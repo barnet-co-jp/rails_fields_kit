@@ -29,6 +29,45 @@ filter.to_table_filter
 
 A table gem can accept any object that responds to `to_table_filter`, store the resulting hash in column metadata, and leave rendering to the host application or a renderer registry.
 
+## Token search filter metadata
+
+Use `TableFilterInput.token_search` when a table has a single search box backed by `rfk_token_search`.
+
+```ruby
+filter = RailsFieldsKit::TableFilterInput.token_search(
+  :query,
+  url: search_tokens_path(format: :json),
+  placeholder: "status:open keyword"
+)
+
+filter.to_table_filter
+# => {
+#      type: "rails_fields_kit",
+#      field_type: "token_search",
+#      method: "query",
+#      options: {
+#        url: "/search_tokens.json",
+#        placeholder: "status:open keyword"
+#      }
+#    }
+```
+
+Use `TableFilterInput.ransack_filter` when the token search should carry Ransack-oriented metadata for a table renderer or host application parser.
+
+```ruby
+filter = RailsFieldsKit::TableFilterInput.ransack_filter(
+  :query,
+  fields: {
+    name: :name_cont,
+    status: :status_eq
+  },
+  url: search_tokens_path(format: :json),
+  param_name: :q
+)
+```
+
+This metadata declares the intended adapter and allowed fields. It does not parse token text, build `params[:q]`, or execute Ransack. The host application or table integration remains responsible for those steps.
+
 ## Cell editor metadata
 
 Use `RailsFieldsKit::TableCellInput` when a table column wants to describe an editable cell control.
@@ -62,6 +101,20 @@ A host app or table helper can pass the metadata objects into column-like defini
     :customer_id,
     url: customers_path(format: :json),
     selected_url: selected_customers_path(format: :json)
+  )
+}
+```
+
+```ruby
+{
+  key: :query,
+  filter: RailsFieldsKit::TableFilterInput.ransack_filter(
+    :query,
+    fields: {
+      name: :name_cont,
+      status: :status_eq
+    },
+    url: search_tokens_path(format: :json)
   )
 }
 ```
