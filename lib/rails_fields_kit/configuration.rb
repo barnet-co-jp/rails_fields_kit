@@ -9,7 +9,12 @@ module RailsFieldsKit
                   :default_label_field,
                   :default_search_field,
                   :default_plugins,
-                  :default_min_length
+                  :default_min_length,
+                  :wrapper_class,
+                  :label_class,
+                  :hint_class,
+                  :error_class,
+                  :field_error_class
 
     def initialize
       @controller_name = "rails-fields-kit--tom-select"
@@ -20,6 +25,11 @@ module RailsFieldsKit
       @default_search_field = "text"
       @default_plugins = []
       @default_min_length = 0
+      @wrapper_class = "rfk-field"
+      @label_class = "rfk-label"
+      @hint_class = "rfk-hint"
+      @error_class = "rfk-error"
+      @field_error_class = "rfk-field--error"
     end
   end
 end
