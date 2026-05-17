@@ -26,6 +26,8 @@ The install generator creates:
 
 Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and controller-side helpers. It does not install Tom Select or choose a JavaScript bundling strategy for your app.
 
+For optional table integration metadata, see [Table adapter metadata](doc/table_adapters.md). This lets table-oriented gems read Rails Fields Kit filter/editor metadata through `to_table_filter` and `to_table_cell_editor` without taking a hard dependency.
+
 ## JavaScript setup
 
 Install Tom Select with the JavaScript toolchain your app already uses:
@@ -354,6 +356,28 @@ Any wrapped field can use custom affixes:
 ```erb
 <%= f.rfk_text_field :code, prefix: "#", suffix: "required", wrapper: true %>
 ```
+
+## Table adapter metadata
+
+Rails Fields Kit can describe filter inputs and editable cell controls without rendering them directly. This is useful when a table-oriented gem owns column inference and rendering, but wants to use Rails Fields Kit when it is present.
+
+```ruby
+filter = RailsFieldsKit::TableFilterInput.new(
+  :combobox,
+  :customer_id,
+  url: customers_path(format: :json),
+  selected_url: selected_customers_path(format: :json)
+)
+
+filter.to_table_filter
+```
+
+```ruby
+editor = RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+editor.to_table_cell_editor
+```
+
+See [Table adapter metadata](doc/table_adapters.md) for the full protocol and intended Rails Table Preferences integration.
 
 ## Configuration
 
