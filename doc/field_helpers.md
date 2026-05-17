@@ -98,6 +98,26 @@ Use this for Rails enum attributes.
 <%= f.rfk_enum_select :status %>
 ```
 
+## Table metadata helpers
+
+Use these helpers when table column definitions already carry Rails Fields Kit metadata through `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, or compatible hashes.
+
+### `rfk_table_filters`
+
+```erb
+<%= f.rfk_table_filters(@table_preferences) %>
+```
+
+This collects filter metadata from a column list or table-like object and renders each filter through the matching Rails Fields Kit field helper.
+
+### `rfk_table_cell_editors`
+
+```erb
+<%= f.rfk_table_cell_editors(@table_preferences) %>
+```
+
+This collects editable-cell metadata from a column list or table-like object and renders each editor through the matching Rails Fields Kit field helper.
+
 ## Native input helpers
 
 These helpers use native HTML inputs while sharing the same wrapper, hint, error, and accessibility behavior.
