@@ -29,6 +29,7 @@ Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and
 See [`doc/setup.md`](doc/setup.md) for a complete setup walkthrough.
 See [`doc/field_helpers.md`](doc/field_helpers.md) for the FormBuilder helper reference.
 See [`doc/controller_helpers.md`](doc/controller_helpers.md) for the controller helper reference.
+See [`doc/configuration.md`](doc/configuration.md) for initializer options.
 See [`doc/events.md`](doc/events.md) for Stimulus events dispatched by the Tom Select controller.
 
 ## JavaScript setup
