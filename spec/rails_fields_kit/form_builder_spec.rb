@@ -134,6 +134,22 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("data-rails-fields-kit--tom-select-option-badge-field-value=\"status\"")
   end
 
+  it "renders extra remote query params" do
+    html = form_builder.rfk_combobox(
+      :customer_id,
+      url: "/customers.json",
+      selected_url: "/customers/selected.json",
+      create_url: "/customers",
+      query_params: { scope: "active" },
+      selected_query_params: { scope: "active" },
+      create_params: { source: "inline" }
+    )
+
+    expect(html).to include("data-rails-fields-kit--tom-select-query-params-value=\"{&quot;scope&quot;:&quot;active&quot;}\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-selected-query-params-value=\"{&quot;scope&quot;:&quot;active&quot;}\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-create-params-value=\"{&quot;source&quot;:&quot;inline&quot;}\"")
+  end
+
   it "renders a clearable select" do
     html = form_builder.rfk_select(:status, collection: { "Draft" => "draft" }, allow_clear: true)
 
@@ -198,6 +214,26 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("data-rails-fields-kit--tom-select-search-field-value=\"name,email\"")
     expect(html).to include("data-rails-fields-kit--tom-select-min-length-value=\"2\"")
     expect(html).to include("placeholder=\"Search or create a customer\"")
+  end
+
+  it "renders a token search text input" do
+    html = form_builder.rfk_token_search(
+      :keyword,
+      url: "/search_suggestions.json",
+      placeholder: "status:open keyword",
+      max_items: 20,
+      load_throttle: 250
+    )
+
+    expect(html).to include("type=\"text\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"token_search\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-free-text-value=\"true\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-create-value=\"true\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-persist-value=\"false\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-delimiter-value=\" \"")
+    expect(html).to include("data-rails-fields-kit--tom-select-max-items-value=\"20\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-load-throttle-value=\"250\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-plugins-value=\"[&quot;remove_button&quot;]\"")
   end
 
   it "preloads a selected option from a hash" do
