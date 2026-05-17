@@ -69,14 +69,15 @@ Importmap users can pin and register these modules manually, but Rails Fields Ki
 <%= form_with model: @order do |f| %>
   <%= f.rfk_combobox :customer_id,
     url: customers_path(format: :json),
+    selected_url: selected_customers_path(format: :json),
     create_url: customers_path,
-    selected: @order.customer,
-    value_method: :id,
-    label_method: :name,
+    selected: @order.customer_id,
     value_field: "id",
     label_field: "name",
     search_field: "name,email",
     query_param: "q",
+    selected_param: "id",
+    selected_multiple_param: "ids",
     create_param: "name",
     min_length: 2,
     max_options: 50,
@@ -94,7 +95,9 @@ Importmap users can pin and register these modules manually, but Rails Fields Ki
 <% end %>
 ```
 
-`selected:` preloads the current option for edit forms before remote search runs. It accepts a record, a `{ value:, text: }` hash, a `{ id:, name: }` hash, or an array of any of those for multiple fields.
+`selected:` preloads the current option for edit forms before remote search runs. It accepts a record, a `{ value:, text: }` hash, a `{ id:, name: }` hash, an ID value, or an array of any of those for multiple fields.
+
+When `selected_url:` is provided, Rails Fields Kit can load missing selected option labels from the server after Tom Select connects. This is useful when the form only has stored IDs and not the display labels. For one value it sends `selected_param`, default `id`; for multiple values it sends `selected_multiple_param`, default `ids`.
 
 Remote options can include extra fields for richer rendering:
 
@@ -118,6 +121,12 @@ or a wrapped result:
 
 ```json
 { "options": [{ "id": 1, "name": "Example Customer" }] }
+```
+
+The selected preload endpoint can return one option, a wrapped option, an array, or a wrapped array:
+
+```json
+{ "option": { "id": 1, "name": "Example Customer" } }
 ```
 
 The create endpoint should return the created option object:
@@ -180,9 +189,11 @@ Use `rfk_multi_select` for ordinary multiple selects and `rfk_tags` for tag-styl
 
 <%= f.rfk_tags :tag_ids,
   url: tags_path(format: :json),
-  selected: @post.tags,
-  value_method: :id,
-  label_method: :name,
+  selected_url: selected_tags_path(format: :json),
+  selected: @post.tag_ids,
+  selected_multiple_param: "ids",
+  value_field: "id",
+  label_field: "name",
   create: true %>
 ```
 
