@@ -27,4 +27,7 @@ RailsFieldsKit.configure do |config|
   config.hint_class = "rfk-hint"
   config.error_class = "rfk-error"
   config.field_error_class = "rfk-field--error"
+  config.control_class = "rfk-control"
+  config.prefix_class = "rfk-prefix"
+  config.suffix_class = "rfk-suffix"
 end
