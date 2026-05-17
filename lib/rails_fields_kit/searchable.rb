@@ -34,6 +34,31 @@ module RailsFieldsKit
           end
         end
       end
+
+      def rfk_create_with(model:, label:, value: :id, create_attribute: nil, create_param: nil, value_field: nil, label_field: nil, permitted_attributes: nil)
+        define_method(:create) do
+          attribute_name = create_attribute || label
+          param_name = create_param || RailsFieldsKit.configuration.default_create_param
+          attributes = rfk_create_attributes(
+            attribute_name: attribute_name,
+            param_name: param_name,
+            permitted_attributes: permitted_attributes
+          )
+          record = model.new(attributes)
+
+          if record.save
+            render json: rfk_option_json(
+              record,
+              value: value,
+              label: label,
+              value_field: value_field,
+              label_field: label_field
+            ), status: :created
+          else
+            render json: { errors: record.errors.to_hash(true) }, status: :unprocessable_entity
+          end
+        end
+      end
     end
 
     private
@@ -43,6 +68,14 @@ module RailsFieldsKit
         (value_field || RailsFieldsKit.configuration.default_value_field) => record.public_send(value),
         (label_field || RailsFieldsKit.configuration.default_label_field) => record.public_send(label)
       }
+    end
+
+    def rfk_create_attributes(attribute_name:, param_name:, permitted_attributes:)
+      base_attributes = { attribute_name => params[param_name] }
+      return base_attributes if permitted_attributes.nil?
+
+      permitted = params.permit(*Array(permitted_attributes)).to_h.symbolize_keys
+      base_attributes.merge(permitted)
     end
   end
 end
