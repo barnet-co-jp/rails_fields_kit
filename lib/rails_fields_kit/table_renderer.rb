@@ -41,16 +41,32 @@ module RailsFieldsKit
         call_spec(normalize_filter(filter))
       end
 
+      def filter_calls(filters)
+        Array(filters).compact.map { |filter| filter_call(filter) }
+      end
+
       def cell_editor_call(editor)
         call_spec(normalize_cell_editor(editor))
+      end
+
+      def cell_editor_calls(editors)
+        Array(editors).compact.map { |editor| cell_editor_call(editor) }
       end
 
       def render_filter(form_builder, filter)
         render_call(form_builder, filter_call(filter))
       end
 
+      def render_filters(form_builder, filters)
+        filter_calls(filters).map { |call| render_call(form_builder, call) }
+      end
+
       def render_cell_editor(form_builder, editor)
         render_call(form_builder, cell_editor_call(editor))
+      end
+
+      def render_cell_editors(form_builder, editors)
+        cell_editor_calls(editors).map { |call| render_call(form_builder, call) }
       end
 
       private
