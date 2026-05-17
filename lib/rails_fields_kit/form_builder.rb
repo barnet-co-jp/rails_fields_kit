@@ -91,11 +91,14 @@ module RailsFieldsKit
       data[:rails_fields_kit__tom_select_kind_value] = field_kind
 
       selected = options.delete(:selected)
+      allow_clear = options.delete(:allow_clear)
       value_method = options.delete(:value_method) || :id
       label_method = options.delete(:label_method) || :to_s
       collection_value_method = options.delete(:collection_value_method) || value_method
       collection_label_method = options.delete(:collection_label_method) || label_method
       selected_choices = rfk_normalize_selected(selected, value_method: value_method, label_method: label_method)
+      plugins = options.delete(:plugins) || config.default_plugins
+      plugins = Array(plugins) | ["clear_button"] if allow_clear
 
       rfk_assign_data_value(data, :url, options.delete(:url))
       rfk_assign_data_value(data, :create_url, options.delete(:create_url))
@@ -108,7 +111,7 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :label_field, options.delete(:label_field) || config.default_label_field)
       rfk_assign_data_value(data, :search_field, options.delete(:search_field) || config.default_search_field)
       rfk_assign_data_value(data, :min_length, options.delete(:min_length) || config.default_min_length)
-      rfk_assign_data_value(data, :plugins, options.delete(:plugins) || config.default_plugins)
+      rfk_assign_data_value(data, :plugins, plugins)
 
       html_options[:multiple] = options.delete(:multiple) if options.key?(:multiple)
       html_options[:placeholder] = options.delete(:placeholder) if options.key?(:placeholder)
