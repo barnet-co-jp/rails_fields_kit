@@ -164,6 +164,28 @@ end
   free_text: true %>
 ```
 
+### Native and business-friendly fields
+
+These helpers use native HTML inputs but share the optional wrapper, label, hint, error, prefix, and suffix behavior:
+
+```erb
+<%= f.rfk_text_field :name, wrapper: true, label: "Name" %>
+<%= f.rfk_text_area :description, wrapper: true %>
+<%= f.rfk_number_field :quantity, min: 1, step: 1 %>
+<%= f.rfk_money_field :amount, currency: "JPY", wrapper: true %>
+<%= f.rfk_percent_field :tax_rate, wrapper: true %>
+<%= f.rfk_email_field :email %>
+<%= f.rfk_url_field :website_url %>
+<%= f.rfk_phone_field :phone %>
+<%= f.rfk_search_field :keyword %>
+```
+
+Any wrapped field can use custom affixes:
+
+```erb
+<%= f.rfk_text_field :code, prefix: "#", suffix: "required", wrapper: true %>
+```
+
 ## Configuration
 
 ```ruby
@@ -177,6 +199,15 @@ RailsFieldsKit.configure do |config|
   config.default_search_field = "text"
   config.default_min_length = 0
   config.default_plugins = []
+
+  config.wrapper_class = "rfk-field"
+  config.label_class = "rfk-label"
+  config.hint_class = "rfk-hint"
+  config.error_class = "rfk-error"
+  config.field_error_class = "rfk-field--error"
+  config.control_class = "rfk-control"
+  config.prefix_class = "rfk-prefix"
+  config.suffix_class = "rfk-suffix"
 end
 ```
 
@@ -193,6 +224,7 @@ Instead, it focuses on the gaps that remain common in Rails business application
 - remote option loading
 - create-on-the-fly records
 - Active Model friendly naming, values, errors, and redisplay
+- light wrappers around native inputs for consistent labels, hints, errors, and affixes
 
 Select-like fields are powered by Tom Select. When Tom Select already supports the behavior directly, Rails Fields Kit acts as a thin Rails wrapper. When Rails integration is the hard part, such as initial value preload or create-on-the-fly records, Rails Fields Kit provides a higher-level field helper.
 
