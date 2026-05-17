@@ -64,4 +64,11 @@ RSpec.describe "public API" do
     expect(RailsFieldsKit::TableRenderer).to respond_to(:register_field_helper)
     expect(RailsFieldsKit::TableRenderer).to respond_to(:reset_field_helpers!)
   end
+
+  it "exposes table metadata collector" do
+    expect(RailsFieldsKit::TableMetadata).to respond_to(:filters)
+    expect(RailsFieldsKit::TableMetadata).to respond_to(:cell_editors)
+    expect(RailsFieldsKit::TableMetadata).to respond_to(:filter_calls)
+    expect(RailsFieldsKit::TableMetadata).to respond_to(:cell_editor_calls)
+  end
 end
