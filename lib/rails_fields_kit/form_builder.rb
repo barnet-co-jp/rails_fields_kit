@@ -27,6 +27,7 @@ module RailsFieldsKit
 
     def rfk_tom_select_field(method, field_kind, collection: nil, **options)
       config = RailsFieldsKit.configuration
+      wrapper_options = rfk_extract_wrapper_options(options)
       html_options = options.delete(:html) || {}
       data = html_options[:data] ||= {}
       data[:controller] = [data[:controller], config.controller_name].compact.join(" ")
@@ -53,13 +54,69 @@ module RailsFieldsKit
       html_options[:multiple] = options.delete(:multiple) if options.key?(:multiple)
       html_options[:placeholder] = options.delete(:placeholder) if options.key?(:placeholder)
 
-      if field_kind == :autocomplete || html_options[:multiple] == false && options[:as] == :text
+      field_html = if field_kind == :autocomplete || html_options[:multiple] == false && options[:as] == :text
         text_field(method, options.merge(html_options))
       else
         choices = rfk_choices_with_selected(collection, selected_choices: selected_choices)
         options[:selected] ||= rfk_selected_values(selected_choices) if selected_choices.any?
         select(method, choices, options, html_options)
       end
+
+      rfk_wrap_field(method, field_html, wrapper_options)
+    end
+
+    def rfk_extract_wrapper_options(options)
+      {
+        label: options.delete(:label),
+        hint: options.delete(:hint),
+        wrapper: options.key?(:wrapper) ? options.delete(:wrapper) : false,
+        wrapper_html: options.delete(:wrapper_html) || {},
+        label_html: options.delete(:label_html) || {},
+        hint_html: options.delete(:hint_html) || {},
+        error_html: options.delete(:error_html) || {}
+      }
+    end
+
+    def rfk_wrap_field(method, field_html, wrapper_options)
+      return field_html unless wrapper_options[:wrapper]
+
+      config = RailsFieldsKit.configuration
+      errors = rfk_errors_for(method)
+      wrapper_html = wrapper_options[:wrapper_html].dup
+      wrapper_html[:class] = [wrapper_html[:class], config.wrapper_class, (config.field_error_class if errors.any?)].compact.join(" ")
+
+      @template.content_tag(:div, wrapper_html) do
+        parts = []
+        parts << rfk_label(method, wrapper_options[:label], wrapper_options[:label_html]) unless wrapper_options[:label] == false
+        parts << field_html
+        parts << rfk_hint(wrapper_options[:hint], wrapper_options[:hint_html]) if wrapper_options[:hint]
+        parts << rfk_error(errors, wrapper_options[:error_html]) if errors.any?
+        parts.join.html_safe
+      end
+    end
+
+    def rfk_label(method, label_text, label_html)
+      label_options = label_html.dup
+      label_options[:class] = [label_options[:class], RailsFieldsKit.configuration.label_class].compact.join(" ")
+      label(method, label_text, label_options)
+    end
+
+    def rfk_hint(hint, hint_html)
+      hint_options = hint_html.dup
+      hint_options[:class] = [hint_options[:class], RailsFieldsKit.configuration.hint_class].compact.join(" ")
+      @template.content_tag(:div, hint, hint_options)
+    end
+
+    def rfk_error(errors, error_html)
+      error_options = error_html.dup
+      error_options[:class] = [error_options[:class], RailsFieldsKit.configuration.error_class].compact.join(" ")
+      @template.content_tag(:div, errors.join(", "), error_options)
+    end
+
+    def rfk_errors_for(method)
+      return [] unless object.respond_to?(:errors) && object.errors.respond_to?(:[])
+
+      Array(object.errors[method]).map(&:to_s).reject(&:empty?)
     end
 
     def rfk_assign_data_value(data, key, value)
