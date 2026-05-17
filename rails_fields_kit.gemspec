@@ -14,16 +14,24 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1"
 
-  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
+  spec.metadata["rubygems_mfa_required"] = "true"
   spec.metadata["source_code_uri"] = spec.homepage
-  spec.metadata["changelog_uri"] = "#{spec.homepage}/releases"
+  spec.metadata["changelog_uri"] = "#{spec.homepage}/blob/main/CHANGELOG.md"
+  spec.metadata["documentation_uri"] = "#{spec.homepage}/blob/main/doc/setup.md"
 
   spec.files = Dir.chdir(__dir__) do
-    Dir["{app,lib}/**/*", "LICENSE.txt", "README.md"]
+    Dir[
+      "{app,lib}/**/*",
+      "doc/**/*.md",
+      "CHANGELOG.md",
+      "LICENSE.txt",
+      "README.md"
+    ].sort
   end
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "rails", ">= 7.0"
+  spec.add_dependency "rails", ">= 7.0", "< 9.0"
 
   spec.add_development_dependency "rspec", "~> 3.13"
 end

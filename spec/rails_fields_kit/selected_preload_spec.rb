@@ -61,4 +61,20 @@ RSpec.describe "Rails Fields Kit selected preload" do
     expect(html).to include("data-rails-fields-kit--tom-select-selected-param-value=\"id\"")
     expect(html).to include("data-rails-fields-kit--tom-select-selected-multiple-param-value=\"tag_ids\"")
   end
+
+  it "uses configured selected preload parameter defaults" do
+    RailsFieldsKit.configure do |config|
+      config.default_selected_param = "record_id"
+      config.default_selected_multiple_param = "record_ids"
+    end
+
+    html = form_builder.rfk_combobox(
+      :customer_id,
+      url: "/customers.json",
+      selected_url: "/customers/selected.json"
+    )
+
+    expect(html).to include("data-rails-fields-kit--tom-select-selected-param-value=\"record_id\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-selected-multiple-param-value=\"record_ids\"")
+  end
 end

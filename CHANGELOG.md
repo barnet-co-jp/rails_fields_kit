@@ -1,0 +1,79 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## Unreleased
+
+## 0.1.0 - 2026-05-18
+
+### Added
+
+- Initial Rails engine skeleton.
+- `RailsFieldsKit.configure` and configuration defaults.
+- Tom Select-backed FormBuilder helpers:
+  - `rfk_select`
+  - `rfk_combobox`
+  - `rfk_autocomplete`
+  - `rfk_tags`
+  - `rfk_multi_select`
+  - `rfk_grouped_select`
+  - `rfk_enum_select`
+- Native field helpers:
+  - `rfk_text_field`
+  - `rfk_text_area`
+  - `rfk_number_field`
+  - `rfk_money_field`
+  - `rfk_percent_field`
+  - `rfk_email_field`
+  - `rfk_url_field`
+  - `rfk_phone_field`
+  - `rfk_search_field`
+- Wrapper support for labels, hints, errors, prefixes, suffixes, and accessibility attributes.
+- Selected option preload with `selected:` and remote selected option loading with `selected_url:`.
+- Remote option loading with configurable request params and JSON field names.
+- Create-on-the-fly option support with `create_url:`.
+- Rich option rendering with description and badge fields.
+- Tom Select UX options:
+  - `open_on_focus`
+  - `close_after_select`
+  - `hide_selected`
+  - `persist`
+  - `max_options`
+  - `preload`
+  - custom no-results/loading/create text
+- Option-level customization:
+  - disabled options
+  - grouped options
+  - per-option HTML attributes
+- `RailsFieldsKit::Searchable` controller concern.
+- `rfk_search_with` for remote search endpoints.
+- `rfk_find_with` for selected option lookup endpoints.
+- `rfk_create_with` for create-on-the-fly endpoints.
+- Controller helper support for scopes, ordering, distinct results, rich fields, assignments, authorization, and before-save hooks.
+- Stimulus events for remote loading, selected preload, create errors, and Tom Select interaction forwarding.
+- Install generator.
+- Documentation:
+  - `doc/setup.md`
+  - `doc/public_api.md`
+  - `doc/field_helpers.md`
+  - `doc/controller_helpers.md`
+  - `doc/configuration.md`
+  - `doc/events.md`
+  - `doc/development.md`
+  - `doc/sample_app_checklist.md`
+  - `doc/sample_app_results.md`
+  - `doc/final_release_checklist.md`
+  - `doc/release_notes_0_1_0.md`
+  - `doc/release.md`
+
+### Changed
+
+- Rails support targets Rails 7.0 and newer.
+- Rails dependency is bounded to Rails 7 and Rails 8 for the initial release line.
+- Tom Select installation and JavaScript bundling strategy are intentionally left to the host application.
+
+### Fixed
+
+- Avoided requiring mountable engine namespace isolation for this helper-only engine.
+- Preserved explicit `false` option values when falling back to configuration defaults.
+- Separated boolean `disabled:` for the entire select from array/value `disabled:` for specific options.

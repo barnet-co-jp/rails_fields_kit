@@ -27,6 +27,16 @@ The install generator creates:
 Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and controller-side helpers. It does not install Tom Select or choose a JavaScript bundling strategy for your app.
 
 For optional table integration metadata, see [Table adapter metadata](doc/table_adapters.md). This lets table-oriented gems read Rails Fields Kit filter/editor metadata through `to_table_filter` and `to_table_cell_editor` without taking a hard dependency.
+See [`doc/setup.md`](doc/setup.md) for a complete setup walkthrough.
+See [`doc/public_api.md`](doc/public_api.md) for the intended stable API surface.
+See [`doc/field_helpers.md`](doc/field_helpers.md) for the FormBuilder helper reference.
+See [`doc/controller_helpers.md`](doc/controller_helpers.md) for the controller helper reference.
+See [`doc/configuration.md`](doc/configuration.md) for initializer options.
+See [`doc/events.md`](doc/events.md) for Stimulus events dispatched by the Tom Select controller.
+See [`doc/development.md`](doc/development.md) for local development checks.
+See [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md) and [`doc/sample_app_results.md`](doc/sample_app_results.md) for sample app verification.
+See [`doc/final_release_checklist.md`](doc/final_release_checklist.md) for the final release checklist.
+See [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) for the 0.1.0 release notes draft.
 
 ## JavaScript setup
 
@@ -100,6 +110,11 @@ Importmap users can pin and register these modules manually, but Rails Fields Ki
 `selected:` preloads the current option for edit forms before remote search runs. It accepts a record, a `{ value:, text: }` hash, a `{ id:, name: }` hash, an ID value, or an array of any of those for multiple fields.
 
 When `selected_url:` is provided, Rails Fields Kit can load missing selected option labels from the server after Tom Select connects. This is useful when the form only has stored IDs and not the display labels. For one value it sends `selected_param`, default `id`; for multiple values it sends `selected_multiple_param`, default `ids`.
+
+Selected preload dispatches these Stimulus events:
+
+- `rails-fields-kit--tom-select:selected-load`
+- `rails-fields-kit--tom-select:selected-load-error`
 
 Remote options can include extra fields for richer rendering:
 
