@@ -10,6 +10,11 @@ module RailsFieldsKit
                   :default_search_field,
                   :default_plugins,
                   :default_min_length,
+                  :default_max_options,
+                  :default_preload,
+                  :default_no_results_text,
+                  :default_loading_text,
+                  :default_create_text,
                   :wrapper_class,
                   :label_class,
                   :hint_class,
@@ -28,6 +33,11 @@ module RailsFieldsKit
       @default_search_field = "text"
       @default_plugins = []
       @default_min_length = 0
+      @default_max_options = nil
+      @default_preload = nil
+      @default_no_results_text = "No results found"
+      @default_loading_text = "Loading..."
+      @default_create_text = "Add"
       @wrapper_class = "rfk-field"
       @label_class = "rfk-label"
       @hint_class = "rfk-hint"
