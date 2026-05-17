@@ -31,6 +31,7 @@ See [`doc/field_helpers.md`](doc/field_helpers.md) for the FormBuilder helper re
 See [`doc/controller_helpers.md`](doc/controller_helpers.md) for the controller helper reference.
 See [`doc/configuration.md`](doc/configuration.md) for initializer options.
 See [`doc/events.md`](doc/events.md) for Stimulus events dispatched by the Tom Select controller.
+See [`doc/development.md`](doc/development.md) for local development checks.
 
 ## JavaScript setup
 
