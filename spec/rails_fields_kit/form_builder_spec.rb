@@ -80,6 +80,23 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include(">Draft</option>")
   end
 
+  it "renders a clearable select" do
+    html = form_builder.rfk_select(:status, collection: { "Draft" => "draft" }, allow_clear: true)
+
+    expect(html).to include("data-rails-fields-kit--tom-select-plugins-value=\"[&quot;clear_button&quot;]\"")
+  end
+
+  it "preserves explicit plugins when allow_clear is enabled" do
+    html = form_builder.rfk_select(
+      :status,
+      collection: { "Draft" => "draft" },
+      plugins: ["dropdown_input"],
+      allow_clear: true
+    )
+
+    expect(html).to include("data-rails-fields-kit--tom-select-plugins-value=\"[&quot;dropdown_input&quot;,&quot;clear_button&quot;]\"")
+  end
+
   it "renders object collections with collection methods" do
     customers = [CollectionCustomer.new("c-1", "Acme Corp")]
 
