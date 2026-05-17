@@ -4,6 +4,29 @@ RSpec.describe RailsFieldsKit::TableMetadata do
   ColumnDefinition = Struct.new(:filter, :editor, keyword_init: true)
   AliasColumnDefinition = Struct.new(:filter_input, :cell_editor, keyword_init: true)
 
+  class MetadataCollectorFormBuilder
+    attr_reader :calls
+
+    def initialize
+      @calls = []
+    end
+
+    def rfk_combobox(method, **options)
+      calls << [:rfk_combobox, method, options]
+      "combobox"
+    end
+
+    def rfk_token_search(method, **options)
+      calls << [:rfk_token_search, method, options]
+      "token_search"
+    end
+
+    def rfk_enum_select(method, **options)
+      calls << [:rfk_enum_select, method, options]
+      "enum_select"
+    end
+  end
+
   it "collects filter metadata from hash columns" do
     columns = [
       {
@@ -186,6 +209,36 @@ RSpec.describe RailsFieldsKit::TableMetadata do
         method: :status,
         options: {}
       }
+    ])
+  end
+
+  it "renders collected filters" do
+    form_builder = MetadataCollectorFormBuilder.new
+    columns = [
+      { filter: RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json") },
+      { filter: nil },
+      { search_filter: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json") }
+    ]
+
+    expect(described_class.render_filters(form_builder, columns)).to eq(["combobox", "token_search"])
+    expect(form_builder.calls).to eq([
+      [:rfk_combobox, :customer_id, { url: "/customers.json" }],
+      [:rfk_token_search, :query, { url: "/tokens.json" }]
+    ])
+  end
+
+  it "renders collected cell editors" do
+    form_builder = MetadataCollectorFormBuilder.new
+    columns = [
+      { editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status) },
+      { editor: nil },
+      { cell_editor: RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json") }
+    ]
+
+    expect(described_class.render_cell_editors(form_builder, columns)).to eq(["enum_select", "combobox"])
+    expect(form_builder.calls).to eq([
+      [:rfk_enum_select, :status, {}],
+      [:rfk_combobox, :customer_id, { url: "/customers.json" }]
     ])
   end
 end
