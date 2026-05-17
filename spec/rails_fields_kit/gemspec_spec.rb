@@ -12,17 +12,17 @@ RSpec.describe "rails_fields_kit.gemspec" do
     expect(specification.required_ruby_version).to be_satisfied_by(Gem::Version.new("3.1.0"))
     expect(specification.metadata["allowed_push_host"]).to eq("https://rubygems.org")
     expect(specification.metadata["rubygems_mfa_required"]).to eq("true")
-    expect(specification.metadata["homepage_uri"]).to eq(specification.homepage)
+    expect(specification.metadata).not_to have_key("homepage_uri")
     expect(specification.metadata["source_code_uri"]).to eq(specification.homepage)
     expect(specification.metadata["changelog_uri"]).to end_with("/CHANGELOG.md")
     expect(specification.metadata["documentation_uri"]).to end_with("/doc/setup.md")
   end
 
-  it "depends on Rails 7 or newer" do
+  it "depends on Rails 7 and 8" do
     rails_dependency = specification.dependencies.find { |dependency| dependency.name == "rails" }
 
     expect(rails_dependency).not_to be_nil
-    expect(rails_dependency.requirement).to eq(Gem::Requirement.new(">= 7.0"))
+    expect(rails_dependency.requirement).to eq(Gem::Requirement.new(">= 7.0", "< 9.0"))
   end
 
   it "packages runtime files and documentation" do
