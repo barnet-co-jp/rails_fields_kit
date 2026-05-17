@@ -135,9 +135,22 @@ export default class extends Controller {
     fetch(url.toString(), {
       headers: { Accept: "application/json" }
     })
-      .then((response) => response.ok ? response.json() : null)
-      .then((json) => this.applySelectedOptions(json))
-      .catch(() => {})
+      .then((response) => this.handleSelectedResponse(response))
+      .then((json) => this.applySelectedOptions(json, values))
+      .catch((error) => {
+        this.dispatch("selected-load-error", { detail: { error, values } })
+      })
+  }
+
+  handleSelectedResponse(response) {
+    return response.json().catch(() => ({})).then((json) => {
+      if (response.ok) return json
+
+      const error = new Error("Rails Fields Kit selected preload request failed")
+      error.response = response
+      error.payload = json
+      throw error
+    })
   }
 
   selectedValuesNeedingOptions() {
@@ -149,13 +162,14 @@ export default class extends Controller {
     return Array.isArray(value) ? value : [value]
   }
 
-  applySelectedOptions(json) {
+  applySelectedOptions(json, requestedValues = []) {
     const options = this.normalizeSelectedOptions(json)
     options.forEach((option) => {
       this.tomSelect.addOption(option)
       this.tomSelect.addItem(option[this.valueFieldValue], true)
     })
     this.tomSelect.refreshOptions(false)
+    this.dispatch("selected-load", { detail: { options, values: requestedValues } })
   }
 
   normalizeSelectedOptions(json) {
