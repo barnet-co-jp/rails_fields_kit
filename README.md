@@ -94,9 +94,11 @@ The create endpoint should return the created option object:
 { "id": 2, "name": "New Customer" }
 ```
 
-### Controller concern for search endpoints
+When the create endpoint returns a non-2xx response, Rails Fields Kit does not add a fallback free-text option. It dispatches a `rails-fields-kit--tom-select:create-error` event with the failed input and error payload so your application can show a validation message.
 
-For simple Active Record-backed option searches, include `RailsFieldsKit::Searchable` and define an index action:
+### Controller concern for search and create endpoints
+
+For simple Active Record-backed option search and create endpoints, include `RailsFieldsKit::Searchable`:
 
 ```ruby
 class CustomersController < ApplicationController
@@ -111,8 +113,20 @@ class CustomersController < ApplicationController
     label_field: "name",
     limit: 20
   )
+
+  rfk_create_with(
+    model: Customer,
+    value: :id,
+    label: :name,
+    create_attribute: :name,
+    create_param: "name",
+    value_field: "id",
+    label_field: "name"
+  )
 end
 ```
+
+`rfk_create_with` renders `422 Unprocessable Entity` with `{ "errors": ... }` when the record is invalid.
 
 ### Normal select wrapper
 
