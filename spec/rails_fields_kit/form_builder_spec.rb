@@ -83,6 +83,35 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include(">Draft</option>")
   end
 
+  it "renders grouped selects" do
+    html = form_builder.rfk_grouped_select(
+      :customer_id,
+      grouped_collection: {
+        "Active" => [["Acme Corp", "1"]],
+        "Archived" => [["Old Corp", "2"]]
+      }
+    )
+
+    expect(html).to include("<optgroup label=\"Active\">")
+    expect(html).to include("<option value=\"1\">Acme Corp</option>")
+    expect(html).to include("<optgroup label=\"Archived\">")
+    expect(html).to include("<option value=\"2\">Old Corp</option>")
+  end
+
+  it "renders disabled options and option html" do
+    html = form_builder.rfk_select(
+      :status,
+      collection: { "Draft" => "draft", "Published" => "published" },
+      disabled: ["published"],
+      option_html: {
+        "draft" => { data: { color: "gray" } }
+      }
+    )
+
+    expect(html).to include("data-color=\"gray\"")
+    expect(html).to include("value=\"published\" disabled=\"disabled\"").or include("disabled=\"disabled\" value=\"published\"")
+  end
+
   it "renders custom Tom Select render options" do
     html = form_builder.rfk_combobox(
       :customer_id,
