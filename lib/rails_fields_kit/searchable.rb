@@ -7,11 +7,11 @@ module RailsFieldsKit
     extend ActiveSupport::Concern
 
     class_methods do
-      def rfk_search_with(model:, label:, value: :id, search:, limit: 20, query_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, wrap: nil)
+      def rfk_search_with(model:, label:, value: :id, search:, limit: 20, query_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, distinct: false, wrap: nil)
         define_method(:index) do
           query_key = query_param || RailsFieldsKit.configuration.default_query_param
           query = params[query_key].to_s
-          scope = model.all
+          relation = rfk_search_scope(model, scope)
 
           if query.present?
             columns = Array(search)
@@ -19,10 +19,12 @@ module RailsFieldsKit
             predicates = columns.map do |column|
               model.arel_table[column].matches("%#{escaped_query}%")
             end
-            scope = scope.where(predicates.reduce { |left, right| left.or(right) })
+            relation = relation.where(predicates.reduce { |left, right| left.or(right) })
           end
 
-          records = scope.limit(limit)
+          relation = relation.distinct if distinct
+          relation = relation.order(order) if order
+          records = relation.limit(limit)
           options = records.map do |record|
             rfk_option_json(
               record,
@@ -72,6 +74,17 @@ module RailsFieldsKit
     end
 
     private
+
+    def rfk_search_scope(model, scope)
+      case scope
+      when nil
+        model.all
+      when Symbol, String
+        model.public_send(scope)
+      else
+        scope.respond_to?(:call) ? instance_exec(&scope) : scope
+      end
+    end
 
     def rfk_option_json(record, value:, label:, value_field:, label_field:, description:, badge:, description_field:, badge_field:)
       option = {
