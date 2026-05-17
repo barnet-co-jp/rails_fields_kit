@@ -22,6 +22,17 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       calls << [:rfk_enum_select, method, options]
       "enum_select"
     end
+
+    def custom_table_field(method, **options)
+      calls << [:custom_table_field, method, options]
+      "custom"
+    end
+  end
+
+  around do |example|
+    described_class.reset_field_helpers!
+    example.run
+    described_class.reset_field_helpers!
   end
 
   it "builds a filter call spec from filter metadata objects" do
@@ -83,6 +94,36 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     expect(form_builder.calls).to eq([
       [:rfk_enum_select, :status, {}]
     ])
+  end
+
+  it "allows custom field helper registration" do
+    described_class.register_field_helper(:custom_field, :custom_table_field)
+    metadata = { field_type: "custom_field", method: "code", options: { prefix: "#" } }
+
+    expect(described_class.filter_call(metadata)).to eq(
+      helper: :custom_table_field,
+      method: :code,
+      options: { prefix: "#" }
+    )
+  end
+
+  it "renders custom registered field helpers" do
+    described_class.register_field_helper(:custom_field, :custom_table_field)
+    form_builder = FakeTableFormBuilder.new
+    metadata = { field_type: "custom_field", method: "code", options: { prefix: "#" } }
+
+    expect(described_class.render_filter(form_builder, metadata)).to eq("custom")
+    expect(form_builder.calls).to eq([
+      [:custom_table_field, :code, { prefix: "#" }]
+    ])
+  end
+
+  it "resets custom field helper registration" do
+    described_class.register_field_helper(:custom_field, :custom_table_field)
+    described_class.reset_field_helpers!
+
+    metadata = { field_type: "custom_field", method: "code", options: {} }
+    expect { described_class.filter_call(metadata) }.to raise_error(RailsFieldsKit::TableRenderer::UnknownFieldType)
   end
 
   it "raises for unknown field types" do
