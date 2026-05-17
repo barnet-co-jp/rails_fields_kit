@@ -168,18 +168,33 @@ Rails enum-like attributes can use `rfk_enum_select`:
 
 It reads `object.class.statuses` by default and uses `human_attribute_name("status.draft")` style labels when available.
 
-### Wrappers and accessibility
+### Wrappers, native attributes, and accessibility
 
-When `wrapper: true` is used, Rails Fields Kit renders labels, hints, and errors with stable IDs and connects them to the field using `aria-describedby`. Fields with validation errors also get `aria-invalid="true"`.
+When `wrapper: true` is used, Rails Fields Kit renders labels, hints, and errors with stable IDs and connects them to the field using `aria-describedby`. Fields with validation errors also get `aria-invalid="true"`. Wrapped required fields get `aria-required="true"`.
 
 ```erb
 <%= f.rfk_select :status,
   collection: Order.statuses.keys,
   wrapper: true,
-  hint: "Choose the workflow status" %>
+  hint: "Choose the workflow status",
+  required: true %>
 ```
 
-You can disable this automation for a specific field:
+Tom Select-backed helpers pass common native attributes through to the underlying input/select:
+
+```erb
+<%= f.rfk_select :status,
+  collection: Order.statuses.keys,
+  required: true,
+  disabled: false,
+  autocomplete: "off" %>
+
+<%= f.rfk_autocomplete :keyword,
+  url: suggestions_path(format: :json),
+  readonly: true %>
+```
+
+You can disable accessibility automation for a specific field:
 
 ```erb
 <%= f.rfk_text_field :name,
