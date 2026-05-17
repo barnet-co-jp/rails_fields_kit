@@ -49,6 +49,11 @@ module RailsFieldsKit
       rfk_tom_select_field(method, :select, collection: collection, **options)
     end
 
+    def rfk_multi_select(method, collection: nil, **options)
+      options[:multiple] = true unless options.key?(:multiple)
+      rfk_tom_select_field(method, :multi_select, collection: collection, **options)
+    end
+
     def rfk_grouped_select(method, grouped_collection:, **options)
       options[:grouped_collection] = grouped_collection
       rfk_tom_select_field(method, :select, collection: nil, **options)
