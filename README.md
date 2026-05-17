@@ -107,6 +107,25 @@ The create endpoint should return the created option object:
 
 When the create endpoint returns a non-2xx response, Rails Fields Kit does not add a fallback free-text option. It dispatches a `rails-fields-kit--tom-select:create-error` event with the failed input and error payload so your application can show a validation message.
 
+### Object collections and enum selects
+
+Collections can be arrays of pairs, hashes, or model-like objects:
+
+```erb
+<%= f.rfk_select :customer_id,
+  collection: @customers,
+  collection_value_method: :id,
+  collection_label_method: :name %>
+```
+
+Rails enum-like attributes can use `rfk_enum_select`:
+
+```erb
+<%= f.rfk_enum_select :status %>
+```
+
+It reads `object.class.statuses` by default and uses `human_attribute_name("status.draft")` style labels when available.
+
 ### Controller concern for search and create endpoints
 
 For simple Active Record-backed option search and create endpoints, include `RailsFieldsKit::Searchable`:
