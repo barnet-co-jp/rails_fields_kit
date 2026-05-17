@@ -6,7 +6,7 @@ RSpec.describe RailsFieldsKit::FormBuilder do
   include ActionView::Helpers::TagHelper
   include ActionView::Context
 
-  DummyModel = Struct.new(:status, :customer_id, :tag_ids, :keyword, :quantity) do
+  DummyModel = Struct.new(:status, :customer_id, :tag_ids, :keyword, :quantity, :amount, :rate, :email, :website_url, :phone) do
     def self.model_name
       ActiveModel::Name.new(self, nil, "DummyModel")
     end
@@ -44,7 +44,7 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     false
   end
 
-  def form_builder(model = DummyModel.new("draft", nil, [], nil, 1), object_name = :dummy_model)
+  def form_builder(model = DummyModel.new("draft", nil, [], nil, 1, 1000, 10, "a@example.com", "https://example.com", "03-0000-0000"), object_name = :dummy_model)
     ActionView::Helpers::FormBuilder.new(object_name, model, self, {})
   end
 
@@ -169,6 +169,32 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("type=\"number\"")
     expect(html).to include("min=\"1\"")
     expect(html).to include("step=\"1\"")
+  end
+
+  it "renders money fields with a currency prefix" do
+    html = form_builder.rfk_money_field(:amount, currency: "JPY", wrapper: true)
+
+    expect(html).to include("inputmode=\"decimal\"")
+    expect(html).to include("class=\"rfk-control\"")
+    expect(html).to include("class=\"rfk-prefix\"")
+    expect(html).to include(">JPY</span>")
+  end
+
+  it "renders percent fields with a suffix" do
+    html = form_builder.rfk_percent_field(:rate, wrapper: true)
+
+    expect(html).to include("type=\"number\"")
+    expect(html).to include("inputmode=\"decimal\"")
+    expect(html).to include("class=\"rfk-suffix\"")
+    expect(html).to include(">%</span>")
+  end
+
+  it "renders email, url, phone, and search fields" do
+    expect(form_builder.rfk_email_field(:email)).to include("type=\"email\"")
+    expect(form_builder.rfk_url_field(:website_url)).to include("type=\"url\"")
+    expect(form_builder.rfk_phone_field(:phone)).to include("type=\"tel\"")
+    expect(form_builder.rfk_phone_field(:phone)).to include("autocomplete=\"tel\"")
+    expect(form_builder.rfk_search_field(:keyword)).to include("type=\"search\"")
   end
 
   it "wraps a field with label and hint when requested" do
