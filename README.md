@@ -79,6 +79,11 @@ Importmap users can pin and register these modules manually, but Rails Fields Ki
     query_param: "q",
     create_param: "name",
     min_length: 2,
+    max_options: 50,
+    preload: true,
+    no_results_text: "No customers found",
+    loading_text: "Searching...",
+    create_text: "Create",
     placeholder: "Search or create a customer" %>
 <% end %>
 ```
@@ -165,7 +170,7 @@ end
 ### Normal select wrapper
 
 ```erb
-<%= f.rfk_select :status, collection: Order.statuses.keys %>
+<%= f.rfk_select :status, collection: Order.statuses.keys, allow_clear: true %>
 ```
 
 ### Tag-style multi select
@@ -221,6 +226,11 @@ RailsFieldsKit.configure do |config|
   config.default_label_field = "text"
   config.default_search_field = "text"
   config.default_min_length = 0
+  config.default_max_options = nil
+  config.default_preload = nil
+  config.default_no_results_text = "No results found"
+  config.default_loading_text = "Loading..."
+  config.default_create_text = "Add"
   config.default_plugins = []
 
   config.wrapper_class = "rfk-field"
