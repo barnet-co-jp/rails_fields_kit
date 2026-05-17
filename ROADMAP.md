@@ -38,27 +38,30 @@ These fields form the center of the gem.
 
 Remote option loading is where Rails integration is often more valuable than Tom Select configuration itself.
 
-Planned improvements:
+Current progress:
 
-- stronger selected-option preload support for edit forms
-- better multi-value selected preload behavior
+- selected-option preload support for edit forms with `selected:` and `selected_url:`
+- multi-value selected preload behavior through `selected_multiple_param:`
 - richer option rendering metadata such as description and badge fields
-- consistent create endpoint error handling
+- consistent create endpoint error handling and `create-error` events
 - documented endpoint response shapes for search, find, and create
-- clearer controller helper examples for scoped Active Record-backed endpoints
+- scoped request context through `query_params:`, `selected_query_params:`, and `create_params:`
+- Tom Select pass-throughs such as `max_items:`, `load_throttle:`, and `delimiter:`
 
 ## Phase 3: Search input helpers
 
 Rails Fields Kit may add helpers for writing complex search text more comfortably, without becoming the search backend.
 
-Candidate helpers:
+Current progress:
 
 - `rfk_search_field`
-  - A wrapped search input with optional suggestions.
+  - A wrapped native search input.
 - `rfk_token_search`
-  - A token-oriented search input for structured search phrases such as `status:open assignee:matsuo keyword`.
-- Operator-aware suggestions
-  - UI assistance for operators such as `not(...)`, `OR`, field names, predicates, and saved searches.
+  - A Tom Select-backed token-oriented search input for structured search phrases such as `status:open assignee:matsuo keyword`.
+- `rfk_token_suggestions_with`
+  - A lightweight controller helper for token suggestion JSON endpoints.
+- `RailsFieldsKit::TokenSuggestions.build`
+  - A builder for operator, field, predicate, value, and saved-search suggestion option JSON.
 
 Non-goals for the core gem:
 
@@ -75,12 +78,18 @@ Ransack integration is valuable, especially for admin screens and list pages, bu
 
 The adapter should help Rails Fields Kit inputs produce or edit Ransack-compatible parameters. It should not install, configure, or hide Ransack.
 
+Current progress:
+
+- `RailsFieldsKit::RansackSuggestions.build` composes Ransack-compatible token suggestion metadata without requiring or executing Ransack.
+- `RailsFieldsKit::TableFilterInput.ransack_filter` can describe table filter metadata intended for Ransack-backed token search.
+
 Host app responsibilities should remain explicit:
 
 - adding the `ransack` gem
 - calling `Model.ransack(params[:q])` in the controller or equivalent layer
 - defining `ransackable_attributes` and `ransackable_associations` when required
 - deciding which fields and predicates are allowed
+- parsing submitted token search text into Ransack params
 - handling authorization, scoping, and result pagination
 
 Possible API direction:
@@ -106,11 +115,13 @@ Integration with `matsuo-haruhito/rails_table_preferences` is a strong candidate
 
 The goal is to let applications that already define table columns and preferences avoid hand-writing repetitive filter and cell-editor views.
 
-Current direction:
+Current progress:
 
 - Rails Fields Kit exposes table-oriented metadata objects such as `RailsFieldsKit::TableFilterInput` and `RailsFieldsKit::TableCellInput`.
 - Table-oriented gems can read these through `to_table_filter` and `to_table_cell_editor` without taking a hard dependency on Rails Fields Kit.
-- A future integration can render filters and editable cell controls from table preference metadata when both gems are present.
+- `RailsFieldsKit::TableRenderer` maps table filter/editor metadata to FormBuilder call specs or dispatches them through a FormBuilder.
+- `RailsFieldsKit::TableMetadata` collects filter/editor metadata from column lists or table-like objects that respond to `columns`.
+- Token search and Ransack-oriented filter metadata can be represented through `TableFilterInput.token_search` and `TableFilterInput.ransack_filter`.
 
 Potential helper direction:
 
@@ -132,7 +143,7 @@ or, for non-Ransack forms:
 MVP scope:
 
 - render filters only for columns marked searchable/filterable
-- support text, select, enum select, combobox, multi-select, and tags fields
+- support text, select, enum select, combobox, multi-select, tags, and token-search fields
 - allow explicit predicate or parameter mapping when using Ransack
 - preserve Rails Fields Kit wrapper, label, hint, error, and accessibility behavior
 - avoid owning the table preference persistence layer
