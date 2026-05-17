@@ -340,6 +340,38 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(form_builder.rfk_search_field(:keyword)).to include("type=\"search\"")
   end
 
+  it "renders table metadata filters" do
+    html = form_builder.rfk_table_filters([
+      {
+        filter: RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json")
+      },
+      {
+        search_filter: RailsFieldsKit::TableFilterInput.token_search(:keyword, url: "/tokens.json")
+      }
+    ])
+
+    expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"combobox\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-url-value=\"/customers.json\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"token_search\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-url-value=\"/tokens.json\"")
+  end
+
+  it "renders table metadata cell editors" do
+    html = form_builder.rfk_table_cell_editors([
+      {
+        editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+      },
+      {
+        cell_editor: RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json")
+      }
+    ])
+
+    expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"select\"")
+    expect(html).to include(">Draft label</option>")
+    expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"combobox\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-url-value=\"/customers.json\"")
+  end
+
   it "wraps a field with label and hint when requested" do
     html = form_builder.rfk_select(
       :status,
