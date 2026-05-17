@@ -39,6 +39,7 @@ RSpec.describe "rails_fields_kit.gemspec" do
       "doc/configuration.md",
       "doc/events.md",
       "doc/development.md",
+      "doc/sample_app_checklist.md",
       "doc/release.md"
     )
   end
