@@ -7,6 +7,9 @@ export default class extends Controller {
     url: String,
     selectedUrl: String,
     createUrl: String,
+    queryParams: Object,
+    selectedQueryParams: Object,
+    createParams: Object,
     create: Boolean,
     freeText: Boolean,
     placeholder: String,
@@ -19,6 +22,9 @@ export default class extends Controller {
     searchField: { type: String, default: "text" },
     minLength: { type: Number, default: 0 },
     maxOptions: Number,
+    maxItems: Number,
+    loadThrottle: Number,
+    delimiter: String,
     preload: Boolean,
     openOnFocus: Boolean,
     closeAfterSelect: Boolean,
@@ -55,6 +61,9 @@ export default class extends Controller {
     }
 
     if (this.hasMaxOptionsValue) options.maxOptions = this.maxOptionsValue
+    if (this.hasMaxItemsValue) options.maxItems = this.maxItemsValue
+    if (this.hasLoadThrottleValue) options.loadThrottle = this.loadThrottleValue
+    if (this.hasDelimiterValue) options.delimiter = this.delimiterValue
     if (this.hasPreloadValue) options.preload = this.preloadValue
     if (this.hasOpenOnFocusValue) options.openOnFocus = this.openOnFocusValue
     if (this.hasCloseAfterSelectValue) options.closeAfterSelect = this.closeAfterSelectValue
@@ -125,6 +134,7 @@ export default class extends Controller {
 
   loadOptions(query, callback) {
     const url = new URL(this.urlValue, window.location.origin)
+    this.appendParams(url, this.queryParamsValue)
     url.searchParams.set(this.queryParamValue, query)
 
     fetch(url.toString(), {
@@ -160,6 +170,7 @@ export default class extends Controller {
     if (values.length === 0) return
 
     const url = new URL(this.selectedUrlValue, window.location.origin)
+    this.appendParams(url, this.selectedQueryParamsValue)
     if (values.length === 1) {
       url.searchParams.set(this.selectedParamValue, values[0])
     } else {
@@ -224,7 +235,7 @@ export default class extends Controller {
         "Content-Type": "application/json",
         "X-CSRF-Token": this.csrfToken()
       },
-      body: JSON.stringify({ [this.createParamValue]: input })
+      body: JSON.stringify({ ...this.createParamsValue, [this.createParamValue]: input })
     })
       .then((response) => this.handleCreateResponse(response))
       .then((json) => callback(this.normalizeCreatedOption(json)))
@@ -242,6 +253,16 @@ export default class extends Controller {
       error.response = response
       error.payload = json
       throw error
+    })
+  }
+
+  appendParams(url, params = {}) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => url.searchParams.append(key, item))
+      } else if (value !== null && value !== undefined) {
+        url.searchParams.set(key, value)
+      }
     })
   }
 
