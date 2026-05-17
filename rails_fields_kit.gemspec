@@ -16,10 +16,17 @@ Gem::Specification.new do |spec|
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
-  spec.metadata["changelog_uri"] = "#{spec.homepage}/releases"
+  spec.metadata["changelog_uri"] = "#{spec.homepage}/blob/main/CHANGELOG.md"
+  spec.metadata["documentation_uri"] = "#{spec.homepage}/tree/main/doc"
 
   spec.files = Dir.chdir(__dir__) do
-    Dir["{app,lib}/**/*", "LICENSE.txt", "README.md"]
+    Dir[
+      "{app,lib}/**/*",
+      "doc/**/*.md",
+      "CHANGELOG.md",
+      "LICENSE.txt",
+      "README.md"
+    ]
   end
   spec.require_paths = ["lib"]
 
