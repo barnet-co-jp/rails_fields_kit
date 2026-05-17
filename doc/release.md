@@ -5,6 +5,7 @@ This guide describes the lightweight release flow for Rails Fields Kit.
 ## Policy
 
 - Rails Fields Kit targets Rails 7.0 and newer.
+- Rails dependency is currently bounded to Rails 7 and Rails 8.
 - CI is intentionally not required during active development.
 - During development, verify changes locally with:
 
@@ -35,37 +36,34 @@ bundle exec rspec
    bundle exec rspec
    ```
 
-4. Review documentation.
+4. Build the gem locally.
+
+   ```bash
+   bundle exec rake build
+   ```
+
+5. Review documentation.
 
    - `README.md`
    - `CHANGELOG.md`
    - `doc/setup.md`
+   - `doc/public_api.md`
    - `doc/field_helpers.md`
    - `doc/controller_helpers.md`
    - `doc/configuration.md`
    - `doc/events.md`
+   - `doc/development.md`
+   - `doc/sample_app_checklist.md`
+   - `doc/release.md`
 
-5. Confirm version.
+6. Confirm version.
 
    ```ruby
    # lib/rails_fields_kit/version.rb
    RailsFieldsKit::VERSION = "0.1.0"
    ```
 
-6. Build the gem locally.
-
-   ```bash
-   bundle exec rake build
-   ```
-
-7. Optionally install the built gem into a sample Rails 7+ application and verify:
-
-   - `rails generate rails_fields_kit:install`
-   - Stimulus controller registration
-   - Tom Select CSS loading
-   - `rfk_combobox` with remote search
-   - `rfk_find_with` selected preload
-   - `rfk_create_with` create-on-the-fly
+7. Install the built gem into a sample Rails 7+ application and verify [`sample_app_checklist.md`](sample_app_checklist.md).
 
 ## Release steps
 
