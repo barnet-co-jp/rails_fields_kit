@@ -16,6 +16,7 @@ Then install:
 
 ```bash
 bundle install
+rails generate rails_fields_kit:install
 ```
 
 Rails Fields Kit expects your JavaScript application to provide `@hotwired/stimulus` and `tom-select`.
@@ -59,6 +60,26 @@ The create endpoint should return the created option object:
 { "id": 2, "name": "New Customer" }
 ```
 
+### Controller concern for search endpoints
+
+For simple Active Record-backed option searches, include `RailsFieldsKit::Searchable` and define an index action:
+
+```ruby
+class CustomersController < ApplicationController
+  include RailsFieldsKit::Searchable
+
+  rfk_search_with(
+    model: Customer,
+    value: :id,
+    label: :name,
+    search: [:name, :email],
+    value_field: "id",
+    label_field: "name",
+    limit: 20
+  )
+end
+```
+
 ### Normal select wrapper
 
 ```erb
@@ -86,12 +107,14 @@ The create endpoint should return the created option object:
 ```ruby
 # config/initializers/rails_fields_kit.rb
 RailsFieldsKit.configure do |config|
+  config.controller_name = "rails-fields-kit--tom-select"
   config.default_query_param = "q"
   config.default_create_param = "text"
   config.default_value_field = "value"
   config.default_label_field = "text"
   config.default_search_field = "text"
   config.default_min_length = 0
+  config.default_plugins = []
 end
 ```
 
