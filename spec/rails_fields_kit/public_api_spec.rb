@@ -40,4 +40,8 @@ RSpec.describe "public API" do
       :rfk_token_suggestions_with
     )
   end
+
+  it "exposes token suggestion builder" do
+    expect(RailsFieldsKit::TokenSuggestions).to respond_to(:build)
+  end
 end
