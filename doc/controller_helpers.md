@@ -1,0 +1,177 @@
+# Rails Fields Kit Controller Helpers
+
+Rails Fields Kit provides `RailsFieldsKit::Searchable` for building JSON endpoints used by remote Tom Select fields.
+
+```ruby
+class CustomersController < ApplicationController
+  include RailsFieldsKit::Searchable
+end
+```
+
+## `rfk_search_with`
+
+Defines a search action, defaulting to `index`.
+
+```ruby
+rfk_search_with(
+  model: Customer,
+  value: :id,
+  label: :name,
+  search: [:name, :email],
+  value_field: "id",
+  label_field: "name",
+  description: :email,
+  badge: :status,
+  description_field: "email",
+  badge_field: "status",
+  query_param: "q",
+  scope: -> { current_account.customers.active },
+  order: { name: :asc },
+  distinct: true,
+  limit: 20,
+  wrap: "options"
+)
+```
+
+### Common options
+
+- `model:` Active Record model or model-like class.
+- `value:` method used for the submitted value.
+- `label:` method used for the visible label.
+- `search:` columns searched with the query string.
+- `query_param:` request parameter name for the query. Defaults to `q`.
+- `limit:` maximum number of records. Defaults to `50`.
+- `scope:` base relation. Supports relation object, symbol scope, or callable evaluated in the controller instance.
+- `order:` order passed to the relation.
+- `distinct:` calls `distinct` before ordering/limiting.
+- `wrap:` wraps the JSON response, commonly `"options"`.
+
+### Rich option fields
+
+Use these to support rich Tom Select rendering.
+
+- `description:` method/callable used for a secondary line.
+- `badge:` method/callable used for a badge.
+- `description_field:` output JSON key for the description.
+- `badge_field:` output JSON key for the badge.
+
+## `rfk_find_with`
+
+Defines a selected-option lookup action, defaulting to `show`.
+
+Use it with FormBuilder's `selected_url:` when the form has saved IDs but not display labels.
+
+```ruby
+rfk_find_with(
+  model: Customer,
+  value: :id,
+  label: :name,
+  description: :email,
+  badge: :status,
+  value_field: "id",
+  label_field: "name",
+  description_field: "email",
+  badge_field: "status",
+  scope: -> { current_account.customers },
+  wrap: "option"
+)
+```
+
+Accepted request params:
+
+- `id` for one value.
+- `ids` for multiple values.
+- comma-separated `ids`, such as `1,2,3`.
+
+The response can be a single option or an array of options depending on the request.
+
+## `rfk_create_with`
+
+Defines a create-on-the-fly action, defaulting to `create`.
+
+```ruby
+rfk_create_with(
+  model: Customer,
+  value: :id,
+  label: :name,
+  create_attribute: :name,
+  create_param: "name",
+  assign: ->(_customer) { { account_id: current_account.id } },
+  authorize: ->(customer) { policy(customer).create? },
+  before_save: :normalize_customer,
+  value_field: "id",
+  label_field: "name",
+  description: :email,
+  badge: :status,
+  description_field: "email",
+  badge_field: "status",
+  wrap: "option"
+)
+```
+
+### Create options
+
+- `create_attribute:` model attribute to set from the incoming text.
+- `create_param:` request parameter name. Defaults to `text`.
+- `assign:` extra attributes assigned before validation. Supports hash, method name, or callable.
+- `authorize:` returns whether the create is allowed. Supports method name or callable. Returns `403` when false.
+- `before_save:` hook called before `save`. Supports method name or callable. Returns `422` when false.
+- `wrap:` wraps the JSON response, commonly `"option"`.
+
+## Output shape
+
+By default, options are returned as plain objects.
+
+```json
+{ "value": 1, "text": "Acme Corp" }
+```
+
+Custom output keys are supported:
+
+```ruby
+value_field: "id",
+label_field: "name",
+description_field: "email",
+badge_field: "status"
+```
+
+```json
+{
+  "id": 1,
+  "name": "Acme Corp",
+  "email": "hello@acme.example",
+  "status": "active"
+}
+```
+
+Wrapped responses are supported:
+
+```json
+{ "options": [ { "id": 1, "name": "Acme Corp" } ] }
+```
+
+```json
+{ "option": { "id": 1, "name": "Acme Corp" } }
+```
+
+## Suggested routes
+
+```ruby
+resources :customers do
+  collection do
+    get :selected
+  end
+end
+```
+
+Then map actions as needed:
+
+```ruby
+class CustomersController < ApplicationController
+  include RailsFieldsKit::Searchable
+
+  rfk_search_with action: :index, model: Customer, value: :id, label: :name, search: [:name]
+  rfk_find_with action: :selected, model: Customer, value: :id, label: :name
+  rfk_create_with action: :create, model: Customer, value: :id, label: :name, create_attribute: :name
+end
+```
