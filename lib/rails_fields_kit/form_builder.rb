@@ -105,7 +105,7 @@ module RailsFieldsKit
       collection_value_method = options.delete(:collection_value_method) || value_method
       collection_label_method = options.delete(:collection_label_method) || label_method
       selected_choices = rfk_normalize_selected(selected, value_method: value_method, label_method: label_method)
-      plugins = options.delete(:plugins) || config.default_plugins
+      plugins = rfk_option_or_default(options, :plugins, config.default_plugins)
       plugins = Array(plugins) | ["clear_button"] if allow_clear
 
       rfk_assign_data_value(data, :url, options.delete(:url))
@@ -113,23 +113,23 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :create, options.delete(:create))
       rfk_assign_data_value(data, :free_text, options.delete(:free_text))
       rfk_assign_data_value(data, :placeholder, options[:placeholder])
-      rfk_assign_data_value(data, :query_param, options.delete(:query_param) || config.default_query_param)
-      rfk_assign_data_value(data, :create_param, options.delete(:create_param) || config.default_create_param)
-      rfk_assign_data_value(data, :value_field, options.delete(:value_field) || config.default_value_field)
-      rfk_assign_data_value(data, :label_field, options.delete(:label_field) || config.default_label_field)
-      rfk_assign_data_value(data, :search_field, options.delete(:search_field) || config.default_search_field)
-      rfk_assign_data_value(data, :min_length, options.delete(:min_length) || config.default_min_length)
-      rfk_assign_data_value(data, :max_options, options.delete(:max_options) || config.default_max_options)
-      rfk_assign_data_value(data, :preload, options.delete(:preload) || config.default_preload)
-      rfk_assign_data_value(data, :open_on_focus, options.delete(:open_on_focus) || config.default_open_on_focus)
-      rfk_assign_data_value(data, :close_after_select, options.delete(:close_after_select) || config.default_close_after_select)
-      rfk_assign_data_value(data, :hide_selected, options.delete(:hide_selected) || config.default_hide_selected)
-      rfk_assign_data_value(data, :persist, options.delete(:persist) || config.default_persist)
-      rfk_assign_data_value(data, :no_results_text, options.delete(:no_results_text) || config.default_no_results_text)
-      rfk_assign_data_value(data, :loading_text, options.delete(:loading_text) || config.default_loading_text)
-      rfk_assign_data_value(data, :create_text, options.delete(:create_text) || config.default_create_text)
-      rfk_assign_data_value(data, :option_description_field, options.delete(:option_description_field) || config.default_option_description_field)
-      rfk_assign_data_value(data, :option_badge_field, options.delete(:option_badge_field) || config.default_option_badge_field)
+      rfk_assign_data_value(data, :query_param, rfk_option_or_default(options, :query_param, config.default_query_param))
+      rfk_assign_data_value(data, :create_param, rfk_option_or_default(options, :create_param, config.default_create_param))
+      rfk_assign_data_value(data, :value_field, rfk_option_or_default(options, :value_field, config.default_value_field))
+      rfk_assign_data_value(data, :label_field, rfk_option_or_default(options, :label_field, config.default_label_field))
+      rfk_assign_data_value(data, :search_field, rfk_option_or_default(options, :search_field, config.default_search_field))
+      rfk_assign_data_value(data, :min_length, rfk_option_or_default(options, :min_length, config.default_min_length))
+      rfk_assign_data_value(data, :max_options, rfk_option_or_default(options, :max_options, config.default_max_options))
+      rfk_assign_data_value(data, :preload, rfk_option_or_default(options, :preload, config.default_preload))
+      rfk_assign_data_value(data, :open_on_focus, rfk_option_or_default(options, :open_on_focus, config.default_open_on_focus))
+      rfk_assign_data_value(data, :close_after_select, rfk_option_or_default(options, :close_after_select, config.default_close_after_select))
+      rfk_assign_data_value(data, :hide_selected, rfk_option_or_default(options, :hide_selected, config.default_hide_selected))
+      rfk_assign_data_value(data, :persist, rfk_option_or_default(options, :persist, config.default_persist))
+      rfk_assign_data_value(data, :no_results_text, rfk_option_or_default(options, :no_results_text, config.default_no_results_text))
+      rfk_assign_data_value(data, :loading_text, rfk_option_or_default(options, :loading_text, config.default_loading_text))
+      rfk_assign_data_value(data, :create_text, rfk_option_or_default(options, :create_text, config.default_create_text))
+      rfk_assign_data_value(data, :option_description_field, rfk_option_or_default(options, :option_description_field, config.default_option_description_field))
+      rfk_assign_data_value(data, :option_badge_field, rfk_option_or_default(options, :option_badge_field, config.default_option_badge_field))
       rfk_assign_data_value(data, :plugins, plugins)
 
       html_options[:multiple] = options.delete(:multiple) if options.key?(:multiple)
@@ -161,6 +161,10 @@ module RailsFieldsKit
       field_html = rfk_wrap_control(field_html, wrapper_options)
 
       rfk_wrap_field(method, field_html, wrapper_options)
+    end
+
+    def rfk_option_or_default(options, key, default)
+      options.key?(key) ? options.delete(key) : default
     end
 
     def rfk_extract_wrapper_options(options)
