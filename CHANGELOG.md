@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+- `rfk_token_search` for token-oriented search inputs such as `status:open keyword`, keeping parsing and search execution in the host application.
+- Remote request extension options for Tom Select-backed helpers:
+  - `query_params:` for fixed search query parameters.
+  - `selected_query_params:` for fixed selected preload query parameters.
+  - `create_params:` for fixed create-on-the-fly JSON fields.
+- Tom Select option pass-throughs for `max_items:`, `load_throttle:`, and `delimiter:`.
+
 ## 0.1.0 - 2026-05-18
 
 ### Added
