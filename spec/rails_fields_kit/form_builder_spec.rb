@@ -75,9 +75,30 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"select\"")
     expect(html).to include("data-rails-fields-kit--tom-select-value-field-value=\"value\"")
     expect(html).to include("data-rails-fields-kit--tom-select-label-field-value=\"text\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"No results found\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-loading-text-value=\"Loading...\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-create-text-value=\"Add\"")
     expect(html).to include("value=\"draft\"")
     expect(html).to include("selected=\"selected\"")
     expect(html).to include(">Draft</option>")
+  end
+
+  it "renders custom Tom Select render options" do
+    html = form_builder.rfk_combobox(
+      :customer_id,
+      url: "/customers.json",
+      max_options: 50,
+      preload: true,
+      no_results_text: "No customers",
+      loading_text: "Searching...",
+      create_text: "Create"
+    )
+
+    expect(html).to include("data-rails-fields-kit--tom-select-max-options-value=\"50\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-preload-value=\"true\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"No customers\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-loading-text-value=\"Searching...\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-create-text-value=\"Create\"")
   end
 
   it "renders a clearable select" do
@@ -282,11 +303,13 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     RailsFieldsKit.configure do |config|
       config.default_query_param = "term"
       config.default_min_length = 3
+      config.default_no_results_text = "Nothing here"
     end
 
     html = form_builder.rfk_combobox(:customer_id, url: "/customers.json")
 
     expect(html).to include("data-rails-fields-kit--tom-select-query-param-value=\"term\"")
     expect(html).to include("data-rails-fields-kit--tom-select-min-length-value=\"3\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"Nothing here\"")
   end
 end
