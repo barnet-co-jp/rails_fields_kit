@@ -20,4 +20,11 @@ RailsFieldsKit.configure do |config|
 
   # Default Tom Select plugins applied by helpers.
   config.default_plugins = []
+
+  # Optional wrapper classes used when helpers are called with wrapper: true.
+  config.wrapper_class = "rfk-field"
+  config.label_class = "rfk-label"
+  config.hint_class = "rfk-hint"
+  config.error_class = "rfk-error"
+  config.field_error_class = "rfk-field--error"
 end
