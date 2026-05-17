@@ -3,6 +3,9 @@
 require "bundler/setup"
 require "rails_fields_kit"
 require "action_view"
+require "active_model"
+
+ActionView::Helpers::FormBuilder.include RailsFieldsKit::FormBuilder
 
 RSpec.configure do |config|
   config.example_status_persistence_file_path = ".rspec_status"
