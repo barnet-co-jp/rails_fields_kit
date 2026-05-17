@@ -45,4 +45,9 @@ RSpec.describe "public API" do
     expect(RailsFieldsKit::TokenSuggestions).to respond_to(:build)
     expect(RailsFieldsKit::RansackSuggestions).to respond_to(:build)
   end
+
+  it "exposes table filter factories" do
+    expect(RailsFieldsKit::TableFilterInput).to respond_to(:token_search)
+    expect(RailsFieldsKit::TableFilterInput).to respond_to(:ransack_filter)
+  end
 end
