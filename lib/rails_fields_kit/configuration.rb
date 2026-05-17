@@ -4,6 +4,8 @@ module RailsFieldsKit
   class Configuration
     attr_accessor :controller_name,
                   :default_query_param,
+                  :default_selected_param,
+                  :default_selected_multiple_param,
                   :default_create_param,
                   :default_value_field,
                   :default_label_field,
@@ -33,6 +35,8 @@ module RailsFieldsKit
     def initialize
       @controller_name = "rails-fields-kit--tom-select"
       @default_query_param = "q"
+      @default_selected_param = "id"
+      @default_selected_multiple_param = "ids"
       @default_create_param = "text"
       @default_value_field = "value"
       @default_label_field = "text"
