@@ -1,0 +1,27 @@
+# frozen_string_literal: true
+
+require_relative "lib/rails_fields_kit/version"
+
+Gem::Specification.new do |spec|
+  spec.name = "rails_fields_kit"
+  spec.version = RailsFieldsKit::VERSION
+  spec.authors = ["Haruhito Matsuo"]
+  spec.email = ["matsuo@scrumsoftware.co.jp"]
+
+  spec.summary = "Rails form helpers for searchable selects, editable comboboxes, tags, and autocomplete."
+  spec.description = "Rails Fields Kit provides Rails-friendly field helpers for form inputs that native HTML and Rails helpers still make awkward, starting with Tom Select powered editable comboboxes."
+  spec.homepage = "https://github.com/matsuo-haruhito/rails_fields_kit"
+  spec.license = "MIT"
+  spec.required_ruby_version = ">= 3.1"
+
+  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["source_code_uri"] = spec.homepage
+  spec.metadata["changelog_uri"] = "#{spec.homepage}/releases"
+
+  spec.files = Dir.chdir(__dir__) do
+    Dir["{app,lib}/**/*", "LICENSE.txt", "README.md"]
+  end
+  spec.require_paths = ["lib"]
+
+  spec.add_dependency "rails", ">= 7.0"
+end
