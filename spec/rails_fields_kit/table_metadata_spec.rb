@@ -23,6 +23,45 @@ RSpec.describe "table metadata objects" do
       )
     end
 
+    it "builds token search filter metadata" do
+      input = described_class.token_search(
+        :query,
+        url: "/search_tokens.json",
+        placeholder: "status:open keyword"
+      )
+
+      expect(input.to_table_filter).to eq(
+        type: "rails_fields_kit",
+        field_type: "token_search",
+        method: "query",
+        options: {
+          url: "/search_tokens.json",
+          placeholder: "status:open keyword"
+        }
+      )
+    end
+
+    it "builds ransack filter metadata" do
+      input = described_class.ransack_filter(
+        :query,
+        fields: { name: :name_cont, status: :status_eq },
+        url: "/search_tokens.json",
+        param_name: :q
+      )
+
+      expect(input.to_table_filter).to eq(
+        type: "rails_fields_kit",
+        field_type: "token_search",
+        method: "query",
+        options: {
+          adapter: :ransack,
+          param_name: :q,
+          fields: { name: :name_cont, status: :status_eq },
+          url: "/search_tokens.json"
+        }
+      )
+    end
+
     it "keeps Object#method available for reflection" do
       input = described_class.new(:combobox, :customer_id)
 
