@@ -46,8 +46,17 @@ module RailsFieldsKit
         when Hash
           column[key] || column[key.to_s]
         else
-          column.public_send(key) if column.respond_to?(key)
+          read_object_column_value(column, key)
         end
+      end
+
+      def read_object_column_value(column, key)
+        return unless column.respond_to?(key)
+
+        reader = column.method(key)
+        return if reader.owner == Enumerable
+
+        reader.call
       end
     end
   end
