@@ -179,6 +179,10 @@ class CustomersController < ApplicationController
     search: [:name, :email],
     value_field: "id",
     label_field: "name",
+    description: :email,
+    badge: :status,
+    description_field: "email",
+    badge_field: "status",
     limit: 20,
     wrap: "options"
   )
@@ -191,10 +195,16 @@ class CustomersController < ApplicationController
     create_param: "name",
     value_field: "id",
     label_field: "name",
+    description: :email,
+    badge: ->(customer) { customer.status.upcase },
+    description_field: "email",
+    badge_field: "status",
     wrap: "option"
   )
 end
 ```
+
+`description:` and `badge:` can be method names or callables. They are useful with `option_description_field:` and `option_badge_field:` on the field helper.
 
 `wrap:` is optional. Without it, search returns an array and create returns a single option object. With `wrap: "options"`, search returns `{ "options": [...] }`. With `wrap: "option"`, create returns `{ "option": {...} }`.
 
