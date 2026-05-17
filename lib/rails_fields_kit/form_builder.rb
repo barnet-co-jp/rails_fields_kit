@@ -138,7 +138,7 @@ module RailsFieldsKit
           label_method: collection_label_method
         )
         options[:selected] ||= rfk_selected_values(selected_choices) if selected_choices.any?
-        grouped_options = options_for_select([], options[:selected]) + grouped_options_for_select(grouped_choices, options[:selected])
+        grouped_options = @template.grouped_options_for_select(grouped_choices, options[:selected])
         select(method, grouped_options, options.except(:selected), html_options)
       else
         choices = rfk_choices_with_selected(
