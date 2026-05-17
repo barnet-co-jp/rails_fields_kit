@@ -81,6 +81,10 @@ Importmap users can pin and register these modules manually, but Rails Fields Ki
     min_length: 2,
     max_options: 50,
     preload: true,
+    open_on_focus: true,
+    close_after_select: true,
+    hide_selected: true,
+    persist: false,
     no_results_text: "No customers found",
     loading_text: "Searching...",
     create_text: "Create",
@@ -288,6 +292,10 @@ RailsFieldsKit.configure do |config|
   config.default_min_length = 0
   config.default_max_options = nil
   config.default_preload = nil
+  config.default_open_on_focus = nil
+  config.default_close_after_select = nil
+  config.default_hide_selected = nil
+  config.default_persist = nil
   config.default_no_results_text = "No results found"
   config.default_loading_text = "Loading..."
   config.default_create_text = "Add"
