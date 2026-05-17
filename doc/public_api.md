@@ -85,6 +85,8 @@ Public classes:
 
 Public metadata methods:
 
+- `RailsFieldsKit::TableFilterInput.token_search`
+- `RailsFieldsKit::TableFilterInput.ransack_filter`
 - `RailsFieldsKit::TableFilterInput#to_table_filter`
 - `RailsFieldsKit::TableCellInput#to_table_cell_editor`
 
