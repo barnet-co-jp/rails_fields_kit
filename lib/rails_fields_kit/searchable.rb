@@ -42,6 +42,32 @@ module RailsFieldsKit
         end
       end
 
+      def rfk_find_with(model:, label:, value: :id, id_param: :id, ids_param: :ids, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, wrap: nil)
+        define_method(:show) do
+          ids = rfk_find_ids(id_param: id_param, ids_param: ids_param)
+          relation = rfk_search_scope(model, scope)
+          relation = relation.where(value => ids)
+          relation = relation.order(order) if order
+          records = relation.limit(ids.size)
+          options = records.map do |record|
+            rfk_option_json(
+              record,
+              value: value,
+              label: label,
+              value_field: value_field,
+              label_field: label_field,
+              description: description,
+              badge: badge,
+              description_field: description_field,
+              badge_field: badge_field
+            )
+          end
+
+          payload = ids.one? ? options.first : options
+          render json: rfk_wrap_find_result(payload, wrap: wrap, multiple: ids.many?)
+        end
+      end
+
       def rfk_create_with(model:, label:, value: :id, create_attribute: nil, create_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, permitted_attributes: nil, assign: nil, authorize: nil, before_save: nil, wrap: nil)
         define_method(:create) do
           attribute_name = create_attribute || label
@@ -95,6 +121,17 @@ module RailsFieldsKit
       else
         scope.respond_to?(:call) ? instance_exec(&scope) : scope
       end
+    end
+
+    def rfk_find_ids(id_param:, ids_param:)
+      ids_value = params[ids_param] || params[ids_param.to_s]
+      ids = if ids_value
+        ids_value.is_a?(String) ? ids_value.split(",") : Array(ids_value)
+      else
+        [params[id_param] || params[id_param.to_s]]
+      end
+
+      ids.map(&:to_s).map(&:strip).reject(&:empty?)
     end
 
     def rfk_apply_assignments(record, assign)
@@ -183,6 +220,12 @@ module RailsFieldsKit
       return option if wrap.nil? || wrap == false
 
       { wrap => option }
+    end
+
+    def rfk_wrap_find_result(payload, wrap:, multiple:)
+      return payload if wrap.nil? || wrap == false
+
+      { wrap => payload }
     end
 
     def rfk_create_attributes(attribute_name:, param_name:, permitted_attributes:)
