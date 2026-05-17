@@ -11,6 +11,18 @@ RSpec.describe RailsFieldsKit::FormBuilder do
       ActiveModel::Name.new(self, nil, "DummyModel")
     end
 
+    def self.statuses
+      { "draft" => 0, "published" => 1 }
+    end
+
+    def self.human_attribute_name(attribute, options = {})
+      translations = {
+        "status.draft" => "Draft label",
+        "status.published" => "Published label"
+      }
+      translations.fetch(attribute.to_s, options[:default] || attribute.to_s.humanize)
+    end
+
     def persisted?
       false
     end
@@ -39,6 +51,7 @@ RSpec.describe RailsFieldsKit::FormBuilder do
   end
 
   SelectedCustomer = Struct.new(:id, :name)
+  CollectionCustomer = Struct.new(:uuid, :display_name)
 
   def protect_against_forgery?
     false
@@ -65,6 +78,29 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("value=\"draft\"")
     expect(html).to include("selected=\"selected\"")
     expect(html).to include(">Draft</option>")
+  end
+
+  it "renders object collections with collection methods" do
+    customers = [CollectionCustomer.new("c-1", "Acme Corp")]
+
+    html = form_builder.rfk_select(
+      :customer_id,
+      collection: customers,
+      collection_value_method: :uuid,
+      collection_label_method: :display_name
+    )
+
+    expect(html).to include("value=\"c-1\"")
+    expect(html).to include(">Acme Corp</option>")
+  end
+
+  it "renders enum selects" do
+    html = form_builder.rfk_enum_select(:status)
+
+    expect(html).to include("value=\"draft\"")
+    expect(html).to include(">Draft label</option>")
+    expect(html).to include("value=\"published\"")
+    expect(html).to include(">Published label</option>")
   end
 
   it "renders a remote editable combobox" do
