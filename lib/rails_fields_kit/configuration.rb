@@ -15,6 +15,8 @@ module RailsFieldsKit
                   :default_no_results_text,
                   :default_loading_text,
                   :default_create_text,
+                  :default_option_description_field,
+                  :default_option_badge_field,
                   :wrapper_class,
                   :label_class,
                   :hint_class,
@@ -38,6 +40,8 @@ module RailsFieldsKit
       @default_no_results_text = "No results found"
       @default_loading_text = "Loading..."
       @default_create_text = "Add"
+      @default_option_description_field = nil
+      @default_option_badge_field = nil
       @wrapper_class = "rfk-field"
       @label_class = "rfk-label"
       @hint_class = "rfk-hint"
