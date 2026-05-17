@@ -73,7 +73,8 @@ RSpec.describe RailsFieldsKit::TableMetadata do
       AliasColumnDefinition.new(filter_input: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json"))
     ]
 
-    expect(columns.first.method(:filter).owner).to eq(Enumerable)
+    expect(columns.first.members).to include(:filter_input)
+    expect(columns.first.members).not_to include(:filter)
     expect(described_class.filters(columns)).to eq([
       {
         type: "rails_fields_kit",
