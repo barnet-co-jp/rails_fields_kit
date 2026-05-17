@@ -115,6 +115,18 @@ RailsFieldsKit::TableRenderer.render_filter(form_builder, filter)
 RailsFieldsKit::TableRenderer.render_cell_editor(form_builder, editor)
 ```
 
+For table definitions with many columns, use the batch APIs. They ignore `nil` entries so callers can compact optional filters/editors naturally.
+
+```ruby
+filter_calls = RailsFieldsKit::TableRenderer.filter_calls(filters)
+editor_calls = RailsFieldsKit::TableRenderer.cell_editor_calls(editors)
+```
+
+```ruby
+RailsFieldsKit::TableRenderer.render_filters(form_builder, filters)
+RailsFieldsKit::TableRenderer.render_cell_editors(form_builder, editors)
+```
+
 The renderer is intentionally thin. It maps documented Rails Fields Kit `field_type` values to FormBuilder helper names and does not own table preference persistence, query parsing, authorization, or result rendering.
 
 ## Custom table field helpers
