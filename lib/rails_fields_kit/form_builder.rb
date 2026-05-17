@@ -81,6 +81,7 @@ module RailsFieldsKit
       wrapper_options = rfk_extract_wrapper_options(options)
       html_options = options.delete(:html) || {}
       field_options = options.merge(html_options)
+      rfk_apply_accessibility!(method, field_options, wrapper_options)
       field_html = public_send(helper_name, method, field_options)
       field_html = rfk_wrap_control(field_html, wrapper_options)
 
@@ -91,6 +92,7 @@ module RailsFieldsKit
       config = RailsFieldsKit.configuration
       wrapper_options = rfk_extract_wrapper_options(options)
       html_options = options.delete(:html) || {}
+      rfk_apply_accessibility!(method, html_options, wrapper_options)
       data = html_options[:data] ||= {}
       data[:controller] = [data[:controller], config.controller_name].compact.join(" ")
       data[:rails_fields_kit__tom_select_kind_value] = field_kind
@@ -180,8 +182,31 @@ module RailsFieldsKit
         error_html: options.delete(:error_html) || {},
         control_html: options.delete(:control_html) || {},
         prefix_html: options.delete(:prefix_html) || {},
-        suffix_html: options.delete(:suffix_html) || {}
+        suffix_html: options.delete(:suffix_html) || {},
+        accessibility: options.key?(:accessibility) ? options.delete(:accessibility) : true
       }
+    end
+
+    def rfk_apply_accessibility!(method, html_options, wrapper_options)
+      return unless wrapper_options[:wrapper] && wrapper_options[:accessibility]
+
+      described_by = []
+      described_by << rfk_hint_id(method) if wrapper_options[:hint]
+      errors = rfk_errors_for(method)
+      described_by << rfk_error_id(method) if errors.any?
+      html_options[:aria] ||= {}
+      existing_described_by = html_options[:aria][:describedby] || html_options[:aria]["describedby"]
+      described_by.unshift(existing_described_by) if existing_described_by
+      html_options[:aria][:describedby] = described_by.join(" ") if described_by.any?
+      html_options[:aria][:invalid] = true if errors.any?
+    end
+
+    def rfk_hint_id(method)
+      "#{object_name}_#{method}_hint"
+    end
+
+    def rfk_error_id(method)
+      "#{object_name}_#{method}_error"
     end
 
     def rfk_wrap_control(field_html, wrapper_options)
@@ -218,8 +243,8 @@ module RailsFieldsKit
         parts = []
         parts << rfk_label(method, wrapper_options[:label], wrapper_options[:label_html]) unless wrapper_options[:label] == false
         parts << field_html
-        parts << rfk_hint(wrapper_options[:hint], wrapper_options[:hint_html]) if wrapper_options[:hint]
-        parts << rfk_error(errors, wrapper_options[:error_html]) if errors.any?
+        parts << rfk_hint(method, wrapper_options[:hint], wrapper_options[:hint_html]) if wrapper_options[:hint]
+        parts << rfk_error(method, errors, wrapper_options[:error_html]) if errors.any?
         parts.join.html_safe
       end
     end
@@ -230,14 +255,16 @@ module RailsFieldsKit
       label(method, label_text, label_options)
     end
 
-    def rfk_hint(hint, hint_html)
+    def rfk_hint(method, hint, hint_html)
       hint_options = hint_html.dup
+      hint_options[:id] ||= rfk_hint_id(method)
       hint_options[:class] = [hint_options[:class], RailsFieldsKit.configuration.hint_class].compact.join(" ")
       @template.content_tag(:div, hint, hint_options)
     end
 
-    def rfk_error(errors, error_html)
+    def rfk_error(method, errors, error_html)
       error_options = error_html.dup
+      error_options[:id] ||= rfk_error_id(method)
       error_options[:class] = [error_options[:class], RailsFieldsKit.configuration.error_class].compact.join(" ")
       @template.content_tag(:div, errors.join(", "), error_options)
     end
