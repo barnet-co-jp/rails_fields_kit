@@ -49,6 +49,12 @@ module RailsFieldsKit
       rfk_tom_select_field(method, :select, collection: collection, **options)
     end
 
+    def rfk_enum_select(method, enum: nil, **options)
+      enum_values = enum || object.class.public_send(method.to_s.pluralize)
+      collection = enum_values.keys.map { |key| [rfk_enum_label(method, key), key] }
+      rfk_tom_select_field(method, :select, collection: collection, **options)
+    end
+
     def rfk_combobox(method, collection: nil, **options)
       rfk_tom_select_field(method, :combobox, collection: collection, **options)
     end
@@ -87,6 +93,8 @@ module RailsFieldsKit
       selected = options.delete(:selected)
       value_method = options.delete(:value_method) || :id
       label_method = options.delete(:label_method) || :to_s
+      collection_value_method = options.delete(:collection_value_method) || value_method
+      collection_label_method = options.delete(:collection_label_method) || label_method
       selected_choices = rfk_normalize_selected(selected, value_method: value_method, label_method: label_method)
 
       rfk_assign_data_value(data, :url, options.delete(:url))
@@ -108,7 +116,12 @@ module RailsFieldsKit
       field_html = if field_kind == :autocomplete || html_options[:multiple] == false && options[:as] == :text
         text_field(method, options.merge(html_options))
       else
-        choices = rfk_choices_with_selected(collection, selected_choices: selected_choices)
+        choices = rfk_choices_with_selected(
+          collection,
+          selected_choices: selected_choices,
+          value_method: collection_value_method,
+          label_method: collection_label_method
+        )
         options[:selected] ||= rfk_selected_values(selected_choices) if selected_choices.any?
         select(method, choices, options, html_options)
       end
@@ -206,8 +219,8 @@ module RailsFieldsKit
       data[data_key] = value.is_a?(Array) || value.is_a?(Hash) ? JSON.generate(value) : value
     end
 
-    def rfk_choices_with_selected(collection, selected_choices:)
-      choices = rfk_normalize_collection(collection)
+    def rfk_choices_with_selected(collection, selected_choices:, value_method:, label_method:)
+      choices = rfk_normalize_collection(collection, value_method: value_method, label_method: label_method)
       existing_values = choices.map { |choice| Array(choice).second.to_s }
       missing_selected_choices = selected_choices.reject { |choice| existing_values.include?(choice.second.to_s) }
 
@@ -218,14 +231,20 @@ module RailsFieldsKit
       selected_choices.map(&:second)
     end
 
-    def rfk_normalize_collection(collection)
+    def rfk_normalize_collection(collection, value_method:, label_method:)
       case collection
       when nil
         []
       when Hash
         collection.map { |label, value| [label, value] }
       else
-        collection
+        collection.map do |item|
+          if item.is_a?(Array) && item.size == 2
+            item
+          else
+            [rfk_read_selected_label(item, label_method), rfk_read_selected_value(item, value_method)]
+          end
+        end
       end
     end
 
@@ -249,6 +268,10 @@ module RailsFieldsKit
       label = selected[:text] || selected["text"] || selected[:label] || selected["label"] || selected[:name] || selected["name"] || value
 
       [label, value]
+    end
+
+    def rfk_enum_label(method, value)
+      object.class.human_attribute_name("#{method}.#{value}", default: value.to_s.humanize)
     end
 
     def rfk_read_selected_value(record, value_method)
