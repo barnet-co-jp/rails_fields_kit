@@ -36,7 +36,8 @@ RSpec.describe "public API" do
     expect(RailsFieldsKit::Searchable::ClassMethods.instance_methods).to include(
       :rfk_search_with,
       :rfk_find_with,
-      :rfk_create_with
+      :rfk_create_with,
+      :rfk_token_suggestions_with
     )
   end
 end
