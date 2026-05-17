@@ -20,6 +20,8 @@ RSpec.describe "public API" do
       :rfk_grouped_select,
       :rfk_enum_select,
       :rfk_token_search,
+      :rfk_table_filters,
+      :rfk_table_cell_editors,
       :rfk_text_field,
       :rfk_text_area,
       :rfk_number_field,
