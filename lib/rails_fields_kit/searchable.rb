@@ -7,7 +7,7 @@ module RailsFieldsKit
     extend ActiveSupport::Concern
 
     class_methods do
-      def rfk_search_with(model:, label:, value: :id, search:, limit: 20, query_param: nil)
+      def rfk_search_with(model:, label:, value: :id, search:, limit: 20, query_param: nil, value_field: nil, label_field: nil)
         define_method(:index) do
           query_key = query_param || RailsFieldsKit.configuration.default_query_param
           query = params[query_key].to_s
@@ -23,17 +23,25 @@ module RailsFieldsKit
           end
 
           records = scope.limit(limit)
-          render json: records.map { |record| rfk_option_json(record, value: value, label: label) }
+          render json: records.map do |record|
+            rfk_option_json(
+              record,
+              value: value,
+              label: label,
+              value_field: value_field,
+              label_field: label_field
+            )
+          end
         end
       end
     end
 
     private
 
-    def rfk_option_json(record, value:, label:)
+    def rfk_option_json(record, value:, label:, value_field:, label_field:)
       {
-        RailsFieldsKit.configuration.default_value_field => record.public_send(value),
-        RailsFieldsKit.configuration.default_label_field => record.public_send(label)
+        (value_field || RailsFieldsKit.configuration.default_value_field) => record.public_send(value),
+        (label_field || RailsFieldsKit.configuration.default_label_field) => record.public_send(label)
       }
     end
   end
