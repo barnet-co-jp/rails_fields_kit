@@ -171,9 +171,11 @@ module RailsFieldsKit
     end
 
     def rfk_promote_html_options!(options, html_options)
-      %i[required readonly disabled autocomplete].each do |key|
+      %i[required readonly autocomplete].each do |key|
         html_options[key] = options.delete(key) if options.key?(key)
       end
+
+      html_options[:disabled] = options.delete(:disabled) if [true, false].include?(options[:disabled])
     end
 
     def rfk_extract_wrapper_options(options)
