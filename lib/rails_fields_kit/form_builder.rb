@@ -92,6 +92,7 @@ module RailsFieldsKit
       config = RailsFieldsKit.configuration
       wrapper_options = rfk_extract_wrapper_options(options)
       html_options = options.delete(:html) || {}
+      rfk_promote_html_options!(options, html_options)
       rfk_apply_accessibility!(method, html_options, wrapper_options)
       data = html_options[:data] ||= {}
       data[:controller] = [data[:controller], config.controller_name].compact.join(" ")
@@ -169,6 +170,12 @@ module RailsFieldsKit
       options.key?(key) ? options.delete(key) : default
     end
 
+    def rfk_promote_html_options!(options, html_options)
+      %i[required readonly disabled autocomplete].each do |key|
+        html_options[key] = options.delete(key) if options.key?(key)
+      end
+    end
+
     def rfk_extract_wrapper_options(options)
       {
         label: options.delete(:label),
@@ -199,6 +206,7 @@ module RailsFieldsKit
       described_by.unshift(existing_described_by) if existing_described_by
       html_options[:aria][:describedby] = described_by.join(" ") if described_by.any?
       html_options[:aria][:invalid] = true if errors.any?
+      html_options[:aria][:required] = true if html_options[:required]
     end
 
     def rfk_hint_id(method)
