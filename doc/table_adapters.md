@@ -122,6 +122,13 @@ filter_calls = RailsFieldsKit::TableMetadata.filter_calls(columns)
 editor_calls = RailsFieldsKit::TableMetadata.cell_editor_calls(columns)
 ```
 
+When a table integration already has a FormBuilder, it can render directly from the column definitions:
+
+```ruby
+RailsFieldsKit::TableMetadata.render_filters(form_builder, columns)
+RailsFieldsKit::TableMetadata.render_cell_editors(form_builder, columns)
+```
+
 `nil` and `false` filters/editors are skipped. Raw metadata hashes are preserved, while objects responding to `to_table_filter` or `to_table_cell_editor` are normalized through those protocols.
 
 ## Rendering metadata
@@ -227,4 +234,4 @@ A host app or table helper can pass the metadata objects into column-like defini
 }
 ```
 
-A table preferences implementation can normalize these values by calling `RailsFieldsKit::TableMetadata.filters` or `RailsFieldsKit::TableMetadata.cell_editors`. It can then call `RailsFieldsKit::TableRenderer.filter_call` or `RailsFieldsKit::TableRenderer.cell_editor_call` to map metadata to Rails Fields Kit FormBuilder helpers.
+A table preferences implementation can normalize these values by calling `RailsFieldsKit::TableMetadata.filters` or `RailsFieldsKit::TableMetadata.cell_editors`. It can then call `RailsFieldsKit::TableRenderer.filter_call`, `RailsFieldsKit::TableRenderer.cell_editor_call`, or the `RailsFieldsKit::TableMetadata` render shortcuts to map metadata to Rails Fields Kit FormBuilder helpers.
