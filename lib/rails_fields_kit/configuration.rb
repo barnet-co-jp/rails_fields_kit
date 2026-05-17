@@ -12,6 +12,10 @@ module RailsFieldsKit
                   :default_min_length,
                   :default_max_options,
                   :default_preload,
+                  :default_open_on_focus,
+                  :default_close_after_select,
+                  :default_hide_selected,
+                  :default_persist,
                   :default_no_results_text,
                   :default_loading_text,
                   :default_create_text,
@@ -37,6 +41,10 @@ module RailsFieldsKit
       @default_min_length = 0
       @default_max_options = nil
       @default_preload = nil
+      @default_open_on_focus = nil
+      @default_close_after_select = nil
+      @default_hide_selected = nil
+      @default_persist = nil
       @default_no_results_text = "No results found"
       @default_loading_text = "Loading..."
       @default_create_text = "Add"
