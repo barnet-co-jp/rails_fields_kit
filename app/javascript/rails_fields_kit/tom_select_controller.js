@@ -5,11 +5,14 @@ export default class extends Controller {
   static values = {
     kind: String,
     url: String,
+    selectedUrl: String,
     createUrl: String,
     create: Boolean,
     freeText: Boolean,
     placeholder: String,
     queryParam: { type: String, default: "q" },
+    selectedParam: { type: String, default: "id" },
+    selectedMultipleParam: { type: String, default: "ids" },
     createParam: { type: String, default: "text" },
     valueField: { type: String, default: "value" },
     labelField: { type: String, default: "text" },
@@ -31,6 +34,7 @@ export default class extends Controller {
 
   connect() {
     this.tomSelect = new TomSelect(this.element, this.options())
+    this.loadSelectedOptions()
   }
 
   disconnect() {
@@ -55,10 +59,13 @@ export default class extends Controller {
     if (this.hasCloseAfterSelectValue) options.closeAfterSelect = this.closeAfterSelectValue
     if (this.hasHideSelectedValue) options.hideSelected = this.hideSelectedValue
 
-    if (this.hasUrlValue) {
+    if (this.hasUrlValue || this.hasSelectedUrlValue) {
       options.valueField = this.valueFieldValue
       options.labelField = this.labelFieldValue
       options.searchField = this.searchFields()
+    }
+
+    if (this.hasUrlValue) {
       options.shouldLoad = (query) => query.length >= this.minLengthValue
       options.load = (query, callback) => this.loadOptions(query, callback)
     }
@@ -110,6 +117,55 @@ export default class extends Controller {
       .then((response) => response.ok ? response.json() : [])
       .then((json) => callback(this.normalizeOptions(json)))
       .catch(() => callback())
+  }
+
+  loadSelectedOptions() {
+    if (!this.hasSelectedUrlValue || !this.tomSelect) return
+
+    const values = this.selectedValuesNeedingOptions()
+    if (values.length === 0) return
+
+    const url = new URL(this.selectedUrlValue, window.location.origin)
+    if (values.length === 1) {
+      url.searchParams.set(this.selectedParamValue, values[0])
+    } else {
+      url.searchParams.set(this.selectedMultipleParamValue, values.join(","))
+    }
+
+    fetch(url.toString(), {
+      headers: { Accept: "application/json" }
+    })
+      .then((response) => response.ok ? response.json() : null)
+      .then((json) => this.applySelectedOptions(json))
+      .catch(() => {})
+  }
+
+  selectedValuesNeedingOptions() {
+    return this.selectedValues().filter((value) => value && !this.tomSelect.options[value])
+  }
+
+  selectedValues() {
+    const value = this.tomSelect.getValue()
+    return Array.isArray(value) ? value : [value]
+  }
+
+  applySelectedOptions(json) {
+    const options = this.normalizeSelectedOptions(json)
+    options.forEach((option) => {
+      this.tomSelect.addOption(option)
+      this.tomSelect.addItem(option[this.valueFieldValue], true)
+    })
+    this.tomSelect.refreshOptions(false)
+  }
+
+  normalizeSelectedOptions(json) {
+    if (Array.isArray(json)) return json
+    if (json && Array.isArray(json.options)) return json.options
+    if (json && Array.isArray(json.results)) return json.results
+    if (json && json.option) return [json.option]
+    if (json) return [json]
+
+    return []
   }
 
   createOption(input, callback) {
