@@ -29,12 +29,20 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     ActionView::Helpers::FormBuilder.new(:dummy_model, model, self, {})
   end
 
+  around do |example|
+    RailsFieldsKit.reset_configuration!
+    example.run
+    RailsFieldsKit.reset_configuration!
+  end
+
   it "renders a Tom Select backed select field" do
     html = form_builder.rfk_select(:status, collection: { "Draft" => "draft" })
 
     expect(html).to include("select")
     expect(html).to include("rails-fields-kit--tom-select")
     expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"select\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-value-field-value=\"value\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-label-field-value=\"text\"")
     expect(html).to include("<option value=\"draft\" selected=\"selected\">Draft</option>")
   end
 
@@ -43,20 +51,33 @@ RSpec.describe RailsFieldsKit::FormBuilder do
       :customer_id,
       url: "/customers.json",
       create_url: "/customers",
-      placeholder: "Search or create a customer"
+      placeholder: "Search or create a customer",
+      query_param: "keyword",
+      create_param: "name",
+      value_field: "id",
+      label_field: "name",
+      search_field: "name,email",
+      min_length: 2
     )
 
     expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"combobox\"")
     expect(html).to include("data-rails-fields-kit--tom-select-url-value=\"/customers.json\"")
     expect(html).to include("data-rails-fields-kit--tom-select-create-url-value=\"/customers\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-query-param-value=\"keyword\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-create-param-value=\"name\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-value-field-value=\"id\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-label-field-value=\"name\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-search-field-value=\"name,email\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-min-length-value=\"2\"")
     expect(html).to include("placeholder=\"Search or create a customer\"")
   end
 
-  it "renders tags as a multiple select" do
+  it "renders tags as a multiple select with remove buttons" do
     html = form_builder.rfk_tags(:tag_ids, collection: [["Urgent", 1]])
 
     expect(html).to include("multiple=\"multiple\"")
     expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"tags\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-plugins-value=\"[&quot;remove_button&quot;]\"")
   end
 
   it "renders autocomplete as a free text field" do
@@ -65,5 +86,17 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("type=\"text\"")
     expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"autocomplete\"")
     expect(html).to include("data-rails-fields-kit--tom-select-free-text-value=\"true\"")
+  end
+
+  it "uses configured defaults" do
+    RailsFieldsKit.configure do |config|
+      config.default_query_param = "term"
+      config.default_min_length = 3
+    end
+
+    html = form_builder.rfk_combobox(:customer_id, url: "/customers.json")
+
+    expect(html).to include("data-rails-fields-kit--tom-select-query-param-value=\"term\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-min-length-value=\"3\"")
   end
 end
