@@ -52,13 +52,25 @@ This keeps table definitions and Active Record introspection flows independent f
 
 ## Intended integration with Rails Table Preferences
 
-A host app or table helper can pass the metadata object into a column-like object:
+A host app or table helper can pass the metadata objects into column-like definitions:
 
 ```ruby
 {
   key: :customer_id,
-  filter: RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: customers_path(format: :json))
+  filter: RailsFieldsKit::TableFilterInput.new(
+    :combobox,
+    :customer_id,
+    url: customers_path(format: :json),
+    selected_url: selected_customers_path(format: :json)
+  )
 }
 ```
 
-A table preferences implementation can normalize this by calling `to_table_filter` if the filter object responds to it.
+```ruby
+{
+  key: :status,
+  editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+}
+```
+
+A table preferences implementation can normalize these values by calling `to_table_filter` if the filter object responds to it, or `to_table_cell_editor` if the editor object responds to it.
