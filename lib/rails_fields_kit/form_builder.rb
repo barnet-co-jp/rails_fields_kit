@@ -80,6 +80,16 @@ module RailsFieldsKit
       rfk_tom_select_field(method, :autocomplete, **options)
     end
 
+    def rfk_token_search(method, **options)
+      options[:as] = :text unless options.key?(:as)
+      options[:free_text] = true unless options.key?(:free_text)
+      options[:create] = true unless options.key?(:create)
+      options[:persist] = false unless options.key?(:persist)
+      options[:delimiter] = " " unless options.key?(:delimiter)
+      options[:plugins] = Array(options[:plugins]) | ["remove_button"] unless options.key?(:plugins)
+      rfk_tom_select_field(method, :token_search, **options)
+    end
+
     private
 
     def rfk_native_field(method, helper_name, **options)
@@ -119,6 +129,9 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :url, options.delete(:url))
       rfk_assign_data_value(data, :selected_url, options.delete(:selected_url))
       rfk_assign_data_value(data, :create_url, options.delete(:create_url))
+      rfk_assign_data_value(data, :query_params, options.delete(:query_params))
+      rfk_assign_data_value(data, :selected_query_params, options.delete(:selected_query_params))
+      rfk_assign_data_value(data, :create_params, options.delete(:create_params))
       rfk_assign_data_value(data, :create, options.delete(:create))
       rfk_assign_data_value(data, :free_text, options.delete(:free_text))
       rfk_assign_data_value(data, :placeholder, options[:placeholder])
@@ -131,6 +144,9 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :search_field, rfk_option_or_default(options, :search_field, config.default_search_field))
       rfk_assign_data_value(data, :min_length, rfk_option_or_default(options, :min_length, config.default_min_length))
       rfk_assign_data_value(data, :max_options, rfk_option_or_default(options, :max_options, config.default_max_options))
+      rfk_assign_data_value(data, :max_items, options.delete(:max_items))
+      rfk_assign_data_value(data, :load_throttle, options.delete(:load_throttle))
+      rfk_assign_data_value(data, :delimiter, options.delete(:delimiter))
       rfk_assign_data_value(data, :preload, rfk_option_or_default(options, :preload, config.default_preload))
       rfk_assign_data_value(data, :open_on_focus, rfk_option_or_default(options, :open_on_focus, config.default_open_on_focus))
       rfk_assign_data_value(data, :close_after_select, rfk_option_or_default(options, :close_after_select, config.default_close_after_select))
@@ -146,8 +162,8 @@ module RailsFieldsKit
       html_options[:multiple] = options.delete(:multiple) if options.key?(:multiple)
       html_options[:placeholder] = options.delete(:placeholder) if options.key?(:placeholder)
 
-      field_html = if field_kind == :autocomplete || html_options[:multiple] == false && options[:as] == :text
-        text_field(method, options.merge(html_options))
+      field_html = if field_kind == :autocomplete || html_options[:multiple] == false && options[:as] == :text || field_kind == :token_search
+        text_field(method, options.merge(html_options).except(:as))
       elsif grouped_collection
         grouped_choices = rfk_normalize_grouped_collection(
           grouped_collection,
