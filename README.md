@@ -28,7 +28,7 @@ Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and
 
 ## JavaScript setup
 
-Install Tom Select with the JavaScript toolchain your Rails app already uses:
+Install Tom Select with the JavaScript toolchain your app already uses:
 
 ```bash
 yarn add tom-select
@@ -202,12 +202,24 @@ class CustomersController < ApplicationController
     badge: ->(customer) { customer.status.upcase },
     description_field: "email",
     badge_field: "status",
+    assign: ->(_customer) { { account_id: current_account.id } },
+    authorize: ->(customer) { policy(customer).create? },
+    before_save: :normalize_customer,
     wrap: "option"
   )
+
+  private
+
+  def normalize_customer(customer)
+    customer.name = customer.name.strip
+    true
+  end
 end
 ```
 
 `scope:` can be a relation, a model scope name such as `:active`, or a callable evaluated in the controller instance. `order:` and `distinct:` are applied before `limit:`.
+
+`assign:` can be a hash, method name, or callable that returns attributes to assign before save. `authorize:` can be a method name or callable; returning `false` renders `403 Forbidden`. `before_save:` can be a method name or callable; returning `false` renders `422 Unprocessable Entity` without saving.
 
 `description:` and `badge:` can be method names or callables. They are useful with `option_description_field:` and `option_badge_field:` on the field helper.
 
