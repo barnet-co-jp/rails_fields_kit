@@ -10,6 +10,8 @@ RSpec.describe "rails_fields_kit.gemspec" do
   it "has expected package metadata" do
     expect(specification.name).to eq("rails_fields_kit")
     expect(specification.required_ruby_version).to be_satisfied_by(Gem::Version.new("3.1.0"))
+    expect(specification.metadata["allowed_push_host"]).to eq("https://rubygems.org")
+    expect(specification.metadata["rubygems_mfa_required"]).to eq("true")
     expect(specification.metadata["homepage_uri"]).to eq(specification.homepage)
     expect(specification.metadata["source_code_uri"]).to eq(specification.homepage)
     expect(specification.metadata["changelog_uri"]).to end_with("/CHANGELOG.md")
