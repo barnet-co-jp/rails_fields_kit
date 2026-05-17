@@ -37,6 +37,11 @@ Tom Select-backed helpers:
 - `rfk_enum_select`
 - `rfk_token_search`
 
+Table metadata helpers:
+
+- `rfk_table_filters`
+- `rfk_table_cell_editors`
+
 Native input helpers:
 
 - `rfk_text_field`
@@ -95,6 +100,8 @@ Public metadata methods:
 - `RailsFieldsKit::TableMetadata.cell_editors`
 - `RailsFieldsKit::TableMetadata.filter_calls`
 - `RailsFieldsKit::TableMetadata.cell_editor_calls`
+- `RailsFieldsKit::TableMetadata.render_filters`
+- `RailsFieldsKit::TableMetadata.render_cell_editors`
 - `RailsFieldsKit::TableRenderer.field_helpers`
 - `RailsFieldsKit::TableRenderer.register_field_helper`
 - `RailsFieldsKit::TableRenderer.reset_field_helpers!`
