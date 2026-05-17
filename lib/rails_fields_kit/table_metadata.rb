@@ -2,13 +2,16 @@
 
 module RailsFieldsKit
   module TableMetadata
+    FILTER_KEYS = %i[filter filter_input search_filter].freeze
+    CELL_EDITOR_KEYS = %i[editor cell_editor cell_input].freeze
+
     class << self
       def filters(columns)
-        collect(columns, :filter, :to_table_filter)
+        collect(columns, FILTER_KEYS, :to_table_filter)
       end
 
       def cell_editors(columns)
-        collect(columns, :editor, :to_table_cell_editor)
+        collect(columns, CELL_EDITOR_KEYS, :to_table_cell_editor)
       end
 
       def filter_calls(columns)
@@ -21,13 +24,21 @@ module RailsFieldsKit
 
       private
 
-      def collect(columns, key, protocol)
+      def collect(columns, keys, protocol)
         Array(columns).filter_map do |column|
-          value = read_column_value(column, key)
+          value = read_first_column_value(column, keys)
           next if value.nil? || value == false
 
           value.respond_to?(protocol) ? value.public_send(protocol) : value
         end
+      end
+
+      def read_first_column_value(column, keys)
+        keys.each do |key|
+          value = read_column_value(column, key)
+          return value unless value.nil?
+        end
+        nil
       end
 
       def read_column_value(column, key)
