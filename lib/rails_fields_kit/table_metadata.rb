@@ -33,12 +33,19 @@ module RailsFieldsKit
       private
 
       def collect(columns, keys, protocol)
-        Array(columns).filter_map do |column|
+        normalize_columns(columns).filter_map do |column|
           value = read_first_column_value(column, keys)
           next if value.nil? || value == false
 
           value.respond_to?(protocol) ? value.public_send(protocol) : value
         end
+      end
+
+      def normalize_columns(columns)
+        return [] if columns.nil?
+        return columns.columns if columns.respond_to?(:columns)
+
+        Array(columns)
       end
 
       def read_first_column_value(column, keys)
