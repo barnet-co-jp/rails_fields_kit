@@ -117,6 +117,32 @@ RailsFieldsKit::TableRenderer.render_cell_editor(form_builder, editor)
 
 The renderer is intentionally thin. It maps documented Rails Fields Kit `field_type` values to FormBuilder helper names and does not own table preference persistence, query parsing, authorization, or result rendering.
 
+## Custom table field helpers
+
+Table integrations can register additional field type mappings without monkey-patching Rails Fields Kit.
+
+```ruby
+RailsFieldsKit::TableRenderer.register_field_helper(
+  :custom_field,
+  :custom_table_field
+)
+
+filter = {
+  field_type: "custom_field",
+  method: "code",
+  options: { prefix: "#" }
+}
+
+RailsFieldsKit::TableRenderer.filter_call(filter)
+# => {
+#      helper: :custom_table_field,
+#      method: :code,
+#      options: { prefix: "#" }
+#    }
+```
+
+Use `RailsFieldsKit::TableRenderer.field_helpers` to inspect the current mapping and `RailsFieldsKit::TableRenderer.reset_field_helpers!` to restore the defaults.
+
 ## Intended integration with Rails Table Preferences
 
 A host app or table helper can pass the metadata objects into column-like definitions:
