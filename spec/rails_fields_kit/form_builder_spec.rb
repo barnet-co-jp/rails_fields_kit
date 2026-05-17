@@ -120,7 +120,9 @@ RSpec.describe RailsFieldsKit::FormBuilder do
       preload: true,
       no_results_text: "No customers",
       loading_text: "Searching...",
-      create_text: "Create"
+      create_text: "Create",
+      option_description_field: "email",
+      option_badge_field: "status"
     )
 
     expect(html).to include("data-rails-fields-kit--tom-select-max-options-value=\"50\"")
@@ -128,6 +130,8 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"No customers\"")
     expect(html).to include("data-rails-fields-kit--tom-select-loading-text-value=\"Searching...\"")
     expect(html).to include("data-rails-fields-kit--tom-select-create-text-value=\"Create\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-option-description-field-value=\"email\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-option-badge-field-value=\"status\"")
   end
 
   it "renders a clearable select" do
