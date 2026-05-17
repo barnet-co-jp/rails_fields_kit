@@ -22,7 +22,7 @@ module RailsFieldsKit
       "search_field" => :rfk_search_field
     }.freeze
 
-    class UnknownFieldType < RailsFieldsKit::Error; end
+    class UnknownFieldType < StandardError; end
 
     class << self
       def filter_call(filter)
