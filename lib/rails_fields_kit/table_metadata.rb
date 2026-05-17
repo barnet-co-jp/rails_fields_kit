@@ -22,6 +22,14 @@ module RailsFieldsKit
         TableRenderer.cell_editor_calls(cell_editors(columns))
       end
 
+      def render_filters(form_builder, columns)
+        TableRenderer.render_filters(form_builder, filters(columns))
+      end
+
+      def render_cell_editors(form_builder, columns)
+        TableRenderer.render_cell_editors(form_builder, cell_editors(columns))
+      end
+
       private
 
       def collect(columns, keys, protocol)
