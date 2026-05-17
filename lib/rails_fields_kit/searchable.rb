@@ -7,8 +7,8 @@ module RailsFieldsKit
     extend ActiveSupport::Concern
 
     class_methods do
-      def rfk_search_with(model:, label:, value: :id, search:, limit: 20, query_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, distinct: false, wrap: nil)
-        define_method(:index) do
+      def rfk_search_with(action: :index, model:, label:, value: :id, search:, limit: 20, query_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, distinct: false, wrap: nil)
+        define_method(action) do
           query_key = query_param || RailsFieldsKit.configuration.default_query_param
           query = params[query_key].to_s
           relation = rfk_search_scope(model, scope)
@@ -42,8 +42,8 @@ module RailsFieldsKit
         end
       end
 
-      def rfk_find_with(model:, label:, value: :id, id_param: :id, ids_param: :ids, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, wrap: nil)
-        define_method(:show) do
+      def rfk_find_with(action: :show, model:, label:, value: :id, id_param: :id, ids_param: :ids, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, wrap: nil)
+        define_method(action) do
           ids = rfk_find_ids(id_param: id_param, ids_param: ids_param)
           relation = rfk_search_scope(model, scope)
           relation = relation.where(value => ids)
@@ -68,8 +68,8 @@ module RailsFieldsKit
         end
       end
 
-      def rfk_create_with(model:, label:, value: :id, create_attribute: nil, create_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, permitted_attributes: nil, assign: nil, authorize: nil, before_save: nil, wrap: nil)
-        define_method(:create) do
+      def rfk_create_with(action: :create, model:, label:, value: :id, create_attribute: nil, create_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, permitted_attributes: nil, assign: nil, authorize: nil, before_save: nil, wrap: nil)
+        define_method(action) do
           attribute_name = create_attribute || label
           param_name = create_param || RailsFieldsKit.configuration.default_create_param
           attributes = rfk_create_attributes(
@@ -106,6 +106,24 @@ module RailsFieldsKit
           else
             render json: { errors: rfk_record_errors(record) }, status: :unprocessable_entity
           end
+        end
+      end
+
+      def rfk_token_suggestions_with(action: :index, suggestions:, query_param: nil, value_field: nil, label_field: nil, description_field: nil, badge_field: nil, limit: 20, wrap: nil)
+        define_method(action) do
+          query_key = query_param || RailsFieldsKit.configuration.default_query_param
+          query = params[query_key].to_s
+          options = rfk_token_suggestion_options(
+            suggestions,
+            query: query,
+            value_field: value_field,
+            label_field: label_field,
+            description_field: description_field,
+            badge_field: badge_field
+          )
+          options = options.first(limit) if limit
+
+          render json: rfk_wrap_options(options, wrap: wrap)
         end
       end
     end
@@ -234,6 +252,59 @@ module RailsFieldsKit
 
       permitted = params.permit(*Array(permitted_attributes)).to_h.symbolize_keys
       base_attributes.merge(permitted)
+    end
+
+    def rfk_token_suggestion_options(suggestions, query:, value_field:, label_field:, description_field:, badge_field:)
+      source = case suggestions
+      when Symbol, String
+        public_send(suggestions, query)
+      else
+        suggestions.respond_to?(:call) ? instance_exec(query, &suggestions) : suggestions
+      end
+
+      Array(source).map do |suggestion|
+        rfk_token_suggestion_json(
+          suggestion,
+          value_field: value_field,
+          label_field: label_field,
+          description_field: description_field,
+          badge_field: badge_field
+        )
+      end.select do |option|
+        rfk_token_suggestion_matches?(option, query)
+      end
+    end
+
+    def rfk_token_suggestion_json(suggestion, value_field:, label_field:, description_field:, badge_field:)
+      value_key = value_field || RailsFieldsKit.configuration.default_value_field
+      label_key = label_field || RailsFieldsKit.configuration.default_label_field
+      description_key = description_field || RailsFieldsKit.configuration.default_option_description_field || "description"
+      badge_key = badge_field || RailsFieldsKit.configuration.default_option_badge_field || "badge"
+
+      case suggestion
+      when Hash
+        normalized = suggestion.transform_keys(&:to_s)
+        value = normalized[value_key] || normalized["value"] || normalized["id"] || normalized["token"] || normalized["text"] || normalized["label"]
+        label = normalized[label_key] || normalized["text"] || normalized["label"] || normalized["name"] || value
+        option = { value_key => value, label_key => label }
+        option[description_key] = normalized[description_key] || normalized["description"] if normalized.key?(description_key) || normalized.key?("description")
+        option[badge_key] = normalized[badge_key] || normalized["badge"] if normalized.key?(badge_key) || normalized.key?("badge")
+        normalized.each do |key, value_for_key|
+          option[key] = value_for_key unless option.key?(key)
+        end
+        option
+      when Array
+        { value_key => suggestion.second || suggestion.first, label_key => suggestion.first }
+      else
+        { value_key => suggestion.to_s, label_key => suggestion.to_s }
+      end
+    end
+
+    def rfk_token_suggestion_matches?(option, query)
+      return true if query.to_s.empty?
+
+      normalized_query = query.to_s.downcase
+      option.values.any? { |value| value.to_s.downcase.include?(normalized_query) }
     end
   end
 end
