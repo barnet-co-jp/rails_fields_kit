@@ -89,6 +89,34 @@ editor.to_table_cell_editor
 
 This keeps table definitions and Active Record introspection flows independent from a concrete form renderer while still allowing Rails Fields Kit to provide richer inputs when installed.
 
+## Rendering metadata
+
+`RailsFieldsKit::TableRenderer` turns metadata into FormBuilder call specs or directly dispatches to a form builder.
+
+```ruby
+call = RailsFieldsKit::TableRenderer.filter_call(filter)
+# => {
+#      helper: :rfk_combobox,
+#      method: :customer_id,
+#      options: { url: "/customers.json" }
+#    }
+```
+
+A table integration can use the call spec with its own rendering pipeline:
+
+```ruby
+form_builder.public_send(call.fetch(:helper), call.fetch(:method), **call.fetch(:options))
+```
+
+Or it can call the renderer directly:
+
+```ruby
+RailsFieldsKit::TableRenderer.render_filter(form_builder, filter)
+RailsFieldsKit::TableRenderer.render_cell_editor(form_builder, editor)
+```
+
+The renderer is intentionally thin. It maps documented Rails Fields Kit `field_type` values to FormBuilder helper names and does not own table preference persistence, query parsing, authorization, or result rendering.
+
 ## Intended integration with Rails Table Preferences
 
 A host app or table helper can pass the metadata objects into column-like definitions:
@@ -126,4 +154,4 @@ A host app or table helper can pass the metadata objects into column-like defini
 }
 ```
 
-A table preferences implementation can normalize these values by calling `to_table_filter` if the filter object responds to it, or `to_table_cell_editor` if the editor object responds to it.
+A table preferences implementation can normalize these values by calling `to_table_filter` if the filter object responds to it, or `to_table_cell_editor` if the editor object responds to it. It can then call `RailsFieldsKit::TableRenderer.filter_call` or `RailsFieldsKit::TableRenderer.cell_editor_call` to map metadata to Rails Fields Kit FormBuilder helpers.
