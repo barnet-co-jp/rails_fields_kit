@@ -14,7 +14,10 @@ module RailsFieldsKit
                   :label_class,
                   :hint_class,
                   :error_class,
-                  :field_error_class
+                  :field_error_class,
+                  :control_class,
+                  :prefix_class,
+                  :suffix_class
 
     def initialize
       @controller_name = "rails-fields-kit--tom-select"
@@ -30,6 +33,9 @@ module RailsFieldsKit
       @hint_class = "rfk-hint"
       @error_class = "rfk-error"
       @field_error_class = "rfk-field--error"
+      @control_class = "rfk-control"
+      @prefix_class = "rfk-prefix"
+      @suffix_class = "rfk-suffix"
     end
   end
 end
