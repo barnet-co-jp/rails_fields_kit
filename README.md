@@ -229,9 +229,9 @@ You can disable accessibility automation for a specific field:
   accessibility: false %>
 ```
 
-### Controller concern for search and create endpoints
+### Controller concern for search, find, and create endpoints
 
-For simple Active Record-backed option search and create endpoints, include `RailsFieldsKit::Searchable`:
+For simple Active Record-backed option endpoints, include `RailsFieldsKit::Searchable`:
 
 ```ruby
 class CustomersController < ApplicationController
@@ -253,6 +253,20 @@ class CustomersController < ApplicationController
     distinct: true,
     limit: 20,
     wrap: "options"
+  )
+
+  rfk_find_with(
+    model: Customer,
+    value: :id,
+    label: :name,
+    value_field: "id",
+    label_field: "name",
+    description: :email,
+    badge: :status,
+    description_field: "email",
+    badge_field: "status",
+    scope: -> { current_account.customers },
+    wrap: "option"
   )
 
   rfk_create_with(
@@ -282,13 +296,15 @@ class CustomersController < ApplicationController
 end
 ```
 
-`scope:` can be a relation, a model scope name such as `:active`, or a callable evaluated in the controller instance. `order:` and `distinct:` are applied before `limit:`.
+`rfk_find_with` defines a `show` action for selected option preload. It accepts `params[:id]` for one record and `params[:ids]` as either an array or comma-separated string for multiple records. This is useful when an edit form has stored IDs and needs option JSON for display.
+
+`scope:` can be a relation, a model scope name such as `:active`, or a callable evaluated in the controller instance. `order:` and `distinct:` are applied before `limit:` for search. `order:` is also supported by find.
 
 `assign:` can be a hash, method name, or callable that returns attributes to assign before save. `authorize:` can be a method name or callable; returning `false` renders `403 Forbidden`. `before_save:` can be a method name or callable; returning `false` renders `422 Unprocessable Entity` without saving.
 
 `description:` and `badge:` can be method names or callables. They are useful with `option_description_field:` and `option_badge_field:` on the field helper.
 
-`wrap:` is optional. Without it, search returns an array and create returns a single option object. With `wrap: "options"`, search returns `{ "options": [...] }`. With `wrap: "option"`, create returns `{ "option": {...} }`.
+`wrap:` is optional. Without it, search returns an array, find returns one option for `id` or an array for `ids`, and create returns a single option object. With `wrap: "options"`, search returns `{ "options": [...] }`. With `wrap: "option"`, find/create return `{ "option": {...} }` for a single option.
 
 `rfk_create_with` renders `422 Unprocessable Entity` with `{ "errors": ... }` when the record is invalid.
 
