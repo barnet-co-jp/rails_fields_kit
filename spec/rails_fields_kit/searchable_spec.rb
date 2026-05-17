@@ -8,13 +8,15 @@ RSpec.describe RailsFieldsKit::Searchable do
   end
 
   class FakeRecord
-    attr_reader :id, :name, :email, :status, :errors
+    attr_accessor :name, :email, :status, :account_id
+    attr_reader :id, :errors
 
     def initialize(attributes = {})
       @id = attributes[:id] || 1
       @name = attributes[:name]
       @email = attributes[:email]
       @status = attributes[:status] || "active"
+      @account_id = attributes[:account_id]
       @errors = FakeErrors.new({ name: ["can't be blank"] })
     end
 
@@ -85,11 +87,11 @@ RSpec.describe RailsFieldsKit::Searchable do
 
   class FakeModel
     class << self
-      attr_accessor :last_relation
+      attr_accessor :last_relation, :last_record
     end
 
     def self.new(attributes)
-      FakeRecord.new(attributes.merge(id: 123, email: "new@example.test", status: "new"))
+      self.last_record = FakeRecord.new(attributes.merge(id: 123, email: "new@example.test", status: "new"))
     end
 
     def self.all
@@ -285,6 +287,42 @@ RSpec.describe RailsFieldsKit::Searchable do
     end
   end
 
+  class FakeHookedCreateController
+    include RailsFieldsKit::Searchable
+
+    attr_accessor :params, :allow_create
+    attr_reader :rendered_json, :rendered_status
+
+    rfk_create_with(
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      create_attribute: :name,
+      create_param: "name",
+      value_field: "id",
+      label_field: "name",
+      assign: ->(record) { { account_id: 42, status: "assigned" } },
+      authorize: ->(_record) { allow_create },
+      before_save: :normalize_record
+    )
+
+    def initialize
+      @allow_create = true
+    end
+
+    def normalize_record(record)
+      return false if record.name == "stop"
+
+      record.name = record.name.upcase
+      true
+    end
+
+    def render(json:, status: :ok)
+      @rendered_json = json
+      @rendered_status = status
+    end
+  end
+
   around do |example|
     RailsFieldsKit.reset_configuration!
     example.run
@@ -378,6 +416,39 @@ RSpec.describe RailsFieldsKit::Searchable do
 
     expect(controller.rendered_status).to eq(:created)
     expect(controller.rendered_json).to eq({ "id" => 123, "name" => "Acme Corp", "email" => "new@example.test", "status" => "NEW" })
+  end
+
+  it "supports create assignments and before save hooks" do
+    controller = FakeHookedCreateController.new
+    controller.params = { "name" => "acme" }
+
+    controller.create
+
+    expect(controller.rendered_status).to eq(:created)
+    expect(controller.rendered_json).to eq({ "id" => 123, "name" => "ACME" })
+    expect(FakeModel.last_record.account_id).to eq(42)
+    expect(FakeModel.last_record.status).to eq("assigned")
+  end
+
+  it "renders forbidden when create authorization fails" do
+    controller = FakeHookedCreateController.new
+    controller.allow_create = false
+    controller.params = { "name" => "acme" }
+
+    controller.create
+
+    expect(controller.rendered_status).to eq(:forbidden)
+    expect(controller.rendered_json).to eq({ errors: { base: ["not authorized"] } })
+  end
+
+  it "renders errors when before save returns false" do
+    controller = FakeHookedCreateController.new
+    controller.params = { "name" => "stop" }
+
+    controller.create
+
+    expect(controller.rendered_status).to eq(:unprocessable_entity)
+    expect(controller.rendered_json).to eq({ errors: { name: ["can't be blank"] } })
   end
 
   it "renders validation errors" do
