@@ -26,6 +26,8 @@ The install generator creates:
 
 Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and controller-side helpers. It does not install Tom Select or choose a JavaScript bundling strategy for your app.
 
+See [`doc/events.md`](doc/events.md) for Stimulus events dispatched by the Tom Select controller.
+
 ## JavaScript setup
 
 Install Tom Select with the JavaScript toolchain your app already uses:
