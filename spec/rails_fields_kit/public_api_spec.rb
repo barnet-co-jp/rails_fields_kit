@@ -56,5 +56,8 @@ RSpec.describe "public API" do
     expect(RailsFieldsKit::TableRenderer).to respond_to(:cell_editor_call)
     expect(RailsFieldsKit::TableRenderer).to respond_to(:render_filter)
     expect(RailsFieldsKit::TableRenderer).to respond_to(:render_cell_editor)
+    expect(RailsFieldsKit::TableRenderer).to respond_to(:field_helpers)
+    expect(RailsFieldsKit::TableRenderer).to respond_to(:register_field_helper)
+    expect(RailsFieldsKit::TableRenderer).to respond_to(:reset_field_helpers!)
   end
 end
