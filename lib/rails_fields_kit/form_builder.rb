@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 module RailsFieldsKit
   module FormBuilder
     def rfk_select(method, collection: nil, **options)
@@ -59,7 +61,7 @@ module RailsFieldsKit
       return if value.respond_to?(:empty?) && value.empty?
 
       data_key = "rails_fields_kit__tom_select_#{key}_value"
-      data[data_key] = value.is_a?(Array) || value.is_a?(Hash) ? value.to_json : value
+      data[data_key] = value.is_a?(Array) || value.is_a?(Hash) ? JSON.generate(value) : value
     end
 
     def rfk_normalize_collection(collection)
