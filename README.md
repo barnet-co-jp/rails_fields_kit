@@ -37,9 +37,15 @@ Register the Rails Fields Kit Stimulus controller in your application:
 
 ```js
 import { application } from "controllers/application"
-import TomSelectController from "rails_fields_kit/tom_select_controller"
+import { TomSelectController } from "rails_fields_kit"
 
 application.register("rails-fields-kit--tom-select", TomSelectController)
+```
+
+You can also import the controller file directly:
+
+```js
+import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
 Load Tom Select's CSS through your application's stylesheet pipeline or bundler:
