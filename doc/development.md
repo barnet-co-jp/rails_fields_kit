@@ -20,6 +20,14 @@ bundle exec rake build
 
 This checks that the gemspec can be packaged and that packaged files are available.
 
+When build fails, check these first:
+
+- `rails_fields_kit.gemspec` metadata URLs
+- missing files in `specification.files`
+- generator template paths
+- documentation paths referenced from README
+- RubyGems warnings about metadata, licenses, or required Ruby version
+
 ## Release-related checks
 
 Before release, also review:
