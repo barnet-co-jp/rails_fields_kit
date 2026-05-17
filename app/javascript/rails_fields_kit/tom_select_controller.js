@@ -17,6 +17,10 @@ export default class extends Controller {
     minLength: { type: Number, default: 0 },
     maxOptions: Number,
     preload: Boolean,
+    openOnFocus: Boolean,
+    closeAfterSelect: Boolean,
+    hideSelected: Boolean,
+    persist: Boolean,
     noResultsText: String,
     loadingText: String,
     createText: String,
@@ -39,7 +43,7 @@ export default class extends Controller {
   options() {
     const options = {
       create: this.createValue || this.freeTextValue,
-      persist: false,
+      persist: this.hasPersistValue ? this.persistValue : false,
       placeholder: this.placeholderValue || this.element.getAttribute("placeholder") || undefined,
       plugins: this.pluginsValue.length > 0 ? this.pluginsValue : undefined,
       render: this.renderers()
@@ -47,6 +51,9 @@ export default class extends Controller {
 
     if (this.hasMaxOptionsValue) options.maxOptions = this.maxOptionsValue
     if (this.hasPreloadValue) options.preload = this.preloadValue
+    if (this.hasOpenOnFocusValue) options.openOnFocus = this.openOnFocusValue
+    if (this.hasCloseAfterSelectValue) options.closeAfterSelect = this.closeAfterSelectValue
+    if (this.hasHideSelectedValue) options.hideSelected = this.hideSelectedValue
 
     if (this.hasUrlValue) {
       options.valueField = this.valueFieldValue
