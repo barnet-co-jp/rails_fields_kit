@@ -47,7 +47,7 @@ RSpec.describe RailsFieldsKit::TokenSuggestions do
 
     expect(suggestions).to include(
       { "value" => "created:today", "text" => "Today", "description" => "Created value", "badge" => "value" },
-      { "value" => "created:this_week", "text" => "This week", "badge" => "value", "value" => "created:this_week", "label" => "This week" },
+      { "value" => "created:this_week", "text" => "This week", "badge" => "value", "label" => "This week" },
       { "value" => "saved:mine", "text" => "Mine", "description" => "My saved search", "badge" => "saved", "label" => "Mine" }
     )
   end
