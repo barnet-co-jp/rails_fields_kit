@@ -33,6 +33,7 @@ RSpec.describe "rails_fields_kit.gemspec" do
       "lib/rails_fields_kit.rb",
       "app/javascript/rails_fields_kit/tom_select_controller.js",
       "doc/setup.md",
+      "doc/public_api.md",
       "doc/field_helpers.md",
       "doc/controller_helpers.md",
       "doc/configuration.md",
