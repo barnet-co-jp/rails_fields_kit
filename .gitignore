@@ -1,0 +1,5 @@
+/pkg/
+/tmp/
+/.bundle/
+/.rspec_status
+/vendor/bundle/
