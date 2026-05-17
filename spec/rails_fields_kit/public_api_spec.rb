@@ -41,7 +41,8 @@ RSpec.describe "public API" do
     )
   end
 
-  it "exposes token suggestion builder" do
+  it "exposes token suggestion builders" do
     expect(RailsFieldsKit::TokenSuggestions).to respond_to(:build)
+    expect(RailsFieldsKit::RansackSuggestions).to respond_to(:build)
   end
 end
