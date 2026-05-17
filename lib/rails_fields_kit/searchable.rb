@@ -7,7 +7,7 @@ module RailsFieldsKit
     extend ActiveSupport::Concern
 
     class_methods do
-      def rfk_search_with(model:, label:, value: :id, search:, limit: 20, query_param: nil, value_field: nil, label_field: nil)
+      def rfk_search_with(model:, label:, value: :id, search:, limit: 20, query_param: nil, value_field: nil, label_field: nil, wrap: nil)
         define_method(:index) do
           query_key = query_param || RailsFieldsKit.configuration.default_query_param
           query = params[query_key].to_s
@@ -23,7 +23,7 @@ module RailsFieldsKit
           end
 
           records = scope.limit(limit)
-          render json: records.map do |record|
+          options = records.map do |record|
             rfk_option_json(
               record,
               value: value,
@@ -32,10 +32,11 @@ module RailsFieldsKit
               label_field: label_field
             )
           end
+          render json: rfk_wrap_options(options, wrap: wrap)
         end
       end
 
-      def rfk_create_with(model:, label:, value: :id, create_attribute: nil, create_param: nil, value_field: nil, label_field: nil, permitted_attributes: nil)
+      def rfk_create_with(model:, label:, value: :id, create_attribute: nil, create_param: nil, value_field: nil, label_field: nil, permitted_attributes: nil, wrap: nil)
         define_method(:create) do
           attribute_name = create_attribute || label
           param_name = create_param || RailsFieldsKit.configuration.default_create_param
@@ -47,13 +48,14 @@ module RailsFieldsKit
           record = model.new(attributes)
 
           if record.save
-            render json: rfk_option_json(
+            option = rfk_option_json(
               record,
               value: value,
               label: label,
               value_field: value_field,
               label_field: label_field
-            ), status: :created
+            )
+            render json: rfk_wrap_option(option, wrap: wrap), status: :created
           else
             render json: { errors: record.errors.to_hash(true) }, status: :unprocessable_entity
           end
@@ -68,6 +70,18 @@ module RailsFieldsKit
         (value_field || RailsFieldsKit.configuration.default_value_field) => record.public_send(value),
         (label_field || RailsFieldsKit.configuration.default_label_field) => record.public_send(label)
       }
+    end
+
+    def rfk_wrap_options(options, wrap:)
+      return options if wrap.nil? || wrap == false
+
+      { wrap => options }
+    end
+
+    def rfk_wrap_option(option, wrap:)
+      return option if wrap.nil? || wrap == false
+
+      { wrap => option }
     end
 
     def rfk_create_attributes(attribute_name:, param_name:, permitted_attributes:)
