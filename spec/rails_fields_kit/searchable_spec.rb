@@ -8,11 +8,12 @@ RSpec.describe RailsFieldsKit::Searchable do
   end
 
   class FakeRecord
-    attr_reader :id, :name, :errors
+    attr_reader :id, :name, :email, :errors
 
     def initialize(attributes = {})
       @id = attributes[:id] || 1
       @name = attributes[:name]
+      @email = attributes[:email]
       @errors = FakeErrors.new({ name: ["can't be blank"] })
     end
 
@@ -21,9 +22,61 @@ RSpec.describe RailsFieldsKit::Searchable do
     end
   end
 
+  class FakeRelation
+    attr_reader :where_args, :limit_value
+
+    def initialize(records)
+      @records = records
+      @where_args = []
+    end
+
+    def where(*args)
+      @where_args << args
+      self
+    end
+
+    def limit(value)
+      @limit_value = value
+      @records.first(value)
+    end
+  end
+
+  class FakeArelColumn
+    attr_reader :name
+
+    def initialize(name)
+      @name = name
+    end
+
+    def matches(value)
+      [:matches, name, value]
+    end
+  end
+
+  class FakeArelTable
+    def [](name)
+      FakeArelColumn.new(name)
+    end
+  end
+
   class FakeModel
     def self.new(attributes)
       FakeRecord.new(attributes.merge(id: 123))
+    end
+
+    def self.all
+      FakeRelation.new([
+        FakeRecord.new(id: 1, name: "Acme Corp", email: "hello@acme.example"),
+        FakeRecord.new(id: 2, name: "Beta LLC", email: "hello@beta.example")
+      ])
+    end
+
+    def self.arel_table
+      FakeArelTable.new
+    end
+
+    def self.sanitize_sql_like(value)
+      value.to_s.gsub("%", "\\%")
     end
   end
 
@@ -32,6 +85,16 @@ RSpec.describe RailsFieldsKit::Searchable do
 
     attr_accessor :params
     attr_reader :rendered_json, :rendered_status
+
+    rfk_search_with(
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      search: [:name, :email],
+      value_field: "id",
+      label_field: "name",
+      limit: 1
+    )
 
     rfk_create_with(
       model: FakeModel,
@@ -49,10 +112,51 @@ RSpec.describe RailsFieldsKit::Searchable do
     end
   end
 
+  class FakeCustomQueryController
+    include RailsFieldsKit::Searchable
+
+    attr_accessor :params
+    attr_reader :rendered_json
+
+    rfk_search_with(
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      search: :name,
+      query_param: "term",
+      value_field: "id",
+      label_field: "name"
+    )
+
+    def render(json:, status: :ok)
+      @rendered_json = json
+      @rendered_status = status
+    end
+  end
+
   around do |example|
     RailsFieldsKit.reset_configuration!
     example.run
     RailsFieldsKit.reset_configuration!
+  end
+
+  it "renders search results as option JSON" do
+    controller = FakeController.new
+    controller.params = { "q" => "Acme" }
+
+    controller.index
+
+    expect(controller.rendered_status).to eq(:ok)
+    expect(controller.rendered_json).to eq([{ "id" => 1, "name" => "Acme Corp" }])
+  end
+
+  it "supports custom query params" do
+    controller = FakeCustomQueryController.new
+    controller.params = { "term" => "Beta" }
+
+    controller.index
+
+    expect(controller.rendered_json.first).to eq({ "id" => 1, "name" => "Acme Corp" })
   end
 
   it "renders created options as JSON" do
