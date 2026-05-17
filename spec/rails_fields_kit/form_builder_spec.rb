@@ -20,15 +20,32 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     end
   end
 
+  ErrorModel = Struct.new(:status) do
+    def self.model_name
+      ActiveModel::Name.new(self, nil, "ErrorModel")
+    end
+
+    def persisted?
+      false
+    end
+
+    def to_key
+      nil
+    end
+
+    def errors
+      { status: ["is invalid"] }
+    end
+  end
+
   SelectedCustomer = Struct.new(:id, :name)
 
   def protect_against_forgery?
     false
   end
 
-  def form_builder
-    model = DummyModel.new("draft", nil, [], nil)
-    ActionView::Helpers::FormBuilder.new(:dummy_model, model, self, {})
+  def form_builder(model = DummyModel.new("draft", nil, [], nil), object_name = :dummy_model)
+    ActionView::Helpers::FormBuilder.new(object_name, model, self, {})
   end
 
   around do |example|
@@ -126,6 +143,34 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("type=\"text\"")
     expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"autocomplete\"")
     expect(html).to include("data-rails-fields-kit--tom-select-free-text-value=\"true\"")
+  end
+
+  it "wraps a field with label and hint when requested" do
+    html = form_builder.rfk_select(
+      :status,
+      collection: { "Draft" => "draft" },
+      wrapper: true,
+      label: "Status",
+      hint: "Choose the workflow status"
+    )
+
+    expect(html).to include("class=\"rfk-field\"")
+    expect(html).to include("class=\"rfk-label\"")
+    expect(html).to include("Status</label>")
+    expect(html).to include("class=\"rfk-hint\"")
+    expect(html).to include("Choose the workflow status")
+  end
+
+  it "renders errors in wrapped fields" do
+    html = form_builder(ErrorModel.new("bad"), :error_model).rfk_select(
+      :status,
+      collection: { "Bad" => "bad" },
+      wrapper: true
+    )
+
+    expect(html).to include("rfk-field--error")
+    expect(html).to include("class=\"rfk-error\"")
+    expect(html).to include("is invalid")
   end
 
   it "uses configured defaults" do
