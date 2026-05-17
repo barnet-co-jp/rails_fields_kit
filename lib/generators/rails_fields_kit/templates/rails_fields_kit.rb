@@ -15,8 +15,15 @@ RailsFieldsKit.configure do |config|
   config.default_label_field = "text"
   config.default_search_field = "text"
 
-  # Minimum query length before remote search runs.
+  # Default Tom Select remote search behavior.
   config.default_min_length = 0
+  config.default_max_options = nil
+  config.default_preload = nil
+
+  # Default Tom Select rendered messages.
+  config.default_no_results_text = "No results found"
+  config.default_loading_text = "Loading..."
+  config.default_create_text = "Add"
 
   # Default Tom Select plugins applied by helpers.
   config.default_plugins = []
