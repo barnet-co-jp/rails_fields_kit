@@ -7,6 +7,10 @@ RailsFieldsKit.configure do |config|
   # Query parameter used for remote search requests.
   config.default_query_param = "q"
 
+  # Query parameters used for selected option preload requests.
+  config.default_selected_param = "id"
+  config.default_selected_multiple_param = "ids"
+
   # JSON key sent when create-on-the-fly posts a new option.
   config.default_create_param = "text"
 
