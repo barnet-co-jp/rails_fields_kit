@@ -20,6 +20,8 @@ export default class extends Controller {
     noResultsText: String,
     loadingText: String,
     createText: String,
+    optionDescriptionField: String,
+    optionBadgeField: String,
     plugins: Array
   }
 
@@ -63,10 +65,28 @@ export default class extends Controller {
 
   renderers() {
     return {
+      option: (data, escape) => this.optionTemplate(data, escape, "option"),
+      item: (data, escape) => this.optionTemplate(data, escape, "item"),
       no_results: () => `<div class="no-results">${this.escape(this.noResultsTextValue)}</div>`,
       loading: () => `<div class="loading">${this.escape(this.loadingTextValue)}</div>`,
       option_create: (data, escape) => `<div class="create">${escape(this.createTextValue)} <strong>${escape(data.input)}</strong></div>`
     }
+  }
+
+  optionTemplate(data, escape, kind) {
+    const label = escape(data[this.labelFieldValue] || "")
+    const description = this.hasOptionDescriptionFieldValue ? data[this.optionDescriptionFieldValue] : null
+    const badge = this.hasOptionBadgeFieldValue ? data[this.optionBadgeFieldValue] : null
+    const parts = [`<div class="rfk-${kind}">`]
+
+    parts.push("<div class=\"rfk-option-main\">")
+    parts.push(`<span class="rfk-option-label">${label}</span>`)
+    if (badge) parts.push(`<span class="rfk-option-badge">${escape(badge)}</span>`)
+    parts.push("</div>")
+    if (description) parts.push(`<div class="rfk-option-description">${escape(description)}</div>`)
+    parts.push("</div>")
+
+    return parts.join("")
   }
 
   searchFields() {
