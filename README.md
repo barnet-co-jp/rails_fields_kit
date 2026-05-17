@@ -32,6 +32,7 @@ See [`doc/setup.md`](doc/setup.md) for a complete setup walkthrough.
 See [`doc/public_api.md`](doc/public_api.md) for the intended stable API surface.
 See [`doc/field_helpers.md`](doc/field_helpers.md) for the FormBuilder helper reference.
 See [`doc/controller_helpers.md`](doc/controller_helpers.md) for the controller helper reference.
+See [`doc/token_suggestions.md`](doc/token_suggestions.md) for token search suggestion helpers.
 See [`doc/configuration.md`](doc/configuration.md) for initializer options.
 See [`doc/events.md`](doc/events.md) for Stimulus events dispatched by the Tom Select controller.
 See [`doc/development.md`](doc/development.md) for local development checks.
@@ -172,6 +173,8 @@ Use `rfk_token_search` when you want a search box for structured phrases such as
     query_params: { context: "orders" } %>
 <% end %>
 ```
+
+Use `RailsFieldsKit::TokenSuggestions.build` with `rfk_token_suggestions_with` to generate operator, field, predicate, value, and saved-search suggestions for the endpoint.
 
 ### Object collections, grouped selects, and enum selects
 
