@@ -2,6 +2,7 @@
 
 require "rails_fields_kit/version"
 require "rails_fields_kit/configuration"
+require "rails_fields_kit/token_suggestions"
 require "rails_fields_kit/searchable"
 require "rails_fields_kit/table_filter_input"
 require "rails_fields_kit/table_cell_input"
