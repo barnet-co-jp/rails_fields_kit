@@ -4,6 +4,18 @@ require "json"
 
 module RailsFieldsKit
   module FormBuilder
+    def rfk_text_field(method, **options)
+      rfk_native_field(method, :text_field, **options)
+    end
+
+    def rfk_text_area(method, **options)
+      rfk_native_field(method, :text_area, **options)
+    end
+
+    def rfk_number_field(method, **options)
+      rfk_native_field(method, :number_field, **options)
+    end
+
     def rfk_select(method, collection: nil, **options)
       rfk_tom_select_field(method, :select, collection: collection, **options)
     end
@@ -24,6 +36,15 @@ module RailsFieldsKit
     end
 
     private
+
+    def rfk_native_field(method, helper_name, **options)
+      wrapper_options = rfk_extract_wrapper_options(options)
+      html_options = options.delete(:html) || {}
+      field_options = options.merge(html_options)
+      field_html = public_send(helper_name, method, field_options)
+
+      rfk_wrap_field(method, field_html, wrapper_options)
+    end
 
     def rfk_tom_select_field(method, field_kind, collection: nil, **options)
       config = RailsFieldsKit.configuration
