@@ -124,6 +124,8 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :no_results_text, options.delete(:no_results_text) || config.default_no_results_text)
       rfk_assign_data_value(data, :loading_text, options.delete(:loading_text) || config.default_loading_text)
       rfk_assign_data_value(data, :create_text, options.delete(:create_text) || config.default_create_text)
+      rfk_assign_data_value(data, :option_description_field, options.delete(:option_description_field) || config.default_option_description_field)
+      rfk_assign_data_value(data, :option_badge_field, options.delete(:option_badge_field) || config.default_option_badge_field)
       rfk_assign_data_value(data, :plugins, plugins)
 
       html_options[:multiple] = options.delete(:multiple) if options.key?(:multiple)
