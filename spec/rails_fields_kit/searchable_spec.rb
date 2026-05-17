@@ -146,6 +146,39 @@ RSpec.describe RailsFieldsKit::Searchable do
     end
   end
 
+  class FakeWrappedController
+    include RailsFieldsKit::Searchable
+
+    attr_accessor :params
+    attr_reader :rendered_json, :rendered_status
+
+    rfk_search_with(
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      search: :name,
+      value_field: "id",
+      label_field: "name",
+      wrap: "options"
+    )
+
+    rfk_create_with(
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      create_attribute: :name,
+      create_param: "name",
+      value_field: "id",
+      label_field: "name",
+      wrap: "option"
+    )
+
+    def render(json:, status: :ok)
+      @rendered_json = json
+      @rendered_status = status
+    end
+  end
+
   around do |example|
     RailsFieldsKit.reset_configuration!
     example.run
@@ -171,6 +204,15 @@ RSpec.describe RailsFieldsKit::Searchable do
     expect(controller.rendered_json.first).to eq({ "id" => 1, "name" => "Acme Corp" })
   end
 
+  it "renders wrapped search results" do
+    controller = FakeWrappedController.new
+    controller.params = { "q" => "Acme" }
+
+    controller.index
+
+    expect(controller.rendered_json).to eq({ "options" => [{ "id" => 1, "name" => "Acme Corp" }, { "id" => 2, "name" => "Beta LLC" }] })
+  end
+
   it "renders created options as JSON" do
     controller = FakeController.new
     controller.params = { "name" => "Acme Corp" }
@@ -179,6 +221,16 @@ RSpec.describe RailsFieldsKit::Searchable do
 
     expect(controller.rendered_status).to eq(:created)
     expect(controller.rendered_json).to eq({ "id" => 123, "name" => "Acme Corp" })
+  end
+
+  it "renders wrapped created options" do
+    controller = FakeWrappedController.new
+    controller.params = { "name" => "Acme Corp" }
+
+    controller.create
+
+    expect(controller.rendered_status).to eq(:created)
+    expect(controller.rendered_json).to eq({ "option" => { "id" => 123, "name" => "Acme Corp" } })
   end
 
   it "renders validation errors" do
