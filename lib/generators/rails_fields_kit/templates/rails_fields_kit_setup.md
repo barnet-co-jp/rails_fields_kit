@@ -43,27 +43,34 @@ import "tom-select/dist/css/tom-select.css"
 
 If your app uses a CSS pipeline instead, import or copy Tom Select's stylesheet according to your app's conventions.
 
-## 4. Use the helpers
+## 4. Use a combobox
 
 ```erb
 <%= form_with model: @order do |f| %>
   <%= f.rfk_combobox :customer_id,
     url: customers_path(format: :json),
+    selected_url: selected_customers_path(format: :json),
     create_url: customers_path,
-    selected: @order.customer,
-    value_method: :id,
-    label_method: :name,
+    selected: @order.customer_id,
     value_field: "id",
     label_field: "name",
     search_field: "name,email",
     query_param: "q",
+    selected_param: "id",
+    selected_multiple_param: "ids",
     create_param: "name",
+    option_description_field: "email",
+    option_badge_field: "status",
     min_length: 2,
     placeholder: "Search or create a customer" %>
 <% end %>
 ```
 
-## 5. Optional Active Record-backed endpoints
+Use `selected:` when you already have the selected record, selected option hash, ID, or list of IDs.
+
+Use `selected_url:` with `rfk_find_with` when edit forms only have stored IDs and need to load display labels.
+
+## 5. Add Active Record-backed endpoints
 
 ```ruby
 class CustomersController < ApplicationController
@@ -75,7 +82,30 @@ class CustomersController < ApplicationController
     label: :name,
     search: [:name, :email],
     value_field: "id",
-    label_field: "name"
+    label_field: "name",
+    description: :email,
+    badge: :status,
+    description_field: "email",
+    badge_field: "status",
+    scope: -> { current_account.customers.active },
+    order: { name: :asc },
+    distinct: true,
+    wrap: "options"
+  )
+
+  rfk_find_with(
+    action: :selected,
+    model: Customer,
+    value: :id,
+    label: :name,
+    value_field: "id",
+    label_field: "name",
+    description: :email,
+    badge: :status,
+    description_field: "email",
+    badge_field: "status",
+    scope: -> { current_account.customers },
+    wrap: "option"
   )
 
   rfk_create_with(
@@ -85,7 +115,32 @@ class CustomersController < ApplicationController
     create_attribute: :name,
     create_param: "name",
     value_field: "id",
-    label_field: "name"
+    label_field: "name",
+    assign: ->(_customer) { { account_id: current_account.id } },
+    authorize: ->(customer) { policy(customer).create? },
+    wrap: "option"
   )
 end
 ```
+
+Example route for selected preload:
+
+```ruby
+resources :customers do
+  collection do
+    get :selected
+  end
+end
+```
+
+## 6. More documentation
+
+See the gem documentation for details:
+
+- `doc/setup.md`
+- `doc/public_api.md`
+- `doc/field_helpers.md`
+- `doc/controller_helpers.md`
+- `doc/configuration.md`
+- `doc/events.md`
+- `doc/sample_app_checklist.md`
