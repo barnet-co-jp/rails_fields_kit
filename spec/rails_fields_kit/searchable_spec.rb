@@ -24,15 +24,26 @@ RSpec.describe RailsFieldsKit::Searchable do
   end
 
   class FakeRelation
-    attr_reader :where_args, :limit_value
+    attr_reader :where_args, :limit_value, :order_value, :distinct_called
 
     def initialize(records)
       @records = records
       @where_args = []
+      @distinct_called = false
     end
 
     def where(*args)
       @where_args << args
+      self
+    end
+
+    def order(value)
+      @order_value = value
+      self
+    end
+
+    def distinct
+      @distinct_called = true
       self
     end
 
@@ -73,14 +84,24 @@ RSpec.describe RailsFieldsKit::Searchable do
   end
 
   class FakeModel
+    class << self
+      attr_accessor :last_relation
+    end
+
     def self.new(attributes)
       FakeRecord.new(attributes.merge(id: 123, email: "new@example.test", status: "new"))
     end
 
     def self.all
-      FakeRelation.new([
+      self.last_relation = FakeRelation.new([
         FakeRecord.new(id: 1, name: "Acme Corp", email: "hello@acme.example", status: "active"),
         FakeRecord.new(id: 2, name: "Beta LLC", email: "hello@beta.example", status: "archived")
+      ])
+    end
+
+    def self.active
+      self.last_relation = FakeRelation.new([
+        FakeRecord.new(id: 1, name: "Acme Corp", email: "hello@acme.example", status: "active")
       ])
     end
 
@@ -220,6 +241,50 @@ RSpec.describe RailsFieldsKit::Searchable do
     end
   end
 
+  class FakeScopedController
+    include RailsFieldsKit::Searchable
+
+    attr_accessor :params
+    attr_reader :rendered_json
+
+    rfk_search_with(
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      search: :name,
+      value_field: "id",
+      label_field: "name",
+      scope: :active,
+      order: { name: :asc },
+      distinct: true
+    )
+
+    def render(json:, status: :ok)
+      @rendered_json = json
+    end
+  end
+
+  class FakeLambdaScopedController
+    include RailsFieldsKit::Searchable
+
+    attr_accessor :params
+    attr_reader :rendered_json
+
+    rfk_search_with(
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      search: :name,
+      value_field: "id",
+      label_field: "name",
+      scope: -> { FakeRelation.new([FakeRecord.new(id: 9, name: "Scoped", email: "scoped@example.test")]) }
+    )
+
+    def render(json:, status: :ok)
+      @rendered_json = json
+    end
+  end
+
   around do |example|
     RailsFieldsKit.reset_configuration!
     example.run
@@ -252,6 +317,26 @@ RSpec.describe RailsFieldsKit::Searchable do
     controller.index
 
     expect(controller.rendered_json).to eq({ "options" => [{ "id" => 1, "name" => "Acme Corp" }, { "id" => 2, "name" => "Beta LLC" }] })
+  end
+
+  it "supports scoped ordered distinct search results" do
+    controller = FakeScopedController.new
+    controller.params = { "q" => "Acme" }
+
+    controller.index
+
+    expect(controller.rendered_json).to eq([{ "id" => 1, "name" => "Acme Corp" }])
+    expect(FakeModel.last_relation.distinct_called).to eq(true)
+    expect(FakeModel.last_relation.order_value).to eq({ name: :asc })
+  end
+
+  it "supports lambda scopes" do
+    controller = FakeLambdaScopedController.new
+    controller.params = { "q" => "Scoped" }
+
+    controller.index
+
+    expect(controller.rendered_json).to eq([{ "id" => 9, "name" => "Scoped" }])
   end
 
   it "renders rich search results" do
