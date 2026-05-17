@@ -66,11 +66,13 @@ Public class methods:
 
 See [`controller_helpers.md`](controller_helpers.md) for details.
 
-## Token suggestion builder
+## Token suggestion builders
 
 `RailsFieldsKit::TokenSuggestions.build` creates option JSON for token search suggestion endpoints. It can combine operator, field, predicate, value, and saved-search suggestions while leaving token parsing and search execution to the host application.
 
-See [`token_suggestions.md`](token_suggestions.md) for details.
+`RailsFieldsKit::RansackSuggestions.build` creates Ransack-compatible token suggestion metadata without requiring the `ransack` gem or executing a Ransack search.
+
+See [`token_suggestions.md`](token_suggestions.md) and [`ransack_suggestions.md`](ransack_suggestions.md) for details.
 
 ## Table metadata adapters
 
