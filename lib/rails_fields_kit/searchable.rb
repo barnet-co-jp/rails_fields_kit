@@ -7,7 +7,7 @@ module RailsFieldsKit
     extend ActiveSupport::Concern
 
     class_methods do
-      def rfk_search_with(model:, label:, value: :id, search:, limit: 20, query_param: nil, value_field: nil, label_field: nil, wrap: nil)
+      def rfk_search_with(model:, label:, value: :id, search:, limit: 20, query_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, wrap: nil)
         define_method(:index) do
           query_key = query_param || RailsFieldsKit.configuration.default_query_param
           query = params[query_key].to_s
@@ -29,14 +29,18 @@ module RailsFieldsKit
               value: value,
               label: label,
               value_field: value_field,
-              label_field: label_field
+              label_field: label_field,
+              description: description,
+              badge: badge,
+              description_field: description_field,
+              badge_field: badge_field
             )
           end
           render json: rfk_wrap_options(options, wrap: wrap)
         end
       end
 
-      def rfk_create_with(model:, label:, value: :id, create_attribute: nil, create_param: nil, value_field: nil, label_field: nil, permitted_attributes: nil, wrap: nil)
+      def rfk_create_with(model:, label:, value: :id, create_attribute: nil, create_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, permitted_attributes: nil, wrap: nil)
         define_method(:create) do
           attribute_name = create_attribute || label
           param_name = create_param || RailsFieldsKit.configuration.default_create_param
@@ -53,7 +57,11 @@ module RailsFieldsKit
               value: value,
               label: label,
               value_field: value_field,
-              label_field: label_field
+              label_field: label_field,
+              description: description,
+              badge: badge,
+              description_field: description_field,
+              badge_field: badge_field
             )
             render json: rfk_wrap_option(option, wrap: wrap), status: :created
           else
@@ -65,11 +73,27 @@ module RailsFieldsKit
 
     private
 
-    def rfk_option_json(record, value:, label:, value_field:, label_field:)
-      {
-        (value_field || RailsFieldsKit.configuration.default_value_field) => record.public_send(value),
-        (label_field || RailsFieldsKit.configuration.default_label_field) => record.public_send(label)
+    def rfk_option_json(record, value:, label:, value_field:, label_field:, description:, badge:, description_field:, badge_field:)
+      option = {
+        (value_field || RailsFieldsKit.configuration.default_value_field) => rfk_read_option_value(record, value),
+        (label_field || RailsFieldsKit.configuration.default_label_field) => rfk_read_option_value(record, label)
       }
+
+      if description
+        option[description_field || RailsFieldsKit.configuration.default_option_description_field || "description"] = rfk_read_option_value(record, description)
+      end
+
+      if badge
+        option[badge_field || RailsFieldsKit.configuration.default_option_badge_field || "badge"] = rfk_read_option_value(record, badge)
+      end
+
+      option
+    end
+
+    def rfk_read_option_value(record, method_or_proc)
+      return method_or_proc.call(record) if method_or_proc.respond_to?(:call)
+
+      record.public_send(method_or_proc)
     end
 
     def rfk_wrap_options(options, wrap:)
