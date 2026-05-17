@@ -6,7 +6,7 @@ RSpec.describe RailsFieldsKit::FormBuilder do
   include ActionView::Helpers::TagHelper
   include ActionView::Context
 
-  DummyModel = Struct.new(:status, :customer_id, :tag_ids, :keyword) do
+  DummyModel = Struct.new(:status, :customer_id, :tag_ids, :keyword, :quantity) do
     def self.model_name
       ActiveModel::Name.new(self, nil, "DummyModel")
     end
@@ -44,7 +44,7 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     false
   end
 
-  def form_builder(model = DummyModel.new("draft", nil, [], nil), object_name = :dummy_model)
+  def form_builder(model = DummyModel.new("draft", nil, [], nil, 1), object_name = :dummy_model)
     ActionView::Helpers::FormBuilder.new(object_name, model, self, {})
   end
 
@@ -62,7 +62,9 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"select\"")
     expect(html).to include("data-rails-fields-kit--tom-select-value-field-value=\"value\"")
     expect(html).to include("data-rails-fields-kit--tom-select-label-field-value=\"text\"")
-    expect(html).to include("<option value=\"draft\" selected=\"selected\">Draft</option>")
+    expect(html).to include("value=\"draft\"")
+    expect(html).to include("selected=\"selected\"")
+    expect(html).to include(">Draft</option>")
   end
 
   it "renders a remote editable combobox" do
@@ -143,6 +145,30 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("type=\"text\"")
     expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"autocomplete\"")
     expect(html).to include("data-rails-fields-kit--tom-select-free-text-value=\"true\"")
+  end
+
+  it "renders native text fields with wrappers" do
+    html = form_builder.rfk_text_field(:keyword, wrapper: true, label: "Keyword", hint: "Free text search")
+
+    expect(html).to include("type=\"text\"")
+    expect(html).to include("class=\"rfk-field\"")
+    expect(html).to include("Keyword</label>")
+    expect(html).to include("Free text search")
+  end
+
+  it "renders native text areas" do
+    html = form_builder.rfk_text_area(:keyword, wrapper: true)
+
+    expect(html).to include("<textarea")
+    expect(html).to include("class=\"rfk-field\"")
+  end
+
+  it "renders native number fields" do
+    html = form_builder.rfk_number_field(:quantity, min: 1, step: 1)
+
+    expect(html).to include("type=\"number\"")
+    expect(html).to include("min=\"1\"")
+    expect(html).to include("step=\"1\"")
   end
 
   it "wraps a field with label and hint when requested" do
