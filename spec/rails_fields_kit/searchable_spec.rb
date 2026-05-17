@@ -41,6 +41,18 @@ RSpec.describe RailsFieldsKit::Searchable do
     end
   end
 
+  class FakeArelPredicate
+    attr_reader :parts
+
+    def initialize(*parts)
+      @parts = parts
+    end
+
+    def or(other)
+      FakeArelPredicate.new(:or, self, other)
+    end
+  end
+
   class FakeArelColumn
     attr_reader :name
 
@@ -49,7 +61,7 @@ RSpec.describe RailsFieldsKit::Searchable do
     end
 
     def matches(value)
-      [:matches, name, value]
+      FakeArelPredicate.new(:matches, name, value)
     end
   end
 
