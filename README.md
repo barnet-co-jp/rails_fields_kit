@@ -19,7 +19,36 @@ bundle install
 rails generate rails_fields_kit:install
 ```
 
-Rails Fields Kit expects your JavaScript application to provide `@hotwired/stimulus` and `tom-select`.
+Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and controller-side helpers. It does not install Tom Select or choose a JavaScript bundling strategy for your app.
+
+## JavaScript setup
+
+Install Tom Select with the JavaScript toolchain your Rails app already uses:
+
+```bash
+yarn add tom-select
+# or
+npm install tom-select
+# or
+pnpm add tom-select
+```
+
+Register the Rails Fields Kit Stimulus controller in your application:
+
+```js
+import { application } from "controllers/application"
+import TomSelectController from "rails_fields_kit/tom_select_controller"
+
+application.register("rails-fields-kit--tom-select", TomSelectController)
+```
+
+Load Tom Select's CSS through your application's stylesheet pipeline or bundler:
+
+```js
+import "tom-select/dist/css/tom-select.css"
+```
+
+Importmap users can pin and register these modules manually, but Rails Fields Kit does not generate importmap-specific setup.
 
 ## Usage
 
