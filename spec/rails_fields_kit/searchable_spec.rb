@@ -13,7 +13,7 @@ RSpec.describe RailsFieldsKit::Searchable do
     def initialize(attributes = {})
       @id = attributes[:id] || 1
       @name = attributes[:name]
-      @errors = FakeErrors.new(name: ["can't be blank"])
+      @errors = FakeErrors.new({ name: ["can't be blank"] })
     end
 
     def save
