@@ -2,7 +2,7 @@
 
 module RailsFieldsKit
   module TableRenderer
-    FIELD_HELPERS = {
+    DEFAULT_FIELD_HELPERS = {
       "select" => :rfk_select,
       "combobox" => :rfk_combobox,
       "autocomplete" => :rfk_autocomplete,
@@ -25,6 +25,18 @@ module RailsFieldsKit
     class UnknownFieldType < StandardError; end
 
     class << self
+      def field_helpers
+        @field_helpers ||= DEFAULT_FIELD_HELPERS.dup
+      end
+
+      def register_field_helper(field_type, helper_name)
+        field_helpers[field_type.to_s] = helper_name.to_sym
+      end
+
+      def reset_field_helpers!
+        @field_helpers = DEFAULT_FIELD_HELPERS.dup
+      end
+
       def filter_call(filter)
         call_spec(normalize_filter(filter))
       end
@@ -54,7 +66,7 @@ module RailsFieldsKit
       def call_spec(metadata)
         metadata = metadata.transform_keys(&:to_sym)
         field_type = metadata.fetch(:field_type).to_s
-        helper = FIELD_HELPERS.fetch(field_type) do
+        helper = field_helpers.fetch(field_type) do
           raise UnknownFieldType, "unknown Rails Fields Kit table field type: #{field_type}"
         end
         method = metadata[:method]&.to_sym
