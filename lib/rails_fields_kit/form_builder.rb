@@ -117,11 +117,14 @@ module RailsFieldsKit
       plugins = Array(plugins) | ["clear_button"] if allow_clear
 
       rfk_assign_data_value(data, :url, options.delete(:url))
+      rfk_assign_data_value(data, :selected_url, options.delete(:selected_url))
       rfk_assign_data_value(data, :create_url, options.delete(:create_url))
       rfk_assign_data_value(data, :create, options.delete(:create))
       rfk_assign_data_value(data, :free_text, options.delete(:free_text))
       rfk_assign_data_value(data, :placeholder, options[:placeholder])
       rfk_assign_data_value(data, :query_param, rfk_option_or_default(options, :query_param, config.default_query_param))
+      rfk_assign_data_value(data, :selected_param, rfk_option_or_default(options, :selected_param, "id"))
+      rfk_assign_data_value(data, :selected_multiple_param, rfk_option_or_default(options, :selected_multiple_param, "ids"))
       rfk_assign_data_value(data, :create_param, rfk_option_or_default(options, :create_param, config.default_create_param))
       rfk_assign_data_value(data, :value_field, rfk_option_or_default(options, :value_field, config.default_value_field))
       rfk_assign_data_value(data, :label_field, rfk_option_or_default(options, :label_field, config.default_label_field))
