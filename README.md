@@ -122,7 +122,8 @@ class CustomersController < ApplicationController
     search: [:name, :email],
     value_field: "id",
     label_field: "name",
-    limit: 20
+    limit: 20,
+    wrap: "options"
   )
 
   rfk_create_with(
@@ -132,10 +133,13 @@ class CustomersController < ApplicationController
     create_attribute: :name,
     create_param: "name",
     value_field: "id",
-    label_field: "name"
+    label_field: "name",
+    wrap: "option"
   )
 end
 ```
+
+`wrap:` is optional. Without it, search returns an array and create returns a single option object. With `wrap: "options"`, search returns `{ "options": [...] }`. With `wrap: "option"`, create returns `{ "option": {...} }`.
 
 `rfk_create_with` renders `422 Unprocessable Entity` with `{ "errors": ... }` when the record is invalid.
 
