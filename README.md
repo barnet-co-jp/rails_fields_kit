@@ -99,6 +99,11 @@ Importmap users can pin and register these modules manually, but Rails Fields Ki
 
 When `selected_url:` is provided, Rails Fields Kit can load missing selected option labels from the server after Tom Select connects. This is useful when the form only has stored IDs and not the display labels. For one value it sends `selected_param`, default `id`; for multiple values it sends `selected_multiple_param`, default `ids`.
 
+Selected preload dispatches these Stimulus events:
+
+- `rails-fields-kit--tom-select:selected-load`
+- `rails-fields-kit--tom-select:selected-load-error`
+
 Remote options can include extra fields for richer rendering:
 
 ```json
@@ -362,6 +367,8 @@ Any wrapped field can use custom affixes:
 RailsFieldsKit.configure do |config|
   config.controller_name = "rails-fields-kit--tom-select"
   config.default_query_param = "q"
+  config.default_selected_param = "id"
+  config.default_selected_multiple_param = "ids"
   config.default_create_param = "text"
   config.default_value_field = "value"
   config.default_label_field = "text"
