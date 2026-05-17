@@ -20,6 +20,8 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     end
   end
 
+  SelectedCustomer = Struct.new(:id, :name)
+
   def protect_against_forgery?
     false
   end
@@ -70,6 +72,44 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("data-rails-fields-kit--tom-select-search-field-value=\"name,email\"")
     expect(html).to include("data-rails-fields-kit--tom-select-min-length-value=\"2\"")
     expect(html).to include("placeholder=\"Search or create a customer\"")
+  end
+
+  it "preloads a selected option from a hash" do
+    html = form_builder.rfk_combobox(
+      :customer_id,
+      url: "/customers.json",
+      selected: { value: 10, text: "Acme Corp" }
+    )
+
+    expect(html).to include("<option selected=\"selected\" value=\"10\">Acme Corp</option>")
+  end
+
+  it "preloads a selected option from an object" do
+    customer = SelectedCustomer.new(20, "Beta LLC")
+
+    html = form_builder.rfk_combobox(
+      :customer_id,
+      url: "/customers.json",
+      selected: customer,
+      value_method: :id,
+      label_method: :name
+    )
+
+    expect(html).to include("<option selected=\"selected\" value=\"20\">Beta LLC</option>")
+  end
+
+  it "preloads multiple selected options without duplicating collection entries" do
+    html = form_builder.rfk_tags(
+      :tag_ids,
+      collection: [["Urgent", 1]],
+      selected: [
+        { value: 1, text: "Urgent" },
+        { value: 2, text: "Backlog" }
+      ]
+    )
+
+    expect(html).to include("<option selected=\"selected\" value=\"2\">Backlog</option>")
+    expect(html.scan("value=\"1\"").size).to eq(1)
   end
 
   it "renders tags as a multiple select with remove buttons" do
