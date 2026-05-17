@@ -49,6 +49,27 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     )
   end
 
+  it "builds filter call specs in batches" do
+    filters = [
+      RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json"),
+      nil,
+      RailsFieldsKit::TableFilterInput.token_search(:query, url: "/search_tokens.json")
+    ]
+
+    expect(described_class.filter_calls(filters)).to eq([
+      {
+        helper: :rfk_combobox,
+        method: :customer_id,
+        options: { url: "/customers.json" }
+      },
+      {
+        helper: :rfk_token_search,
+        method: :query,
+        options: { url: "/search_tokens.json" }
+      }
+    ])
+  end
+
   it "builds a token search filter call spec" do
     filter = RailsFieldsKit::TableFilterInput.token_search(
       :query,
@@ -76,6 +97,27 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     )
   end
 
+  it "builds cell editor call specs in batches" do
+    editors = [
+      RailsFieldsKit::TableCellInput.new(:enum_select, :status),
+      nil,
+      RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json")
+    ]
+
+    expect(described_class.cell_editor_calls(editors)).to eq([
+      {
+        helper: :rfk_enum_select,
+        method: :status,
+        options: {}
+      },
+      {
+        helper: :rfk_combobox,
+        method: :customer_id,
+        options: { url: "/customers.json" }
+      }
+    ])
+  end
+
   it "renders filters through a form builder" do
     form_builder = FakeTableFormBuilder.new
     filter = RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json")
@@ -86,6 +128,21 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     ])
   end
 
+  it "renders filters in batches" do
+    form_builder = FakeTableFormBuilder.new
+    filters = [
+      RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json"),
+      nil,
+      RailsFieldsKit::TableFilterInput.token_search(:query, url: "/search_tokens.json")
+    ]
+
+    expect(described_class.render_filters(form_builder, filters)).to eq(["combobox", "token_search"])
+    expect(form_builder.calls).to eq([
+      [:rfk_combobox, :customer_id, { url: "/customers.json" }],
+      [:rfk_token_search, :query, { url: "/search_tokens.json" }]
+    ])
+  end
+
   it "renders cell editors through a form builder" do
     form_builder = FakeTableFormBuilder.new
     editor = RailsFieldsKit::TableCellInput.new(:enum_select, :status)
@@ -93,6 +150,21 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     expect(described_class.render_cell_editor(form_builder, editor)).to eq("enum_select")
     expect(form_builder.calls).to eq([
       [:rfk_enum_select, :status, {}]
+    ])
+  end
+
+  it "renders cell editors in batches" do
+    form_builder = FakeTableFormBuilder.new
+    editors = [
+      RailsFieldsKit::TableCellInput.new(:enum_select, :status),
+      nil,
+      RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json")
+    ]
+
+    expect(described_class.render_cell_editors(form_builder, editors)).to eq(["enum_select", "combobox"])
+    expect(form_builder.calls).to eq([
+      [:rfk_enum_select, :status, {}],
+      [:rfk_combobox, :customer_id, { url: "/customers.json" }]
     ])
   end
 
