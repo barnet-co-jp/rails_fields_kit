@@ -37,6 +37,7 @@ RSpec.describe "rails_fields_kit.gemspec" do
       "doc/controller_helpers.md",
       "doc/configuration.md",
       "doc/events.md",
+      "doc/development.md",
       "doc/release.md"
     )
   end
