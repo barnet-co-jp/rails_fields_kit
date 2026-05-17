@@ -20,10 +20,20 @@ RailsFieldsKit.configure do |config|
   config.default_max_options = nil
   config.default_preload = nil
 
+  # Default Tom Select UX behavior. Leave nil to use Tom Select defaults.
+  config.default_open_on_focus = nil
+  config.default_close_after_select = nil
+  config.default_hide_selected = nil
+  config.default_persist = nil
+
   # Default Tom Select rendered messages.
   config.default_no_results_text = "No results found"
   config.default_loading_text = "Loading..."
   config.default_create_text = "Add"
+
+  # Default rich option render fields.
+  config.default_option_description_field = nil
+  config.default_option_badge_field = nil
 
   # Default Tom Select plugins applied by helpers.
   config.default_plugins = []
