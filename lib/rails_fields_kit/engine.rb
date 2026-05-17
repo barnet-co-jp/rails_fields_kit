@@ -7,6 +7,10 @@ module RailsFieldsKit
   class Engine < ::Rails::Engine
     isolate_namespace RailsFieldsKit
 
+    initializer "rails_fields_kit.assets" do |app|
+      app.config.assets.paths << root.join("app/javascript") if app.config.respond_to?(:assets)
+    end
+
     initializer "rails_fields_kit.form_builder" do
       ActiveSupport.on_load(:action_view) do
         ActionView::Helpers::FormBuilder.include RailsFieldsKit::FormBuilder
