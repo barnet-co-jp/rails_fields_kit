@@ -2,6 +2,7 @@
 
 RSpec.describe RailsFieldsKit::TableMetadata do
   ColumnDefinition = Struct.new(:filter, :editor, keyword_init: true)
+  AliasColumnDefinition = Struct.new(:filter_input, :cell_editor, keyword_init: true)
 
   it "collects filter metadata from hash columns" do
     columns = [
@@ -23,10 +24,53 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ])
   end
 
+  it "collects filter metadata from hash alias keys" do
+    columns = [
+      {
+        key: :customer_id,
+        filter_input: RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json")
+      },
+      {
+        key: :query,
+        "search_filter" => RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")
+      }
+    ]
+
+    expect(described_class.filters(columns)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "combobox",
+        method: "customer_id",
+        options: { url: "/customers.json" }
+      },
+      {
+        type: "rails_fields_kit",
+        field_type: "token_search",
+        method: "query",
+        options: { url: "/tokens.json" }
+      }
+    ])
+  end
+
   it "collects filter metadata from object columns" do
     columns = [
       ColumnDefinition.new(filter: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")),
       ColumnDefinition.new(filter: nil)
+    ]
+
+    expect(described_class.filters(columns)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "token_search",
+        method: "query",
+        options: { url: "/tokens.json" }
+      }
+    ])
+  end
+
+  it "collects filter metadata from object alias methods" do
+    columns = [
+      AliasColumnDefinition.new(filter_input: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json"))
     ]
 
     expect(described_class.filters(columns)).to eq([
@@ -46,6 +90,31 @@ RSpec.describe RailsFieldsKit::TableMetadata do
         editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
       },
       ColumnDefinition.new(editor: RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json"))
+    ]
+
+    expect(described_class.cell_editors(columns)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "enum_select",
+        method: "status",
+        options: {}
+      },
+      {
+        type: "rails_fields_kit",
+        field_type: "combobox",
+        method: "customer_id",
+        options: { url: "/customers.json" }
+      }
+    ])
+  end
+
+  it "collects cell editor metadata from alias keys and methods" do
+    columns = [
+      {
+        key: :status,
+        cell_input: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+      },
+      AliasColumnDefinition.new(cell_editor: RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json"))
     ]
 
     expect(described_class.cell_editors(columns)).to eq([
