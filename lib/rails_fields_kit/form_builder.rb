@@ -111,6 +111,11 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :label_field, options.delete(:label_field) || config.default_label_field)
       rfk_assign_data_value(data, :search_field, options.delete(:search_field) || config.default_search_field)
       rfk_assign_data_value(data, :min_length, options.delete(:min_length) || config.default_min_length)
+      rfk_assign_data_value(data, :max_options, options.delete(:max_options) || config.default_max_options)
+      rfk_assign_data_value(data, :preload, options.delete(:preload) || config.default_preload)
+      rfk_assign_data_value(data, :no_results_text, options.delete(:no_results_text) || config.default_no_results_text)
+      rfk_assign_data_value(data, :loading_text, options.delete(:loading_text) || config.default_loading_text)
+      rfk_assign_data_value(data, :create_text, options.delete(:create_text) || config.default_create_text)
       rfk_assign_data_value(data, :plugins, plugins)
 
       html_options[:multiple] = options.delete(:multiple) if options.key?(:multiple)
