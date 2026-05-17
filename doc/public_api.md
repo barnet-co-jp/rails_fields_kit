@@ -62,6 +62,22 @@ Public class methods:
 
 See [`controller_helpers.md`](controller_helpers.md) for details.
 
+## Table metadata adapters
+
+Rails Fields Kit exposes small metadata objects for table-oriented gems that want optional Rails Fields Kit integration without a hard dependency.
+
+Public classes:
+
+- `RailsFieldsKit::TableFilterInput`
+- `RailsFieldsKit::TableCellInput`
+
+Public metadata methods:
+
+- `RailsFieldsKit::TableFilterInput#to_table_filter`
+- `RailsFieldsKit::TableCellInput#to_table_cell_editor`
+
+The returned hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. See [`table_adapters.md`](table_adapters.md) for the protocol and Rails Table Preferences integration notes.
+
 ## JavaScript exports
 
 The package exposes the Tom Select Stimulus controller from the JavaScript entrypoint:
