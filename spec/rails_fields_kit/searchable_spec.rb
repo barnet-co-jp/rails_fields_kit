@@ -155,6 +155,48 @@ RSpec.describe RailsFieldsKit::Searchable do
     end
   end
 
+  class FakeCustomActionController
+    include RailsFieldsKit::Searchable
+
+    attr_accessor :params
+    attr_reader :rendered_json, :rendered_status
+
+    rfk_search_with(
+      action: :lookup,
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      search: :name,
+      value_field: "id",
+      label_field: "name"
+    )
+
+    rfk_find_with(
+      action: :selected,
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      value_field: "id",
+      label_field: "name"
+    )
+
+    rfk_create_with(
+      action: :build,
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      create_attribute: :name,
+      create_param: "name",
+      value_field: "id",
+      label_field: "name"
+    )
+
+    def render(json:, status: :ok)
+      @rendered_json = json
+      @rendered_status = status
+    end
+  end
+
   class FakeCustomQueryController
     include RailsFieldsKit::Searchable
 
@@ -315,6 +357,54 @@ RSpec.describe RailsFieldsKit::Searchable do
     end
   end
 
+  class FakeTokenSuggestionsController
+    include RailsFieldsKit::Searchable
+
+    attr_accessor :params
+    attr_reader :rendered_json, :rendered_status
+
+    rfk_token_suggestions_with(
+      suggestions: [
+        "status:open",
+        ["Assigned to me", "assignee:me"],
+        { token: "priority:high", label: "High priority", description: "Urgent items", badge: "priority" },
+        { value: "status:closed", text: "Closed" }
+      ],
+      limit: 3
+    )
+
+    def render(json:, status: :ok)
+      @rendered_json = json
+      @rendered_status = status
+    end
+  end
+
+  class FakeCallableTokenSuggestionsController
+    include RailsFieldsKit::Searchable
+
+    attr_accessor :params
+    attr_reader :rendered_json
+
+    rfk_token_suggestions_with(
+      action: :tokens,
+      query_param: "term",
+      suggestions: ->(query) {
+        [
+          { token: "status:#{query}", label: "Status #{query}", badge: "operator" },
+          { token: "assignee:me", label: "Assigned to me" }
+        ]
+      },
+      value_field: "token",
+      label_field: "label",
+      badge_field: "kind",
+      wrap: "options"
+    )
+
+    def render(json:, status: :ok)
+      @rendered_json = json
+    end
+  end
+
   class FakeHookedCreateController
     include RailsFieldsKit::Searchable
 
@@ -365,6 +455,21 @@ RSpec.describe RailsFieldsKit::Searchable do
 
     expect(controller.rendered_status).to eq(:ok)
     expect(controller.rendered_json).to eq([{ "id" => 1, "name" => "Acme Corp" }])
+  end
+
+  it "supports custom action names" do
+    controller = FakeCustomActionController.new
+    controller.params = { "q" => "Acme", "id" => "1", "name" => "Created" }
+
+    controller.lookup
+    expect(controller.rendered_json).to eq([{ "id" => 1, "name" => "Acme Corp" }, { "id" => 2, "name" => "Beta LLC" }])
+
+    controller.selected
+    expect(controller.rendered_json).to eq({ "id" => 1, "name" => "Acme Corp" })
+
+    controller.build
+    expect(controller.rendered_status).to eq(:created)
+    expect(controller.rendered_json).to eq({ "id" => 123, "name" => "Created" })
   end
 
   it "supports custom query params" do
@@ -444,6 +549,32 @@ RSpec.describe RailsFieldsKit::Searchable do
     expect(controller.rendered_json).to eq([
       { "id" => 1, "name" => "Acme Corp", "email" => "hello@acme.example", "status" => "active" }
     ])
+  end
+
+  it "renders token suggestions" do
+    controller = FakeTokenSuggestionsController.new
+    controller.params = { "q" => "status" }
+
+    controller.index
+
+    expect(controller.rendered_status).to eq(:ok)
+    expect(controller.rendered_json).to eq([
+      { "value" => "status:open", "text" => "status:open" },
+      { "value" => "status:closed", "text" => "Closed" }
+    ])
+  end
+
+  it "renders callable wrapped token suggestions with custom fields" do
+    controller = FakeCallableTokenSuggestionsController.new
+    controller.params = { "term" => "open" }
+
+    controller.tokens
+
+    expect(controller.rendered_json).to eq({
+      "options" => [
+        { "token" => "status:open", "label" => "Status open", "kind" => "operator", "badge" => "operator" }
+      ]
+    })
   end
 
   it "renders created options as JSON" do
