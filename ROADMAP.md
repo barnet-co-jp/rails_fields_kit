@@ -1,0 +1,160 @@
+# Roadmap
+
+Rails Fields Kit should grow as a focused kit for Rails form fields that remain awkward with native HTML inputs alone.
+
+The core scope is not every possible form control. Native browser inputs such as date, time, color, email, URL, and number should stay native when they already provide a good default. Rails Fields Kit should focus on candidate-based text inputs, searchable selections, tag inputs, remote option loading, and adjacent Rails form integration work.
+
+## Positioning
+
+Rails Fields Kit is not just a combobox helper and is not a query engine.
+
+It should provide modern Rails form fields for candidate-based text inputs, powered by Tom Select where Tom Select is the right fit, and wrapped in Rails-friendly helpers for naming, redisplay, validation errors, accessibility, and Hotwire-friendly behavior.
+
+Query parsing, authorization, scoping, and Active Record relation construction usually belong in the host application, a search object, a controller concern, or a dedicated search gem. Rails Fields Kit may provide UI helpers and optional adapters that make those systems easier to use, but it should not own application-specific search semantics.
+
+## Phase 1: Core Rails field helpers
+
+These fields form the center of the gem.
+
+- `rfk_combobox`
+  - Editable combobox for choosing from candidates while still allowing free text or create-on-the-fly flows.
+  - Should remain the main differentiator from plain autocomplete helpers.
+- `rfk_autocomplete`
+  - Text input with remote suggestions.
+  - Best for keeping the submitted value as text while improving typing speed.
+- `rfk_select`
+  - Tom Select-backed wrapper around ordinary single selects.
+  - Should stay thin when Tom Select already provides the behavior.
+- `rfk_multi_select`
+  - Multiple selection with Rails array parameter handling and clearing support.
+- `rfk_tags`
+  - Tag-style input for arrays of IDs or values, with optional remote search and create-on-the-fly support.
+- `rfk_enum_select`
+  - Rails enum-friendly select helper.
+- Native wrappers
+  - Text, text area, number, money, percent, email, URL, phone, and search fields with consistent labels, hints, errors, prefixes, suffixes, and accessibility behavior.
+
+## Phase 2: Better remote option workflows
+
+Remote option loading is where Rails integration is often more valuable than Tom Select configuration itself.
+
+Planned improvements:
+
+- stronger selected-option preload support for edit forms
+- better multi-value selected preload behavior
+- richer option rendering metadata such as description and badge fields
+- consistent create endpoint error handling
+- documented endpoint response shapes for search, find, and create
+- clearer controller helper examples for scoped Active Record-backed endpoints
+
+## Phase 3: Search input helpers
+
+Rails Fields Kit may add helpers for writing complex search text more comfortably, without becoming the search backend.
+
+Candidate helpers:
+
+- `rfk_search_field`
+  - A wrapped search input with optional suggestions.
+- `rfk_token_search`
+  - A token-oriented search input for structured search phrases such as `status:open assignee:matsuo keyword`.
+- Operator-aware suggestions
+  - UI assistance for operators such as `not(...)`, `OR`, field names, predicates, and saved searches.
+
+Non-goals for the core gem:
+
+- parsing arbitrary query languages into SQL
+- deciding what `not(123)` means for a specific model
+- building Active Record relations for app-specific search semantics
+- replacing dedicated search gems
+
+The host app, controller concern, query object, or search gem should remain responsible for interpreting submitted search text.
+
+## Phase 4: Optional Ransack adapter
+
+Ransack integration is valuable, especially for admin screens and list pages, but it should be optional.
+
+The adapter should help Rails Fields Kit inputs produce or edit Ransack-compatible parameters. It should not install, configure, or hide Ransack.
+
+Host app responsibilities should remain explicit:
+
+- adding the `ransack` gem
+- calling `Model.ransack(params[:q])` in the controller or equivalent layer
+- defining `ransackable_attributes` and `ransackable_associations` when required
+- deciding which fields and predicates are allowed
+- handling authorization, scoping, and result pagination
+
+Possible API direction:
+
+```erb
+<%= f.rfk_token_search :query,
+  adapter: :ransack,
+  param_name: :q,
+  fields: {
+    name: :name_cont,
+    email: :email_cont,
+    status: :status_eq,
+    created_after: :created_at_gteq,
+    created_before: :created_at_lteq
+  } %>
+```
+
+This keeps Rails Fields Kit responsible for input UI and parameter assistance while leaving the actual search behavior to Ransack and the host application.
+
+## Phase 5: Rails Table Preferences integration
+
+Integration with `matsuo-haruhito/rails_table_preferences` is a strong candidate because it stays close to the gem's view/helper responsibility.
+
+The goal is to let applications that already define table columns and preferences avoid hand-writing repetitive filter and cell-editor views.
+
+Current direction:
+
+- Rails Fields Kit exposes table-oriented metadata objects such as `RailsFieldsKit::TableFilterInput` and `RailsFieldsKit::TableCellInput`.
+- Table-oriented gems can read these through `to_table_filter` and `to_table_cell_editor` without taking a hard dependency on Rails Fields Kit.
+- A future integration can render filters and editable cell controls from table preference metadata when both gems are present.
+
+Potential helper direction:
+
+```erb
+<%= search_form_for @q do |f| %>
+  <%= f.rfk_table_preference_filters @table_preferences,
+    adapter: :ransack %>
+<% end %>
+```
+
+or, for non-Ransack forms:
+
+```erb
+<%= form_with url: users_path, method: :get do |f| %>
+  <%= f.rfk_table_preference_filters @table_preferences %>
+<% end %>
+```
+
+MVP scope:
+
+- render filters only for columns marked searchable/filterable
+- support text, select, enum select, combobox, multi-select, and tags fields
+- allow explicit predicate or parameter mapping when using Ransack
+- preserve Rails Fields Kit wrapper, label, hint, error, and accessibility behavior
+- avoid owning the table preference persistence layer
+- avoid owning the search execution layer
+
+This integration should be implemented as an optional layer, not as a hard dependency from the core gem.
+
+## Longer-term candidates
+
+These are useful but should not distract from the core Tom Select-backed field kit.
+
+- mention fields for `@user` or `#tag` style textarea interactions
+- saved search selectors
+- field/operator suggestion registries
+- slug helpers for title-to-slug workflows
+- masked inputs only if a clear Rails integration gap remains
+
+## Design guardrails
+
+- Prefer Rails-friendly wrappers over replacing Rails conventions.
+- Keep Tom Select configuration accessible rather than hiding it completely.
+- Treat app-specific search meaning as host app responsibility.
+- Keep integrations optional and dependency-light.
+- Make generated markup work naturally with Turbo-driven page updates.
+- Document where Rails Fields Kit stops and host app code begins.
