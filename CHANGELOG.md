@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## 0.1.0 - 2026-05-18
+
 ### Added
 
 - Initial Rails engine skeleton.
@@ -52,14 +54,18 @@ All notable changes to this project will be documented in this file.
 - Install generator.
 - Documentation:
   - `doc/setup.md`
+  - `doc/public_api.md`
   - `doc/field_helpers.md`
   - `doc/controller_helpers.md`
   - `doc/configuration.md`
   - `doc/events.md`
+  - `doc/development.md`
+  - `doc/release.md`
 
 ### Changed
 
 - Rails support targets Rails 7.0 and newer.
+- Rails dependency is bounded to Rails 7 and Rails 8 for the initial release line.
 - Tom Select installation and JavaScript bundling strategy are intentionally left to the host application.
 
 ### Fixed
