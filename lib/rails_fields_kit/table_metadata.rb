@@ -51,12 +51,17 @@ module RailsFieldsKit
       end
 
       def read_object_column_value(column, key)
-        return unless column.respond_to?(key)
+        return unless column_metadata_reader?(column, key)
+
+        column.public_send(key)
+      end
+
+      def column_metadata_reader?(column, key)
+        return false unless column.respond_to?(key)
+        return column.members.map(&:to_sym).include?(key) if column.respond_to?(:members)
 
         reader = column.method(key)
-        return if reader.owner == Enumerable
-
-        reader.call
+        reader.owner != Enumerable
       end
     end
   end
