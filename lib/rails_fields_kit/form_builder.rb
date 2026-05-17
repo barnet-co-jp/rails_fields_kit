@@ -35,6 +35,7 @@ module RailsFieldsKit
       selected = options.delete(:selected)
       value_method = options.delete(:value_method) || :id
       label_method = options.delete(:label_method) || :to_s
+      selected_choices = rfk_normalize_selected(selected, value_method: value_method, label_method: label_method)
 
       rfk_assign_data_value(data, :url, options.delete(:url))
       rfk_assign_data_value(data, :create_url, options.delete(:create_url))
@@ -55,12 +56,8 @@ module RailsFieldsKit
       if field_kind == :autocomplete || html_options[:multiple] == false && options[:as] == :text
         text_field(method, options.merge(html_options))
       else
-        choices = rfk_choices_with_selected(
-          collection,
-          selected: selected,
-          value_method: value_method,
-          label_method: label_method
-        )
+        choices = rfk_choices_with_selected(collection, selected_choices: selected_choices)
+        options[:selected] ||= rfk_selected_values(selected_choices) if selected_choices.any?
         select(method, choices, options, html_options)
       end
     end
@@ -73,13 +70,16 @@ module RailsFieldsKit
       data[data_key] = value.is_a?(Array) || value.is_a?(Hash) ? JSON.generate(value) : value
     end
 
-    def rfk_choices_with_selected(collection, selected:, value_method:, label_method:)
+    def rfk_choices_with_selected(collection, selected_choices:)
       choices = rfk_normalize_collection(collection)
-      selected_choices = rfk_normalize_selected(selected, value_method: value_method, label_method: label_method)
       existing_values = choices.map { |choice| Array(choice).second.to_s }
       missing_selected_choices = selected_choices.reject { |choice| existing_values.include?(choice.second.to_s) }
 
       missing_selected_choices + choices
+    end
+
+    def rfk_selected_values(selected_choices)
+      selected_choices.map(&:second)
     end
 
     def rfk_normalize_collection(collection)
