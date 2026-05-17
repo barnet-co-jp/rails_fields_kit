@@ -1,25 +1,40 @@
 # frozen_string_literal: true
 
+require "active_support/concern"
+
 module RailsFieldsKit
   module Searchable
     extend ActiveSupport::Concern
 
     class_methods do
-      def rfk_search_with(model:, label:, value: :id, search:, limit: 20)
+      def rfk_search_with(model:, label:, value: :id, search:, limit: 20, query_param: nil)
         define_method(:index) do
-          query = params[RailsFieldsKit.configuration.default_query_param].to_s
+          query_key = query_param || RailsFieldsKit.configuration.default_query_param
+          query = params[query_key].to_s
           scope = model.all
 
           if query.present?
             columns = Array(search)
-            predicates = columns.map { |column| model.arel_table[column].matches("%#{model.sanitize_sql_like(query)}%") }
-            scope = scope.where(predicates.inject { |left, right| left.or(right) })
+            escaped_query = model.sanitize_sql_like(query)
+            predicates = columns.map do |column|
+              model.arel_table[column].matches("%#{escaped_query}%")
+            end
+            scope = scope.where(predicates.reduce { |left, right| left.or(right) })
           end
 
           records = scope.limit(limit)
-          render json: records.map { |record| { value => record.public_send(value), label => record.public_send(label) } }
+          render json: records.map { |record| rfk_option_json(record, value: value, label: label) }
         end
       end
+    end
+
+    private
+
+    def rfk_option_json(record, value:, label:)
+      {
+        RailsFieldsKit.configuration.default_value_field => record.public_send(value),
+        RailsFieldsKit.configuration.default_label_field => record.public_send(label)
+      }
     end
   end
 end
