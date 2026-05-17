@@ -49,6 +49,11 @@ module RailsFieldsKit
       rfk_tom_select_field(method, :select, collection: collection, **options)
     end
 
+    def rfk_grouped_select(method, grouped_collection:, **options)
+      options[:grouped_collection] = grouped_collection
+      rfk_tom_select_field(method, :select, collection: nil, **options)
+    end
+
     def rfk_enum_select(method, enum: nil, **options)
       enum_values = enum || object.class.public_send(method.to_s.pluralize)
       collection = enum_values.keys.map { |key| [rfk_enum_label(method, key), key] }
@@ -90,6 +95,9 @@ module RailsFieldsKit
       data[:controller] = [data[:controller], config.controller_name].compact.join(" ")
       data[:rails_fields_kit__tom_select_kind_value] = field_kind
 
+      grouped_collection = options.delete(:grouped_collection)
+      disabled = options.delete(:disabled)
+      option_html = options.delete(:option_html) || {}
       selected = options.delete(:selected)
       allow_clear = options.delete(:allow_clear)
       value_method = options.delete(:value_method) || :id
@@ -123,12 +131,23 @@ module RailsFieldsKit
 
       field_html = if field_kind == :autocomplete || html_options[:multiple] == false && options[:as] == :text
         text_field(method, options.merge(html_options))
+      elsif grouped_collection
+        grouped_choices = rfk_normalize_grouped_collection(
+          grouped_collection,
+          value_method: collection_value_method,
+          label_method: collection_label_method
+        )
+        options[:selected] ||= rfk_selected_values(selected_choices) if selected_choices.any?
+        grouped_options = options_for_select([], options[:selected]) + grouped_options_for_select(grouped_choices, options[:selected])
+        select(method, grouped_options, options.except(:selected), html_options)
       else
         choices = rfk_choices_with_selected(
           collection,
           selected_choices: selected_choices,
           value_method: collection_value_method,
-          label_method: collection_label_method
+          label_method: collection_label_method,
+          disabled: disabled,
+          option_html: option_html
         )
         options[:selected] ||= rfk_selected_values(selected_choices) if selected_choices.any?
         select(method, choices, options, html_options)
@@ -227,8 +246,8 @@ module RailsFieldsKit
       data[data_key] = value.is_a?(Array) || value.is_a?(Hash) ? JSON.generate(value) : value
     end
 
-    def rfk_choices_with_selected(collection, selected_choices:, value_method:, label_method:)
-      choices = rfk_normalize_collection(collection, value_method: value_method, label_method: label_method)
+    def rfk_choices_with_selected(collection, selected_choices:, value_method:, label_method:, disabled: nil, option_html: {})
+      choices = rfk_normalize_collection(collection, value_method: value_method, label_method: label_method, disabled: disabled, option_html: option_html)
       existing_values = choices.map { |choice| Array(choice).second.to_s }
       missing_selected_choices = selected_choices.reject { |choice| existing_values.include?(choice.second.to_s) }
 
@@ -239,20 +258,47 @@ module RailsFieldsKit
       selected_choices.map(&:second)
     end
 
-    def rfk_normalize_collection(collection, value_method:, label_method:)
+    def rfk_normalize_collection(collection, value_method:, label_method:, disabled: nil, option_html: {})
+      disabled_values = Array(disabled).map(&:to_s)
+
       case collection
       when nil
         []
       when Hash
-        collection.map { |label, value| [label, value] }
+        collection.map { |label, value| rfk_choice_with_html(label, value, disabled_values: disabled_values, option_html: option_html) }
       else
         collection.map do |item|
           if item.is_a?(Array) && item.size == 2
-            item
+            rfk_choice_with_html(item.first, item.second, disabled_values: disabled_values, option_html: option_html)
           else
-            [rfk_read_selected_label(item, label_method), rfk_read_selected_value(item, value_method)]
+            value = rfk_read_selected_value(item, value_method)
+            label = rfk_read_selected_label(item, label_method)
+            rfk_choice_with_html(label, value, disabled_values: disabled_values, option_html: option_html)
           end
         end
+      end
+    end
+
+    def rfk_choice_with_html(label, value, disabled_values:, option_html:)
+      html = rfk_option_html_for(value, option_html)
+      html[:disabled] = true if disabled_values.include?(value.to_s)
+      html.empty? ? [label, value] : [label, value, html]
+    end
+
+    def rfk_option_html_for(value, option_html)
+      case option_html
+      when Proc
+        option_html.call(value) || {}
+      when Hash
+        option_html[value] || option_html[value.to_s] || {}
+      else
+        {}
+      end
+    end
+
+    def rfk_normalize_grouped_collection(grouped_collection, value_method:, label_method:)
+      grouped_collection.map do |group_label, items|
+        [group_label, rfk_normalize_collection(items, value_method: value_method, label_method: label_method)]
       end
     end
 
