@@ -3,6 +3,7 @@
 RSpec.describe RailsFieldsKit::TableMetadata do
   ColumnDefinition = Struct.new(:filter, :editor, keyword_init: true)
   AliasColumnDefinition = Struct.new(:filter_input, :cell_editor, keyword_init: true)
+  TableDefinition = Struct.new(:columns, keyword_init: true)
 
   class MetadataCollectorFormBuilder
     attr_reader :calls
@@ -43,6 +44,36 @@ RSpec.describe RailsFieldsKit::TableMetadata do
         field_type: "combobox",
         method: "customer_id",
         options: { url: "/customers.json" }
+      }
+    ])
+  end
+
+  it "collects filter metadata from table-like objects" do
+    table = TableDefinition.new(
+      columns: [
+        {
+          key: :customer_id,
+          filter: RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json")
+        },
+        {
+          key: :query,
+          search_filter: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")
+        }
+      ]
+    )
+
+    expect(described_class.filters(table)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "combobox",
+        method: "customer_id",
+        options: { url: "/customers.json" }
+      },
+      {
+        type: "rails_fields_kit",
+        field_type: "token_search",
+        method: "query",
+        options: { url: "/tokens.json" }
       }
     ])
   end
@@ -118,6 +149,36 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ]
 
     expect(described_class.cell_editors(columns)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "enum_select",
+        method: "status",
+        options: {}
+      },
+      {
+        type: "rails_fields_kit",
+        field_type: "combobox",
+        method: "customer_id",
+        options: { url: "/customers.json" }
+      }
+    ])
+  end
+
+  it "collects cell editor metadata from table-like objects" do
+    table = TableDefinition.new(
+      columns: [
+        {
+          key: :status,
+          editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+        },
+        {
+          key: :customer_id,
+          cell_editor: RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json")
+        }
+      ]
+    )
+
+    expect(described_class.cell_editors(table)).to eq([
       {
         type: "rails_fields_kit",
         field_type: "enum_select",
