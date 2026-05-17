@@ -83,6 +83,7 @@ Public classes:
 - `RailsFieldsKit::TableFilterInput`
 - `RailsFieldsKit::TableCellInput`
 - `RailsFieldsKit::TableRenderer`
+- `RailsFieldsKit::TableMetadata`
 
 Public metadata methods:
 
@@ -90,6 +91,10 @@ Public metadata methods:
 - `RailsFieldsKit::TableFilterInput.ransack_filter`
 - `RailsFieldsKit::TableFilterInput#to_table_filter`
 - `RailsFieldsKit::TableCellInput#to_table_cell_editor`
+- `RailsFieldsKit::TableMetadata.filters`
+- `RailsFieldsKit::TableMetadata.cell_editors`
+- `RailsFieldsKit::TableMetadata.filter_calls`
+- `RailsFieldsKit::TableMetadata.cell_editor_calls`
 - `RailsFieldsKit::TableRenderer.field_helpers`
 - `RailsFieldsKit::TableRenderer.register_field_helper`
 - `RailsFieldsKit::TableRenderer.reset_field_helpers!`
@@ -102,7 +107,7 @@ Public metadata methods:
 - `RailsFieldsKit::TableRenderer.render_cell_editor`
 - `RailsFieldsKit::TableRenderer.render_cell_editors`
 
-The returned hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `TableRenderer` can turn those hashes into FormBuilder call specs or dispatch them to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol and Rails Table Preferences integration notes.
+The returned hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `TableMetadata` can collect those hashes from column-like definitions. `TableRenderer` can turn those hashes into FormBuilder call specs or dispatch them to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol and Rails Table Preferences integration notes.
 
 ## JavaScript exports
 
