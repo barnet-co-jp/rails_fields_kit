@@ -53,9 +53,13 @@ RSpec.describe "public API" do
 
   it "exposes table metadata renderer" do
     expect(RailsFieldsKit::TableRenderer).to respond_to(:filter_call)
+    expect(RailsFieldsKit::TableRenderer).to respond_to(:filter_calls)
     expect(RailsFieldsKit::TableRenderer).to respond_to(:cell_editor_call)
+    expect(RailsFieldsKit::TableRenderer).to respond_to(:cell_editor_calls)
     expect(RailsFieldsKit::TableRenderer).to respond_to(:render_filter)
+    expect(RailsFieldsKit::TableRenderer).to respond_to(:render_filters)
     expect(RailsFieldsKit::TableRenderer).to respond_to(:render_cell_editor)
+    expect(RailsFieldsKit::TableRenderer).to respond_to(:render_cell_editors)
     expect(RailsFieldsKit::TableRenderer).to respond_to(:field_helpers)
     expect(RailsFieldsKit::TableRenderer).to respond_to(:register_field_helper)
     expect(RailsFieldsKit::TableRenderer).to respond_to(:reset_field_helpers!)
