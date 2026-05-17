@@ -60,6 +60,9 @@ Public class methods:
 - `rfk_search_with`
 - `rfk_find_with`
 - `rfk_create_with`
+- `rfk_token_suggestions_with`
+
+`rfk_search_with`, `rfk_find_with`, and `rfk_create_with` support custom `action:` names. `rfk_token_suggestions_with` provides lightweight token suggestion endpoints for `rfk_token_search` without taking over query parsing or result filtering.
 
 See [`controller_helpers.md`](controller_helpers.md) for details.
 
