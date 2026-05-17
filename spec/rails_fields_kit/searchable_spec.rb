@@ -36,6 +36,13 @@ RSpec.describe RailsFieldsKit::Searchable do
 
     def where(*args)
       @where_args << args
+      if args.first.is_a?(Hash)
+        key, values = args.first.first
+        values = Array(values).map(&:to_s)
+        filtered_records = @records.select { |record| values.include?(record.public_send(key).to_s) }
+        return FakeRelation.new(filtered_records)
+      end
+
       self
     end
 
@@ -186,6 +193,15 @@ RSpec.describe RailsFieldsKit::Searchable do
       wrap: "options"
     )
 
+    rfk_find_with(
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      value_field: "id",
+      label_field: "name",
+      wrap: "option"
+    )
+
     rfk_create_with(
       model: FakeModel,
       value: :id,
@@ -221,6 +237,18 @@ RSpec.describe RailsFieldsKit::Searchable do
       description_field: "email",
       badge_field: "status",
       limit: 1
+    )
+
+    rfk_find_with(
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      value_field: "id",
+      label_field: "name",
+      description: :email,
+      badge: :status,
+      description_field: "email",
+      badge_field: "status"
     )
 
     rfk_create_with(
@@ -355,6 +383,36 @@ RSpec.describe RailsFieldsKit::Searchable do
     controller.index
 
     expect(controller.rendered_json).to eq({ "options" => [{ "id" => 1, "name" => "Acme Corp" }, { "id" => 2, "name" => "Beta LLC" }] })
+  end
+
+  it "renders selected option by id" do
+    controller = FakeRichController.new
+    controller.params = { "id" => "1" }
+
+    controller.show
+
+    expect(controller.rendered_json).to eq({ "id" => 1, "name" => "Acme Corp", "email" => "hello@acme.example", "status" => "active" })
+  end
+
+  it "renders selected options by comma separated ids" do
+    controller = FakeRichController.new
+    controller.params = { "ids" => "1,2" }
+
+    controller.show
+
+    expect(controller.rendered_json).to eq([
+      { "id" => 1, "name" => "Acme Corp", "email" => "hello@acme.example", "status" => "active" },
+      { "id" => 2, "name" => "Beta LLC", "email" => "hello@beta.example", "status" => "archived" }
+    ])
+  end
+
+  it "renders wrapped selected option" do
+    controller = FakeWrappedController.new
+    controller.params = { "id" => "1" }
+
+    controller.show
+
+    expect(controller.rendered_json).to eq({ "option" => { "id" => 1, "name" => "Acme Corp" } })
   end
 
   it "supports scoped ordered distinct search results" do
