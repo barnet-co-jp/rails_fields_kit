@@ -15,7 +15,7 @@ RSpec.describe "rails_fields_kit.gemspec" do
     expect(specification.metadata["homepage_uri"]).to eq(specification.homepage)
     expect(specification.metadata["source_code_uri"]).to eq(specification.homepage)
     expect(specification.metadata["changelog_uri"]).to end_with("/CHANGELOG.md")
-    expect(specification.metadata["documentation_uri"]).to end_with("/tree/main/doc")
+    expect(specification.metadata["documentation_uri"]).to end_with("/doc/setup.md")
   end
 
   it "depends on Rails 7 or newer" do
