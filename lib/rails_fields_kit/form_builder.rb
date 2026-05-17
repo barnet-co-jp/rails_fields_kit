@@ -16,6 +16,35 @@ module RailsFieldsKit
       rfk_native_field(method, :number_field, **options)
     end
 
+    def rfk_money_field(method, currency: nil, **options)
+      options[:inputmode] ||= "decimal"
+      options[:prefix] = currency if currency
+      rfk_native_field(method, :text_field, **options)
+    end
+
+    def rfk_percent_field(method, **options)
+      options[:inputmode] ||= "decimal"
+      options[:suffix] = "%" unless options.key?(:suffix)
+      rfk_native_field(method, :number_field, **options)
+    end
+
+    def rfk_email_field(method, **options)
+      rfk_native_field(method, :email_field, **options)
+    end
+
+    def rfk_url_field(method, **options)
+      rfk_native_field(method, :url_field, **options)
+    end
+
+    def rfk_phone_field(method, **options)
+      options[:autocomplete] ||= "tel"
+      rfk_native_field(method, :telephone_field, **options)
+    end
+
+    def rfk_search_field(method, **options)
+      rfk_native_field(method, :search_field, **options)
+    end
+
     def rfk_select(method, collection: nil, **options)
       rfk_tom_select_field(method, :select, collection: collection, **options)
     end
@@ -42,6 +71,7 @@ module RailsFieldsKit
       html_options = options.delete(:html) || {}
       field_options = options.merge(html_options)
       field_html = public_send(helper_name, method, field_options)
+      field_html = rfk_wrap_control(field_html, wrapper_options)
 
       rfk_wrap_field(method, field_html, wrapper_options)
     end
@@ -82,6 +112,7 @@ module RailsFieldsKit
         options[:selected] ||= rfk_selected_values(selected_choices) if selected_choices.any?
         select(method, choices, options, html_options)
       end
+      field_html = rfk_wrap_control(field_html, wrapper_options)
 
       rfk_wrap_field(method, field_html, wrapper_options)
     end
@@ -90,12 +121,39 @@ module RailsFieldsKit
       {
         label: options.delete(:label),
         hint: options.delete(:hint),
+        prefix: options.delete(:prefix),
+        suffix: options.delete(:suffix),
         wrapper: options.key?(:wrapper) ? options.delete(:wrapper) : false,
         wrapper_html: options.delete(:wrapper_html) || {},
         label_html: options.delete(:label_html) || {},
         hint_html: options.delete(:hint_html) || {},
-        error_html: options.delete(:error_html) || {}
+        error_html: options.delete(:error_html) || {},
+        control_html: options.delete(:control_html) || {},
+        prefix_html: options.delete(:prefix_html) || {},
+        suffix_html: options.delete(:suffix_html) || {}
       }
+    end
+
+    def rfk_wrap_control(field_html, wrapper_options)
+      return field_html unless wrapper_options[:prefix] || wrapper_options[:suffix]
+
+      config = RailsFieldsKit.configuration
+      control_html = wrapper_options[:control_html].dup
+      control_html[:class] = [control_html[:class], config.control_class].compact.join(" ")
+
+      @template.content_tag(:div, control_html) do
+        parts = []
+        parts << rfk_affix(wrapper_options[:prefix], wrapper_options[:prefix_html], config.prefix_class) if wrapper_options[:prefix]
+        parts << field_html
+        parts << rfk_affix(wrapper_options[:suffix], wrapper_options[:suffix_html], config.suffix_class) if wrapper_options[:suffix]
+        parts.join.html_safe
+      end
+    end
+
+    def rfk_affix(content, html_options, default_class)
+      options = html_options.dup
+      options[:class] = [options[:class], default_class].compact.join(" ")
+      @template.content_tag(:span, content, options)
     end
 
     def rfk_wrap_field(method, field_html, wrapper_options)
