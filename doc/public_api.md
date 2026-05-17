@@ -66,6 +66,12 @@ Public class methods:
 
 See [`controller_helpers.md`](controller_helpers.md) for details.
 
+## Token suggestion builder
+
+`RailsFieldsKit::TokenSuggestions.build` creates option JSON for token search suggestion endpoints. It can combine operator, field, predicate, value, and saved-search suggestions while leaving token parsing and search execution to the host application.
+
+See [`token_suggestions.md`](token_suggestions.md) for details.
+
 ## Table metadata adapters
 
 Rails Fields Kit exposes small metadata objects for table-oriented gems that want optional Rails Fields Kit integration without a hard dependency.
