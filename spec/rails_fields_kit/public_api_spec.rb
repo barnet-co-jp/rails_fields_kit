@@ -70,5 +70,7 @@ RSpec.describe "public API" do
     expect(RailsFieldsKit::TableMetadata).to respond_to(:cell_editors)
     expect(RailsFieldsKit::TableMetadata).to respond_to(:filter_calls)
     expect(RailsFieldsKit::TableMetadata).to respond_to(:cell_editor_calls)
+    expect(RailsFieldsKit::TableMetadata).to respond_to(:render_filters)
+    expect(RailsFieldsKit::TableMetadata).to respond_to(:render_cell_editors)
   end
 end
