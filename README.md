@@ -183,6 +183,9 @@ class CustomersController < ApplicationController
     badge: :status,
     description_field: "email",
     badge_field: "status",
+    scope: -> { current_account.customers.active },
+    order: { name: :asc },
+    distinct: true,
     limit: 20,
     wrap: "options"
   )
@@ -203,6 +206,8 @@ class CustomersController < ApplicationController
   )
 end
 ```
+
+`scope:` can be a relation, a model scope name such as `:active`, or a callable evaluated in the controller instance. `order:` and `distinct:` are applied before `limit:`.
 
 `description:` and `badge:` can be method names or callables. They are useful with `option_description_field:` and `option_badge_field:` on the field helper.
 
