@@ -78,9 +78,23 @@ export default class extends Controller {
       },
       body: JSON.stringify({ [this.createParamValue]: input })
     })
-      .then((response) => response.ok ? response.json() : null)
-      .then((json) => callback(this.normalizeCreatedOption(json, input)))
-      .catch(() => callback(this.fallbackOption(input)))
+      .then((response) => this.handleCreateResponse(response))
+      .then((json) => callback(this.normalizeCreatedOption(json)))
+      .catch((error) => {
+        this.dispatch("create-error", { detail: { error, input } })
+        callback(false)
+      })
+  }
+
+  handleCreateResponse(response) {
+    return response.json().catch(() => ({})).then((json) => {
+      if (response.ok) return json
+
+      const error = new Error("Rails Fields Kit create request failed")
+      error.response = response
+      error.payload = json
+      throw error
+    })
   }
 
   normalizeOptions(json) {
@@ -91,17 +105,11 @@ export default class extends Controller {
     return []
   }
 
-  normalizeCreatedOption(json, input) {
+  normalizeCreatedOption(json) {
+    if (json && json.option) return json.option
     if (json) return json
 
-    return this.fallbackOption(input)
-  }
-
-  fallbackOption(input) {
-    return {
-      [this.valueFieldValue]: input,
-      [this.labelFieldValue]: input
-    }
+    return false
   }
 
   csrfToken() {
