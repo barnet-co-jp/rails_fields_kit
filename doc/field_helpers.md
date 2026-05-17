@@ -39,6 +39,21 @@ Use this for a text input with suggestions where the submitted value is free tex
   min_length: 2 %>
 ```
 
+### `rfk_token_search`
+
+Use this for token-oriented search text such as `status:open assignee:matsuo keyword`. It keeps Rails Fields Kit responsible for the input UI and suggestions while the host app remains responsible for parsing and applying the submitted query.
+
+```erb
+<%= f.rfk_token_search :query,
+  url: search_token_suggestions_path(format: :json),
+  placeholder: "status:open keyword",
+  max_items: 20,
+  load_throttle: 250,
+  query_params: { context: "orders" } %>
+```
+
+By default, `rfk_token_search` renders a text input with free-text creation enabled, uses a space delimiter, does not persist created options in the Tom Select option list, and enables Tom Select's `remove_button` plugin. Pass explicit `create:`, `persist:`, `delimiter:`, or `plugins:` options to override those defaults.
+
 ### `rfk_tags`
 
 Use this for tag-style multiple selection, usually with create enabled.
@@ -199,6 +214,31 @@ Option-level customization:
 ```
 
 Use boolean `disabled: true` to disable the whole select. Use array/value `disabled:` to disable specific options.
+
+## Remote option options
+
+Tom Select-backed helpers that call remote endpoints accept these request-shaping options:
+
+- `query_params:` adds fixed query parameters to the remote search URL.
+- `selected_query_params:` adds fixed query parameters to the selected-option preload URL.
+- `create_params:` adds fixed JSON fields to create-on-the-fly POST requests.
+- `max_items:` forwards Tom Select's maximum selected item count.
+- `load_throttle:` forwards Tom Select's remote load throttle in milliseconds.
+- `delimiter:` forwards Tom Select's delimiter option, useful for text-backed token inputs.
+
+Example:
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  selected_url: selected_customers_path(format: :json),
+  create_url: customers_path,
+  query_params: { account_id: current_account.id },
+  selected_query_params: { account_id: current_account.id },
+  create_params: { account_id: current_account.id } %>
+```
+
+The main query value still uses `query_param:`. Selected values still use `selected_param:` or `selected_multiple_param:`. Create input text still uses `create_param:`.
 
 ## Multiple values
 
