@@ -90,6 +90,14 @@ module RailsFieldsKit
       rfk_tom_select_field(method, :token_search, **options)
     end
 
+    def rfk_table_filters(columns)
+      @template.safe_join(RailsFieldsKit::TableMetadata.render_filters(self, columns))
+    end
+
+    def rfk_table_cell_editors(columns)
+      @template.safe_join(RailsFieldsKit::TableMetadata.render_cell_editors(self, columns))
+    end
+
     private
 
     def rfk_native_field(method, helper_name, **options)
