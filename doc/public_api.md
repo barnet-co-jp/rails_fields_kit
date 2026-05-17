@@ -94,9 +94,13 @@ Public metadata methods:
 - `RailsFieldsKit::TableRenderer.register_field_helper`
 - `RailsFieldsKit::TableRenderer.reset_field_helpers!`
 - `RailsFieldsKit::TableRenderer.filter_call`
+- `RailsFieldsKit::TableRenderer.filter_calls`
 - `RailsFieldsKit::TableRenderer.cell_editor_call`
+- `RailsFieldsKit::TableRenderer.cell_editor_calls`
 - `RailsFieldsKit::TableRenderer.render_filter`
+- `RailsFieldsKit::TableRenderer.render_filters`
 - `RailsFieldsKit::TableRenderer.render_cell_editor`
+- `RailsFieldsKit::TableRenderer.render_cell_editors`
 
 The returned hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `TableRenderer` can turn those hashes into FormBuilder call specs or dispatch them to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol and Rails Table Preferences integration notes.
 
