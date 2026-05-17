@@ -60,6 +60,10 @@ All notable changes to this project will be documented in this file.
   - `doc/configuration.md`
   - `doc/events.md`
   - `doc/development.md`
+  - `doc/sample_app_checklist.md`
+  - `doc/sample_app_results.md`
+  - `doc/final_release_checklist.md`
+  - `doc/release_notes_0_1_0.md`
   - `doc/release.md`
 
 ### Changed
