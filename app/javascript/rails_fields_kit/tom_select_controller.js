@@ -114,9 +114,27 @@ export default class extends Controller {
     fetch(url.toString(), {
       headers: { Accept: "application/json" }
     })
-      .then((response) => response.ok ? response.json() : [])
-      .then((json) => callback(this.normalizeOptions(json)))
-      .catch(() => callback())
+      .then((response) => this.handleLoadResponse(response))
+      .then((json) => {
+        const options = this.normalizeOptions(json)
+        this.dispatch("load", { detail: { query, options } })
+        callback(options)
+      })
+      .catch((error) => {
+        this.dispatch("load-error", { detail: { error, query } })
+        callback()
+      })
+  }
+
+  handleLoadResponse(response) {
+    return response.json().catch(() => ({})).then((json) => {
+      if (response.ok) return json
+
+      const error = new Error("Rails Fields Kit remote search request failed")
+      error.response = response
+      error.payload = json
+      throw error
+    })
   }
 
   loadSelectedOptions() {
