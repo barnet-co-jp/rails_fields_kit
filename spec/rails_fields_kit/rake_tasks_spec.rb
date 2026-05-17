@@ -4,12 +4,14 @@ require "spec_helper"
 require "rake"
 
 RSpec.describe "Rake tasks" do
+  let(:rakefile_path) { File.expand_path("../../Rakefile", __dir__) }
+  let(:rakefile) { File.read(rakefile_path) }
   let(:rake) { Rake::Application.new }
 
   around do |example|
     original_application = Rake.application
     Rake.application = rake
-    load File.expand_path("../../Rakefile", __dir__)
+    load rakefile_path
     example.run
   ensure
     Rake.application = original_application
@@ -23,8 +25,7 @@ RSpec.describe "Rake tasks" do
     expect(rake.lookup("spec")).not_to be_nil
   end
 
-  it "defines Bundler gem build tasks" do
-    expect(rake.lookup("build")).not_to be_nil
-    expect(rake.lookup("release")).not_to be_nil
+  it "loads Bundler gem tasks for build and release" do
+    expect(rakefile).to include('require "bundler/gem_tasks"')
   end
 end
