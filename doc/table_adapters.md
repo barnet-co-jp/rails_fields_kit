@@ -91,7 +91,7 @@ This keeps table definitions and Active Record introspection flows independent f
 
 ## Collecting metadata from columns
 
-`RailsFieldsKit::TableMetadata` can collect Rails Fields Kit filter/editor metadata from hash-like or object-like column definitions.
+`RailsFieldsKit::TableMetadata` can collect Rails Fields Kit filter/editor metadata from hash-like or object-like column definitions. It also accepts a table-like object that responds to `columns`.
 
 ```ruby
 columns = [
@@ -111,6 +111,13 @@ columns = [
 
 filters = RailsFieldsKit::TableMetadata.filters(columns)
 editors = RailsFieldsKit::TableMetadata.cell_editors(columns)
+```
+
+```ruby
+table = OpenStruct.new(columns: columns)
+
+filter_calls = RailsFieldsKit::TableMetadata.filter_calls(table)
+editor_calls = RailsFieldsKit::TableMetadata.cell_editor_calls(table)
 ```
 
 Filter aliases are also recognized: `filter`, `filter_input`, and `search_filter`. Cell editor aliases are `editor`, `cell_editor`, and `cell_input`. These names work as hash keys or object methods.
@@ -234,4 +241,4 @@ A host app or table helper can pass the metadata objects into column-like defini
 }
 ```
 
-A table preferences implementation can normalize these values by calling `RailsFieldsKit::TableMetadata.filters` or `RailsFieldsKit::TableMetadata.cell_editors`. It can then call `RailsFieldsKit::TableRenderer.filter_call`, `RailsFieldsKit::TableRenderer.cell_editor_call`, or the `RailsFieldsKit::TableMetadata` render shortcuts to map metadata to Rails Fields Kit FormBuilder helpers.
+A table preferences implementation can normalize these values by calling `RailsFieldsKit::TableMetadata.filters` or `RailsFieldsKit::TableMetadata.cell_editors` on either its column list or the table object itself. It can then call `RailsFieldsKit::TableRenderer.filter_call`, `RailsFieldsKit::TableRenderer.cell_editor_call`, or the `RailsFieldsKit::TableMetadata` render shortcuts to map metadata to Rails Fields Kit FormBuilder helpers.
