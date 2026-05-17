@@ -15,6 +15,11 @@ export default class extends Controller {
     labelField: { type: String, default: "text" },
     searchField: { type: String, default: "text" },
     minLength: { type: Number, default: 0 },
+    maxOptions: Number,
+    preload: Boolean,
+    noResultsText: String,
+    loadingText: String,
+    createText: String,
     plugins: Array
   }
 
@@ -34,8 +39,12 @@ export default class extends Controller {
       create: this.createValue || this.freeTextValue,
       persist: false,
       placeholder: this.placeholderValue || this.element.getAttribute("placeholder") || undefined,
-      plugins: this.pluginsValue.length > 0 ? this.pluginsValue : undefined
+      plugins: this.pluginsValue.length > 0 ? this.pluginsValue : undefined,
+      render: this.renderers()
     }
+
+    if (this.hasMaxOptionsValue) options.maxOptions = this.maxOptionsValue
+    if (this.hasPreloadValue) options.preload = this.preloadValue
 
     if (this.hasUrlValue) {
       options.valueField = this.valueFieldValue
@@ -50,6 +59,14 @@ export default class extends Controller {
     }
 
     return options
+  }
+
+  renderers() {
+    return {
+      no_results: () => `<div class="no-results">${this.escape(this.noResultsTextValue)}</div>`,
+      loading: () => `<div class="loading">${this.escape(this.loadingTextValue)}</div>`,
+      option_create: (data, escape) => `<div class="create">${escape(this.createTextValue)} <strong>${escape(data.input)}</strong></div>`
+    }
   }
 
   searchFields() {
@@ -115,5 +132,11 @@ export default class extends Controller {
   csrfToken() {
     const element = document.querySelector("meta[name='csrf-token']")
     return element && element.content
+  }
+
+  escape(value) {
+    const div = document.createElement("div")
+    div.textContent = value || ""
+    return div.innerHTML
   }
 }
