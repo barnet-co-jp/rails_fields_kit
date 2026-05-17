@@ -84,11 +84,23 @@ Importmap users can pin and register these modules manually, but Rails Fields Ki
     no_results_text: "No customers found",
     loading_text: "Searching...",
     create_text: "Create",
+    option_description_field: "email",
+    option_badge_field: "status",
     placeholder: "Search or create a customer" %>
 <% end %>
 ```
 
 `selected:` preloads the current option for edit forms before remote search runs. It accepts a record, a `{ value:, text: }` hash, a `{ id:, name: }` hash, or an array of any of those for multiple fields.
+
+Remote options can include extra fields for richer rendering:
+
+```json
+[
+  { "id": 1, "name": "Example Customer", "email": "hello@example.com", "status": "active" }
+]
+```
+
+Then set `option_description_field:` and `option_badge_field:` to show those fields in Tom Select's dropdown and selected item rendering.
 
 The search endpoint can return an array:
 
@@ -112,7 +124,7 @@ The create endpoint should return the created option object:
 
 When the create endpoint returns a non-2xx response, Rails Fields Kit does not add a fallback free-text option. It dispatches a `rails-fields-kit--tom-select:create-error` event with the failed input and error payload so your application can show a validation message.
 
-### Object collections and enum selects
+### Object collections, grouped selects, and enum selects
 
 Collections can be arrays of pairs, hashes, or model-like objects:
 
@@ -121,6 +133,27 @@ Collections can be arrays of pairs, hashes, or model-like objects:
   collection: @customers,
   collection_value_method: :id,
   collection_label_method: :name %>
+```
+
+Grouped selects render `<optgroup>` elements:
+
+```erb
+<%= f.rfk_grouped_select :customer_id,
+  grouped_collection: {
+    "Active" => [["Acme Corp", 1]],
+    "Archived" => [["Old Corp", 2]]
+  } %>
+```
+
+Options can be disabled or receive per-option HTML attributes:
+
+```erb
+<%= f.rfk_select :status,
+  collection: { "Draft" => "draft", "Published" => "published" },
+  disabled: ["published"],
+  option_html: {
+    "draft" => { data: { color: "gray" } }
+  } %>
 ```
 
 Rails enum-like attributes can use `rfk_enum_select`:
@@ -231,6 +264,8 @@ RailsFieldsKit.configure do |config|
   config.default_no_results_text = "No results found"
   config.default_loading_text = "Loading..."
   config.default_create_text = "Add"
+  config.default_option_description_field = nil
+  config.default_option_badge_field = nil
   config.default_plugins = []
 
   config.wrapper_class = "rfk-field"
