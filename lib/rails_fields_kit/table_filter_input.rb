@@ -10,6 +10,16 @@ module RailsFieldsKit
       new(:token_search, field_name, **filter_options)
     end
 
+    def self.ransack_filter(field_name = :query, fields:, url: nil, param_name: :q, **options)
+      filter_options = {
+        adapter: :ransack,
+        param_name: param_name,
+        fields: fields
+      }.merge(options)
+      filter_options[:url] = url if url
+      new(:token_search, field_name, **filter_options)
+    end
+
     def initialize(field_type = nil, field_name = nil, type: nil, **options)
       @field_type = (field_type || type || :combobox).to_sym
       @field_name = field_name&.to_s
