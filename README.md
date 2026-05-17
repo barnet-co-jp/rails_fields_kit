@@ -1,6 +1,6 @@
 # Rails Fields Kit
 
-Rails Fields Kit is a Rails form helper kit for fields that are still awkward with native HTML inputs alone: searchable selects, editable comboboxes, tag inputs, autocomplete, and create-on-the-fly fields.
+Rails Fields Kit is a Rails form helper kit for fields that are still awkward with native HTML inputs alone: searchable selects, editable comboboxes, tag inputs, autocomplete, token search inputs, and create-on-the-fly fields.
 
 The first focus is a Tom Select powered editable combobox for Rails forms.
 
@@ -104,6 +104,9 @@ Importmap users can pin and register these modules manually, but Rails Fields Ki
     create_text: "Create",
     option_description_field: "email",
     option_badge_field: "status",
+    query_params: { account_id: current_account.id },
+    selected_query_params: { account_id: current_account.id },
+    create_params: { account_id: current_account.id },
     placeholder: "Search or create a customer" %>
 <% end %>
 ```
@@ -155,6 +158,21 @@ The create endpoint should return the created option object:
 
 When the create endpoint returns a non-2xx response, Rails Fields Kit does not add a fallback free-text option. It dispatches a `rails-fields-kit--tom-select:create-error` event with the failed input and error payload so your application can show a validation message.
 
+### Token search
+
+Use `rfk_token_search` when you want a search box for structured phrases such as `status:open assignee:matsuo keyword`, while keeping query parsing and result filtering in your application or search object.
+
+```erb
+<%= form_with url: orders_path, method: :get do |f| %>
+  <%= f.rfk_token_search :query,
+    url: search_token_suggestions_path(format: :json),
+    placeholder: "status:open keyword",
+    max_items: 20,
+    load_throttle: 250,
+    query_params: { context: "orders" } %>
+<% end %>
+```
+
 ### Object collections, grouped selects, and enum selects
 
 Collections can be arrays of pairs, hashes, or model-like objects:
@@ -193,267 +211,6 @@ Rails enum-like attributes can use `rfk_enum_select`:
 <%= f.rfk_enum_select :status %>
 ```
 
-It reads `object.class.statuses` by default and uses `human_attribute_name("status.draft")` style labels when available.
-
 ### Multiple selects and tags
 
 Use `rfk_multi_select` for ordinary multiple selects and `rfk_tags` for tag-style inputs. Both render array-style parameter names and Rails' hidden blank input by default, so clearing all selected values still submits an empty value.
-
-```erb
-<%= f.rfk_multi_select :category_ids,
-  collection: Category.order(:name),
-  collection_value_method: :id,
-  collection_label_method: :name %>
-
-<%= f.rfk_tags :tag_ids,
-  url: tags_path(format: :json),
-  selected_url: selected_tags_path(format: :json),
-  selected: @post.tag_ids,
-  selected_multiple_param: "ids",
-  value_field: "id",
-  label_field: "name",
-  create: true %>
-```
-
-If you do not want Rails' hidden blank input, pass `include_hidden: false`:
-
-```erb
-<%= f.rfk_multi_select :category_ids,
-  collection: @categories,
-  include_hidden: false %>
-```
-
-### Wrappers, native attributes, and accessibility
-
-When `wrapper: true` is used, Rails Fields Kit renders labels, hints, and errors with stable IDs and connects them to the field using `aria-describedby`. Fields with validation errors also get `aria-invalid="true"`. Wrapped required fields get `aria-required="true"`.
-
-```erb
-<%= f.rfk_select :status,
-  collection: Order.statuses.keys,
-  wrapper: true,
-  hint: "Choose the workflow status",
-  required: true %>
-```
-
-Tom Select-backed helpers pass common native attributes through to the underlying input/select:
-
-```erb
-<%= f.rfk_select :status,
-  collection: Order.statuses.keys,
-  required: true,
-  disabled: false,
-  autocomplete: "off" %>
-
-<%= f.rfk_autocomplete :keyword,
-  url: suggestions_path(format: :json),
-  readonly: true %>
-```
-
-You can disable accessibility automation for a specific field:
-
-```erb
-<%= f.rfk_text_field :name,
-  wrapper: true,
-  hint: "Internal display name",
-  accessibility: false %>
-```
-
-### Controller concern for search, find, and create endpoints
-
-For simple Active Record-backed option endpoints, include `RailsFieldsKit::Searchable`:
-
-```ruby
-class CustomersController < ApplicationController
-  include RailsFieldsKit::Searchable
-
-  rfk_search_with(
-    model: Customer,
-    value: :id,
-    label: :name,
-    search: [:name, :email],
-    value_field: "id",
-    label_field: "name",
-    description: :email,
-    badge: :status,
-    description_field: "email",
-    badge_field: "status",
-    scope: -> { current_account.customers.active },
-    order: { name: :asc },
-    distinct: true,
-    limit: 20,
-    wrap: "options"
-  )
-
-  rfk_find_with(
-    model: Customer,
-    value: :id,
-    label: :name,
-    value_field: "id",
-    label_field: "name",
-    description: :email,
-    badge: :status,
-    description_field: "email",
-    badge_field: "status",
-    scope: -> { current_account.customers },
-    wrap: "option"
-  )
-
-  rfk_create_with(
-    model: Customer,
-    value: :id,
-    label: :name,
-    create_attribute: :name,
-    create_param: "name",
-    value_field: "id",
-    label_field: "name",
-    description: :email,
-    badge: ->(customer) { customer.status.upcase },
-    description_field: "email",
-    badge_field: "status",
-    assign: ->(_customer) { { account_id: current_account.id } },
-    authorize: ->(customer) { policy(customer).create? },
-    before_save: :normalize_customer,
-    wrap: "option"
-  )
-
-  private
-
-  def normalize_customer(customer)
-    customer.name = customer.name.strip
-    true
-  end
-end
-```
-
-`rfk_find_with` defines a `show` action for selected option preload. It accepts `params[:id]` for one record and `params[:ids]` as either an array or comma-separated string for multiple records. This is useful when an edit form has stored IDs and needs option JSON for display.
-
-`scope:` can be a relation, a model scope name such as `:active`, or a callable evaluated in the controller instance. `order:` and `distinct:` are applied before `limit:` for search. `order:` is also supported by find.
-
-`assign:` can be a hash, method name, or callable that returns attributes to assign before save. `authorize:` can be a method name or callable; returning `false` renders `403 Forbidden`. `before_save:` can be a method name or callable; returning `false` renders `422 Unprocessable Entity` without saving.
-
-`description:` and `badge:` can be method names or callables. They are useful with `option_description_field:` and `option_badge_field:` on the field helper.
-
-`wrap:` is optional. Without it, search returns an array, find returns one option for `id` or an array for `ids`, and create returns a single option object. With `wrap: "options"`, search returns `{ "options": [...] }`. With `wrap: "option"`, find/create return `{ "option": {...} }` for a single option.
-
-`rfk_create_with` renders `422 Unprocessable Entity` with `{ "errors": ... }` when the record is invalid.
-
-### Normal select wrapper
-
-```erb
-<%= f.rfk_select :status, collection: Order.statuses.keys, allow_clear: true %>
-```
-
-### Autocomplete text field
-
-```erb
-<%= f.rfk_autocomplete :keyword,
-  url: suggestions_path(format: :json),
-  free_text: true %>
-```
-
-### Native and business-friendly fields
-
-These helpers use native HTML inputs but share the optional wrapper, label, hint, error, prefix, and suffix behavior:
-
-```erb
-<%= f.rfk_text_field :name, wrapper: true, label: "Name" %>
-<%= f.rfk_text_area :description, wrapper: true %>
-<%= f.rfk_number_field :quantity, min: 1, step: 1 %>
-<%= f.rfk_money_field :amount, currency: "JPY", wrapper: true %>
-<%= f.rfk_percent_field :tax_rate, wrapper: true %>
-<%= f.rfk_email_field :email %>
-<%= f.rfk_url_field :website_url %>
-<%= f.rfk_phone_field :phone %>
-<%= f.rfk_search_field :keyword %>
-```
-
-Any wrapped field can use custom affixes:
-
-```erb
-<%= f.rfk_text_field :code, prefix: "#", suffix: "required", wrapper: true %>
-```
-
-## Table adapter metadata
-
-Rails Fields Kit can describe filter inputs and editable cell controls without rendering them directly. This is useful when a table-oriented gem owns column inference and rendering, but wants to use Rails Fields Kit when it is present.
-
-```ruby
-filter = RailsFieldsKit::TableFilterInput.new(
-  :combobox,
-  :customer_id,
-  url: customers_path(format: :json),
-  selected_url: selected_customers_path(format: :json)
-)
-
-filter.to_table_filter
-```
-
-```ruby
-editor = RailsFieldsKit::TableCellInput.new(:enum_select, :status)
-editor.to_table_cell_editor
-```
-
-See [Table adapter metadata](doc/table_adapters.md) for the full protocol and intended Rails Table Preferences integration.
-
-## Configuration
-
-```ruby
-# config/initializers/rails_fields_kit.rb
-RailsFieldsKit.configure do |config|
-  config.controller_name = "rails-fields-kit--tom-select"
-  config.default_query_param = "q"
-  config.default_create_param = "text"
-  config.default_value_field = "value"
-  config.default_label_field = "text"
-  config.default_search_field = "text"
-  config.default_min_length = 0
-  config.default_max_options = nil
-  config.default_preload = nil
-  config.default_open_on_focus = nil
-  config.default_close_after_select = nil
-  config.default_hide_selected = nil
-  config.default_persist = nil
-  config.default_no_results_text = "No results found"
-  config.default_loading_text = "Loading..."
-  config.default_create_text = "Add"
-  config.default_option_description_field = nil
-  config.default_option_badge_field = nil
-  config.default_plugins = []
-
-  config.wrapper_class = "rfk-field"
-  config.label_class = "rfk-label"
-  config.hint_class = "rfk-hint"
-  config.error_class = "rfk-error"
-  config.field_error_class = "rfk-field--error"
-  config.control_class = "rfk-control"
-  config.prefix_class = "rfk-prefix"
-  config.suffix_class = "rfk-suffix"
-end
-```
-
-## Design principles
-
-Rails Fields Kit does not try to replace native HTML inputs when browsers already provide a good default, such as date, time, color, email, URL, or number inputs.
-
-Instead, it focuses on the gaps that remain common in Rails business applications:
-
-- searchable selects
-- editable comboboxes
-- autocomplete text fields
-- tag inputs
-- remote option loading
-- create-on-the-fly records
-- Active Model friendly naming, values, errors, and redisplay
-- light wrappers around native inputs for consistent labels, hints, errors, and affixes
-
-Select-like fields are powered by Tom Select. When Tom Select already supports the behavior directly, Rails Fields Kit acts as a thin Rails wrapper. When Rails integration is the hard part, such as initial value preload or create-on-the-fly records, Rails Fields Kit provides a higher-level field helper.
-
-## Development
-
-```bash
-git pull
-bundle install
-bundle exec rspec
-```
-
-CI is intentionally not required during early implementation.
