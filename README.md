@@ -26,6 +26,7 @@ The install generator creates:
 
 Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and controller-side helpers. It does not install Tom Select or choose a JavaScript bundling strategy for your app.
 
+For the current direction and integration priorities, see [Roadmap](ROADMAP.md).
 For optional table integration metadata, see [Table adapter metadata](doc/table_adapters.md). This lets table-oriented gems read Rails Fields Kit filter/editor metadata through `to_table_filter` and `to_table_cell_editor` without taking a hard dependency.
 See [`doc/setup.md`](doc/setup.md) for a complete setup walkthrough.
 See [`doc/public_api.md`](doc/public_api.md) for the intended stable API surface.
