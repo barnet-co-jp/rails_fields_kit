@@ -33,6 +33,8 @@ See [`doc/controller_helpers.md`](doc/controller_helpers.md) for the controller 
 See [`doc/configuration.md`](doc/configuration.md) for initializer options.
 See [`doc/events.md`](doc/events.md) for Stimulus events dispatched by the Tom Select controller.
 See [`doc/development.md`](doc/development.md) for local development checks.
+See [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md) and [`doc/sample_app_results.md`](doc/sample_app_results.md) for sample app verification.
+See [`doc/final_release_checklist.md`](doc/final_release_checklist.md) for the final release checklist.
 See [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) for the 0.1.0 release notes draft.
 
 ## JavaScript setup
