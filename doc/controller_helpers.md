@@ -14,6 +14,7 @@ Defines a search action, defaulting to `index`.
 
 ```ruby
 rfk_search_with(
+  action: :index,
   model: Customer,
   value: :id,
   label: :name,
@@ -35,12 +36,13 @@ rfk_search_with(
 
 ### Common options
 
+- `action:` action method to define. Defaults to `:index`.
 - `model:` Active Record model or model-like class.
 - `value:` method used for the submitted value.
 - `label:` method used for the visible label.
 - `search:` columns searched with the query string.
 - `query_param:` request parameter name for the query. Defaults to `q`.
-- `limit:` maximum number of records. Defaults to `50`.
+- `limit:` maximum number of records. Defaults to `20`.
 - `scope:` base relation. Supports relation object, symbol scope, or callable evaluated in the controller instance.
 - `order:` order passed to the relation.
 - `distinct:` calls `distinct` before ordering/limiting.
@@ -63,6 +65,7 @@ Use it with FormBuilder's `selected_url:` when the form has saved IDs but not di
 
 ```ruby
 rfk_find_with(
+  action: :selected,
   model: Customer,
   value: :id,
   label: :name,
@@ -91,6 +94,7 @@ Defines a create-on-the-fly action, defaulting to `create`.
 
 ```ruby
 rfk_create_with(
+  action: :create,
   model: Customer,
   value: :id,
   label: :name,
@@ -111,12 +115,61 @@ rfk_create_with(
 
 ### Create options
 
+- `action:` action method to define. Defaults to `:create`.
 - `create_attribute:` model attribute to set from the incoming text.
 - `create_param:` request parameter name. Defaults to `text`.
 - `assign:` extra attributes assigned before validation. Supports hash, method name, or callable.
 - `authorize:` returns whether the create is allowed. Supports method name or callable. Returns `403` when false.
 - `before_save:` hook called before `save`. Supports method name or callable. Returns `422` when false.
 - `wrap:` wraps the JSON response, commonly `"option"`.
+
+## `rfk_token_suggestions_with`
+
+Defines a lightweight token suggestion action, defaulting to `index`. Use it with `rfk_token_search` when suggestions are static, generated from controller context, or not tied to a single Active Record search relation.
+
+```ruby
+rfk_token_suggestions_with(
+  action: :index,
+  suggestions: [
+    "status:open",
+    ["Assigned to me", "assignee:me"],
+    { token: "priority:high", label: "High priority", description: "Urgent items", badge: "operator" }
+  ],
+  value_field: "value",
+  label_field: "text",
+  query_param: "q",
+  limit: 20,
+  wrap: "options"
+)
+```
+
+`suggestions:` accepts:
+
+- an array of strings
+- an array of `[label, value]` pairs
+- hashes using keys such as `value`, `text`, `label`, `token`, `description`, and `badge`
+- a method name that receives the current query
+- a callable evaluated in the controller instance with the current query
+
+Example with controller context:
+
+```ruby
+rfk_token_suggestions_with(
+  action: :search_tokens,
+  suggestions: ->(query) {
+    [
+      { token: "status:#{query}", label: "Status #{query}", badge: "operator" },
+      { token: "assignee:me", label: "Assigned to me" }
+    ]
+  },
+  value_field: "token",
+  label_field: "label",
+  badge_field: "kind",
+  wrap: "options"
+)
+```
+
+The helper filters normalized suggestions by the incoming query before applying `limit:`. It only returns suggestion option JSON; parsing and applying submitted token search text remains the host application's responsibility.
 
 ## Output shape
 
@@ -160,6 +213,7 @@ Wrapped responses are supported:
 resources :customers do
   collection do
     get :selected
+    get :search_tokens
   end
 end
 ```
@@ -173,5 +227,6 @@ class CustomersController < ApplicationController
   rfk_search_with action: :index, model: Customer, value: :id, label: :name, search: [:name]
   rfk_find_with action: :selected, model: Customer, value: :id, label: :name
   rfk_create_with action: :create, model: Customer, value: :id, label: :name, create_attribute: :name
+  rfk_token_suggestions_with action: :search_tokens, suggestions: ["status:open", "status:closed"]
 end
 ```
