@@ -113,6 +113,8 @@ filters = RailsFieldsKit::TableMetadata.filters(columns)
 editors = RailsFieldsKit::TableMetadata.cell_editors(columns)
 ```
 
+Filter aliases are also recognized: `filter`, `filter_input`, and `search_filter`. Cell editor aliases are `editor`, `cell_editor`, and `cell_input`. These names work as hash keys or object methods.
+
 It also exposes convenience methods that collect metadata and immediately convert it to FormBuilder call specs:
 
 ```ruby
@@ -207,7 +209,7 @@ A host app or table helper can pass the metadata objects into column-like defini
 ```ruby
 {
   key: :query,
-  filter: RailsFieldsKit::TableFilterInput.ransack_filter(
+  filter_input: RailsFieldsKit::TableFilterInput.ransack_filter(
     :query,
     fields: {
       name: :name_cont,
@@ -221,7 +223,7 @@ A host app or table helper can pass the metadata objects into column-like defini
 ```ruby
 {
   key: :status,
-  editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+  cell_editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
 }
 ```
 
