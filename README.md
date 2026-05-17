@@ -168,6 +168,26 @@ Rails enum-like attributes can use `rfk_enum_select`:
 
 It reads `object.class.statuses` by default and uses `human_attribute_name("status.draft")` style labels when available.
 
+### Wrappers and accessibility
+
+When `wrapper: true` is used, Rails Fields Kit renders labels, hints, and errors with stable IDs and connects them to the field using `aria-describedby`. Fields with validation errors also get `aria-invalid="true"`.
+
+```erb
+<%= f.rfk_select :status,
+  collection: Order.statuses.keys,
+  wrapper: true,
+  hint: "Choose the workflow status" %>
+```
+
+You can disable this automation for a specific field:
+
+```erb
+<%= f.rfk_text_field :name,
+  wrapper: true,
+  hint: "Internal display name",
+  accessibility: false %>
+```
+
 ### Controller concern for search and create endpoints
 
 For simple Active Record-backed option search and create endpoints, include `RailsFieldsKit::Searchable`:
