@@ -6,8 +6,6 @@ require "rails_fields_kit/form_builder"
 
 module RailsFieldsKit
   class Engine < ::Rails::Engine
-    isolate_namespace RailsFieldsKit
-
     initializer "rails_fields_kit.assets" do |app|
       app.config.assets.paths << root.join("app/javascript") if app.config.respond_to?(:assets)
     end
