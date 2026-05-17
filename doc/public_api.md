@@ -90,6 +90,9 @@ Public metadata methods:
 - `RailsFieldsKit::TableFilterInput.ransack_filter`
 - `RailsFieldsKit::TableFilterInput#to_table_filter`
 - `RailsFieldsKit::TableCellInput#to_table_cell_editor`
+- `RailsFieldsKit::TableRenderer.field_helpers`
+- `RailsFieldsKit::TableRenderer.register_field_helper`
+- `RailsFieldsKit::TableRenderer.reset_field_helpers!`
 - `RailsFieldsKit::TableRenderer.filter_call`
 - `RailsFieldsKit::TableRenderer.cell_editor_call`
 - `RailsFieldsKit::TableRenderer.render_filter`
