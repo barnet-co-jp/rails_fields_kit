@@ -8,12 +8,13 @@ RSpec.describe RailsFieldsKit::Searchable do
   end
 
   class FakeRecord
-    attr_reader :id, :name, :email, :errors
+    attr_reader :id, :name, :email, :status, :errors
 
     def initialize(attributes = {})
       @id = attributes[:id] || 1
       @name = attributes[:name]
       @email = attributes[:email]
+      @status = attributes[:status] || "active"
       @errors = FakeErrors.new({ name: ["can't be blank"] })
     end
 
@@ -73,13 +74,13 @@ RSpec.describe RailsFieldsKit::Searchable do
 
   class FakeModel
     def self.new(attributes)
-      FakeRecord.new(attributes.merge(id: 123))
+      FakeRecord.new(attributes.merge(id: 123, email: "new@example.test", status: "new"))
     end
 
     def self.all
       FakeRelation.new([
-        FakeRecord.new(id: 1, name: "Acme Corp", email: "hello@acme.example"),
-        FakeRecord.new(id: 2, name: "Beta LLC", email: "hello@beta.example")
+        FakeRecord.new(id: 1, name: "Acme Corp", email: "hello@acme.example", status: "active"),
+        FakeRecord.new(id: 2, name: "Beta LLC", email: "hello@beta.example", status: "archived")
       ])
     end
 
@@ -179,6 +180,46 @@ RSpec.describe RailsFieldsKit::Searchable do
     end
   end
 
+  class FakeRichController
+    include RailsFieldsKit::Searchable
+
+    attr_accessor :params
+    attr_reader :rendered_json, :rendered_status
+
+    rfk_search_with(
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      search: :name,
+      value_field: "id",
+      label_field: "name",
+      description: :email,
+      badge: :status,
+      description_field: "email",
+      badge_field: "status",
+      limit: 1
+    )
+
+    rfk_create_with(
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      create_attribute: :name,
+      create_param: "name",
+      value_field: "id",
+      label_field: "name",
+      description: :email,
+      badge: ->(record) { record.status.upcase },
+      description_field: "email",
+      badge_field: "status"
+    )
+
+    def render(json:, status: :ok)
+      @rendered_json = json
+      @rendered_status = status
+    end
+  end
+
   around do |example|
     RailsFieldsKit.reset_configuration!
     example.run
@@ -213,6 +254,17 @@ RSpec.describe RailsFieldsKit::Searchable do
     expect(controller.rendered_json).to eq({ "options" => [{ "id" => 1, "name" => "Acme Corp" }, { "id" => 2, "name" => "Beta LLC" }] })
   end
 
+  it "renders rich search results" do
+    controller = FakeRichController.new
+    controller.params = { "q" => "Acme" }
+
+    controller.index
+
+    expect(controller.rendered_json).to eq([
+      { "id" => 1, "name" => "Acme Corp", "email" => "hello@acme.example", "status" => "active" }
+    ])
+  end
+
   it "renders created options as JSON" do
     controller = FakeController.new
     controller.params = { "name" => "Acme Corp" }
@@ -231,6 +283,16 @@ RSpec.describe RailsFieldsKit::Searchable do
 
     expect(controller.rendered_status).to eq(:created)
     expect(controller.rendered_json).to eq({ "option" => { "id" => 123, "name" => "Acme Corp" } })
+  end
+
+  it "renders rich created options" do
+    controller = FakeRichController.new
+    controller.params = { "name" => "Acme Corp" }
+
+    controller.create
+
+    expect(controller.rendered_status).to eq(:created)
+    expect(controller.rendered_json).to eq({ "id" => 123, "name" => "Acme Corp", "email" => "new@example.test", "status" => "NEW" })
   end
 
   it "renders validation errors" do
