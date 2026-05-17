@@ -59,6 +59,9 @@ Importmap users can pin and register these modules manually, but Rails Fields Ki
   <%= f.rfk_combobox :customer_id,
     url: customers_path(format: :json),
     create_url: customers_path,
+    selected: @order.customer,
+    value_method: :id,
+    label_method: :name,
     value_field: "id",
     label_field: "name",
     search_field: "name,email",
@@ -68,6 +71,8 @@ Importmap users can pin and register these modules manually, but Rails Fields Ki
     placeholder: "Search or create a customer" %>
 <% end %>
 ```
+
+`selected:` preloads the current option for edit forms before remote search runs. It accepts a record, a `{ value:, text: }` hash, a `{ id:, name: }` hash, or an array of any of those for multiple fields.
 
 The search endpoint can return an array:
 
@@ -120,6 +125,9 @@ end
 ```erb
 <%= f.rfk_tags :tag_ids,
   url: tags_path(format: :json),
+  selected: @post.tags,
+  value_method: :id,
+  label_method: :name,
   create: true %>
 ```
 
