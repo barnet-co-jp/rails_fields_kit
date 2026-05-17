@@ -8,7 +8,14 @@ export default class extends Controller {
     createUrl: String,
     create: Boolean,
     freeText: Boolean,
-    placeholder: String
+    placeholder: String,
+    queryParam: { type: String, default: "q" },
+    createParam: { type: String, default: "text" },
+    valueField: { type: String, default: "value" },
+    labelField: { type: String, default: "text" },
+    searchField: { type: String, default: "text" },
+    minLength: { type: Number, default: 0 },
+    plugins: Array
   }
 
   connect() {
@@ -26,13 +33,15 @@ export default class extends Controller {
     const options = {
       create: this.createValue || this.freeTextValue,
       persist: false,
-      placeholder: this.placeholderValue || this.element.getAttribute("placeholder") || undefined
+      placeholder: this.placeholderValue || this.element.getAttribute("placeholder") || undefined,
+      plugins: this.pluginsValue.length > 0 ? this.pluginsValue : undefined
     }
 
     if (this.hasUrlValue) {
-      options.valueField = "value"
-      options.labelField = "text"
-      options.searchField = ["text"]
+      options.valueField = this.valueFieldValue
+      options.labelField = this.labelFieldValue
+      options.searchField = this.searchFields()
+      options.shouldLoad = (query) => query.length >= this.minLengthValue
       options.load = (query, callback) => this.loadOptions(query, callback)
     }
 
@@ -43,15 +52,19 @@ export default class extends Controller {
     return options
   }
 
+  searchFields() {
+    return this.searchFieldValue.split(",").map((field) => field.trim()).filter(Boolean)
+  }
+
   loadOptions(query, callback) {
     const url = new URL(this.urlValue, window.location.origin)
-    url.searchParams.set("q", query)
+    url.searchParams.set(this.queryParamValue, query)
 
     fetch(url.toString(), {
       headers: { Accept: "application/json" }
     })
       .then((response) => response.ok ? response.json() : [])
-      .then((json) => callback(json))
+      .then((json) => callback(this.normalizeOptions(json)))
       .catch(() => callback())
   }
 
@@ -63,11 +76,32 @@ export default class extends Controller {
         "Content-Type": "application/json",
         "X-CSRF-Token": this.csrfToken()
       },
-      body: JSON.stringify({ text: input })
+      body: JSON.stringify({ [this.createParamValue]: input })
     })
       .then((response) => response.ok ? response.json() : null)
-      .then((json) => callback(json || { value: input, text: input }))
-      .catch(() => callback({ value: input, text: input }))
+      .then((json) => callback(this.normalizeCreatedOption(json, input)))
+      .catch(() => callback(this.fallbackOption(input)))
+  }
+
+  normalizeOptions(json) {
+    if (Array.isArray(json)) return json
+    if (json && Array.isArray(json.options)) return json.options
+    if (json && Array.isArray(json.results)) return json.results
+
+    return []
+  }
+
+  normalizeCreatedOption(json, input) {
+    if (json) return json
+
+    return this.fallbackOption(input)
+  }
+
+  fallbackOption(input) {
+    return {
+      [this.valueFieldValue]: input,
+      [this.labelFieldValue]: input
+    }
   }
 
   csrfToken() {
