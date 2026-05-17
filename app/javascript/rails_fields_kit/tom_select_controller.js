@@ -34,6 +34,7 @@ export default class extends Controller {
 
   connect() {
     this.tomSelect = new TomSelect(this.element, this.options())
+    this.bindTomSelectEvents()
     this.loadSelectedOptions()
   }
 
@@ -75,6 +76,21 @@ export default class extends Controller {
     }
 
     return options
+  }
+
+  bindTomSelectEvents() {
+    this.tomSelect.on("change", (value) => {
+      this.dispatch("change", { detail: { value, values: this.selectedValues() } })
+    })
+    this.tomSelect.on("item_add", (value, item) => {
+      this.dispatch("item-add", { detail: { value, item, values: this.selectedValues() } })
+    })
+    this.tomSelect.on("item_remove", (value, item) => {
+      this.dispatch("item-remove", { detail: { value, item, values: this.selectedValues() } })
+    })
+    this.tomSelect.on("clear", () => {
+      this.dispatch("clear", { detail: { values: this.selectedValues() } })
+    })
   }
 
   renderers() {
