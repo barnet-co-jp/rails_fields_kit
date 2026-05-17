@@ -168,6 +168,32 @@ Rails enum-like attributes can use `rfk_enum_select`:
 
 It reads `object.class.statuses` by default and uses `human_attribute_name("status.draft")` style labels when available.
 
+### Multiple selects and tags
+
+Use `rfk_multi_select` for ordinary multiple selects and `rfk_tags` for tag-style inputs. Both render array-style parameter names and Rails' hidden blank input by default, so clearing all selected values still submits an empty value.
+
+```erb
+<%= f.rfk_multi_select :category_ids,
+  collection: Category.order(:name),
+  collection_value_method: :id,
+  collection_label_method: :name %>
+
+<%= f.rfk_tags :tag_ids,
+  url: tags_path(format: :json),
+  selected: @post.tags,
+  value_method: :id,
+  label_method: :name,
+  create: true %>
+```
+
+If you do not want Rails' hidden blank input, pass `include_hidden: false`:
+
+```erb
+<%= f.rfk_multi_select :category_ids,
+  collection: @categories,
+  include_hidden: false %>
+```
+
 ### Wrappers, native attributes, and accessibility
 
 When `wrapper: true` is used, Rails Fields Kit renders labels, hints, and errors with stable IDs and connects them to the field using `aria-describedby`. Fields with validation errors also get `aria-invalid="true"`. Wrapped required fields get `aria-required="true"`.
@@ -270,17 +296,6 @@ end
 
 ```erb
 <%= f.rfk_select :status, collection: Order.statuses.keys, allow_clear: true %>
-```
-
-### Tag-style multi select
-
-```erb
-<%= f.rfk_tags :tag_ids,
-  url: tags_path(format: :json),
-  selected: @post.tags,
-  value_method: :id,
-  label_method: :name,
-  create: true %>
 ```
 
 ### Autocomplete text field
