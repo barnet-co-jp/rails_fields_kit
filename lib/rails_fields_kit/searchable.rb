@@ -42,7 +42,7 @@ module RailsFieldsKit
         end
       end
 
-      def rfk_create_with(model:, label:, value: :id, create_attribute: nil, create_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, permitted_attributes: nil, wrap: nil)
+      def rfk_create_with(model:, label:, value: :id, create_attribute: nil, create_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, permitted_attributes: nil, assign: nil, authorize: nil, before_save: nil, wrap: nil)
         define_method(:create) do
           attribute_name = create_attribute || label
           param_name = create_param || RailsFieldsKit.configuration.default_create_param
@@ -52,6 +52,17 @@ module RailsFieldsKit
             permitted_attributes: permitted_attributes
           )
           record = model.new(attributes)
+          rfk_apply_assignments(record, assign) if assign
+
+          unless rfk_authorized?(record, authorize)
+            render json: { errors: { base: ["not authorized"] } }, status: :forbidden
+            next
+          end
+
+          unless rfk_before_save(record, before_save)
+            render json: { errors: rfk_record_errors(record, fallback: "could not be saved") }, status: :unprocessable_entity
+            next
+          end
 
           if record.save
             option = rfk_option_json(
@@ -67,7 +78,7 @@ module RailsFieldsKit
             )
             render json: rfk_wrap_option(option, wrap: wrap), status: :created
           else
-            render json: { errors: record.errors.to_hash(true) }, status: :unprocessable_entity
+            render json: { errors: rfk_record_errors(record) }, status: :unprocessable_entity
           end
         end
       end
@@ -84,6 +95,59 @@ module RailsFieldsKit
       else
         scope.respond_to?(:call) ? instance_exec(&scope) : scope
       end
+    end
+
+    def rfk_apply_assignments(record, assign)
+      attributes = case assign
+      when Symbol, String
+        public_send(assign, record)
+      when Hash
+        assign
+      else
+        assign.respond_to?(:call) ? instance_exec(record, &assign) : {}
+      end
+
+      return unless attributes.respond_to?(:each)
+
+      attributes.each do |attribute, value|
+        writer = "#{attribute}="
+        record.public_send(writer, value) if record.respond_to?(writer)
+      end
+    end
+
+    def rfk_authorized?(record, authorize)
+      return true unless authorize
+
+      result = case authorize
+      when Symbol, String
+        public_send(authorize, record)
+      else
+        authorize.respond_to?(:call) ? instance_exec(record, &authorize) : authorize
+      end
+
+      result != false
+    end
+
+    def rfk_before_save(record, before_save)
+      return true unless before_save
+
+      result = case before_save
+      when Symbol, String
+        public_send(before_save, record)
+      else
+        before_save.respond_to?(:call) ? instance_exec(record, &before_save) : before_save
+      end
+
+      result != false
+    end
+
+    def rfk_record_errors(record, fallback: nil)
+      if record.respond_to?(:errors) && record.errors.respond_to?(:to_hash)
+        errors = record.errors.to_hash(true)
+        return errors if errors.respond_to?(:empty?) && !errors.empty?
+      end
+
+      fallback ? { base: [fallback] } : {}
     end
 
     def rfk_option_json(record, value:, label:, value_field:, label_field:, description:, badge:, description_field:, badge_field:)
