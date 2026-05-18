@@ -49,6 +49,7 @@ RSpec.describe "public API" do
   end
 
   it "exposes table filter factories" do
+    expect(RailsFieldsKit::TableFilterInput).to respond_to(:from_type)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:combobox)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:select)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:tags)
@@ -57,6 +58,7 @@ RSpec.describe "public API" do
   end
 
   it "exposes table cell editor factories" do
+    expect(RailsFieldsKit::TableCellInput).to respond_to(:from_type)
     expect(RailsFieldsKit::TableCellInput).to respond_to(:combobox)
     expect(RailsFieldsKit::TableCellInput).to respond_to(:select)
     expect(RailsFieldsKit::TableCellInput).to respond_to(:tags)
