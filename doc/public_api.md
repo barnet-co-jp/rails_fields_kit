@@ -92,6 +92,7 @@ Public classes:
 
 Public metadata methods:
 
+- `RailsFieldsKit::TableFilterInput.from_type`
 - `RailsFieldsKit::TableFilterInput.select`
 - `RailsFieldsKit::TableFilterInput.combobox`
 - `RailsFieldsKit::TableFilterInput.autocomplete`
@@ -102,6 +103,7 @@ Public metadata methods:
 - `RailsFieldsKit::TableFilterInput.token_search`
 - `RailsFieldsKit::TableFilterInput.ransack_filter`
 - `RailsFieldsKit::TableFilterInput#to_table_filter`
+- `RailsFieldsKit::TableCellInput.from_type`
 - `RailsFieldsKit::TableCellInput.select`
 - `RailsFieldsKit::TableCellInput.combobox`
 - `RailsFieldsKit::TableCellInput.autocomplete`
