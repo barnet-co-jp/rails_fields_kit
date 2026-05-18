@@ -31,6 +31,16 @@ filter = RailsFieldsKit::TableFilterInput.combobox(
 )
 ```
 
+When the field type is chosen dynamically, use `from_type`:
+
+```ruby
+filter = RailsFieldsKit::TableFilterInput.from_type(
+  field_type,
+  :customer_id,
+  url: customers_path(format: :json)
+)
+```
+
 ```ruby
 filter.to_table_filter
 # => {
@@ -97,6 +107,15 @@ Common field types also have factory helpers:
 
 ```ruby
 editor = RailsFieldsKit::TableCellInput.enum_select(:status)
+```
+
+When the field type is chosen dynamically, use `from_type`:
+
+```ruby
+editor = RailsFieldsKit::TableCellInput.from_type(
+  field_type,
+  :status
+)
 ```
 
 ```ruby
