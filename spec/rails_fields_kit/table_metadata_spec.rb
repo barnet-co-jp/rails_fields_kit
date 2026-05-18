@@ -58,6 +58,13 @@ RSpec.describe "table metadata objects" do
       )
     end
 
+    it "exposes known filter field types" do
+      expect(described_class.known_types).to include(:combobox, :token_search)
+      expect(described_class.known_type?(:combobox)).to be(true)
+      expect(described_class.known_type?("token_search")).to be(true)
+      expect(described_class.known_type?(:unknown_field)).to be(false)
+    end
+
     it "builds token search filter metadata" do
       input = described_class.token_search(
         :query,
@@ -155,6 +162,13 @@ RSpec.describe "table metadata objects" do
           label: "Workflow status"
         }
       )
+    end
+
+    it "exposes known cell editor field types" do
+      expect(described_class.known_types).to include(:combobox, :token_search)
+      expect(described_class.known_type?(:combobox)).to be(true)
+      expect(described_class.known_type?("token_search")).to be(true)
+      expect(described_class.known_type?(:unknown_field)).to be(false)
     end
 
     it "keeps Object#method available for reflection" do
