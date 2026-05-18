@@ -92,9 +92,24 @@ Public classes:
 
 Public metadata methods:
 
+- `RailsFieldsKit::TableFilterInput.select`
+- `RailsFieldsKit::TableFilterInput.combobox`
+- `RailsFieldsKit::TableFilterInput.autocomplete`
+- `RailsFieldsKit::TableFilterInput.tags`
+- `RailsFieldsKit::TableFilterInput.multi_select`
+- `RailsFieldsKit::TableFilterInput.grouped_select`
+- `RailsFieldsKit::TableFilterInput.enum_select`
 - `RailsFieldsKit::TableFilterInput.token_search`
 - `RailsFieldsKit::TableFilterInput.ransack_filter`
 - `RailsFieldsKit::TableFilterInput#to_table_filter`
+- `RailsFieldsKit::TableCellInput.select`
+- `RailsFieldsKit::TableCellInput.combobox`
+- `RailsFieldsKit::TableCellInput.autocomplete`
+- `RailsFieldsKit::TableCellInput.tags`
+- `RailsFieldsKit::TableCellInput.multi_select`
+- `RailsFieldsKit::TableCellInput.grouped_select`
+- `RailsFieldsKit::TableCellInput.enum_select`
+- `RailsFieldsKit::TableCellInput.token_search`
 - `RailsFieldsKit::TableCellInput#to_table_cell_editor`
 - `RailsFieldsKit::TableMetadata.filters`
 - `RailsFieldsKit::TableMetadata.cell_editors`
