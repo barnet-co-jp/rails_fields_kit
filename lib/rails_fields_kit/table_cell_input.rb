@@ -2,7 +2,35 @@
 
 module RailsFieldsKit
   class TableCellInput
+    COMMON_FIELD_TYPES = %i[
+      select
+      combobox
+      autocomplete
+      tags
+      multi_select
+      grouped_select
+      enum_select
+      text_field
+      text_area
+      number_field
+      money_field
+      percent_field
+      email_field
+      url_field
+      phone_field
+      search_field
+      token_search
+    ].freeze
+
     attr_reader :field_type, :field_name, :options
+
+    class << self
+      COMMON_FIELD_TYPES.each do |field_type|
+        define_method(field_type) do |field_name = nil, **options|
+          new(field_type, field_name, **options)
+        end
+      end
+    end
 
     def initialize(field_type = nil, field_name = nil, type: nil, **options)
       @field_type = (field_type || type || :combobox).to_sym
