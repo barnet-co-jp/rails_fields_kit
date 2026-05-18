@@ -92,6 +92,8 @@ Public classes:
 
 Public metadata methods:
 
+- `RailsFieldsKit::TableFilterInput.known_types`
+- `RailsFieldsKit::TableFilterInput.known_type?`
 - `RailsFieldsKit::TableFilterInput.from_type`
 - `RailsFieldsKit::TableFilterInput.select`
 - `RailsFieldsKit::TableFilterInput.combobox`
@@ -103,6 +105,8 @@ Public metadata methods:
 - `RailsFieldsKit::TableFilterInput.token_search`
 - `RailsFieldsKit::TableFilterInput.ransack_filter`
 - `RailsFieldsKit::TableFilterInput#to_table_filter`
+- `RailsFieldsKit::TableCellInput.known_types`
+- `RailsFieldsKit::TableCellInput.known_type?`
 - `RailsFieldsKit::TableCellInput.from_type`
 - `RailsFieldsKit::TableCellInput.select`
 - `RailsFieldsKit::TableCellInput.combobox`
