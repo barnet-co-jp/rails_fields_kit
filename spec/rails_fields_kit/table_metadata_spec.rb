@@ -23,6 +23,24 @@ RSpec.describe "table metadata objects" do
       )
     end
 
+    it "builds common table filter metadata from factories" do
+      input = described_class.combobox(
+        :customer_id,
+        url: "/customers.json",
+        selected_url: "/customers/selected.json"
+      )
+
+      expect(input.to_table_filter).to eq(
+        type: "rails_fields_kit",
+        field_type: "combobox",
+        method: "customer_id",
+        options: {
+          url: "/customers.json",
+          selected_url: "/customers/selected.json"
+        }
+      )
+    end
+
     it "builds token search filter metadata" do
       input = described_class.token_search(
         :query,
@@ -84,6 +102,24 @@ RSpec.describe "table metadata objects" do
         field_type: "enum_select",
         method: "status",
         options: {}
+      )
+    end
+
+    it "builds common table cell editor metadata from factories" do
+      input = described_class.combobox(
+        :customer_id,
+        url: "/customers.json",
+        selected_url: "/customers/selected.json"
+      )
+
+      expect(input.to_table_cell_editor).to eq(
+        type: "rails_fields_kit",
+        field_type: "combobox",
+        method: "customer_id",
+        options: {
+          url: "/customers.json",
+          selected_url: "/customers/selected.json"
+        }
       )
     end
 
