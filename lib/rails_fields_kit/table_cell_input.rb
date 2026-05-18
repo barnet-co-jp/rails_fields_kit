@@ -27,8 +27,12 @@ module RailsFieldsKit
     class << self
       COMMON_FIELD_TYPES.each do |field_type|
         define_method(field_type) do |field_name = nil, **options|
-          new(field_type, field_name, **options)
+          from_type(field_type, field_name, **options)
         end
+      end
+
+      def from_type(field_type, field_name = nil, **options)
+        new(field_type, field_name, **options)
       end
     end
 
