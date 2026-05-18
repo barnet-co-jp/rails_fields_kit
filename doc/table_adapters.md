@@ -17,7 +17,21 @@ filter = RailsFieldsKit::TableFilterInput.new(
   value_field: "id",
   label_field: "name"
 )
+```
 
+Common field types also have factory helpers:
+
+```ruby
+filter = RailsFieldsKit::TableFilterInput.combobox(
+  :customer_id,
+  url: customers_path(format: :json),
+  selected_url: selected_customers_path(format: :json),
+  value_field: "id",
+  label_field: "name"
+)
+```
+
+```ruby
 filter.to_table_filter
 # => {
 #      type: "rails_fields_kit",
@@ -77,7 +91,15 @@ editor = RailsFieldsKit::TableCellInput.new(
   :enum_select,
   :status
 )
+```
 
+Common field types also have factory helpers:
+
+```ruby
+editor = RailsFieldsKit::TableCellInput.enum_select(:status)
+```
+
+```ruby
 editor.to_table_cell_editor
 # => {
 #      type: "rails_fields_kit",
@@ -97,15 +119,14 @@ This keeps table definitions and Active Record introspection flows independent f
 columns = [
   {
     key: :customer_id,
-    filter: RailsFieldsKit::TableFilterInput.new(
-      :combobox,
+    filter: RailsFieldsKit::TableFilterInput.combobox(
       :customer_id,
       url: customers_path(format: :json)
     )
   },
   {
     key: :status,
-    editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+    editor: RailsFieldsKit::TableCellInput.enum_select(:status)
   }
 ]
 
@@ -211,8 +232,7 @@ A host app or table helper can pass the metadata objects into column-like defini
 ```ruby
 {
   key: :customer_id,
-  filter: RailsFieldsKit::TableFilterInput.new(
-    :combobox,
+  filter: RailsFieldsKit::TableFilterInput.combobox(
     :customer_id,
     url: customers_path(format: :json),
     selected_url: selected_customers_path(format: :json)
@@ -237,7 +257,7 @@ A host app or table helper can pass the metadata objects into column-like defini
 ```ruby
 {
   key: :status,
-  cell_editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+  cell_editor: RailsFieldsKit::TableCellInput.enum_select(:status)
 }
 ```
 
