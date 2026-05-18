@@ -21,6 +21,8 @@ module RailsFieldsKit
       search_field
     ].freeze
 
+    KNOWN_FIELD_TYPES = (COMMON_FIELD_TYPES + %i[token_search]).freeze
+
     attr_reader :field_type, :field_name, :options
 
     class << self
@@ -32,6 +34,14 @@ module RailsFieldsKit
 
       def from_type(field_type, field_name = nil, **options)
         new(field_type, field_name, **options)
+      end
+
+      def known_types
+        KNOWN_FIELD_TYPES
+      end
+
+      def known_type?(field_type)
+        known_types.include?(field_type.to_sym)
       end
 
       def token_search(field_name = :query, url: nil, **options)
