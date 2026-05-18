@@ -49,8 +49,18 @@ RSpec.describe "public API" do
   end
 
   it "exposes table filter factories" do
+    expect(RailsFieldsKit::TableFilterInput).to respond_to(:combobox)
+    expect(RailsFieldsKit::TableFilterInput).to respond_to(:select)
+    expect(RailsFieldsKit::TableFilterInput).to respond_to(:tags)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:token_search)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:ransack_filter)
+  end
+
+  it "exposes table cell editor factories" do
+    expect(RailsFieldsKit::TableCellInput).to respond_to(:combobox)
+    expect(RailsFieldsKit::TableCellInput).to respond_to(:select)
+    expect(RailsFieldsKit::TableCellInput).to respond_to(:tags)
+    expect(RailsFieldsKit::TableCellInput).to respond_to(:token_search)
   end
 
   it "exposes table metadata renderer" do
