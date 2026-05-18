@@ -41,6 +41,23 @@ RSpec.describe "table metadata objects" do
       )
     end
 
+    it "builds table filter metadata from a dynamic type" do
+      input = described_class.from_type(
+        :combobox,
+        :customer_id,
+        url: "/customers.json"
+      )
+
+      expect(input.to_table_filter).to eq(
+        type: "rails_fields_kit",
+        field_type: "combobox",
+        method: "customer_id",
+        options: {
+          url: "/customers.json"
+        }
+      )
+    end
+
     it "builds token search filter metadata" do
       input = described_class.token_search(
         :query,
@@ -119,6 +136,23 @@ RSpec.describe "table metadata objects" do
         options: {
           url: "/customers.json",
           selected_url: "/customers/selected.json"
+        }
+      )
+    end
+
+    it "builds table cell editor metadata from a dynamic type" do
+      input = described_class.from_type(
+        :enum_select,
+        :status,
+        label: "Workflow status"
+      )
+
+      expect(input.to_table_cell_editor).to eq(
+        type: "rails_fields_kit",
+        field_type: "enum_select",
+        method: "status",
+        options: {
+          label: "Workflow status"
         }
       )
     end
