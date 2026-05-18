@@ -26,14 +26,18 @@ module RailsFieldsKit
     class << self
       COMMON_FIELD_TYPES.each do |field_type|
         define_method(field_type) do |field_name = nil, **options|
-          new(field_type, field_name, **options)
+          from_type(field_type, field_name, **options)
         end
+      end
+
+      def from_type(field_type, field_name = nil, **options)
+        new(field_type, field_name, **options)
       end
 
       def token_search(field_name = :query, url: nil, **options)
         filter_options = options.dup
         filter_options[:url] = url if url
-        new(:token_search, field_name, **filter_options)
+        from_type(:token_search, field_name, **filter_options)
       end
 
       def ransack_filter(field_name = :query, fields:, url: nil, param_name: :q, **options)
@@ -43,7 +47,7 @@ module RailsFieldsKit
           fields: fields
         }.merge(options)
         filter_options[:url] = url if url
-        new(:token_search, field_name, **filter_options)
+        from_type(:token_search, field_name, **filter_options)
       end
     end
 
