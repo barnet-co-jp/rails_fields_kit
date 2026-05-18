@@ -2,22 +2,49 @@
 
 module RailsFieldsKit
   class TableFilterInput
+    COMMON_FIELD_TYPES = %i[
+      select
+      combobox
+      autocomplete
+      tags
+      multi_select
+      grouped_select
+      enum_select
+      text_field
+      text_area
+      number_field
+      money_field
+      percent_field
+      email_field
+      url_field
+      phone_field
+      search_field
+    ].freeze
+
     attr_reader :field_type, :field_name, :options
 
-    def self.token_search(field_name = :query, url: nil, **options)
-      filter_options = options.dup
-      filter_options[:url] = url if url
-      new(:token_search, field_name, **filter_options)
-    end
+    class << self
+      COMMON_FIELD_TYPES.each do |field_type|
+        define_method(field_type) do |field_name = nil, **options|
+          new(field_type, field_name, **options)
+        end
+      end
 
-    def self.ransack_filter(field_name = :query, fields:, url: nil, param_name: :q, **options)
-      filter_options = {
-        adapter: :ransack,
-        param_name: param_name,
-        fields: fields
-      }.merge(options)
-      filter_options[:url] = url if url
-      new(:token_search, field_name, **filter_options)
+      def token_search(field_name = :query, url: nil, **options)
+        filter_options = options.dup
+        filter_options[:url] = url if url
+        new(:token_search, field_name, **filter_options)
+      end
+
+      def ransack_filter(field_name = :query, fields:, url: nil, param_name: :q, **options)
+        filter_options = {
+          adapter: :ransack,
+          param_name: param_name,
+          fields: fields
+        }.merge(options)
+        filter_options[:url] = url if url
+        new(:token_search, field_name, **filter_options)
+      end
     end
 
     def initialize(field_type = nil, field_name = nil, type: nil, **options)
