@@ -41,6 +41,13 @@ filter = RailsFieldsKit::TableFilterInput.from_type(
 )
 ```
 
+Use `known_type?` when table integrations want to validate a configured field type before rendering:
+
+```ruby
+RailsFieldsKit::TableFilterInput.known_type?(field_type)
+RailsFieldsKit::TableFilterInput.known_types
+```
+
 ```ruby
 filter.to_table_filter
 # => {
@@ -116,6 +123,13 @@ editor = RailsFieldsKit::TableCellInput.from_type(
   field_type,
   :status
 )
+```
+
+Use `known_type?` when table integrations want to validate a configured editor type before rendering:
+
+```ruby
+RailsFieldsKit::TableCellInput.known_type?(field_type)
+RailsFieldsKit::TableCellInput.known_types
 ```
 
 ```ruby
