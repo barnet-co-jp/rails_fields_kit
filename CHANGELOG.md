@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 - `rfk_token_suggestions_with` for lightweight token suggestion JSON endpoints that can use static suggestions, controller methods, or callables.
 - `RailsFieldsKit::TokenSuggestions.build` for composing operator, field, predicate, value, and saved-search suggestion option JSON.
 - `RailsFieldsKit::RansackSuggestions.build` for composing Ransack-compatible token suggestion metadata without requiring or executing Ransack.
-- `RailsFieldsKit::TableFilterInput` and `RailsFieldsKit::TableCellInput` factory helpers such as `.combobox`, `.select`, `.tags`, `.enum_select`, and `.from_type` for concise table metadata definitions.
+- `RailsFieldsKit::TableFilterInput` and `RailsFieldsKit::TableCellInput` factory helpers such as `.combobox`, `.select`, `.tags`, `.enum_select`, `.from_type`, `.known_types`, and `.known_type?` for concise table metadata definitions.
 - `RailsFieldsKit::TableFilterInput.token_search` and `RailsFieldsKit::TableFilterInput.ransack_filter` for table metadata that describes token-search filters.
 - `RailsFieldsKit::TableMetadata` for collecting Rails Fields Kit filter/editor metadata from table column definitions and table-like objects that respond to `columns`, including common alias keys such as `filter_input`, `search_filter`, `cell_editor`, and `cell_input`, plus render shortcuts for collected filters and editors.
 - `RailsFieldsKit::TableRenderer` for turning table filter/editor metadata into FormBuilder call specs or dispatching them through a form builder, including batch rendering APIs and custom table field helper registration.
