@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 - `RailsFieldsKit::TableMetadata` can collect hash-like column definitions and hash-like metadata objects that respond to `to_hash` when table integrations do not expose concrete Hash columns, `to_table_filter`, or `to_table_cell_editor`.
 - `RailsFieldsKit::TableFilterInput.token_search` and `RailsFieldsKit::TableFilterInput.ransack_filter` for table metadata that describes token-search filters.
 - `RailsFieldsKit::TableMetadata` for collecting Rails Fields Kit filter/editor metadata from table column definitions and table-like objects that respond to `columns`, including common alias keys such as `filter_input`, `search_filter`, `cell_editor`, and `cell_input`, plus render shortcuts for collected filters and editors.
-- `RailsFieldsKit::TableRenderer` for turning table filter/editor metadata into FormBuilder call specs or dispatching them through a form builder, including ordered batch rendering APIs, custom table field helper registration, and mapping introspection helpers.
+- `RailsFieldsKit::TableRenderer` for turning table filter/editor metadata into FormBuilder call specs or dispatching them through a form builder, including ordered batch rendering APIs, custom table field helper registration, normalized field type and method handling, and mapping introspection helpers.
 - `rfk_table_filters` and `rfk_table_cell_editors` for rendering table metadata directly from a FormBuilder, including mixed hash/object/hash-like columns, enumerator columns, hash-like column inputs, table-like object inputs, custom table helper registrations, reset behavior, and safe-buffer rendering contracts.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so generated endpoint actions can match custom routes.
 - Remote request extension options for Tom Select-backed helpers:
@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 - `TableRenderer.field_helpers` now returns a duplicated hash so callers cannot mutate the internal helper mapping.
 - `TableRenderer.register_field_helper` now rejects nil or blank field type and helper name values.
 - `TableRenderer` now accepts hash-like metadata objects directly when they return valid hash metadata from `to_hash`.
+- `TableRenderer` now normalizes field type and method strings for call specs and helper lookups.
 - `TableRenderer` now preserves render result order for filter and cell editor batches.
 - `TableRenderer` now rejects metadata that is not Hash-like and validates hash-like metadata objects returned from `to_hash`.
 - `TableRenderer` now preserves single hash-like metadata objects in batch APIs even when they implement `to_a`.
