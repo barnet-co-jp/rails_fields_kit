@@ -181,7 +181,7 @@ RailsFieldsKit::TableMetadata.filters(columns.each)
 RailsFieldsKit::TableMetadata.filters(filter: RailsFieldsKit::TableFilterInput.search_field(:keyword))
 ```
 
-Filter aliases are also recognized: `filter`, `filter_input`, and `search_filter`. Cell editor aliases are `editor`, `cell_editor`, and `cell_input`. These names work as hash keys or object methods.
+Filter aliases are also recognized: `filter`, `filter_input`, and `search_filter`. Cell editor aliases are `editor`, `cell_editor`, and `cell_input`. These names work as hash keys or public object methods. For struct-like objects, only declared members are considered metadata readers so inherited `Enumerable` methods such as `filter` are ignored.
 
 It also exposes convenience methods that collect metadata and immediately convert it to FormBuilder call specs:
 
