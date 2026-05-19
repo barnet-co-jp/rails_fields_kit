@@ -29,6 +29,12 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     end
   end
 
+  class HashLikeOptions
+    def to_hash
+      { url: "/customers.json" }
+    end
+  end
+
   around do |example|
     described_class.reset_field_helpers!
     example.run
@@ -77,6 +83,43 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       helper: :rfk_combobox,
       method: :customer_id,
       options: { url: "/customers.json" }
+    )
+  end
+
+  it "normalizes metadata options" do
+    metadata = { field_type: "combobox", method: :customer_id, options: HashLikeOptions.new }
+
+    expect(described_class.filter_call(metadata)).to eq(
+      helper: :rfk_combobox,
+      method: :customer_id,
+      options: { url: "/customers.json" }
+    )
+  end
+
+  it "defaults missing metadata options to an empty hash" do
+    metadata = { field_type: "combobox", method: :customer_id }
+
+    expect(described_class.filter_call(metadata)).to eq(
+      helper: :rfk_combobox,
+      method: :customer_id,
+      options: {}
+    )
+  end
+
+  it "duplicates metadata options" do
+    options = { url: "/customers.json" }
+    call = described_class.filter_call(field_type: "combobox", method: :customer_id, options: options)
+    call.fetch(:options).clear
+
+    expect(options).to eq(url: "/customers.json")
+  end
+
+  it "rejects non-hash metadata options" do
+    metadata = { field_type: "combobox", method: :customer_id, options: [[:url, "/customers.json"]] }
+
+    expect { described_class.filter_call(metadata) }.to raise_error(
+      ArgumentError,
+      "table metadata options must be a hash"
     )
   end
 
