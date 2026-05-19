@@ -467,6 +467,13 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ])
   end
 
+  it "renders no filters for nil columns" do
+    form_builder = MetadataCollectorFormBuilder.new
+
+    expect(described_class.render_filters(form_builder, nil)).to eq([])
+    expect(form_builder.calls).to eq([])
+  end
+
   it "renders a single filter from one hash column" do
     form_builder = MetadataCollectorFormBuilder.new
     column = {
@@ -507,6 +514,13 @@ RSpec.describe RailsFieldsKit::TableMetadata do
       [:rfk_enum_select, :status, {}],
       [:rfk_combobox, :customer_id, { url: "/customers.json" }]
     ])
+  end
+
+  it "renders no cell editors for nil columns" do
+    form_builder = MetadataCollectorFormBuilder.new
+
+    expect(described_class.render_cell_editors(form_builder, nil)).to eq([])
+    expect(form_builder.calls).to eq([])
   end
 
   it "renders a single cell editor from one hash column" do
