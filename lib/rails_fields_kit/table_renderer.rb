@@ -8,7 +8,7 @@ module RailsFieldsKit
       "autocomplete" => :rfk_autocomplete,
       "tags" => :rfk_tags,
       "multi_select" => :rfk_multi_select,
-      "grouped_select" => :rfk_grouped_select,
+      "grouped_select" => :rfk_multi_select,
       "enum_select" => :rfk_enum_select,
       "token_search" => :rfk_token_search,
       "text_field" => :rfk_text_field,
@@ -110,7 +110,7 @@ module RailsFieldsKit
       end
 
       def call_spec(metadata)
-        metadata = metadata.transform_keys(&:to_sym)
+        metadata = normalize_metadata_hash(metadata)
         field_type = normalize_field_type(metadata.fetch(:field_type, nil))
         raise UnknownFieldType, "table metadata field_type is required" if field_type.empty?
 
@@ -125,6 +125,12 @@ module RailsFieldsKit
           method: method,
           options: options
         }
+      end
+
+      def normalize_metadata_hash(metadata)
+        raise ArgumentError, "table metadata must be a hash" unless metadata.respond_to?(:transform_keys)
+
+        metadata.transform_keys(&:to_sym)
       end
 
       def render_call(form_builder, call)
