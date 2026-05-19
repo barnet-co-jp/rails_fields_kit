@@ -435,6 +435,10 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ])
   end
 
+  it "builds no filter call specs for nil columns" do
+    expect(described_class.filter_calls(nil)).to eq([])
+  end
+
   it "builds cell editor call specs from collected metadata" do
     columns = [
       {
@@ -450,6 +454,10 @@ RSpec.describe RailsFieldsKit::TableMetadata do
         options: {}
       }
     ])
+  end
+
+  it "builds no cell editor call specs for nil columns" do
+    expect(described_class.cell_editor_calls(nil)).to eq([])
   end
 
   it "renders collected filters" do
