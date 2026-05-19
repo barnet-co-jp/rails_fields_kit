@@ -55,7 +55,7 @@ module RailsFieldsKit
       end
 
       def filter_calls(filters)
-        Array(filters).compact.map { |filter| filter_call(filter) }
+        normalize_metadata_list(filters).compact.map { |filter| filter_call(filter) }
       end
 
       def cell_editor_call(editor)
@@ -63,7 +63,7 @@ module RailsFieldsKit
       end
 
       def cell_editor_calls(editors)
-        Array(editors).compact.map { |editor| cell_editor_call(editor) }
+        normalize_metadata_list(editors).compact.map { |editor| cell_editor_call(editor) }
       end
 
       def render_filter(form_builder, filter)
@@ -86,6 +86,15 @@ module RailsFieldsKit
 
       def registered_field_helpers
         @field_helpers ||= DEFAULT_FIELD_HELPERS.dup
+      end
+
+      def normalize_metadata_list(metadata)
+        return [] if metadata.nil?
+        return [metadata] if metadata.is_a?(Hash)
+        return metadata if metadata.is_a?(Array)
+        return metadata.to_a if metadata.respond_to?(:to_a)
+
+        Array(metadata)
       end
 
       def normalize_filter(filter)
