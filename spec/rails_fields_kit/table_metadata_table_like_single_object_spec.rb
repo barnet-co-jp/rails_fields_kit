@@ -39,6 +39,22 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ])
   end
 
+  it "builds filter call specs from a table-like object with a single hash column" do
+    table = SingleObjectTable.new(
+      columns: {
+        filter: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")
+      }
+    )
+
+    expect(described_class.filter_calls(table)).to eq([
+      {
+        helper: :rfk_token_search,
+        method: :query,
+        options: { url: "/tokens.json" }
+      }
+    ])
+  end
+
   it "renders filters from a table-like object with a single hash column" do
     form_builder = SingleObjectFormBuilder.new
     table = SingleObjectTable.new(
@@ -65,6 +81,22 @@ RSpec.describe RailsFieldsKit::TableMetadata do
         type: "rails_fields_kit",
         field_type: "enum_select",
         method: "status",
+        options: {}
+      }
+    ])
+  end
+
+  it "builds cell editor call specs from a table-like object with a single hash column" do
+    table = SingleObjectTable.new(
+      columns: {
+        editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+      }
+    )
+
+    expect(described_class.cell_editor_calls(table)).to eq([
+      {
+        helper: :rfk_enum_select,
+        method: :status,
         options: {}
       }
     ])
