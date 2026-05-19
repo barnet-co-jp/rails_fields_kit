@@ -57,6 +57,7 @@ RSpec.describe "public API" do
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:tags)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:token_search)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:ransack_filter)
+    expect(RailsFieldsKit::TableFilterInput.new).to respond_to(:to_h)
   end
 
   it "exposes table cell editor factories" do
@@ -67,6 +68,7 @@ RSpec.describe "public API" do
     expect(RailsFieldsKit::TableCellInput).to respond_to(:select)
     expect(RailsFieldsKit::TableCellInput).to respond_to(:tags)
     expect(RailsFieldsKit::TableCellInput).to respond_to(:token_search)
+    expect(RailsFieldsKit::TableCellInput.new).to respond_to(:to_h)
   end
 
   it "exposes table metadata renderer" do
