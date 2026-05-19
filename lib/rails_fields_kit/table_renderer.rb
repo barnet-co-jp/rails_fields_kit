@@ -89,11 +89,24 @@ module RailsFieldsKit
       end
 
       def normalize_filter(filter)
-        filter.respond_to?(:to_table_filter) ? filter.to_table_filter : filter
+        return filter.to_table_filter if filter.respond_to?(:to_table_filter)
+
+        normalize_hash_like_metadata(filter)
       end
 
       def normalize_cell_editor(editor)
-        editor.respond_to?(:to_table_cell_editor) ? editor.to_table_cell_editor : editor
+        return editor.to_table_cell_editor if editor.respond_to?(:to_table_cell_editor)
+
+        normalize_hash_like_metadata(editor)
+      end
+
+      def normalize_hash_like_metadata(metadata)
+        return metadata unless metadata.respond_to?(:to_hash)
+
+        normalized_metadata = metadata.to_hash
+        raise ArgumentError, "table metadata to_hash must return a hash" unless normalized_metadata.respond_to?(:to_hash)
+
+        normalized_metadata.to_hash
       end
 
       def call_spec(metadata)
