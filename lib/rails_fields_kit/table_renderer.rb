@@ -26,11 +26,11 @@ module RailsFieldsKit
 
     class << self
       def field_helpers
-        @field_helpers ||= DEFAULT_FIELD_HELPERS.dup
+        registered_field_helpers.dup
       end
 
       def helper_for(field_type)
-        field_helpers[normalize_field_type(field_type)]
+        registered_field_helpers[normalize_field_type(field_type)]
       end
 
       def registered_field_type?(field_type)
@@ -38,7 +38,7 @@ module RailsFieldsKit
       end
 
       def register_field_helper(field_type, helper_name)
-        field_helpers[field_type.to_s] = helper_name.to_sym
+        registered_field_helpers[field_type.to_s] = helper_name.to_sym
       end
 
       def reset_field_helpers!
@@ -79,6 +79,10 @@ module RailsFieldsKit
 
       private
 
+      def registered_field_helpers
+        @field_helpers ||= DEFAULT_FIELD_HELPERS.dup
+      end
+
       def normalize_filter(filter)
         filter.respond_to?(:to_table_filter) ? filter.to_table_filter : filter
       end
@@ -90,9 +94,7 @@ module RailsFieldsKit
       def call_spec(metadata)
         metadata = metadata.transform_keys(&:to_sym)
         field_type = metadata.fetch(:field_type).to_s
-        helper = helper_for(field_type) do
-          raise UnknownFieldType, "unknown Rails Fields Kit table field type: #{field_type}"
-        end
+        helper = helper_for(field_type)
         raise UnknownFieldType, "unknown Rails Fields Kit table field type: #{field_type}" unless helper
 
         method = metadata[:method]&.to_sym
