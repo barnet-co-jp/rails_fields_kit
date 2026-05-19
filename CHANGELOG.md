@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - `TableFilterInput.known_type?` and `TableCellInput.known_type?` now return `false` for nil or blank field type values.
+- `TableFilterInput.known_types` and `TableCellInput.known_types` now return duplicated arrays so callers cannot mutate the internal type list.
 
 ## 0.1.0 - 2026-05-18
 
