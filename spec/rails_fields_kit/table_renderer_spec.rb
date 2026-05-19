@@ -43,6 +43,10 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     def to_hash
       @metadata
     end
+
+    def to_a
+      [[:unexpected, true]]
+    end
   end
 
   around do |example|
@@ -126,6 +130,24 @@ RSpec.describe RailsFieldsKit::TableRenderer do
 
   it "builds a single filter call spec from one hash in batch APIs" do
     metadata = { field_type: "combobox", method: "customer_id", options: { url: "/customers.json" } }
+
+    expect(described_class.filter_calls(metadata)).to eq([
+      {
+        helper: :rfk_combobox,
+        method: :customer_id,
+        options: { url: "/customers.json" }
+      }
+    ])
+  end
+
+  it "treats a single hash-like metadata object as one batch entry" do
+    metadata = HashLikeRendererMetadata.new(
+      field_type: "combobox",
+      method: "customer_id",
+      options: { url: "/customers.json" }
+    )
+
+    expect(metadata.to_a).to eq([[:unexpected, true]])
 
     expect(described_class.filter_calls(metadata)).to eq([
       {
@@ -292,6 +314,24 @@ RSpec.describe RailsFieldsKit::TableRenderer do
 
   it "builds a single cell editor call spec from one hash in batch APIs" do
     metadata = { field_type: "enum_select", method: "status", options: {} }
+
+    expect(described_class.cell_editor_calls(metadata)).to eq([
+      {
+        helper: :rfk_enum_select,
+        method: :status,
+        options: {}
+      }
+    ])
+  end
+
+  it "treats a single hash-like cell editor metadata object as one batch entry" do
+    metadata = HashLikeRendererMetadata.new(
+      field_type: "enum_select",
+      method: "status",
+      options: {}
+    )
+
+    expect(metadata.to_a).to eq([[:unexpected, true]])
 
     expect(described_class.cell_editor_calls(metadata)).to eq([
       {
