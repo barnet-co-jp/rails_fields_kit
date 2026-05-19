@@ -124,6 +124,8 @@ Public metadata methods:
 - `RailsFieldsKit::TableMetadata.render_filters`
 - `RailsFieldsKit::TableMetadata.render_cell_editors`
 - `RailsFieldsKit::TableRenderer.field_helpers`
+- `RailsFieldsKit::TableRenderer.helper_for`
+- `RailsFieldsKit::TableRenderer.registered_field_type?`
 - `RailsFieldsKit::TableRenderer.register_field_helper`
 - `RailsFieldsKit::TableRenderer.reset_field_helpers!`
 - `RailsFieldsKit::TableRenderer.filter_call`
