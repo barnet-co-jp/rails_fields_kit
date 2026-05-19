@@ -332,6 +332,31 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     ])
   end
 
+  it "renders one filter from one hash in batch APIs" do
+    form_builder = FakeTableFormBuilder.new
+    metadata = { field_type: "combobox", method: "customer_id", options: { url: "/customers.json" } }
+
+    expect(described_class.render_filters(form_builder, metadata)).to eq(["combobox"])
+    expect(form_builder.calls).to eq([
+      [:rfk_combobox, :customer_id, { url: "/customers.json" }]
+    ])
+  end
+
+  it "renders filters from enumerable batch inputs" do
+    form_builder = FakeTableFormBuilder.new
+    filters = [
+      { field_type: "combobox", method: "customer_id", options: { url: "/customers.json" } },
+      nil,
+      RailsFieldsKit::TableFilterInput.token_search(:query, url: "/search_tokens.json")
+    ].each
+
+    expect(described_class.render_filters(form_builder, filters)).to eq(["combobox", "token_search"])
+    expect(form_builder.calls).to eq([
+      [:rfk_combobox, :customer_id, { url: "/customers.json" }],
+      [:rfk_token_search, :query, { url: "/search_tokens.json" }]
+    ])
+  end
+
   it "renders cell editors through a form builder" do
     form_builder = FakeTableFormBuilder.new
     editor = RailsFieldsKit::TableCellInput.new(:enum_select, :status)
@@ -349,6 +374,31 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       nil,
       RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json")
     ]
+
+    expect(described_class.render_cell_editors(form_builder, editors)).to eq(["enum_select", "combobox"])
+    expect(form_builder.calls).to eq([
+      [:rfk_enum_select, :status, {}],
+      [:rfk_combobox, :customer_id, { url: "/customers.json" }]
+    ])
+  end
+
+  it "renders one cell editor from one hash in batch APIs" do
+    form_builder = FakeTableFormBuilder.new
+    metadata = { field_type: "enum_select", method: "status", options: {} }
+
+    expect(described_class.render_cell_editors(form_builder, metadata)).to eq(["enum_select"])
+    expect(form_builder.calls).to eq([
+      [:rfk_enum_select, :status, {}]
+    ])
+  end
+
+  it "renders cell editors from enumerable batch inputs" do
+    form_builder = FakeTableFormBuilder.new
+    editors = [
+      { field_type: "enum_select", method: "status", options: {} },
+      nil,
+      RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json")
+    ].each
 
     expect(described_class.render_cell_editors(form_builder, editors)).to eq(["enum_select", "combobox"])
     expect(form_builder.calls).to eq([
