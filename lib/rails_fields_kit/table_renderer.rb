@@ -38,7 +38,12 @@ module RailsFieldsKit
       end
 
       def register_field_helper(field_type, helper_name)
-        registered_field_helpers[field_type.to_s] = helper_name.to_sym
+        normalized_field_type = normalize_field_type(field_type)
+        normalized_helper_name = normalize_helper_name(helper_name)
+        raise ArgumentError, "table field type is required" if normalized_field_type.empty?
+        raise ArgumentError, "table helper name is required" if normalized_helper_name.empty?
+
+        registered_field_helpers[normalized_field_type] = normalized_helper_name.to_sym
       end
 
       def reset_field_helpers!
@@ -116,6 +121,10 @@ module RailsFieldsKit
 
       def normalize_field_type(field_type)
         field_type.to_s.strip
+      end
+
+      def normalize_helper_name(helper_name)
+        helper_name.to_s.strip
       end
     end
   end
