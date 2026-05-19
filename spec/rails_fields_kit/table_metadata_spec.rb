@@ -27,6 +27,7 @@ RSpec.describe "table metadata objects" do
       input = described_class.new(:combobox, :customer_id, url: "/customers.json")
 
       expect(input.to_h).to eq(input.to_table_filter)
+      expect(input.to_hash).to eq(input.to_h)
       expect(input.to_h).to eq(
         type: "rails_fields_kit",
         field_type: "combobox",
@@ -164,6 +165,7 @@ RSpec.describe "table metadata objects" do
       input = described_class.new(:enum_select, :status)
 
       expect(input.to_h).to eq(input.to_table_cell_editor)
+      expect(input.to_hash).to eq(input.to_h)
       expect(input.to_h).to eq(
         type: "rails_fields_kit",
         field_type: "enum_select",
