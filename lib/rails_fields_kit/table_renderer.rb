@@ -98,7 +98,9 @@ module RailsFieldsKit
 
       def call_spec(metadata)
         metadata = metadata.transform_keys(&:to_sym)
-        field_type = metadata.fetch(:field_type).to_s
+        field_type = normalize_field_type(metadata.fetch(:field_type, nil))
+        raise UnknownFieldType, "table metadata field_type is required" if field_type.empty?
+
         helper = helper_for(field_type)
         raise UnknownFieldType, "unknown Rails Fields Kit table field type: #{field_type}" unless helper
 
