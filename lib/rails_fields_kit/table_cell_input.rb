@@ -42,7 +42,10 @@ module RailsFieldsKit
       end
 
       def known_type?(field_type)
-        known_types.include?(field_type.to_sym)
+        normalized_field_type = field_type.to_s.strip
+        return false if normalized_field_type.empty?
+
+        known_types.include?(normalized_field_type.to_sym)
       end
     end
 
