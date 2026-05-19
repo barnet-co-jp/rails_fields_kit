@@ -48,6 +48,55 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ])
   end
 
+  it "collects filter metadata from enumerable columns" do
+    columns = [
+      { filter: RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json") },
+      { filter: nil }
+    ].each
+
+    expect(described_class.filters(columns)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "combobox",
+        method: "customer_id",
+        options: { url: "/customers.json" }
+      }
+    ])
+  end
+
+  it "collects filter metadata from table-like objects with enumerable columns" do
+    table = TableDefinition.new(
+      columns: [
+        { filter: RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json") },
+        { filter: nil }
+      ].each
+    )
+
+    expect(described_class.filters(table)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "combobox",
+        method: "customer_id",
+        options: { url: "/customers.json" }
+      }
+    ])
+  end
+
+  it "treats a single hash as one column" do
+    column = {
+      filter: RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json")
+    }
+
+    expect(described_class.filters(column)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "combobox",
+        method: "customer_id",
+        options: { url: "/customers.json" }
+      }
+    ])
+  end
+
   it "treats explicit false hash metadata as disabled metadata" do
     columns = [
       {
