@@ -38,14 +38,14 @@ module RailsFieldsKit
       end
 
       def known_types
-        KNOWN_FIELD_TYPES
+        KNOWN_FIELD_TYPES.dup
       end
 
       def known_type?(field_type)
         normalized_field_type = field_type.to_s.strip
         return false if normalized_field_type.empty?
 
-        known_types.include?(normalized_field_type.to_sym)
+        KNOWN_FIELD_TYPES.include?(normalized_field_type.to_sym)
       end
     end
 
