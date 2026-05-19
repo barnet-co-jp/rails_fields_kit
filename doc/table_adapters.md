@@ -230,6 +230,13 @@ RailsFieldsKit::TableRenderer.render_filters(form_builder, filters)
 RailsFieldsKit::TableRenderer.render_cell_editors(form_builder, editors)
 ```
 
+Use `helper_for` and `registered_field_type?` when an integration needs to inspect renderer mappings, including custom registrations.
+
+```ruby
+RailsFieldsKit::TableRenderer.helper_for(:combobox)
+RailsFieldsKit::TableRenderer.registered_field_type?(:combobox)
+```
+
 The renderer is intentionally thin. It maps documented Rails Fields Kit `field_type` values to FormBuilder helper names and does not own table preference persistence, query parsing, authorization, or result rendering.
 
 ## Custom table field helpers
@@ -256,7 +263,7 @@ RailsFieldsKit::TableRenderer.filter_call(filter)
 #    }
 ```
 
-Use `RailsFieldsKit::TableRenderer.field_helpers` to inspect the current mapping and `RailsFieldsKit::TableRenderer.reset_field_helpers!` to restore the defaults.
+Use `RailsFieldsKit::TableRenderer.field_helpers`, `RailsFieldsKit::TableRenderer.helper_for`, and `RailsFieldsKit::TableRenderer.registered_field_type?` to inspect the current mapping. Use `RailsFieldsKit::TableRenderer.reset_field_helpers!` to restore the defaults.
 
 ## Intended integration with Rails Table Preferences
 
