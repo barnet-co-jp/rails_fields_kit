@@ -23,6 +23,15 @@ RSpec.describe "table metadata objects" do
       )
     end
 
+    it "returns duplicated filter field names" do
+      input = described_class.new(:combobox, :customer_id)
+      field_name = input.field_name
+      field_name.replace("mutated")
+
+      expect(input.field_name).to eq("customer_id")
+      expect(input.to_table_filter).to include(method: "customer_id")
+    end
+
     it "returns duplicated filter options" do
       input = described_class.new(:combobox, :customer_id, url: "/customers.json")
       input.options.clear
@@ -137,6 +146,15 @@ RSpec.describe "table metadata objects" do
         method: "status",
         options: {}
       )
+    end
+
+    it "returns duplicated cell editor field names" do
+      input = described_class.new(:combobox, :customer_id)
+      field_name = input.field_name
+      field_name.replace("mutated")
+
+      expect(input.field_name).to eq("customer_id")
+      expect(input.to_table_cell_editor).to include(method: "customer_id")
     end
 
     it "returns duplicated cell editor options" do
