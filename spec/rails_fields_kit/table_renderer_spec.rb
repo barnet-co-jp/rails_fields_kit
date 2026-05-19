@@ -176,6 +176,14 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     expect(described_class.registered_field_type?(nil)).to be(false)
   end
 
+  it "returns duplicated registered helper mappings" do
+    helpers = described_class.field_helpers
+    helpers.clear
+
+    expect(described_class.helper_for(:combobox)).to eq(:rfk_combobox)
+    expect(described_class.registered_field_type?(:combobox)).to be(true)
+  end
+
   it "exposes custom registered helper mappings" do
     described_class.register_field_helper(:custom_field, :custom_table_field)
 
