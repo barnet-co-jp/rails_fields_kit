@@ -55,15 +55,32 @@ module RailsFieldsKit
         metadata.to_hash
       end
 
+      def normalize_hash_like_column(column)
+        normalized_column = column.to_hash
+        raise ArgumentError, "table column to_hash must return a hash" unless normalized_column.respond_to?(:to_hash)
+
+        normalized_column.to_hash
+      end
+
       def normalize_columns(columns)
         source = columns.respond_to?(:columns) ? columns.columns : columns
         return [] if source.nil?
         return [source] if source.is_a?(Hash)
         return source if source.is_a?(Array)
+        return [source] if hash_like_column?(source)
         return [source] if metadata_column_object?(source)
         return source.to_a if enumerable_columns?(source)
 
         Array(source)
+      end
+
+      def hash_like_column?(source)
+        return false unless source.respond_to?(:to_hash)
+
+        normalized_source = normalize_hash_like_column(source)
+        (FILTER_KEYS + CELL_EDITOR_KEYS).any? do |key|
+          normalized_source.key?(key) || normalized_source.key?(key.to_s)
+        end
       end
 
       def metadata_column_object?(source)
@@ -85,11 +102,15 @@ module RailsFieldsKit
       def read_column_value(column, key)
         case column
         when Hash
-          return column[key] if column.key?(key)
-          return column[key.to_s] if column.key?(key.to_s)
+          read_hash_column_value(column, key)
         else
-          read_object_column_value(column, key)
-        end
+          read_hash_column_value(normalize_hash_like_column(column), key) if column.respond_to?(:to_hash)
+        end || read_object_column_value(column, key)
+      end
+
+      def read_hash_column_value(column, key)
+        return column[key] if column.key?(key)
+        return column[key.to_s] if column.key?(key.to_s)
       end
 
       def read_object_column_value(column, key)
