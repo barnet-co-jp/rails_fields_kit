@@ -37,8 +37,15 @@ module RailsFieldsKit
           value = read_first_column_value(column, keys)
           next if value.nil? || value == false
 
-          value.respond_to?(protocol) ? value.public_send(protocol) : value
+          normalize_metadata_value(value, protocol)
         end
+      end
+
+      def normalize_metadata_value(value, protocol)
+        return value.public_send(protocol) if value.respond_to?(protocol)
+        return value.to_hash if value.respond_to?(:to_hash)
+
+        value
       end
 
       def normalize_columns(columns)
