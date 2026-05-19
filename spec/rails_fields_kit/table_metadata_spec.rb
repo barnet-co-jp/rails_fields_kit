@@ -23,6 +23,18 @@ RSpec.describe "table metadata objects" do
       )
     end
 
+    it "exposes table filter metadata as a hash" do
+      input = described_class.new(:combobox, :customer_id, url: "/customers.json")
+
+      expect(input.to_h).to eq(input.to_table_filter)
+      expect(input.to_h).to eq(
+        type: "rails_fields_kit",
+        field_type: "combobox",
+        method: "customer_id",
+        options: { url: "/customers.json" }
+      )
+    end
+
     it "returns duplicated filter field names" do
       input = described_class.new(:combobox, :customer_id)
       field_name = input.field_name
@@ -141,6 +153,18 @@ RSpec.describe "table metadata objects" do
       input = described_class.new(:enum_select, :status)
 
       expect(input.to_table_cell_editor).to eq(
+        type: "rails_fields_kit",
+        field_type: "enum_select",
+        method: "status",
+        options: {}
+      )
+    end
+
+    it "exposes table cell editor metadata as a hash" do
+      input = described_class.new(:enum_select, :status)
+
+      expect(input.to_h).to eq(input.to_table_cell_editor)
+      expect(input.to_h).to eq(
         type: "rails_fields_kit",
         field_type: "enum_select",
         method: "status",
