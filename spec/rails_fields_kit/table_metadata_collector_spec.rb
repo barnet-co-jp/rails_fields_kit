@@ -48,6 +48,16 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     attr_reader :filter
   end
 
+  class HashLikeMetadata
+    def initialize(metadata)
+      @metadata = metadata
+    end
+
+    def to_hash
+      @metadata
+    end
+  end
+
   it "collects filter metadata from hash columns" do
     columns = [
       {
@@ -252,6 +262,25 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ])
   end
 
+  it "collects hash-like filter metadata" do
+    metadata = HashLikeMetadata.new(
+      type: "rails_fields_kit",
+      field_type: "search_field",
+      method: "keyword",
+      options: { placeholder: "Search" }
+    )
+    columns = [{ filter: metadata }]
+
+    expect(described_class.filters(columns)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "search_field",
+        method: "keyword",
+        options: { placeholder: "Search" }
+      }
+    ])
+  end
+
   it "collects cell editor metadata" do
     columns = [
       {
@@ -273,6 +302,25 @@ RSpec.describe RailsFieldsKit::TableMetadata do
         field_type: "combobox",
         method: "customer_id",
         options: { url: "/customers.json" }
+      }
+    ])
+  end
+
+  it "collects hash-like cell editor metadata" do
+    metadata = HashLikeMetadata.new(
+      type: "rails_fields_kit",
+      field_type: "enum_select",
+      method: "status",
+      options: {}
+    )
+    columns = [{ editor: metadata }]
+
+    expect(described_class.cell_editors(columns)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "enum_select",
+        method: "status",
+        options: {}
       }
     ])
   end
