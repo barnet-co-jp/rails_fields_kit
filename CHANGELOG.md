@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- `TableMetadata` now reads object column metadata through public readers only and ignores private readers.
 - `TableMetadata` now keeps a single hash column definition intact instead of expanding it through `Hash#to_a`.
 - `TableMetadata` now collects metadata from enumerable column lists while preserving a single hash as one column definition.
 - `TableMetadata` now treats explicit `false` hash metadata values as disabled metadata instead of falling through to alias keys.
