@@ -43,7 +43,7 @@ module RailsFieldsKit
 
       def normalize_columns(columns)
         return [] if columns.nil?
-        return columns.columns if columns.respond_to?(:columns)
+        return Array(columns.columns) if columns.respond_to?(:columns)
 
         Array(columns)
       end
