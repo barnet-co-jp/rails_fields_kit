@@ -28,6 +28,26 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     end
   end
 
+  class PublicMetadataColumn
+    def initialize(filter)
+      @filter = filter
+    end
+
+    def filter
+      @filter
+    end
+  end
+
+  class PrivateMetadataColumn
+    def initialize(filter)
+      @filter = filter
+    end
+
+    private
+
+    attr_reader :filter
+  end
+
   it "collects filter metadata from hash columns" do
     columns = [
       {
@@ -187,6 +207,22 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     columns = [
       ColumnDefinition.new(filter: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")),
       ColumnDefinition.new(filter: nil)
+    ]
+
+    expect(described_class.filters(columns)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "token_search",
+        method: "query",
+        options: { url: "/tokens.json" }
+      }
+    ])
+  end
+
+  it "collects filter metadata from public object readers" do
+    columns = [
+      PublicMetadataColumn.new(RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")),
+      PrivateMetadataColumn.new(RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json"))
     ]
 
     expect(described_class.filters(columns)).to eq([
