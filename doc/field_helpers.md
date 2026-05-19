@@ -100,7 +100,7 @@ Use this for Rails enum attributes.
 
 ## Table metadata helpers
 
-Use these helpers when table column definitions already carry Rails Fields Kit metadata through `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, or compatible hashes.
+Use these helpers when table column definitions already carry Rails Fields Kit metadata through `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, compatible hashes, hash-like column objects, or table-like objects that respond to `columns`.
 
 ### `rfk_table_filters`
 
@@ -108,7 +108,7 @@ Use these helpers when table column definitions already carry Rails Fields Kit m
 <%= f.rfk_table_filters(@table_preferences) %>
 ```
 
-This collects filter metadata from a column list or table-like object and renders each filter through the matching Rails Fields Kit field helper.
+This collects filter metadata from a column list or table-like object and renders each filter through the matching Rails Fields Kit field helper. `nil` metadata renders an empty safe string, so callers can pass optional table objects without pre-normalizing them.
 
 ### `rfk_table_cell_editors`
 
@@ -116,7 +116,7 @@ This collects filter metadata from a column list or table-like object and render
 <%= f.rfk_table_cell_editors(@table_preferences) %>
 ```
 
-This collects editable-cell metadata from a column list or table-like object and renders each editor through the matching Rails Fields Kit field helper.
+This collects editable-cell metadata from a column list or table-like object and renders each editor through the matching Rails Fields Kit field helper. Hash-like column objects can expose metadata through `to_hash`; object columns with public metadata readers such as `editor` or `cell_editor` keep those readers as the preferred protocol.
 
 ## Native input helpers
 
