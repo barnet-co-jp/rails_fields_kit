@@ -63,6 +63,26 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ])
   end
 
+  it "treats explicit false hash-like filter metadata as disabled metadata" do
+    column = HashLikeColumn.new(
+      filter: false,
+      filter_input: RailsFieldsKit::TableFilterInput.combobox(:customer_id, url: "/customers.json")
+    )
+
+    expect(described_class.filters([column])).to eq([])
+    expect(described_class.filter_calls([column])).to eq([])
+  end
+
+  it "treats explicit false hash-like cell editor metadata as disabled metadata" do
+    column = HashLikeColumn.new(
+      editor: false,
+      cell_editor: RailsFieldsKit::TableCellInput.enum_select(:status)
+    )
+
+    expect(described_class.cell_editors([column])).to eq([])
+    expect(described_class.cell_editor_calls([column])).to eq([])
+  end
+
   it "normalizes a hash-like column once per collected column" do
     column = HashLikeColumn.new(
       filter: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")
