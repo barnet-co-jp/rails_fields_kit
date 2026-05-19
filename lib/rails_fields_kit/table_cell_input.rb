@@ -24,7 +24,7 @@ module RailsFieldsKit
 
     KNOWN_FIELD_TYPES = COMMON_FIELD_TYPES.freeze
 
-    attr_reader :field_type, :field_name, :options
+    attr_reader :field_type, :field_name
 
     class << self
       COMMON_FIELD_TYPES.each do |field_type|
@@ -55,12 +55,16 @@ module RailsFieldsKit
       @options = options
     end
 
+    def options
+      @options.dup
+    end
+
     def to_table_cell_editor
       {
         type: "rails_fields_kit",
         field_type: field_type.to_s,
         method: field_name,
-        options: options.dup
+        options: options
       }.compact
     end
   end
