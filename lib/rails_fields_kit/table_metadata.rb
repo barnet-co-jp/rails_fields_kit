@@ -60,9 +60,14 @@ module RailsFieldsKit
         return [] if source.nil?
         return [source] if source.is_a?(Hash)
         return source if source.is_a?(Array)
+        return [source] if metadata_column_object?(source)
         return source.to_a if enumerable_columns?(source)
 
         Array(source)
+      end
+
+      def metadata_column_object?(source)
+        (FILTER_KEYS + CELL_EDITOR_KEYS).any? { |key| column_metadata_reader(source, key) }
       end
 
       def enumerable_columns?(source)
