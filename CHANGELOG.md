@@ -22,6 +22,10 @@ All notable changes to this project will be documented in this file.
   - `create_params:` for fixed create-on-the-fly JSON fields.
 - Tom Select option pass-throughs for `max_items:`, `load_throttle:`, and `delimiter:`.
 
+### Fixed
+
+- `TableFilterInput.known_type?` and `TableCellInput.known_type?` now return `false` for nil or blank field type values.
+
 ## 0.1.0 - 2026-05-18
 
 ### Added
