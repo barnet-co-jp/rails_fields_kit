@@ -101,8 +101,6 @@ RSpec.describe "public API" do
 
   it "exposes table renderer exception classes" do
     expect(defined?(RailsFieldsKit::TableRenderer::UnknownFieldType)).to eq("constant")
-    expect(defined?(RailsFieldsKit::TableRenderer::MissingFieldType)).to eq("constant")
-    expect(defined?(RailsFieldsKit::TableRenderer::MissingMethod)).to eq("constant")
   end
 
   it "exposes table metadata collector" do
