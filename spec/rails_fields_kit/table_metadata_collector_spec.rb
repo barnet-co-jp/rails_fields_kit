@@ -48,6 +48,22 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ])
   end
 
+  it "treats explicit false hash metadata as disabled metadata" do
+    columns = [
+      {
+        filter: false,
+        filter_input: RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json")
+      },
+      {
+        editor: false,
+        cell_editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+      }
+    ]
+
+    expect(described_class.filters(columns)).to eq([])
+    expect(described_class.cell_editors(columns)).to eq([])
+  end
+
   it "treats nil columns as empty metadata" do
     expect(described_class.filters(nil)).to eq([])
     expect(described_class.cell_editors(nil)).to eq([])
