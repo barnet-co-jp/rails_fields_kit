@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - `RailsFieldsKit::TokenSuggestions.build` for composing operator, field, predicate, value, and saved-search suggestion option JSON.
 - `RailsFieldsKit::RansackSuggestions.build` for composing Ransack-compatible token suggestion metadata without requiring or executing Ransack.
 - `RailsFieldsKit::TableFilterInput` and `RailsFieldsKit::TableCellInput` factory helpers such as `.combobox`, `.select`, `.tags`, `.enum_select`, `.from_type`, `.known_types`, `.known_type?`, `#to_h`, and `#to_hash` for concise table metadata definitions.
-- `RailsFieldsKit::TableMetadata` can collect hash-like metadata objects that respond to `to_hash` when table integrations do not expose `to_table_filter` or `to_table_cell_editor`.
+- `RailsFieldsKit::TableMetadata` can collect hash-like column definitions and hash-like metadata objects that respond to `to_hash` when table integrations do not expose concrete Hash columns, `to_table_filter`, or `to_table_cell_editor`.
 - `RailsFieldsKit::TableFilterInput.token_search` and `RailsFieldsKit::TableFilterInput.ransack_filter` for table metadata that describes token-search filters.
 - `RailsFieldsKit::TableMetadata` for collecting Rails Fields Kit filter/editor metadata from table column definitions and table-like objects that respond to `columns`, including common alias keys such as `filter_input`, `search_filter`, `cell_editor`, and `cell_input`, plus render shortcuts for collected filters and editors.
 - `RailsFieldsKit::TableRenderer` for turning table filter/editor metadata into FormBuilder call specs or dispatching them through a form builder, including batch rendering APIs, custom table field helper registration, and mapping introspection helpers.
@@ -25,12 +25,14 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- `TableMetadata` now validates hash-like columns by requiring `to_hash` to return a Hash-like object.
 - `TableMetadata` now validates hash-like metadata objects by requiring `to_hash` to return a Hash-like object.
 - `TableMetadata` now reads only declared struct members for struct-like columns, avoiding `Enumerable#filter` when `filter` is not a member.
 - `TableMetadata` now reads object column metadata through public readers only and ignores private readers.
 - `TableMetadata` now keeps a single hash column definition intact instead of expanding it through `Hash#to_a`.
+- `TableMetadata` now keeps a single hash-like column definition intact instead of expanding it through `to_a`.
 - `TableMetadata` now keeps single object column definitions intact when a table-like object returns one column object.
-- `TableMetadata` now collects metadata from table-like objects whose `columns` reader returns a single hash column or a single object column.
+- `TableMetadata` now collects metadata from table-like objects whose `columns` reader returns a single hash column, hash-like column, or object column.
 - `TableMetadata` now collects metadata from enumerable column lists while preserving a single hash as one column definition.
 - `TableMetadata` now treats explicit `false` object metadata values as disabled metadata instead of falling through to alias readers.
 - `TableMetadata` now treats explicit `false` hash metadata values as disabled metadata instead of falling through to alias keys.
