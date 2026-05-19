@@ -191,6 +191,23 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     expect(described_class.registered_field_type?(:custom_field)).to be(true)
   end
 
+  it "normalizes custom field helper registration" do
+    described_class.register_field_helper(" custom_field ", " custom_table_field ")
+
+    expect(described_class.helper_for(:custom_field)).to eq(:custom_table_field)
+  end
+
+  it "rejects blank custom field helper registrations" do
+    expect { described_class.register_field_helper(nil, :custom_table_field) }.to raise_error(
+      ArgumentError,
+      "table field type is required"
+    )
+    expect { described_class.register_field_helper(:custom_field, " ") }.to raise_error(
+      ArgumentError,
+      "table helper name is required"
+    )
+  end
+
   it "allows custom field helper registration" do
     described_class.register_field_helper(:custom_field, :custom_table_field)
     metadata = { field_type: "custom_field", method: "code", options: { prefix: "#" } }
