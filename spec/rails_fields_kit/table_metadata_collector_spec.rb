@@ -229,6 +229,20 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ])
   end
 
+  it "treats a single object column as one column" do
+    column = ColumnDefinition.new(filter: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json"))
+
+    expect(column.to_a.length).to eq(2)
+    expect(described_class.filters(column)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "token_search",
+        method: "query",
+        options: { url: "/tokens.json" }
+      }
+    ])
+  end
+
   it "collects filter metadata from public object readers" do
     columns = [
       PublicMetadataColumn.new(RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")),
@@ -311,6 +325,20 @@ RSpec.describe RailsFieldsKit::TableMetadata do
         field_type: "combobox",
         method: "customer_id",
         options: { url: "/customers.json" }
+      }
+    ])
+  end
+
+  it "treats a single object cell editor column as one column" do
+    column = ColumnDefinition.new(editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status))
+
+    expect(column.to_a.length).to eq(2)
+    expect(described_class.cell_editors(column)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "enum_select",
+        method: "status",
+        options: {}
       }
     ])
   end
