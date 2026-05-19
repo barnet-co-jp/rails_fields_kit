@@ -70,6 +70,16 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     ])
   end
 
+  it "normalizes metadata method names" do
+    metadata = { field_type: "combobox", method: " customer_id ", options: { url: "/customers.json" } }
+
+    expect(described_class.filter_call(metadata)).to eq(
+      helper: :rfk_combobox,
+      method: :customer_id,
+      options: { url: "/customers.json" }
+    )
+  end
+
   it "builds a token search filter call spec" do
     filter = RailsFieldsKit::TableFilterInput.token_search(
       :query,
@@ -262,11 +272,15 @@ RSpec.describe RailsFieldsKit::TableRenderer do
 
   it "raises when rendering metadata without a method" do
     form_builder = FakeTableFormBuilder.new
-    metadata = { field_type: "combobox", options: {} }
-
-    expect { described_class.render_filter(form_builder, metadata) }.to raise_error(
-      ArgumentError,
-      "table metadata method is required"
-    )
+    [
+      { field_type: "combobox", options: {} },
+      { field_type: "combobox", method: nil, options: {} },
+      { field_type: "combobox", method: " ", options: {} }
+    ].each do |metadata|
+      expect { described_class.render_filter(form_builder, metadata) }.to raise_error(
+        ArgumentError,
+        "table metadata method is required"
+      )
+    end
   end
 end
