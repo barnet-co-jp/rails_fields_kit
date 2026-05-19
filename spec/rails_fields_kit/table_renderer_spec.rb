@@ -116,6 +116,39 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     ])
   end
 
+  it "builds a single filter call spec from one hash in batch APIs" do
+    metadata = { field_type: "combobox", method: "customer_id", options: { url: "/customers.json" } }
+
+    expect(described_class.filter_calls(metadata)).to eq([
+      {
+        helper: :rfk_combobox,
+        method: :customer_id,
+        options: { url: "/customers.json" }
+      }
+    ])
+  end
+
+  it "builds filter call specs from enumerable batch inputs" do
+    filters = [
+      { field_type: "combobox", method: "customer_id", options: { url: "/customers.json" } },
+      nil,
+      RailsFieldsKit::TableFilterInput.token_search(:query, url: "/search_tokens.json")
+    ].each
+
+    expect(described_class.filter_calls(filters)).to eq([
+      {
+        helper: :rfk_combobox,
+        method: :customer_id,
+        options: { url: "/customers.json" }
+      },
+      {
+        helper: :rfk_token_search,
+        method: :query,
+        options: { url: "/search_tokens.json" }
+      }
+    ])
+  end
+
   it "normalizes metadata method names" do
     metadata = { field_type: "combobox", method: " customer_id ", options: { url: "/customers.json" } }
 
@@ -226,6 +259,39 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       nil,
       RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json")
     ]
+
+    expect(described_class.cell_editor_calls(editors)).to eq([
+      {
+        helper: :rfk_enum_select,
+        method: :status,
+        options: {}
+      },
+      {
+        helper: :rfk_combobox,
+        method: :customer_id,
+        options: { url: "/customers.json" }
+      }
+    ])
+  end
+
+  it "builds a single cell editor call spec from one hash in batch APIs" do
+    metadata = { field_type: "enum_select", method: "status", options: {} }
+
+    expect(described_class.cell_editor_calls(metadata)).to eq([
+      {
+        helper: :rfk_enum_select,
+        method: :status,
+        options: {}
+      }
+    ])
+  end
+
+  it "builds cell editor call specs from enumerable batch inputs" do
+    editors = [
+      { field_type: "enum_select", method: "status", options: {} },
+      nil,
+      RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json")
+    ].each
 
     expect(described_class.cell_editor_calls(editors)).to eq([
       {
