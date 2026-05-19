@@ -92,9 +92,16 @@ module RailsFieldsKit
         return [] if metadata.nil?
         return [metadata] if metadata.is_a?(Hash)
         return metadata if metadata.is_a?(Array)
+        return [metadata] if single_metadata_object?(metadata)
         return metadata.to_a if metadata.respond_to?(:to_a)
 
         Array(metadata)
+      end
+
+      def single_metadata_object?(metadata)
+        metadata.respond_to?(:to_table_filter) ||
+          metadata.respond_to?(:to_table_cell_editor) ||
+          metadata.respond_to?(:to_hash)
       end
 
       def normalize_filter(filter)
