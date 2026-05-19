@@ -67,6 +67,10 @@ module RailsFieldsKit
       to_h
     end
 
+    def to_hash
+      to_h
+    end
+
     def to_h
       {
         type: "rails_fields_kit",
