@@ -29,6 +29,14 @@ module RailsFieldsKit
         @field_helpers ||= DEFAULT_FIELD_HELPERS.dup
       end
 
+      def helper_for(field_type)
+        field_helpers[normalize_field_type(field_type)]
+      end
+
+      def registered_field_type?(field_type)
+        !helper_for(field_type).nil?
+      end
+
       def register_field_helper(field_type, helper_name)
         field_helpers[field_type.to_s] = helper_name.to_sym
       end
@@ -82,9 +90,11 @@ module RailsFieldsKit
       def call_spec(metadata)
         metadata = metadata.transform_keys(&:to_sym)
         field_type = metadata.fetch(:field_type).to_s
-        helper = field_helpers.fetch(field_type) do
+        helper = helper_for(field_type) do
           raise UnknownFieldType, "unknown Rails Fields Kit table field type: #{field_type}"
         end
+        raise UnknownFieldType, "unknown Rails Fields Kit table field type: #{field_type}" unless helper
+
         method = metadata[:method]&.to_sym
         options = (metadata[:options] || {}).dup
 
@@ -100,6 +110,10 @@ module RailsFieldsKit
         raise ArgumentError, "table metadata method is required" unless method
 
         form_builder.public_send(call.fetch(:helper), method, **call.fetch(:options))
+      end
+
+      def normalize_field_type(field_type)
+        field_type.to_s.strip
       end
     end
   end
