@@ -105,6 +105,7 @@ Public metadata methods:
 - `RailsFieldsKit::TableFilterInput.token_search`
 - `RailsFieldsKit::TableFilterInput.ransack_filter`
 - `RailsFieldsKit::TableFilterInput#to_h`
+- `RailsFieldsKit::TableFilterInput#to_hash`
 - `RailsFieldsKit::TableFilterInput#to_table_filter`
 - `RailsFieldsKit::TableCellInput.known_types`
 - `RailsFieldsKit::TableCellInput.known_type?`
@@ -118,6 +119,7 @@ Public metadata methods:
 - `RailsFieldsKit::TableCellInput.enum_select`
 - `RailsFieldsKit::TableCellInput.token_search`
 - `RailsFieldsKit::TableCellInput#to_h`
+- `RailsFieldsKit::TableCellInput#to_hash`
 - `RailsFieldsKit::TableCellInput#to_table_cell_editor`
 - `RailsFieldsKit::TableMetadata.filters`
 - `RailsFieldsKit::TableMetadata.cell_editors`
@@ -139,7 +141,7 @@ Public metadata methods:
 - `RailsFieldsKit::TableRenderer.render_cell_editor`
 - `RailsFieldsKit::TableRenderer.render_cell_editors`
 
-The returned hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `to_h` returns the same metadata hash as `to_table_filter` or `to_table_cell_editor`. `TableMetadata` can collect those hashes from column-like definitions. `TableRenderer` can turn those hashes into FormBuilder call specs or dispatch them to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol and Rails Table Preferences integration notes.
+The returned hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `to_h` and `to_hash` return the same metadata hash as `to_table_filter` or `to_table_cell_editor`. `TableMetadata` can collect those hashes from column-like definitions. `TableRenderer` can turn those hashes into FormBuilder call specs or dispatch them to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol and Rails Table Preferences integration notes.
 
 ## JavaScript exports
 
