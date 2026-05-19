@@ -44,6 +44,7 @@ module RailsFieldsKit
       def normalize_columns(columns)
         source = columns.respond_to?(:columns) ? columns.columns : columns
         return [] if source.nil?
+        return [source] if source.is_a?(Hash)
         return source if source.is_a?(Array)
         return source.to_a if enumerable_columns?(source)
 
@@ -51,7 +52,7 @@ module RailsFieldsKit
       end
 
       def enumerable_columns?(source)
-        source.respond_to?(:to_a) && !source.is_a?(Hash)
+        source.respond_to?(:to_a)
       end
 
       def read_first_column_value(column, keys)
