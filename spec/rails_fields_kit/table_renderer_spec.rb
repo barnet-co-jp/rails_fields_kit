@@ -35,6 +35,16 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     end
   end
 
+  class HashLikeRendererMetadata
+    def initialize(metadata)
+      @metadata = metadata
+    end
+
+    def to_hash
+      @metadata
+    end
+  end
+
   around do |example|
     described_class.reset_field_helpers!
     example.run
@@ -52,6 +62,29 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       helper: :rfk_combobox,
       method: :customer_id,
       options: { url: "/customers.json" }
+    )
+  end
+
+  it "builds a filter call spec from hash-like metadata" do
+    metadata = HashLikeRendererMetadata.new(
+      field_type: "combobox",
+      method: "customer_id",
+      options: { url: "/customers.json" }
+    )
+
+    expect(described_class.filter_call(metadata)).to eq(
+      helper: :rfk_combobox,
+      method: :customer_id,
+      options: { url: "/customers.json" }
+    )
+  end
+
+  it "rejects invalid hash-like filter metadata" do
+    metadata = HashLikeRendererMetadata.new([[:field_type, "combobox"]])
+
+    expect { described_class.filter_call(metadata) }.to raise_error(
+      ArgumentError,
+      "table metadata to_hash must return a hash"
     )
   end
 
@@ -147,6 +180,29 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       helper: :rfk_enum_select,
       method: :status,
       options: {}
+    )
+  end
+
+  it "builds a cell editor call spec from hash-like metadata" do
+    metadata = HashLikeRendererMetadata.new(
+      field_type: "enum_select",
+      method: "status",
+      options: {}
+    )
+
+    expect(described_class.cell_editor_call(metadata)).to eq(
+      helper: :rfk_enum_select,
+      method: :status,
+      options: {}
+    )
+  end
+
+  it "rejects invalid hash-like cell editor metadata" do
+    metadata = HashLikeRendererMetadata.new([[:field_type, "enum_select"]])
+
+    expect { described_class.cell_editor_call(metadata) }.to raise_error(
+      ArgumentError,
+      "table metadata to_hash must return a hash"
     )
   end
 
