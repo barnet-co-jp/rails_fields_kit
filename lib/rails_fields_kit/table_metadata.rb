@@ -59,7 +59,8 @@ module RailsFieldsKit
       def read_column_value(column, key)
         case column
         when Hash
-          column[key] || column[key.to_s]
+          return column[key] if column.key?(key)
+          return column[key.to_s] if column.key?(key.to_s)
         else
           read_object_column_value(column, key)
         end
