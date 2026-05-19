@@ -54,11 +54,16 @@ RSpec.describe "public API" do
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:known_type?)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:combobox)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:select)
+    expect(RailsFieldsKit::TableFilterInput).to respond_to(:autocomplete)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:tags)
+    expect(RailsFieldsKit::TableFilterInput).to respond_to(:multi_select)
+    expect(RailsFieldsKit::TableFilterInput).to respond_to(:grouped_select)
+    expect(RailsFieldsKit::TableFilterInput).to respond_to(:enum_select)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:token_search)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:ransack_filter)
     expect(RailsFieldsKit::TableFilterInput.new).to respond_to(:to_h)
     expect(RailsFieldsKit::TableFilterInput.new).to respond_to(:to_hash)
+    expect(RailsFieldsKit::TableFilterInput.new).to respond_to(:to_table_filter)
   end
 
   it "exposes table cell editor factories" do
@@ -67,10 +72,15 @@ RSpec.describe "public API" do
     expect(RailsFieldsKit::TableCellInput).to respond_to(:known_type?)
     expect(RailsFieldsKit::TableCellInput).to respond_to(:combobox)
     expect(RailsFieldsKit::TableCellInput).to respond_to(:select)
+    expect(RailsFieldsKit::TableCellInput).to respond_to(:autocomplete)
     expect(RailsFieldsKit::TableCellInput).to respond_to(:tags)
+    expect(RailsFieldsKit::TableCellInput).to respond_to(:multi_select)
+    expect(RailsFieldsKit::TableCellInput).to respond_to(:grouped_select)
+    expect(RailsFieldsKit::TableCellInput).to respond_to(:enum_select)
     expect(RailsFieldsKit::TableCellInput).to respond_to(:token_search)
     expect(RailsFieldsKit::TableCellInput.new).to respond_to(:to_h)
     expect(RailsFieldsKit::TableCellInput.new).to respond_to(:to_hash)
+    expect(RailsFieldsKit::TableCellInput.new).to respond_to(:to_table_cell_editor)
   end
 
   it "exposes table metadata renderer" do
@@ -87,6 +97,12 @@ RSpec.describe "public API" do
     expect(RailsFieldsKit::TableRenderer).to respond_to(:registered_field_type?)
     expect(RailsFieldsKit::TableRenderer).to respond_to(:register_field_helper)
     expect(RailsFieldsKit::TableRenderer).to respond_to(:reset_field_helpers!)
+  end
+
+  it "exposes table renderer exception classes" do
+    expect(defined?(RailsFieldsKit::TableRenderer::UnknownFieldType)).to eq("constant")
+    expect(defined?(RailsFieldsKit::TableRenderer::MissingFieldType)).to eq("constant")
+    expect(defined?(RailsFieldsKit::TableRenderer::MissingMethod)).to eq("constant")
   end
 
   it "exposes table metadata collector" do
