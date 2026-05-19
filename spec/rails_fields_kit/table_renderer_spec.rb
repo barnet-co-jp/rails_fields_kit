@@ -238,6 +238,19 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     expect { described_class.filter_call(metadata) }.to raise_error(RailsFieldsKit::TableRenderer::UnknownFieldType)
   end
 
+  it "raises for missing field types" do
+    [
+      { method: "query", options: {} },
+      { field_type: nil, method: "query", options: {} },
+      { field_type: " ", method: "query", options: {} }
+    ].each do |metadata|
+      expect { described_class.filter_call(metadata) }.to raise_error(
+        RailsFieldsKit::TableRenderer::UnknownFieldType,
+        "table metadata field_type is required"
+      )
+    end
+  end
+
   it "raises for unknown field types" do
     metadata = { field_type: "unknown", method: "query", options: {} }
 
