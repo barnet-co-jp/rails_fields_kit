@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - `TableMetadata` now keeps single object column definitions intact when a table-like object returns one column object.
 - `TableMetadata` now collects metadata from table-like objects whose `columns` reader returns a single hash column or a single object column.
 - `TableMetadata` now collects metadata from enumerable column lists while preserving a single hash as one column definition.
+- `TableMetadata` now treats explicit `false` object metadata values as disabled metadata instead of falling through to alias readers.
 - `TableMetadata` now treats explicit `false` hash metadata values as disabled metadata instead of falling through to alias keys.
 - `TableMetadata` now treats table-like objects with `nil` columns as empty metadata.
 - `TableFilterInput.known_type?` and `TableCellInput.known_type?` now return `false` for nil or blank field type values.
@@ -42,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - `TableRenderer.register_field_helper` now rejects nil or blank field type and helper name values.
 - `TableRenderer` now accepts hash-like metadata objects directly when they return valid hash metadata from `to_hash`.
 - `TableRenderer` now rejects metadata that is not Hash-like and validates hash-like metadata objects returned from `to_hash`.
+- `TableRenderer` now preserves single hash-like metadata objects in batch APIs even when they implement `to_a`.
 - `TableRenderer` now normalizes batch inputs so nil becomes an empty list, a single hash becomes one metadata entry, arrays are preserved, enumerables are expanded, and other single objects are treated as one entry.
 - `TableRenderer` now reports missing or blank metadata `field_type` values with a dedicated error message.
 - `TableRenderer` now normalizes metadata `method` values and treats blank methods as missing before rendering.
