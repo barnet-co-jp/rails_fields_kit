@@ -8,7 +8,7 @@ module RailsFieldsKit
       "autocomplete" => :rfk_autocomplete,
       "tags" => :rfk_tags,
       "multi_select" => :rfk_multi_select,
-      "grouped_select" => :rfk_multi_select,
+      "grouped_select" => :rfk_grouped_select,
       "enum_select" => :rfk_enum_select,
       "token_search" => :rfk_token_search,
       "text_field" => :rfk_text_field,
