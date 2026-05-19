@@ -174,6 +174,13 @@ filter_calls = RailsFieldsKit::TableMetadata.filter_calls(table)
 editor_calls = RailsFieldsKit::TableMetadata.cell_editor_calls(table)
 ```
 
+Column lists can be arrays or enumerable objects such as enumerators. A single hash is treated as one column definition, not as a list of key-value pairs.
+
+```ruby
+RailsFieldsKit::TableMetadata.filters(columns.each)
+RailsFieldsKit::TableMetadata.filters(filter: RailsFieldsKit::TableFilterInput.search_field(:keyword))
+```
+
 Filter aliases are also recognized: `filter`, `filter_input`, and `search_filter`. Cell editor aliases are `editor`, `cell_editor`, and `cell_input`. These names work as hash keys or object methods.
 
 It also exposes convenience methods that collect metadata and immediately convert it to FormBuilder call specs:
