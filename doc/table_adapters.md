@@ -178,11 +178,25 @@ filter_calls = RailsFieldsKit::TableMetadata.filter_calls(table)
 editor_calls = RailsFieldsKit::TableMetadata.cell_editor_calls(table)
 ```
 
-Column lists can be arrays or enumerable objects such as enumerators. A single hash is treated as one column definition, not as a list of key-value pairs.
+Column lists can be arrays or enumerable objects such as enumerators. A single hash is treated as one column definition, not as a list of key-value pairs. Table-like objects can also return a single hash column or a single object column directly from `columns`.
 
 ```ruby
 RailsFieldsKit::TableMetadata.filters(columns.each)
 RailsFieldsKit::TableMetadata.filters(filter: RailsFieldsKit::TableFilterInput.search_field(:keyword))
+```
+
+```ruby
+single_hash_table = OpenStruct.new(
+  columns: {
+    filter: RailsFieldsKit::TableFilterInput.search_field(:keyword)
+  }
+)
+
+single_object_table = OpenStruct.new(
+  columns: Struct.new(:filter).new(
+    RailsFieldsKit::TableFilterInput.search_field(:keyword)
+  )
+)
 ```
 
 Filter aliases are also recognized: `filter`, `filter_input`, and `search_filter`. Cell editor aliases are `editor`, `cell_editor`, and `cell_input`. These names work as hash keys or public object methods. For struct-like objects, only declared members are considered metadata readers so inherited `Enumerable` methods such as `filter` are ignored.
@@ -229,7 +243,25 @@ RailsFieldsKit::TableRenderer.render_filter(form_builder, filter)
 RailsFieldsKit::TableRenderer.render_cell_editor(form_builder, editor)
 ```
 
-For table definitions with many columns, use the batch APIs. They ignore `nil` entries so callers can compact optional filters/editors naturally.
+`TableRenderer` also accepts hash-like metadata objects directly when they implement `to_hash` and return a Hash-like metadata object.
+
+```ruby
+metadata = Struct.new(:field_type, :method, :options) do
+  def to_hash
+    {
+      field_type: field_type,
+      method: method,
+      options: options
+    }
+  end
+end
+
+RailsFieldsKit::TableRenderer.filter_call(
+  metadata.new("combobox", :customer_id, url: "/customers.json")
+)
+```
+
+For table definitions with many columns, use the batch APIs. Batch normalization treats `nil` as an empty list, a single hash as one metadata object, arrays as-is, enumerables through `to_a`, and other single objects as one metadata entry.
 
 ```ruby
 filter_calls = RailsFieldsKit::TableRenderer.filter_calls(filters)
