@@ -48,6 +48,18 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ])
   end
 
+  it "treats nil columns as empty metadata" do
+    expect(described_class.filters(nil)).to eq([])
+    expect(described_class.cell_editors(nil)).to eq([])
+  end
+
+  it "treats table-like objects with nil columns as empty metadata" do
+    table = TableDefinition.new(columns: nil)
+
+    expect(described_class.filters(table)).to eq([])
+    expect(described_class.cell_editors(table)).to eq([])
+  end
+
   it "collects filter metadata from table-like objects" do
     table = TableDefinition.new(
       columns: [
