@@ -59,8 +59,8 @@ RSpec.describe "RailsFieldsKit FormBuilder table helper reset integration" do
     expect {
       form_builder.rfk_table_filters(metadata)
     }.to raise_error(
-      ArgumentError,
-      "unknown table field type: custom_filter"
+      RailsFieldsKit::TableRenderer::UnknownFieldType,
+      "unknown Rails Fields Kit table field type: custom_filter"
     )
   end
 
@@ -88,8 +88,8 @@ RSpec.describe "RailsFieldsKit FormBuilder table helper reset integration" do
     expect {
       form_builder.rfk_table_cell_editors(metadata)
     }.to raise_error(
-      ArgumentError,
-      "unknown table field type: custom_editor"
+      RailsFieldsKit::TableRenderer::UnknownFieldType,
+      "unknown Rails Fields Kit table field type: custom_editor"
     )
   end
 end
