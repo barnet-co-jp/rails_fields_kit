@@ -58,6 +58,8 @@ filter.to_table_filter
 #    }
 ```
 
+`to_h` returns the same metadata hash as `to_table_filter` for integrations that prefer a generic hash protocol.
+
 A table gem can accept any object that responds to `to_table_filter`, store the resulting hash in column metadata, and leave rendering to the host application or a renderer registry.
 
 ## Token search filter metadata
@@ -141,6 +143,8 @@ editor.to_table_cell_editor
 #      options: {}
 #    }
 ```
+
+`to_h` returns the same metadata hash as `to_table_cell_editor` for integrations that prefer a generic hash protocol.
 
 This keeps table definitions and Active Record introspection flows independent from a concrete form renderer while still allowing Rails Fields Kit to provide richer inputs when installed.
 
