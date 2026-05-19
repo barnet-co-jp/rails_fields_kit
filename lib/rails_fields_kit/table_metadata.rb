@@ -67,11 +67,11 @@ module RailsFieldsKit
         return [] if source.nil?
         return [source] if source.is_a?(Hash)
         return source if source.is_a?(Array)
+        return [source] if metadata_column_object?(source)
 
         hash_like_source = normalized_hash_like_column_or_nil(source)
         return [hash_like_source] if hash_like_source && metadata_hash_column?(hash_like_source)
 
-        return [source] if metadata_column_object?(source)
         return source.to_a if enumerable_columns?(source)
 
         Array(source)
@@ -98,7 +98,7 @@ module RailsFieldsKit
       end
 
       def read_first_column_value(column, keys)
-        hash_column = column.is_a?(Hash) ? column : normalized_hash_like_column_or_nil(column)
+        hash_column = column.is_a?(Hash) || metadata_column_object?(column) ? column : normalized_hash_like_column_or_nil(column)
 
         keys.each do |key|
           value = read_column_value(column, key, hash_column)
@@ -108,7 +108,10 @@ module RailsFieldsKit
       end
 
       def read_column_value(column, key, hash_column = nil)
-        (read_hash_column_value(hash_column, key) if hash_column) || read_object_column_value(column, key)
+        return read_hash_column_value(hash_column, key) if hash_column.is_a?(Hash)
+        return read_object_column_value(column, key) if metadata_column_object?(column)
+
+        nil
       end
 
       def read_hash_column_value(column, key)
