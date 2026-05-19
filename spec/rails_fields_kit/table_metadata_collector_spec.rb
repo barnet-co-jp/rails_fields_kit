@@ -467,6 +467,33 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ])
   end
 
+  it "renders a single filter from one hash column" do
+    form_builder = MetadataCollectorFormBuilder.new
+    column = {
+      filter: RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json")
+    }
+
+    expect(described_class.render_filters(form_builder, column)).to eq(["combobox"])
+    expect(form_builder.calls).to eq([
+      [:rfk_combobox, :customer_id, { url: "/customers.json" }]
+    ])
+  end
+
+  it "renders collected filters from enumerable columns" do
+    form_builder = MetadataCollectorFormBuilder.new
+    columns = [
+      { filter: RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json") },
+      nil,
+      { search_filter: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json") }
+    ].compact.each
+
+    expect(described_class.render_filters(form_builder, columns)).to eq(["combobox", "token_search"])
+    expect(form_builder.calls).to eq([
+      [:rfk_combobox, :customer_id, { url: "/customers.json" }],
+      [:rfk_token_search, :query, { url: "/tokens.json" }]
+    ])
+  end
+
   it "renders collected cell editors" do
     form_builder = MetadataCollectorFormBuilder.new
     columns = [
@@ -474,6 +501,33 @@ RSpec.describe RailsFieldsKit::TableMetadata do
       { editor: nil },
       { cell_editor: RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json") }
     ]
+
+    expect(described_class.render_cell_editors(form_builder, columns)).to eq(["enum_select", "combobox"])
+    expect(form_builder.calls).to eq([
+      [:rfk_enum_select, :status, {}],
+      [:rfk_combobox, :customer_id, { url: "/customers.json" }]
+    ])
+  end
+
+  it "renders a single cell editor from one hash column" do
+    form_builder = MetadataCollectorFormBuilder.new
+    column = {
+      editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+    }
+
+    expect(described_class.render_cell_editors(form_builder, column)).to eq(["enum_select"])
+    expect(form_builder.calls).to eq([
+      [:rfk_enum_select, :status, {}]
+    ])
+  end
+
+  it "renders collected cell editors from enumerable columns" do
+    form_builder = MetadataCollectorFormBuilder.new
+    columns = [
+      { editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status) },
+      nil,
+      { cell_editor: RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json") }
+    ].compact.each
 
     expect(described_class.render_cell_editors(form_builder, columns)).to eq(["enum_select", "combobox"])
     expect(form_builder.calls).to eq([
