@@ -201,7 +201,7 @@ RailsFieldsKit::TableMetadata.render_filters(form_builder, columns)
 RailsFieldsKit::TableMetadata.render_cell_editors(form_builder, columns)
 ```
 
-`nil` and `false` filters/editors are skipped. Raw metadata hashes are preserved. Objects responding to `to_table_filter` or `to_table_cell_editor` are normalized through those protocols, and hash-like metadata objects responding to `to_hash` are normalized through `to_hash`.
+`nil` and `false` filters/editors are skipped. Raw metadata hashes are preserved. Objects responding to `to_table_filter` or `to_table_cell_editor` are normalized through those protocols, and hash-like metadata objects responding to `to_hash` are normalized through `to_hash`. A `to_hash` implementation must return a Hash-like object.
 
 ## Rendering metadata
 
