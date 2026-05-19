@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 - `RailsFieldsKit::TableFilterInput.token_search` and `RailsFieldsKit::TableFilterInput.ransack_filter` for table metadata that describes token-search filters.
 - `RailsFieldsKit::TableMetadata` for collecting Rails Fields Kit filter/editor metadata from table column definitions and table-like objects that respond to `columns`, including common alias keys such as `filter_input`, `search_filter`, `cell_editor`, and `cell_input`, plus render shortcuts for collected filters and editors.
 - `RailsFieldsKit::TableRenderer` for turning table filter/editor metadata into FormBuilder call specs or dispatching them through a form builder, including batch rendering APIs, custom table field helper registration, and mapping introspection helpers.
-- `rfk_table_filters` and `rfk_table_cell_editors` for rendering table metadata directly from a FormBuilder, including mixed hash/object/hash-like columns, enumerator columns, hash-like column inputs, and table-like object inputs.
+- `rfk_table_filters` and `rfk_table_cell_editors` for rendering table metadata directly from a FormBuilder, including mixed hash/object/hash-like columns, enumerator columns, hash-like column inputs, table-like object inputs, and custom table helper registrations.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so generated endpoint actions can match custom routes.
 - Remote request extension options for Tom Select-backed helpers:
   - `query_params:` for fixed search query parameters.
