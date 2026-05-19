@@ -88,6 +88,13 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     )
   end
 
+  it "rejects non-hash filter metadata" do
+    expect { described_class.filter_call(Object.new) }.to raise_error(
+      ArgumentError,
+      "table metadata must be a hash"
+    )
+  end
+
   it "builds filter call specs in batches" do
     filters = [
       RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json"),
@@ -206,6 +213,13 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     )
   end
 
+  it "rejects non-hash cell editor metadata" do
+    expect { described_class.cell_editor_call(Object.new) }.to raise_error(
+      ArgumentError,
+      "table metadata must be a hash"
+    )
+  end
+
   it "builds cell editor call specs in batches" do
     editors = [
       RailsFieldsKit::TableCellInput.new(:enum_select, :status),
@@ -279,6 +293,7 @@ RSpec.describe RailsFieldsKit::TableRenderer do
 
   it "exposes registered helper mappings" do
     expect(described_class.helper_for(:combobox)).to eq(:rfk_combobox)
+    expect(described_class.helper_for(:grouped_select)).to eq(:rfk_grouped_select)
     expect(described_class.helper_for(" token_search ")).to eq(:rfk_token_search)
     expect(described_class.registered_field_type?(:combobox)).to be(true)
     expect(described_class.registered_field_type?(:unknown_field)).to be(false)
