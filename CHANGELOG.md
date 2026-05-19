@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 
 - `TableFilterInput.known_type?` and `TableCellInput.known_type?` now return `false` for nil or blank field type values.
 - `TableFilterInput.known_types` and `TableCellInput.known_types` now return duplicated arrays so callers cannot mutate the internal type list.
+- `TableFilterInput#options` and `TableCellInput#options` now return duplicated hashes so callers cannot mutate metadata object internals.
 - `TableRenderer.field_helpers` now returns a duplicated hash so callers cannot mutate the internal helper mapping.
 - `TableRenderer.register_field_helper` now rejects nil or blank field type and helper name values.
 - `TableRenderer` now reports missing or blank metadata `field_type` values with a dedicated error message.
