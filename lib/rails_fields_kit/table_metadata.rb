@@ -81,8 +81,8 @@ module RailsFieldsKit
       end
 
       def column_metadata_reader(column, key)
+        return struct_metadata_reader(column, key) if column.respond_to?(:members)
         return unless column.respond_to?(key)
-        return column.public_method(key) if struct_member?(column, key)
 
         reader = column.public_method(key)
         return if reader.owner == Enumerable
@@ -92,8 +92,10 @@ module RailsFieldsKit
         nil
       end
 
-      def struct_member?(column, key)
-        column.respond_to?(:members) && column.members.map(&:to_sym).include?(key)
+      def struct_metadata_reader(column, key)
+        return unless column.members.map(&:to_sym).include?(key)
+
+        column.public_method(key)
       end
     end
   end
