@@ -23,7 +23,7 @@ module RailsFieldsKit
 
     KNOWN_FIELD_TYPES = (COMMON_FIELD_TYPES + %i[token_search]).freeze
 
-    attr_reader :field_type, :field_name
+    attr_reader :field_type
 
     class << self
       COMMON_FIELD_TYPES.each do |field_type|
@@ -68,6 +68,10 @@ module RailsFieldsKit
       @field_type = (field_type || type || :combobox).to_sym
       @field_name = field_name&.to_s
       @options = options
+    end
+
+    def field_name
+      @field_name&.dup
     end
 
     def options
