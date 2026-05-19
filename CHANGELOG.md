@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- `TableMetadata` now collects metadata from enumerable column lists while preserving a single hash as one column definition.
 - `TableMetadata` now treats explicit `false` hash metadata values as disabled metadata instead of falling through to alias keys.
 - `TableMetadata` now treats table-like objects with `nil` columns as empty metadata.
 - `TableFilterInput.known_type?` and `TableCellInput.known_type?` now return `false` for nil or blank field type values.
