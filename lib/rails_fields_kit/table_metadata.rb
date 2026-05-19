@@ -43,9 +43,16 @@ module RailsFieldsKit
 
       def normalize_metadata_value(value, protocol)
         return value.public_send(protocol) if value.respond_to?(protocol)
-        return value.to_hash if value.respond_to?(:to_hash)
+        return normalize_hash_like_metadata(value) if value.respond_to?(:to_hash)
 
         value
+      end
+
+      def normalize_hash_like_metadata(value)
+        metadata = value.to_hash
+        raise ArgumentError, "table metadata to_hash must return a hash" unless metadata.respond_to?(:to_hash)
+
+        metadata.to_hash
       end
 
       def normalize_columns(columns)
