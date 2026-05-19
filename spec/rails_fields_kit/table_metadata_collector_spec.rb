@@ -281,6 +281,15 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     ])
   end
 
+  it "rejects invalid hash-like filter metadata" do
+    columns = [{ filter: HashLikeMetadata.new([[:field_type, "search_field"]]) }]
+
+    expect { described_class.filters(columns) }.to raise_error(
+      ArgumentError,
+      "table metadata to_hash must return a hash"
+    )
+  end
+
   it "collects cell editor metadata" do
     columns = [
       {
@@ -323,6 +332,15 @@ RSpec.describe RailsFieldsKit::TableMetadata do
         options: {}
       }
     ])
+  end
+
+  it "rejects invalid hash-like cell editor metadata" do
+    columns = [{ editor: HashLikeMetadata.new([[:field_type, "enum_select"]]) }]
+
+    expect { described_class.cell_editors(columns) }.to raise_error(
+      ArgumentError,
+      "table metadata to_hash must return a hash"
+    )
   end
 
   it "collects cell editor metadata from table-like objects" do
