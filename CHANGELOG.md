@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - `TableRenderer.field_helpers` now returns a duplicated hash so callers cannot mutate the internal helper mapping.
 - `TableRenderer.register_field_helper` now rejects nil or blank field type and helper name values.
 - `TableRenderer` now reports missing or blank metadata `field_type` values with a dedicated error message.
+- `TableRenderer` now normalizes metadata `method` values and treats blank methods as missing before rendering.
 
 ## 0.1.0 - 2026-05-18
 
