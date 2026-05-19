@@ -104,7 +104,7 @@ module RailsFieldsKit
         helper = helper_for(field_type)
         raise UnknownFieldType, "unknown Rails Fields Kit table field type: #{field_type}" unless helper
 
-        method = metadata[:method]&.to_sym
+        method = normalize_method_name(metadata[:method])
         options = (metadata[:options] || {}).dup
 
         {
@@ -127,6 +127,13 @@ module RailsFieldsKit
 
       def normalize_helper_name(helper_name)
         helper_name.to_s.strip
+      end
+
+      def normalize_method_name(method_name)
+        normalized_method_name = method_name.to_s.strip
+        return nil if normalized_method_name.empty?
+
+        normalized_method_name.to_sym
       end
     end
   end
