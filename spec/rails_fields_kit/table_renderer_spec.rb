@@ -168,6 +168,21 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     ])
   end
 
+  it "exposes registered helper mappings" do
+    expect(described_class.helper_for(:combobox)).to eq(:rfk_combobox)
+    expect(described_class.helper_for(" token_search ")).to eq(:rfk_token_search)
+    expect(described_class.registered_field_type?(:combobox)).to be(true)
+    expect(described_class.registered_field_type?(:unknown_field)).to be(false)
+    expect(described_class.registered_field_type?(nil)).to be(false)
+  end
+
+  it "exposes custom registered helper mappings" do
+    described_class.register_field_helper(:custom_field, :custom_table_field)
+
+    expect(described_class.helper_for(:custom_field)).to eq(:custom_table_field)
+    expect(described_class.registered_field_type?(:custom_field)).to be(true)
+  end
+
   it "allows custom field helper registration" do
     described_class.register_field_helper(:custom_field, :custom_table_field)
     metadata = { field_type: "custom_field", method: "code", options: { prefix: "#" } }
