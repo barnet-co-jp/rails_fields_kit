@@ -79,6 +79,10 @@ module RailsFieldsKit
     end
 
     def to_table_filter
+      to_h
+    end
+
+    def to_h
       {
         type: "rails_fields_kit",
         field_type: field_type.to_s,
