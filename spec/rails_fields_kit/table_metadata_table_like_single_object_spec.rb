@@ -22,6 +22,68 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     end
   end
 
+  it "collects filter metadata from a table-like object with a single hash column" do
+    table = SingleObjectTable.new(
+      columns: {
+        filter: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")
+      }
+    )
+
+    expect(described_class.filters(table)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "token_search",
+        method: "query",
+        options: { url: "/tokens.json" }
+      }
+    ])
+  end
+
+  it "renders filters from a table-like object with a single hash column" do
+    form_builder = SingleObjectFormBuilder.new
+    table = SingleObjectTable.new(
+      columns: {
+        filter: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")
+      }
+    )
+
+    expect(described_class.render_filters(form_builder, table)).to eq(["token_search"])
+    expect(form_builder.calls).to eq([
+      [:rfk_token_search, :query, { url: "/tokens.json" }]
+    ])
+  end
+
+  it "collects cell editor metadata from a table-like object with a single hash column" do
+    table = SingleObjectTable.new(
+      columns: {
+        editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+      }
+    )
+
+    expect(described_class.cell_editors(table)).to eq([
+      {
+        type: "rails_fields_kit",
+        field_type: "enum_select",
+        method: "status",
+        options: {}
+      }
+    ])
+  end
+
+  it "renders cell editors from a table-like object with a single hash column" do
+    form_builder = SingleObjectFormBuilder.new
+    table = SingleObjectTable.new(
+      columns: {
+        editor: RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+      }
+    )
+
+    expect(described_class.render_cell_editors(form_builder, table)).to eq(["enum_select"])
+    expect(form_builder.calls).to eq([
+      [:rfk_enum_select, :status, {}]
+    ])
+  end
+
   it "collects filter metadata from a table-like object with a single object column" do
     column = SingleObjectColumn.new(
       filter: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")
