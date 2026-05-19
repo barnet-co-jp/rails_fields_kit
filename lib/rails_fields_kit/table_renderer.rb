@@ -105,7 +105,7 @@ module RailsFieldsKit
         raise UnknownFieldType, "unknown Rails Fields Kit table field type: #{field_type}" unless helper
 
         method = normalize_method_name(metadata[:method])
-        options = (metadata[:options] || {}).dup
+        options = normalize_options(metadata[:options])
 
         {
           helper: helper,
@@ -134,6 +134,13 @@ module RailsFieldsKit
         return nil if normalized_method_name.empty?
 
         normalized_method_name.to_sym
+      end
+
+      def normalize_options(options)
+        return {} if options.nil?
+        raise ArgumentError, "table metadata options must be a hash" unless options.respond_to?(:to_hash)
+
+        options.to_hash.dup
       end
     end
   end
