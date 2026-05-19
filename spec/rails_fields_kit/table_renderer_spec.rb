@@ -116,6 +116,14 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     ])
   end
 
+  it "treats nil filter batches as empty" do
+    form_builder = FakeTableFormBuilder.new
+
+    expect(described_class.filter_calls(nil)).to eq([])
+    expect(described_class.render_filters(form_builder, nil)).to eq([])
+    expect(form_builder.calls).to eq([])
+  end
+
   it "builds a single filter call spec from one hash in batch APIs" do
     metadata = { field_type: "combobox", method: "customer_id", options: { url: "/customers.json" } }
 
@@ -272,6 +280,14 @@ RSpec.describe RailsFieldsKit::TableRenderer do
         options: { url: "/customers.json" }
       }
     ])
+  end
+
+  it "treats nil cell editor batches as empty" do
+    form_builder = FakeTableFormBuilder.new
+
+    expect(described_class.cell_editor_calls(nil)).to eq([])
+    expect(described_class.render_cell_editors(form_builder, nil)).to eq([])
+    expect(form_builder.calls).to eq([])
   end
 
   it "builds a single cell editor call spec from one hash in batch APIs" do
