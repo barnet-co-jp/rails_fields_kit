@@ -67,19 +67,25 @@ module RailsFieldsKit
         return [] if source.nil?
         return [source] if source.is_a?(Hash)
         return source if source.is_a?(Array)
-        return [source] if hash_like_column?(source)
+
+        hash_like_source = normalized_hash_like_column_or_nil(source)
+        return [hash_like_source] if hash_like_source && metadata_hash_column?(hash_like_source)
+
         return [source] if metadata_column_object?(source)
         return source.to_a if enumerable_columns?(source)
 
         Array(source)
       end
 
-      def hash_like_column?(source)
-        return false unless source.respond_to?(:to_hash)
+      def normalized_hash_like_column_or_nil(source)
+        return unless source.respond_to?(:to_hash)
 
-        normalized_source = normalize_hash_like_column(source)
+        normalize_hash_like_column(source)
+      end
+
+      def metadata_hash_column?(column)
         (FILTER_KEYS + CELL_EDITOR_KEYS).any? do |key|
-          normalized_source.key?(key) || normalized_source.key?(key.to_s)
+          column.key?(key) || column.key?(key.to_s)
         end
       end
 
@@ -92,20 +98,17 @@ module RailsFieldsKit
       end
 
       def read_first_column_value(column, keys)
+        hash_column = column.is_a?(Hash) ? column : normalized_hash_like_column_or_nil(column)
+
         keys.each do |key|
-          value = read_column_value(column, key)
+          value = read_column_value(column, key, hash_column)
           return value unless value.nil?
         end
         nil
       end
 
-      def read_column_value(column, key)
-        case column
-        when Hash
-          read_hash_column_value(column, key)
-        else
-          read_hash_column_value(normalize_hash_like_column(column), key) if column.respond_to?(:to_hash)
-        end || read_object_column_value(column, key)
+      def read_column_value(column, key, hash_column = nil)
+        (read_hash_column_value(hash_column, key) if hash_column) || read_object_column_value(column, key)
       end
 
       def read_hash_column_value(column, key)
