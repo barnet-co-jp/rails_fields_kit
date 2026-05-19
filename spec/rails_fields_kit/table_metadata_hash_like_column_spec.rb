@@ -2,11 +2,15 @@
 
 RSpec.describe RailsFieldsKit::TableMetadata do
   class HashLikeColumn
+    attr_reader :to_hash_calls
+
     def initialize(column)
       @column = column
+      @to_hash_calls = 0
     end
 
     def to_hash
+      @to_hash_calls += 1
       @column
     end
 
@@ -57,6 +61,16 @@ RSpec.describe RailsFieldsKit::TableMetadata do
         options: {}
       }
     ])
+  end
+
+  it "normalizes a hash-like column once per collected column" do
+    column = HashLikeColumn.new(
+      filter: RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")
+    )
+
+    described_class.filters([column])
+
+    expect(column.to_hash_calls).to eq(1)
   end
 
   it "preserves a single hash-like column instead of expanding to_a" do
