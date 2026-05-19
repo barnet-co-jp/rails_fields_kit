@@ -74,17 +74,26 @@ module RailsFieldsKit
       end
 
       def read_object_column_value(column, key)
-        return unless column_metadata_reader?(column, key)
+        reader = column_metadata_reader(column, key)
+        return unless reader
 
-        column.public_send(key)
+        reader.call
       end
 
-      def column_metadata_reader?(column, key)
-        return false unless column.respond_to?(key)
-        return column.members.map(&:to_sym).include?(key) if column.respond_to?(:members)
+      def column_metadata_reader(column, key)
+        return unless column.respond_to?(key)
+        return column.public_method(key) if struct_member?(column, key)
 
-        reader = column.method(key)
-        reader.owner != Enumerable
+        reader = column.public_method(key)
+        return if reader.owner == Enumerable
+
+        reader
+      rescue NameError
+        nil
+      end
+
+      def struct_member?(column, key)
+        column.respond_to?(:members) && column.members.map(&:to_sym).include?(key)
       end
     end
   end
