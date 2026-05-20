@@ -54,4 +54,30 @@ RSpec.describe RailsFieldsKit::TableMetadata do
       }
     )
   end
+
+  it "duplicates string-keyed options hashes" do
+    column = {
+      filter: {
+        "field_type" => "token_search",
+        "method" => "query",
+        "options" => {
+          "url" => "/tokens.json"
+        }
+      }
+    }
+
+    filters = described_class.filters([column])
+
+    filters.first["options"]["url"] = "/mutated.json"
+
+    expect(column).to eq(
+      filter: {
+        "field_type" => "token_search",
+        "method" => "query",
+        "options" => {
+          "url" => "/tokens.json"
+        }
+      }
+    )
+  end
 end
