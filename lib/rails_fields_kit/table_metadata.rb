@@ -42,10 +42,24 @@ module RailsFieldsKit
       end
 
       def normalize_metadata_value(value, protocol)
-        return value.public_send(protocol) if value.respond_to?(protocol)
-        return normalize_hash_like_metadata(value) if value.respond_to?(:to_hash)
+        metadata = if value.respond_to?(protocol)
+          value.public_send(protocol)
+        elsif value.respond_to?(:to_hash)
+          normalize_hash_like_metadata(value)
+        else
+          value
+        end
 
-        value
+        duplicate_metadata(metadata)
+      end
+
+      def duplicate_metadata(metadata)
+        return metadata unless metadata.respond_to?(:to_hash)
+
+        metadata_hash = metadata.to_hash.dup
+        metadata_hash[:options] = metadata_hash[:options].dup if metadata_hash[:options].respond_to?(:dup)
+        metadata_hash["options"] = metadata_hash["options"].dup if metadata_hash["options"].respond_to?(:dup)
+        metadata_hash
       end
 
       def normalize_hash_like_metadata(value)
