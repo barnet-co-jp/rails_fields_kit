@@ -113,4 +113,43 @@ RSpec.describe RailsFieldsKit::RansackSuggestions do
       }
     )
   end
+
+  it "supports Ransack predicate aliases in field config" do
+    suggestions = described_class.build(
+      fields: {
+        customer: { ransack_predicate: :customer_name_cont },
+        email: { ransack: :email_cont },
+        code: { param: :code_eq }
+      },
+      operators: []
+    )
+
+    expect(suggestions).to include(
+      hash_including("value" => "customer:", "ransack_predicate" => "customer_name_cont"),
+      hash_including("value" => "email:", "ransack_predicate" => "email_cont"),
+      hash_including("value" => "code:", "ransack_predicate" => "code_eq")
+    )
+  end
+
+  it "does not mutate field or value metadata inputs" do
+    value = { value: "today", label: "Today", description: "Created today", range: "day" }
+    field_config = {
+      predicate: :created_at_gteq,
+      values: [value]
+    }
+    fields = { created: field_config }
+
+    suggestions = described_class.build(fields: fields, operators: [])
+    suggestions.last["range"] = "mutated"
+    suggestions.last["label"] = "Mutated"
+
+    expect(fields).to eq(
+      created: {
+        predicate: :created_at_gteq,
+        values: [
+          { value: "today", label: "Today", description: "Created today", range: "day" }
+        ]
+      }
+    )
+  end
 end
