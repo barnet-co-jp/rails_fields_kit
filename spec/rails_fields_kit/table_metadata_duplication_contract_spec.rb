@@ -11,6 +11,16 @@ RSpec.describe RailsFieldsKit::TableMetadata do
     end
   end
 
+  class DuplicationHashLikeColumn
+    def initialize(column)
+      @column = column
+    end
+
+    def to_hash
+      @column
+    end
+  end
+
   it "duplicates collected filter metadata hashes" do
     column = {
       filter: {
@@ -114,6 +124,33 @@ RSpec.describe RailsFieldsKit::TableMetadata do
       method: :query,
       options: {
         url: "/tokens.json"
+      }
+    )
+  end
+
+  it "duplicates metadata collected from hash-like columns" do
+    column = DuplicationHashLikeColumn.new(
+      filter: {
+        field_type: "token_search",
+        method: :query,
+        options: {
+          url: "/tokens.json"
+        }
+      }
+    )
+
+    filters = described_class.filters([column])
+
+    filters.first[:field_type] = "mutated"
+    filters.first[:options][:url] = "/mutated.json"
+
+    expect(column.to_hash).to eq(
+      filter: {
+        field_type: "token_search",
+        method: :query,
+        options: {
+          url: "/tokens.json"
+        }
       }
     )
   end
