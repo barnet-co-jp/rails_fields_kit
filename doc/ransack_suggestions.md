@@ -94,6 +94,51 @@ RailsFieldsKit::RansackSuggestions.build(
 
 This emits both the field token and value tokens such as `status:open`. Value suggestions include `ransack_value` metadata in addition to `ransack_predicate` and `ransack_field`.
 
+## Predicate aliases
+
+Field metadata can use several equivalent keys for the Ransack predicate:
+
+```ruby
+RailsFieldsKit::RansackSuggestions.build(
+  fields: {
+    customer: { ransack_predicate: :customer_name_cont },
+    email: { ransack: :email_cont },
+    code: { param: :code_eq }
+  }
+)
+```
+
+The recognized predicate keys are:
+
+- `predicate`
+- `ransack_predicate`
+- `ransack`
+- `param`
+
+## Value metadata
+
+Structured value metadata is preserved in generated suggestions:
+
+```ruby
+RailsFieldsKit::RansackSuggestions.build(
+  fields: {
+    created_after: {
+      predicate: :created_at_gteq,
+      values: [
+        {
+          value: "today",
+          label: "Today",
+          description: "Created today",
+          range: "day"
+        }
+      ]
+    }
+  }
+)
+```
+
+Custom metadata such as `range` is copied onto the generated value option. Generated suggestions are independent from the original field/value hashes, so applications can decorate or rewrite suggestion payloads without mutating the source configuration.
+
 ## Operators and saved searches
 
 By default, the builder includes `OR` and `not()` operator suggestions. Pass `operators: []` to disable them or pass your own list.
