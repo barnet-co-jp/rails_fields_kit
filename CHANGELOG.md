@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - `rfk_token_search` for token-oriented search inputs such as `status:open keyword`, keeping parsing and search execution in the host application.
 - `rfk_token_suggestions_with` for lightweight token suggestion JSON endpoints that can use static suggestions, controller methods, or callables.
 - `RailsFieldsKit::TokenSuggestions.build` for composing operator, field, predicate, value, and saved-search suggestion option JSON.
-- `RailsFieldsKit::RansackSuggestions.build` for composing Ransack-compatible token suggestion metadata without requiring or executing Ransack.
+- `RailsFieldsKit::RansackSuggestions.build` for composing Ransack-compatible token suggestion metadata without requiring or executing Ransack, including predicate aliases and mutation-safe value metadata handling.
 - `RailsFieldsKit::TableFilterInput` and `RailsFieldsKit::TableCellInput` factory helpers such as `.combobox`, `.select`, `.tags`, `.enum_select`, `.from_type`, `.known_types`, `.known_type?`, `#to_h`, and `#to_hash` for concise table metadata definitions.
 - `RailsFieldsKit::TableMetadata` can collect hash-like column definitions and hash-like metadata objects that respond to `to_hash` when table integrations do not expose concrete Hash columns, `to_table_filter`, or `to_table_cell_editor`.
 - `RailsFieldsKit::TableFilterInput.token_search` and `RailsFieldsKit::TableFilterInput.ransack_filter` for table metadata that describes token-search filters.
@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - `rfk_table_filters` and `rfk_table_cell_editors` now render an empty safe string for nil table metadata inputs.
+- `RansackSuggestions` now preserves predicate aliases and duplicates generated value metadata so downstream mutation does not alter source field configuration.
 - `TableMetadata` now duplicates collected metadata hashes and nested options hashes from hash-like column objects so downstream mutation does not alter original column definitions.
 - `TableMetadata` now duplicates collected metadata hashes and nested options hashes so downstream mutation does not alter original column definitions.
 - `TableMetadata` now validates hash-like columns by requiring `to_hash` to return a Hash-like object.
