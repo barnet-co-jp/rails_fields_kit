@@ -152,4 +152,46 @@ RSpec.describe RailsFieldsKit::RansackSuggestions do
       }
     )
   end
+
+  it "isolates custom output field mutations from source metadata" do
+    fields = {
+      created: {
+        predicate: :created_at_gteq,
+        values: [
+          {
+            value: "today",
+            label: "Today",
+            description: "Created today",
+            range: "day"
+          }
+        ]
+      }
+    }
+
+    suggestions = described_class.build(
+      fields: fields,
+      operators: [],
+      value_field: "token",
+      label_field: "label",
+      description_field: "help",
+      badge_field: "kind"
+    )
+
+    suggestions.last["range"] = "mutated"
+    suggestions.last["label"] = "Mutated"
+
+    expect(fields).to eq(
+      created: {
+        predicate: :created_at_gteq,
+        values: [
+          {
+            value: "today",
+            label: "Today",
+            description: "Created today",
+            range: "day"
+          }
+        ]
+      }
+    )
+  end
 end
