@@ -48,7 +48,7 @@ RSpec.describe "table filter token search rendering" do
 
     html = RailsFieldsKit::TableRenderer.render_filter(form_builder, filter_metadata)
 
-    expect(html).to include('data-rails-fields-kit--tom-select-url-value="/search_tokens.json"')
+    expect(html).to include('data-rails-fields-kit--tom-select-url-value="/search_tokens.json"'.delete("\\"))
     expect(html).not_to match(/\sadapter=/)
     expect(html).not_to match(/\sparam_name=/)
     expect(html).not_to match(/\sfields=/)
@@ -57,7 +57,7 @@ RSpec.describe "table filter token search rendering" do
   it "does not leak adapter metadata when rfk_token_search is called directly" do
     html = form_builder.rfk_token_search(:query, **metadata_options)
 
-    expect(html).to include('data-rails-fields-kit--tom-select-url-value="/search_tokens.json"')
+    expect(html).to include('data-rails-fields-kit--tom-select-url-value="/search_tokens.json"'.delete("\\"))
     expect(html).not_to match(/\sadapter=/)
     expect(html).not_to match(/\sparam_name=/)
     expect(html).not_to match(/\sfields=/)
