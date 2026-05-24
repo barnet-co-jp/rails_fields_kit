@@ -1,6 +1,8 @@
 # Rails Fields Kit Setup
 
-This guide summarizes the steps for adding Rails Fields Kit to a Rails 7+ application.
+This guide is the maintained setup walkthrough for Rails Fields Kit.
+
+Use the generated `doc/rails_fields_kit_setup.md` in your host app as a short checklist and place for app-specific notes. When the setup flow changes, update this file first and keep the generated note focused on linking back here.
 
 ## 1. Add the gem
 
@@ -19,6 +21,8 @@ The generator creates:
 
 - `config/initializers/rails_fields_kit.rb`
 - `doc/rails_fields_kit_setup.md`
+
+Treat `doc/rails_fields_kit_setup.md` as a host-app checklist. This `doc/setup.md` file is the detailed setup reference and source of truth for examples.
 
 ## 2. Install Tom Select
 
