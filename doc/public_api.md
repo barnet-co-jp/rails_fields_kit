@@ -169,6 +169,10 @@ Remote endpoint extensions:
 - `selected_query_params:` adds fixed query parameters to selected preload requests.
 - `create_params:` adds fixed JSON fields to create requests.
 
+## Stimulus lifecycle contract
+
+Tom Select-backed `rfk_*` fields initialize from the controller's Stimulus `connect()` lifecycle on the rendered element. In Turbo-enabled Rails apps, replacing or revisiting a server-rendered form is expected to reconnect the controller without a separate host-app `turbo:load` reinitializer for normal Rails Fields Kit usage.
+
 ## Stimulus events
 
 Events dispatched by the Tom Select controller are part of the public integration surface.

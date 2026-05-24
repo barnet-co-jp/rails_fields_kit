@@ -61,6 +61,8 @@ application.register("rails-fields-kit--tom-select", TomSelectController)
 
 If the host app already started Stimulus elsewhere, reuse that application instead of calling `Application.start()` again.
 
+Rails Fields Kit relies on Stimulus `connect()` for initialization and reconnect. In Turbo-enabled apps, replacing or revisiting a server-rendered form should not require a separate host-app `turbo:load` reinitializer for normal `rfk_*` fields.
+
 Direct import is also supported:
 
 ```js
