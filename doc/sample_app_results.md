@@ -2,13 +2,17 @@
 
 Use this file to record manual verification results before publishing a release.
 
-## Release candidate
+## Target release
 
-- Version: `0.1.0`
+- Version:
 - Date:
 - Tester:
 - Sample app Rails version:
 - Ruby version:
+- Gem source:
+  - [ ] local path checkout
+  - [ ] built gem package
+  - [ ] other:
 - JavaScript setup:
   - [ ] esbuild
   - [ ] jsbundling-rails
@@ -40,14 +44,16 @@ Result:
 
 - [ ] `config/initializers/rails_fields_kit.rb` generated
 - [ ] `doc/rails_fields_kit_setup.md` generated
-- [ ] generated setup notes match current public API
+- [ ] generated setup notes match current public API and setup walkthrough
 
 Notes:
 
 ## JavaScript setup checks
 
 - [ ] Tom Select package installed
-- [ ] Rails Fields Kit Stimulus controller registered
+- [ ] `import { TomSelectController } from "rails_fields_kit"` resolved
+- [ ] `import TomSelectController from "rails_fields_kit/tom_select_controller"` resolved
+- [ ] documented controller registration succeeded
 - [ ] Tom Select CSS loaded
 - [ ] browser console has no import errors
 
@@ -62,6 +68,7 @@ Notes:
 - [ ] `rfk_multi_select`
 - [ ] `rfk_grouped_select`
 - [ ] `rfk_enum_select`
+- [ ] `rfk_token_search`
 - [ ] native helpers such as `rfk_text_field` and `rfk_money_field`
 
 Notes:
@@ -71,10 +78,22 @@ Notes:
 - [ ] `rfk_search_with` returns remote options
 - [ ] `rfk_find_with` returns selected option labels for edit forms
 - [ ] `rfk_create_with` creates options on the fly
+- [ ] `rfk_token_suggestions_with` returns token suggestion option JSON
 - [ ] validation errors return `422`
 - [ ] authorization failures return `403`
 - [ ] wrapped responses work with `options` / `option`
 - [ ] rich fields return description and badge data
+- [ ] Ransack-compatible suggestion metadata works as expected if it is part of the release surface
+
+Notes:
+
+## Table metadata checks
+
+- [ ] `RailsFieldsKit::TableFilterInput` metadata renders through the documented helper path
+- [ ] `RailsFieldsKit::TableCellInput` metadata renders through the documented helper path
+- [ ] `rfk_table_filters` renders collected filter metadata
+- [ ] `rfk_table_cell_editors` renders collected cell editor metadata
+- [ ] direct `TableRenderer` call-spec usage still matches the documented helper / method / options shape when used
 
 Notes:
 
@@ -89,6 +108,12 @@ Notes:
 - [ ] `rails-fields-kit--tom-select:item-add`
 - [ ] `rails-fields-kit--tom-select:item-remove`
 - [ ] `rails-fields-kit--tom-select:clear`
+
+Notes:
+
+## Release notes
+
+- [ ] Version-specific release note draft reviewed or updated
 
 Notes:
 
