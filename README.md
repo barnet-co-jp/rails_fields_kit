@@ -24,11 +24,13 @@ The install generator creates:
 - `config/initializers/rails_fields_kit.rb`
 - `doc/rails_fields_kit_setup.md`
 
+Use the generated `doc/rails_fields_kit_setup.md` in your host app as a short checklist and place for app-specific notes. The maintained setup walkthrough and source of truth for setup examples stays in this repository at [`doc/setup.md`](doc/setup.md).
+
 Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and controller-side helpers. It does not install Tom Select or choose a JavaScript bundling strategy for your app.
 
 For the current direction and integration priorities, see [Roadmap](ROADMAP.md).
 For optional table integration metadata, see [Table adapter metadata](doc/table_adapters.md). This lets table-oriented gems read Rails Fields Kit filter/editor metadata through `to_table_filter`, `to_table_cell_editor`, and hash-like `to_hash` protocols without taking a hard dependency.
-See [`doc/setup.md`](doc/setup.md) for a complete setup walkthrough.
+See [`doc/setup.md`](doc/setup.md) for the maintained setup walkthrough.
 See [`doc/public_api.md`](doc/public_api.md) for the intended stable API surface.
 See [`doc/field_helpers.md`](doc/field_helpers.md) for the FormBuilder helper reference.
 See [`doc/controller_helpers.md`](doc/controller_helpers.md) for the controller helper reference.
