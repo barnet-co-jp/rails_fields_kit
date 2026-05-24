@@ -62,10 +62,41 @@ import { TomSelectController } from "rails_fields_kit"
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
+If your app starts Stimulus from `app/frontend/entrypoints/application.js` or another Vite entrypoint, register the controller on that existing application instead:
+
+```js
+import { Application } from "@hotwired/stimulus"
+import { TomSelectController } from "rails_fields_kit"
+
+const application = Application.start()
+application.register("rails-fields-kit--tom-select", TomSelectController)
+```
+
+If Stimulus is already started elsewhere, reuse that application instead of calling `Application.start()` a second time.
+
 You can also import the controller file directly:
 
 ```js
 import TomSelectController from "rails_fields_kit/tom_select_controller"
+```
+
+For Vite or another JS bundler, the host app also needs to resolve the gem's `app/javascript` files. One option is to alias the documented import paths to the gem contents returned by `bundle show`:
+
+```ts
+import { execSync } from "node:child_process"
+import { fileURLToPath } from "node:url"
+
+function gemJavaScriptPath(entrypoint: string) {
+  const gemRoot = execSync("bundle show rails_fields_kit", { encoding: "utf-8" }).trim()
+  return fileURLToPath(new URL(`app/javascript/rails_fields_kit/${entrypoint}`, `file://${gemRoot}/`))
+}
+
+resolve: {
+  alias: [
+    { find: /^rails_fields_kit$/, replacement: gemJavaScriptPath("index.js") },
+    { find: /^rails_fields_kit\/tom_select_controller$/, replacement: gemJavaScriptPath("tom_select_controller.js") },
+  ],
+}
 ```
 
 Load Tom Select's CSS through your application's stylesheet pipeline or bundler:
