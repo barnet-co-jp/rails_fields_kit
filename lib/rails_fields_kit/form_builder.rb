@@ -4,6 +4,8 @@ require "json"
 
 module RailsFieldsKit
   module FormBuilder
+    TABLE_ADAPTER_METADATA_KEYS = %i[adapter param_name fields].freeze
+
     def rfk_text_field(method, **options)
       rfk_native_field(method, :text_field, **options)
     end
@@ -116,6 +118,7 @@ module RailsFieldsKit
       wrapper_options = rfk_extract_wrapper_options(options)
       html_options = options.delete(:html) || {}
       rfk_promote_html_options!(options, html_options)
+      rfk_strip_table_adapter_metadata!(options) if field_kind == :token_search
       rfk_apply_accessibility!(method, html_options, wrapper_options)
       data = html_options[:data] ||= {}
       data[:controller] = [data[:controller], config.controller_name].compact.join(" ")
@@ -208,6 +211,13 @@ module RailsFieldsKit
       end
 
       html_options[:disabled] = options.delete(:disabled) if [true, false].include?(options[:disabled])
+    end
+
+    def rfk_strip_table_adapter_metadata!(options)
+      TABLE_ADAPTER_METADATA_KEYS.each do |key|
+        options.delete(key)
+        options.delete(key.to_s)
+      end
     end
 
     def rfk_extract_wrapper_options(options)
