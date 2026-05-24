@@ -50,20 +50,26 @@ bundle exec rspec
    - `doc/public_api.md`
    - `doc/field_helpers.md`
    - `doc/controller_helpers.md`
+   - `doc/token_suggestions.md`
+   - `doc/ransack_suggestions.md`
+   - `doc/table_adapters.md`
    - `doc/configuration.md`
    - `doc/events.md`
    - `doc/development.md`
    - `doc/sample_app_checklist.md`
+   - `doc/sample_app_results.md`
+   - `doc/final_release_checklist.md`
    - `doc/release.md`
+   - the version-specific release note draft for the target release
 
 6. Confirm version.
 
    ```ruby
    # lib/rails_fields_kit/version.rb
-   RailsFieldsKit::VERSION = "0.1.0"
+   RailsFieldsKit::VERSION = "x.y.z"
    ```
 
-7. Install the built gem into a sample Rails 7+ application and verify [`sample_app_checklist.md`](sample_app_checklist.md).
+7. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
 
 ## Release steps
 
@@ -72,23 +78,27 @@ bundle exec rspec
    Move entries from `Unreleased` to the target version, for example:
 
    ```markdown
-   ## 0.1.0 - YYYY-MM-DD
+   ## 0.1.1 - YYYY-MM-DD
    ```
 
-2. Commit release metadata.
+2. Prepare the version-specific release note draft.
+
+   Copy the structure from `doc/release_notes_0_1_0.md` when you need a new draft, then replace the version number and verification details for the target release.
+
+3. Commit release metadata.
 
    ```bash
    git add CHANGELOG.md lib/rails_fields_kit/version.rb
-   git commit -m "Prepare 0.1.0 release"
+   git commit -m "Prepare x.y.z release"
    ```
 
-3. Build the gem.
+4. Build the gem.
 
    ```bash
    bundle exec rake build
    ```
 
-4. Publish the gem when ready.
+5. Publish the gem when ready.
 
    ```bash
    bundle exec rake release
@@ -104,6 +114,8 @@ bundle exec rspec
 ## Unreleased
 ```
 
+- Prepare the next release note draft when useful.
+
 ## Notes
 
-This project intentionally avoids owning the JavaScript package manager or importmap setup. Host applications should install Tom Select and register the Stimulus controller using their existing JavaScript toolchain.
+This project intentionally avoids owning the JavaScript package manager or importmap setup. Host applications should install Tom Select and register the Stimulus controller using the documented public import paths through their existing JavaScript toolchain.
