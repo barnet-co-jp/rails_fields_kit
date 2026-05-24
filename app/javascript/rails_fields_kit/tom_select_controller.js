@@ -106,8 +106,8 @@ export default class extends Controller {
     return {
       option: (data, escape) => this.optionTemplate(data, escape, "option"),
       item: (data, escape) => this.optionTemplate(data, escape, "item"),
-      no_results: () => `<div class="no-results">${this.escape(this.noResultsTextValue)}</div>`,
-      loading: () => `<div class="loading">${this.escape(this.loadingTextValue)}</div>`,
+      no_results: () => `<div class="no-results" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.noResultsTextValue)}</div>`,
+      loading: () => `<div class="loading" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.loadingTextValue)}</div>`,
       option_create: (data, escape) => `<div class="create">${escape(this.createTextValue)} <strong>${escape(data.input)}</strong></div>`
     }
   }
