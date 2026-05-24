@@ -26,7 +26,8 @@ Gem::Specification.new do |spec|
       "doc/**/*.md",
       "CHANGELOG.md",
       "LICENSE.txt",
-      "README.md"
+      "README.md",
+      "package.json"
     ].sort
   end
   spec.require_paths = ["lib"]
