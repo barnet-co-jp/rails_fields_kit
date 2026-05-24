@@ -1,0 +1,10 @@
+{
+  "name": "rails_fields_kit",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./app/javascript/rails_fields_kit/index.js",
+    "./tom_select_controller": "./app/javascript/rails_fields_kit/tom_select_controller.js"
+  }
+}
