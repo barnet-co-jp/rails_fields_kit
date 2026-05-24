@@ -46,6 +46,15 @@ import { TomSelectController } from "rails_fields_kit"
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
+Confirm both documented import paths resolve in the sample app:
+
+```js
+import { TomSelectController } from "rails_fields_kit"
+import DirectTomSelectController from "rails_fields_kit/tom_select_controller"
+
+console.assert(TomSelectController === DirectTomSelectController)
+```
+
 Load Tom Select CSS:
 
 ```js
