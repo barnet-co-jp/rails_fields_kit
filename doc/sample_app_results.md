@@ -78,6 +78,16 @@ Notes:
 
 Notes:
 
+## Turbo reconnect checks
+
+- [ ] Tom Select initializes on first render without a host-app `setupXxx()` helper
+- [ ] Turbo-driven validation rerender reconnects the replaced field
+- [ ] same-form revisit through Turbo reconnects the field
+- [ ] `selected_url:` still restores labels after the rerender
+- [ ] no separate `turbo:load` reinitializer was needed for normal `rfk_*` usage
+
+Notes:
+
 ## Event checks
 
 - [ ] `rails-fields-kit--tom-select:load`
