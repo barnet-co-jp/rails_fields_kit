@@ -35,6 +35,8 @@ Confirm these files are created:
 - `config/initializers/rails_fields_kit.rb`
 - `doc/rails_fields_kit_setup.md`
 
+Confirm the generated setup notes still match the maintained walkthrough in `doc/setup.md` and the documented JavaScript registration flow.
+
 ## Register JavaScript
 
 Register the controller:
@@ -55,6 +57,8 @@ import DirectTomSelectController from "rails_fields_kit/tom_select_controller"
 console.assert(TomSelectController === DirectTomSelectController)
 ```
 
+If the sample app uses a bundler alias or custom resolver, confirm it still resolves those documented import paths rather than an app-specific private path.
+
 Load Tom Select CSS:
 
 ```js
@@ -67,9 +71,12 @@ Create a form that exercises:
 
 - `rfk_select`
 - `rfk_combobox`
+- `rfk_autocomplete`
 - `rfk_tags`
 - `rfk_multi_select`
+- `rfk_grouped_select`
 - `rfk_enum_select`
+- `rfk_token_search`
 - native helpers such as `rfk_text_field` and `rfk_money_field`
 
 ## Verify controller helpers
@@ -80,14 +87,34 @@ Add a controller with:
 - `rfk_search_with`
 - `rfk_find_with`
 - `rfk_create_with`
+- `rfk_token_suggestions_with`
 
 Verify:
 
 - remote search returns options
 - edit forms can load selected labels through `selected_url:`
 - create-on-the-fly adds a newly-created option
+- token suggestion endpoints return option JSON for `rfk_token_search`
 - validation errors return `422`
 - authorization failures return `403`
+
+If the release surface includes `RailsFieldsKit::RansackSuggestions.build`, also confirm the sample endpoint can return the expected predicate metadata without handing query parsing to the gem.
+
+## Verify table metadata adapters
+
+Create a minimal table definition that exercises:
+
+- `RailsFieldsKit::TableFilterInput.combobox` or `RailsFieldsKit::TableFilterInput.token_search`
+- `RailsFieldsKit::TableCellInput.enum_select` or another current editor helper
+- `rfk_table_filters`
+- `rfk_table_cell_editors`
+
+Verify:
+
+- collected filter metadata renders through the documented helper path
+- collected cell editor metadata renders through the documented helper path
+- any direct `TableRenderer.filter_call` or `TableRenderer.cell_editor_call` usage in your integration still matches the documented call-spec shape
+- token search or Ransack-oriented metadata, if used, is still treated as UI metadata or rendering assistance rather than query execution
 
 ## Verify events
 
@@ -112,4 +139,4 @@ bundle exec rspec
 bundle exec rake build
 ```
 
-Then perform the sample app checks above.
+Then perform the sample app checks above and record the result in `doc/sample_app_results.md`.
