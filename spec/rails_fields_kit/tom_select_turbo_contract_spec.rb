@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "cgi"
+
 RSpec.describe "Tom Select Turbo reconnect contract" do
   include ActionView::Helpers::FormHelper
   include ActionView::Helpers::FormOptionsHelper
@@ -33,7 +35,7 @@ RSpec.describe "Tom Select Turbo reconnect contract" do
   end
 
   def action_names(html)
-    html[/data-action="([^"]+)"/, 1].to_s.split
+    CGI.unescapeHTML(html[/data-action="([^"]+)"/, 1].to_s).split
   end
 
   around do |example|
