@@ -1,4 +1,8 @@
-# Rails Fields Kit 0.1.0 Release Notes
+# Rails Fields Kit 0.1.0 Release Notes (Historical Reference)
+
+This file is the archived draft for the first `0.1.0` release.
+
+For a newer release, copy this structure into a new version-specific note and replace the version number, highlights, and verification details instead of editing this historical record in place.
 
 Rails Fields Kit 0.1.0 is the first release candidate for a Rails 7+ form helper kit focused on Tom Select-backed fields.
 
@@ -40,11 +44,11 @@ Controller helpers:
 - Rails: `>= 7.0`, `< 9.0`
 - Ruby: `>= 3.1`
 - Tom Select is installed by the host application.
-- JavaScript bundling/importmap setup is intentionally owned by the host application.
+- JavaScript bundling or importmap setup is intentionally owned by the host application.
 
 ## Verification
 
-The release candidate should pass:
+The 0.1.0 release candidate should pass:
 
 ```bash
 bundle exec rspec
