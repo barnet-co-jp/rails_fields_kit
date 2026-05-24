@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Tom Select failure events now share a consistent detail shape with `operation`, request context, `response`, `payload`, and `status` across remote search, selected preload, and create failures.
 - `rfk_table_filters` and `rfk_table_cell_editors` now render an empty safe string for nil table metadata inputs.
 - `RansackSuggestions` now preserves predicate aliases and duplicates generated value metadata, including custom output field payloads, so downstream mutation does not alter source field configuration.
 - `TableMetadata` now duplicates collected metadata hashes and nested options hashes from hash-like column objects so downstream mutation does not alter original column definitions.
@@ -118,19 +119,3 @@ All notable changes to this project will be documented in this file.
   - `doc/events.md`
   - `doc/development.md`
   - `doc/sample_app_checklist.md`
-  - `doc/sample_app_results.md`
-  - `doc/final_release_checklist.md`
-  - `doc/release_notes_0_1_0.md`
-  - `doc/release.md`
-
-### Changed
-
-- Rails support targets Rails 7.0 and newer.
-- Rails dependency is bounded to Rails 7 and Rails 8 for the initial release line.
-- Tom Select installation and JavaScript bundling strategy are intentionally left to the host application.
-
-### Fixed
-
-- Avoided requiring mountable engine namespace isolation for this helper-only engine.
-- Preserved explicit `false` option values when falling back to configuration defaults.
-- Separated boolean `disabled:` for the entire select from array/value `disabled:` for specific options.
