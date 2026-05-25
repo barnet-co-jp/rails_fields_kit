@@ -129,6 +129,8 @@ module RailsFieldsKit
       option_html = options.delete(:option_html) || {}
       selected = options.delete(:selected)
       allow_clear = options.delete(:allow_clear)
+      error_surface = options.delete(:error_surface)
+      error_surface_html = options.delete(:error_surface_html) || {}
       value_method = options.delete(:value_method) || :id
       label_method = options.delete(:label_method) || :to_s
       collection_value_method = options.delete(:collection_value_method) || value_method
@@ -136,6 +138,7 @@ module RailsFieldsKit
       selected_choices = rfk_normalize_selected(selected, value_method: value_method, label_method: label_method)
       plugins = rfk_option_or_default(options, :plugins, config.default_plugins)
       plugins = Array(plugins) | ["clear_button"] if allow_clear
+      error_surface_id = rfk_error_surface_id(method) if error_surface
 
       rfk_assign_data_value(data, :url, options.delete(:url))
       rfk_assign_data_value(data, :selected_url, options.delete(:selected_url))
@@ -169,6 +172,8 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :option_description_field, rfk_option_or_default(options, :option_description_field, config.default_option_description_field))
       rfk_assign_data_value(data, :option_badge_field, rfk_option_or_default(options, :option_badge_field, config.default_option_badge_field))
       rfk_assign_data_value(data, :plugins, plugins)
+      rfk_assign_data_value(data, :error_surface_id, error_surface_id) if error_surface
+      rfk_apply_error_surface_accessibility!(html_options, error_surface_id) if error_surface
 
       html_options[:multiple] = options.delete(:multiple) if options.key?(:multiple)
       html_options[:placeholder] = options.delete(:placeholder) if options.key?(:placeholder)
@@ -197,6 +202,7 @@ module RailsFieldsKit
         select(method, choices, options, html_options)
       end
       field_html = rfk_wrap_control(field_html, wrapper_options)
+      field_html = rfk_append_error_surface(field_html, error_surface_id, error_surface_html) if error_surface
 
       rfk_wrap_field(method, field_html, wrapper_options)
     end
@@ -253,12 +259,24 @@ module RailsFieldsKit
       html_options[:aria][:required] = true if html_options[:required]
     end
 
+    def rfk_apply_error_surface_accessibility!(html_options, error_surface_id)
+      html_options[:aria] ||= {}
+      existing_described_by = html_options[:aria][:describedby] || html_options[:aria]["describedby"]
+      described_by = Array(existing_described_by.to_s.split(/\s+/)).reject(&:empty?)
+      described_by << error_surface_id unless described_by.include?(error_surface_id)
+      html_options[:aria][:describedby] = described_by.join(" ")
+    end
+
     def rfk_hint_id(method)
       "#{object_name}_#{method}_hint"
     end
 
     def rfk_error_id(method)
       "#{object_name}_#{method}_error"
+    end
+
+    def rfk_error_surface_id(method)
+      "#{object_name}_#{method}_error_surface"
     end
 
     def rfk_wrap_control(field_html, wrapper_options)
@@ -275,6 +293,18 @@ module RailsFieldsKit
         parts << rfk_affix(wrapper_options[:suffix], wrapper_options[:suffix_html], config.suffix_class) if wrapper_options[:suffix]
         parts.join.html_safe
       end
+    end
+
+    def rfk_append_error_surface(field_html, error_surface_id, error_surface_html)
+      surface_options = error_surface_html.dup
+      surface_options[:id] ||= error_surface_id
+      surface_options[:hidden] = true unless surface_options.key?(:hidden)
+      surface_options[:role] ||= "status"
+      surface_options[:"aria-live"] ||= "polite"
+      surface_options[:"aria-atomic"] = true unless surface_options.key?(:"aria-atomic")
+      surface_options[:class] = [surface_options[:class], "rfk-tom-select-error-surface"].compact.join(" ")
+
+      @template.safe_join([field_html, @template.content_tag(:div, "", surface_options)])
     end
 
     def rfk_affix(content, html_options, default_class)
