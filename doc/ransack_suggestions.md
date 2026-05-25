@@ -185,3 +185,47 @@ Rails Fields Kit intentionally stops at suggestion metadata. A typical applicati
 - scope, authorize, paginate, and render results
 
 This keeps Ransack optional and avoids making Rails Fields Kit a query engine.
+
+## Copyable host-app parser example
+
+Keep the suggestion metadata and the parser whitelist aligned from the same allowed field list. The builder helps the UI advertise supported tokens; the host app still chooses which submitted tokens become `params[:q]`.
+
+```ruby
+class OrderTokenQuery
+  ALLOWED_FIELDS = {
+    "name" => :name_cont,
+    "email" => :email_cont,
+    "status" => :status_eq
+  }.freeze
+
+  def initialize(raw_query)
+    @raw_query = raw_query.to_s
+  end
+
+  def to_ransack_params
+    @raw_query.split(/\s+/).each_with_object({}) do |token, params|
+      field, value = token.split(":", 2)
+      next if value.blank?
+
+      predicate = ALLOWED_FIELDS[field]
+      next unless predicate
+
+      params[predicate] = value
+    end
+  end
+end
+```
+
+Use that parser in the host app's controller or search object:
+
+```ruby
+def index
+  token_query = OrderTokenQuery.new(params[:query])
+  @q = Order.ransack(token_query.to_ransack_params)
+  @orders = @q.result
+end
+```
+
+This example is intentionally small. It only handles simple `field:value` tokens and leaves operators such as `OR`, `not()`, saved searches, duplicate-field merge rules, and free-text fallback semantics to the host application.
+
+The suggestion payload can still expose richer metadata like `ransack_predicate`, `ransack_field`, and `ransack_value`, but the parser remains the place where the host app decides which tokens to honor.
