@@ -139,13 +139,16 @@ Listen for the events documented in [`events.md`](events.md):
 - `rails-fields-kit--tom-select:item-remove`
 - `rails-fields-kit--tom-select:clear`
 
+For create-on-the-fly success, verify the current success surface documented in [`events.md`](events.md). Today that means `item-add` and `change`, because Rails Fields Kit does not dispatch a dedicated create-success event.
+
 ## Release gate
 
-Before release, confirm:
+Before release, confirm the current local check set:
 
 ```bash
+bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
 ```
 
-Then perform the sample app checks above and record the result in `doc/sample_app_results.md`.
+Then perform the sample app checks above, record the result in `doc/sample_app_results.md`, and confirm GitHub Actions is green for the same branch head once the change is ready for review or release.
