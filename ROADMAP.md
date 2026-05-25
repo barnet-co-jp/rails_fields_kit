@@ -92,7 +92,7 @@ Host app responsibilities should remain explicit:
 - parsing submitted token search text into Ransack params
 - handling authorization, scoping, and result pagination
 
-Possible API direction:
+Future proposal, not current public API:
 
 ```erb
 <%= f.rfk_token_search :query,
@@ -107,7 +107,7 @@ Possible API direction:
   } %>
 ```
 
-This keeps Rails Fields Kit responsible for input UI and parameter assistance while leaving the actual search behavior to Ransack and the host application.
+If this direction is adopted later, it should keep Rails Fields Kit responsible for input UI and parameter assistance while leaving the actual search behavior to Ransack and the host application.
 
 ## Phase 5: Rails Table Preferences integration
 
@@ -140,7 +140,7 @@ Implemented helper direction:
 <% end %>
 ```
 
-Potential next API direction:
+Future proposal, not current public API:
 
 ```erb
 <%= search_form_for @q do |f| %>
