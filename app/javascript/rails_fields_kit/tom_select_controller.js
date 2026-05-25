@@ -106,8 +106,8 @@ export default class extends Controller {
     return {
       option: (data, escape) => this.optionTemplate(data, escape, "option"),
       item: (data, escape) => this.optionTemplate(data, escape, "item"),
-      no_results: () => `<div class="no-results">${this.escape(this.noResultsTextValue)}</div>`,
-      loading: () => `<div class="loading">${this.escape(this.loadingTextValue)}</div>`,
+      no_results: () => `<div class="no-results" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.noResultsTextValue)}</div>`,
+      loading: () => `<div class="loading" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.loadingTextValue)}</div>`,
       option_create: (data, escape) => `<div class="create">${escape(this.createTextValue)} <strong>${escape(data.input)}</strong></div>`
     }
   }
@@ -147,7 +147,7 @@ export default class extends Controller {
         callback(options)
       })
       .catch((error) => {
-        this.dispatch("load-error", { detail: { error, query } })
+        this.dispatchRequestError("load-error", "load", { query }, error)
         callback()
       })
   }
@@ -183,7 +183,7 @@ export default class extends Controller {
       .then((response) => this.handleSelectedResponse(response))
       .then((json) => this.applySelectedOptions(json, values))
       .catch((error) => {
-        this.dispatch("selected-load-error", { detail: { error, values } })
+        this.dispatchRequestError("selected-load-error", "selected-load", { values }, error)
       })
   }
 
@@ -240,7 +240,7 @@ export default class extends Controller {
       .then((response) => this.handleCreateResponse(response))
       .then((json) => callback(this.normalizeCreatedOption(json)))
       .catch((error) => {
-        this.dispatch("create-error", { detail: { error, input } })
+        this.dispatchRequestError("create-error", "create", { input }, error)
         callback(false)
       })
   }
@@ -253,6 +253,23 @@ export default class extends Controller {
       error.response = response
       error.payload = json
       throw error
+    })
+  }
+
+  dispatchRequestError(eventName, operation, context, error) {
+    const response = error.response || null
+    const payload = error.payload ?? null
+    const status = response ? response.status : null
+
+    this.dispatch(eventName, {
+      detail: {
+        operation,
+        ...context,
+        error,
+        response,
+        payload,
+        status
+      }
     })
   }
 

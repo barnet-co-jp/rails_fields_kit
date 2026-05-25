@@ -61,6 +61,8 @@ application.register("rails-fields-kit--tom-select", TomSelectController)
 
 If the host app already started Stimulus elsewhere, reuse that application instead of calling `Application.start()` again.
 
+Rails Fields Kit relies on Stimulus `connect()` for initialization and reconnect. In Turbo-enabled apps, replacing or revisiting a server-rendered form should not require a separate host-app `turbo:load` reinitializer for normal `rfk_*` fields.
+
 Direct import is also supported:
 
 ```js
@@ -167,3 +169,5 @@ end
 ## 7. Listen to events when needed
 
 See [`events.md`](events.md) for the Stimulus events emitted by the Tom Select controller.
+
+Remote search and selected preload have dedicated success and failure events. Create-on-the-fly currently reports success through the normal `item-add` / `change` interaction events and keeps `create-error` as the dedicated failure hook. Visible success or error UI remains a host-app responsibility.
