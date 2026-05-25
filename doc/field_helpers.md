@@ -51,6 +51,20 @@ Use this for searchable remote selects and editable comboboxes.
   option_badge_field: "status" %>
 ```
 
+If the host app wants a stable placeholder for request-failure UI, pass `error_surface: true`. Rails Fields Kit will render an empty status-region placeholder next to the field and include that element as `event.detail.surface` on `load-error`, `selected-load-error`, and `create-error`.
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  selected_url: selected_customers_path(format: :json),
+  error_surface: true,
+  html: {
+    data: {
+      action: "rails-fields-kit--tom-select:load-error->customers#error rails-fields-kit--tom-select:create-error->customers#error"
+    }
+  } %>
+```
+
 ### `rfk_autocomplete`
 
 Use this for a text input with suggestions where the submitted value is free text.
@@ -232,6 +246,8 @@ Common options:
 - `accessibility: false` disables automatic `aria-describedby`, `aria-invalid`, and `aria-required` output.
 - `html:` passes HTML attributes to the input/select.
 - `control_html:`, `prefix_html:`, and `suffix_html:` customize wrapper pieces.
+- `error_surface: true` adds an opt-in empty status-region placeholder for remote Tom Select request failures.
+- `error_surface_html:` customizes that placeholder when `error_surface: true` is enabled.
 
 ## Collection options
 
@@ -258,47 +274,3 @@ Option-level customization:
 Use boolean `disabled: true` to disable the whole select. Use array/value `disabled:` to disable specific options.
 
 `include_blank:` and `prompt:` keep using the normal Rails `select` option behavior, so a `collection_select` to `rfk_select` migration can preserve blank-option wording without changing controller or model code.
-
-## Remote option options
-
-Tom Select-backed helpers that call remote endpoints accept these request-shaping options:
-
-- `query_params:` adds fixed query parameters to the remote search URL.
-- `selected_query_params:` adds fixed query parameters to the selected-option preload URL.
-- `create_params:` adds fixed JSON fields to create-on-the-fly POST requests.
-- `max_items:` forwards Tom Select's maximum selected item count.
-- `load_throttle:` forwards Tom Select's remote load throttle in milliseconds.
-- `delimiter:` forwards Tom Select's delimiter option, useful for text-backed token inputs.
-
-Example:
-
-```erb
-<%= f.rfk_combobox :customer_id,
-  url: customers_path(format: :json),
-  selected_url: selected_customers_path(format: :json),
-  create_url: customers_path,
-  query_params: { account_id: current_account.id },
-  selected_query_params: { account_id: current_account.id },
-  create_params: { account_id: current_account.id } %>
-```
-
-The main query value still uses `query_param:`. Selected values still use `selected_param:` or `selected_multiple_param:`. Create input text still uses `create_param:`.
-
-## Multiple values
-
-`rfk_tags` and `rfk_multi_select` submit Rails-style array params.
-
-```erb
-<%= f.rfk_tags :tag_ids,
-  collection: Tag.order(:name),
-  collection_value_method: :id,
-  collection_label_method: :name %>
-```
-
-Rails emits a hidden blank input for multiple selects by default. Disable it when needed:
-
-```erb
-<%= f.rfk_tags :tag_ids,
-  collection: Tag.order(:name),
-  include_hidden: false %>
-```
