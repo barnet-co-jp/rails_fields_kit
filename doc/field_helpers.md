@@ -274,3 +274,47 @@ Option-level customization:
 Use boolean `disabled: true` to disable the whole select. Use array/value `disabled:` to disable specific options.
 
 `include_blank:` and `prompt:` keep using the normal Rails `select` option behavior, so a `collection_select` to `rfk_select` migration can preserve blank-option wording without changing controller or model code.
+
+## Remote option options
+
+Tom Select-backed helpers that call remote endpoints accept these request-shaping options:
+
+- `query_params:` adds fixed query parameters to the remote search URL.
+- `selected_query_params:` adds fixed query parameters to the selected-option preload URL.
+- `create_params:` adds fixed JSON fields to create-on-the-fly POST requests.
+- `max_items:` forwards Tom Select's maximum selected item count.
+- `load_throttle:` forwards Tom Select's remote load throttle in milliseconds.
+- `delimiter:` forwards Tom Select's delimiter option, useful for text-backed token inputs.
+
+Example:
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  selected_url: selected_customers_path(format: :json),
+  create_url: customers_path,
+  query_params: { account_id: current_account.id },
+  selected_query_params: { account_id: current_account.id },
+  create_params: { account_id: current_account.id } %>
+```
+
+The main query value still uses `query_param:`. Selected values still use `selected_param:` or `selected_multiple_param:`. Create input text still uses `create_param:`.
+
+## Multiple values
+
+`rfk_tags` and `rfk_multi_select` submit Rails-style array params.
+
+```erb
+<%= f.rfk_tags :tag_ids,
+  collection: Tag.order(:name),
+  collection_value_method: :id,
+  collection_label_method: :name %>
+```
+
+Rails emits a hidden blank input for multiple selects by default. Disable it when needed:
+
+```erb
+<%= f.rfk_tags :tag_ids,
+  collection: Tag.order(:name),
+  include_hidden: false %>
+```
