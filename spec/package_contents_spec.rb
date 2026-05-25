@@ -36,4 +36,13 @@ RSpec.describe "package contents" do
       "doc/table_adapters.md"
     )
   end
+
+  it "ships the release-facing verification docs linked from README" do
+    expect(specification.files).to include(
+      "doc/development.md",
+      "doc/sample_app_results.md",
+      "doc/final_release_checklist.md",
+      "doc/release_notes_0_1_0.md"
+    )
+  end
 end
