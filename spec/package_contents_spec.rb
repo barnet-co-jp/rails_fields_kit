@@ -15,11 +15,13 @@ RSpec.describe "package contents" do
     )
   end
 
-  it "ships the setup docs that describe the public import paths" do
+  it "ships the install-flow docs and generator artifacts described by README and setup" do
     expect(specification.files).to include(
       "README.md",
       "doc/setup.md",
-      "doc/sample_app_checklist.md"
+      "doc/sample_app_checklist.md",
+      "lib/generators/rails_fields_kit/install_generator.rb",
+      "lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md"
     )
   end
 
@@ -34,6 +36,15 @@ RSpec.describe "package contents" do
       "doc/token_suggestions.md",
       "doc/ransack_suggestions.md",
       "doc/table_adapters.md"
+    )
+  end
+
+  it "ships the release-facing verification docs linked from README" do
+    expect(specification.files).to include(
+      "doc/development.md",
+      "doc/sample_app_results.md",
+      "doc/final_release_checklist.md",
+      "doc/release_notes_0_1_0.md"
     )
   end
 end
