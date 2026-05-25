@@ -130,6 +130,14 @@ Default: `nil`
 
 ## Render text defaults
 
+These values are the gem's bundled English baseline. Override them in the initializer when your host app wants a repo-wide default, and use field-level helper options when one field needs different copy.
+
+Override precedence for Tom Select-backed helpers is:
+
+1. field-level options such as `loading_text:`, `no_results_text:`, and `create_text:`
+2. initializer defaults such as `config.default_loading_text`
+3. the bundled defaults listed below
+
 ### `default_no_results_text`
 
 Text shown when no result is found.
