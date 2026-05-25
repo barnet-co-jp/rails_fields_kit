@@ -107,7 +107,25 @@ Load Tom Select's CSS through your application's stylesheet pipeline or bundler:
 import "tom-select/dist/css/tom-select.css"
 ```
 
-Importmap users can pin and register these modules manually, but Rails Fields Kit does not generate importmap-specific setup.
+For importmap, keep Tom Select on the host app's normal pinning flow and pin the Rails Fields Kit entrypoints explicitly:
+
+```ruby
+# config/importmap.rb
+pin "tom-select"
+pin "rails_fields_kit", to: "rails_fields_kit/index.js"
+pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
+```
+
+Then register the controller from the file where your app already boots Stimulus:
+
+```js
+import { application } from "controllers/application"
+import { TomSelectController } from "rails_fields_kit"
+
+application.register("rails-fields-kit--tom-select", TomSelectController)
+```
+
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
 
 ## Usage
 
