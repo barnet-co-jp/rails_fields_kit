@@ -116,6 +116,15 @@ Verify:
 - any direct `TableRenderer.filter_call` or `TableRenderer.cell_editor_call` usage in your integration still matches the documented call-spec shape
 - token search or Ransack-oriented metadata, if used, is still treated as UI metadata or rendering assistance rather than query execution
 
+## Verify Turbo reconnect
+
+Use a server-rendered form with at least one `rfk_combobox` or `rfk_tags` field and confirm:
+
+- the field initializes on the first render without a host-app `setupXxx()` helper
+- a Turbo-driven validation rerender or same-form revisit reconnects Tom Select on the replaced element
+- selected preload still restores labels after the Turbo rerender when `selected_url:` is configured
+- the sample app does not add a separate `turbo:load` reinitializer just for Rails Fields Kit fields
+
 ## Verify events
 
 Listen for the events documented in [`events.md`](events.md):
