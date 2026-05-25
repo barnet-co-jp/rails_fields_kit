@@ -134,6 +134,52 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("data-rails-fields-kit--tom-select-option-badge-field-value=\"status\"")
   end
 
+  it "uses bundled locale-aware render text defaults" do
+    html = I18n.with_locale(:ja) do
+      form_builder.rfk_combobox(:customer_id, url: "/customers.json")
+    end
+
+    expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"該当する項目はありません\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-loading-text-value=\"読み込み中...\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-create-text-value=\"追加\"")
+  end
+
+  it "prefers configured render text defaults over bundled locale copy" do
+    RailsFieldsKit.configure do |config|
+      config.default_no_results_text = "Nothing here"
+      config.default_loading_text = "Searching..."
+      config.default_create_text = "Create now"
+    end
+
+    html = I18n.with_locale(:ja) do
+      form_builder.rfk_combobox(:customer_id, url: "/customers.json")
+    end
+
+    expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"Nothing here\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-loading-text-value=\"Searching...\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-create-text-value=\"Create now\"")
+  end
+
+  it "prefers field-level render text over configured defaults" do
+    RailsFieldsKit.configure do |config|
+      config.default_no_results_text = "Nothing here"
+      config.default_loading_text = "Searching..."
+      config.default_create_text = "Create now"
+    end
+
+    html = form_builder.rfk_combobox(
+      :customer_id,
+      url: "/customers.json",
+      no_results_text: "No customers",
+      loading_text: "Loading customers",
+      create_text: "Add customer"
+    )
+
+    expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"No customers\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-loading-text-value=\"Loading customers\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-create-text-value=\"Add customer\"")
+  end
+
   it "renders extra remote query params" do
     html = form_builder.rfk_combobox(
       :customer_id,
