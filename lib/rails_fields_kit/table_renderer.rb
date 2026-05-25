@@ -40,8 +40,14 @@ module RailsFieldsKit
       def register_field_helper(field_type, helper_name)
         normalized_field_type = normalize_field_type(field_type)
         normalized_helper_name = normalize_helper_name(helper_name)
-        raise ArgumentError, "field type is required" if normalized_field_type.empty?
-        raise ArgumentError, "helper name is required" if normalized_helper_name.empty?
+
+        if normalized_field_type.empty?
+          raise ArgumentError, field_type.nil? ? "table field type is required" : "field type is required"
+        end
+
+        if normalized_helper_name.empty?
+          raise ArgumentError, helper_name.nil? ? "table helper name is required" : "helper name is required"
+        end
 
         registered_field_helpers[normalized_field_type] = normalized_helper_name.to_sym
       end
@@ -127,8 +133,13 @@ module RailsFieldsKit
 
       def call_spec(metadata)
         metadata = normalize_metadata_hash(metadata)
-        field_type = normalize_field_type(metadata[:field_type])
-        raise ArgumentError, "table metadata field_type is required" if field_type.empty?
+        raw_field_type = metadata[:field_type]
+        field_type = normalize_field_type(raw_field_type)
+
+        if field_type.empty?
+          error_class = raw_field_type.nil? ? UnknownFieldType : ArgumentError
+          raise error_class, "table metadata field_type is required"
+        end
 
         helper = helper_for(field_type)
         raise UnknownFieldType, "unknown Rails Fields Kit table field type: #{field_type}" unless helper
