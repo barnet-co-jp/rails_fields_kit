@@ -45,6 +45,8 @@ bundle exec rspec
 5. Review documentation.
 
    - `README.md`
+   - `Product Profile.md`
+   - `AGENTS.md`
    - `CHANGELOG.md`
    - `doc/setup.md`
    - `doc/public_api.md`
