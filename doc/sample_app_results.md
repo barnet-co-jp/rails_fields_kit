@@ -129,6 +129,7 @@ Notes:
 - [ ] `rails-fields-kit--tom-select:item-add`
 - [ ] `rails-fields-kit--tom-select:item-remove`
 - [ ] `rails-fields-kit--tom-select:clear`
+- [ ] create-on-the-fly success matched the current success surface documented in `doc/events.md`
 
 Notes:
 
