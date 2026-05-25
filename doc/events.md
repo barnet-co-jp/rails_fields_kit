@@ -4,13 +4,15 @@ Rails Fields Kit dispatches Stimulus events from the `rails-fields-kit--tom-sele
 
 These events are integration hooks. Rails Fields Kit does not render visible success or error messages by itself, so host applications should subscribe to the events they care about and decide how to show feedback.
 
+When a field is rendered with `error_surface: true`, the controller also includes `detail.surface` on request-failure events. That surface is an opt-in empty placeholder element near the field where the host app can render its own message or retry UI.
+
 ## Event map
 
 | Workflow | Success surface | Failure surface | Notes |
 | --- | --- | --- | --- |
 | Remote search | `rails-fields-kit--tom-select:load` | `rails-fields-kit--tom-select:load-error` | Use when the app needs the fetched option payloads. |
 | Selected preload | `rails-fields-kit--tom-select:selected-load` | `rails-fields-kit--tom-select:selected-load-error` | Use when edit forms need labels for already-selected IDs. |
-| Create-on-the-fly | `rails-fields-kit--tom-select:item-add` and `rails-fields-kit--tom-select:change` | `rails-fields-kit--tom-select:create-error` | There is no dedicated create-success event today. |
+| Create-on-the-fly | `rails-fields-kit--tom-select:item-add` and `rails-fields-kit--tom-select:change` | `rails-fields-kit--tom-select:create-error` | Success still uses the normal interaction events. |
 
 Common error detail fields:
 
@@ -19,6 +21,7 @@ Common error detail fields:
 - `response`: fetch response when the request reached the server, otherwise `null`
 - `payload`: parsed error payload when available, otherwise `null`
 - `status`: HTTP status when available, otherwise `null`
+- `surface`: opt-in placeholder element when `error_surface: true` is enabled, otherwise `null`
 
 ## Remote search
 
@@ -27,7 +30,7 @@ Common error detail fields:
   - Detail: `{ query, options }`
 - `rails-fields-kit--tom-select:load-error`
   - Fired after remote search fails or returns a non-2xx response.
-  - Detail: `{ operation, query, error, response, payload, status }`
+  - Detail: `{ operation, query, error, response, payload, status, surface }`
 
 Use these hooks when the host app wants to react to the fetched option set itself, for example by logging searches, updating nearby helper text, or showing a retry state.
 
@@ -38,7 +41,7 @@ Use these hooks when the host app wants to react to the fetched option set itsel
   - Detail: `{ values, options }`
 - `rails-fields-kit--tom-select:selected-load-error`
   - Fired after selected option preload fails or returns a non-2xx response.
-  - Detail: `{ operation, values, error, response, payload, status }`
+  - Detail: `{ operation, values, error, response, payload, status, surface }`
 
 Use these hooks when the host app needs to know whether edit-form labels were resolved successfully before the user starts searching.
 
@@ -57,7 +60,7 @@ Create failure keeps its own dedicated event:
 
 - `rails-fields-kit--tom-select:create-error`
   - Fired after create-on-the-fly fails or returns a non-2xx response.
-  - Detail: `{ operation, input, error, response, payload, status }`
+  - Detail: `{ operation, input, error, response, payload, status, surface }`
 
 Use `create-error` when the host app wants to show validation feedback, retry affordances, or analytics for failed inline creation.
 
@@ -81,6 +84,7 @@ These are useful even when the field does not use remote search or create-on-the
 - Use `load` / `selected-load` when the app cares about fetched option payloads.
 - Use `item-add` / `change` when the app cares that the selection actually changed, including the current create-success path.
 - Use `load-error`, `selected-load-error`, or `create-error` when the app wants visible error UI, retry UI, or logging.
+- Use `detail.surface` with `error_surface: true` when the app wants a stable placeholder next to the field without replacing the controller.
 - Keep visible feedback in the host app. Rails Fields Kit only dispatches the events.
 
 Example:
@@ -88,9 +92,19 @@ Example:
 ```erb
 <%= f.rfk_combobox :customer_id,
   url: customers_path(format: :json),
+  error_surface: true,
   html: {
     data: {
       action: "rails-fields-kit--tom-select:load-error->customers#error rails-fields-kit--tom-select:create-error->customers#error rails-fields-kit--tom-select:item-add->customers#selected"
     }
   } %>
+```
+
+```js
+error(event) {
+  const { surface, payload } = event.detail
+  if (!surface) return
+
+  surface.textContent = payload?.error || "Unable to load options"
+}
 ```
