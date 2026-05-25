@@ -18,7 +18,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm `lib/rails_fields_kit/version.rb` matches the intended release.
 - [ ] Confirm `CHANGELOG.md` has an entry for the release version and date.
 - [ ] Confirm `CHANGELOG.md` has a fresh `Unreleased` section for the next cycle.
-- [ ] Prepare or update a version-specific release note draft. Use `doc/release_notes_0_1_0.md` as the historical reference when creating a newer draft.
+- [ ] Prepare or update `doc/release_notes_0_1_1.md` for the current next-release draft. If release planning chooses a different version number, rename that draft and keep `doc/release_notes_0_1_0.md` as the historical reference.
 
 ## Documentation
 
@@ -39,7 +39,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/sample_app_checklist.md`.
 - [ ] Review `doc/sample_app_results.md`.
 - [ ] Review `doc/release.md`.
-- [ ] Review the version-specific release note draft for the target release.
+- [ ] Review `doc/release_notes_0_1_1.md` for the current next-release draft.
 - [ ] Confirm `README.md` and `doc/public_api.md` still describe both documented JavaScript import paths: `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] Confirm token search and table integration docs still distinguish gem responsibilities from host app responsibilities.
 
