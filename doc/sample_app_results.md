@@ -22,15 +22,26 @@ Use this file to record manual verification results before publishing a release.
 ## Local gem checks
 
 ```bash
+bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
 ```
 
 Result:
 
+- [ ] StandardRB passed
 - [ ] RSpec passed
 - [ ] Gem build passed
 - [ ] No RubyGems validation warnings
+
+Notes:
+
+## Branch head CI confirmation
+
+- Branch / PR:
+- Commit SHA:
+- Workflow run URL:
+- [ ] GitHub Actions passed for the same branch head reviewed in this checklist
 
 Notes:
 
@@ -107,16 +118,6 @@ Notes:
 
 Notes:
 
-## Turbo reconnect checks
-
-- [ ] Tom Select initializes on first render without a host-app `setupXxx()` helper
-- [ ] Turbo-driven validation rerender reconnects the replaced field
-- [ ] same-form revisit through Turbo reconnects the field
-- [ ] `selected_url:` still restores labels after the rerender
-- [ ] no separate `turbo:load` reinitializer was needed for normal `rfk_*` usage
-
-Notes:
-
 ## Event checks
 
 - [ ] `rails-fields-kit--tom-select:load`
@@ -128,6 +129,7 @@ Notes:
 - [ ] `rails-fields-kit--tom-select:item-add`
 - [ ] `rails-fields-kit--tom-select:item-remove`
 - [ ] `rails-fields-kit--tom-select:clear`
+- [ ] create-on-the-fly success matched the current success surface documented in `doc/events.md`
 
 Notes:
 
