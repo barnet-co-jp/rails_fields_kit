@@ -95,6 +95,9 @@ Verify:
 - edit forms can load selected labels through `selected_url:`
 - create-on-the-fly adds a newly-created option
 - token suggestion endpoints return option JSON for `rfk_token_search`
+- fixed `query_params:` reach representative remote search requests when the field relies on request context
+- fixed `selected_query_params:` reach representative selected preload requests when `selected_url:` is used
+- fixed `create_params:` are merged into representative create-on-the-fly requests when the field relies on them
 - validation errors return `422`
 - authorization failures return `403`
 
