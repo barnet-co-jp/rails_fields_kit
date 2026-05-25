@@ -90,6 +90,9 @@ Notes:
 - [ ] `rfk_find_with` returns selected option labels for edit forms
 - [ ] `rfk_create_with` creates options on the fly
 - [ ] `rfk_token_suggestions_with` returns token suggestion option JSON
+- [ ] fixed `query_params:` reached representative remote search requests
+- [ ] fixed `selected_query_params:` reached representative selected preload requests
+- [ ] fixed `create_params:` were merged into representative create-on-the-fly requests
 - [ ] validation errors return `422`
 - [ ] authorization failures return `403`
 - [ ] wrapped responses work with `options` / `option`
