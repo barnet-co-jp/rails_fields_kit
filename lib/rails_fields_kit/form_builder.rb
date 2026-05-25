@@ -332,7 +332,7 @@ module RailsFieldsKit
       return if value.respond_to?(:empty?) && value.empty?
 
       data_key = "rails_fields_kit__tom_select_#{key}_value"
-      data[data_key] = value.is_a?(Array) || value.is_a?(Hash) ? JSON.generate(value) : value
+      data[data_key] = (value.is_a?(Array) || value.is_a?(Hash)) ? JSON.generate(value) : value
     end
 
     def rfk_choices_with_selected(collection, selected_choices:, value_method:, label_method:, disabled: nil, option_html: {})
@@ -399,7 +399,7 @@ module RailsFieldsKit
         [rfk_choice_from_hash(selected)]
       when Array
         selected.flat_map do |item|
-          item.is_a?(Array) && item.size == 2 ? [item] : rfk_normalize_selected(item, value_method: value_method, label_method: label_method)
+          (item.is_a?(Array) && item.size == 2) ? [item] : rfk_normalize_selected(item, value_method: value_method, label_method: label_method)
         end
       else
         [[rfk_read_selected_label(selected, label_method), rfk_read_selected_value(selected, value_method)]]
