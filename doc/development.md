@@ -1,6 +1,6 @@
 # Rails Fields Kit Development
 
-This document summarizes the local development checks that should stay aligned with CI.
+This document summarizes the local development checks and how they relate to GitHub Actions.
 
 ## Install dependencies
 
@@ -28,7 +28,7 @@ The RSpec suite includes a Node-sandbox smoke check for the documented `rails_fi
 bundle exec rake build
 ```
 
-These are the primary repository checks used in CI:
+These are the primary local checks for branch-ready work:
 
 - `bundle exec standardrb`
 - `bundle exec rspec`
@@ -42,15 +42,23 @@ When build fails, check these first:
 - documentation paths referenced from README
 - RubyGems warnings about metadata, licenses, or required Ruby version
 
+## GitHub Actions confirmation
+
+Run the local checks first during active development. When the branch head is ready for review or release, also confirm the latest GitHub Actions CI run is green for that exact commit.
+
+Current CI adds these repository-level confirmations on top of the local workflow above:
+
+- `bundle exec standardrb`
+- `bundle exec rspec`
+- JavaScript syntax checks for `app/javascript/rails_fields_kit/*.js`
+- gem build, install, and `require "rails_fields_kit"` smoke checks
+
 ## Release-related checks
 
 Before release, also review:
 
 - `CHANGELOG.md`
 - `doc/release.md`
+- `doc/final_release_checklist.md`
 - `rails_fields_kit.gemspec`
 - `lib/rails_fields_kit/version.rb`
-
-## CI policy
-
-CI should stay aligned with the local commands above. During active development, run the local checks first and use GitHub Actions to confirm the branch head when the change is ready for review.

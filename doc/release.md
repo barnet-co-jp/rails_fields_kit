@@ -6,15 +6,16 @@ This guide describes the lightweight release flow for Rails Fields Kit.
 
 - Rails Fields Kit targets Rails 7.0 and newer.
 - Rails dependency is currently bounded to Rails 7 and Rails 8.
-- CI is intentionally not required during active development.
-- During development, verify changes locally with:
+- GitHub Actions CI is not required for every exploratory commit during active development.
+- Branch-ready changes should pass the local checks in [`doc/development.md`](development.md):
 
 ```bash
-git pull
+bundle exec standardrb
 bundle exec rspec
+bundle exec rake build
 ```
 
-- Run CI only near the final release stage when it is worth spending CI minutes.
+- Before release, rerun those local checks on the latest `main` and confirm GitHub Actions CI succeeds for the exact release candidate commit.
 
 ## Pre-release checklist
 
@@ -30,19 +31,29 @@ bundle exec rspec
    bundle install
    ```
 
-3. Run the test suite locally.
+3. Run the linter locally.
+
+   ```bash
+   bundle exec standardrb
+   ```
+
+4. Run the test suite locally.
 
    ```bash
    bundle exec rspec
    ```
 
-4. Build the gem locally.
+5. Build the gem locally.
 
    ```bash
    bundle exec rake build
    ```
 
-5. Review documentation.
+6. Confirm the latest GitHub Actions CI run is green for the commit you plan to release.
+
+   This is the final branch-head confirmation for lint, RSpec, JavaScript syntax, and gem package/install smoke checks.
+
+7. Review documentation.
 
    - `README.md`
    - `CHANGELOG.md`
@@ -62,14 +73,14 @@ bundle exec rspec
    - `doc/release.md`
    - the version-specific release note draft for the target release
 
-6. Confirm version.
+8. Confirm version.
 
    ```ruby
    # lib/rails_fields_kit/version.rb
    RailsFieldsKit::VERSION = "x.y.z"
    ```
 
-7. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
+9. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
 
 ## Release steps
 
