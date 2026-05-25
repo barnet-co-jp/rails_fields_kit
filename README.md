@@ -29,6 +29,8 @@ Use the generated `doc/rails_fields_kit_setup.md` in your host app as a short ch
 Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and controller-side helpers. It does not install Tom Select or choose a JavaScript bundling strategy for your app.
 
 For the current direction and integration priorities, see [Roadmap](ROADMAP.md).
+For repo positioning and responsibility boundaries, see [Product profile](Product%20Profile.md).
+For repo-specific working guidance, see [AGENTS](AGENTS.md).
 For optional table integration metadata, see [Table adapter metadata](doc/table_adapters.md). This lets table-oriented gems read Rails Fields Kit filter/editor metadata through `to_table_filter`, `to_table_cell_editor`, and hash-like `to_hash` protocols without taking a hard dependency.
 See [`doc/setup.md`](doc/setup.md) for the maintained setup walkthrough.
 See [`doc/public_api.md`](doc/public_api.md) for the intended stable API surface.
