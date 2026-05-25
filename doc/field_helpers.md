@@ -14,6 +14,28 @@ Use this for a normal single select that should get Tom Select behavior.
   allow_clear: true %>
 ```
 
+When replacing an existing `collection_select`, keep the same model attribute and ordinary Rails select options so the submitted param shape stays the same:
+
+```erb
+<%= f.collection_select :company_id,
+  @companies,
+  :id,
+  :name,
+  { include_blank: "Select a company" } %>
+```
+
+```erb
+<%= f.rfk_select :company_id,
+  collection: @companies,
+  collection_value_method: :id,
+  collection_label_method: :name,
+  include_blank: "Select a company" %>
+```
+
+For collection-backed `rfk_select`, Rails still uses the same field name, so existing strong params and normal save flows do not need extra changes just because the form helper changed. Edit-form redisplay and validation rerender also keep using the model value already assigned to `company_id`, so the selected option is preserved the same way as an ordinary Rails select.
+
+Use `selected:` only when the field needs to preload a value that is not already present in the rendered collection, such as a remote combobox or a collection loaded later.
+
 ### `rfk_combobox`
 
 Use this for searchable remote selects and editable comboboxes.
@@ -234,6 +256,8 @@ Option-level customization:
 ```
 
 Use boolean `disabled: true` to disable the whole select. Use array/value `disabled:` to disable specific options.
+
+`include_blank:` and `prompt:` keep using the normal Rails `select` option behavior, so a `collection_select` to `rfk_select` migration can preserve blank-option wording without changing controller or model code.
 
 ## Remote option options
 
