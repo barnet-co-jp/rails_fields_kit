@@ -139,6 +139,8 @@ Listen for the events documented in [`events.md`](events.md):
 - `rails-fields-kit--tom-select:item-remove`
 - `rails-fields-kit--tom-select:clear`
 
+For create-on-the-fly success, verify the current success surface documented in [`events.md`](events.md). On current `main`, that means `item-add` and `change` rather than a dedicated create-success event.
+
 ## Release gate
 
 Before release, confirm:
