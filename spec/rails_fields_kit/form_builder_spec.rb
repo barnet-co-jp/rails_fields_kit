@@ -63,10 +63,16 @@ RSpec.describe RailsFieldsKit::FormBuilder do
 
   def with_available_locales(*locales)
     previous_available_locales = I18n.available_locales
+    previous_load_path = I18n.load_path.dup
+    locale_paths = locales.map { |locale| File.expand_path("../../config/locales/#{locale}.yml", __dir__) }
+    I18n.load_path |= locale_paths
+    I18n.reload!
     I18n.available_locales = (previous_available_locales + locales).uniq
     yield
   ensure
+    I18n.load_path = previous_load_path
     I18n.available_locales = previous_available_locales
+    I18n.reload!
   end
 
   around do |example|
