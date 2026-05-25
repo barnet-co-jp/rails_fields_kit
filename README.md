@@ -230,6 +230,38 @@ Use `rfk_token_search` when you want a search box for structured phrases such as
 
 Use `RailsFieldsKit::TokenSuggestions.build` with `rfk_token_suggestions_with` to generate operator, field, predicate, value, and saved-search suggestions for the endpoint. Use `RailsFieldsKit::RansackSuggestions.build` when those suggestions should carry Ransack predicate metadata.
 
+### Table metadata helpers
+
+If a table helper or host app already describes filters and cell editors as column metadata, Rails Fields Kit can render the current public field helpers from that metadata without taking over query execution or persistence.
+
+```ruby
+columns = [
+  {
+    key: :customer_id,
+    filter_input: RailsFieldsKit::TableFilterInput.combobox(
+      :customer_id,
+      url: customers_path(format: :json),
+      selected_url: selected_customers_path(format: :json),
+      value_field: "id",
+      label_field: "name"
+    )
+  },
+  {
+    key: :status,
+    cell_editor: RailsFieldsKit::TableCellInput.enum_select(:status)
+  }
+]
+```
+
+```erb
+<%= form_with model: @table_preferences do |f| %>
+  <%= f.rfk_table_filters(columns) %>
+  <%= f.rfk_table_cell_editors(columns) %>
+<% end %>
+```
+
+This keeps the table gem or host app responsible for collecting column definitions, executing queries, and saving preferences. Rails Fields Kit only turns the documented metadata into FormBuilder helper calls. For the full protocol, renderer call specs, and Ransack-oriented metadata notes, see [`doc/table_adapters.md`](doc/table_adapters.md).
+
 ### Object collections, grouped selects, and enum selects
 
 Collections can be arrays of pairs, hashes, or model-like objects:
