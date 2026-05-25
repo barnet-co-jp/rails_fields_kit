@@ -59,6 +59,10 @@ console.assert(TomSelectController === DirectTomSelectController)
 
 If the sample app uses a bundler alias or custom resolver, confirm it still resolves those documented import paths rather than an app-specific private path.
 
+If the sample app uses importmap, confirm the documented `config/importmap.rb` pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` resolve without switching to a private asset path or an undocumented pin name.
+
+If the sample app uses importmap, confirm the documented controller registration still works from the app's existing Stimulus boot file after those pins are added.
+
 Load Tom Select CSS:
 
 ```js
