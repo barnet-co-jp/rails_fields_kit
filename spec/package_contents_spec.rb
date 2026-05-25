@@ -22,4 +22,17 @@ RSpec.describe "package contents" do
       "doc/sample_app_checklist.md"
     )
   end
+
+  it "ships the maintained public reference docs linked from README and setup" do
+    expect(specification.files).to include(
+      "doc/public_api.md",
+      "doc/field_helpers.md",
+      "doc/controller_helpers.md",
+      "doc/configuration.md",
+      "doc/events.md",
+      "doc/token_suggestions.md",
+      "doc/ransack_suggestions.md",
+      "doc/table_adapters.md"
+    )
+  end
 end
