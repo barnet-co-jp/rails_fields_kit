@@ -26,6 +26,7 @@ RSpec.describe "package contents" do
   it "ships the maintained public reference docs linked from README and setup" do
     expect(specification.files).to include(
       "doc/public_api.md",
+      "doc/select_migration.md",
       "doc/field_helpers.md",
       "doc/controller_helpers.md",
       "doc/configuration.md",
