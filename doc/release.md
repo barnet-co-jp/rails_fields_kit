@@ -61,6 +61,7 @@ bundle exec rake build
    - `CHANGELOG.md`
    - `doc/setup.md`
    - `doc/public_api.md`
+   - `doc/select_migration.md`
    - `doc/field_helpers.md`
    - `doc/controller_helpers.md`
    - `doc/token_suggestions.md`
