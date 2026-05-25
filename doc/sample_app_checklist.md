@@ -100,6 +100,22 @@ Verify:
 
 If the release surface includes `RailsFieldsKit::RansackSuggestions.build`, also confirm the sample endpoint can return the expected predicate metadata without handing query parsing to the gem.
 
+## Verify token suggestion and Ransack suggestion metadata
+
+Create at least one token suggestion endpoint that uses `rfk_token_suggestions_with(..., wrap: "options")` and confirm:
+
+- operator suggestions such as `OR` or `not()` are returned with the documented option fields
+- field suggestions such as `status:` and `assignee:` match the current labels and descriptions from `doc/token_suggestions.md`
+- value suggestions such as `status:open` and `status:closed` are returned when the field configuration includes values
+- saved-search suggestions such as `saved:mine` are returned with the expected label and optional description
+- the endpoint still returns suggestion metadata only, and submitted token parsing remains a host-app responsibility
+
+If the release surface includes `RailsFieldsKit::RansackSuggestions.build`, also confirm:
+
+- the response exposes `ransack_predicate` and `ransack_field` metadata on field suggestions
+- value suggestions preserve `ransack_value` and any documented extra metadata
+- the sample app treats that payload as metadata for a parser or search object, not as query execution performed by the gem
+
 ## Verify visible feedback surfaces
 
 Rails Fields Kit does not choose user-facing copy for the host app. In the sample app, confirm at least one searchable field exercises the visible states that your release expects to rely on:

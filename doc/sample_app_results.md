@@ -98,6 +98,20 @@ Notes:
 
 Notes:
 
+## Token suggestion and Ransack suggestion metadata checks
+
+- [ ] `rfk_token_suggestions_with(..., wrap: "options")` returns the documented wrapped suggestion payload
+- [ ] operator suggestions such as `OR` or `not()` use the documented option fields
+- [ ] field suggestions such as `status:` and `assignee:` match the documented labels and descriptions
+- [ ] value suggestions such as `status:open` and `status:closed` are returned when configured
+- [ ] saved-search suggestions such as `saved:mine` return the expected label and optional description
+- [ ] the sample app still treats submitted token text as a host-app parsing concern
+- [ ] Ransack field suggestions expose `ransack_predicate` and `ransack_field` when that release surface is in scope
+- [ ] Ransack value suggestions preserve `ransack_value` and any documented extra metadata when that release surface is in scope
+- [ ] the sample app treats Ransack suggestion payload as metadata only, not as query execution performed by the gem
+
+Notes:
+
 ## Visible feedback checks
 
 - [ ] `placeholder` copy reads as intended before interaction
