@@ -88,6 +88,26 @@ resolve: {
 }
 ```
 
+For importmap, keep Tom Select on the host app's normal pinning flow and pin the Rails Fields Kit entrypoints explicitly:
+
+```ruby
+# config/importmap.rb
+pin "tom-select"
+pin "rails_fields_kit", to: "rails_fields_kit/index.js"
+pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
+```
+
+Then register the controller from the file where the host app already boots Stimulus:
+
+```js
+import { application } from "controllers/application"
+import { TomSelectController } from "rails_fields_kit"
+
+application.register("rails-fields-kit--tom-select", TomSelectController)
+```
+
+`rails_fields_kit/index.js` re-exports the same controller as `rails_fields_kit/tom_select_controller`, so both documented import paths stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
+
 ## 4. Load Tom Select CSS
 
 Use the stylesheet pipeline or bundler already used by the application.
@@ -96,7 +116,7 @@ Use the stylesheet pipeline or bundler already used by the application.
 import "tom-select/dist/css/tom-select.css"
 ```
 
-Rails Fields Kit intentionally does not generate importmap-specific setup. Importmap applications can pin `tom-select` and register the controller manually.
+Rails Fields Kit intentionally does not generate importmap-specific setup beyond the documented manual pins above.
 
 ## 5. Add a searchable combobox
 
