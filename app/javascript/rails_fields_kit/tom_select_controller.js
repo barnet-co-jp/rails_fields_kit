@@ -238,7 +238,11 @@ export default class extends Controller {
       body: JSON.stringify({ ...this.createParamsValue, [this.createParamValue]: input })
     })
       .then((response) => this.handleCreateResponse(response))
-      .then((json) => callback(this.normalizeCreatedOption(json)))
+      .then((json) => {
+        const option = this.normalizeCreatedOption(json)
+        if (option) this.dispatch("create", { detail: { input, option } })
+        callback(option)
+      })
       .catch((error) => {
         this.dispatchRequestError("create-error", "create", { input }, error)
         callback(false)
