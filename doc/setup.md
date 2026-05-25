@@ -169,3 +169,5 @@ end
 ## 7. Listen to events when needed
 
 See [`events.md`](events.md) for the Stimulus events emitted by the Tom Select controller.
+
+Remote search and selected preload have dedicated success and failure events. Create-on-the-fly currently reports success through the normal `item-add` / `change` interaction events and keeps `create-error` as the dedicated failure hook. Visible success or error UI remains a host-app responsibility.
