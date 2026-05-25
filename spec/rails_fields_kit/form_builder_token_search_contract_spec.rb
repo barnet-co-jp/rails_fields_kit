@@ -8,9 +8,9 @@ RSpec.describe "rfk_token_search defaults" do
   include ActionView::Helpers::TagHelper
   include ActionView::Context
 
-  DummyModel = Struct.new(:query) do
+  TokenSearchContractModel = Struct.new(:query) do
     def self.model_name
-      ActiveModel::Name.new(self, nil, "DummyModel")
+      ActiveModel::Name.new(self, nil, "TokenSearchContractModel")
     end
 
     def persisted?
@@ -26,7 +26,7 @@ RSpec.describe "rfk_token_search defaults" do
     false
   end
 
-  def form_builder(model = DummyModel.new(nil), object_name = :dummy_model)
+  def form_builder(model = TokenSearchContractModel.new(nil), object_name = :token_search_contract_model)
     ActionView::Helpers::FormBuilder.new(object_name, model, self, {})
   end
 
