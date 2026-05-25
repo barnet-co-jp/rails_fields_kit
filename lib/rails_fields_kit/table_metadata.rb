@@ -56,24 +56,45 @@ module RailsFieldsKit
       def duplicate_metadata(metadata)
         return metadata unless metadata.respond_to?(:to_hash)
 
-        metadata_hash = metadata.to_hash.dup
-        metadata_hash[:options] = metadata_hash[:options].dup if metadata_hash[:options].respond_to?(:dup)
-        metadata_hash["options"] = metadata_hash["options"].dup if metadata_hash["options"].respond_to?(:dup)
-        metadata_hash
+        normalize_metadata_hash(metadata.to_hash)
       end
 
       def normalize_hash_like_metadata(value)
         metadata = value.to_hash
         raise ArgumentError, "table metadata to_hash must return a hash" unless metadata.respond_to?(:to_hash)
 
-        metadata.to_hash
+        normalize_metadata_hash(metadata.to_hash)
       end
 
       def normalize_hash_like_column(column)
         normalized_column = column.to_hash
         raise ArgumentError, "table column to_hash must return a hash" unless normalized_column.respond_to?(:to_hash)
 
-        normalized_column.to_hash
+        normalize_metadata_hash(normalized_column.to_hash)
+      end
+
+      def normalize_metadata_hash(hash)
+        normalized_hash = {}
+
+        hash.each_pair do |key, value|
+          normalized_key = normalize_metadata_key(key)
+          next if normalized_hash.key?(normalized_key) && value.nil?
+
+          normalized_hash[normalized_key] = duplicate_metadata_value(normalized_key, value)
+        end
+
+        normalized_hash
+      end
+
+      def normalize_metadata_key(key)
+        key.respond_to?(:to_sym) ? key.to_sym : key
+      end
+
+      def duplicate_metadata_value(key, value)
+        return value.dup if key == :options && value.respond_to?(:dup)
+        return value.dup if value.is_a?(Hash)
+
+        value
       end
 
       def normalize_columns(columns)
