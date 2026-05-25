@@ -56,24 +56,59 @@ module RailsFieldsKit
       def duplicate_metadata(metadata)
         return metadata unless metadata.respond_to?(:to_hash)
 
-        metadata_hash = metadata.to_hash.dup
-        metadata_hash[:options] = metadata_hash[:options].dup if metadata_hash[:options].respond_to?(:dup)
-        metadata_hash["options"] = metadata_hash["options"].dup if metadata_hash["options"].respond_to?(:dup)
-        metadata_hash
+        duplicate_metadata_hash(metadata.to_hash)
       end
 
       def normalize_hash_like_metadata(value)
         metadata = value.to_hash
         raise ArgumentError, "table metadata to_hash must return a hash" unless metadata.respond_to?(:to_hash)
 
-        metadata.to_hash
+        duplicate_metadata_hash(metadata.to_hash)
       end
 
       def normalize_hash_like_column(column)
         normalized_column = column.to_hash
         raise ArgumentError, "table column to_hash must return a hash" unless normalized_column.respond_to?(:to_hash)
 
-        normalized_column.to_hash
+        duplicate_metadata_hash(normalized_column.to_hash)
+      end
+
+      def duplicate_metadata_hash(hash)
+        duplicated_hash = {}
+        canonical_keys = {}
+
+        hash.each_pair do |key, value|
+          canonical_key = normalize_metadata_key(key)
+
+          if canonical_keys.key?(canonical_key)
+            existing_key = canonical_keys[canonical_key]
+            next if value.nil?
+
+            if duplicated_hash[existing_key].nil?
+              duplicated_hash.delete(existing_key)
+              duplicated_hash[key] = duplicate_metadata_value(canonical_key, value)
+              canonical_keys[canonical_key] = key
+            end
+
+            next
+          end
+
+          duplicated_hash[key] = duplicate_metadata_value(canonical_key, value)
+          canonical_keys[canonical_key] = key
+        end
+
+        duplicated_hash
+      end
+
+      def normalize_metadata_key(key)
+        key.respond_to?(:to_sym) ? key.to_sym : key
+      end
+
+      def duplicate_metadata_value(key, value)
+        return value.dup if key == :options && value.respond_to?(:dup)
+        return value.dup if value.is_a?(Hash)
+
+        value
       end
 
       def normalize_columns(columns)
@@ -112,7 +147,7 @@ module RailsFieldsKit
       end
 
       def read_first_column_value(column, keys)
-        hash_column = column.is_a?(Hash) || metadata_column_object?(column) ? column : normalized_hash_like_column_or_nil(column)
+        hash_column = (column.is_a?(Hash) || metadata_column_object?(column)) ? column : normalized_hash_like_column_or_nil(column)
 
         keys.each do |key|
           value = read_column_value(column, key, hash_column)
@@ -130,7 +165,8 @@ module RailsFieldsKit
 
       def read_hash_column_value(column, key)
         return column[key] if column.key?(key)
-        return column[key.to_s] if column.key?(key.to_s)
+
+        column[key.to_s] if column.key?(key.to_s)
       end
 
       def read_object_column_value(column, key)

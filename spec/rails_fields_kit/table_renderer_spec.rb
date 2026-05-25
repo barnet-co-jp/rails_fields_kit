@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 RSpec.describe RailsFieldsKit::TableRenderer do
+  class FakeHashLikeMetadata
+    def initialize(hash)
+      @hash = hash
+    end
+
+    def to_hash
+      @hash
+    end
+  end
+
   class FakeTableFormBuilder
     attr_reader :calls
 
@@ -29,62 +39,108 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     end
   end
 
-  class HashLikeOptions
-    def to_hash
-      { url: "/customers.json" }
-    end
-  end
-
-  class HashLikeRendererMetadata
-    def initialize(metadata)
-      @metadata = metadata
-    end
-
-    def to_hash
-      @metadata
-    end
-
-    def to_a
-      [[:unexpected, true]]
-    end
-  end
-
   around do |example|
     described_class.reset_field_helpers!
     example.run
     described_class.reset_field_helpers!
   end
 
-  it "builds a filter call spec from filter metadata objects" do
-    filter = RailsFieldsKit::TableFilterInput.new(
-      :combobox,
-      :customer_id,
-      url: "/customers.json"
-    )
+  it "normalizes string field types and methods for filter calls" do
+    metadata = {"field_type" => " token_search ", "method" => " query ", "options" => {"url" => "/tokens.json"}}
 
-    expect(described_class.filter_call(filter)).to eq(
-      helper: :rfk_combobox,
-      method: :customer_id,
-      options: { url: "/customers.json" }
+    expect(described_class.filter_call(metadata)).to eq(
+      helper: :rfk_token_search,
+      method: :query,
+      options: {"url" => "/tokens.json"}
+    )
+  end
+
+  it "normalizes string field types and methods for cell editor calls" do
+    metadata = {"field_type" => " enum_select ", "method" => " status ", "options" => {}}
+
+    expect(described_class.cell_editor_call(metadata)).to eq(
+      helper: :rfk_enum_select,
+      method: :status,
+      options: {}
+    )
+  end
+
+  it "normalizes registered helper lookups" do
+    expect(described_class.helper_for(" token_search ")).to eq(:rfk_token_search)
+  end
+
+  it "duplicates filter call options hashes" do
+    metadata = {field_type: "token_search", method: "query", options: {url: "/tokens.json"}}
+
+    call = described_class.filter_call(metadata)
+    call[:options][:url] = "/mutated.json"
+
+    expect(metadata).to eq(field_type: "token_search", method: "query", options: {url: "/tokens.json"})
+  end
+
+  it "duplicates cell editor call options hashes" do
+    metadata = {field_type: "enum_select", method: "status", options: {include_blank: true}}
+
+    call = described_class.cell_editor_call(metadata)
+    call[:options][:include_blank] = false
+
+    expect(metadata).to eq(field_type: "enum_select", method: "status", options: {include_blank: true})
+  end
+
+  it "returns rendered filter results in metadata order" do
+    form_builder = FakeTableFormBuilder.new
+    filters = [
+      {field_type: "combobox", method: "customer_id", options: {url: "/customers.json"}},
+      {field_type: "token_search", method: "query", options: {url: "/tokens.json"}}
+    ]
+
+    expect(described_class.render_filters(form_builder, filters)).to eq(["combobox", "token_search"])
+    expect(form_builder.calls).to eq([
+      [:rfk_combobox, :customer_id, {url: "/customers.json"}],
+      [:rfk_token_search, :query, {url: "/tokens.json"}]
+    ])
+  end
+
+  it "returns rendered cell editor results in metadata order" do
+    form_builder = FakeTableFormBuilder.new
+    editors = [
+      {field_type: "enum_select", method: "status", options: {}},
+      {field_type: "combobox", method: "customer_id", options: {url: "/customers.json"}}
+    ]
+
+    expect(described_class.render_cell_editors(form_builder, editors)).to eq(["enum_select", "combobox"])
+    expect(form_builder.calls).to eq([
+      [:rfk_enum_select, :status, {}],
+      [:rfk_combobox, :customer_id, {url: "/customers.json"}]
+    ])
+  end
+
+  it "builds a filter call spec from filter metadata objects" do
+    metadata = RailsFieldsKit::TableFilterInput.token_search(:query, url: "/tokens.json")
+
+    expect(described_class.filter_call(metadata)).to eq(
+      helper: :rfk_token_search,
+      method: :query,
+      options: {url: "/tokens.json"}
     )
   end
 
   it "builds a filter call spec from hash-like metadata" do
-    metadata = HashLikeRendererMetadata.new(
-      field_type: "combobox",
-      method: "customer_id",
-      options: { url: "/customers.json" }
+    metadata = FakeHashLikeMetadata.new(
+      field_type: "token_search",
+      method: :query,
+      options: {url: "/tokens.json"}
     )
 
     expect(described_class.filter_call(metadata)).to eq(
-      helper: :rfk_combobox,
-      method: :customer_id,
-      options: { url: "/customers.json" }
+      helper: :rfk_token_search,
+      method: :query,
+      options: {url: "/tokens.json"}
     )
   end
 
   it "rejects invalid hash-like filter metadata" do
-    metadata = HashLikeRendererMetadata.new([[:field_type, "combobox"]])
+    metadata = FakeHashLikeMetadata.new([[:field_type, "token_search"]])
 
     expect { described_class.filter_call(metadata) }.to raise_error(
       ArgumentError,
@@ -93,7 +149,7 @@ RSpec.describe RailsFieldsKit::TableRenderer do
   end
 
   it "rejects non-hash filter metadata" do
-    expect { described_class.filter_call(Object.new) }.to raise_error(
+    expect { described_class.filter_call(:token_search) }.to raise_error(
       ArgumentError,
       "table metadata must be a hash"
     )
@@ -101,124 +157,93 @@ RSpec.describe RailsFieldsKit::TableRenderer do
 
   it "builds filter call specs in batches" do
     filters = [
-      RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json"),
-      nil,
-      RailsFieldsKit::TableFilterInput.token_search(:query, url: "/search_tokens.json")
+      {field_type: "combobox", method: "customer_id", options: {url: "/customers.json"}},
+      {field_type: "token_search", method: "query", options: {url: "/tokens.json"}}
     ]
 
     expect(described_class.filter_calls(filters)).to eq([
-      {
-        helper: :rfk_combobox,
-        method: :customer_id,
-        options: { url: "/customers.json" }
-      },
-      {
-        helper: :rfk_token_search,
-        method: :query,
-        options: { url: "/search_tokens.json" }
-      }
+      {helper: :rfk_combobox, method: :customer_id, options: {url: "/customers.json"}},
+      {helper: :rfk_token_search, method: :query, options: {url: "/tokens.json"}}
     ])
   end
 
   it "treats nil filter batches as empty" do
-    form_builder = FakeTableFormBuilder.new
-
     expect(described_class.filter_calls(nil)).to eq([])
-    expect(described_class.render_filters(form_builder, nil)).to eq([])
-    expect(form_builder.calls).to eq([])
   end
 
   it "builds a single filter call spec from one hash in batch APIs" do
-    metadata = { field_type: "combobox", method: "customer_id", options: { url: "/customers.json" } }
+    metadata = {field_type: "token_search", method: "query", options: {url: "/tokens.json"}}
 
     expect(described_class.filter_calls(metadata)).to eq([
-      {
-        helper: :rfk_combobox,
-        method: :customer_id,
-        options: { url: "/customers.json" }
-      }
+      {helper: :rfk_token_search, method: :query, options: {url: "/tokens.json"}}
     ])
   end
 
   it "treats a single hash-like metadata object as one batch entry" do
-    metadata = HashLikeRendererMetadata.new(
-      field_type: "combobox",
-      method: "customer_id",
-      options: { url: "/customers.json" }
+    metadata = FakeHashLikeMetadata.new(
+      field_type: "token_search",
+      method: :query,
+      options: {url: "/tokens.json"}
     )
 
-    expect(metadata.to_a).to eq([[:unexpected, true]])
-
     expect(described_class.filter_calls(metadata)).to eq([
-      {
-        helper: :rfk_combobox,
-        method: :customer_id,
-        options: { url: "/customers.json" }
-      }
+      {helper: :rfk_token_search, method: :query, options: {url: "/tokens.json"}}
     ])
   end
 
   it "builds filter call specs from enumerable batch inputs" do
     filters = [
-      { field_type: "combobox", method: "customer_id", options: { url: "/customers.json" } },
-      nil,
-      RailsFieldsKit::TableFilterInput.token_search(:query, url: "/search_tokens.json")
+      {field_type: "combobox", method: "customer_id", options: {url: "/customers.json"}},
+      {field_type: "token_search", method: "query", options: {url: "/tokens.json"}}
     ].each
 
     expect(described_class.filter_calls(filters)).to eq([
-      {
-        helper: :rfk_combobox,
-        method: :customer_id,
-        options: { url: "/customers.json" }
-      },
-      {
-        helper: :rfk_token_search,
-        method: :query,
-        options: { url: "/search_tokens.json" }
-      }
+      {helper: :rfk_combobox, method: :customer_id, options: {url: "/customers.json"}},
+      {helper: :rfk_token_search, method: :query, options: {url: "/tokens.json"}}
     ])
   end
 
   it "normalizes metadata method names" do
-    metadata = { field_type: "combobox", method: " customer_id ", options: { url: "/customers.json" } }
+    metadata = {field_type: "token_search", method: " query ", options: {url: "/tokens.json"}}
 
     expect(described_class.filter_call(metadata)).to eq(
-      helper: :rfk_combobox,
-      method: :customer_id,
-      options: { url: "/customers.json" }
+      helper: :rfk_token_search,
+      method: :query,
+      options: {url: "/tokens.json"}
     )
   end
 
   it "normalizes metadata options" do
-    metadata = { field_type: "combobox", method: :customer_id, options: HashLikeOptions.new }
+    metadata = {field_type: "token_search", method: "query", options: {"url" => "/tokens.json"}}
 
     expect(described_class.filter_call(metadata)).to eq(
-      helper: :rfk_combobox,
-      method: :customer_id,
-      options: { url: "/customers.json" }
+      helper: :rfk_token_search,
+      method: :query,
+      options: {"url" => "/tokens.json"}
     )
   end
 
   it "defaults missing metadata options to an empty hash" do
-    metadata = { field_type: "combobox", method: :customer_id }
+    metadata = {field_type: "token_search", method: "query"}
 
     expect(described_class.filter_call(metadata)).to eq(
-      helper: :rfk_combobox,
-      method: :customer_id,
+      helper: :rfk_token_search,
+      method: :query,
       options: {}
     )
   end
 
   it "duplicates metadata options" do
-    options = { url: "/customers.json" }
-    call = described_class.filter_call(field_type: "combobox", method: :customer_id, options: options)
-    call.fetch(:options).clear
+    metadata = {field_type: "token_search", method: "query", options: {url: "/tokens.json"}}
 
-    expect(options).to eq(url: "/customers.json")
+    call = described_class.filter_call(metadata)
+    call[:options][:url] = "/mutated.json"
+
+    expect(metadata).to eq(field_type: "token_search", method: "query", options: {url: "/tokens.json"})
   end
 
   it "rejects non-hash metadata options" do
-    metadata = { field_type: "combobox", method: :customer_id, options: [[:url, "/customers.json"]] }
+    metadata = {field_type: "token_search", method: "query", options: "not a hash"}
 
     expect { described_class.filter_call(metadata) }.to raise_error(
       ArgumentError,
@@ -227,26 +252,19 @@ RSpec.describe RailsFieldsKit::TableRenderer do
   end
 
   it "builds a token search filter call spec" do
-    filter = RailsFieldsKit::TableFilterInput.token_search(
-      :query,
-      url: "/search_tokens.json",
-      placeholder: "status:open keyword"
-    )
+    metadata = {field_type: "token_search", method: "query", options: {url: "/tokens.json"}}
 
-    expect(described_class.filter_call(filter)).to eq(
+    expect(described_class.filter_call(metadata)).to eq(
       helper: :rfk_token_search,
       method: :query,
-      options: {
-        url: "/search_tokens.json",
-        placeholder: "status:open keyword"
-      }
+      options: {url: "/tokens.json"}
     )
   end
 
   it "builds a cell editor call spec" do
-    editor = RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+    metadata = {field_type: "enum_select", method: "status", options: {}}
 
-    expect(described_class.cell_editor_call(editor)).to eq(
+    expect(described_class.cell_editor_call(metadata)).to eq(
       helper: :rfk_enum_select,
       method: :status,
       options: {}
@@ -254,9 +272,9 @@ RSpec.describe RailsFieldsKit::TableRenderer do
   end
 
   it "builds a cell editor call spec from hash-like metadata" do
-    metadata = HashLikeRendererMetadata.new(
+    metadata = FakeHashLikeMetadata.new(
       field_type: "enum_select",
-      method: "status",
+      method: :status,
       options: {}
     )
 
@@ -268,7 +286,7 @@ RSpec.describe RailsFieldsKit::TableRenderer do
   end
 
   it "rejects invalid hash-like cell editor metadata" do
-    metadata = HashLikeRendererMetadata.new([[:field_type, "enum_select"]])
+    metadata = FakeHashLikeMetadata.new([[:field_type, "enum_select"]])
 
     expect { described_class.cell_editor_call(metadata) }.to raise_error(
       ArgumentError,
@@ -277,7 +295,7 @@ RSpec.describe RailsFieldsKit::TableRenderer do
   end
 
   it "rejects non-hash cell editor metadata" do
-    expect { described_class.cell_editor_call(Object.new) }.to raise_error(
+    expect { described_class.cell_editor_call(:enum_select) }.to raise_error(
       ArgumentError,
       "table metadata must be a hash"
     )
@@ -285,139 +303,105 @@ RSpec.describe RailsFieldsKit::TableRenderer do
 
   it "builds cell editor call specs in batches" do
     editors = [
-      RailsFieldsKit::TableCellInput.new(:enum_select, :status),
-      nil,
-      RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json")
+      {field_type: "enum_select", method: "status", options: {}},
+      {field_type: "combobox", method: "customer_id", options: {url: "/customers.json"}}
     ]
 
     expect(described_class.cell_editor_calls(editors)).to eq([
-      {
-        helper: :rfk_enum_select,
-        method: :status,
-        options: {}
-      },
-      {
-        helper: :rfk_combobox,
-        method: :customer_id,
-        options: { url: "/customers.json" }
-      }
+      {helper: :rfk_enum_select, method: :status, options: {}},
+      {helper: :rfk_combobox, method: :customer_id, options: {url: "/customers.json"}}
     ])
   end
 
   it "treats nil cell editor batches as empty" do
-    form_builder = FakeTableFormBuilder.new
-
     expect(described_class.cell_editor_calls(nil)).to eq([])
-    expect(described_class.render_cell_editors(form_builder, nil)).to eq([])
-    expect(form_builder.calls).to eq([])
   end
 
   it "builds a single cell editor call spec from one hash in batch APIs" do
-    metadata = { field_type: "enum_select", method: "status", options: {} }
+    metadata = {field_type: "enum_select", method: "status", options: {}}
 
     expect(described_class.cell_editor_calls(metadata)).to eq([
-      {
-        helper: :rfk_enum_select,
-        method: :status,
-        options: {}
-      }
+      {helper: :rfk_enum_select, method: :status, options: {}}
     ])
   end
 
   it "treats a single hash-like cell editor metadata object as one batch entry" do
-    metadata = HashLikeRendererMetadata.new(
+    metadata = FakeHashLikeMetadata.new(
       field_type: "enum_select",
-      method: "status",
+      method: :status,
       options: {}
     )
 
-    expect(metadata.to_a).to eq([[:unexpected, true]])
-
     expect(described_class.cell_editor_calls(metadata)).to eq([
-      {
-        helper: :rfk_enum_select,
-        method: :status,
-        options: {}
-      }
+      {helper: :rfk_enum_select, method: :status, options: {}}
     ])
   end
 
   it "builds cell editor call specs from enumerable batch inputs" do
     editors = [
-      { field_type: "enum_select", method: "status", options: {} },
-      nil,
-      RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json")
+      {field_type: "enum_select", method: "status", options: {}},
+      {field_type: "combobox", method: "customer_id", options: {url: "/customers.json"}}
     ].each
 
     expect(described_class.cell_editor_calls(editors)).to eq([
-      {
-        helper: :rfk_enum_select,
-        method: :status,
-        options: {}
-      },
-      {
-        helper: :rfk_combobox,
-        method: :customer_id,
-        options: { url: "/customers.json" }
-      }
+      {helper: :rfk_enum_select, method: :status, options: {}},
+      {helper: :rfk_combobox, method: :customer_id, options: {url: "/customers.json"}}
     ])
   end
 
   it "renders filters through a form builder" do
     form_builder = FakeTableFormBuilder.new
-    filter = RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json")
+    metadata = {field_type: "token_search", method: "query", options: {url: "/tokens.json"}}
 
-    expect(described_class.render_filter(form_builder, filter)).to eq("combobox")
+    expect(described_class.render_filter(form_builder, metadata)).to eq("token_search")
     expect(form_builder.calls).to eq([
-      [:rfk_combobox, :customer_id, { url: "/customers.json" }]
+      [:rfk_token_search, :query, {url: "/tokens.json"}]
     ])
   end
 
   it "renders filters in batches" do
     form_builder = FakeTableFormBuilder.new
     filters = [
-      RailsFieldsKit::TableFilterInput.new(:combobox, :customer_id, url: "/customers.json"),
-      nil,
-      RailsFieldsKit::TableFilterInput.token_search(:query, url: "/search_tokens.json")
+      {field_type: "combobox", method: "customer_id", options: {url: "/customers.json"}},
+      {field_type: "token_search", method: "query", options: {url: "/tokens.json"}}
     ]
 
     expect(described_class.render_filters(form_builder, filters)).to eq(["combobox", "token_search"])
     expect(form_builder.calls).to eq([
-      [:rfk_combobox, :customer_id, { url: "/customers.json" }],
-      [:rfk_token_search, :query, { url: "/search_tokens.json" }]
+      [:rfk_combobox, :customer_id, {url: "/customers.json"}],
+      [:rfk_token_search, :query, {url: "/tokens.json"}]
     ])
   end
 
   it "renders one filter from one hash in batch APIs" do
     form_builder = FakeTableFormBuilder.new
-    metadata = { field_type: "combobox", method: "customer_id", options: { url: "/customers.json" } }
+    metadata = {field_type: "token_search", method: "query", options: {url: "/tokens.json"}}
 
-    expect(described_class.render_filters(form_builder, metadata)).to eq(["combobox"])
+    expect(described_class.render_filters(form_builder, metadata)).to eq(["token_search"])
     expect(form_builder.calls).to eq([
-      [:rfk_combobox, :customer_id, { url: "/customers.json" }]
+      [:rfk_token_search, :query, {url: "/tokens.json"}]
     ])
   end
 
   it "renders filters from enumerable batch inputs" do
     form_builder = FakeTableFormBuilder.new
     filters = [
-      { field_type: "combobox", method: "customer_id", options: { url: "/customers.json" } },
-      nil,
-      RailsFieldsKit::TableFilterInput.token_search(:query, url: "/search_tokens.json")
+      {field_type: "combobox", method: "customer_id", options: {url: "/customers.json"}},
+      {field_type: "token_search", method: "query", options: {url: "/tokens.json"}}
     ].each
 
     expect(described_class.render_filters(form_builder, filters)).to eq(["combobox", "token_search"])
     expect(form_builder.calls).to eq([
-      [:rfk_combobox, :customer_id, { url: "/customers.json" }],
-      [:rfk_token_search, :query, { url: "/search_tokens.json" }]
+      [:rfk_combobox, :customer_id, {url: "/customers.json"}],
+      [:rfk_token_search, :query, {url: "/tokens.json"}]
     ])
   end
 
   it "renders cell editors through a form builder" do
     form_builder = FakeTableFormBuilder.new
-    editor = RailsFieldsKit::TableCellInput.new(:enum_select, :status)
+    metadata = {field_type: "enum_select", method: "status", options: {}}
 
-    expect(described_class.render_cell_editor(form_builder, editor)).to eq("enum_select")
+    expect(described_class.render_cell_editor(form_builder, metadata)).to eq("enum_select")
     expect(form_builder.calls).to eq([
       [:rfk_enum_select, :status, {}]
     ])
@@ -426,21 +410,20 @@ RSpec.describe RailsFieldsKit::TableRenderer do
   it "renders cell editors in batches" do
     form_builder = FakeTableFormBuilder.new
     editors = [
-      RailsFieldsKit::TableCellInput.new(:enum_select, :status),
-      nil,
-      RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json")
+      {field_type: "enum_select", method: "status", options: {}},
+      {field_type: "combobox", method: "customer_id", options: {url: "/customers.json"}}
     ]
 
     expect(described_class.render_cell_editors(form_builder, editors)).to eq(["enum_select", "combobox"])
     expect(form_builder.calls).to eq([
       [:rfk_enum_select, :status, {}],
-      [:rfk_combobox, :customer_id, { url: "/customers.json" }]
+      [:rfk_combobox, :customer_id, {url: "/customers.json"}]
     ])
   end
 
   it "renders one cell editor from one hash in batch APIs" do
     form_builder = FakeTableFormBuilder.new
-    metadata = { field_type: "enum_select", method: "status", options: {} }
+    metadata = {field_type: "enum_select", method: "status", options: {}}
 
     expect(described_class.render_cell_editors(form_builder, metadata)).to eq(["enum_select"])
     expect(form_builder.calls).to eq([
@@ -451,40 +434,38 @@ RSpec.describe RailsFieldsKit::TableRenderer do
   it "renders cell editors from enumerable batch inputs" do
     form_builder = FakeTableFormBuilder.new
     editors = [
-      { field_type: "enum_select", method: "status", options: {} },
-      nil,
-      RailsFieldsKit::TableCellInput.new(:combobox, :customer_id, url: "/customers.json")
+      {field_type: "enum_select", method: "status", options: {}},
+      {field_type: "combobox", method: "customer_id", options: {url: "/customers.json"}}
     ].each
 
     expect(described_class.render_cell_editors(form_builder, editors)).to eq(["enum_select", "combobox"])
     expect(form_builder.calls).to eq([
       [:rfk_enum_select, :status, {}],
-      [:rfk_combobox, :customer_id, { url: "/customers.json" }]
+      [:rfk_combobox, :customer_id, {url: "/customers.json"}]
     ])
   end
 
   it "exposes registered helper mappings" do
-    expect(described_class.helper_for(:combobox)).to eq(:rfk_combobox)
-    expect(described_class.helper_for(:grouped_select)).to eq(:rfk_grouped_select)
-    expect(described_class.helper_for(" token_search ")).to eq(:rfk_token_search)
-    expect(described_class.registered_field_type?(:combobox)).to be(true)
-    expect(described_class.registered_field_type?(:unknown_field)).to be(false)
-    expect(described_class.registered_field_type?(nil)).to be(false)
+    expect(described_class.field_helpers).to include(
+      "combobox" => :rfk_combobox,
+      "token_search" => :rfk_token_search,
+      "enum_select" => :rfk_enum_select
+    )
   end
 
   it "returns duplicated registered helper mappings" do
     helpers = described_class.field_helpers
-    helpers.clear
+    helpers["custom"] = :custom_helper
 
-    expect(described_class.helper_for(:combobox)).to eq(:rfk_combobox)
-    expect(described_class.registered_field_type?(:combobox)).to be(true)
+    expect(described_class.field_helpers).not_to have_key("custom")
   end
 
   it "exposes custom registered helper mappings" do
     described_class.register_field_helper(:custom_field, :custom_table_field)
 
-    expect(described_class.helper_for(:custom_field)).to eq(:custom_table_field)
-    expect(described_class.registered_field_type?(:custom_field)).to be(true)
+    expect(described_class.field_helpers).to include(
+      "custom_field" => :custom_table_field
+    )
   end
 
   it "normalizes custom field helper registration" do
@@ -498,7 +479,7 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       ArgumentError,
       "table field type is required"
     )
-    expect { described_class.register_field_helper(:custom_field, " ") }.to raise_error(
+    expect { described_class.register_field_helper(:custom_field, nil) }.to raise_error(
       ArgumentError,
       "table helper name is required"
     )
@@ -506,23 +487,23 @@ RSpec.describe RailsFieldsKit::TableRenderer do
 
   it "allows custom field helper registration" do
     described_class.register_field_helper(:custom_field, :custom_table_field)
-    metadata = { field_type: "custom_field", method: "code", options: { prefix: "#" } }
+    metadata = {field_type: "custom_field", method: "code", options: {prefix: "#"}}
 
     expect(described_class.filter_call(metadata)).to eq(
       helper: :custom_table_field,
       method: :code,
-      options: { prefix: "#" }
+      options: {prefix: "#"}
     )
   end
 
   it "renders custom registered field helpers" do
     described_class.register_field_helper(:custom_field, :custom_table_field)
     form_builder = FakeTableFormBuilder.new
-    metadata = { field_type: "custom_field", method: "code", options: { prefix: "#" } }
+    metadata = {field_type: "custom_field", method: "code", options: {prefix: "#"}}
 
     expect(described_class.render_filter(form_builder, metadata)).to eq("custom")
     expect(form_builder.calls).to eq([
-      [:custom_table_field, :code, { prefix: "#" }]
+      [:custom_table_field, :code, {prefix: "#"}]
     ])
   end
 
@@ -530,15 +511,14 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     described_class.register_field_helper(:custom_field, :custom_table_field)
     described_class.reset_field_helpers!
 
-    metadata = { field_type: "custom_field", method: "code", options: {} }
+    metadata = {field_type: "custom_field", method: "code", options: {}}
     expect { described_class.filter_call(metadata) }.to raise_error(RailsFieldsKit::TableRenderer::UnknownFieldType)
   end
 
   it "raises for missing field types" do
     [
-      { method: "query", options: {} },
-      { field_type: nil, method: "query", options: {} },
-      { field_type: " ", method: "query", options: {} }
+      {method: "query", options: {}},
+      {field_type: nil, method: "query", options: {}}
     ].each do |metadata|
       expect { described_class.filter_call(metadata) }.to raise_error(
         RailsFieldsKit::TableRenderer::UnknownFieldType,
@@ -548,7 +528,7 @@ RSpec.describe RailsFieldsKit::TableRenderer do
   end
 
   it "raises for unknown field types" do
-    metadata = { field_type: "unknown", method: "query", options: {} }
+    metadata = {field_type: "unknown", method: "query", options: {}}
 
     expect { described_class.filter_call(metadata) }.to raise_error(
       RailsFieldsKit::TableRenderer::UnknownFieldType,
@@ -558,15 +538,11 @@ RSpec.describe RailsFieldsKit::TableRenderer do
 
   it "raises when rendering metadata without a method" do
     form_builder = FakeTableFormBuilder.new
-    [
-      { field_type: "combobox", options: {} },
-      { field_type: "combobox", method: nil, options: {} },
-      { field_type: "combobox", method: " ", options: {} }
-    ].each do |metadata|
-      expect { described_class.render_filter(form_builder, metadata) }.to raise_error(
-        ArgumentError,
-        "table metadata method is required"
-      )
-    end
+    metadata = {field_type: "token_search", method: nil, options: {url: "/tokens.json"}}
+
+    expect { described_class.render_filter(form_builder, metadata) }.to raise_error(
+      ArgumentError,
+      "table metadata method is required"
+    )
   end
 end

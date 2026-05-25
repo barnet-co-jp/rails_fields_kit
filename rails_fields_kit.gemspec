@@ -35,4 +35,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rails", ">= 7.0", "< 9.0"
 
   spec.add_development_dependency "rspec", "~> 3.13"
+  spec.add_development_dependency "standard", ">= 1.35.1"
 end
