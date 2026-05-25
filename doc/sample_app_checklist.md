@@ -100,6 +100,17 @@ Verify:
 
 If the release surface includes `RailsFieldsKit::RansackSuggestions.build`, also confirm the sample endpoint can return the expected predicate metadata without handing query parsing to the gem.
 
+## Verify visible feedback surfaces
+
+Rails Fields Kit does not choose user-facing copy for the host app. In the sample app, confirm at least one searchable field exercises the visible states that your release expects to rely on:
+
+- `placeholder` copy reads naturally before the user interacts with the field
+- `loading_text` appears while remote search is in flight and clears after the response returns
+- `no_results_text` appears for empty search responses instead of leaving the dropdown blank
+- `create_text` appears with the intended wording when create-on-the-fly is enabled
+- failed inline create requests surface visible host-app feedback after `rails-fields-kit--tom-select:create-error`
+- selected preload failures, if exercised, still leave a user-understandable fallback or visible host-app feedback after `rails-fields-kit--tom-select:selected-load-error`
+
 ## Verify table metadata adapters
 
 Create a minimal table definition that exercises:
