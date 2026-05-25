@@ -1,0 +1,6 @@
+ja:
+  rails_fields_kit:
+    tom_select:
+      no_results_text: "該当する項目はありません"
+      loading_text: "読み込み中..."
+      create_text: "追加"
