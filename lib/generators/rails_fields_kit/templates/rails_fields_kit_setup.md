@@ -9,6 +9,7 @@ For the maintained walkthrough and copyable examples, use the upstream docs:
 - Setup guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>
 - README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>
 - Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>
+- Practical `rfk_select` migration guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/select_migration.md>
 - Events: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/events.md>
 
 ## Setup checklist
@@ -20,6 +21,7 @@ For the maintained walkthrough and copyable examples, use the upstream docs:
 - [ ] If this app uses importmap, add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` in `config/importmap.rb`.
 - [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.
 - [ ] Add the first `rfk_combobox` field and matching `rfk_search_with` / `rfk_find_with` / `rfk_create_with` endpoints.
+- [ ] If this app is replacing a server-rendered `collection_select`, review the practical `rfk_select` migration guide before adding extra reinitializers or controller glue.
 - [ ] Review remote option settings such as `selected_url:`, `option_description_field:`, and `option_badge_field:` in the public API guide before wiring richer selects.
 - [ ] Record any app-specific deviations or follow-up tasks below.
 
