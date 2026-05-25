@@ -98,6 +98,8 @@ Verify:
 - fixed `query_params:` reach representative remote search requests when the field relies on request context
 - fixed `selected_query_params:` reach representative selected preload requests when `selected_url:` is used
 - fixed `create_params:` are merged into representative create-on-the-fly requests when the field relies on them
+- wrapped responses work with `options` / `option` when the helper flow relies on them
+- rich option payloads return representative `description` / `badge` data when the UI depends on them
 - validation errors return `422`
 - authorization failures return `403`
 
