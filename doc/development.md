@@ -1,16 +1,24 @@
 # Rails Fields Kit Development
 
-This document summarizes the local development checks used while CI is intentionally deferred.
+This document summarizes the local development checks that should stay aligned with CI.
+
+## Install dependencies
+
+```bash
+bundle install
+```
+
+## Lint locally
+
+```bash
+bundle exec standardrb
+```
 
 ## Test locally
 
 ```bash
-git pull
-bundle install
 bundle exec rspec
 ```
-
-During active development, this is the primary verification command.
 
 ## Build locally
 
@@ -18,7 +26,11 @@ During active development, this is the primary verification command.
 bundle exec rake build
 ```
 
-This checks that the gemspec can be packaged and that packaged files are available.
+These are the primary repository checks used in CI:
+
+- `bundle exec standardrb`
+- `bundle exec rspec`
+- `bundle exec rake build`
 
 When build fails, check these first:
 
@@ -39,4 +51,4 @@ Before release, also review:
 
 ## CI policy
 
-CI should be saved for the final release stage or moments where the cost is justified. While iterating quickly, prefer local `bundle exec rspec` and `bundle exec rake build`.
+CI should stay aligned with the local commands above. During active development, run the local checks first and use GitHub Actions to confirm the branch head when the change is ready for review.
