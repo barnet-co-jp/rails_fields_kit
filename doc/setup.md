@@ -116,6 +116,18 @@ Rails Fields Kit intentionally does not generate importmap-specific setup. Impor
 <% end %>
 ```
 
+For a static collection that already works with `collection_select`, migrating to `rfk_select` is usually a form-helper-only change. Keep the same attribute name and normal Rails select options such as `include_blank:` or `prompt:` and let the registered Stimulus controller enhance the rendered select in place.
+
+```erb
+<%= f.rfk_select :company_id,
+  collection: @companies,
+  collection_value_method: :id,
+  collection_label_method: :name,
+  include_blank: "Select a company" %>
+```
+
+That migration keeps the ordinary submitted param and selected-value redisplay behavior, so host-app controller code and extra Turbo/Vite reinitializers usually do not need to change just for this helper swap.
+
 ## 6. Add controller endpoints
 
 ```ruby
