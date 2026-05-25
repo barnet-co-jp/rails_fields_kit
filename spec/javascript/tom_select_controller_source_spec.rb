@@ -17,8 +17,19 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include('this.dispatch("load", { detail: { query, options } })')
   end
 
+  it "appends fixed query params before adding the remote search query" do
+    expect(source).to include('this.appendParams(url, this.queryParamsValue)')
+    expect(source).to include('url.searchParams.set(this.queryParamValue, query)')
+  end
+
   it "dispatches selected preload success with requested values and resolved options" do
     expect(source).to include('this.dispatch("selected-load", { detail: { options, values: requestedValues } })')
+  end
+
+  it "appends fixed selected preload params before selected id keys" do
+    expect(source).to include('this.appendParams(url, this.selectedQueryParamsValue)')
+    expect(source).to include('url.searchParams.set(this.selectedParamValue, values[0])')
+    expect(source).to include('url.searchParams.set(this.selectedMultipleParamValue, values.join(","))')
   end
 
   it "forwards interaction events with stable detail keys" do
@@ -26,6 +37,10 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include('this.dispatch("item-add", { detail: { value, item, values: this.selectedValues() } })')
     expect(source).to include('this.dispatch("item-remove", { detail: { value, item, values: this.selectedValues() } })')
     expect(source).to include('this.dispatch("clear", { detail: { values: this.selectedValues() } })')
+  end
+
+  it "merges fixed create params into the create request body" do
+    expect(source).to include('body: JSON.stringify({ ...this.createParamsValue, [this.createParamValue]: input })')
   end
 
   it "keeps request error events on the shared detail shape" do
