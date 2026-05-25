@@ -20,6 +20,8 @@ bundle exec standardrb
 bundle exec rspec
 ```
 
+The RSpec suite includes a Node-sandbox smoke check for the documented `rails_fields_kit` and `rails_fields_kit/tom_select_controller` entrypoints, so public import-path wiring drift is caught alongside the Ruby-side contract specs.
+
 ## Build locally
 
 ```bash
