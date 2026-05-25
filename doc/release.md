@@ -74,7 +74,7 @@ bundle exec rake build
    - `doc/sample_app_results.md`
    - `doc/final_release_checklist.md`
    - `doc/release.md`
-   - the version-specific release note draft for the target release
+   - `doc/release_notes_0_1_1.md` for the current next-release draft
 
 8. Confirm version.
 
@@ -97,7 +97,7 @@ bundle exec rake build
 
 2. Prepare the version-specific release note draft.
 
-   Copy the structure from `doc/release_notes_0_1_0.md` when you need a new draft, then replace the version number and verification details for the target release.
+   Update `doc/release_notes_0_1_1.md` when the next release remains `0.1.1`. If release planning chooses a different version number, rename that draft and use `doc/release_notes_0_1_0.md` as the historical reference instead of editing the historical notes in place.
 
 3. Commit release metadata.
 
