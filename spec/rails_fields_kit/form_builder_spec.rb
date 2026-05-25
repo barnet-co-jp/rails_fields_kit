@@ -61,6 +61,14 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     ActionView::Helpers::FormBuilder.new(object_name, model, self, {})
   end
 
+  def with_available_locales(*locales)
+    previous_available_locales = I18n.available_locales
+    I18n.available_locales = (previous_available_locales + locales).uniq
+    yield
+  ensure
+    I18n.available_locales = previous_available_locales
+  end
+
   around do |example|
     RailsFieldsKit.reset_configuration!
     example.run
@@ -135,8 +143,10 @@ RSpec.describe RailsFieldsKit::FormBuilder do
   end
 
   it "uses bundled locale-aware render text defaults" do
-    html = I18n.with_locale(:ja) do
-      form_builder.rfk_combobox(:customer_id, url: "/customers.json")
+    html = with_available_locales(:ja) do
+      I18n.with_locale(:ja) do
+        form_builder.rfk_combobox(:customer_id, url: "/customers.json")
+      end
     end
 
     expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"該当する項目はありません\"")
@@ -151,8 +161,10 @@ RSpec.describe RailsFieldsKit::FormBuilder do
       config.default_create_text = "Create now"
     end
 
-    html = I18n.with_locale(:ja) do
-      form_builder.rfk_combobox(:customer_id, url: "/customers.json")
+    html = with_available_locales(:ja) do
+      I18n.with_locale(:ja) do
+        form_builder.rfk_combobox(:customer_id, url: "/customers.json")
+      end
     end
 
     expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"Nothing here\"")
