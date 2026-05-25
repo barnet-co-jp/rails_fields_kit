@@ -40,8 +40,8 @@ module RailsFieldsKit
       def register_field_helper(field_type, helper_name)
         normalized_field_type = normalize_field_type(field_type)
         normalized_helper_name = normalize_helper_name(helper_name)
-        raise ArgumentError, "table field type is required" if normalized_field_type.empty?
-        raise ArgumentError, "table helper name is required" if normalized_helper_name.empty?
+        raise ArgumentError, "field type is required" if normalized_field_type.empty?
+        raise ArgumentError, "helper name is required" if normalized_helper_name.empty?
 
         registered_field_helpers[normalized_field_type] = normalized_helper_name.to_sym
       end
@@ -122,18 +122,20 @@ module RailsFieldsKit
         normalized_metadata = metadata.to_hash
         raise ArgumentError, "table metadata to_hash must return a hash" unless normalized_metadata.respond_to?(:to_hash)
 
-        normalized_metadata.to_hash
+        normalize_metadata_hash(normalized_metadata.to_hash)
       end
 
       def call_spec(metadata)
         metadata = normalize_metadata_hash(metadata)
-        field_type = normalize_field_type(metadata.fetch(:field_type, nil))
-        raise UnknownFieldType, "table metadata field_type is required" if field_type.empty?
+        field_type = normalize_field_type(metadata[:field_type])
+        raise ArgumentError, "table metadata field_type is required" if field_type.empty?
 
         helper = helper_for(field_type)
         raise UnknownFieldType, "unknown Rails Fields Kit table field type: #{field_type}" unless helper
 
         method = normalize_method_name(metadata[:method])
+        raise ArgumentError, "table metadata method is required" unless method
+
         options = normalize_options(metadata[:options])
 
         {
@@ -144,9 +146,18 @@ module RailsFieldsKit
       end
 
       def normalize_metadata_hash(metadata)
-        raise ArgumentError, "table metadata must be a hash" unless metadata.respond_to?(:transform_keys)
+        raise ArgumentError, "table metadata must be a hash" unless metadata.respond_to?(:each_pair)
 
-        metadata.transform_keys(&:to_sym)
+        normalized_hash = {}
+
+        metadata.each_pair do |key, value|
+          normalized_key = key.respond_to?(:to_sym) ? key.to_sym : key
+          next if normalized_hash.key?(normalized_key) && value.nil?
+
+          normalized_hash[normalized_key] = value
+        end
+
+        normalized_hash
       end
 
       def render_call(form_builder, call)
