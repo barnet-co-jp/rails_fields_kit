@@ -7,7 +7,7 @@ module RailsFieldsKit
     extend ActiveSupport::Concern
 
     class_methods do
-      def rfk_search_with(action: :index, model:, label:, value: :id, search:, limit: 20, query_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, distinct: false, wrap: nil)
+      def rfk_search_with(model:, label:, search:, action: :index, value: :id, limit: 20, query_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, distinct: false, wrap: nil)
         define_method(action) do
           query_key = query_param || RailsFieldsKit.configuration.default_query_param
           query = params[query_key].to_s
@@ -42,7 +42,7 @@ module RailsFieldsKit
         end
       end
 
-      def rfk_find_with(action: :show, model:, label:, value: :id, id_param: :id, ids_param: :ids, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, wrap: nil)
+      def rfk_find_with(model:, label:, action: :show, value: :id, id_param: :id, ids_param: :ids, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, wrap: nil)
         define_method(action) do
           ids = rfk_find_ids(id_param: id_param, ids_param: ids_param)
           relation = rfk_search_scope(model, scope)
@@ -68,7 +68,7 @@ module RailsFieldsKit
         end
       end
 
-      def rfk_create_with(action: :create, model:, label:, value: :id, create_attribute: nil, create_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, permitted_attributes: nil, assign: nil, authorize: nil, before_save: nil, wrap: nil)
+      def rfk_create_with(model:, label:, action: :create, value: :id, create_attribute: nil, create_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, permitted_attributes: nil, assign: nil, authorize: nil, before_save: nil, wrap: nil)
         define_method(action) do
           attribute_name = create_attribute || label
           param_name = create_param || RailsFieldsKit.configuration.default_create_param
@@ -81,12 +81,12 @@ module RailsFieldsKit
           rfk_apply_assignments(record, assign) if assign
 
           unless rfk_authorized?(record, authorize)
-            render json: { errors: { base: ["not authorized"] } }, status: :forbidden
+            render json: {errors: {base: ["not authorized"]}}, status: :forbidden
             next
           end
 
           unless rfk_before_save(record, before_save)
-            render json: { errors: rfk_record_errors(record, fallback: "could not be saved") }, status: :unprocessable_entity
+            render json: {errors: rfk_record_errors(record, fallback: "could not be saved")}, status: :unprocessable_entity
             next
           end
 
@@ -104,12 +104,12 @@ module RailsFieldsKit
             )
             render json: rfk_wrap_option(option, wrap: wrap), status: :created
           else
-            render json: { errors: rfk_record_errors(record) }, status: :unprocessable_entity
+            render json: {errors: rfk_record_errors(record)}, status: :unprocessable_entity
           end
         end
       end
 
-      def rfk_token_suggestions_with(action: :index, suggestions:, query_param: nil, value_field: nil, label_field: nil, description_field: nil, badge_field: nil, limit: 20, wrap: nil)
+      def rfk_token_suggestions_with(suggestions:, action: :index, query_param: nil, value_field: nil, label_field: nil, description_field: nil, badge_field: nil, limit: 20, wrap: nil)
         define_method(action) do
           query_key = query_param || RailsFieldsKit.configuration.default_query_param
           query = params[query_key].to_s
@@ -159,7 +159,7 @@ module RailsFieldsKit
       when Hash
         assign
       else
-        assign.respond_to?(:call) ? instance_exec(record, &assign) : {}
+        assign.respond_to?(:call) ? instance_exec(record, &assign) : assign
       end
 
       return unless attributes.respond_to?(:each)
@@ -202,13 +202,13 @@ module RailsFieldsKit
         return errors if errors.respond_to?(:empty?) && !errors.empty?
       end
 
-      fallback ? { base: [fallback] } : {}
+      fallback ? {base: [fallback]} : {}
     end
 
     def rfk_option_json(record, value:, label:, value_field:, label_field:, description:, badge:, description_field:, badge_field:)
       option = {
-        (value_field || RailsFieldsKit.configuration.default_value_field) => rfk_read_option_value(record, value),
-        (label_field || RailsFieldsKit.configuration.default_label_field) => rfk_read_option_value(record, label)
+        value_field || RailsFieldsKit.configuration.default_value_field => rfk_read_option_value(record, value),
+        label_field || RailsFieldsKit.configuration.default_label_field => rfk_read_option_value(record, label)
       }
 
       if description
@@ -231,23 +231,23 @@ module RailsFieldsKit
     def rfk_wrap_options(options, wrap:)
       return options if wrap.nil? || wrap == false
 
-      { wrap => options }
+      {wrap => options}
     end
 
     def rfk_wrap_option(option, wrap:)
       return option if wrap.nil? || wrap == false
 
-      { wrap => option }
+      {wrap => option}
     end
 
     def rfk_wrap_find_result(payload, wrap:, multiple:)
       return payload if wrap.nil? || wrap == false
 
-      { wrap => payload }
+      {wrap => payload}
     end
 
     def rfk_create_attributes(attribute_name:, param_name:, permitted_attributes:)
-      base_attributes = { attribute_name => params[param_name] }
+      base_attributes = {attribute_name => params[param_name]}
       return base_attributes if permitted_attributes.nil?
 
       permitted = params.permit(*Array(permitted_attributes)).to_h.symbolize_keys
@@ -286,7 +286,7 @@ module RailsFieldsKit
         normalized = suggestion.transform_keys(&:to_s)
         value = normalized[value_key] || normalized["value"] || normalized["id"] || normalized["token"] || normalized["text"] || normalized["label"]
         label = normalized[label_key] || normalized["text"] || normalized["label"] || normalized["name"] || value
-        option = { value_key => value, label_key => label }
+        option = {value_key => value, label_key => label}
         option[description_key] = normalized[description_key] || normalized["description"] if normalized.key?(description_key) || normalized.key?("description")
         option[badge_key] = normalized[badge_key] || normalized["badge"] if normalized.key?(badge_key) || normalized.key?("badge")
         normalized.each do |key, value_for_key|
@@ -294,9 +294,9 @@ module RailsFieldsKit
         end
         option
       when Array
-        { value_key => suggestion.second || suggestion.first, label_key => suggestion.first }
+        {value_key => suggestion.second || suggestion.first, label_key => suggestion.first}
       else
-        { value_key => suggestion.to_s, label_key => suggestion.to_s }
+        {value_key => suggestion.to_s, label_key => suggestion.to_s}
       end
     end
 
