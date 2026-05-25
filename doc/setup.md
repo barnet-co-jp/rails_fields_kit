@@ -1,46 +1,9 @@
-# Rails Fields Kit Setup
-
-This guide is the maintained setup walkthrough for Rails Fields Kit.
-
-Use the generated `doc/rails_fields_kit_setup.md` in your host app as a short checklist and place for app-specific notes. When the setup flow changes, update this file first and keep the generated note focused on linking back here.
-
-## 1. Add the gem
-
-```ruby
-gem "rails_fields_kit"
+pin "tom-select"
+pin "rails_fields_kit", to: "rails_fields_kit/index.js"
+pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
 ```
 
-Then run:
-
-```bash
-bundle install
-rails generate rails_fields_kit:install
-```
-
-The generator creates:
-
-- `config/initializers/rails_fields_kit.rb`
-- `doc/rails_fields_kit_setup.md`
-
-Treat `doc/rails_fields_kit_setup.md` as a host-app checklist. This `doc/setup.md` file is the detailed setup reference and source of truth for examples.
-
-## 2. Install Tom Select
-
-Rails Fields Kit provides Rails helpers and a Stimulus controller, but it does not install Tom Select or choose a JavaScript bundling strategy.
-
-Install Tom Select with the JavaScript toolchain already used by the application:
-
-```bash
-yarn add tom-select
-# or
-npm install tom-select
-# or
-pnpm add tom-select
-```
-
-## 3. Register the Stimulus controller
-
-For the default `stimulus-rails` layout, register the controller on the shared application from `controllers/application`:
+Then register the controller from the file where the host app already boots Stimulus:
 
 ```js
 import { application } from "controllers/application"
@@ -49,44 +12,7 @@ import { TomSelectController } from "rails_fields_kit"
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
-For Vite or `app/frontend/entrypoints/application.js`, register the controller on the application that the host app already boots from that entrypoint:
-
-```js
-import { Application } from "@hotwired/stimulus"
-import { TomSelectController } from "rails_fields_kit"
-
-const application = Application.start()
-application.register("rails-fields-kit--tom-select", TomSelectController)
-```
-
-If the host app already started Stimulus elsewhere, reuse that application instead of calling `Application.start()` again.
-
-Rails Fields Kit relies on Stimulus `connect()` for initialization and reconnect. In Turbo-enabled apps, replacing or revisiting a server-rendered form should not require a separate host-app `turbo:load` reinitializer for normal `rfk_*` fields.
-
-Direct import is also supported:
-
-```js
-import TomSelectController from "rails_fields_kit/tom_select_controller"
-```
-
-For Vite or another JS bundler, the host app also needs to resolve the gem's `app/javascript` files. One option is to alias the documented import paths to the gem contents returned by `bundle show`:
-
-```ts
-import { execSync } from "node:child_process"
-import { fileURLToPath } from "node:url"
-
-function gemJavaScriptPath(entrypoint: string) {
-  const gemRoot = execSync("bundle show rails_fields_kit", { encoding: "utf-8" }).trim()
-  return fileURLToPath(new URL(`app/javascript/rails_fields_kit/${entrypoint}`, `file://${gemRoot}/`))
-}
-
-resolve: {
-  alias: [
-    { find: /^rails_fields_kit$/, replacement: gemJavaScriptPath("index.js") },
-    { find: /^rails_fields_kit\/tom_select_controller$/, replacement: gemJavaScriptPath("tom_select_controller.js") },
-  ],
-}
-```
+`rails_fields_kit/index.js` re-exports the same controller as `rails_fields_kit/tom_select_controller`, so both documented import paths stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
 
 ## 4. Load Tom Select CSS
 
@@ -109,6 +35,7 @@ Rails Fields Kit intentionally does not generate importmap-specific setup. Impor
     selected: @order.customer_id,
     value_field: "id",
     label_field: "name",
+    search_field: "name,email",
     option_description_field: "email",
     option_badge_field: "status",
     placeholder: "Search or create a customer" %>
