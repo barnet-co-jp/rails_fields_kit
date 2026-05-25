@@ -1,0 +1,6 @@
+en:
+  rails_fields_kit:
+    tom_select:
+      no_results_text: "No results found"
+      loading_text: "Loading..."
+      create_text: "Add"
