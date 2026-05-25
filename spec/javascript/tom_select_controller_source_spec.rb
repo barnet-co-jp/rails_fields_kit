@@ -12,4 +12,8 @@ RSpec.describe "Tom Select controller source" do
   it "announces loading state through a polite status region" do
     expect(source).to include('loading: () => `<div class="loading" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.loadingTextValue)}</div>`')
   end
+
+  it "dispatches a dedicated create success event with the input and option" do
+    expect(source).to include('if (option) this.dispatch("create", { detail: { input, option } })')
+  end
 end
