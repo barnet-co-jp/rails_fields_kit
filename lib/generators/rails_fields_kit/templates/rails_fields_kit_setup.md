@@ -10,6 +10,9 @@ For the maintained walkthrough and copyable examples, use the upstream docs:
 - README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>
 - Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>
 - Events: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/events.md>
+- Token suggestions: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/token_suggestions.md>
+- Ransack suggestions: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/ransack_suggestions.md>
+- Table adapter metadata: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/table_adapters.md>
 
 ## Setup checklist
 
@@ -21,6 +24,8 @@ For the maintained walkthrough and copyable examples, use the upstream docs:
 - [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.
 - [ ] Add the first `rfk_combobox` field and matching `rfk_search_with` / `rfk_find_with` / `rfk_create_with` endpoints.
 - [ ] Review remote option settings such as `selected_url:`, `option_description_field:`, and `option_badge_field:` in the public API guide before wiring richer selects.
+- [ ] If this app uses `rfk_token_search`, review `doc/token_suggestions.md` for suggestion endpoint basics and `doc/ransack_suggestions.md` when those suggestions should map to Ransack metadata.
+- [ ] If this app renders table filters or cell editors from metadata, review `doc/table_adapters.md` before wiring `rfk_table_filters` or `rfk_table_cell_editors`.
 - [ ] Record any app-specific deviations or follow-up tasks below.
 
 ## App-specific notes
