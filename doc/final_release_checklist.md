@@ -23,8 +23,11 @@ Use this checklist immediately before publishing a gem release.
 ## Documentation
 
 - [ ] Review `README.md`.
+- [ ] Review `Product Profile.md`.
+- [ ] Review `AGENTS.md`.
 - [ ] Review `doc/setup.md`.
 - [ ] Review `doc/public_api.md`.
+- [ ] Review `doc/select_migration.md`.
 - [ ] Review `doc/field_helpers.md`.
 - [ ] Review `doc/controller_helpers.md`.
 - [ ] Review `doc/token_suggestions.md`.
