@@ -228,7 +228,34 @@ Use `rfk_token_search` when you want a search box for structured phrases such as
 <% end %>
 ```
 
-Use `RailsFieldsKit::TokenSuggestions.build` with `rfk_token_suggestions_with` to generate operator, field, predicate, value, and saved-search suggestions for the endpoint. Use `RailsFieldsKit::RansackSuggestions.build` when those suggestions should carry Ransack predicate metadata.
+Use `RailsFieldsKit::TokenSuggestions.build` with `rfk_token_suggestions_with` to generate operator, field, predicate, value, and saved-search suggestions for the endpoint.
+
+```ruby
+# config/routes.rb
+get "search_token_suggestions", to: "search_token_suggestions#index"
+
+class SearchTokenSuggestionsController < ApplicationController
+  include RailsFieldsKit::Searchable
+
+  rfk_token_suggestions_with(
+    action: :index,
+    suggestions: ->(_query) {
+      RailsFieldsKit::TokenSuggestions.build(
+        fields: {
+          status: { label: "Status", values: %w[open closed] },
+          assignee: "Assignee"
+        },
+        saved_searches: [
+          { token: "saved:mine", label: "Mine", description: "My saved search" }
+        ]
+      )
+    },
+    wrap: "options"
+  )
+end
+```
+
+This endpoint only returns suggestion option JSON. Submitted token text still belongs to the host application's parser, search object, or Ransack layer. Use `RailsFieldsKit::RansackSuggestions.build` when those suggestions should carry Ransack predicate metadata. See [`doc/controller_helpers.md`](doc/controller_helpers.md) and [`doc/token_suggestions.md`](doc/token_suggestions.md) for the maintained reference.
 
 ### Table metadata helpers
 
