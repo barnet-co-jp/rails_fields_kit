@@ -98,6 +98,17 @@ Notes:
 
 Notes:
 
+## Visible feedback checks
+
+- [ ] `placeholder` copy reads as intended before interaction
+- [ ] `loading_text` appears during remote search and clears after the response returns
+- [ ] `no_results_text` appears for empty search responses
+- [ ] `create_text` shows the intended affordance when create-on-the-fly is enabled
+- [ ] `create-error` handling produces visible host-app feedback when create fails
+- [ ] `selected-load-error` handling leaves a visible host-app fallback or understandable failure state when selected preload fails
+
+Notes:
+
 ## Table metadata checks
 
 - [ ] `RailsFieldsKit::TableFilterInput` metadata renders through the documented helper path
