@@ -99,7 +99,9 @@ filter = RailsFieldsKit::TableFilterInput.ransack_filter(
 )
 ```
 
-This metadata declares the intended adapter and allowed fields. It does not parse token text, build `params[:q]`, or execute Ransack. The host application or table integration remains responsible for those steps.
+This is the current public entrypoint for Ransack-oriented table filter metadata. It declares the intended adapter and allowed fields, but it does not parse token text, build `params[:q]`, or execute Ransack. The host application or table integration remains responsible for those steps.
+
+The helper-level DSL shown in `ROADMAP.md`, such as `rfk_table_filters @table_preferences, adapter: :ransack`, is still a future proposal. Current integrations should keep preparing metadata first and then render it through `rfk_table_filters(columns)`.
 
 ## Cell editor metadata
 
