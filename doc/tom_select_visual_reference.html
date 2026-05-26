@@ -209,6 +209,12 @@
         font-weight: 600;
       }
 
+      .selection-cluster {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
       .control.disabled {
         border-color: #c6cbd0;
         background: #f4f5f6;
@@ -364,6 +370,34 @@
             </div>
           </div>
           <p class="card-footer">Use the selected preload docs for the actual loading contract and event names.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag">Multiple</span>
+            <h2>Multiple selected values</h2>
+            <p>Best match for `rfk_multi_select` when several chosen values should stay visible together.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection selection-cluster">
+                <span class="token">North region</span>
+                <span class="token">Priority accounts</span>
+              </div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="option">
+                <strong>North region</strong>
+                <span>Collection-backed option that remains selected</span>
+              </div>
+              <div class="option">
+                <strong>Priority accounts</strong>
+                <span>Use `rfk_tags` when the same token layout should also allow tag-style entry or create-on-the-fly tags.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">This highlights the settled multi-value layout without implying query execution or tag persistence rules.</p>
         </article>
 
         <article class="card">
