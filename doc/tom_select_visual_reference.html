@@ -143,6 +143,12 @@
         color: #185740;
       }
 
+      .tag.disabled {
+        border-color: #c6cbd0;
+        background: #eef1f3;
+        color: #48565f;
+      }
+
       h2 {
         margin: 0;
         font-size: 1.12rem;
@@ -200,6 +206,31 @@
         border: 1px solid #bfd6cb;
         background: #ecf7f1;
         color: #184b39;
+        font-weight: 600;
+      }
+
+      .control.disabled {
+        border-color: #c6cbd0;
+        background: #f4f5f6;
+      }
+
+      .control.disabled .control-top {
+        border-bottom: 0;
+      }
+
+      .control.disabled .token {
+        border-color: #cfd6db;
+        background: #f5f7f8;
+        color: #415159;
+      }
+
+      .status-note {
+        flex: none;
+        padding: 4px 8px;
+        border: 1px solid #d8dde1;
+        background: #ffffff;
+        color: #6a747b;
+        font-size: 0.78rem;
         font-weight: 600;
       }
 
@@ -333,6 +364,23 @@
             </div>
           </div>
           <p class="card-footer">Use the selected preload docs for the actual loading contract and event names.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag disabled">Disabled</span>
+            <h2>Non-editable field with the current value</h2>
+            <p>Use when the host app keeps the selected value visible but does not allow edits.</p>
+          </div>
+          <div class="control disabled" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection">
+                <span class="token">Archived customer</span>
+              </div>
+              <div class="status-note">Disabled</div>
+            </div>
+          </div>
+          <p class="card-footer">Final permission or availability wording still belongs to the host app; this reference only shows the muted non-editable surface.</p>
         </article>
 
         <article class="card">
