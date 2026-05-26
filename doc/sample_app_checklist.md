@@ -168,6 +168,9 @@ Verify:
 - collected cell editor metadata renders through the documented helper path
 - native metadata such as `TableFilterInput.search_field`, `money_field`, or `TableCellInput.text_area` also render through the documented helper path when the integration uses common field helpers
 - any direct `TableRenderer.filter_call` or `TableRenderer.cell_editor_call` usage in your integration still matches the documented call-spec shape
+- a representative `TableFilterInput.ransack_filter(...)` field rendered through `rfk_table_filters(columns)` keeps `data-rails-fields-kit--tom-select-table-adapter-value`, `data-rails-fields-kit--tom-select-table-adapter-param-name-value`, and `data-rails-fields-kit--tom-select-table-adapter-fields-value`
+- the rendered Ransack metadata surface can be read back as the same allowed-field source of truth the host app parser whitelist uses, without redefining those fields elsewhere
+- the render-time metadata still stays metadata only; building `params[:q]` and executing query behavior remain host-app responsibility
 - a representative `TableRenderer.register_field_helper` mapping can be rendered through the documented call-spec path, and `TableRenderer.reset_field_helpers!` restores the default mapping after that scoped customization
 - token search or Ransack-oriented metadata, if used, is still treated as UI metadata or rendering assistance rather than query execution
 - representative query execution and preference persistence still belong to the host app or table integration rather than Rails Fields Kit
