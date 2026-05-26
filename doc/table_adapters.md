@@ -105,6 +105,51 @@ For a copyable host-app example that turns submitted token text into `params[:q]
 
 The helper-level DSL shown in `ROADMAP.md`, such as `rfk_table_filters @table_preferences, adapter: :ransack`, is still a future proposal. Current integrations should keep preparing metadata first and then render it through `rfk_table_filters(columns)`.
 
+## Native field metadata
+
+`TableFilterInput` and `TableCellInput` also cover the native helper family listed in [`public_api.md`](public_api.md), so a table integration can stay metadata-first even when it does not need Tom Select.
+
+```ruby
+columns = [
+  {
+    key: :keyword,
+    filter_input: RailsFieldsKit::TableFilterInput.search_field(
+      :keyword,
+      placeholder: "Search orders"
+    )
+  },
+  {
+    key: :minimum_total,
+    filter_input: RailsFieldsKit::TableFilterInput.money_field(
+      :minimum_total,
+      step: 0.01,
+      placeholder: "Minimum total"
+    )
+  },
+  {
+    key: :notes,
+    cell_editor: RailsFieldsKit::TableCellInput.text_area(
+      :notes,
+      rows: 3
+    )
+  }
+]
+```
+
+Those metadata objects normalize to the same hash protocol:
+
+```ruby
+RailsFieldsKit::TableFilterInput.search_field(:keyword).to_table_filter
+# => {
+#      type: "rails_fields_kit",
+#      field_type: "search_field",
+#      method: "keyword",
+#      options: {}
+#    }
+```
+
+Use this native field path when the table integration wants Rails Fields Kit naming, redisplay, and renderer mapping, but the host app does not need remote search or tag-style behavior for that column.
+
 ## Cell editor metadata
 
 Use `RailsFieldsKit::TableCellInput` when a table column wants to describe an editable cell control.
@@ -151,6 +196,29 @@ editor.to_table_cell_editor
 `to_h` and `to_hash` return the same metadata hash as `to_table_cell_editor` for integrations that prefer a generic hash protocol.
 
 This keeps table definitions and Active Record introspection flows independent from a concrete form renderer while still allowing Rails Fields Kit to provide richer inputs when installed.
+
+## Token-search and native cell editor examples
+
+`TableCellInput` includes the same common field factory family plus `token_search`, so table-oriented UIs can describe richer editors without leaving metadata mode.
+
+```ruby
+columns = [
+  {
+    key: :status_tokens,
+    cell_editor: RailsFieldsKit::TableCellInput.token_search(
+      :status_tokens,
+      url: search_status_tokens_path(format: :json),
+      placeholder: "status:open assignee:matsuo"
+    )
+  },
+  {
+    key: :contact_email,
+    cell_editor: RailsFieldsKit::TableCellInput.email_field(:contact_email)
+  }
+]
+```
+
+`TableCellInput.token_search` is still only editor metadata. The host app or table integration remains responsible for parsing submitted token text, deciding whether that editor belongs in a modal or inline cell flow, and persisting the resulting value.
 
 ## Collecting metadata from columns
 
@@ -312,6 +380,33 @@ RailsFieldsKit::TableRenderer.filter_call(filter)
 #    }
 ```
 
+For an end-to-end integration, register the helper before you build call specs, then reset it after the scoped customization if you need to go back to the defaults:
+
+```ruby
+RailsFieldsKit::TableRenderer.register_field_helper(
+  :currency_range,
+  :rfk_money_field
+)
+
+columns = [
+  {
+    key: :minimum_total,
+    filter_input: {
+      field_type: :currency_range,
+      method: :minimum_total,
+      options: { step: 0.01, placeholder: "Minimum total" }
+    }
+  }
+]
+
+call = RailsFieldsKit::TableMetadata.filter_calls(columns).first
+form_builder.public_send(call.fetch(:helper), call.fetch(:method), **call.fetch(:options))
+
+RailsFieldsKit::TableRenderer.reset_field_helpers!
+RailsFieldsKit::TableRenderer.registered_field_type?(:currency_range)
+# => false
+```
+
 Use `RailsFieldsKit::TableRenderer.field_helpers`, `RailsFieldsKit::TableRenderer.helper_for`, and `RailsFieldsKit::TableRenderer.registered_field_type?` to inspect the current mapping. Use `RailsFieldsKit::TableRenderer.reset_field_helpers!` to restore the defaults.
 
 ## Intended integration with Rails Table Preferences
@@ -347,6 +442,26 @@ A host app or table helper can pass the metadata objects into column-like defini
 {
   key: :status,
   cell_editor: RailsFieldsKit::TableCellInput.enum_select(:status)
+}
+```
+
+```ruby
+{
+  key: :minimum_total,
+  filter_input: RailsFieldsKit::TableFilterInput.money_field(
+    :minimum_total,
+    step: 0.01
+  )
+}
+```
+
+```ruby
+{
+  key: :status_tokens,
+  cell_editor: RailsFieldsKit::TableCellInput.token_search(
+    :status_tokens,
+    url: search_status_tokens_path(format: :json)
+  )
 }
 ```
 
