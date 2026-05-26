@@ -9,6 +9,9 @@ For the maintained walkthrough and copyable examples, use the upstream docs:
 - Setup guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>
 - README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>
 - Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>
+- Configuration: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration.md>
+- Field helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/field_helpers.md>
+- Controller helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/controller_helpers.md>
 - Practical `rfk_select` migration guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/select_migration.md>
 - Events: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/events.md>
 - Token suggestions: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/token_suggestions.md>
@@ -18,13 +21,16 @@ For the maintained walkthrough and copyable examples, use the upstream docs:
 ## Setup checklist
 
 - [ ] Confirm `config/initializers/rails_fields_kit.rb` matches this app's needs.
+- [ ] Review `doc/configuration.md` before changing initializer defaults or text overrides.
 - [ ] Install Tom Select with the JavaScript toolchain already used by this app.
 - [ ] Register `rails-fields-kit--tom-select` on the app's existing Stimulus application.
 - [ ] If this app uses Vite or another bundler, add resolver or alias entries for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] If this app uses importmap, add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` in `config/importmap.rb`.
 - [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.
 - [ ] Add the first `rfk_combobox` field and matching `rfk_search_with` / `rfk_find_with` / `rfk_create_with` endpoints.
+- [ ] Use `doc/controller_helpers.md` for the maintained endpoint option reference, including custom `action:` names.
 - [ ] If this app is replacing a server-rendered `collection_select`, review the practical `rfk_select` migration guide before adding extra reinitializers or controller glue.
+- [ ] Use `doc/field_helpers.md` when choosing between `rfk_select`, `rfk_combobox`, `rfk_autocomplete`, `rfk_token_search`, `rfk_tags`, and `rfk_multi_select`.
 - [ ] Review remote option settings such as `selected_url:`, `option_description_field:`, and `option_badge_field:` in the public API guide before wiring richer selects.
 - [ ] If this app uses `rfk_token_search`, review `doc/token_suggestions.md` for suggestion endpoint basics and `doc/ransack_suggestions.md` when those suggestions should map to Ransack metadata.
 - [ ] If this app renders table filters or cell editors from metadata, review `doc/table_adapters.md` before wiring `rfk_table_filters` or `rfk_table_cell_editors`.
