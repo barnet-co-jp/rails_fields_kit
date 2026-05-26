@@ -21,6 +21,8 @@ For a server-rendered `collection_select` migration that keeps the normal Rails 
 
 ## Tom Select-backed helpers
 
+For a product-neutral visual comparison of representative Tom Select-backed states, see [`tom_select_visual_reference.html`](tom_select_visual_reference.html).
+
 ### `rfk_select`
 
 Use this for a normal single select that should get Tom Select behavior.
