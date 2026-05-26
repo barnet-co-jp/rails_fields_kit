@@ -105,6 +105,14 @@ For a copyable host-app example that turns submitted token text into `params[:q]
 
 The helper-level DSL shown in `ROADMAP.md`, such as `rfk_table_filters @table_preferences, adapter: :ransack`, is still a future proposal. Current integrations should keep preparing metadata first and then render it through `rfk_table_filters(columns)`.
 
+When `rfk_table_filters(columns)` or `TableRenderer.render_filter(...)` renders that metadata, the resulting token-search field keeps the same adapter contract in stable data attributes:
+
+- `data-rails-fields-kit--tom-select-table-adapter-value`
+- `data-rails-fields-kit--tom-select-table-adapter-param-name-value`
+- `data-rails-fields-kit--tom-select-table-adapter-fields-value`
+
+That render-time surface is intentionally additive and table-specific. Generic direct `rfk_token_search` calls still strip adapter-specific metadata instead of turning it into a broader helper-level API.
+
 ## Native field metadata
 
 `TableFilterInput` and `TableCellInput` also cover the native helper family listed in [`public_api.md`](public_api.md), so a table integration can stay metadata-first even when it does not need Tom Select.
