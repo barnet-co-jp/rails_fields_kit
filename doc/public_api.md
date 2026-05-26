@@ -168,6 +168,14 @@ The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_typ
 
 `TableFilterInput.ransack_filter` is the current public entrypoint when table-oriented code wants Ransack-compatible token-search metadata. `TableMetadata` can collect metadata from Hash columns, hash-like columns that respond to `to_hash`, object columns with public metadata readers, enumerable column lists, and table-like objects that respond to `columns`. Explicit `false` filter/editor metadata disables that slot instead of falling through to alias keys or readers. `TableRenderer` can turn collected metadata into FormBuilder call specs or dispatch it to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol and Rails Table Preferences integration notes.
 
+When `TableFilterInput.ransack_filter` metadata is rendered through `rfk_table_filters(columns)` or `TableRenderer.render_filter(...)`, the resulting token-search field keeps the table-specific adapter contract in stable data attributes:
+
+- `data-rails-fields-kit--tom-select-table-adapter-value`
+- `data-rails-fields-kit--tom-select-table-adapter-param-name-value`
+- `data-rails-fields-kit--tom-select-table-adapter-fields-value`
+
+That render-time surface is additive and table-oriented. Direct `rfk_token_search` usage still strips adapter-specific metadata instead of turning it into a broader helper-level DSL.
+
 ## JavaScript exports
 
 The package exposes the Tom Select Stimulus controller from the JavaScript entrypoint:
