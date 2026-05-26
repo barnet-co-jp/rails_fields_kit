@@ -22,6 +22,13 @@ bundle exec rspec
 
 The RSpec suite includes a Node-sandbox smoke check for the documented `rails_fields_kit` and `rails_fields_kit/tom_select_controller` entrypoints, so public import-path wiring drift is caught alongside the Ruby-side contract specs.
 
+Representative compatibility checks are also useful before review or release:
+
+```bash
+BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rspec
+BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rspec
+```
+
 ## Build locally
 
 ```bash
@@ -50,6 +57,7 @@ Current CI adds these repository-level confirmations on top of the local workflo
 
 - `bundle exec standardrb`
 - `bundle exec rspec`
+- Representative PR compatibility checks for Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
 - JavaScript syntax checks for `app/javascript/rails_fields_kit/*.js`
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 

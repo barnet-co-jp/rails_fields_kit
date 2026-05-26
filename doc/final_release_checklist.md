@@ -9,7 +9,10 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Run `bundle exec standardrb`.
 - [ ] Run `bundle exec rspec`.
 - [ ] Run `bundle exec rake build`.
+- [ ] Run `BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rspec`.
+- [ ] Run `BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rspec`.
 - [ ] Confirm the latest GitHub Actions CI run passed for the release commit.
+- [ ] Confirm the latest release-prep pull request passed the representative Rails 7.0 / Ruby 3.1 and Rails 8.0 / Ruby 3.3 compatibility jobs.
 - [ ] Confirm the built gem path matches the target version, for example `pkg/rails_fields_kit-x.y.z.gem`.
 - [ ] Confirm RubyGems validation warnings are understood or resolved.
 

@@ -39,6 +39,38 @@ jobs:
       - name: Run RSpec
         run: bundle exec rspec
 
+  pr_rails_matrix:
+    if: github.event_name == 'pull_request'
+    name: PR compatibility (Rails ${{ matrix.rails }}, Ruby ${{ matrix.ruby-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rails: "7.0"
+            ruby-version: "3.1"
+            gemfile: gemfiles/rails_7_0.gemfile
+          - rails: "8.0"
+            ruby-version: "3.3"
+            gemfile: gemfiles/rails_8_0.gemfile
+    env:
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+
+      - name: Run representative RSpec suite
+        run: bundle exec rspec
+
+      - name: Build representative gem package
+        run: bundle exec rake build
+
   javascript:
     runs-on: ubuntu-latest
 
