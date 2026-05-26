@@ -64,6 +64,16 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include('this.dispatchRequestError("create-error", "create", { input }, error)')
   end
 
+  it "tracks request lifecycles so stale callbacks stay on the latest request" do
+    expect(source).to include('const { signal, token } = this.beginRequest("load")')
+    expect(source).to include('const { signal, token } = this.beginRequest("selected-load")')
+    expect(source).to include('const { signal, token } = this.beginRequest("create")')
+    expect(source).to include('if (this.isAbortError(error) || !this.requestIsCurrent("load", token)) return')
+    expect(source).to include('if (this.isAbortError(error) || !this.requestIsCurrent("selected-load", token)) return')
+    expect(source).to include('if (this.isAbortError(error) || !this.requestIsCurrent("create", token)) return')
+    expect(source).to include('this.abortAllRequests()')
+  end
+
   it "exposes the opt-in error surface on request failures" do
     expect(source).to include("const surface = this.errorSurfaceElement()")
     expect(source).to include("this.markErrorSurface(surface, { operation, status })")

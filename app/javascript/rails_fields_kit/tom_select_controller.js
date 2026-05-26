@@ -40,6 +40,9 @@ export default class extends Controller {
   }
 
   connect() {
+    this.connected = true
+    this.requestControllers = {}
+    this.requestTokens = {}
     this.tomSelect = new TomSelect(this.element, this.options())
     this.bindTomSelectEvents()
     this.clearErrorSurface()
@@ -47,6 +50,8 @@ export default class extends Controller {
   }
 
   disconnect() {
+    this.connected = false
+    this.abortAllRequests()
     if (this.tomSelect) {
       this.tomSelect.destroy()
       this.tomSelect = null
@@ -138,26 +143,85 @@ export default class extends Controller {
     return this.searchFieldValue.split(",").map((field) => field.trim()).filter(Boolean)
   }
 
+  beginRequest(operation) {
+    if (!this.requestControllers) this.requestControllers = {}
+    if (!this.requestTokens) this.requestTokens = {}
+
+    this.abortRequest(operation)
+
+    const token = Symbol(operation)
+    const controller = this.abortController()
+
+    this.requestTokens[operation] = token
+    if (controller) this.requestControllers[operation] = controller
+
+    return { signal: controller ? controller.signal : null, token }
+  }
+
+  finishRequest(operation, token) {
+    if (!this.requestTokens || this.requestTokens[operation] !== token) return
+
+    delete this.requestTokens[operation]
+    delete this.requestControllers[operation]
+  }
+
+  abortAllRequests() {
+    ["load", "selected-load", "create"].forEach((operation) => this.abortRequest(operation))
+  }
+
+  abortRequest(operation) {
+    if (!this.requestControllers || !this.requestTokens) return
+
+    const controller = this.requestControllers[operation]
+    if (controller) controller.abort()
+
+    delete this.requestControllers[operation]
+    delete this.requestTokens[operation]
+  }
+
+  requestIsCurrent(operation, token) {
+    return this.connected && this.requestTokens && this.requestTokens[operation] === token
+  }
+
+  abortController() {
+    return typeof AbortController === "function" ? new AbortController() : null
+  }
+
+  requestOptions(options, signal) {
+    return signal ? { ...options, signal } : options
+  }
+
+  isAbortError(error) {
+    return error && (error.name === "AbortError" || error.code === 20)
+  }
+
   loadOptions(query, callback) {
     this.clearErrorSurface()
     const url = new URL(this.urlValue, window.location.origin)
     this.appendParams(url, this.queryParamsValue)
     url.searchParams.set(this.queryParamValue, query)
 
-    fetch(url.toString(), {
+    const { signal, token } = this.beginRequest("load")
+
+    fetch(url.toString(), this.requestOptions({
       headers: { Accept: "application/json" }
-    })
+    }, signal))
       .then((response) => this.handleLoadResponse(response))
       .then((json) => {
+        if (!this.requestIsCurrent("load", token)) return
+
         const options = this.normalizeOptions(json)
         this.clearErrorSurface()
         this.dispatch("load", { detail: { query, options } })
         callback(options)
       })
       .catch((error) => {
+        if (this.isAbortError(error) || !this.requestIsCurrent("load", token)) return
+
         this.dispatchRequestError("load-error", "load", { query }, error)
         callback()
       })
+      .finally(() => this.finishRequest("load", token))
   }
 
   handleLoadResponse(response) {
@@ -186,14 +250,23 @@ export default class extends Controller {
       url.searchParams.set(this.selectedMultipleParamValue, values.join(","))
     }
 
-    fetch(url.toString(), {
+    const { signal, token } = this.beginRequest("selected-load")
+
+    fetch(url.toString(), this.requestOptions({
       headers: { Accept: "application/json" }
-    })
+    }, signal))
       .then((response) => this.handleSelectedResponse(response))
-      .then((json) => this.applySelectedOptions(json, values))
+      .then((json) => {
+        if (!this.requestIsCurrent("selected-load", token)) return
+
+        this.applySelectedOptions(json, values)
+      })
       .catch((error) => {
+        if (this.isAbortError(error) || !this.requestIsCurrent("selected-load", token)) return
+
         this.dispatchRequestError("selected-load-error", "selected-load", { values }, error)
       })
+      .finally(() => this.finishRequest("selected-load", token))
   }
 
   handleSelectedResponse(response) {
@@ -239,7 +312,9 @@ export default class extends Controller {
 
   createOption(input, callback) {
     this.clearErrorSurface()
-    fetch(this.createUrlValue, {
+    const { signal, token } = this.beginRequest("create")
+
+    fetch(this.createUrlValue, this.requestOptions({
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -247,18 +322,23 @@ export default class extends Controller {
         "X-CSRF-Token": this.csrfToken()
       },
       body: JSON.stringify({ ...this.createParamsValue, [this.createParamValue]: input })
-    })
+    }, signal))
       .then((response) => this.handleCreateResponse(response))
       .then((json) => {
+        if (!this.requestIsCurrent("create", token)) return
+
         const option = this.normalizeCreatedOption(json)
         this.clearErrorSurface()
         if (option) this.dispatch("create", { detail: { input, option } })
         callback(option)
       })
       .catch((error) => {
+        if (this.isAbortError(error) || !this.requestIsCurrent("create", token)) return
+
         this.dispatchRequestError("create-error", "create", { input }, error)
         callback(false)
       })
+      .finally(() => this.finishRequest("create", token))
   }
 
   handleCreateResponse(response) {

@@ -20,7 +20,7 @@ bundle exec standardrb
 bundle exec rspec
 ```
 
-The RSpec suite includes a Node-sandbox smoke check for the documented `rails_fields_kit` and `rails_fields_kit/tom_select_controller` entrypoints, so public import-path wiring drift is caught alongside the Ruby-side contract specs.
+The RSpec suite includes Node-sandbox checks for the documented `rails_fields_kit` and `rails_fields_kit/tom_select_controller` entrypoints, plus Tom Select request-lifecycle behavior, so public import-path wiring drift and stale-request regressions are caught alongside the Ruby-side contract specs.
 
 Representative compatibility checks are also useful before review or release:
 
