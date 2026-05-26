@@ -149,6 +149,12 @@
         color: #48565f;
       }
 
+      .tag.multi {
+        border-color: #c8d7ee;
+        background: #edf4ff;
+        color: #2d4f7f;
+      }
+
       h2 {
         margin: 0;
         font-size: 1.12rem;
@@ -184,6 +190,12 @@
         min-width: 0;
       }
 
+      .selection--multiple {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
       .placeholder {
         color: #84928d;
       }
@@ -207,6 +219,12 @@
         background: #ecf7f1;
         color: #184b39;
         font-weight: 600;
+      }
+
+      .token.subtle {
+        border-color: #c8d7ee;
+        background: #edf4ff;
+        color: #26466e;
       }
 
       .control.disabled {
@@ -364,6 +382,35 @@
             </div>
           </div>
           <p class="card-footer">Use the selected preload docs for the actual loading contract and event names.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag multi">Multi Select</span>
+            <h2>Multiple chosen values in a settled state</h2>
+            <p>Represents `rfk_multi_select` when the host app is choosing from a known collection, not creating tags.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection selection--multiple">
+                <span class="token subtle">Operations</span>
+                <span class="token subtle">Finance</span>
+                <span class="token subtle">Support</span>
+              </div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="option">
+                <strong>Operations</strong>
+                <span>One of several selected collection-backed values</span>
+              </div>
+              <div class="option">
+                <strong>Finance</strong>
+                <span>Keep this surface distinct from create-on-the-fly tag entry</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Use `rfk_tags` when the interaction should feel like tag entry or optional creation, rather than ordinary multi selection.</p>
         </article>
 
         <article class="card">
