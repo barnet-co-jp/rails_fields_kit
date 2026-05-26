@@ -23,6 +23,25 @@ For a server-rendered `collection_select` migration that keeps the normal Rails 
 
 For a product-neutral visual comparison of representative Tom Select-backed states, see [`tom_select_visual_reference.html`](tom_select_visual_reference.html).
 
+### Shared request-failure feedback options
+
+All Tom Select-backed helpers support the same opt-in request-failure feedback options:
+
+- `rfk_select`
+- `rfk_combobox`
+- `rfk_autocomplete`
+- `rfk_tags`
+- `rfk_multi_select`
+- `rfk_grouped_select`
+- `rfk_enum_select`
+- `rfk_token_search`
+
+Use `error_surface: true` when the host app wants Rails Fields Kit to render a stable nearby placeholder for request-failure handlers. Use `error_surface_html:` when that placeholder needs custom classes or wrapper attributes.
+
+When enabled, Rails Fields Kit appends a hidden polite status placeholder near the field, wires that placeholder into `aria-describedby`, and exposes the element as `event.detail.surface` on request-failure events documented in [`events.md`](events.md). The host app still decides when to reveal that placeholder, what message to render, and whether to add retry UI.
+
+The same shared option contract applies even when a given helper only uses part of the remote workflow set. For example, a field without create-on-the-fly support will never dispatch `create-error`, but it can still use `error_surface:` for `load-error` or `selected-load-error` when those hooks apply.
+
 ### `rfk_select`
 
 Use this for a normal single select that should get Tom Select behavior.
@@ -70,9 +89,9 @@ Use this for searchable remote selects and editable comboboxes.
   option_badge_field: "status" %>
 ```
 
-#### Error surfaces for request failures
+#### Representative `error_surface` example
 
-Use `error_surface: true` on Tom Select-backed helpers when the host app wants a stable placeholder element next to the field for `load-error`, `selected-load-error`, or `create-error` handlers.
+The shared request-failure feedback options above apply here too. This combobox example is representative, not combobox-only:
 
 ```erb
 <%= f.rfk_combobox :customer_id,
