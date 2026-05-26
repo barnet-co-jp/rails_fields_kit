@@ -252,6 +252,7 @@ export default class extends Controller {
       .then((json) => {
         const option = this.normalizeCreatedOption(json)
         this.clearErrorSurface()
+        if (option) this.dispatch("create", { detail: { input, option } })
         callback(option)
       })
       .catch((error) => {
