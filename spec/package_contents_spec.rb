@@ -44,6 +44,8 @@ RSpec.describe "package contents" do
       "doc/development.md",
       "doc/sample_app_results.md",
       "doc/final_release_checklist.md",
+      "doc/release.md",
+      "doc/release_notes_0_1_1.md",
       "doc/release_notes_0_1_0.md"
     )
   end
