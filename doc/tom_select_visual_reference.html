@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rails Fields Kit Tom Select Visual Reference</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page: #f5f2ea;
+        --surface: #fffdf8;
+        --surface-strong: #ffffff;
+        --ink: #20302c;
+        --muted: #5f6f69;
+        --line: #d6d0c3;
+        --line-strong: #b8af9f;
+        --accent: #1f7a5a;
+        --accent-soft: #d9efe4;
+        --warning: #af6d1d;
+        --warning-soft: #f8e7c9;
+        --empty: #7c4a60;
+        --empty-soft: #f3dce7;
+        --shadow: 0 18px 40px rgba(28, 42, 36, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at top left, rgba(31, 122, 90, 0.10), transparent 26%),
+          linear-gradient(180deg, #faf7f0 0%, var(--page) 100%);
+        color: var(--ink);
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 56px 0 72px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 18px;
+        margin-bottom: 34px;
+      }
+
+      .eyebrow {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1 {
+        margin: 0;
+        font-family: "Fraunces", "Times New Roman", serif;
+        font-size: clamp(2.2rem, 4vw, 3.4rem);
+        font-weight: 600;
+        line-height: 1.05;
+      }
+
+      .lede {
+        max-width: 760px;
+        margin: 0;
+        font-size: 1.02rem;
+        color: var(--muted);
+      }
+
+      .hero-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .hero-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 0 14px;
+        border: 1px solid var(--line-strong);
+        color: var(--ink);
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .hero-links a:hover {
+        border-color: var(--accent);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+      }
+
+      .card {
+        display: grid;
+        gap: 14px;
+        padding: 20px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .card-header {
+        display: grid;
+        gap: 8px;
+      }
+
+      .tag {
+        justify-self: start;
+        padding: 4px 8px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        border: 1px solid var(--line);
+        background: var(--surface-strong);
+      }
+
+      .tag.loading {
+        border-color: #d9c792;
+        background: var(--warning-soft);
+        color: #77450d;
+      }
+
+      .tag.empty {
+        border-color: #d8b7c7;
+        background: var(--empty-soft);
+        color: #6a314b;
+      }
+
+      .tag.create {
+        border-color: #b7d9c9;
+        background: var(--accent-soft);
+        color: #185740;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 1.12rem;
+        line-height: 1.2;
+      }
+
+      .card-header p,
+      .card-footer {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .control {
+        border: 1px solid var(--line-strong);
+        background: var(--surface-strong);
+        overflow: hidden;
+      }
+
+      .control-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 52px;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .placeholder,
+      .query,
+      .selection {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .placeholder {
+        color: #84928d;
+      }
+
+      .query {
+        color: var(--ink);
+      }
+
+      .caret {
+        flex: none;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .token {
+        display: inline-flex;
+        align-items: center;
+        max-width: 100%;
+        padding: 6px 10px;
+        border: 1px solid #bfd6cb;
+        background: #ecf7f1;
+        color: #184b39;
+        font-weight: 600;
+      }
+
+      .dropdown {
+        display: grid;
+        gap: 1px;
+        background: var(--line);
+      }
+
+      .option,
+      .message,
+      .action {
+        padding: 12px;
+        background: var(--surface-strong);
+      }
+
+      .option strong,
+      .action strong {
+        display: block;
+        font-size: 0.96rem;
+      }
+
+      .option span,
+      .message span,
+      .action span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .message {
+        background: #fff8ea;
+        color: #77450d;
+      }
+
+      .message.empty {
+        background: #fff5f9;
+        color: #6a314b;
+      }
+
+      .action {
+        background: #eef8f2;
+        color: #185740;
+      }
+
+      .legend {
+        margin-top: 28px;
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.72);
+        color: var(--muted);
+      }
+
+      .legend strong {
+        color: var(--ink);
+      }
+
+      @media (max-width: 640px) {
+        main {
+          width: min(100% - 20px, 1120px);
+          padding-top: 40px;
+          padding-bottom: 56px;
+        }
+
+        .card {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">Rails Fields Kit</div>
+        <h1>Tom Select Visual Reference</h1>
+        <p class="lede">
+          A product-neutral static reference for representative Tom Select-backed field states.
+          Use this page to review how common states read at a glance before wiring them into a host app.
+        </p>
+        <div class="hero-links">
+          <a href="field_helpers.md">Field helper reference</a>
+          <a href="../README.md">README</a>
+        </div>
+      </section>
+
+      <section class="grid" aria-label="Representative Tom Select states">
+        <article class="card">
+          <div class="card-header">
+            <span class="tag">Idle</span>
+            <h2>Placeholder before interaction</h2>
+            <p>Suitable for `rfk_select` and `rfk_combobox` when the field is ready but empty.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="placeholder">Search a value</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="option">
+                <strong>Example option</strong>
+                <span>Secondary description</span>
+              </div>
+              <div class="option">
+                <strong>Another option</strong>
+                <span>Badge or helper text can appear here</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">The placeholder stays generic and leaves query parsing to the host app.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag">Selected</span>
+            <h2>Chosen value in view</h2>
+            <p>Shows a settled state after one option has been selected or preloaded.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection">
+                <span class="token">Example customer</span>
+              </div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="option">
+                <strong>Example customer</strong>
+                <span>Selected label with optional description</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Use the selected preload docs for the actual loading contract and event names.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag loading">Loading</span>
+            <h2>Remote query in progress</h2>
+            <p>Useful for remote combobox and token search flows while suggestions are loading.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="query">exa</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="message">
+                <strong>Loading results</strong>
+                <span>Waiting for the host app endpoint</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">This reference illustrates the visible state only, not the request lifecycle.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag empty">No Results</span>
+            <h2>Empty result set</h2>
+            <p>Use when the query returns no matches and the field should remain read-only.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="query">zxq</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="message empty">
+                <strong>No matching options</strong>
+                <span>The host app still owns retry wording and follow-up guidance.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Keep empty-state copy light so it does not imply search semantics beyond the current query.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag create">Create Enabled</span>
+            <h2>Create-on-the-fly affordance</h2>
+            <p>Applicable to helpers that allow turning the current input into a new option.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="query">New label</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="action">
+                <strong>Create “New label”</strong>
+                <span>Confirmation, validation, and persistence still belong to the host app.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">This keeps the visual cue narrow and avoids implying a full create workflow.</p>
+        </article>
+      </section>
+
+      <section class="legend">
+        <strong>Scope note.</strong>
+        This page is a static visual aid. The maintained contract for helper options, Stimulus events,
+        selected preload, token parsing, and create-on-the-fly responsibilities remains in the README and helper docs.
+      </section>
+    </main>
+  </body>
+</html>
