@@ -271,6 +271,8 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `delimiter:` forwards Tom Select's delimiter option, useful for text-backed token inputs.
 - `loading_text:`, `no_results_text:`, and `create_text:` override the bundled or initializer-provided Tom Select copy for one field only.
 
+When neither the field nor the initializer sets those values, Rails Fields Kit falls back to bundled locale-aware copy at render time. The bundled baseline currently includes English and Japanese, and falls back to English when a locale-specific key is not present.
+
 Use `config.default_loading_text`, `config.default_no_results_text`, and `config.default_create_text` in the initializer when the whole host app should share the same baseline wording. Use the helper options above when a single field needs different copy.
 
 Example:

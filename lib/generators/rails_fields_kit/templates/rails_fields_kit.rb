@@ -31,9 +31,10 @@ RailsFieldsKit.configure do |config|
   config.default_persist = nil
 
   # Default Tom Select rendered messages.
-  config.default_no_results_text = "No results found"
-  config.default_loading_text = "Loading..."
-  config.default_create_text = "Add"
+  # Leave these unset to use the bundled locale-aware copy.
+  # config.default_no_results_text = "No results found"
+  # config.default_loading_text = "Loading..."
+  # config.default_create_text = "Add"
 
   # Default rich option render fields.
   config.default_option_description_field = nil

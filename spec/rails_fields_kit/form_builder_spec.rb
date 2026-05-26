@@ -61,6 +61,20 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     ActionView::Helpers::FormBuilder.new(object_name, model, self, {})
   end
 
+  def with_available_locales(*locales)
+    previous_available_locales = I18n.available_locales
+    previous_load_path = I18n.load_path.dup
+    locale_paths = locales.map { |locale| File.expand_path("../../config/locales/#{locale}.yml", __dir__) }
+    I18n.load_path |= locale_paths
+    I18n.reload!
+    I18n.available_locales = (previous_available_locales + locales).uniq
+    yield
+  ensure
+    I18n.load_path = previous_load_path
+    I18n.available_locales = previous_available_locales
+    I18n.reload!
+  end
+
   around do |example|
     RailsFieldsKit.reset_configuration!
     example.run
@@ -132,6 +146,56 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("data-rails-fields-kit--tom-select-create-text-value=\"Create\"")
     expect(html).to include("data-rails-fields-kit--tom-select-option-description-field-value=\"email\"")
     expect(html).to include("data-rails-fields-kit--tom-select-option-badge-field-value=\"status\"")
+  end
+
+  it "uses bundled locale-aware render text defaults" do
+    html = with_available_locales(:ja) do
+      I18n.with_locale(:ja) do
+        form_builder.rfk_combobox(:customer_id, url: "/customers.json")
+      end
+    end
+
+    expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"該当する項目はありません\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-loading-text-value=\"読み込み中...\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-create-text-value=\"追加\"")
+  end
+
+  it "prefers configured render text defaults over bundled locale copy" do
+    RailsFieldsKit.configure do |config|
+      config.default_no_results_text = "Nothing here"
+      config.default_loading_text = "Searching..."
+      config.default_create_text = "Create now"
+    end
+
+    html = with_available_locales(:ja) do
+      I18n.with_locale(:ja) do
+        form_builder.rfk_combobox(:customer_id, url: "/customers.json")
+      end
+    end
+
+    expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"Nothing here\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-loading-text-value=\"Searching...\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-create-text-value=\"Create now\"")
+  end
+
+  it "prefers field-level render text over configured defaults" do
+    RailsFieldsKit.configure do |config|
+      config.default_no_results_text = "Nothing here"
+      config.default_loading_text = "Searching..."
+      config.default_create_text = "Create now"
+    end
+
+    html = form_builder.rfk_combobox(
+      :customer_id,
+      url: "/customers.json",
+      no_results_text: "No customers",
+      loading_text: "Loading customers",
+      create_text: "Add customer"
+    )
+
+    expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"No customers\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-loading-text-value=\"Loading customers\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-create-text-value=\"Add customer\"")
   end
 
   it "renders extra remote query params" do

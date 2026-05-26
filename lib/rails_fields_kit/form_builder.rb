@@ -163,9 +163,9 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :close_after_select, rfk_option_or_default(options, :close_after_select, config.default_close_after_select))
       rfk_assign_data_value(data, :hide_selected, rfk_option_or_default(options, :hide_selected, config.default_hide_selected))
       rfk_assign_data_value(data, :persist, rfk_option_or_default(options, :persist, config.default_persist))
-      rfk_assign_data_value(data, :no_results_text, rfk_option_or_default(options, :no_results_text, config.default_no_results_text))
-      rfk_assign_data_value(data, :loading_text, rfk_option_or_default(options, :loading_text, config.default_loading_text))
-      rfk_assign_data_value(data, :create_text, rfk_option_or_default(options, :create_text, config.default_create_text))
+      rfk_assign_data_value(data, :no_results_text, rfk_render_text_option(options, :no_results_text, config.default_no_results_text, "rails_fields_kit.tom_select.no_results_text", "No results found"))
+      rfk_assign_data_value(data, :loading_text, rfk_render_text_option(options, :loading_text, config.default_loading_text, "rails_fields_kit.tom_select.loading_text", "Loading..."))
+      rfk_assign_data_value(data, :create_text, rfk_render_text_option(options, :create_text, config.default_create_text, "rails_fields_kit.tom_select.create_text", "Add"))
       rfk_assign_data_value(data, :option_description_field, rfk_option_or_default(options, :option_description_field, config.default_option_description_field))
       rfk_assign_data_value(data, :option_badge_field, rfk_option_or_default(options, :option_badge_field, config.default_option_badge_field))
       rfk_assign_data_value(data, :plugins, plugins)
@@ -203,6 +203,19 @@ module RailsFieldsKit
 
     def rfk_option_or_default(options, key, default)
       options.key?(key) ? options.delete(key) : default
+    end
+
+    def rfk_render_text_option(options, key, configured_default, i18n_key, fallback)
+      value = options.key?(key) ? options.delete(key) : configured_default
+      return I18n.t(i18n_key, default: fallback) if rfk_bundled_render_text_default?(value)
+
+      value
+    end
+
+    def rfk_bundled_render_text_default?(value)
+      value == RailsFieldsKit::Configuration::DEFAULT_NO_RESULTS_TEXT ||
+        value == RailsFieldsKit::Configuration::DEFAULT_LOADING_TEXT ||
+        value == RailsFieldsKit::Configuration::DEFAULT_CREATE_TEXT
     end
 
     def rfk_promote_html_options!(options, html_options)

@@ -130,31 +130,40 @@ Default: `nil`
 
 ## Render text defaults
 
-These values are the gem's bundled English baseline. Override them in the initializer when your host app wants a repo-wide default, and use field-level helper options when one field needs different copy.
+When the initializer leaves these values unset, Rails Fields Kit uses bundled locale-aware copy at render time. That keeps the default Tom Select wording closer to the host app locale without taking away existing override paths.
 
 Override precedence for Tom Select-backed helpers is:
 
 1. field-level options such as `loading_text:`, `no_results_text:`, and `create_text:`
 2. initializer defaults such as `config.default_loading_text`
-3. the bundled defaults listed below
+3. bundled locale-aware defaults (`I18n.locale`, with English fallback)
 
 ### `default_no_results_text`
 
 Text shown when no result is found.
 
-Default: `"No results found"`
+Bundled fallback:
+
+- `en`: `"No results found"`
+- `ja`: `"該当する項目はありません"`
 
 ### `default_loading_text`
 
 Text shown while remote options are loading.
 
-Default: `"Loading..."`
+Bundled fallback:
+
+- `en`: `"Loading..."`
+- `ja`: `"読み込み中..."`
 
 ### `default_create_text`
 
 Text shown for the create option.
 
-Default: `"Add"`
+Bundled fallback:
+
+- `en`: `"Add"`
+- `ja`: `"追加"`
 
 ## Wrapper class defaults
 
@@ -218,9 +227,12 @@ RailsFieldsKit.configure do |config|
   config.default_search_field = "name,email"
   config.default_min_length = 2
   config.default_max_options = 50
-  config.default_no_results_text = "No matches"
-  config.default_loading_text = "Searching..."
-  config.default_create_text = "Create"
+
+  # Uncomment these when your host app wants repo-wide wording.
+  # config.default_no_results_text = "No matches"
+  # config.default_loading_text = "Searching..."
+  # config.default_create_text = "Create"
+
   config.wrapper_class = "field"
   config.label_class = "form-label"
   config.hint_class = "form-text"

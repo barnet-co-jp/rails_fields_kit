@@ -2,6 +2,10 @@
 
 module RailsFieldsKit
   class Configuration
+    DEFAULT_NO_RESULTS_TEXT = :__rails_fields_kit_default_no_results_text__
+    DEFAULT_LOADING_TEXT = :__rails_fields_kit_default_loading_text__
+    DEFAULT_CREATE_TEXT = :__rails_fields_kit_default_create_text__
+
     attr_accessor :controller_name,
       :default_query_param,
       :default_selected_param,
@@ -49,9 +53,9 @@ module RailsFieldsKit
       @default_close_after_select = nil
       @default_hide_selected = nil
       @default_persist = nil
-      @default_no_results_text = "No results found"
-      @default_loading_text = "Loading..."
-      @default_create_text = "Add"
+      @default_no_results_text = DEFAULT_NO_RESULTS_TEXT
+      @default_loading_text = DEFAULT_LOADING_TEXT
+      @default_create_text = DEFAULT_CREATE_TEXT
       @default_option_description_field = nil
       @default_option_badge_field = nil
       @wrapper_class = "rfk-field"
