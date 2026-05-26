@@ -59,6 +59,8 @@ See [`select_migration.md`](select_migration.md) for a practical server-rendered
 
 Current Ransack-oriented public surface stays metadata-first. `rfk_token_search` is a general token-search UI helper, while `rfk_table_filters(columns)` renders metadata that was already prepared elsewhere. Helper-level DSL examples such as `rfk_token_search ..., adapter: :ransack` or `rfk_table_filters @table_preferences, adapter: :ransack` are not current public APIs in the 0.1.x contract.
 
+Tom Select-backed `rfk_*` helpers also support opt-in `error_surface:` and `error_surface_html:` options for fields that should expose a stable nearby placeholder on request failures. When enabled, request-failure events described in [`events.md`](events.md) can include that placeholder as `detail.surface`, while visible error copy and retry UI remain host-app responsibility.
+
 ## Controller helpers
 
 Include `RailsFieldsKit::Searchable` in controllers that serve remote option JSON.
@@ -171,6 +173,9 @@ Remote endpoint extensions:
 - `query_params:` adds fixed query parameters to search requests.
 - `selected_query_params:` adds fixed query parameters to selected preload requests.
 - `create_params:` adds fixed JSON fields to create requests.
+- `error_surface:` adds a generated placeholder id so request-failure events can expose `detail.surface` for host-app feedback.
+
+`error_surface_html:` customizes the generated placeholder element, but it does not change the event names or move visible feedback responsibility into the gem.
 
 ## Stimulus lifecycle contract
 
