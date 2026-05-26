@@ -172,12 +172,16 @@ Notes:
 - [ ] `rails-fields-kit--tom-select:load-error`
 - [ ] `rails-fields-kit--tom-select:selected-load`
 - [ ] `rails-fields-kit--tom-select:selected-load-error`
+- [ ] `rails-fields-kit--tom-select:create`
 - [ ] `rails-fields-kit--tom-select:create-error`
 - [ ] `rails-fields-kit--tom-select:change`
 - [ ] `rails-fields-kit--tom-select:item-add`
 - [ ] `rails-fields-kit--tom-select:item-remove`
 - [ ] `rails-fields-kit--tom-select:clear`
-- [ ] create-on-the-fly success matched the current success surface documented in `doc/events.md`
+- [ ] create-on-the-fly success dispatched the dedicated `create` event before the normal selection events continued
+- [ ] `event.detail.input` matched the submitted text for the create success case
+- [ ] `event.detail.option` exposed the created option payload needed by the host app
+- [ ] `item-add` and `change` still matched the accepted selection after dedicated create success
 
 Notes:
 
