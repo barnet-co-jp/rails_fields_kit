@@ -240,7 +240,7 @@ Keep the detailed option reference in [`controller_helpers.md`](controller_helpe
 
 See [`events.md`](events.md) for the Stimulus events emitted by the Tom Select controller.
 
-Remote search and selected preload have dedicated success and failure events. Create-on-the-fly currently reports success through the normal `item-add` / `change` interaction events and keeps `create-error` as the dedicated failure hook. When `error_surface: true` is enabled, request-failure events also expose `event.detail.surface` so the host app can render inline error UI without replacing the controller.
+Remote search and selected preload have dedicated success and failure events. Create-on-the-fly success also has a dedicated `rails-fields-kit--tom-select:create` hook before the normal `item-add` / `change` interaction events continue, while `create-error` remains the dedicated failure hook. When `error_surface: true` is enabled, request-failure events also expose `event.detail.surface` so the host app can render inline error UI without replacing the controller.
 
 Visible success or error UI remains a host-app responsibility.
 

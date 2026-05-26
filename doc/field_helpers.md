@@ -70,6 +70,26 @@ Use this for searchable remote selects and editable comboboxes.
   option_badge_field: "status" %>
 ```
 
+#### Error surfaces for request failures
+
+Use `error_surface: true` on Tom Select-backed helpers when the host app wants a stable placeholder element next to the field for `load-error`, `selected-load-error`, or `create-error` handlers.
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  selected_url: selected_customers_path(format: :json),
+  create_url: customers_path,
+  error_surface: true,
+  error_surface_html: { class: "field-error" },
+  html: {
+    data: {
+      action: "rails-fields-kit--tom-select:load-error->customers#error rails-fields-kit--tom-select:create-error->customers#error"
+    }
+  } %>
+```
+
+When enabled, Rails Fields Kit appends a hidden polite status placeholder near the field, wires that placeholder into `aria-describedby`, and exposes the element as `event.detail.surface` on request-failure events. `error_surface_html:` customizes that generated placeholder element only; the host app still decides when to reveal it and what message or retry UI to render.
+
 ### `rfk_autocomplete`
 
 Use this for a text input with suggestions where the submitted value is free text.
@@ -289,6 +309,8 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `load_throttle:` forwards Tom Select's remote load throttle in milliseconds.
 - `delimiter:` forwards Tom Select's delimiter option, useful for text-backed token inputs.
 - `loading_text:`, `no_results_text:`, and `create_text:` override the bundled or initializer-provided Tom Select copy for one field only.
+- `error_surface:` adds a stable nearby placeholder for request-failure handlers.
+- `error_surface_html:` customizes that generated placeholder element.
 
 When neither the field nor the initializer sets those values, Rails Fields Kit falls back to bundled locale-aware copy at render time. The bundled baseline currently includes English and Japanese, and falls back to English when a locale-specific key is not present.
 
