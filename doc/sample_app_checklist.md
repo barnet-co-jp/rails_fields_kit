@@ -110,6 +110,7 @@ Verify:
 - edit forms can load selected labels through `selected_url:`
 - create-on-the-fly adds a newly-created option
 - token suggestion endpoints return option JSON for `rfk_token_search`
+- at least one representative non-default `action:` route still works from the documented route shape, such as `rfk_find_with action: :selected` or `rfk_token_suggestions_with action: :search_tokens`
 - fixed `query_params:` reach representative remote search requests when the field relies on request context
 - fixed `selected_query_params:` reach representative selected preload requests when `selected_url:` is used
 - fixed `create_params:` are merged into representative create-on-the-fly requests when the field relies on them
@@ -162,8 +163,11 @@ Verify:
 
 - collected filter metadata renders through the documented helper path
 - collected cell editor metadata renders through the documented helper path
+- native metadata such as `TableFilterInput.search_field`, `money_field`, or `TableCellInput.text_area` also render through the documented helper path when the integration uses common field helpers
 - any direct `TableRenderer.filter_call` or `TableRenderer.cell_editor_call` usage in your integration still matches the documented call-spec shape
+- a representative `TableRenderer.register_field_helper` mapping can be rendered through the documented call-spec path, and `TableRenderer.reset_field_helpers!` restores the default mapping after that scoped customization
 - token search or Ransack-oriented metadata, if used, is still treated as UI metadata or rendering assistance rather than query execution
+- representative query execution and preference persistence still belong to the host app or table integration rather than Rails Fields Kit
 
 ## Verify Turbo reconnect
 

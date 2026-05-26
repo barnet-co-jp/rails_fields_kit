@@ -103,6 +103,7 @@ Notes:
 - [ ] `rfk_find_with` returns selected option labels for edit forms
 - [ ] `rfk_create_with` creates options on the fly
 - [ ] `rfk_token_suggestions_with` returns token suggestion option JSON
+- [ ] at least one representative non-default `action:` route still worked from the documented route shape
 - [ ] fixed `query_params:` reached representative remote search requests
 - [ ] fixed `selected_query_params:` reached representative selected preload requests
 - [ ] fixed `create_params:` were merged into representative create-on-the-fly requests
@@ -147,7 +148,11 @@ Notes:
 - [ ] `RailsFieldsKit::TableCellInput` metadata renders through the documented helper path
 - [ ] `rfk_table_filters` renders collected filter metadata
 - [ ] `rfk_table_cell_editors` renders collected cell editor metadata
+- [ ] native field metadata such as `search_field`, `money_field`, or `text_area` rendered through the documented helper path
 - [ ] direct `TableRenderer` call-spec usage still matches the documented helper / method / options shape when used
+- [ ] a representative `TableRenderer.register_field_helper` mapping rendered through the documented call-spec path
+- [ ] `TableRenderer.reset_field_helpers!` restored the default mapping after the representative custom helper check
+- [ ] table metadata remained rendering assistance only; representative query execution or persistence stayed in the host app / table integration
 
 Notes:
 
