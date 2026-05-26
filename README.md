@@ -44,7 +44,8 @@ See [`doc/events.md`](doc/events.md) for Stimulus events dispatched by the Tom S
 See [`doc/development.md`](doc/development.md) for local development checks.
 See [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md) and [`doc/sample_app_results.md`](doc/sample_app_results.md) for sample app verification.
 See [`doc/final_release_checklist.md`](doc/final_release_checklist.md) for the final release checklist.
-See [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) for the 0.1.0 release notes draft.
+See [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md) for the current next-release draft.
+See [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) for the archived 0.1.0 release notes.
 
 ## JavaScript setup
 
