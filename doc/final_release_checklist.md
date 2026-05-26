@@ -22,6 +22,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm `CHANGELOG.md` has an entry for the release version and date.
 - [ ] Confirm `CHANGELOG.md` has a fresh `Unreleased` section for the next cycle.
 - [ ] Prepare or update `doc/release_notes_0_1_1.md` for the current next-release draft. If release planning chooses a different version number, rename that draft and keep `doc/release_notes_0_1_0.md` as the historical reference.
+- [ ] If request-failure placeholder support is part of the release scope, confirm `CHANGELOG.md` and `doc/release_notes_0_1_1.md` mention `error_surface:` / `error_surface_html:` and `event.detail.surface` without implying built-in retry UI.
 
 ## Documentation
 
@@ -65,7 +66,9 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm create-on-the-fly works.
 - [ ] Confirm create-on-the-fly success dispatched `rails-fields-kit--tom-select:create` before the normal selection events when that hook is part of the release surface.
 - [ ] Confirm `event.detail.input` and `event.detail.option` exposed the expected payload for the representative create success flow.
+- [ ] Confirm request-failure events expose `event.detail.surface` when `error_surface:` is part of the release surface.
 - [ ] Confirm visible success UI remained a host-app responsibility rather than a built-in Rails Fields Kit surface.
+- [ ] Confirm visible error or retry UI around any opt-in `error_surface:` placeholder remained a host-app responsibility.
 - [ ] Confirm token search and token suggestion endpoints are covered if they are part of the release surface.
 - [ ] Confirm table metadata helpers or call-spec rendering paths are covered if they are part of the release surface.
 - [ ] Confirm validation and authorization failures return expected status codes.
