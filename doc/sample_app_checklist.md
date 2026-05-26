@@ -149,6 +149,9 @@ Rails Fields Kit does not choose user-facing copy for the host app. In the sampl
 - `create_text` appears with the intended wording when create-on-the-fly is enabled
 - failed inline create requests surface visible host-app feedback after `rails-fields-kit--tom-select:create-error`
 - selected preload failures, if exercised, still leave a user-understandable fallback or visible host-app feedback after `rails-fields-kit--tom-select:selected-load-error`
+- at least one field with `error_surface: true` exposes a stable inline placeholder from `load-error`, `selected-load-error`, or `create-error`
+- success or a follow-up interaction clears stale inline error content from that placeholder
+- a comparable field without `error_surface: true` keeps the default no-inline-placeholder behavior
 
 ## Verify table metadata adapters
 
@@ -193,6 +196,8 @@ Listen for the events documented in [`events.md`](events.md):
 - `rails-fields-kit--tom-select:clear`
 
 For create-on-the-fly success, verify the current success surface documented in [`events.md`](events.md). Today that means `item-add` and `change`, because Rails Fields Kit does not dispatch a dedicated create-success event.
+
+When `error_surface: true` is part of the release surface, also verify the request-failure events above expose `event.detail.surface` for the opted-in field and leave it `null` for a comparable non-opt-in field.
 
 ## Release gate
 
