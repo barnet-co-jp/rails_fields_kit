@@ -67,6 +67,10 @@ Create failure keeps its own dedicated event:
 
 Use `create-error` when the host app wants to show validation feedback, retry affordances, or analytics for failed inline creation.
 
+If the host app writes its inline error copy into `detail.surface`, keep that copy inside the placeholder element itself. The controller clears and hides that placeholder before a fresh remote request, after successful selected preload or create, and again when forwarded interaction events such as `change`, `item-add`, `item-remove`, or `clear` fire.
+
+If the app mirrors the same error in another element, clear that extra UI from the same success or follow-up hooks. Rails Fields Kit only resets the opt-in placeholder that it rendered.
+
 ## Interaction forwarding
 
 These events forward common Tom Select interactions:
