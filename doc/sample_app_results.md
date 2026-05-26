@@ -153,6 +153,11 @@ Notes:
 - [ ] `rfk_table_cell_editors` renders collected cell editor metadata
 - [ ] native field metadata such as `search_field`, `money_field`, or `text_area` rendered through the documented helper path
 - [ ] direct `TableRenderer` call-spec usage still matches the documented helper / method / options shape when used
+- [ ] a rendered `TableFilterInput.ransack_filter(...)` field exposed `data-rails-fields-kit--tom-select-table-adapter-value`
+- [ ] that rendered field exposed `data-rails-fields-kit--tom-select-table-adapter-param-name-value`
+- [ ] that rendered field exposed `data-rails-fields-kit--tom-select-table-adapter-fields-value`
+- [ ] the rendered metadata surface matched the same allowed-field source of truth used by the host app parser whitelist
+- [ ] render-time metadata stayed metadata only; `params[:q]` building and query execution still lived in the host app
 - [ ] a representative `TableRenderer.register_field_helper` mapping rendered through the documented call-spec path
 - [ ] `TableRenderer.reset_field_helpers!` restored the default mapping after the representative custom helper check
 - [ ] table metadata remained rendering assistance only; representative query execution or persistence stayed in the host app / table integration
