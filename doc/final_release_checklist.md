@@ -29,6 +29,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/public_api.md`.
 - [ ] Review `doc/select_migration.md`.
 - [ ] Review `doc/field_helpers.md`.
+- [ ] Review `doc/tom_select_visual_reference.html`.
 - [ ] Review `doc/controller_helpers.md`.
 - [ ] Review `doc/token_suggestions.md`.
 - [ ] Review `doc/ransack_suggestions.md`.
