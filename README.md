@@ -31,22 +31,17 @@ Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and
 For the current direction and integration priorities, see [Roadmap](ROADMAP.md).
 For repo positioning and responsibility boundaries, see [Product profile](Product%20Profile.md).
 For repo-specific working guidance, see [AGENTS](AGENTS.md).
-For optional table integration metadata, see [Table adapter metadata](doc/table_adapters.md). This lets table-oriented gems read Rails Fields Kit filter/editor metadata through `to_table_filter`, `to_table_cell_editor`, and hash-like `to_hash` protocols without taking a hard dependency.
-See [`doc/setup.md`](doc/setup.md) for the maintained setup walkthrough.
-See [`doc/public_api.md`](doc/public_api.md) for the intended stable API surface.
-See [`doc/select_migration.md`](doc/select_migration.md) for a practical `collection_select` to `rfk_select` migration pattern.
-See [`doc/field_helpers.md`](doc/field_helpers.md) for the FormBuilder helper reference.
-See [`doc/tom_select_visual_reference.html`](doc/tom_select_visual_reference.html) for a static visual comparison of representative Tom Select-backed states.
-See [`doc/controller_helpers.md`](doc/controller_helpers.md) for the controller helper reference.
-See [`doc/token_suggestions.md`](doc/token_suggestions.md) for token search suggestion helpers.
-See [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) for optional Ransack-compatible token suggestion metadata.
-See [`doc/configuration.md`](doc/configuration.md) for initializer options.
-See [`doc/events.md`](doc/events.md) for Stimulus events dispatched by the Tom Select controller.
-See [`doc/development.md`](doc/development.md) for local development checks.
-See [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md) and [`doc/sample_app_results.md`](doc/sample_app_results.md) for sample app verification.
-See [`doc/final_release_checklist.md`](doc/final_release_checklist.md) for the final release checklist.
-See [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md) for the current next-release draft.
-See [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) for the archived 0.1.0 release notes.
+
+## Docs map
+
+| If you want to... | Start here |
+| --- | --- |
+| Set up a host app | [`doc/setup.md`](doc/setup.md) |
+| Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md), [`doc/select_migration.md`](doc/select_migration.md) |
+| See the UI states quickly | [`doc/tom_select_visual_reference.html`](doc/tom_select_visual_reference.html) |
+| Review public API and integration contracts | [`doc/public_api.md`](doc/public_api.md), [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md), [`doc/table_adapters.md`](doc/table_adapters.md), [`doc/events.md`](doc/events.md), [`doc/configuration.md`](doc/configuration.md) |
+| Work with optional table metadata | [`doc/table_adapters.md`](doc/table_adapters.md) |
+| Run local checks or release verification | [`doc/development.md`](doc/development.md), [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md), [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) |
 
 ## Choosing a helper
 
