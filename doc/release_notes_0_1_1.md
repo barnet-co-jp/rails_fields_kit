@@ -4,7 +4,7 @@ This draft assumes the next release after `0.1.0` will be `0.1.1`.
 
 If release planning chooses a different version number, rename this file and keep the contents aligned with `CHANGELOG.md` instead of editing the `0.1.0` historical notes in place.
 
-Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public surface around token-oriented search, Ransack-compatible suggestion metadata, table metadata adapters, and controller/helper integration details while keeping query execution and JavaScript package ownership in the host application.
+Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public surface around token-oriented search, Ransack-compatible suggestion metadata, table metadata adapters, controller/helper integration details, and a dedicated create-success event for create-on-the-fly flows while keeping query execution and JavaScript package ownership in the host application.
 
 ## Highlights
 
@@ -15,6 +15,7 @@ Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public
 - `rfk_table_filters` and `rfk_table_cell_editors` for rendering documented table metadata through a FormBuilder.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so controller helpers can match custom routes.
 - Fixed remote request params with `query_params:`, `selected_query_params:`, and `create_params:`.
+- `rails-fields-kit--tom-select:create` as a dedicated create-on-the-fly success hook with `event.detail.input` and `event.detail.option`.
 - A normalized Tom Select failure event detail shape across remote search, selected preload, and create-on-the-fly failures.
 
 ## Main helpers and builders
@@ -56,6 +57,7 @@ Metadata and builder APIs:
 - Tom Select must still be installed by the host application.
 - The host application still owns bundler or importmap setup for JavaScript entrypoints.
 - Submitted token text parsing, `params[:q]` construction, authorization, scoping, pagination, and result execution remain host-app responsibilities.
+- Visible success UI, toast copy, and follow-up app behavior after `rails-fields-kit--tom-select:create` remain host-app responsibilities.
 - Table metadata helpers expose rendering metadata only; they do not take over table preference persistence or query execution.
 
 ## Verification expectations
@@ -73,6 +75,8 @@ Before publishing, also confirm:
 - GitHub Actions CI is green for the exact release commit.
 - `doc/sample_app_results.md` is completed for the same branch head.
 - documented JavaScript import paths resolve in the sample app.
+- the sample app confirms `rails-fields-kit--tom-select:create`, `event.detail.input`, and `event.detail.option` when that release surface is in scope.
+- `rails-fields-kit--tom-select:item-add` and `rails-fields-kit--tom-select:change` still describe the accepted selection after create succeeds.
 - token suggestion and Ransack suggestion metadata checks pass if those surfaces are in scope for the release.
 - table metadata helpers or `TableRenderer` call-spec paths are covered if they are in scope for the release.
 - remote search, selected preload, create-on-the-fly, and failure event handling still match the current docs.
@@ -80,7 +84,7 @@ Before publishing, also confirm:
 ## Suggested GitHub release body
 
 ```markdown
-Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token-oriented search helpers, metadata-only Ransack suggestion builders, and table adapter metadata for rendering documented field helpers through existing host-app table definitions.
+Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token-oriented search helpers, metadata-only Ransack suggestion builders, table adapter metadata for rendering documented field helpers through existing host-app table definitions, and a dedicated create-success event for create-on-the-fly flows.
 
 ### Highlights
 
@@ -90,6 +94,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 - `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
 - `rfk_table_filters` and `rfk_table_cell_editors`
 - controller helper `action:` support and fixed request params
+- `rails-fields-kit--tom-select:create` with `event.detail.input` / `event.detail.option`
 - normalized Tom Select failure event detail payloads
 
 ### Compatibility
@@ -100,7 +105,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 
 ### Responsibility boundary
 
-Rails Fields Kit still stops at UI helpers and metadata. Host applications remain responsible for token parsing, search execution, authorization, pagination, and JavaScript package manager or importmap choices.
+Rails Fields Kit still stops at UI helpers and metadata. Host applications remain responsible for token parsing, search execution, authorization, pagination, JavaScript package manager or importmap choices, and visible success UI after create-on-the-fly succeeds.
 
 ### Verification
 
