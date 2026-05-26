@@ -24,9 +24,11 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 
 ## Docs sync rules
 
-- Keep `README.md`, `doc/setup.md`, `doc/public_api.md`, `doc/field_helpers.md`, `doc/controller_helpers.md`, `doc/events.md`, and any affected topic doc aligned when public behavior changes.
+- Keep `README.md`, `doc/setup.md`, `doc/public_api.md`, `doc/field_helpers.md`, `doc/controller_helpers.md`, `doc/configuration.md`, `doc/token_suggestions.md`, `doc/ransack_suggestions.md`, `doc/table_adapters.md`, `doc/select_migration.md`, `doc/events.md`, and any affected topic doc aligned when the current public surface changes.
 - Do not document roadmap examples as current public API unless the code and `doc/public_api.md` already support them.
 - Keep host-app responsibilities explicit. Rails Fields Kit does not own query parsing, authorization, pagination, or the host app's JavaScript package manager setup.
+- When setup guidance or docs discoverability changes, sync `README.md`, `doc/setup.md`, and `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md` together.
+- When token suggestion, Ransack suggestion, or table metadata behavior changes, sync the related `doc/*.md` reference plus `doc/public_api.md` together.
 - When event dispatch, selected preload, or create-on-the-fly behavior changes, sync `doc/events.md`, `doc/sample_app_checklist.md`, and `doc/sample_app_results.md` together.
 
 ## Verification
