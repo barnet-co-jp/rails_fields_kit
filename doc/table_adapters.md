@@ -287,6 +287,8 @@ RailsFieldsKit::TableMetadata.render_filters(form_builder, columns)
 RailsFieldsKit::TableMetadata.render_cell_editors(form_builder, columns)
 ```
 
+These batch render helpers return ordered arrays of rendered pieces. `rfk_table_filters` and `rfk_table_cell_editors` are the helper-level direct rendering path that safe-joins those pieces into ordinary FormBuilder output.
+
 `nil` and `false` filters/editors are skipped. Raw metadata hashes are preserved. Objects responding to `to_table_filter` or `to_table_cell_editor` are normalized through those protocols, and hash-like metadata objects responding to `to_hash` are normalized through `to_hash`. A `to_hash` implementation must return a Hash-like object.
 
 Collected metadata hashes are duplicated before being returned. Nested `options` hashes are also duplicated so downstream mutation does not alter the original column definition, hash-like metadata object, or hash-like column object.
@@ -346,6 +348,8 @@ editor_calls = RailsFieldsKit::TableRenderer.cell_editor_calls(editors)
 RailsFieldsKit::TableRenderer.render_filters(form_builder, filters)
 RailsFieldsKit::TableRenderer.render_cell_editors(form_builder, editors)
 ```
+
+Use `rfk_table_filters` / `rfk_table_cell_editors` when you already want direct FormBuilder output from a Rails view. Use `TableMetadata.filter_calls` / `cell_editor_calls` or `TableRenderer.filter_call` / `cell_editor_call` when a table integration needs to inspect, reorder, wrap, or selectively render helper, method, and options in its own pipeline. Use the batch render helpers when the integration wants rendering convenience but still treats the result as an ordered array of rendered controls rather than a new helper-level API.
 
 Use `helper_for` and `registered_field_type?` when an integration needs to inspect renderer mappings, including custom registrations.
 

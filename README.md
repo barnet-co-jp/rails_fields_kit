@@ -269,7 +269,26 @@ class SearchTokenSuggestionsController < ApplicationController
 end
 ```
 
-This endpoint only returns suggestion option JSON. Submitted token text still belongs to the host application's parser, search object, or Ransack layer. Use `RailsFieldsKit::RansackSuggestions.build` when those suggestions should carry Ransack predicate metadata. See [`doc/controller_helpers.md`](doc/controller_helpers.md) and [`doc/token_suggestions.md`](doc/token_suggestions.md) for the maintained reference.
+This endpoint only returns suggestion option JSON. Submitted token text still belongs to the host application's parser, search object, or Ransack layer.
+
+For a current Ransack-oriented path, keep the same `rfk_token_search` field and switch the suggestion builder:
+
+```ruby
+rfk_token_suggestions_with(
+  action: :index,
+  suggestions: ->(_query) {
+    RailsFieldsKit::RansackSuggestions.build(
+      fields: {
+        status: :status_eq,
+        assignee: :assignee_name_cont
+      }
+    )
+  },
+  wrap: "options"
+)
+```
+
+This remains metadata-first. Rails Fields Kit helps the field advertise allowed tokens, but the host app still parses the submitted text and turns it into `params[:q]` or an equivalent search object input. Helper-level DSL examples such as `rfk_token_search ..., adapter: :ransack` stay in `ROADMAP.md` as future proposals, not current public API. See [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), and [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) for the maintained reference.
 
 ### Table metadata helpers
 

@@ -139,6 +139,9 @@ Notes:
 - [ ] `create_text` shows the intended affordance when create-on-the-fly is enabled
 - [ ] `create-error` handling produces visible host-app feedback when create fails
 - [ ] `selected-load-error` handling leaves a visible host-app fallback or understandable failure state when selected preload fails
+- [ ] an `error_surface: true` field exposed a usable inline placeholder during a representative request failure
+- [ ] stale inline error content cleared after success or a follow-up interaction
+- [ ] a comparable field without `error_surface: true` kept the default no-inline-placeholder behavior
 
 Notes:
 
