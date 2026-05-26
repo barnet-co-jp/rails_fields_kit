@@ -155,6 +155,12 @@
         color: #2d4f7f;
       }
 
+      .tag.tags {
+        border-color: #e2caa4;
+        background: #fff1db;
+        color: #8c5c18;
+      }
+
       h2 {
         margin: 0;
         font-size: 1.12rem;
@@ -202,6 +208,14 @@
 
       .query {
         color: var(--ink);
+      }
+
+      .inline-query {
+        align-self: center;
+        padding: 6px 0;
+        color: var(--ink);
+        font-weight: 600;
+        white-space: nowrap;
       }
 
       .caret {
@@ -411,6 +425,31 @@
             </div>
           </div>
           <p class="card-footer">Use `rfk_tags` when the interaction should feel like tag entry or optional creation, rather than ordinary multi selection.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag tags">Tags</span>
+            <h2>Tag entry with the next value in progress</h2>
+            <p>Represents `rfk_tags` when existing tokens stay visible and the same field is still ready to accept or create another tag.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection selection--multiple">
+                <span class="token">Priority</span>
+                <span class="token">Internal</span>
+                <span class="inline-query">beta-pilot</span>
+              </div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="action">
+                <strong>Add “beta-pilot” as a new tag</strong>
+                <span>Compared with ordinary multi select, this surface keeps focus on tag entry and optional creation.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">This card shows the helper-specific meaning that stays implicit in the generic create affordance.</p>
         </article>
 
         <article class="card">
