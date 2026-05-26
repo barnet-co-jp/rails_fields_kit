@@ -50,12 +50,24 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include('error,')
     expect(source).to include('response,')
     expect(source).to include('payload,')
-    expect(source).to include('status')
+    expect(source).to include('status,')
+    expect(source).to include('surface')
   end
 
   it "routes each request failure through its dedicated event and context" do
     expect(source).to include('this.dispatchRequestError("load-error", "load", { query }, error)')
     expect(source).to include('this.dispatchRequestError("selected-load-error", "selected-load", { values }, error)')
     expect(source).to include('this.dispatchRequestError("create-error", "create", { input }, error)')
+  end
+
+  it "exposes the opt-in error surface on request failures" do
+    expect(source).to include("const surface = this.errorSurfaceElement()")
+    expect(source).to include("this.markErrorSurface(surface, { operation, status })")
+  end
+
+  it "clears the opt-in error surface when interaction recovers" do
+    expect(source).to include("this.clearErrorSurface()")
+    expect(source).to include("surface.hidden = true")
+    expect(source).to include("surface.textContent = \"\"")
   end
 end
