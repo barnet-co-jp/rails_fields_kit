@@ -140,6 +140,8 @@ Notes:
 - [ ] `create-error` handling produces visible host-app feedback when create fails
 - [ ] `selected-load-error` handling leaves a visible host-app fallback or understandable failure state when selected preload fails
 - [ ] an `error_surface: true` field exposed a usable inline placeholder during a representative request failure
+- [ ] a representative `error_surface_html:` field preserved its custom wrapper class or attrs without losing the shared placeholder `id`, hidden default, `role`, `aria-live`, or `aria-atomic` contract
+- [ ] request-failure events for that custom placeholder field still surfaced the same inline placeholder through `event.detail.surface`
 - [ ] stale inline error content cleared after success or a follow-up interaction
 - [ ] a comparable field without `error_surface: true` kept the default no-inline-placeholder behavior
 
