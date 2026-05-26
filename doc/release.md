@@ -86,6 +86,8 @@ bundle exec rake build
 
 9. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
 
+   When the release surface includes create-on-the-fly success hooks, confirm the sample app and recorded results cover `rails-fields-kit--tom-select:create`, `event.detail.input`, `event.detail.option`, and the continued `item-add` / `change` flow. Visible success UI remains a host-app responsibility.
+
 ## Release steps
 
 1. Update `CHANGELOG.md`.
