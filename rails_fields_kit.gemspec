@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
     Dir[
       "{app,lib}/**/*",
       "doc/**/*.md",
+      "doc/**/*.html",
       "CHANGELOG.md",
       "LICENSE.txt",
       "README.md",

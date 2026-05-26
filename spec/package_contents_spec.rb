@@ -73,7 +73,8 @@ RSpec.describe "package contents" do
       "doc/events.md",
       "doc/token_suggestions.md",
       "doc/ransack_suggestions.md",
-      "doc/table_adapters.md"
+      "doc/table_adapters.md",
+      "doc/tom_select_visual_reference.html"
     )
   end
 
