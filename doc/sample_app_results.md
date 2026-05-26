@@ -86,6 +86,17 @@ Notes:
 
 Notes:
 
+## `collection_select` migration checks
+
+- [ ] documented `collection_select` to `rfk_select` swap preserved the same submitted attribute and redisplay behavior
+- [ ] `include_blank:` kept the expected blank-option behavior from `doc/select_migration.md`
+- [ ] representative `disabled:` options still rendered and behaved as expected
+- [ ] representative grouped options still rendered correctly
+- [ ] representative `option_html:` data or HTML attributes still reached the rendered options
+- [ ] the migration path stayed aligned with `doc/field_helpers.md` and `doc/public_api.md`
+
+Notes:
+
 ## Controller helper checks
 
 - [ ] `rfk_search_with` returns remote options
