@@ -186,13 +186,19 @@ Listen for the events documented in [`events.md`](events.md):
 - `rails-fields-kit--tom-select:load-error`
 - `rails-fields-kit--tom-select:selected-load`
 - `rails-fields-kit--tom-select:selected-load-error`
+- `rails-fields-kit--tom-select:create`
 - `rails-fields-kit--tom-select:create-error`
 - `rails-fields-kit--tom-select:change`
 - `rails-fields-kit--tom-select:item-add`
 - `rails-fields-kit--tom-select:item-remove`
 - `rails-fields-kit--tom-select:clear`
 
-For create-on-the-fly success, verify the current success surface documented in [`events.md`](events.md). Today that means `item-add` and `change`, because Rails Fields Kit does not dispatch a dedicated create-success event.
+For create-on-the-fly success, confirm:
+
+- the dedicated `rails-fields-kit--tom-select:create` hook is observed before the normal selection events continue
+- `event.detail.input` matches the submitted text
+- `event.detail.option` contains the created option payload the host app needs to inspect
+- `rails-fields-kit--tom-select:item-add` and `rails-fields-kit--tom-select:change` still describe the accepted selection after create succeeds
 
 ## Release gate
 
