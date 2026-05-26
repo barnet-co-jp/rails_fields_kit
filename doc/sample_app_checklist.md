@@ -83,6 +83,17 @@ Create a form that exercises:
 - `rfk_token_search`
 - native helpers such as `rfk_text_field` and `rfk_money_field`
 
+## Verify `collection_select` migration path
+
+Create at least one server-rendered form that starts from the documented `collection_select` example in [`select_migration.md`](select_migration.md), then swap it to `rfk_select` and confirm:
+
+- the same model attribute still drives the selected value on first render, edit forms, and validation rerender
+- `include_blank:` keeps the documented blank-option behavior from the migration guide
+- representative `disabled:` options still render and behave as expected after the helper swap
+- representative grouped options still render correctly after the helper swap
+- representative `option_html:` data or HTML attributes still reach the rendered options after the helper swap
+- the migration path stays aligned with the helper reference in `field_helpers.md` and the public API summary in `public_api.md`
+
 ## Verify controller helpers
 
 Add a controller with:
