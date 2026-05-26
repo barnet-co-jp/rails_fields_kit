@@ -39,6 +39,10 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include('this.dispatch("clear", { detail: { values: this.selectedValues() } })')
   end
 
+  it "dispatches a dedicated create success event with the input and option" do
+    expect(source).to include('if (option) this.dispatch("create", { detail: { input, option } })')
+  end
+
   it "merges fixed create params into the create request body" do
     expect(source).to include('body: JSON.stringify({ ...this.createParamsValue, [this.createParamValue]: input })')
   end

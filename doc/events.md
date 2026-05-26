@@ -12,7 +12,7 @@ When a field is rendered with `error_surface: true`, the controller also include
 | --- | --- | --- | --- |
 | Remote search | `rails-fields-kit--tom-select:load` | `rails-fields-kit--tom-select:load-error` | Use when the app needs the fetched option payloads. |
 | Selected preload | `rails-fields-kit--tom-select:selected-load` | `rails-fields-kit--tom-select:selected-load-error` | Use when edit forms need labels for already-selected IDs. |
-| Create-on-the-fly | `rails-fields-kit--tom-select:item-add` and `rails-fields-kit--tom-select:change` | `rails-fields-kit--tom-select:create-error` | Success still uses the normal interaction events. |
+| Create-on-the-fly | `rails-fields-kit--tom-select:create`, `rails-fields-kit--tom-select:item-add`, and `rails-fields-kit--tom-select:change` | `rails-fields-kit--tom-select:create-error` | Use `create` when the app needs a dedicated hook before ordinary selection events. |
 
 Common error detail fields:
 
@@ -47,14 +47,17 @@ Use these hooks when the host app needs to know whether edit-form labels were re
 
 ## Create-on-the-fly
 
-Current create success is surfaced through the normal Tom Select interaction events after the created option is accepted:
+Create success now has a dedicated hook before the normal Tom Select interaction events continue:
 
+- `rails-fields-kit--tom-select:create`
+  - Fired after the create endpoint succeeds and before the created option is handed back to Tom Select.
+  - Detail: `{ input, option }`
 - `rails-fields-kit--tom-select:item-add`
   - Detail: `{ value, item, values }`
 - `rails-fields-kit--tom-select:change`
   - Detail: `{ value, values }`
 
-Rails Fields Kit does not dispatch a dedicated `create` success event today. If the host app needs to distinguish create success from ordinary selection, it should combine these interaction events with the field configuration or its own application state.
+Use `create` when the host app needs to distinguish inline creation from ordinary selection, for example for analytics, toast messages, hidden field wiring, or follow-up fetches. Keep using `item-add` / `change` when the app only cares that the current selection changed.
 
 Create failure keeps its own dedicated event:
 
@@ -82,7 +85,8 @@ These are useful even when the field does not use remote search or create-on-the
 ## Choosing the right hook
 
 - Use `load` / `selected-load` when the app cares about fetched option payloads.
-- Use `item-add` / `change` when the app cares that the selection actually changed, including the current create-success path.
+- Use `create` when the app needs a dedicated success hook for inline creation.
+- Use `item-add` / `change` when the app cares that the selection actually changed after Tom Select accepted the value.
 - Use `load-error`, `selected-load-error`, or `create-error` when the app wants visible error UI, retry UI, or logging.
 - Use `detail.surface` with `error_surface: true` when the app wants a stable placeholder next to the field without replacing the controller.
 - Keep visible feedback in the host app. Rails Fields Kit only dispatches the events.
@@ -95,7 +99,7 @@ Example:
   error_surface: true,
   html: {
     data: {
-      action: "rails-fields-kit--tom-select:load-error->customers#error rails-fields-kit--tom-select:create-error->customers#error rails-fields-kit--tom-select:item-add->customers#selected"
+      action: "rails-fields-kit--tom-select:create->customers#created rails-fields-kit--tom-select:create-error->customers#error rails-fields-kit--tom-select:item-add->customers#selected"
     }
   } %>
 ```
