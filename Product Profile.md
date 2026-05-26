@@ -47,12 +47,15 @@ Host applications remain responsible for:
 
 ## Key docs
 
-- `README.md`: public entrypoint
+- `README.md`: public entrypoint and maintained docs map
 - `doc/setup.md`: maintained setup walkthrough
+- `doc/field_helpers.md` and `doc/controller_helpers.md`: public helper references
+- `doc/configuration.md`: initializer defaults and override precedence
+- `doc/select_migration.md`: practical `collection_select` to `rfk_select` migration pattern
+- `doc/token_suggestions.md` and `doc/ransack_suggestions.md`: token-search suggestion surfaces and host-app responsibility boundary
+- `doc/table_adapters.md`: table metadata bridge
 - `doc/public_api.md`: intended stable API for 0.1.x
 - `doc/events.md`: Stimulus event contract
-- `doc/ransack_suggestions.md`: Ransack-compatible suggestion metadata and responsibility boundary
-- `doc/table_adapters.md`: table metadata bridge
 - `doc/development.md`: local checks
 - `doc/release.md`, `doc/final_release_checklist.md`, `doc/sample_app_checklist.md`, and `doc/sample_app_results.md`: release-facing maintainer docs
 
