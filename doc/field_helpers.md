@@ -2,6 +2,23 @@
 
 This document lists the FormBuilder helpers provided by Rails Fields Kit.
 
+## Quick chooser
+
+| If you need... | Choose | Why |
+| --- | --- | --- |
+| A normal single select backed by a collection you already rendered in Rails | `rfk_select` | Keeps the same field name and ordinary Rails select flow. |
+| Remote search, selected preload, or create-on-the-fly while still submitting a selected ID or value | `rfk_combobox` | Uses remote JSON endpoints for options instead of relying on the initial collection. |
+| Suggestion UI for a text value that stays free text when submitted | `rfk_autocomplete` | Suggestions help typing, but the submitted value is still plain text. |
+| Structured search text such as `status:open keyword` with suggestion metadata | `rfk_token_search` | Rails Fields Kit owns the token input UI, while the host app still parses and executes the query. |
+| Ordinary multiple selection from a known collection | `rfk_multi_select` | Keeps a select-style multiple value flow without implying tag creation. |
+| Tag-style multiple selection or create-on-the-fly tags | `rfk_tags` | Optimized for tag entry and optional remote tag creation. |
+| Grouped `<optgroup>` choices | `rfk_grouped_select` | Keeps grouped collection structure explicit. |
+| A Rails enum attribute | `rfk_enum_select` | Uses the enum-backed attribute directly. |
+
+If the choice is mostly about who owns search semantics, use this rule of thumb: `rfk_select`, `rfk_multi_select`, `rfk_grouped_select`, and `rfk_enum_select` stay collection-first; `rfk_combobox` and `rfk_autocomplete` call remote endpoints for suggestions; `rfk_token_search` goes one step further by letting the host app parse submitted token text or build `params[:q]` later.
+
+For a server-rendered `collection_select` migration that keeps the normal Rails param flow, see [`select_migration.md`](select_migration.md).
+
 ## Tom Select-backed helpers
 
 ### `rfk_select`
