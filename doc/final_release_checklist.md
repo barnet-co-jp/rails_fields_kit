@@ -46,6 +46,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/release_notes_0_1_1.md` for the current next-release draft.
 - [ ] Confirm `README.md` and `doc/public_api.md` still describe both documented JavaScript import paths: `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] Confirm token search and table integration docs still distinguish gem responsibilities from host app responsibilities.
+- [ ] Confirm release-prep docs, `doc/events.md`, and sample app verification all agree on whether create-on-the-fly success uses a dedicated `rails-fields-kit--tom-select:create` hook or only the generic selection events.
 
 ## Generated files
 
@@ -62,6 +63,9 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm remote search works.
 - [ ] Confirm selected preload works in edit forms.
 - [ ] Confirm create-on-the-fly works.
+- [ ] Confirm create-on-the-fly success dispatched `rails-fields-kit--tom-select:create` before the normal selection events when that hook is part of the release surface.
+- [ ] Confirm `event.detail.input` and `event.detail.option` exposed the expected payload for the representative create success flow.
+- [ ] Confirm visible success UI remained a host-app responsibility rather than a built-in Rails Fields Kit surface.
 - [ ] Confirm token search and token suggestion endpoints are covered if they are part of the release surface.
 - [ ] Confirm table metadata helpers or call-spec rendering paths are covered if they are part of the release surface.
 - [ ] Confirm validation and authorization failures return expected status codes.
