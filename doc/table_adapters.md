@@ -101,7 +101,7 @@ filter = RailsFieldsKit::TableFilterInput.ransack_filter(
 
 This is the current public entrypoint for Ransack-oriented table filter metadata. It declares the intended adapter and allowed fields, but it does not parse token text, build `params[:q]`, or execute Ransack. The host application or table integration remains responsible for those steps.
 
-For a copyable host-app example that turns submitted token text into `params[:q]`, see [`ransack_suggestions.md`](ransack_suggestions.md#copyable-host-app-parser-example).
+For a copyable host-app example that reads the rendered metadata surface and turns submitted token text into `params[:q]`, see [`ransack_suggestions.md`](ransack_suggestions.md#copyable-read-path-for-table-rendered-metadata) and [`ransack_suggestions.md`](ransack_suggestions.md#copyable-host-app-parser-example).
 
 The helper-level DSL shown in `ROADMAP.md`, such as `rfk_table_filters @table_preferences, adapter: :ransack`, is still a future proposal. Current integrations should keep preparing metadata first and then render it through `rfk_table_filters(columns)`.
 
@@ -418,63 +418,3 @@ RailsFieldsKit::TableRenderer.reset_field_helpers!
 RailsFieldsKit::TableRenderer.registered_field_type?(:currency_range)
 # => false
 ```
-
-Use `RailsFieldsKit::TableRenderer.field_helpers`, `RailsFieldsKit::TableRenderer.helper_for`, and `RailsFieldsKit::TableRenderer.registered_field_type?` to inspect the current mapping. Use `RailsFieldsKit::TableRenderer.reset_field_helpers!` to restore the defaults.
-
-## Intended integration with Rails Table Preferences
-
-A host app or table helper can pass the metadata objects into column-like definitions:
-
-```ruby
-{
-  key: :customer_id,
-  filter: RailsFieldsKit::TableFilterInput.combobox(
-    :customer_id,
-    url: customers_path(format: :json),
-    selected_url: selected_customers_path(format: :json)
-  )
-}
-```
-
-```ruby
-{
-  key: :query,
-  filter_input: RailsFieldsKit::TableFilterInput.ransack_filter(
-    :query,
-    fields: {
-      name: :name_cont,
-      status: :status_eq
-    },
-    url: search_tokens_path(format: :json)
-  )
-}
-```
-
-```ruby
-{
-  key: :status,
-  cell_editor: RailsFieldsKit::TableCellInput.enum_select(:status)
-}
-```
-
-```ruby
-{
-  key: :minimum_total,
-  filter_input: RailsFieldsKit::TableFilterInput.money_field(
-    :minimum_total,
-    step: 0.01
-  )
-}
-```
-
-```ruby
-{
-  key: :status_tokens,
-  cell_editor: RailsFieldsKit::TableCellInput.token_search(
-    :status_tokens,
-    url: search_status_tokens_path(format: :json)
-  )
-}
-```
-
-A table preferences implementation can normalize these values by calling `RailsFieldsKit::TableMetadata.filters` or `RailsFieldsKit::TableMetadata.cell_editors` on either its column list or the table object itself. It can then call `RailsFieldsKit::TableRenderer.filter_call`, `RailsFieldsKit::TableRenderer.cell_editor_call`, or the `RailsFieldsKit::TableMetadata` render shortcuts to map metadata to Rails Fields Kit FormBuilder helpers.
