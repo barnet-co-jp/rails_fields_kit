@@ -36,6 +36,7 @@ See [`doc/setup.md`](doc/setup.md) for the maintained setup walkthrough.
 See [`doc/public_api.md`](doc/public_api.md) for the intended stable API surface.
 See [`doc/select_migration.md`](doc/select_migration.md) for a practical `collection_select` to `rfk_select` migration pattern.
 See [`doc/field_helpers.md`](doc/field_helpers.md) for the FormBuilder helper reference.
+See [`doc/tom_select_visual_reference.html`](doc/tom_select_visual_reference.html) for a static visual comparison of representative Tom Select-backed states.
 See [`doc/controller_helpers.md`](doc/controller_helpers.md) for the controller helper reference.
 See [`doc/token_suggestions.md`](doc/token_suggestions.md) for token search suggestion helpers.
 See [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) for optional Ransack-compatible token suggestion metadata.
