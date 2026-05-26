@@ -155,6 +155,8 @@ Notes:
 - [ ] direct `TableRenderer` call-spec usage still matches the documented helper / method / options shape when used
 - [ ] a representative `TableRenderer.register_field_helper` mapping rendered through the documented call-spec path
 - [ ] `TableRenderer.reset_field_helpers!` restored the default mapping after the representative custom helper check
+- [ ] a representative `TableFilterInput.ransack_filter` exposed `adapter`, `param_name`, and `fields` through the documented `data-rails-fields-kit--tom-select-table-*` attributes after `rfk_table_filters(columns)` rendering
+- [ ] the host app read those rendered attributes and used the same `fields` / `param_name` source of truth for the parser whitelist or request bridge
 - [ ] table metadata remained rendering assistance only; representative query execution or persistence stayed in the host app / table integration
 
 Notes:
