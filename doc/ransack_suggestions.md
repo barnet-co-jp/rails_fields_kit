@@ -186,6 +186,41 @@ Rails Fields Kit intentionally stops at suggestion metadata. A typical applicati
 
 This keeps Ransack optional and avoids making Rails Fields Kit a query engine.
 
+## Copyable read path for table-rendered metadata
+
+When a table-oriented form uses `TableFilterInput.ransack_filter` and renders it through `rfk_table_filters(columns)` or `TableRenderer.render_filter(...)`, the resulting field keeps the same adapter contract in data attributes.
+
+```js
+export function readRenderedRansackMetadata(field) {
+  const adapter = field.dataset.railsFieldsKitTomSelectTableAdapterValue || null
+  const paramName = field.dataset.railsFieldsKitTomSelectTableAdapterParamNameValue || "q"
+  const fieldsJson = field.dataset.railsFieldsKitTomSelectTableAdapterFieldsValue
+
+  return {
+    adapter,
+    paramName,
+    fields: fieldsJson ? JSON.parse(fieldsJson) : {}
+  }
+}
+```
+
+Use that helper only as a read path for metadata that the host app already decided to expose. The field still does not parse token text or execute Ransack on its own.
+
+A table-oriented controller or Stimulus action can then keep the rendered field and the parser whitelist aligned from the same source of truth:
+
+```js
+const metadata = readRenderedRansackMetadata(searchField)
+if (metadata.adapter !== "ransack") return
+
+submitTokenQuery({
+  rawQuery: searchField.value,
+  allowedFields: metadata.fields,
+  paramName: metadata.paramName
+})
+```
+
+That keeps `fields` and `param_name` close to the rendered filter definition without turning direct `rfk_token_search` usage into a new helper-level Ransack DSL.
+
 ## Copyable host-app parser example
 
 Keep the suggestion metadata and the parser whitelist aligned from the same allowed field list. The builder helps the UI advertise supported tokens; the host app still chooses which submitted tokens become `params[:q]`.
@@ -198,8 +233,9 @@ class OrderTokenQuery
     "status" => :status_eq
   }.freeze
 
-  def initialize(raw_query)
+  def initialize(raw_query, allowed_fields: ALLOWED_FIELDS)
     @raw_query = raw_query.to_s
+    @allowed_fields = allowed_fields.transform_keys(&:to_s)
   end
 
   def to_ransack_params
@@ -207,7 +243,7 @@ class OrderTokenQuery
       field, value = token.split(":", 2)
       next if value.blank?
 
-      predicate = ALLOWED_FIELDS[field]
+      predicate = @allowed_fields[field]
       next unless predicate
 
       params[predicate] = value
@@ -225,6 +261,8 @@ def index
   @orders = @q.result
 end
 ```
+
+For table-oriented forms, the same parser can receive `allowed_fields:` from the rendered metadata reader above instead of a hard-coded constant.
 
 This example is intentionally small. It only handles simple `field:value` tokens and leaves operators such as `OR`, `not()`, saved searches, duplicate-field merge rules, and free-text fallback semantics to the host application.
 
