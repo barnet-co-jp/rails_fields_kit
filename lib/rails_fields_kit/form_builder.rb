@@ -5,6 +5,7 @@ require "json"
 module RailsFieldsKit
   module FormBuilder
     TABLE_ADAPTER_METADATA_KEYS = %i[adapter param_name fields].freeze
+    TABLE_RENDER_ADAPTER_METADATA_OPTION = :_rfk_table_render_adapter_metadata
 
     def rfk_text_field(method, **options)
       rfk_native_field(method, :text_field, **options)
@@ -118,6 +119,7 @@ module RailsFieldsKit
       wrapper_options = rfk_extract_wrapper_options(options)
       html_options = options.delete(:html) || {}
       rfk_promote_html_options!(options, html_options)
+      adapter_metadata = rfk_extract_table_adapter_metadata(options) if field_kind == :token_search
       rfk_strip_table_adapter_metadata!(options) if field_kind == :token_search
       rfk_apply_accessibility!(method, html_options, wrapper_options)
       data = html_options[:data] ||= {}
@@ -172,6 +174,7 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :option_description_field, rfk_option_or_default(options, :option_description_field, config.default_option_description_field))
       rfk_assign_data_value(data, :option_badge_field, rfk_option_or_default(options, :option_badge_field, config.default_option_badge_field))
       rfk_assign_data_value(data, :plugins, plugins)
+      rfk_assign_table_adapter_metadata(data, adapter_metadata)
       rfk_assign_data_value(data, :error_surface_id, error_surface_id) if error_surface
       rfk_apply_error_surface_accessibility!(html_options, error_surface_id) if error_surface
 
@@ -230,6 +233,29 @@ module RailsFieldsKit
       end
 
       html_options[:disabled] = options.delete(:disabled) if [true, false].include?(options[:disabled])
+    end
+
+    def rfk_extract_table_adapter_metadata(options)
+      render_adapter_metadata = options.delete(TABLE_RENDER_ADAPTER_METADATA_OPTION) ||
+        options.delete(TABLE_RENDER_ADAPTER_METADATA_OPTION.to_s)
+      return nil unless render_adapter_metadata
+
+      metadata = {}
+      TABLE_ADAPTER_METADATA_KEYS.each do |key|
+        value = options[key]
+        value = options[key.to_s] if value.nil? && options.key?(key.to_s)
+        metadata[key] = value unless value.nil?
+      end
+
+      metadata.empty? ? nil : metadata
+    end
+
+    def rfk_assign_table_adapter_metadata(data, adapter_metadata)
+      return unless adapter_metadata
+
+      rfk_assign_data_value(data, :table_adapter, adapter_metadata[:adapter])
+      rfk_assign_data_value(data, :table_adapter_param_name, adapter_metadata[:param_name])
+      rfk_assign_data_value(data, :table_adapter_fields, adapter_metadata[:fields])
     end
 
     def rfk_strip_table_adapter_metadata!(options)
