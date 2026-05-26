@@ -185,6 +185,9 @@ Notes:
 - [ ] `event.detail.input` matched the submitted text for the create success case
 - [ ] `event.detail.option` exposed the created option payload needed by the host app
 - [ ] `item-add` and `change` still matched the accepted selection after dedicated create success
+- [ ] request-failure events for an `error_surface: true` field exposed `event.detail.surface`
+- [ ] a comparable field without `error_surface: true` kept `event.detail.surface` at `null`
+- [ ] stale inline error content cleared after a fresh request or follow-up interaction when the message stayed inside the placeholder
 
 Notes:
 
