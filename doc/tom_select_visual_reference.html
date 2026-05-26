@@ -161,6 +161,12 @@
         color: #8c5c18;
       }
 
+      .tag.error {
+        border-color: #e2b4b4;
+        background: #f8e1e1;
+        color: #7f2d2d;
+      }
+
       h2 {
         margin: 0;
         font-size: 1.12rem;
@@ -280,14 +286,16 @@
       }
 
       .option strong,
-      .action strong {
+      .action strong,
+      .inline-feedback strong {
         display: block;
         font-size: 0.96rem;
       }
 
       .option span,
       .message span,
-      .action span {
+      .action span,
+      .inline-feedback span {
         display: block;
         margin-top: 4px;
         color: var(--muted);
@@ -307,6 +315,16 @@
       .action {
         background: #eef8f2;
         color: #185740;
+      }
+
+      .inline-feedback {
+        padding: 12px;
+        background: #fff1f1;
+        color: #7f2d2d;
+      }
+
+      .inline-feedback span {
+        color: #8d4c4c;
       }
 
       .legend {
@@ -509,6 +527,25 @@
             </div>
           </div>
           <p class="card-footer">Keep empty-state copy light so it does not imply search semantics beyond the current query.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag error">Inline Error</span>
+            <h2>Opt-in error surface after a request failure</h2>
+            <p>Represents `error_surface: true` when the host app writes visible feedback into the placeholder exposed as `event.detail.surface`.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="query">acm</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="inline-feedback">
+              <strong>Unable to load options</strong>
+              <span>Host-app copy inside the inline placeholder after a `load-error` or `create-error` event.</span>
+            </div>
+          </div>
+          <p class="card-footer">The placeholder is opt-in and stays product-neutral; retry policy and message wording still belong to the host app.</p>
         </article>
 
         <article class="card">
