@@ -495,3 +495,4 @@ module RailsFieldsKit
     end
   end
 end
+
