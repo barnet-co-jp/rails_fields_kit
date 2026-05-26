@@ -67,6 +67,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm create-on-the-fly success dispatched `rails-fields-kit--tom-select:create` before the normal selection events when that hook is part of the release surface.
 - [ ] Confirm `event.detail.input` and `event.detail.option` exposed the expected payload for the representative create success flow.
 - [ ] Confirm request-failure events expose `event.detail.surface` when `error_surface:` is part of the release surface.
+- [ ] Confirm at least one representative `error_surface_html:` lane keeps its custom class or wrapper attrs without losing the shared placeholder `id`, hidden default, `role`, `aria-live`, or `aria-atomic` contract.
 - [ ] Confirm visible success UI remained a host-app responsibility rather than a built-in Rails Fields Kit surface.
 - [ ] Confirm visible error or retry UI around any opt-in `error_surface:` placeholder remained a host-app responsibility.
 - [ ] Confirm token search and token suggestion endpoints are covered if they are part of the release surface.
