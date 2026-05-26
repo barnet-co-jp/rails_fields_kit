@@ -148,6 +148,22 @@ For a static collection that already works with `collection_select`, migrating t
 
 That migration keeps the ordinary submitted param and selected-value redisplay behavior, so host-app controller code and extra Turbo/Vite reinitializers usually do not need to change just for this helper swap.
 
+If the host app wants a stable placeholder for inline error UI, opt in with `error_surface: true`:
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  selected_url: selected_customers_path(format: :json),
+  error_surface: true,
+  html: {
+    data: {
+      action: "rails-fields-kit--tom-select:load-error->customers#error rails-fields-kit--tom-select:selected-load-error->customers#error rails-fields-kit--tom-select:create-error->customers#error"
+    }
+  } %>
+```
+
+The helper renders an empty placeholder next to the field, and request-failure events include that element as `event.detail.surface`. The gem still does not choose the message copy or retry behavior.
+
 ## 6. Add controller endpoints
 
 ```ruby
@@ -224,6 +240,8 @@ Keep the detailed option reference in [`controller_helpers.md`](controller_helpe
 
 See [`events.md`](events.md) for the Stimulus events emitted by the Tom Select controller.
 
-Remote search and selected preload have dedicated success and failure events. Create-on-the-fly currently reports success through the normal `item-add` / `change` interaction events and keeps `create-error` as the dedicated failure hook. Visible success or error UI remains a host-app responsibility.
+Remote search and selected preload have dedicated success and failure events. Create-on-the-fly currently reports success through the normal `item-add` / `change` interaction events and keeps `create-error` as the dedicated failure hook. When `error_surface: true` is enabled, request-failure events also expose `event.detail.surface` so the host app can render inline error UI without replacing the controller.
+
+Visible success or error UI remains a host-app responsibility.
 
 Before release, verify the intended placeholder, loading, no-results, and create-error copy in a sample app and record it in [`sample_app_checklist.md`](sample_app_checklist.md) and [`sample_app_results.md`](sample_app_results.md).
