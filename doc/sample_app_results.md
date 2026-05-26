@@ -65,6 +65,8 @@ Notes:
 - [ ] `import { TomSelectController } from "rails_fields_kit"` resolved
 - [ ] `import TomSelectController from "rails_fields_kit/tom_select_controller"` resolved
 - [ ] documented controller registration succeeded
+- [ ] importmap pins resolved `rails_fields_kit` and `rails_fields_kit/tom_select_controller` when importmap was used
+- [ ] documented controller registration still worked from the existing Stimulus boot file after adding those importmap pins
 - [ ] Tom Select CSS loaded
 - [ ] browser console has no import errors
 
@@ -90,6 +92,9 @@ Notes:
 - [ ] `rfk_find_with` returns selected option labels for edit forms
 - [ ] `rfk_create_with` creates options on the fly
 - [ ] `rfk_token_suggestions_with` returns token suggestion option JSON
+- [ ] fixed `query_params:` reached representative remote search requests
+- [ ] fixed `selected_query_params:` reached representative selected preload requests
+- [ ] fixed `create_params:` were merged into representative create-on-the-fly requests
 - [ ] validation errors return `422`
 - [ ] authorization failures return `403`
 - [ ] wrapped responses work with `options` / `option`

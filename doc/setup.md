@@ -198,6 +198,28 @@ class CustomersController < ApplicationController
 end
 ```
 
+The default `index` / `show` / `create` action names keep the shortest setup path. When the host app already uses route names such as `selected` or `search_tokens`, map the helpers to those action names directly instead of adding adapter actions around them.
+
+```ruby
+resources :customers, only: [] do
+  collection do
+    get :search
+    get :selected
+    post :create_customer
+  end
+end
+
+class CustomersController < ApplicationController
+  include RailsFieldsKit::Searchable
+
+  rfk_search_with action: :search, model: Customer, value: :id, label: :name, search: [:name, :email]
+  rfk_find_with action: :selected, model: Customer, value: :id, label: :name
+  rfk_create_with action: :create_customer, model: Customer, value: :id, label: :name, create_attribute: :name
+end
+```
+
+Keep the detailed option reference in [`controller_helpers.md`](controller_helpers.md). This setup walkthrough only needs the minimal reminder that custom `action:` names are part of the current public surface.
+
 ## 7. Listen to events when needed
 
 See [`events.md`](events.md) for the Stimulus events emitted by the Tom Select controller.

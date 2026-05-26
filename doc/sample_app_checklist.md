@@ -59,6 +59,10 @@ console.assert(TomSelectController === DirectTomSelectController)
 
 If the sample app uses a bundler alias or custom resolver, confirm it still resolves those documented import paths rather than an app-specific private path.
 
+If the sample app uses importmap, confirm the documented `config/importmap.rb` pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` resolve without switching to a private asset path or an undocumented pin name.
+
+If the sample app uses importmap, confirm the documented controller registration still works from the app's existing Stimulus boot file after those pins are added.
+
 Load Tom Select CSS:
 
 ```js
@@ -95,6 +99,11 @@ Verify:
 - edit forms can load selected labels through `selected_url:`
 - create-on-the-fly adds a newly-created option
 - token suggestion endpoints return option JSON for `rfk_token_search`
+- fixed `query_params:` reach representative remote search requests when the field relies on request context
+- fixed `selected_query_params:` reach representative selected preload requests when `selected_url:` is used
+- fixed `create_params:` are merged into representative create-on-the-fly requests when the field relies on them
+- wrapped responses work with `options` / `option` when the helper flow relies on them
+- rich option payloads return representative `description` / `badge` data when the UI depends on them
 - validation errors return `422`
 - authorization failures return `403`
 
