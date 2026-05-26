@@ -21,6 +21,8 @@ module RailsFieldsKit
       "phone_field" => :rfk_phone_field,
       "search_field" => :rfk_search_field
     }.freeze
+    TABLE_ADAPTER_METADATA_KEYS = %i[adapter param_name fields].freeze
+    TABLE_RENDER_ADAPTER_METADATA_OPTION = :_rfk_table_render_adapter_metadata
 
     class UnknownFieldType < StandardError; end
 
@@ -175,7 +177,17 @@ module RailsFieldsKit
         method = call.fetch(:method)
         raise ArgumentError, "table metadata method is required" unless method
 
-        form_builder.public_send(call.fetch(:helper), method, **call.fetch(:options))
+        options = call.fetch(:options).dup
+        if table_render_adapter_metadata?(call.fetch(:helper), options)
+          options[TABLE_RENDER_ADAPTER_METADATA_OPTION] = true
+        end
+
+        form_builder.public_send(call.fetch(:helper), method, **options)
+      end
+
+      def table_render_adapter_metadata?(helper_name, options)
+        helper_name == :rfk_token_search &&
+          TABLE_ADAPTER_METADATA_KEYS.any? { |key| options.key?(key) || options.key?(key.to_s) }
       end
 
       def normalize_field_type(field_type)
