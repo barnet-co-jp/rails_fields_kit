@@ -63,6 +63,7 @@ bundle exec rake build
    - `doc/public_api.md`
    - `doc/select_migration.md`
    - `doc/field_helpers.md`
+   - `doc/tom_select_visual_reference.html`
    - `doc/controller_helpers.md`
    - `doc/token_suggestions.md`
    - `doc/ransack_suggestions.md`
