@@ -13,6 +13,7 @@ export default class extends Controller {
     create: Boolean,
     freeText: Boolean,
     placeholder: String,
+    errorSurfaceId: String,
     queryParam: { type: String, default: "q" },
     selectedParam: { type: String, default: "id" },
     selectedMultipleParam: { type: String, default: "ids" },
@@ -41,6 +42,7 @@ export default class extends Controller {
   connect() {
     this.tomSelect = new TomSelect(this.element, this.options())
     this.bindTomSelectEvents()
+    this.clearErrorSurface()
     this.loadSelectedOptions()
   }
 
@@ -89,15 +91,19 @@ export default class extends Controller {
 
   bindTomSelectEvents() {
     this.tomSelect.on("change", (value) => {
+      this.clearErrorSurface()
       this.dispatch("change", { detail: { value, values: this.selectedValues() } })
     })
     this.tomSelect.on("item_add", (value, item) => {
+      this.clearErrorSurface()
       this.dispatch("item-add", { detail: { value, item, values: this.selectedValues() } })
     })
     this.tomSelect.on("item_remove", (value, item) => {
+      this.clearErrorSurface()
       this.dispatch("item-remove", { detail: { value, item, values: this.selectedValues() } })
     })
     this.tomSelect.on("clear", () => {
+      this.clearErrorSurface()
       this.dispatch("clear", { detail: { values: this.selectedValues() } })
     })
   }
@@ -133,6 +139,7 @@ export default class extends Controller {
   }
 
   loadOptions(query, callback) {
+    this.clearErrorSurface()
     const url = new URL(this.urlValue, window.location.origin)
     this.appendParams(url, this.queryParamsValue)
     url.searchParams.set(this.queryParamValue, query)
@@ -143,6 +150,7 @@ export default class extends Controller {
       .then((response) => this.handleLoadResponse(response))
       .then((json) => {
         const options = this.normalizeOptions(json)
+        this.clearErrorSurface()
         this.dispatch("load", { detail: { query, options } })
         callback(options)
       })
@@ -169,6 +177,7 @@ export default class extends Controller {
     const values = this.selectedValuesNeedingOptions()
     if (values.length === 0) return
 
+    this.clearErrorSurface()
     const url = new URL(this.selectedUrlValue, window.location.origin)
     this.appendParams(url, this.selectedQueryParamsValue)
     if (values.length === 1) {
@@ -214,6 +223,7 @@ export default class extends Controller {
       this.tomSelect.addItem(option[this.valueFieldValue], true)
     })
     this.tomSelect.refreshOptions(false)
+    this.clearErrorSurface()
     this.dispatch("selected-load", { detail: { options, values: requestedValues } })
   }
 
@@ -228,6 +238,7 @@ export default class extends Controller {
   }
 
   createOption(input, callback) {
+    this.clearErrorSurface()
     fetch(this.createUrlValue, {
       method: "POST",
       headers: {
@@ -238,7 +249,11 @@ export default class extends Controller {
       body: JSON.stringify({ ...this.createParamsValue, [this.createParamValue]: input })
     })
       .then((response) => this.handleCreateResponse(response))
-      .then((json) => callback(this.normalizeCreatedOption(json)))
+      .then((json) => {
+        const option = this.normalizeCreatedOption(json)
+        this.clearErrorSurface()
+        callback(option)
+      })
       .catch((error) => {
         this.dispatchRequestError("create-error", "create", { input }, error)
         callback(false)
@@ -260,6 +275,9 @@ export default class extends Controller {
     const response = error.response || null
     const payload = error.payload ?? null
     const status = response ? response.status : null
+    const surface = this.errorSurfaceElement()
+
+    this.markErrorSurface(surface, { operation, status })
 
     this.dispatch(eventName, {
       detail: {
@@ -268,9 +286,40 @@ export default class extends Controller {
         error,
         response,
         payload,
-        status
+        status,
+        surface
       }
     })
+  }
+
+  errorSurfaceElement() {
+    if (!this.hasErrorSurfaceIdValue) return null
+
+    return document.getElementById(this.errorSurfaceIdValue)
+  }
+
+  markErrorSurface(surface, { operation, status }) {
+    if (!surface) return
+
+    surface.hidden = false
+    surface.dataset.rfkErrorState = "error"
+    surface.dataset.rfkErrorOperation = operation
+    if (status === null || status === undefined) {
+      delete surface.dataset.rfkErrorStatus
+    } else {
+      surface.dataset.rfkErrorStatus = String(status)
+    }
+  }
+
+  clearErrorSurface() {
+    const surface = this.errorSurfaceElement()
+    if (!surface) return
+
+    surface.hidden = true
+    delete surface.dataset.rfkErrorState
+    delete surface.dataset.rfkErrorOperation
+    delete surface.dataset.rfkErrorStatus
+    surface.textContent = ""
   }
 
   appendParams(url, params = {}) {
