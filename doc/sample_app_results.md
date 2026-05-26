@@ -124,7 +124,9 @@ Notes:
 - [ ] the sample app still treats submitted token text as a host-app parsing concern
 - [ ] Ransack field suggestions expose `ransack_predicate` and `ransack_field` when that release surface is in scope
 - [ ] Ransack value suggestions preserve `ransack_value` and any documented extra metadata when that release surface is in scope
-- [ ] the sample app treats Ransack suggestion payload as metadata only, not as query execution performed by the gem
+- [ ] the same allowed field list drove both the documented suggestion builder config and the host-app parser whitelist
+- [ ] submitted token text was turned into `params[:q]` by the host app parser or search object, not by Rails Fields Kit
+- [ ] the sample app treated Ransack suggestion payload as metadata only, not as query execution performed by the gem
 
 Notes:
 

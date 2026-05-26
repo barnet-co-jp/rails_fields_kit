@@ -134,6 +134,8 @@ If the release surface includes `RailsFieldsKit::RansackSuggestions.build`, also
 
 - the response exposes `ransack_predicate` and `ransack_field` metadata on field suggestions
 - value suggestions preserve `ransack_value` and any documented extra metadata
+- the same allowed field list drives both the documented suggestion builder config and the host-app parser whitelist from `doc/ransack_suggestions.md`
+- submitted token text is turned into `params[:q]` by the host app parser or search object, not by Rails Fields Kit
 - the sample app treats that payload as metadata for a parser or search object, not as query execution performed by the gem
 
 ## Verify visible feedback surfaces
