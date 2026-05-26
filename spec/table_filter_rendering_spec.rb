@@ -34,7 +34,7 @@ RSpec.describe "table filter token search rendering" do
     }
   end
 
-  it "keeps adapter metadata in the call spec but not in rendered HTML attributes" do
+  it "keeps adapter metadata in the call spec and preserves it on table-rendered fields" do
     call = RailsFieldsKit::TableRenderer.filter_call(filter_metadata)
 
     expect(call.fetch(:options)).to include(
@@ -49,15 +49,28 @@ RSpec.describe "table filter token search rendering" do
     html = RailsFieldsKit::TableRenderer.render_filter(form_builder, filter_metadata)
 
     expect(html).to include('data-rails-fields-kit--tom-select-url-value="/search_tokens.json"')
+    expect(html).to include('data-rails-fields-kit--tom-select-table-adapter-value="ransack"')
+    expect(html).to include('data-rails-fields-kit--tom-select-table-adapter-param-name-value="q"')
+    expect(html).to include('data-rails-fields-kit--tom-select-table-adapter-fields-value="{&quot;name&quot;:&quot;name_cont&quot;,&quot;status&quot;:&quot;status_eq&quot;}"')
     expect(html).not_to match(/\sadapter=/)
     expect(html).not_to match(/\sparam_name=/)
     expect(html).not_to match(/\sfields=/)
+  end
+
+  it "keeps adapter metadata when rfk_table_filters renders metadata collections" do
+    html = form_builder.rfk_table_filters([filter_metadata])
+
+    expect(html).to include('data-rails-fields-kit--tom-select-table-adapter-value="ransack"')
+    expect(html).to include('data-rails-fields-kit--tom-select-table-adapter-param-name-value="q"')
   end
 
   it "does not leak adapter metadata when rfk_token_search is called directly" do
     html = form_builder.rfk_token_search(:query, **metadata_options)
 
     expect(html).to include('data-rails-fields-kit--tom-select-url-value="/search_tokens.json"')
+    expect(html).not_to include("data-rails-fields-kit--tom-select-table-adapter-value")
+    expect(html).not_to include("data-rails-fields-kit--tom-select-table-adapter-param-name-value")
+    expect(html).not_to include("data-rails-fields-kit--tom-select-table-adapter-fields-value")
     expect(html).not_to match(/\sadapter=/)
     expect(html).not_to match(/\sparam_name=/)
     expect(html).not_to match(/\sfields=/)
