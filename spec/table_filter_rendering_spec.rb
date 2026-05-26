@@ -58,7 +58,7 @@ RSpec.describe "table filter token search rendering" do
   end
 
   it "keeps adapter metadata when rfk_table_filters renders metadata collections" do
-    html = form_builder.rfk_table_filters([filter_metadata])
+    html = form_builder.rfk_table_filters([{filter: filter_metadata}])
 
     expect(html).to include('data-rails-fields-kit--tom-select-table-adapter-value="ransack"')
     expect(html).to include('data-rails-fields-kit--tom-select-table-adapter-param-name-value="q"')
