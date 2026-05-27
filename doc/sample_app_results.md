@@ -64,6 +64,7 @@ Notes:
 - [ ] Tom Select package installed
 - [ ] `import { TomSelectController } from "rails_fields_kit"` resolved
 - [ ] `import TomSelectController from "rails_fields_kit/tom_select_controller"` resolved
+- [ ] `import { readRenderedRansackFilterMetadata } from "rails_fields_kit"` resolved when that release surface was in scope
 - [ ] documented controller registration succeeded
 - [ ] importmap pins resolved `rails_fields_kit` and `rails_fields_kit/tom_select_controller` when importmap was used
 - [ ] documented controller registration still worked from the existing Stimulus boot file after adding those importmap pins
@@ -150,6 +151,8 @@ Notes:
 - [ ] `RailsFieldsKit::TableFilterInput` metadata renders through the documented helper path
 - [ ] `RailsFieldsKit::TableCellInput` metadata renders through the documented helper path
 - [ ] `rfk_table_filters` renders collected filter metadata
+- [ ] `readRenderedRansackFilterMetadata(...)` resolved from `rails_fields_kit` when that release surface was in scope
+- [ ] a representative `TableFilterInput.ransack_filter` field rendered through `rfk_table_filters` returned `{ adapter, paramName, fields }`
 - [ ] `rfk_table_cell_editors` renders collected cell editor metadata
 - [ ] native field metadata such as `search_field`, `money_field`, or `text_area` rendered through the documented helper path
 - [ ] direct `TableRenderer` call-spec usage still matches the documented helper / method / options shape when used
