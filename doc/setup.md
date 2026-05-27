@@ -164,6 +164,22 @@ If the host app wants a stable placeholder for inline error UI, opt in with `err
 
 The helper renders an empty placeholder next to the field, and request-failure events include that element as `event.detail.surface`. The gem still does not choose the message copy or retry behavior.
 
+For a representative create-on-the-fly failure lane, keep `create_url:` and `error_surface: true` on the same field and subscribe to the dedicated create hooks explicitly:
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  create_url: customers_path,
+  error_surface: true,
+  html: {
+    data: {
+      action: "rails-fields-kit--tom-select:create->customers#created rails-fields-kit--tom-select:create-error->customers#createFailed"
+    }
+  } %>
+```
+
+Use `create` when the host app needs a success hook before ordinary selection events continue, and use `create-error` when the host app needs field-adjacent fallback copy or retry UI for failed inline creation. If `error_surface: true` is enabled, the failure event exposes `event.detail.surface`; keep the actual message and retry behavior in the host app. See [`events.md`](events.md) for the event payloads and [`field_helpers.md`](field_helpers.md) for the broader helper example inventory.
+
 ## 6. Add controller endpoints
 
 ```ruby
