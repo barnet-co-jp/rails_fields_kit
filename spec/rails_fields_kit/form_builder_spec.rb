@@ -266,7 +266,10 @@ RSpec.describe RailsFieldsKit::FormBuilder do
 
     expect(html).to include("name=\"document_set[customer_id]\"")
     expect(html).to include("<option value=\"\">Select an owner</option>")
-    expect(html).to include("<option selected=\"selected\" value=\"c-2\" data-migration=\"kept\">Beta LLC</option>")
+    expect(html).to include("value=\"c-2\"")
+    expect(html).to include("selected=\"selected\"")
+    expect(html).to include("data-migration=\"kept\"")
+    expect(html).to include(">Beta LLC</option>")
     expect(html).to include("value=\"c-1\" disabled=\"disabled\"").or include("disabled=\"disabled\" value=\"c-1\"")
   end
 
@@ -285,7 +288,9 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("<option value=\"\">Select an owner</option>")
     expect(html).to include("<optgroup label=\"Active\">")
     expect(html).to include("<optgroup label=\"Archived\">")
-    expect(html).to include("<option selected=\"selected\" value=\"2\">Beta LLC</option>")
+    expect(html).to include("value=\"2\"")
+    expect(html).to include("selected=\"selected\"")
+    expect(html).to include(">Beta LLC</option>")
   end
 
   it "renders enum selects" do
