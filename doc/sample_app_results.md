@@ -126,6 +126,16 @@ Notes:
 
 Notes:
 
+## `rfk_autocomplete` representative suggestion-only lane checks
+
+- [ ] one representative `rfk_autocomplete` field covered the end-to-end suggestion-only lane
+- [ ] remote suggestions appeared as typing assist for that field
+- [ ] choosing a suggestion still left the submitted value as free text rather than a selected ID or created record payload
+- [ ] a normal submit, edit-form redisplay, or validation rerender kept that same field in the free-text helper lane
+- [ ] the representative field stayed independent from `selected_url:` and `create_url:`
+
+Notes:
+
 ## Token suggestion and Ransack suggestion metadata checks
 
 - [ ] `rfk_token_suggestions_with(..., wrap: "options")` returns the documented wrapped suggestion payload
