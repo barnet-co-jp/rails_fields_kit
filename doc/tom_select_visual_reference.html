@@ -163,6 +163,12 @@
         color: #5b4781;
       }
 
+      .tag.autocomplete {
+        border-color: #c6ddd4;
+        background: #ecf7f2;
+        color: #215645;
+      }
+
       .tag.tags {
         border-color: #e2caa4;
         background: #fff1db;
@@ -481,37 +487,6 @@
 
         <article class="card">
           <div class="card-header">
-            <span class="tag grouped">Grouped Select</span>
-            <h2>Grouped choices with visible optgroup headings</h2>
-            <p>Represents `rfk_grouped_select` when a known collection stays server-rendered but related options still need clear buckets.</p>
-          </div>
-          <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="placeholder">Choose an account owner</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="option-group-label">Current Accounts</div>
-              <div class="option grouped-option">
-                <strong>Acme North</strong>
-                <span>Representative option inside the first grouped collection</span>
-              </div>
-              <div class="option grouped-option">
-                <strong>Acme South</strong>
-                <span>Grouped select keeps category structure readable before a value is chosen</span>
-              </div>
-              <div class="option-group-label">Archived Accounts</div>
-              <div class="option grouped-option">
-                <strong>Legacy Retail</strong>
-                <span>Optgroup headings make archived or secondary sets easy to scan without changing helper semantics</span>
-              </div>
-            </div>
-          </div>
-          <p class="card-footer">Compared with ordinary `rfk_select`, this state keeps the grouped collection structure explicit instead of flattening every option into one list.</p>
-        </article>
-
-        <article class="card">
-          <div class="card-header">
             <span class="tag">Enum</span>
             <h2>Enum-backed status choice</h2>
             <p>Represents `rfk_enum_select` when a Rails enum attribute keeps ordinary select semantics but still benefits from a clearer status-choice surface.</p>
@@ -539,6 +514,62 @@
             </div>
           </div>
           <p class="card-footer">Compared with a generic collection select, the source of truth stays the enum-backed attribute rather than a hand-maintained option list.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag autocomplete">Autocomplete</span>
+            <h2>Free-text value with assistive suggestions</h2>
+            <p>Represents `rfk_autocomplete` when the current text stays the submitted value and the dropdown only helps complete it.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="query">Acme cor</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="option">
+                <strong>Acme Corporation</strong>
+                <span>Suggestion copy can help typing, without turning the field into an ID-backed chooser.</span>
+              </div>
+              <div class="option">
+                <strong>Acme Corner Shop</strong>
+                <span>The host app still decides whether to accept the typed text as-is or normalize it later.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Unlike `rfk_combobox`, this state keeps the typed text itself as the value that will be submitted unless the host app changes it.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag grouped">Grouped Select</span>
+            <h2>Grouped choices with visible optgroup headings</h2>
+            <p>Represents `rfk_grouped_select` when a known collection stays server-rendered but related options still need clear buckets.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="placeholder">Choose an account owner</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="option-group-label">Current Accounts</div>
+              <div class="option grouped-option">
+                <strong>Acme North</strong>
+                <span>Representative option inside the first grouped collection</span>
+              </div>
+              <div class="option grouped-option">
+                <strong>Acme South</strong>
+                <span>Grouped select keeps category structure readable before a value is chosen</span>
+              </div>
+              <div class="option-group-label">Archived Accounts</div>
+              <div class="option grouped-option">
+                <strong>Legacy Retail</strong>
+                <span>Optgroup headings make archived or secondary sets easy to scan without changing helper semantics</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Compared with ordinary `rfk_select`, this state keeps the grouped collection structure explicit instead of flattening every option into one list.</p>
         </article>
 
         <article class="card">
