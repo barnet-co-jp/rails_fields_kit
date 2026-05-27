@@ -111,13 +111,23 @@ When enabled, Rails Fields Kit appends a hidden polite status placeholder near t
 
 ### `rfk_autocomplete`
 
-Use this for a text input with suggestions where the submitted value is free text.
+Use this for a text input with suggestions where the submitted value stays free text.
 
 ```erb
-<%= f.rfk_autocomplete :keyword,
-  url: suggestions_path(format: :json),
-  min_length: 2 %>
+<%= f.rfk_autocomplete :customer_name,
+  url: customer_name_suggestions_path(format: :json),
+  query_param: "q",
+  min_length: 2,
+  placeholder: "Type a customer name" %>
 ```
+
+Use this representative lane when the host app still wants the user's text itself, for example a keyword field or a draft customer-name field. Choosing a suggestion helps fill the text the user is typing, but it does not switch the field into a selected-ID contract.
+
+- `rfk_autocomplete` keeps the submitted value as free text.
+- `rfk_combobox` is the helper to use when the field should submit a selected ID or value and may need `selected_url:` or `create_url:` as part of that workflow.
+- `rfk_token_search` is the helper to use when the text itself is structured query syntax that the host app will parse later.
+
+Like other remote helpers, `rfk_autocomplete` can still opt into `error_surface: true` for request-failure feedback. Its representative setup does not depend on selected preload or create-on-the-fly support.
 
 ### `rfk_token_search`
 
@@ -133,6 +143,10 @@ Use this for token-oriented search text such as `status:open assignee:matsuo key
 ```
 
 By default, `rfk_token_search` renders a text input with free-text creation enabled, uses a space delimiter, does not persist created options in the Tom Select option list, and enables Tom Select's `remove_button` plugin. Pass explicit `create:`, `persist:`, `delimiter:`, or `plugins:` options to override those defaults.
+
+Use [`controller_helpers.md`](controller_helpers.md) and [`token_suggestions.md`](token_suggestions.md) when the host app wants a maintained controller-side suggestion endpoint for operators, fields, predicates, values, or saved-search shortcuts.
+
+For a current Ransack-oriented lane, keep the same `rfk_token_search` field and switch the suggestion metadata to `RailsFieldsKit::RansackSuggestions.build`. The submitted token text still belongs to the host app's parser and `params[:q]` construction; see [`ransack_suggestions.md`](ransack_suggestions.md) for that boundary.
 
 ### `rfk_tags`
 
@@ -157,6 +171,14 @@ Use this for a normal multiple select. Use `rfk_tags` when the UI should feel li
   collection_value_method: :id,
   collection_label_method: :name %>
 ```
+
+Use this representative lane when the host app already knows the allowed collection and the submitted value should stay an ordinary array of selected IDs or values.
+
+- `rfk_multi_select` keeps the same collection-backed multiple-value flow that an ordinary Rails multiple select uses.
+- `rfk_tags` is the helper to use when the same UI should feel like tag entry or allow create-on-the-fly tag creation.
+- `rfk_combobox` is the helper to use when choices come from remote search or when a single selected value needs `selected_url:` or `create_url:` support.
+
+Keep the representative setup collection-first: pass the known collection, keep the normal Rails array attribute, and treat remote tag creation or structured token parsing as separate helper lanes.
 
 ### `rfk_grouped_select`
 
