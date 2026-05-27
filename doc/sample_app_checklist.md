@@ -155,6 +155,28 @@ Verify that same field can demonstrate the collection-backed multiple-value cont
 - an edit form or validation rerender keeps the same selected values on that representative field
 - the representative field does not depend on `create_url:` or token-style parsing to remain understandable in the sample app
 
+## Verify `rfk_grouped_select` representative optgroup-preserving lane
+
+Use one representative `rfk_grouped_select` field backed by grouped server-rendered collections and keep that same field outside remote search or create-on-the-fly lanes.
+
+Verify that same field can demonstrate the optgroup-preserving contract end to end:
+
+- the representative field renders the documented grouped collection with its current optgroup structure intact
+- choosing a value keeps the submitted value in the ordinary selected ID or value lane rather than a remote-search or token-metadata lane
+- an edit form or validation rerender keeps the same selected value while preserving the grouped labels for that representative field
+- the representative field does not depend on `url:`, `selected_url:`, or `create_url:` to remain understandable in the sample app
+
+## Verify `rfk_enum_select` representative enum-backed lane
+
+Use one representative `rfk_enum_select` field backed by a current Rails enum attribute and keep that same field outside arbitrary hand-maintained collections or remote search lanes.
+
+Verify that same field can demonstrate the enum-backed contract end to end:
+
+- the representative field renders the current enum labels and values from the model-backed enum lane
+- choosing a value keeps the submitted value in the ordinary enum-backed selected-value lane rather than a free-text or created-record lane
+- an edit form or validation rerender keeps the same selected enum value and redisplays the matching label for that representative field
+- the representative field remains clearly tied to the enum-backed attribute rather than a hand-maintained collection helper lane
+
 ## Verify token suggestion and Ransack suggestion metadata
 
 Create at least one token suggestion endpoint that uses `rfk_token_suggestions_with(..., wrap: "options")` and confirm:
