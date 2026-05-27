@@ -22,6 +22,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm `CHANGELOG.md` has an entry for the release version and date.
 - [ ] Confirm `CHANGELOG.md` has a fresh `Unreleased` section for the next cycle.
 - [ ] Prepare or update `doc/release_notes_0_1_1.md` for the current next-release draft. If release planning chooses a different version number, rename that draft and keep `doc/release_notes_0_1_0.md` as the historical reference.
+- [ ] If the current release adds package-root helper exports, confirm `doc/release_notes_0_1_1.md` mentions the representative helper surface without implying built-in query parsing.
 
 ## Documentation
 
@@ -45,6 +46,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/release.md`.
 - [ ] Review `doc/release_notes_0_1_1.md` for the current next-release draft.
 - [ ] Confirm `README.md` and `doc/public_api.md` still describe both documented JavaScript import paths: `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
+- [ ] If the current release adds package-root helper exports, confirm `doc/setup.md` and `doc/public_api.md` still agree on the representative helper import path and responsibility boundary.
 - [ ] Confirm token search and table integration docs still distinguish gem responsibilities from host app responsibilities.
 
 ## Generated files
@@ -62,6 +64,8 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm remote search works.
 - [ ] Confirm selected preload works in edit forms.
 - [ ] Confirm create-on-the-fly works.
+- [ ] If the current release adds package-root helper exports, confirm `import { readRenderedRansackFilterMetadata } from "rails_fields_kit"` resolves in the sample app.
+- [ ] If the current release adds package-root helper exports, confirm a representative table-rendered field returns `{ adapter, paramName, fields }` and a plain `rfk_token_search` field still returns `null`.
 - [ ] Confirm token search and token suggestion endpoints are covered if they are part of the release surface.
 - [ ] Confirm table metadata helpers or call-spec rendering paths are covered if they are part of the release surface.
 - [ ] Confirm validation and authorization failures return expected status codes.
