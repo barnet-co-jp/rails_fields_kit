@@ -126,6 +126,17 @@ Notes:
 
 Notes:
 
+## Create-on-the-fly representative failure lane checks
+
+- [ ] one representative field with `create_url:` covered the end-to-end create-on-the-fly failure lane
+- [ ] a failed create request dispatched `rails-fields-kit--tom-select:create-error`
+- [ ] the representative failure path left host-app fallback copy or retry UI visible near the field
+- [ ] if that field used `error_surface: true`, the failure path still exposed the expected inline placeholder through `event.detail.surface`
+- [ ] a follow-up success or fresh interaction cleared stale inline failure UI for that same field
+- [ ] retry policy and final visible copy remained a host-app responsibility rather than a built-in Rails Fields Kit behavior
+
+Notes:
+
 ## Token suggestion and Ransack suggestion metadata checks
 
 - [ ] `rfk_token_suggestions_with(..., wrap: "options")` returns the documented wrapped suggestion payload
