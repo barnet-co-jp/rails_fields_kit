@@ -57,6 +57,14 @@ import DirectTomSelectController from "rails_fields_kit/tom_select_controller"
 console.assert(TomSelectController === DirectTomSelectController)
 ```
 
+If the release surface includes `readRenderedRansackFilterMetadata`, confirm the package-root helper export also resolves in the sample app:
+
+```js
+import { readRenderedRansackFilterMetadata } from "rails_fields_kit"
+
+console.assert(typeof readRenderedRansackFilterMetadata === "function")
+```
+
 If the sample app uses a bundler alias or custom resolver, confirm it still resolves those documented import paths rather than an app-specific private path.
 
 If the sample app uses importmap, confirm the documented `config/importmap.rb` pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` resolve without switching to a private asset path or an undocumented pin name.
@@ -171,6 +179,8 @@ Verify:
 - a representative `TableRenderer.register_field_helper` mapping can be rendered through the documented call-spec path, and `TableRenderer.reset_field_helpers!` restores the default mapping after that scoped customization
 - token search or Ransack-oriented metadata, if used, is still treated as UI metadata or rendering assistance rather than query execution
 - representative query execution and preference persistence still belong to the host app or table integration rather than Rails Fields Kit
+- if the release surface includes `readRenderedRansackFilterMetadata`, a representative `TableFilterInput.ransack_filter` field rendered through `rfk_table_filters(columns)` can be passed to that helper and returns `{ adapter, paramName, fields }`
+- that helper verification stays on the documented package-root import and table-rendered field surface rather than expanding into host-app parser or query execution checks
 
 ## Verify Turbo reconnect
 
