@@ -136,6 +136,16 @@ Notes:
 
 Notes:
 
+## `rfk_multi_select` representative collection-backed lane checks
+
+- [ ] one representative `rfk_multi_select` field covered the end-to-end collection-backed multiple-value lane
+- [ ] the field selected multiple known values from the documented collection-backed lane
+- [ ] the submitted value stayed an ordinary array of selected IDs or values rather than tag-entry or free-text creation payload
+- [ ] an edit form or validation rerender kept the same selected values on that representative field
+- [ ] the representative field stayed independent from `create_url:` and token-style parsing
+
+Notes:
+
 ## Token suggestion and Ransack suggestion metadata checks
 
 - [ ] `rfk_token_suggestions_with(..., wrap: "options")` returns the documented wrapped suggestion payload
