@@ -113,6 +113,22 @@ When `rfk_table_filters(columns)` or `TableRenderer.render_filter(...)` renders 
 
 That render-time surface is intentionally additive and table-specific. Generic direct `rfk_token_search` calls still strip adapter-specific metadata instead of turning it into a broader helper-level API.
 
+Host-app JavaScript can read that surface without re-encoding attribute names or decoding the JSON payload manually:
+
+```js
+import { readRenderedRansackFilterMetadata } from "rails_fields_kit"
+
+const metadata = readRenderedRansackFilterMetadata(fieldElement)
+
+if (metadata) {
+  metadata.adapter
+  metadata.paramName
+  metadata.fields
+}
+```
+
+The helper returns `null` for non-table fields or fields that were not rendered from `TableFilterInput.ransack_filter`.
+
 ## Native field metadata
 
 `TableFilterInput` and `TableCellInput` also cover the native helper family listed in [`public_api.md`](public_api.md), so a table integration can stay metadata-first even when it does not need Tom Select.
