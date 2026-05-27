@@ -150,6 +150,8 @@ Rails Fields Kit does not choose user-facing copy for the host app. In the sampl
 - failed inline create requests surface visible host-app feedback after `rails-fields-kit--tom-select:create-error`
 - selected preload failures, if exercised, still leave a user-understandable fallback or visible host-app feedback after `rails-fields-kit--tom-select:selected-load-error`
 - at least one field with `error_surface: true` exposes a stable inline placeholder from `load-error`, `selected-load-error`, or `create-error`
+- at least one field with custom `error_surface_html:` keeps its representative wrapper class or attrs without losing the shared placeholder `id`, hidden default, `role`, `aria-live`, or `aria-atomic` contract
+- request-failure events for that custom placeholder field still expose the same inline placeholder through `event.detail.surface`
 - success or a follow-up interaction clears stale inline error content from that placeholder
 - a comparable field without `error_surface: true` keeps the default no-inline-placeholder behavior
 
