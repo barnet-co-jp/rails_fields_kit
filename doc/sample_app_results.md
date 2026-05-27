@@ -97,6 +97,17 @@ Notes:
 
 Notes:
 
+## `rfk_select` representative collection-backed single-value lane checks
+
+- [ ] one representative `rfk_select` field covered the end-to-end collection-backed single-value lane
+- [ ] the field rendered the current selected value from the documented server-rendered collection lane
+- [ ] an edit form or validation rerender kept the same selected value on that representative field
+- [ ] representative `include_blank:` still exposed the documented blank-option behavior for that lane
+- [ ] representative `disabled:` options and `option_html:` attributes remained visible on that field without drifting into a remote-search or token-metadata lane
+- [ ] the representative field stayed independent from `url:`, `selected_url:`, and `create_url:`
+
+Notes:
+
 ## Controller helper checks
 
 - [ ] `rfk_search_with` returns remote options
@@ -123,6 +134,17 @@ Notes:
 - [ ] a representative failure path left user-understandable host-app fallback or visible feedback after `rails-fields-kit--tom-select:selected-load-error`
 - [ ] if that field used `error_surface: true`, the selected preload failure path still exposed the expected inline placeholder through `event.detail.surface`
 - [ ] a Turbo-driven validation rerender or same-form revisit still restored the label for that same representative field
+
+Notes:
+
+## Create-on-the-fly representative failure lane checks
+
+- [ ] one representative field with `create_url:` covered the end-to-end create-on-the-fly failure lane
+- [ ] a failed create request dispatched `rails-fields-kit--tom-select:create-error`
+- [ ] the representative failure path left host-app fallback copy or retry UI visible near the field
+- [ ] if that field used `error_surface: true`, the failure path still exposed the expected inline placeholder through `event.detail.surface`
+- [ ] a follow-up success or fresh interaction cleared stale inline failure UI for that same field
+- [ ] retry policy and final visible copy remained a host-app responsibility rather than a built-in Rails Fields Kit behavior
 
 Notes:
 
