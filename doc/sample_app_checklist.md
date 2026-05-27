@@ -94,6 +94,18 @@ Create at least one server-rendered form that starts from the documented `collec
 - representative `option_html:` data or HTML attributes still reach the rendered options after the helper swap
 - the migration path stays aligned with the helper reference in `field_helpers.md` and the public API summary in `public_api.md`
 
+## Verify `rfk_select` representative collection-backed single-value lane
+
+Use one representative `rfk_select` field backed by a server-rendered collection and keep that same field outside remote search, selected preload, and create-on-the-fly lanes.
+
+Verify that same field can demonstrate the collection-backed single-value contract end to end:
+
+- the representative field renders the current selected value from the documented server-rendered collection lane
+- an edit form or validation rerender keeps the same selected value on that representative field
+- representative `include_blank:` still exposes the documented blank-option behavior for that lane
+- representative `disabled:` options and `option_html:` attributes remain visible on that field without changing it into a remote-search or token-metadata lane
+- the representative field does not depend on `url:`, `selected_url:`, or `create_url:` to remain understandable in the sample app
+
 ## Verify controller helpers
 
 Add a controller with:
@@ -144,6 +156,50 @@ Verify that same field can demonstrate the create-on-the-fly failure lane end to
 - if the field uses `error_surface: true`, the failure path still exposes the expected inline placeholder through `event.detail.surface`
 - a follow-up success or fresh interaction clears stale inline failure UI for that same field
 - retry policy and final visible copy still remain a host-app responsibility rather than a built-in Rails Fields Kit behavior
+
+## Verify `rfk_autocomplete` representative suggestion-only lane
+
+Use one representative `rfk_autocomplete` field with remote suggestions and keep that same field outside the `selected_url:` and create-on-the-fly lanes.
+
+Verify that same field can demonstrate the suggestion-only contract end to end:
+
+- remote suggestions appear as typing assist for the representative field
+- choosing a suggestion still leaves the submitted value as free text rather than a selected ID or created record payload
+- a normal submit, edit-form redisplay, or validation rerender keeps that same field in the free-text helper lane
+- the representative field does not depend on `selected_url:` or `create_url:` to remain understandable in the sample app
+
+## Verify `rfk_multi_select` representative collection-backed lane
+
+Use one representative `rfk_multi_select` field backed by a known collection and keep that same field outside tag-entry or create-on-the-fly lanes.
+
+Verify that same field can demonstrate the collection-backed multiple-value contract end to end:
+
+- the representative field selects multiple known values from the documented collection-backed lane
+- the submitted value stays an ordinary array of selected IDs or values rather than tag-entry or free-text creation payload
+- an edit form or validation rerender keeps the same selected values on that representative field
+- the representative field does not depend on `create_url:` or token-style parsing to remain understandable in the sample app
+
+## Verify `rfk_grouped_select` representative optgroup-preserving lane
+
+Use one representative `rfk_grouped_select` field backed by grouped server-rendered collections and keep that same field outside remote search or create-on-the-fly lanes.
+
+Verify that same field can demonstrate the optgroup-preserving contract end to end:
+
+- the representative field renders the documented grouped collection with its current optgroup structure intact
+- choosing a value keeps the submitted value in the ordinary selected ID or value lane rather than a remote-search or token-metadata lane
+- an edit form or validation rerender keeps the same selected value while preserving the grouped labels for that representative field
+- the representative field does not depend on `url:`, `selected_url:`, or `create_url:` to remain understandable in the sample app
+
+## Verify `rfk_enum_select` representative enum-backed lane
+
+Use one representative `rfk_enum_select` field backed by a current Rails enum attribute and keep that same field outside arbitrary hand-maintained collections or remote search lanes.
+
+Verify that same field can demonstrate the enum-backed contract end to end:
+
+- the representative field renders the current enum labels and values from the model-backed enum lane
+- choosing a value keeps the submitted value in the ordinary enum-backed selected-value lane rather than a free-text or created-record lane
+- an edit form or validation rerender keeps the same selected enum value and redisplays the matching label for that representative field
+- the representative field remains clearly tied to the enum-backed attribute rather than a hand-maintained collection helper lane
 
 ## Verify token suggestion and Ransack suggestion metadata
 

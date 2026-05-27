@@ -97,6 +97,17 @@ Notes:
 
 Notes:
 
+## `rfk_select` representative collection-backed single-value lane checks
+
+- [ ] one representative `rfk_select` field covered the end-to-end collection-backed single-value lane
+- [ ] the field rendered the current selected value from the documented server-rendered collection lane
+- [ ] an edit form or validation rerender kept the same selected value on that representative field
+- [ ] representative `include_blank:` still exposed the documented blank-option behavior for that lane
+- [ ] representative `disabled:` options and `option_html:` attributes remained visible on that field without drifting into a remote-search or token-metadata lane
+- [ ] the representative field stayed independent from `url:`, `selected_url:`, and `create_url:`
+
+Notes:
+
 ## Controller helper checks
 
 - [ ] `rfk_search_with` returns remote options
@@ -134,6 +145,46 @@ Notes:
 - [ ] if that field used `error_surface: true`, the failure path still exposed the expected inline placeholder through `event.detail.surface`
 - [ ] a follow-up success or fresh interaction cleared stale inline failure UI for that same field
 - [ ] retry policy and final visible copy remained a host-app responsibility rather than a built-in Rails Fields Kit behavior
+
+Notes:
+
+## `rfk_autocomplete` representative suggestion-only lane checks
+
+- [ ] one representative `rfk_autocomplete` field covered the end-to-end suggestion-only lane
+- [ ] remote suggestions appeared as typing assist for that field
+- [ ] choosing a suggestion still left the submitted value as free text rather than a selected ID or created record payload
+- [ ] a normal submit, edit-form redisplay, or validation rerender kept that same field in the free-text helper lane
+- [ ] the representative field stayed independent from `selected_url:` and `create_url:`
+
+Notes:
+
+## `rfk_multi_select` representative collection-backed lane checks
+
+- [ ] one representative `rfk_multi_select` field covered the end-to-end collection-backed multiple-value lane
+- [ ] the field selected multiple known values from the documented collection-backed lane
+- [ ] the submitted value stayed an ordinary array of selected IDs or values rather than tag-entry or free-text creation payload
+- [ ] an edit form or validation rerender kept the same selected values on that representative field
+- [ ] the representative field stayed independent from `create_url:` and token-style parsing
+
+Notes:
+
+## `rfk_grouped_select` representative optgroup-preserving lane checks
+
+- [ ] one representative `rfk_grouped_select` field covered the end-to-end optgroup-preserving lane
+- [ ] the field rendered the documented grouped collection with its current optgroup structure intact
+- [ ] choosing a value kept the submitted value in the ordinary selected ID or value lane rather than a remote-search or token-metadata lane
+- [ ] an edit form or validation rerender kept the same selected value while preserving the grouped labels on that representative field
+- [ ] the representative field stayed independent from `url:`, `selected_url:`, and `create_url:`
+
+Notes:
+
+## `rfk_enum_select` representative enum-backed lane checks
+
+- [ ] one representative `rfk_enum_select` field covered the end-to-end enum-backed lane
+- [ ] the field rendered the current enum labels and values from the model-backed enum lane
+- [ ] choosing a value kept the submitted value in the ordinary enum-backed selected-value lane rather than a free-text or created-record lane
+- [ ] an edit form or validation rerender kept the same selected enum value and redisplayed the matching label for that representative field
+- [ ] the representative field stayed clearly tied to the enum-backed attribute rather than a hand-maintained collection helper lane
 
 Notes:
 
