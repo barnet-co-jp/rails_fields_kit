@@ -69,6 +69,17 @@ Direct import is also supported:
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
+The package root can also expose helper exports in addition to the Stimulus controller. For example, when the current release surface includes the rendered Ransack metadata reader, the host app can import it from the same `rails_fields_kit` entrypoint:
+
+```js
+import {
+  TomSelectController,
+  readRenderedRansackFilterMetadata
+} from "rails_fields_kit"
+```
+
+`readRenderedRansackFilterMetadata(element)` is a narrow helper for fields rendered from `rfk_table_filters(columns)` or `TableRenderer.render_filter(...)` with `TableFilterInput.ransack_filter`. It does not parse submitted token text or build `params[:q]`; those responsibilities still belong to the host app.
+
 For Vite or another JS bundler, the host app also needs to resolve the gem's `app/javascript` files. One option is to alias the documented import paths to the gem contents returned by `bundle show`:
 
 ```ts
@@ -106,7 +117,7 @@ import { TomSelectController } from "rails_fields_kit"
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as `rails_fields_kit/tom_select_controller`, so both documented import paths stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
+`rails_fields_kit/index.js` re-exports the same controller as `rails_fields_kit/tom_select_controller`, so both documented import paths stay available after pinning. When the current release surface adds package-root helpers such as `readRenderedRansackFilterMetadata`, that same `rails_fields_kit` entrypoint remains the documented place to import them. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
 
 ## 4. Load Tom Select CSS
 
