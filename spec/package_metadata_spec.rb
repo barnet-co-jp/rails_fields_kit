@@ -25,10 +25,15 @@ RSpec.describe "package metadata" do
         File.join(package_dir, "index.js"),
         File.read(File.join(repo_root, "app/javascript/rails_fields_kit/index.js"))
           .gsub('"./tom_select_controller"', '"./tom_select_controller.js"')
+          .gsub('"./rendered_ransack_filter_metadata"', '"./rendered_ransack_filter_metadata.js"')
       )
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
         File.join(package_dir, "tom_select_controller.js")
+      )
+      FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/rendered_ransack_filter_metadata.js"),
+        File.join(package_dir, "rendered_ransack_filter_metadata.js")
       )
       File.write(
         File.join(stimulus_dir, "package.json"),
@@ -70,7 +75,7 @@ RSpec.describe "package metadata" do
     )
   end
 
-  it "loads the documented entrypoints and keeps the root export wired to the direct controller export" do
+  it "loads the documented entrypoints and keeps the root exports wired to the documented helper surface" do
     build_entrypoint_sandbox do |tmpdir|
       index_entrypoint_path = File.join(tmpdir, "app/javascript/rails_fields_kit/index.js")
       controller_entrypoint_path = File.join(tmpdir, "app/javascript/rails_fields_kit/tom_select_controller.js")
@@ -94,6 +99,30 @@ RSpec.describe "package metadata" do
 
         if (indexModule.TomSelectController !== controllerModule.default) {
           throw new Error("package root named export no longer matches the direct controller entrypoint")
+        }
+
+        if (typeof indexModule.readRenderedRansackFilterMetadata !== "function") {
+          throw new Error("package root no longer exports readRenderedRansackFilterMetadata")
+        }
+
+        const metadata = indexModule.readRenderedRansackFilterMetadata({
+          dataset: {
+            railsFieldsKitTomSelectTableAdapterValue: "ransack",
+            railsFieldsKitTomSelectTableAdapterParamNameValue: "q",
+            railsFieldsKitTomSelectTableAdapterFieldsValue: '{"name":"name_cont","status":"status_eq"}'
+          }
+        })
+
+        if (!metadata || metadata.adapter !== "ransack" || metadata.paramName !== "q") {
+          throw new Error("rendered Ransack metadata reader did not preserve adapter and paramName")
+        }
+
+        if (metadata.fields.name !== "name_cont" || metadata.fields.status !== "status_eq") {
+          throw new Error("rendered Ransack metadata reader did not decode fields JSON")
+        }
+
+        if (indexModule.readRenderedRansackFilterMetadata({ dataset: {} }) !== null) {
+          throw new Error("rendered Ransack metadata reader should return null for non-table fields")
         }
       JS
 
