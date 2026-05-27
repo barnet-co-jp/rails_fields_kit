@@ -58,6 +58,7 @@ Use this checklist immediately before publishing a gem release.
 
 - [ ] Complete `doc/sample_app_results.md`.
 - [ ] Confirm the documented JavaScript import paths resolve in the sample app.
+- [ ] If the release surface includes `readRenderedRansackFilterMetadata`, confirm the package-root helper import resolves and a representative table-rendered Ransack field returns `{ adapter, paramName, fields }`.
 - [ ] Confirm Tom Select CSS is loaded.
 - [ ] Confirm remote search works.
 - [ ] Confirm selected preload works in edit forms.
