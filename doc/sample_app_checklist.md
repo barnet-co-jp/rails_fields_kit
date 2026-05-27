@@ -133,6 +133,17 @@ Verify that same field can demonstrate the full selected preload lane end to end
 - if the field uses `error_surface: true`, the selected preload failure path still exposes the expected inline placeholder through `event.detail.surface`
 - a Turbo-driven validation rerender or same-form revisit still restores the label for that same representative field when `selected_url:` is configured
 
+## Verify `rfk_autocomplete` representative suggestion-only lane
+
+Use one representative `rfk_autocomplete` field with remote suggestions and keep that same field outside the `selected_url:` and create-on-the-fly lanes.
+
+Verify that same field can demonstrate the suggestion-only contract end to end:
+
+- remote suggestions appear as typing assist for the representative field
+- choosing a suggestion still leaves the submitted value as free text rather than a selected ID or created record payload
+- a normal submit, edit-form redisplay, or validation rerender keeps that same field in the free-text helper lane
+- the representative field does not depend on `selected_url:` or `create_url:` to remain understandable in the sample app
+
 ## Verify token suggestion and Ransack suggestion metadata
 
 Create at least one token suggestion endpoint that uses `rfk_token_suggestions_with(..., wrap: "options")` and confirm:
