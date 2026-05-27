@@ -163,12 +163,6 @@
         color: #5b4781;
       }
 
-      .tag.autocomplete {
-        border-color: #b9d8d2;
-        background: #ecf7f4;
-        color: #1d5f54;
-      }
-
       .tag.preload {
         border-color: #bbd2ea;
         background: #ecf4ff;
@@ -484,31 +478,6 @@
             </div>
           </div>
           <p class="card-footer">Use this card to distinguish edit-form label restore from the ordinary selected state and from remote search success or failure.</p>
-        </article>
-
-        <article class="card">
-          <div class="card-header">
-            <span class="tag autocomplete">Autocomplete</span>
-            <h2>Free-text query with assistive suggestions</h2>
-            <p>Represents `rfk_autocomplete` when the typed text itself is the submitted value and the dropdown only helps the user keep typing.</p>
-          </div>
-          <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="query">northwind sup</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="option">
-                <strong>Northwind Supplies</strong>
-                <span>Suggestion only: the field can stay free text even when the list helps the user finish typing.</span>
-              </div>
-              <div class="option">
-                <strong>Northwind Support Desk</strong>
-                <span>Use this state to keep autocomplete distinct from ID-backed combobox selection or structured token search.</span>
-              </div>
-            </div>
-          </div>
-          <p class="card-footer">Unlike `rfk_combobox`, this helper does not make the suggestion list the canonical selected-ID contract on its own.</p>
         </article>
 
         <article class="card">
