@@ -62,6 +62,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm the documented JavaScript import paths resolve in the sample app.
 - [ ] Confirm Tom Select CSS is loaded.
 - [ ] Confirm remote search works.
+- [ ] Confirm one representative `rfk_autocomplete` lane keeps remote suggestions in the typing-assist role while the submitted value stays free text, without depending on `selected_url:` or create-on-the-fly hooks.
 - [ ] Confirm selected preload works in edit forms.
 - [ ] Confirm one representative selected preload lane covers saved-ID label restore, `rails-fields-kit--tom-select:selected-load`, `rails-fields-kit--tom-select:selected-load-error`, and any host-app fallback or `error_surface:` boundary together.
 - [ ] Confirm create-on-the-fly works.
