@@ -133,6 +133,18 @@ Verify that same field can demonstrate the full selected preload lane end to end
 - if the field uses `error_surface: true`, the selected preload failure path still exposes the expected inline placeholder through `event.detail.surface`
 - a Turbo-driven validation rerender or same-form revisit still restores the label for that same representative field when `selected_url:` is configured
 
+## Verify create-on-the-fly representative failure lane
+
+Use one representative field with `create_url:` and whatever host-app fallback UI or `error_surface:` wiring the release expects to support.
+
+Verify that same field can demonstrate the create-on-the-fly failure lane end to end:
+
+- a failed create request dispatches `rails-fields-kit--tom-select:create-error`
+- the representative failure path leaves host-app fallback copy or retry UI visible near the field
+- if the field uses `error_surface: true`, the failure path still exposes the expected inline placeholder through `event.detail.surface`
+- a follow-up success or fresh interaction clears stale inline failure UI for that same field
+- retry policy and final visible copy still remain a host-app responsibility rather than a built-in Rails Fields Kit behavior
+
 ## Verify token suggestion and Ransack suggestion metadata
 
 Create at least one token suggestion endpoint that uses `rfk_token_suggestions_with(..., wrap: "options")` and confirm:
