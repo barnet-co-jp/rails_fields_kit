@@ -10,6 +10,18 @@ RSpec.describe "FormBuilder error surface source" do
     expect(source).to include("rfk_apply_error_surface_accessibility!(html_options, error_surface_id) if error_surface")
   end
 
+  it "derives a stable shared placeholder id from the object name and method" do
+    expect(source).to include('def rfk_error_surface_id(method)')
+    expect(source).to include('"#{object_name}_#{method}_error_surface"')
+  end
+
+  it "appends the shared placeholder id into aria-describedby without duplication" do
+    expect(source).to include('existing_described_by = html_options[:aria][:describedby] || html_options[:aria]["describedby"]')
+    expect(source).to include('described_by = Array(existing_described_by.to_s.split(/\\s+/)).reject(&:empty?)')
+    expect(source).to include('described_by << error_surface_id unless described_by.include?(error_surface_id)')
+    expect(source).to include('html_options[:aria][:describedby] = described_by.join(" ")')
+  end
+
   it "preserves the shared placeholder contract when host apps add custom HTML" do
     expect(source).to include("surface_options = error_surface_html.dup")
     expect(source).to include("surface_options[:id] ||= error_surface_id")
