@@ -115,6 +115,18 @@ Notes:
 
 Notes:
 
+## Selected preload scenario checks
+
+- [ ] representative edit form started with a saved ID and no rendered label
+- [ ] `selected_url:` restored the visible label before a new search
+- [ ] `rails-fields-kit--tom-select:selected-load` fired for that restore path
+- [ ] a forced preload failure triggered `rails-fields-kit--tom-select:selected-load-error`
+- [ ] the failure path left visible host-app fallback or retry UI
+- [ ] `event.detail.surface` pointed at the inline placeholder when `error_surface: true` was enabled
+- [ ] the field behavior matched the route and response shape documented in `controller_helpers.md` and the event contract in `events.md`
+
+Notes:
+
 ## Token suggestion and Ransack suggestion metadata checks
 
 - [ ] `rfk_token_suggestions_with(..., wrap: "options")` returns the documented wrapped suggestion payload
