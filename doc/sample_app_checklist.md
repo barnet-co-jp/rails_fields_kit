@@ -107,12 +107,11 @@ Add a controller with:
 Verify:
 
 - remote search returns options
-- edit forms can load selected labels through `selected_url:`
+- the representative selected preload lane below can load selected labels through `selected_url:` and receives any fixed `selected_query_params:` it relies on
 - create-on-the-fly adds a newly-created option
 - token suggestion endpoints return option JSON for `rfk_token_search`
 - at least one representative non-default `action:` route still works from the documented route shape, such as `rfk_find_with action: :selected` or `rfk_token_suggestions_with action: :search_tokens`
 - fixed `query_params:` reach representative remote search requests when the field relies on request context
-- fixed `selected_query_params:` reach representative selected preload requests when `selected_url:` is used
 - fixed `create_params:` are merged into representative create-on-the-fly requests when the field relies on them
 - wrapped responses work with `options` / `option` when the helper flow relies on them
 - rich option payloads return representative `description` / `badge` data when the UI depends on them
@@ -120,6 +119,19 @@ Verify:
 - authorization failures return `403`
 
 If the release surface includes `RailsFieldsKit::RansackSuggestions.build`, also confirm the sample endpoint can return the expected predicate metadata without handing query parsing to the gem.
+
+## Verify selected preload representative lane
+
+Use one representative server-rendered edit-form field with `selected_url:` and whatever host-app fallback UI or `error_surface:` wiring the release expects to support.
+
+Verify that same field can demonstrate the full selected preload lane end to end:
+
+- saved ID only initial state restores the selected label through `selected_url:`
+- representative fixed `selected_query_params:` still reach the selected preload request when the integration relies on request context
+- `rails-fields-kit--tom-select:selected-load` is observed for the success path before the field settles into its normal selected state
+- a representative failure path leaves user-understandable host-app fallback or visible feedback after `rails-fields-kit--tom-select:selected-load-error`
+- if the field uses `error_surface: true`, the selected preload failure path still exposes the expected inline placeholder through `event.detail.surface`
+- a Turbo-driven validation rerender or same-form revisit still restores the label for that same representative field when `selected_url:` is configured
 
 ## Verify token suggestion and Ransack suggestion metadata
 
@@ -148,7 +160,6 @@ Rails Fields Kit does not choose user-facing copy for the host app. In the sampl
 - `no_results_text` appears for empty search responses instead of leaving the dropdown blank
 - `create_text` appears with the intended wording when create-on-the-fly is enabled
 - failed inline create requests surface visible host-app feedback after `rails-fields-kit--tom-select:create-error`
-- selected preload failures, if exercised, still leave a user-understandable fallback or visible host-app feedback after `rails-fields-kit--tom-select:selected-load-error`
 - at least one field with `error_surface: true` exposes a stable inline placeholder from `load-error`, `selected-load-error`, or `create-error`
 - at least one field with custom `error_surface_html:` keeps its representative wrapper class or attrs without losing the shared placeholder `id`, hidden default, `role`, `aria-live`, or `aria-atomic` contract
 - request-failure events for that custom placeholder field still expose the same inline placeholder through `event.detail.surface`
@@ -180,7 +191,6 @@ Use a server-rendered form with at least one `rfk_combobox` or `rfk_tags` field 
 
 - the field initializes on the first render without a host-app `setupXxx()` helper
 - a Turbo-driven validation rerender or same-form revisit reconnects Tom Select on the replaced element
-- selected preload still restores labels after the Turbo rerender when `selected_url:` is configured
 - the sample app does not add a separate `turbo:load` reinitializer just for Rails Fields Kit fields
 
 ## Verify events
@@ -189,8 +199,6 @@ Listen for the events documented in [`events.md`](events.md):
 
 - `rails-fields-kit--tom-select:load`
 - `rails-fields-kit--tom-select:load-error`
-- `rails-fields-kit--tom-select:selected-load`
-- `rails-fields-kit--tom-select:selected-load-error`
 - `rails-fields-kit--tom-select:create`
 - `rails-fields-kit--tom-select:create-error`
 - `rails-fields-kit--tom-select:change`
