@@ -94,6 +94,18 @@ Create at least one server-rendered form that starts from the documented `collec
 - representative `option_html:` data or HTML attributes still reach the rendered options after the helper swap
 - the migration path stays aligned with the helper reference in `field_helpers.md` and the public API summary in `public_api.md`
 
+## Verify `rfk_select` representative collection-backed single-value lane
+
+Use one representative `rfk_select` field backed by a server-rendered collection and keep that same field outside remote search, selected preload, and create-on-the-fly lanes.
+
+Verify that same field can demonstrate the collection-backed single-value contract end to end:
+
+- the representative field renders the current selected value from the documented server-rendered collection lane
+- an edit form or validation rerender keeps the same selected value on that representative field
+- representative `include_blank:` still exposes the documented blank-option behavior for that lane
+- representative `disabled:` options and `option_html:` attributes remain visible on that field without changing it into a remote-search or token-metadata lane
+- the representative field does not depend on `url:`, `selected_url:`, or `create_url:` to remain understandable in the sample app
+
 ## Verify controller helpers
 
 Add a controller with:
@@ -132,6 +144,18 @@ Verify that same field can demonstrate the full selected preload lane end to end
 - a representative failure path leaves user-understandable host-app fallback or visible feedback after `rails-fields-kit--tom-select:selected-load-error`
 - if the field uses `error_surface: true`, the selected preload failure path still exposes the expected inline placeholder through `event.detail.surface`
 - a Turbo-driven validation rerender or same-form revisit still restores the label for that same representative field when `selected_url:` is configured
+
+## Verify create-on-the-fly representative failure lane
+
+Use one representative field with `create_url:` and whatever host-app fallback UI or `error_surface:` wiring the release expects to support.
+
+Verify that same field can demonstrate the create-on-the-fly failure lane end to end:
+
+- a failed create request dispatches `rails-fields-kit--tom-select:create-error`
+- the representative failure path leaves host-app fallback copy or retry UI visible near the field
+- if the field uses `error_surface: true`, the failure path still exposes the expected inline placeholder through `event.detail.surface`
+- a follow-up success or fresh interaction clears stale inline failure UI for that same field
+- retry policy and final visible copy still remain a host-app responsibility rather than a built-in Rails Fields Kit behavior
 
 ## Verify `rfk_autocomplete` representative suggestion-only lane
 
