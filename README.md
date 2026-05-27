@@ -41,7 +41,7 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | See the UI states quickly | [`doc/tom_select_visual_reference.html`](doc/tom_select_visual_reference.html) |
 | Review public API and integration contracts | [`doc/public_api.md`](doc/public_api.md), [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md), [`doc/table_adapters.md`](doc/table_adapters.md), [`doc/events.md`](doc/events.md), [`doc/configuration.md`](doc/configuration.md) |
 | Work with optional table metadata | [`doc/table_adapters.md`](doc/table_adapters.md) |
-| Run local checks or release verification | [`doc/development.md`](doc/development.md), [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md), [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) |
+| Run local checks or release verification | [`doc/development.md`](doc/development.md), [`doc/release.md`](doc/release.md), [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md), [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) |
 
 ## Choosing a helper
 
