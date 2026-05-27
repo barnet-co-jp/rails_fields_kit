@@ -170,11 +170,16 @@ The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_typ
 
 ## JavaScript exports
 
-The package exposes the Tom Select Stimulus controller from the JavaScript entrypoint:
+The package exposes the Tom Select Stimulus controller and a helper that reads table-rendered Ransack metadata from rendered fields:
 
 ```js
-import { TomSelectController } from "rails_fields_kit"
+import {
+  TomSelectController,
+  readRenderedRansackFilterMetadata
+} from "rails_fields_kit"
 ```
+
+`readRenderedRansackFilterMetadata(element)` returns `{ adapter, paramName, fields }` for `rfk_table_filters(columns)` or `TableRenderer.render_filter(...)` fields rendered from `TableFilterInput.ransack_filter`. It returns `null` for plain `rfk_token_search` fields and elements that do not carry the table-specific Ransack metadata surface.
 
 Direct import is also supported:
 
