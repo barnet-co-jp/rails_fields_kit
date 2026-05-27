@@ -461,6 +461,37 @@
 
         <article class="card">
           <div class="card-header">
+            <span class="tag">Enum</span>
+            <h2>Enum-backed status choice</h2>
+            <p>Represents `rfk_enum_select` when a Rails enum attribute keeps ordinary select semantics but still benefits from a clearer status-choice surface.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection">
+                <span class="token subtle">Published</span>
+              </div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="option">
+                <strong>Draft</strong>
+                <span>Representative enum-backed state before publication</span>
+              </div>
+              <div class="option">
+                <strong>Published</strong>
+                <span>The selected value still comes from the model's enum-backed attribute.</span>
+              </div>
+              <div class="option">
+                <strong>Archived</strong>
+                <span>Keep business-specific labels in the host app while this reference only shows the helper-specific shape.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Compared with a generic collection select, the source of truth stays the enum-backed attribute rather than a hand-maintained option list.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
             <span class="tag tags">Tags</span>
             <h2>Tag entry with the next value in progress</h2>
             <p>Represents `rfk_tags` when existing tokens stay visible and the same field is still ready to accept or create another tag.</p>
