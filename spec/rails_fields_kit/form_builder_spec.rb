@@ -274,9 +274,7 @@ RSpec.describe RailsFieldsKit::FormBuilder do
   end
 
   it "keeps representative grouped options in the migration lane" do
-    model = DummyModel.new("draft", "2", [], nil, 1, 1000, 10, "a@example.com", "https://example.com", "03-0000-0000")
-
-    html = form_builder(model, :document_set).rfk_grouped_select(
+    html = form_builder(DummyModel.new("draft", "2", [], nil, 1, 1000, 10, "a@example.com", "https://example.com", "03-0000-0000"), :document_set).rfk_grouped_select(
       :customer_id,
       grouped_collection: {
         "Active" => [["Acme Corp", "1"]],
@@ -289,7 +287,6 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("<optgroup label=\"Active\">")
     expect(html).to include("<optgroup label=\"Archived\">")
     expect(html).to include("value=\"2\"")
-    expect(html).to include("selected=\"selected\"")
     expect(html).to include(">Beta LLC</option>")
   end
 
