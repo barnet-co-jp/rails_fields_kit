@@ -150,16 +150,26 @@ For a current Ransack-oriented lane, keep the same `rfk_token_search` field and 
 
 ### `rfk_tags`
 
-Use this for tag-style multiple selection, usually with create enabled.
+Use this for tag-style multiple selection when the same field should keep existing tags visible, accept the next tag in place, and optionally create a missing tag without switching to a separate helper.
 
 ```erb
 <%= f.rfk_tags :tag_ids,
   url: tags_path(format: :json),
   create_url: tags_path,
   selected_url: selected_tags_path(format: :json),
+  selected: @post.tag_ids,
   value_field: "id",
-  label_field: "name" %>
+  label_field: "name",
+  placeholder: "Add a tag" %>
 ```
+
+Use this representative lane when the host app wants one field to stay in tag-entry mode from start to finish:
+
+- existing selected tags stay visible while the next input is typed in the same field
+- `create_url:` is the maintained path when the host app allows create-on-the-fly tag creation for a missing tag
+- `selected_url:` keeps edit-form redisplay aligned when the form starts from saved IDs instead of already-rendered tag labels
+
+Compared with `rfk_multi_select`, the interaction stays centered on tag entry and optional creation rather than on settling a known collection first. See [`tom_select_visual_reference.html`](tom_select_visual_reference.html) for the representative `Tags` state when you want the same lane as a quick static surface.
 
 ### `rfk_multi_select`
 
