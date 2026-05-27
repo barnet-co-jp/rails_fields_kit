@@ -121,6 +121,18 @@ Verify:
 
 If the release surface includes `RailsFieldsKit::RansackSuggestions.build`, also confirm the sample endpoint can return the expected predicate metadata without handing query parsing to the gem.
 
+## Verify selected preload scenario
+
+Use one representative edit form that starts with a saved ID and no rendered label, then force both success and failure paths for the same field.
+
+Verify:
+
+- `selected_url:` restores the visible label before the user performs a new search
+- `rails-fields-kit--tom-select:selected-load` fires for that restore path
+- a forced preload failure fires `rails-fields-kit--tom-select:selected-load-error` and leaves a visible host-app fallback or retry affordance
+- when that fallback lane opts into `error_surface: true`, the failure event exposes `event.detail.surface` for the inline placeholder
+- the same field stays aligned with the route and response shape documented in `controller_helpers.md` and the event contract in `events.md`
+
 ## Verify token suggestion and Ransack suggestion metadata
 
 Create at least one token suggestion endpoint that uses `rfk_token_suggestions_with(..., wrap: "options")` and confirm:
