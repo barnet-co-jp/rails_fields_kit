@@ -111,13 +111,23 @@ When enabled, Rails Fields Kit appends a hidden polite status placeholder near t
 
 ### `rfk_autocomplete`
 
-Use this for a text input with suggestions where the submitted value is free text.
+Use this for a text input with suggestions where the submitted value stays free text.
 
 ```erb
-<%= f.rfk_autocomplete :keyword,
-  url: suggestions_path(format: :json),
-  min_length: 2 %>
+<%= f.rfk_autocomplete :customer_name,
+  url: customer_name_suggestions_path(format: :json),
+  query_param: "q",
+  min_length: 2,
+  placeholder: "Type a customer name" %>
 ```
+
+Use this representative lane when the host app still wants the user's text itself, for example a keyword field or a draft customer-name field. Choosing a suggestion helps fill the text the user is typing, but it does not switch the field into a selected-ID contract.
+
+- `rfk_autocomplete` keeps the submitted value as free text.
+- `rfk_combobox` is the helper to use when the field should submit a selected ID or value and may need `selected_url:` or `create_url:` as part of that workflow.
+- `rfk_token_search` is the helper to use when the text itself is structured query syntax that the host app will parse later.
+
+Like other remote helpers, `rfk_autocomplete` can still opt into `error_surface: true` for request-failure feedback. Its representative setup does not depend on selected preload or create-on-the-fly support.
 
 ### `rfk_token_search`
 
