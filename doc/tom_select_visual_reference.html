@@ -163,6 +163,12 @@
         color: #8c5c18;
       }
 
+      .tag.tokens {
+        border-color: #d5c6ec;
+        background: #f4effd;
+        color: #5a3d83;
+      }
+
       .tag.error {
         border-color: #e2bcc6;
         background: var(--error-soft);
@@ -476,6 +482,35 @@
             </div>
           </div>
           <p class="card-footer">This card shows the helper-specific meaning that stays implicit in the generic create affordance.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag tokens">Token Search</span>
+            <h2>Structured query with the next clause in progress</h2>
+            <p>Represents `rfk_token_search` when the field already holds token text and the user is refining the next search clause.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection selection--multiple">
+                <span class="token subtle">status:open</span>
+                <span class="token subtle">assignee:matsuo</span>
+                <span class="inline-query">prio</span>
+              </div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="option">
+                <strong>priority:high</strong>
+                <span>Suggestion metadata helps finish the token text without choosing search semantics for the app.</span>
+              </div>
+              <div class="option">
+                <strong>priority:low</strong>
+                <span>Use this surface to keep structured token text distinct from create-on-the-fly tag entry.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Suggestions help author token text, but parsing the submitted query and building `params[:q]` still belong to the host app.</p>
         </article>
 
         <article class="card">
