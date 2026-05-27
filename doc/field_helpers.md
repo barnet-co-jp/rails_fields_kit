@@ -168,6 +168,14 @@ Use this for a normal multiple select. Use `rfk_tags` when the UI should feel li
   collection_label_method: :name %>
 ```
 
+Use this representative lane when the host app already knows the allowed collection and the submitted value should stay an ordinary array of selected IDs or values.
+
+- `rfk_multi_select` keeps the same collection-backed multiple-value flow that an ordinary Rails multiple select uses.
+- `rfk_tags` is the helper to use when the same UI should feel like tag entry or allow create-on-the-fly tag creation.
+- `rfk_combobox` is the helper to use when choices come from remote search or when a single selected value needs `selected_url:` or `create_url:` support.
+
+Keep the representative setup collection-first: pass the known collection, keep the normal Rails array attribute, and treat remote tag creation or structured token parsing as separate helper lanes.
+
 ### `rfk_grouped_select`
 
 Use this when options should be grouped with `<optgroup>`.
