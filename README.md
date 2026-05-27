@@ -28,9 +28,9 @@ Use the generated `doc/rails_fields_kit_setup.md` in your host app as a short ch
 
 Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and controller-side helpers. It does not install Tom Select or choose a JavaScript bundling strategy for your app.
 
-For the current direction and integration priorities, see [Roadmap](ROADMAP.md).
-For repo positioning and responsibility boundaries, see [Product profile](Product%20Profile.md).
-For repo-specific working guidance, see [AGENTS](AGENTS.md).
+For the current direction and integration priorities, see the repository roadmap: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/ROADMAP.md>.
+For repo positioning and responsibility boundaries, see the repository [Product profile](https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/Product%20Profile.md).
+For repo-specific working guidance, see the repository [AGENTS](https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/AGENTS.md).
 
 ## Docs map
 
