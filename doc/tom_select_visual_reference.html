@@ -193,6 +193,12 @@
         color: var(--error);
       }
 
+      .tag.create-error {
+        border-color: #efc8a6;
+        background: #fff2e6;
+        color: #8d4a1f;
+      }
+
       h2 {
         margin: 0;
         font-size: 1.12rem;
@@ -732,6 +738,25 @@
             </div>
           </div>
           <p class="card-footer">Keep the inline message product-neutral here; retry wording and business-specific recovery still belong to the host app.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag create-error">Create Error</span>
+            <h2>Inline create failed beside the field</h2>
+            <p>Represents the `create-error` lane when a create-on-the-fly request fails and the host app uses the field-adjacent fallback surface to explain what happened.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="query">New label</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="error-surface">
+              <strong>Unable to create “New label”</strong>
+              <span>The host app can keep validation or retry guidance close to the field without turning this state into a generic remote-search failure.</span>
+            </div>
+          </div>
+          <p class="card-footer">Use this card when create-on-the-fly fails after the user has already committed to a new value, leaving retry policy and recovery UI in host-app hands.</p>
         </article>
 
         <article class="card">
