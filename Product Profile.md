@@ -49,7 +49,9 @@ Host applications remain responsible for:
 
 - `README.md`: public entrypoint and maintained docs map
 - `doc/setup.md`: maintained setup walkthrough
+- `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
 - `doc/field_helpers.md` and `doc/controller_helpers.md`: public helper references
+- `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states
 - `doc/configuration.md`: initializer defaults and override precedence
 - `doc/select_migration.md`: practical `collection_select` to `rfk_select` migration pattern
 - `doc/token_suggestions.md` and `doc/ransack_suggestions.md`: token-search suggestion surfaces and host-app responsibility boundary

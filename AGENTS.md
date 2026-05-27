@@ -20,6 +20,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `lib/rails_fields_kit/searchable.rb`: controller-side search, find, create, and token suggestion helpers
 - `lib/rails_fields_kit/table_*`: table metadata and renderer support
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app setup note
+- `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states
 - `doc/*.md`: maintained public and maintainer-facing docs
 
 ## Docs sync rules
@@ -27,7 +28,8 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - Keep `README.md`, `doc/setup.md`, `doc/public_api.md`, `doc/field_helpers.md`, `doc/controller_helpers.md`, `doc/configuration.md`, `doc/token_suggestions.md`, `doc/ransack_suggestions.md`, `doc/table_adapters.md`, `doc/select_migration.md`, `doc/events.md`, and any affected topic doc aligned when the current public surface changes.
 - Do not document roadmap examples as current public API unless the code and `doc/public_api.md` already support them.
 - Keep host-app responsibilities explicit. Rails Fields Kit does not own query parsing, authorization, pagination, or the host app's JavaScript package manager setup.
-- When setup guidance or docs discoverability changes, sync `README.md`, `doc/setup.md`, and `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md` together.
+- When setup guidance or docs discoverability changes, sync `README.md`, `doc/setup.md`, `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`, and root inventory docs such as `Product Profile.md` when they summarize maintainer-facing entrypoints.
+- When helper discoverability or representative UI states change, sync `README.md`, `doc/field_helpers.md`, and `doc/tom_select_visual_reference.html` together.
 - When token suggestion, Ransack suggestion, or table metadata behavior changes, sync the related `doc/*.md` reference plus `doc/public_api.md` together.
 - When event dispatch, selected preload, or create-on-the-fly behavior changes, sync `doc/events.md`, `doc/sample_app_checklist.md`, and `doc/sample_app_results.md` together.
 
