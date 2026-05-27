@@ -144,6 +144,10 @@ Use this for token-oriented search text such as `status:open assignee:matsuo key
 
 By default, `rfk_token_search` renders a text input with free-text creation enabled, uses a space delimiter, does not persist created options in the Tom Select option list, and enables Tom Select's `remove_button` plugin. Pass explicit `create:`, `persist:`, `delimiter:`, or `plugins:` options to override those defaults.
 
+Use [`controller_helpers.md`](controller_helpers.md) and [`token_suggestions.md`](token_suggestions.md) when the host app wants a maintained controller-side suggestion endpoint for operators, fields, predicates, values, or saved-search shortcuts.
+
+For a current Ransack-oriented lane, keep the same `rfk_token_search` field and switch the suggestion metadata to `RailsFieldsKit::RansackSuggestions.build`. The submitted token text still belongs to the host app's parser and `params[:q]` construction; see [`ransack_suggestions.md`](ransack_suggestions.md) for that boundary.
+
 ### `rfk_tags`
 
 Use this for tag-style multiple selection, usually with create enabled.
