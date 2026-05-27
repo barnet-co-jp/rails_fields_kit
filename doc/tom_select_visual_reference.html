@@ -157,6 +157,12 @@
         color: #2d4f7f;
       }
 
+      .tag.grouped {
+        border-color: #d7d0f0;
+        background: #f4f0ff;
+        color: #5b4781;
+      }
+
       .tag.tags {
         border-color: #e2caa4;
         background: #fff1db;
@@ -308,6 +314,20 @@
         font-size: 0.88rem;
       }
 
+      .option-group-label {
+        padding: 10px 12px 8px;
+        background: #f6f1e7;
+        color: #5e675f;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .option.grouped-option {
+        padding-left: 20px;
+      }
+
       .message {
         background: #fff8ea;
         color: #77450d;
@@ -457,6 +477,37 @@
             </div>
           </div>
           <p class="card-footer">Use `rfk_tags` when the interaction should feel like tag entry or optional creation, rather than ordinary multi selection.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag grouped">Grouped Select</span>
+            <h2>Grouped choices with visible optgroup headings</h2>
+            <p>Represents `rfk_grouped_select` when a known collection stays server-rendered but related options still need clear buckets.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="placeholder">Choose an account owner</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="option-group-label">Current Accounts</div>
+              <div class="option grouped-option">
+                <strong>Acme North</strong>
+                <span>Representative option inside the first grouped collection</span>
+              </div>
+              <div class="option grouped-option">
+                <strong>Acme South</strong>
+                <span>Grouped select keeps category structure readable before a value is chosen</span>
+              </div>
+              <div class="option-group-label">Archived Accounts</div>
+              <div class="option grouped-option">
+                <strong>Legacy Retail</strong>
+                <span>Optgroup headings make archived or secondary sets easy to scan without changing helper semantics</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Compared with ordinary `rfk_select`, this state keeps the grouped collection structure explicit instead of flattening every option into one list.</p>
         </article>
 
         <article class="card">
