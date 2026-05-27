@@ -62,6 +62,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm the documented JavaScript import paths resolve in the sample app.
 - [ ] Confirm Tom Select CSS is loaded.
 - [ ] Confirm remote search works.
+- [ ] Confirm one representative `rfk_select` lane keeps a server-rendered collection-backed selected value stable through edit-form redisplay or validation rerender, while `include_blank:`, representative `disabled:`, and representative `option_html:` stay aligned with current docs and do not depend on remote search or create-on-the-fly hooks.
 - [ ] Confirm one representative `rfk_autocomplete` lane keeps remote suggestions in the typing-assist role while the submitted value stays free text, without depending on `selected_url:` or create-on-the-fly hooks.
 - [ ] Confirm one representative `rfk_multi_select` lane keeps a known collection-backed multiple-value flow, with the submitted value staying an ordinary array of selected IDs or values rather than a tag-entry or free-text creation lane.
 - [ ] Confirm one representative `rfk_grouped_select` lane preserves the documented optgroup structure while the submitted value stays an ordinary selected ID or value and does not depend on remote search or create-on-the-fly hooks.
@@ -71,6 +72,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm create-on-the-fly works.
 - [ ] Confirm create-on-the-fly success dispatched `rails-fields-kit--tom-select:create` before the normal selection events when that hook is part of the release surface.
 - [ ] Confirm `event.detail.input` and `event.detail.option` exposed the expected payload for the representative create success flow.
+- [ ] Confirm one representative create-on-the-fly failure lane covers `rails-fields-kit--tom-select:create-error`, host-app fallback or retry UI, and any `error_surface:` boundary together.
 - [ ] Confirm request-failure events expose `event.detail.surface` when `error_surface:` is part of the release surface.
 - [ ] Confirm at least one representative `error_surface_html:` lane keeps its custom class or wrapper attrs without losing the shared placeholder `id`, hidden default, `role`, `aria-live`, or `aria-atomic` contract.
 - [ ] Confirm visible success UI remained a host-app responsibility rather than a built-in Rails Fields Kit surface.
