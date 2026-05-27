@@ -245,6 +245,51 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include(">Acme Corp</option>")
   end
 
+  it "keeps the documented rfk_select migration contract" do
+    customers = [
+      CollectionCustomer.new("c-1", "Acme Corp"),
+      CollectionCustomer.new("c-2", "Beta LLC")
+    ]
+    model = DummyModel.new("draft", "c-2", [], nil, 1, 1000, 10, "a@example.com", "https://example.com", "03-0000-0000")
+
+    html = form_builder(model, :document_set).rfk_select(
+      :customer_id,
+      collection: customers,
+      collection_value_method: :uuid,
+      collection_label_method: :display_name,
+      include_blank: "Select an owner",
+      disabled: ["c-1"],
+      option_html: {
+        "c-2" => { data: { migration: "kept" } }
+      }
+    )
+
+    expect(html).to include("name=\"document_set[customer_id]\"")
+    expect(html).to include("<option value=\"\">Select an owner</option>")
+    expect(html).to include("value=\"c-2\"")
+    expect(html).to include("selected=\"selected\"")
+    expect(html).to include("data-migration=\"kept\"")
+    expect(html).to include(">Beta LLC</option>")
+    expect(html).to include("value=\"c-1\" disabled=\"disabled\"").or include("disabled=\"disabled\" value=\"c-1\"")
+  end
+
+  it "keeps representative grouped options in the migration lane" do
+    html = form_builder(DummyModel.new("draft", "2", [], nil, 1, 1000, 10, "a@example.com", "https://example.com", "03-0000-0000"), :document_set).rfk_grouped_select(
+      :customer_id,
+      grouped_collection: {
+        "Active" => [["Acme Corp", "1"]],
+        "Archived" => [["Beta LLC", "2"]]
+      },
+      include_blank: "Select an owner"
+    )
+
+    expect(html).to include("<option value=\"\">Select an owner</option>")
+    expect(html).to include("<optgroup label=\"Active\">")
+    expect(html).to include("<optgroup label=\"Archived\">")
+    expect(html).to include("value=\"2\"")
+    expect(html).to include(">Beta LLC</option>")
+  end
+
   it "renders enum selects" do
     html = form_builder.rfk_enum_select(:status)
 
