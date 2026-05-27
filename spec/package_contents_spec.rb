@@ -6,6 +6,10 @@ require "spec_helper"
 RSpec.describe "package contents" do
   let(:gemspec_path) { File.expand_path("../rails_fields_kit.gemspec", __dir__) }
   let(:specification) { Gem::Specification.load(gemspec_path) }
+  let(:repo_agents_path) { File.expand_path("../AGENTS.md", __dir__) }
+  let(:repo_agents) { File.read(repo_agents_path) }
+  let(:product_profile_path) { File.expand_path("../Product Profile.md", __dir__) }
+  let(:product_profile) { File.read(product_profile_path) }
   let(:generated_setup_note_path) do
     File.expand_path("../lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md", __dir__)
   end
@@ -70,6 +74,21 @@ RSpec.describe "package contents" do
       "- CSS entrypoint:",
       "- First field using Rails Fields Kit:",
       "- Follow-up tasks:"
+    )
+  end
+
+  it "keeps the root maintainer docs aligned with the maintained docs inventory" do
+    expect(repo_agents).to include(
+      "- `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app setup note",
+      "- `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states",
+      "sync `README.md`, `doc/setup.md`, `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`, and root inventory docs such as `Product Profile.md`",
+      "sync `README.md`, `doc/field_helpers.md`, and `doc/tom_select_visual_reference.html` together."
+    )
+
+    expect(product_profile).to include(
+      "- `README.md`: public entrypoint and maintained docs map",
+      "- `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs",
+      "- `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states"
     )
   end
 
