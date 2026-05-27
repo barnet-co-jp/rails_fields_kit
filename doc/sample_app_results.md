@@ -146,6 +146,26 @@ Notes:
 
 Notes:
 
+## `rfk_grouped_select` representative optgroup-preserving lane checks
+
+- [ ] one representative `rfk_grouped_select` field covered the end-to-end optgroup-preserving lane
+- [ ] the field rendered the documented grouped collection with its current optgroup structure intact
+- [ ] choosing a value kept the submitted value in the ordinary selected ID or value lane rather than a remote-search or token-metadata lane
+- [ ] an edit form or validation rerender kept the same selected value while preserving the grouped labels on that representative field
+- [ ] the representative field stayed independent from `url:`, `selected_url:`, and `create_url:`
+
+Notes:
+
+## `rfk_enum_select` representative enum-backed lane checks
+
+- [ ] one representative `rfk_enum_select` field covered the end-to-end enum-backed lane
+- [ ] the field rendered the current enum labels and values from the model-backed enum lane
+- [ ] choosing a value kept the submitted value in the ordinary enum-backed selected-value lane rather than a free-text or created-record lane
+- [ ] an edit form or validation rerender kept the same selected enum value and redisplayed the matching label for that representative field
+- [ ] the representative field stayed clearly tied to the enum-backed attribute rather than a hand-maintained collection helper lane
+
+Notes:
+
 ## Token suggestion and Ransack suggestion metadata checks
 
 - [ ] `rfk_token_suggestions_with(..., wrap: "options")` returns the documented wrapped suggestion payload
