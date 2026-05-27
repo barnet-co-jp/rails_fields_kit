@@ -169,6 +169,12 @@
         color: #1d5f54;
       }
 
+      .tag.preload {
+        border-color: #bbd2ea;
+        background: #ecf4ff;
+        color: #244d78;
+      }
+
       .tag.tags {
         border-color: #e2caa4;
         background: #fff1db;
@@ -437,7 +443,7 @@
           <div class="card-header">
             <span class="tag">Selected</span>
             <h2>Chosen value in view</h2>
-            <p>Shows a settled state after one option has been selected or preloaded.</p>
+            <p>Shows the ordinary settled state after one option has already been selected.</p>
           </div>
           <div class="control" aria-hidden="true">
             <div class="control-top">
@@ -453,7 +459,31 @@
               </div>
             </div>
           </div>
-          <p class="card-footer">Use the selected preload docs for the actual loading contract and event names.</p>
+          <p class="card-footer">Use this baseline when the choice is already settled and no preload-specific context needs to be shown.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag preload">Selected Preload</span>
+            <h2>Edit-form label restored before search</h2>
+            <p>Represents the `selected_url:` lane where a saved ID becomes a visible label before the user types a fresh query.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection">
+                <span class="token subtle">Northwind Supplies</span>
+              </div>
+              <div class="status-note">Preloaded</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="message">
+                <strong>Selected label restored from saved value</strong>
+                <span>The field can stay settled until the next user-driven search, while `selected-load` and `selected-load-error` remain the maintained host-app hooks.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Use this card to distinguish edit-form label restore from the ordinary selected state and from remote search success or failure.</p>
         </article>
 
         <article class="card">
