@@ -136,6 +136,23 @@ Rails Fields Kit intentionally does not generate importmap-specific setup beyond
 <% end %>
 ```
 
+For a representative selected preload lane that keeps label restore, event hooks, and visible fallback together on the same edit form, wire `selected_url:`, `selected:`, and `error_surface: true` on the field:
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  selected_url: selected_customers_path(format: :json),
+  selected: @order.customer_id,
+  error_surface: true,
+  html: {
+    data: {
+      action: "rails-fields-kit--tom-select:selected-load->customers#selectedLoaded rails-fields-kit--tom-select:selected-load-error->customers#selectedLoadFailed"
+    }
+  } %>
+```
+
+Use `selected-load` to confirm that the saved ID was restored to a visible label, and use `selected-load-error` when the host app needs fallback copy or retry UI. If `error_surface: true` is enabled, the failure event also exposes `event.detail.surface` so the host app can render that fallback inline. Keep the selected lookup response shape in [`controller_helpers.md`](controller_helpers.md) and the event payload details in [`events.md`](events.md).
+
 For a static collection that already works with `collection_select`, migrating to `rfk_select` is usually a form-helper-only change. Keep the same attribute name and normal Rails select options such as `include_blank:` or `prompt:` and let the registered Stimulus controller enhance the rendered select in place.
 
 ```erb
