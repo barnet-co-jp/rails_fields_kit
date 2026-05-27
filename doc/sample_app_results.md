@@ -100,18 +100,29 @@ Notes:
 ## Controller helper checks
 
 - [ ] `rfk_search_with` returns remote options
-- [ ] `rfk_find_with` returns selected option labels for edit forms
+- [ ] the representative selected preload lane below can load selected labels through `selected_url:` and receives any fixed `selected_query_params:` it relies on
 - [ ] `rfk_create_with` creates options on the fly
 - [ ] `rfk_token_suggestions_with` returns token suggestion option JSON
 - [ ] at least one representative non-default `action:` route still worked from the documented route shape
 - [ ] fixed `query_params:` reached representative remote search requests
-- [ ] fixed `selected_query_params:` reached representative selected preload requests
 - [ ] fixed `create_params:` were merged into representative create-on-the-fly requests
 - [ ] validation errors return `422`
 - [ ] authorization failures return `403`
 - [ ] wrapped responses work with `options` / `option`
 - [ ] rich fields return description and badge data
 - [ ] Ransack-compatible suggestion metadata works as expected if it is part of the release surface
+
+Notes:
+
+## Selected preload representative lane checks
+
+- [ ] one representative edit-form field with `selected_url:` covered the end-to-end selected preload lane
+- [ ] saved ID only initial state restored the selected label through `selected_url:`
+- [ ] representative fixed `selected_query_params:` still reached the selected preload request
+- [ ] `rails-fields-kit--tom-select:selected-load` was observed before the field settled into its normal selected state
+- [ ] a representative failure path left user-understandable host-app fallback or visible feedback after `rails-fields-kit--tom-select:selected-load-error`
+- [ ] if that field used `error_surface: true`, the selected preload failure path still exposed the expected inline placeholder through `event.detail.surface`
+- [ ] a Turbo-driven validation rerender or same-form revisit still restored the label for that same representative field
 
 Notes:
 
@@ -138,7 +149,6 @@ Notes:
 - [ ] `no_results_text` appears for empty search responses
 - [ ] `create_text` shows the intended affordance when create-on-the-fly is enabled
 - [ ] `create-error` handling produces visible host-app feedback when create fails
-- [ ] `selected-load-error` handling leaves a visible host-app fallback or understandable failure state when selected preload fails
 - [ ] an `error_surface: true` field exposed a usable inline placeholder during a representative request failure
 - [ ] a representative `error_surface_html:` field preserved its custom wrapper class or attrs without losing the shared placeholder `id`, hidden default, `role`, `aria-live`, or `aria-atomic` contract
 - [ ] request-failure events for that custom placeholder field still surfaced the same inline placeholder through `event.detail.surface`
@@ -166,7 +176,6 @@ Notes:
 - [ ] Tom Select initializes on first render without a host-app `setupXxx()` helper
 - [ ] Turbo-driven validation rerender reconnects the replaced field
 - [ ] same-form revisit through Turbo reconnects the field
-- [ ] `selected_url:` still restores labels after the rerender
 - [ ] no separate `turbo:load` reinitializer was needed for normal `rfk_*` usage
 
 Notes:
@@ -175,8 +184,6 @@ Notes:
 
 - [ ] `rails-fields-kit--tom-select:load`
 - [ ] `rails-fields-kit--tom-select:load-error`
-- [ ] `rails-fields-kit--tom-select:selected-load`
-- [ ] `rails-fields-kit--tom-select:selected-load-error`
 - [ ] `rails-fields-kit--tom-select:create`
 - [ ] `rails-fields-kit--tom-select:create-error`
 - [ ] `rails-fields-kit--tom-select:change`
