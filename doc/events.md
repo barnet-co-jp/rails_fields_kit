@@ -45,6 +45,8 @@ Use these hooks when the host app wants to react to the fetched option set itsel
 
 Use these hooks when the host app needs to know whether edit-form labels were resolved successfully before the user starts searching.
 
+For a copyable edit-form example that wires `selected_url:`, `selected:`, `error_surface: true`, and these hooks together on one field, see [`setup.md`](setup.md). Keep the selected lookup endpoint shape and `rfk_find_with` contract in [`controller_helpers.md`](controller_helpers.md).
+
 ## Create-on-the-fly
 
 Create success now has a dedicated hook before the normal Tom Select interaction events continue:
