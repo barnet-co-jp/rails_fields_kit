@@ -136,6 +136,17 @@ Rails Fields Kit intentionally does not generate importmap-specific setup beyond
 <% end %>
 ```
 
+If a host-app Stimulus controller or browser-side integration test needs to inspect the rendered option payload mapping without repeating raw data attribute names or the `search_field:` split rule, the package root also exports a small reader:
+
+```js
+import { readRenderedOptionPayloadMapping } from "rails_fields_kit"
+
+const mapping = readRenderedOptionPayloadMapping(element)
+// => { valueField, labelField, searchFields, optionDescriptionField, optionBadgeField } or null
+```
+
+Use this helper only to read the documented rendered contract. It does not execute requests, choose option rendering HTML, or move visible feedback into the gem. Fields that do not opt into `option_description_field:` or `option_badge_field:` simply return `null` for those keys.
+
 For a static collection that already works with `collection_select`, migrating to `rfk_select` is usually a form-helper-only change. Keep the same attribute name and normal Rails select options such as `include_blank:` or `prompt:` and let the registered Stimulus controller enhance the rendered select in place.
 
 ```erb
