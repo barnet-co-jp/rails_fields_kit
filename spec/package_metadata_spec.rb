@@ -25,10 +25,15 @@ RSpec.describe "package metadata" do
         File.join(package_dir, "index.js"),
         File.read(File.join(repo_root, "app/javascript/rails_fields_kit/index.js"))
           .gsub('"./tom_select_controller"', '"./tom_select_controller.js"')
+          .gsub('"./rendered_text_overrides"', '"./rendered_text_overrides.js"')
       )
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
         File.join(package_dir, "tom_select_controller.js")
+      )
+      FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/rendered_text_overrides.js"),
+        File.join(package_dir, "rendered_text_overrides.js")
       )
       File.write(
         File.join(stimulus_dir, "package.json"),
@@ -94,6 +99,36 @@ RSpec.describe "package metadata" do
 
         if (indexModule.TomSelectController !== controllerModule.default) {
           throw new Error("package root named export no longer matches the direct controller entrypoint")
+        }
+
+        if (typeof indexModule.readRenderedTextOverrides !== "function") {
+          throw new Error("package root did not export readRenderedTextOverrides")
+        }
+
+        const element = {
+          getAttribute(name) {
+            const attributes = {
+              "data-rails-fields-kit--tom-select-kind-value": "combobox",
+              "data-rails-fields-kit--tom-select-no-results-text-value": "No matches",
+              "data-rails-fields-kit--tom-select-loading-text-value": "Searching...",
+              "data-rails-fields-kit--tom-select-create-text-value": "Create"
+            }
+
+            return Object.prototype.hasOwnProperty.call(attributes, name) ? attributes[name] : null
+          }
+        }
+
+        const overrides = indexModule.readRenderedTextOverrides(element)
+        if (!overrides || overrides.noResultsText !== "No matches") {
+          throw new Error("text override helper did not read the no-results text")
+        }
+
+        if (overrides.loadingText !== "Searching...") {
+          throw new Error("text override helper did not read the loading text")
+        }
+
+        if (overrides.createText !== "Create") {
+          throw new Error("text override helper did not read the create text")
         }
       JS
 
