@@ -465,13 +465,24 @@
                   <span class="helper">Waiting for customer confirmation before invoice is sent.</span>
                 </div>
               </div>
+              <div class="editor-row">
+                <div class="label-line">
+                  <span>Search Tokens Editor</span>
+                  <span class="metadata-chip">TableCellInput.token_search</span>
+                </div>
+                <div class="control search">
+                  <span class="typed">status:open owner:ops</span>
+                  <span class="caret">▾</span>
+                </div>
+              </div>
             </div>
             <div class="toolbar">
               <span class="pill editor">Metadata chooses editor type</span>
               <span class="pill editor">Host app still persists edits</span>
             </div>
+            <div class="stack-note">The token-search editor lane shows an inline token-oriented control, but query parsing, value normalization, and persistence still stay with the host app or table integration.</div>
           </div>
-          <p class="card-footer">Use this lane when the table wants richer controls but still owns modal flow, authorization, and save timing outside the helper renderer.</p>
+          <p class="card-footer">Use this lane when the table wants richer controls, including token-oriented editors, but still owns modal flow, authorization, and save timing outside the helper renderer.</p>
         </article>
 
         <article class="card">
