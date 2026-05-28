@@ -145,6 +145,15 @@ Verify that same field can demonstrate the full selected preload lane end to end
 - if the field uses `error_surface: true`, the selected preload failure path still exposes the expected inline placeholder through `event.detail.surface`
 - a Turbo-driven validation rerender or same-form revisit still restores the label for that same representative field when `selected_url:` is configured
 
+## Verify selected preload helper export
+
+Using the same representative field from the selected preload lane above, verify:
+
+- `import { readRenderedSelectedPreloadConfig } from "rails_fields_kit"` resolves from the documented package-root path
+- `readRenderedSelectedPreloadConfig(fieldElement)` returns `{ selectedUrl, selectedParam, selectedMultipleParam, selectedQueryParams }` for that representative rendered field
+- a comparable rendered field without `selected_url:` returns `null`
+- the sample app treats that helper output as rendered config read only, while selected preload request execution, fallback UI, and retry behavior remain host-app responsibilities
+
 ## Verify create-on-the-fly representative failure lane
 
 Use one representative field with `create_url:` and whatever host-app fallback UI or `error_surface:` wiring the release expects to support.
