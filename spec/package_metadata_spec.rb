@@ -25,10 +25,15 @@ RSpec.describe "package metadata" do
         File.join(package_dir, "index.js"),
         File.read(File.join(repo_root, "app/javascript/rails_fields_kit/index.js"))
           .gsub('"./tom_select_controller"', '"./tom_select_controller.js"')
+          .gsub('"./rendered_error_surface"', '"./rendered_error_surface.js"')
       )
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
         File.join(package_dir, "tom_select_controller.js")
+      )
+      FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/rendered_error_surface.js"),
+        File.join(package_dir, "rendered_error_surface.js")
       )
       File.write(
         File.join(stimulus_dir, "package.json"),
@@ -70,7 +75,7 @@ RSpec.describe "package metadata" do
     )
   end
 
-  it "loads the documented entrypoints and keeps the root export wired to the direct controller export" do
+  it "loads the documented entrypoints and keeps the root exports wired to the documented helper surface" do
     build_entrypoint_sandbox do |tmpdir|
       index_entrypoint_path = File.join(tmpdir, "app/javascript/rails_fields_kit/index.js")
       controller_entrypoint_path = File.join(tmpdir, "app/javascript/rails_fields_kit/tom_select_controller.js")
@@ -94,6 +99,30 @@ RSpec.describe "package metadata" do
 
         if (indexModule.TomSelectController !== controllerModule.default) {
           throw new Error("package root named export no longer matches the direct controller entrypoint")
+        }
+
+        if (typeof indexModule.readRenderedErrorSurface !== "function") {
+          throw new Error("package root no longer exports readRenderedErrorSurface")
+        }
+
+        const surface = { id: "dummy_model_customer_id_error_surface" }
+        const resolvedSurface = indexModule.readRenderedErrorSurface({
+          dataset: {
+            railsFieldsKitTomSelectErrorSurfaceIdValue: "dummy_model_customer_id_error_surface"
+          },
+          ownerDocument: {
+            getElementById(id) {
+              return id === surface.id ? surface : null
+            }
+          }
+        })
+
+        if (resolvedSurface !== surface) {
+          throw new Error("rendered error surface reader did not resolve the placeholder element")
+        }
+
+        if (indexModule.readRenderedErrorSurface({ dataset: {}, ownerDocument: { getElementById() { return surface } } }) !== null) {
+          throw new Error("rendered error surface reader should return null for non-opt-in fields")
         }
       JS
 
