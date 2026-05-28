@@ -169,6 +169,12 @@
         color: #1d5f54;
       }
 
+      .tag.autocomplete-empty {
+        border-color: #c7d9d5;
+        background: #f1f8f6;
+        color: #215d53;
+      }
+
       .tag.preload {
         border-color: #bbd2ea;
         background: #ecf4ff;
@@ -519,6 +525,27 @@
 
         <article class="card">
           <div class="card-header">
+            <span class="tag autocomplete-empty">Autocomplete Empty</span>
+            <h2>No suggestions while free-text typing continues</h2>
+            <p>Represents the no-match lane for `rfk_autocomplete`, where an empty suggestion list does not turn the field into a read-only selection contract.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="query">northwind zeta</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="message empty">
+                <strong>No matching suggestions yet</strong>
+                <span>The user can keep typing free text, while the host app still owns any follow-up wording or guidance.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Use this card to separate autocomplete's continue-typing lane from collection-backed empty states that stay constrained to existing options.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
             <span class="tag multi">Multi Select</span>
             <h2>Multiple chosen values in a settled state</h2>
             <p>Represents `rfk_multi_select` when the host app is choosing from a known collection, not creating tags.</p>
@@ -703,8 +730,8 @@
         <article class="card">
           <div class="card-header">
             <span class="tag empty">No Results</span>
-            <h2>Empty result set</h2>
-            <p>Use when the query returns no matches and the field should remain read-only.</p>
+            <h2>Collection-backed empty result set</h2>
+            <p>Use when the query returns no matches and the helper stays constrained to the documented option set.</p>
           </div>
           <div class="control" aria-hidden="true">
             <div class="control-top">
@@ -718,7 +745,7 @@
               </div>
             </div>
           </div>
-          <p class="card-footer">Keep empty-state copy light so it does not imply search semantics beyond the current query.</p>
+          <p class="card-footer">Keep empty-state copy light so collection-backed helpers do not imply extra search semantics beyond the current query.</p>
         </article>
 
         <article class="card">
