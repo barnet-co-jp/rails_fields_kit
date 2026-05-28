@@ -21,6 +21,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `lib/rails_fields_kit/table_*`: table metadata and renderer support
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app setup note
 - `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states
+- `doc/native_field_visual_reference.html`: static visual reference for representative native helper states
 - `doc/*.md`: maintained public and maintainer-facing docs
 
 ## Docs sync rules
@@ -29,7 +30,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - Do not document roadmap examples as current public API unless the code and `doc/public_api.md` already support them.
 - Keep host-app responsibilities explicit. Rails Fields Kit does not own query parsing, authorization, pagination, or the host app's JavaScript package manager setup.
 - When setup guidance or docs discoverability changes, sync `README.md`, `doc/setup.md`, `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`, and root inventory docs such as `Product Profile.md` when they summarize maintainer-facing entrypoints.
-- When helper discoverability or representative UI states change, sync `README.md`, `doc/field_helpers.md`, and `doc/tom_select_visual_reference.html` together.
+- When helper discoverability or representative UI states change, sync `README.md`, `doc/field_helpers.md`, and any affected static visual reference together.
 - When token suggestion, Ransack suggestion, or table metadata behavior changes, sync the related `doc/*.md` reference plus `doc/public_api.md` together.
 - When event dispatch, selected preload, or create-on-the-fly behavior changes, sync `doc/events.md`, `doc/sample_app_checklist.md`, and `doc/sample_app_results.md` together.
 
