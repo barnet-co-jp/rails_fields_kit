@@ -45,6 +45,8 @@ Use these hooks when the host app wants to react to the fetched option set itsel
 
 Use these hooks when the host app needs to know whether edit-form labels were resolved successfully before the user starts searching.
 
+For a copyable field example that wires `selected_url:`, `selected-load`, `selected-load-error`, and `error_surface: true` together on one field, see [`setup.md`](setup.md). Keep the selected-option lookup endpoint itself in [`controller_helpers.md`](controller_helpers.md), and keep the visible fallback copy or retry UI in the host app.
+
 ## Create-on-the-fly
 
 Create success now has a dedicated hook before the normal Tom Select interaction events continue:
