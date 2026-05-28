@@ -108,6 +108,18 @@ Verify that same field can demonstrate the collection-backed single-value contra
 - representative `disabled:` options and `option_html:` attributes remain visible on that field without changing it into a remote-search or token-metadata lane
 - the representative field does not depend on `url:`, `selected_url:`, or `create_url:` to remain understandable in the sample app
 
+## Verify option payload mapping helper export representative lane
+
+Use one representative rendered Rails Fields Kit Tom Select field whose documented mapping includes `search_field:` and keep a comparable field nearby that does not use `option_description_field:` or `option_badge_field:`.
+
+Verify that same pair can demonstrate the package-root helper export contract end to end:
+
+- `import { readRenderedOptionPayloadMapping } from "rails_fields_kit"` resolves in the sample app
+- the representative rendered field returns the documented `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField`
+- `search_field:` is read back in the documented final array shape rather than a raw data-attribute string
+- the comparable field without `option_description_field:` or `option_badge_field:` returns the same core mapping while leaving `optionDescriptionField` and `optionBadgeField` at `null`
+- the verification stays limited to rendered config read, and request execution or visible option rendering ownership remains with the host app
+
 ## Verify controller helpers
 
 Add a controller with:
