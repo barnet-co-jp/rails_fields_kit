@@ -416,6 +416,37 @@
         color: #5f5380;
       }
 
+      .copy-stack {
+        display: grid;
+        gap: 1px;
+        border: 1px solid var(--line-strong);
+        background: var(--line);
+      }
+
+      .copy-row {
+        display: grid;
+        gap: 4px;
+        padding: 12px;
+        background: var(--surface-strong);
+      }
+
+      .copy-label {
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .copy-row strong {
+        font-size: 0.96rem;
+      }
+
+      .copy-row span {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
       .legend {
         margin-top: 28px;
         padding: 18px 20px;
@@ -452,6 +483,7 @@
         </p>
         <div class="hero-links">
           <a href="field_helpers.md">Field helper reference</a>
+          <a href="configuration.md">Configuration defaults</a>
           <a href="../README.md">README</a>
         </div>
       </section>
@@ -727,7 +759,7 @@
             </div>
             <div class="dropdown">
               <div class="action">
-                <strong>Add “beta-pilot” as a new tag</strong>
+                <strong>Add "beta-pilot" as a new tag</strong>
                 <span>Compared with ordinary multi select, this surface keeps focus on tag entry and optional creation.</span>
               </div>
             </div>
@@ -781,7 +813,7 @@
             </div>
             <div class="dropdown">
               <div class="message empty">
-                <strong>No token suggestions for “priority:urgentzz”</strong>
+                <strong>No token suggestions for "priority:urgentzz"</strong>
                 <span>The text stays editable and submittable, while the host app still decides whether that unfinished clause is valid, ignored, or needs help copy.</span>
               </div>
             </div>
@@ -804,6 +836,58 @@
             </div>
           </div>
           <p class="card-footer">Final permission or availability wording still belongs to the host app; this reference only shows the muted non-editable surface.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag">Bundled Fallback</span>
+            <h2>Locale-aware feedback copy without field overrides</h2>
+            <p>Represents the lane where the field leaves `loading_text:`, `no_results_text:`, and `create_text:` unset and relies on initializer defaults or bundled fallback copy.</p>
+          </div>
+          <div class="copy-stack" aria-hidden="true">
+            <div class="copy-row">
+              <div class="copy-label">Loading fallback</div>
+              <strong>Loading...</strong>
+              <span>Visible when no field-level loading override is provided.</span>
+            </div>
+            <div class="copy-row">
+              <div class="copy-label">No-results fallback</div>
+              <strong>No results found</strong>
+              <span>Collection-backed empty feedback stays generic until the host app chooses narrower wording.</span>
+            </div>
+            <div class="copy-row">
+              <div class="copy-label">Create fallback</div>
+              <strong>Add</strong>
+              <span>The helper can expose a create affordance without taking over product-specific object naming.</span>
+            </div>
+          </div>
+          <p class="card-footer">Use this card to compare the baseline copy lane before a host app or initializer deliberately changes visible text.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag create">Field Override</span>
+            <h2>Field-level text override lane</h2>
+            <p>Shows how the same feedback surfaces can read after a host app supplies helper options such as `loading_text:`, `no_results_text:`, and `create_text:` for a narrower domain context.</p>
+          </div>
+          <div class="copy-stack" aria-hidden="true">
+            <div class="copy-row">
+              <div class="copy-label">Loading override</div>
+              <strong>Searching customers...</strong>
+              <span>Field-level copy can be more specific than the shared fallback while leaving request behavior unchanged.</span>
+            </div>
+            <div class="copy-row">
+              <div class="copy-label">No-results override</div>
+              <strong>No customers match this account</strong>
+              <span>The host app owns whether empty feedback should reference account scope, business terms, or next-step guidance.</span>
+            </div>
+            <div class="copy-row">
+              <div class="copy-label">Create override</div>
+              <strong>Create customer</strong>
+              <span>This stays a visible text override only; persistence and validation still belong to the host app.</span>
+            </div>
+          </div>
+          <p class="card-footer">Field-level overrides sit above initializer defaults and bundled fallback, but they only choose visible wording for the maintained feedback surfaces.</p>
         </article>
 
         <article class="card">
@@ -899,7 +983,7 @@
               <div class="caret">▾</div>
             </div>
             <div class="error-surface">
-              <strong>Unable to create “New label”</strong>
+              <strong>Unable to create "New label"</strong>
               <span>The host app can keep validation or retry guidance close to the field without turning this state into a generic remote-search failure.</span>
             </div>
           </div>
@@ -919,7 +1003,7 @@
             </div>
             <div class="dropdown">
               <div class="action">
-                <strong>Create “New label”</strong>
+                <strong>Create "New label"</strong>
                 <span>Confirmation, validation, and persistence still belong to the host app.</span>
               </div>
             </div>
