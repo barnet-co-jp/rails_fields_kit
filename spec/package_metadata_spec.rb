@@ -25,11 +25,16 @@ RSpec.describe "package metadata" do
         File.join(package_dir, "index.js"),
         File.read(File.join(repo_root, "app/javascript/rails_fields_kit/index.js"))
           .gsub('"./tom_select_controller"', '"./tom_select_controller.js"')
+          .gsub('"./rendered_interaction_config"', '"./rendered_interaction_config.js"')
           .gsub('"./rendered_option_payload_mapping"', '"./rendered_option_payload_mapping.js"')
       )
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
         File.join(package_dir, "tom_select_controller.js")
+      )
+      FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/rendered_interaction_config.js"),
+        File.join(package_dir, "rendered_interaction_config.js")
       )
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/rendered_option_payload_mapping.js"),
@@ -101,11 +106,45 @@ RSpec.describe "package metadata" do
           throw new Error("package root named export no longer matches the direct controller entrypoint")
         }
 
+        if (typeof indexModule.readRenderedInteractionConfig !== "function") {
+          throw new Error("package root did not export readRenderedInteractionConfig")
+        }
+
+        const interactionElement = {
+          getAttribute(name) {
+            const attributes = {
+              "data-rails-fields-kit--tom-select-kind-value": "combobox",
+              "data-rails-fields-kit--tom-select-max-options-value": "25",
+              "data-rails-fields-kit--tom-select-load-throttle-value": "300",
+              "data-rails-fields-kit--tom-select-preload-value": "true",
+              "data-rails-fields-kit--tom-select-open-on-focus-value": "false",
+              "data-rails-fields-kit--tom-select-close-after-select-value": "true",
+              "data-rails-fields-kit--tom-select-hide-selected-value": "true",
+              "data-rails-fields-kit--tom-select-persist-value": "true"
+            }
+
+            return Object.prototype.hasOwnProperty.call(attributes, name) ? attributes[name] : null
+          }
+        }
+
+        const interactionConfig = indexModule.readRenderedInteractionConfig(interactionElement)
+        if (!interactionConfig || interactionConfig.maxOptions !== 25) {
+          throw new Error("interaction config helper did not read maxOptions")
+        }
+
+        if (interactionConfig.loadThrottle !== 300) {
+          throw new Error("interaction config helper did not read loadThrottle")
+        }
+
+        if (interactionConfig.persist !== true) {
+          throw new Error("interaction config helper did not read persist")
+        }
+
         if (typeof indexModule.readRenderedOptionPayloadMapping !== "function") {
           throw new Error("package root did not export readRenderedOptionPayloadMapping")
         }
 
-        const element = {
+        const mappingElement = {
           getAttribute(name) {
             const attributes = {
               "data-rails-fields-kit--tom-select-kind-value": "combobox",
@@ -120,7 +159,7 @@ RSpec.describe "package metadata" do
           }
         }
 
-        const mapping = indexModule.readRenderedOptionPayloadMapping(element)
+        const mapping = indexModule.readRenderedOptionPayloadMapping(mappingElement)
         if (!mapping || mapping.valueField !== "id") {
           throw new Error("option payload mapping helper did not read the value field")
         }
