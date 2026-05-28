@@ -146,6 +146,15 @@ Notes:
 
 Notes:
 
+## Selected preload helper export checks
+
+- [ ] `import { readRenderedSelectedPreloadConfig } from "rails_fields_kit"` resolved from the documented package-root path
+- [ ] the representative selected preload field returned `{ selectedUrl, selectedParam, selectedMultipleParam, selectedQueryParams }`
+- [ ] a comparable rendered field without `selected_url:` returned `null`
+- [ ] the helper stayed in the rendered-config-read lane rather than taking over selected preload request execution, fallback UI, or retry behavior
+
+Notes:
+
 ## Create-on-the-fly representative failure lane checks
 
 - [ ] one representative field with `create_url:` covered the end-to-end create-on-the-fly failure lane
