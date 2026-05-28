@@ -239,6 +239,8 @@ This collects editable-cell metadata from a column list or table-like object and
 
 These helpers use native HTML inputs while sharing the same wrapper, hint, error, and accessibility behavior.
 
+For a product-neutral visual comparison of representative native helper states, see [`native_field_visual_reference.html`](native_field_visual_reference.html).
+
 If you want one representative lane before the per-helper snippets below, start with a wrapped text field and treat the rest of the native helper family as variations on that same shared contract.
 
 ### Representative wrapper and accessibility lane
@@ -418,22 +420,3 @@ Example:
 ```
 
 The main query value still uses `query_param:`. Selected values still use `selected_param:` or `selected_multiple_param:`. Create input text still uses `create_param:`.
-
-## Multiple values
-
-`rfk_tags` and `rfk_multi_select` submit Rails-style array params.
-
-```erb
-<%= f.rfk_tags :tag_ids,
-  collection: Tag.order(:name),
-  collection_value_method: :id,
-  collection_label_method: :name %>
-```
-
-Rails emits a hidden blank input for multiple selects by default. Disable it when needed:
-
-```erb
-<%= f.rfk_tags :tag_ids,
-  collection: Tag.order(:name),
-  include_hidden: false %>
-```
