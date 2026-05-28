@@ -268,6 +268,20 @@
         font-size: 0.92rem;
       }
 
+      .clear-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+        width: 28px;
+        height: 28px;
+        border: 1px solid #c9d8d1;
+        background: #f5fbf7;
+        color: #245846;
+        font-size: 0.94rem;
+        font-weight: 700;
+      }
+
       .token {
         display: inline-flex;
         align-items: center;
@@ -385,6 +399,17 @@
         font-size: 0.88rem;
       }
 
+      .error-surface.custom-wrapper {
+        border-top: 1px solid #d8caee;
+        border-left: 4px solid #7b61ab;
+        background: #f8f4ff;
+        color: #5b4781;
+      }
+
+      .error-surface.custom-wrapper span {
+        color: #5f5380;
+      }
+
       .legend {
         margin-top: 28px;
         padding: 18px 20px;
@@ -476,6 +501,30 @@
 
         <article class="card">
           <div class="card-header">
+            <span class="tag">Clearable</span>
+            <h2>Chosen value with a visible clear affordance</h2>
+            <p>Represents the `allow_clear: true` lane where the field can return to its placeholder without switching to tag entry or multi selection.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection">
+                <span class="token">Example customer</span>
+              </div>
+              <div class="clear-button">×</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="message">
+                <strong>Clear returns the field to its placeholder</strong>
+                <span>The single-select contract stays collection-backed even when the host app lets the current value be removed inline.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Use this lane when prose docs mention clearability but the quick visual entrypoint also needs to show the visible remove affordance.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
             <span class="tag preload">Selected Preload</span>
             <h2>Edit-form label restored before search</h2>
             <p>Represents the `selected_url:` lane where a saved ID becomes a visible label before the user types a fresh query.</p>
@@ -496,6 +545,26 @@
             </div>
           </div>
           <p class="card-footer">Use this card to distinguish edit-form label restore from the ordinary selected state and from remote search success or failure.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag error">Selected Preload Failure</span>
+            <h2>Saved label restore failed before a new search</h2>
+            <p>Represents the `selected-load-error` lane where an edit form starts from a saved ID but the host app shows a nearby fallback instead of a restored label.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="placeholder">Search a replacement customer</div>
+              <div class="status-note">Restore failed</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="error-surface">
+              <strong>Unable to restore the saved customer label</strong>
+              <span>The host app can explain the preload failure beside the field while keeping remote search and recovery policy separate.</span>
+            </div>
+          </div>
+          <p class="card-footer">Keep this lane distinct from the generic remote-search failure card: the issue happened while restoring an already-saved value, not while querying for new options.</p>
         </article>
 
         <article class="card">
@@ -765,6 +834,26 @@
             </div>
           </div>
           <p class="card-footer">Keep the inline message product-neutral here; retry wording and business-specific recovery still belong to the host app.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag error">Custom Wrapper</span>
+            <h2>Styled `error_surface_html:` variant</h2>
+            <p>Represents the same nearby placeholder contract after the host app changes wrapper classes or attributes through `error_surface_html:`.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="query">exa</div>
+              <div class="status-note">field-error</div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="error-surface custom-wrapper">
+              <strong>Unable to load matching options</strong>
+              <span>The host app can restyle the wrapper while keeping the same field-adjacent placeholder contract and event boundaries.</span>
+            </div>
+          </div>
+          <p class="card-footer">Use this lane to compare wrapper customization itself, not to introduce a new failure family or a different retry policy.</p>
         </article>
 
         <article class="card">
