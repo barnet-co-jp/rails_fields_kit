@@ -136,7 +136,18 @@ import { TomSelectController } from "rails_fields_kit"
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
+If host-app JavaScript also needs to inspect the rendered create-on-the-fly contract, the package root exposes a helper import for that documented surface:
+
+```js
+import { readRenderedCreateOnTheFlyConfig } from "rails_fields_kit"
+
+const config = readRenderedCreateOnTheFlyConfig(element)
+// => { createUrl, createParam, createParams } or null
+```
+
+Use that helper only to read the rendered public contract. It does not execute the create request, show visible feedback, or change retry policy; those remain host-app responsibilities.
+
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, and it can also expose documented helper imports such as `readRenderedCreateOnTheFlyConfig`. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
 
 ## Usage
 
