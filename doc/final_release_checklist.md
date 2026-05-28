@@ -61,6 +61,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Complete `doc/sample_app_results.md`.
 - [ ] Confirm the documented JavaScript import paths resolve in the sample app.
 - [ ] Confirm Tom Select CSS is loaded.
+- [ ] Confirm one representative package-root `readRenderedInteractionConfig(...)` lane resolves from `rails_fields_kit` and reads the documented default, override, and multiple-value interaction settings without taking over Tom Select runtime behavior.
 - [ ] Confirm remote search works.
 - [ ] Confirm one representative `rfk_select` lane keeps a server-rendered collection-backed selected value stable through edit-form redisplay or validation rerender, while `include_blank:`, representative `disabled:`, and representative `option_html:` stay aligned with current docs and do not depend on remote search or create-on-the-fly hooks.
 - [ ] Confirm one representative clearable `rfk_select` lane can return from a selected value to the documented blank or placeholder state with `allow_clear: true` while staying in the collection-backed single-value contract.
@@ -69,6 +70,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm one representative `rfk_grouped_select` lane preserves the documented optgroup structure while the submitted value stays an ordinary selected ID or value and does not depend on remote search or create-on-the-fly hooks.
 - [ ] Confirm one representative `rfk_enum_select` lane preserves the current enum label and value mapping through edit-form redisplay or validation rerender without drifting into a hand-maintained arbitrary collection lane.
 - [ ] Confirm one representative native helper lane keeps `wrapper: true` label / hint / prefix / suffix rendering stable through validation rerender, and that a comparable `accessibility: false` example clearly drops the shared automatic wiring.
+- [ ] Confirm one representative wrapped native helper non-editable lane keeps `disabled:` and `readonly:` current-value states distinct while preserving the shared label / hint / prefix / suffix wrapper contract through redisplay.
 - [ ] Confirm selected preload works in edit forms.
 - [ ] Confirm one representative selected preload lane covers saved-ID label restore, `rails-fields-kit--tom-select:selected-load`, `rails-fields-kit--tom-select:selected-load-error`, and any host-app fallback or `error_surface:` boundary together.
 - [ ] Confirm create-on-the-fly works.
