@@ -52,6 +52,8 @@ Use this for a normal single select that should get Tom Select behavior.
   allow_clear: true %>
 ```
 
+Use `allow_clear: true` when the field should stay a collection-backed single select but still let the user return to the blank or placeholder state. This is still the same `rfk_select` lane: the rendered collection remains the source of available options, and ordinary Rails select options such as `include_blank:` or `prompt:` still own the empty-state wording.
+
 When replacing an existing `collection_select`, keep the same model attribute and ordinary Rails select options so the submitted param shape stays the same:
 
 ```erb
@@ -73,6 +75,9 @@ When replacing an existing `collection_select`, keep the same model attribute an
 For collection-backed `rfk_select`, Rails still uses the same field name, so existing strong params and normal save flows do not need extra changes just because the form helper changed. Edit-form redisplay and validation rerender also keep using the model value already assigned to `company_id`, so the selected option is preserved the same way as an ordinary Rails select.
 
 Use `selected:` only when the field needs to preload a value that is not already present in the rendered collection, such as a remote combobox or a collection loaded later.
+
+- ordinary selected state and clearable selected state both stay in the same collection-backed `rfk_select` lane
+- move to `rfk_combobox` when the field needs `url:`, `selected_url:`, or `create_url:` because option lookup or label restore comes from remote endpoints instead of the rendered collection
 
 ### `rfk_combobox`
 
