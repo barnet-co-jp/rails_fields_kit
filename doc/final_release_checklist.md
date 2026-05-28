@@ -75,6 +75,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm create-on-the-fly success dispatched `rails-fields-kit--tom-select:create` before the normal selection events when that hook is part of the release surface.
 - [ ] Confirm `event.detail.input` and `event.detail.option` exposed the expected payload for the representative create success flow.
 - [ ] Confirm one representative create-on-the-fly failure lane covers `rails-fields-kit--tom-select:create-error`, host-app fallback or retry UI, and any `error_surface:` boundary together.
+- [ ] Confirm that same representative create-on-the-fly lane also proves `import { readRenderedCreateOnTheFlyConfig } from "rails_fields_kit"` resolves, returns the documented `{ createUrl, createParam, createParams }` shape for a `create_url:` field, and returns `null` for a comparable field without `create_url:`.
 - [ ] Confirm request-failure events expose `event.detail.surface` when `error_surface:` is part of the release surface.
 - [ ] Confirm at least one representative `error_surface_html:` lane keeps its custom class or wrapper attrs without losing the shared placeholder `id`, hidden default, `role`, `aria-live`, or `aria-atomic` contract.
 - [ ] Confirm visible success UI remained a host-app responsibility rather than a built-in Rails Fields Kit surface.
