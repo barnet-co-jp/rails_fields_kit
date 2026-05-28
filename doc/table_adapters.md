@@ -8,7 +8,7 @@ For a product-neutral visual comparison of representative `rfk_table_filters(col
 
 ## Filter input metadata
 
-Use `RailsFieldsKit::TableFilterInput` when a table column wants to describe a filter UI that should be rendered with Rails Kit.
+Use `RailsFieldsKit::TableFilterInput` when a table column wants to describe a filter UI that should be rendered with Rails Fields Kit.
 
 ```ruby
 filter = RailsFieldsKit::TableFilterInput.new(
