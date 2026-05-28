@@ -193,6 +193,12 @@
         color: #5a3d83;
       }
 
+      .tag.tokens-empty {
+        border-color: #d9ccef;
+        background: #fbf7ff;
+        color: #65488b;
+      }
+
       .tag.error {
         border-color: #e2bcc6;
         background: var(--error-soft);
@@ -756,6 +762,31 @@
             </div>
           </div>
           <p class="card-footer">Suggestions help author token text, but parsing the submitted query and building `params[:q]` still belong to the host app.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag tokens-empty">Token Search Empty</span>
+            <h2>No suggestions while token text stays editable</h2>
+            <p>Represents `rfk_token_search` when the next clause has no suggested completion yet, but the current token text still remains the user's draft query.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection selection--multiple">
+                <span class="token subtle">status:open</span>
+                <span class="token subtle">assignee:matsuo</span>
+                <span class="inline-query">priority:urgentzz</span>
+              </div>
+              <div class="caret">▾</div>
+            </div>
+            <div class="dropdown">
+              <div class="message empty">
+                <strong>No token suggestions for “priority:urgentzz”</strong>
+                <span>The text stays editable and submittable, while the host app still decides whether that unfinished clause is valid, ignored, or needs help copy.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Unlike the collection-backed `No Results` lane, this state keeps the structured token text itself as the current query draft instead of implying that only predefined options are allowed.</p>
         </article>
 
         <article class="card">
