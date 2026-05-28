@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rails Fields Kit Table Metadata Visual Reference</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page: #f4f1ea;
+        --surface: #fffdf8;
+        --surface-strong: #ffffff;
+        --ink: #22312c;
+        --muted: #5e6d67;
+        --line: #d9d2c4;
+        --line-strong: #bcae97;
+        --accent: #1f6e63;
+        --accent-soft: #dcefe9;
+        --filter: #2d5f8f;
+        --filter-soft: #e9f1fb;
+        --editor: #7a4f9a;
+        --editor-soft: #f3ecfb;
+        --native: #8a5a22;
+        --native-soft: #f9ead7;
+        --shadow: 0 18px 40px rgba(32, 47, 41, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at top left, rgba(31, 110, 99, 0.12), transparent 26%),
+          linear-gradient(180deg, #faf7f0 0%, var(--page) 100%);
+        color: var(--ink);
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+
+      main {
+        width: min(1160px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 56px 0 72px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 18px;
+        margin-bottom: 34px;
+      }
+
+      .eyebrow {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1 {
+        margin: 0;
+        font-family: "Fraunces", "Times New Roman", serif;
+        font-size: clamp(2.1rem, 4vw, 3.3rem);
+        font-weight: 600;
+        line-height: 1.06;
+      }
+
+      .lede {
+        max-width: 780px;
+        margin: 0;
+        font-size: 1.02rem;
+        color: var(--muted);
+      }
+
+      .hero-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .hero-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 0 14px;
+        border: 1px solid var(--line-strong);
+        color: var(--ink);
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.76);
+      }
+
+      .hero-links a:hover {
+        border-color: var(--accent);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+      }
+
+      .card {
+        display: grid;
+        gap: 14px;
+        padding: 20px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .card-header {
+        display: grid;
+        gap: 8px;
+      }
+
+      .tag {
+        justify-self: start;
+        padding: 4px 8px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        border: 1px solid var(--line);
+        background: var(--surface-strong);
+      }
+
+      .tag.filter {
+        border-color: #c8d8ee;
+        background: var(--filter-soft);
+        color: var(--filter);
+      }
+
+      .tag.editor {
+        border-color: #d9caef;
+        background: var(--editor-soft);
+        color: var(--editor);
+      }
+
+      .tag.native {
+        border-color: #e5d0b2;
+        background: var(--native-soft);
+        color: var(--native);
+      }
+
+      .tag.boundary {
+        border-color: #bfd7cf;
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 1.12rem;
+        line-height: 1.2;
+      }
+
+      .card-header p,
+      .card-footer {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .panel {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface-strong);
+      }
+
+      .strip,
+      .editor-stack,
+      .callout {
+        display: grid;
+        gap: 10px;
+      }
+
+      .field-row,
+      .editor-row {
+        display: grid;
+        gap: 6px;
+      }
+
+      .label-line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #4f625b;
+      }
+
+      .metadata-chip {
+        padding: 3px 8px;
+        border: 1px solid var(--line);
+        background: #faf7f1;
+        color: #586760;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 48px;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        background: #fffdfa;
+      }
+
+      .control.search {
+        border-color: #c9d7ea;
+      }
+
+      .control.native {
+        border-color: #e4d2b8;
+      }
+
+      .control.textarea {
+        display: grid;
+        align-items: start;
+        min-height: 92px;
+      }
+
+      .placeholder,
+      .selected,
+      .typed,
+      .helper {
+        min-width: 0;
+      }
+
+      .placeholder {
+        color: #8b9792;
+      }
+
+      .selected {
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      .typed {
+        color: #31537d;
+        font-weight: 600;
+      }
+
+      .caret {
+        margin-left: auto;
+        color: var(--muted);
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border: 1px solid #bfd0e8;
+        background: var(--filter-soft);
+        color: var(--filter);
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .pill.editor {
+        border-color: #d8caef;
+        background: var(--editor-soft);
+        color: var(--editor);
+      }
+
+      .stack-note {
+        padding: 12px;
+        border: 1px solid #d7d0c5;
+        background: #faf7f1;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .callout {
+        padding: 14px;
+        border: 1px solid #bfd7cf;
+        background: #f2faf7;
+      }
+
+      .callout strong {
+        color: var(--ink);
+      }
+
+      .legend {
+        margin-top: 28px;
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.74);
+        color: var(--muted);
+      }
+
+      .legend strong {
+        color: var(--ink);
+      }
+
+      @media (max-width: 640px) {
+        main {
+          width: min(100% - 20px, 1160px);
+          padding-top: 40px;
+          padding-bottom: 56px;
+        }
+
+        .card {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">Rails Fields Kit</div>
+        <h1>Table Metadata Visual Reference</h1>
+        <p class="lede">
+          A product-neutral static reference for representative table metadata lanes.
+          Use this page to compare how `rfk_table_filters(columns)` and `rfk_table_cell_editors(columns)` read at a glance while keeping query execution and persistence in the host app or table integration.
+        </p>
+        <div class="hero-links">
+          <a href="table_adapters.md">Table adapter reference</a>
+          <a href="../README.md">README</a>
+        </div>
+      </section>
+
+      <section class="grid" aria-label="Representative table metadata states">
+        <article class="card">
+          <div class="card-header">
+            <span class="tag filter">Filters</span>
+            <h2>Collection-backed filter strip</h2>
+            <p>Represents `rfk_table_filters(columns)` when the table metadata already chose a combobox and enum select for scan-friendly filtering.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="strip">
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Customer</span>
+                  <span class="metadata-chip">TableFilterInput.combobox</span>
+                </div>
+                <div class="control search">
+                  <span class="selected">Northwind Supplies</span>
+                  <span class="caret">▾</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Status</span>
+                  <span class="metadata-chip">TableFilterInput.enum_select</span>
+                </div>
+                <div class="control">
+                  <span class="selected">Open</span>
+                  <span class="caret">▾</span>
+                </div>
+              </div>
+            </div>
+            <div class="toolbar">
+              <span class="pill">Renderer maps metadata to helpers</span>
+              <span class="pill">Host app still executes queries</span>
+            </div>
+          </div>
+          <p class="card-footer">Use this lane when the table contract is already metadata-first and Rails Fields Kit is only responsible for rendering the documented field helpers.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag filter">Ransack Filter</span>
+            <h2>Token-search filter with allowed fields metadata</h2>
+            <p>Represents `TableFilterInput.ransack_filter` after the metadata has already declared the adapter and allowed fields for the host app parser.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="field-row">
+              <div class="label-line">
+                <span>Query</span>
+                <span class="metadata-chip">adapter: ransack</span>
+              </div>
+              <div class="control search">
+                <span class="typed">status:open assignee:matsuo</span>
+                <span class="caret">▾</span>
+              </div>
+            </div>
+            <div class="toolbar">
+              <span class="pill">param_name: q</span>
+              <span class="pill">fields: name, status</span>
+            </div>
+            <div class="stack-note">Suggestion and metadata rendering belong to Rails Fields Kit. Turning the submitted text into `params[:q]` still belongs to the host app or search object.</div>
+          </div>
+          <p class="card-footer">This lane stays metadata-first and does not turn table helpers into a built-in Ransack execution API.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag native">Native Metadata</span>
+            <h2>Native helper filters without Tom Select</h2>
+            <p>Represents table metadata that still wants Rails Fields Kit naming, redisplay, and mapping, but does not need remote search for every column.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="strip">
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Keyword</span>
+                  <span class="metadata-chip">TableFilterInput.search_field</span>
+                </div>
+                <div class="control native">
+                  <span class="placeholder">Search orders</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Minimum Total</span>
+                  <span class="metadata-chip">TableFilterInput.money_field</span>
+                </div>
+                <div class="control native">
+                  <span class="placeholder">Minimum total</span>
+                </div>
+              </div>
+            </div>
+            <div class="toolbar">
+              <span class="pill">Same metadata protocol</span>
+              <span class="pill">Different rendered helper family</span>
+            </div>
+          </div>
+          <p class="card-footer">This helps keep table integrations metadata-first even when the rendered control is a native input instead of a Tom Select-backed helper.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag editor">Editors</span>
+            <h2>Editable cell controls</h2>
+            <p>Represents `rfk_table_cell_editors(columns)` when the table metadata describes the editor family and Rails Fields Kit only renders those controls.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="editor-stack">
+              <div class="editor-row">
+                <div class="label-line">
+                  <span>Status Editor</span>
+                  <span class="metadata-chip">TableCellInput.enum_select</span>
+                </div>
+                <div class="control">
+                  <span class="selected">Draft</span>
+                  <span class="caret">▾</span>
+                </div>
+              </div>
+              <div class="editor-row">
+                <div class="label-line">
+                  <span>Notes Editor</span>
+                  <span class="metadata-chip">TableCellInput.text_area</span>
+                </div>
+                <div class="control textarea native">
+                  <span class="helper">Waiting for customer confirmation before invoice is sent.</span>
+                </div>
+              </div>
+            </div>
+            <div class="toolbar">
+              <span class="pill editor">Metadata chooses editor type</span>
+              <span class="pill editor">Host app still persists edits</span>
+            </div>
+          </div>
+          <p class="card-footer">Use this lane when the table wants richer controls but still owns modal flow, authorization, and save timing outside the helper renderer.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag boundary">Boundary</span>
+            <h2>What this visual reference does and does not claim</h2>
+            <p>Keeps the quick visual entrypoint aligned with the maintained metadata contract instead of turning it into an API proposal.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="callout">
+              <strong>Rails Fields Kit owns rendering assistance.</strong>
+              <span>Metadata objects, renderer mapping, and the current FormBuilder helper families are the supported surface shown here.</span>
+            </div>
+            <div class="callout">
+              <strong>The host app or table integration owns behavior.</strong>
+              <span>Query execution, token parsing, persistence, authorization, and result rendering remain outside this static reference.</span>
+            </div>
+          </div>
+          <p class="card-footer">Keep responsibility boundaries explicit so a visual docs page does not imply a broader runtime contract than `table_adapters.md` and `public_api.md` already document.</p>
+        </article>
+      </section>
+
+      <section class="legend">
+        <strong>Scope note.</strong>
+        This page is a static visual aid for representative table metadata lanes. The maintained protocol for `TableFilterInput`, `TableCellInput`, `TableMetadata`, `TableRenderer`, and helper responsibility boundaries remains in the README and table adapter docs.
+      </section>
+    </main>
+  </body>
+</html>
