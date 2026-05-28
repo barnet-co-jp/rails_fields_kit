@@ -25,10 +25,15 @@ RSpec.describe "package metadata" do
         File.join(package_dir, "index.js"),
         File.read(File.join(repo_root, "app/javascript/rails_fields_kit/index.js"))
           .gsub('"./tom_select_controller"', '"./tom_select_controller.js"')
+          .gsub('"./rendered_create_on_the_fly_config"', '"./rendered_create_on_the_fly_config.js"')
       )
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
         File.join(package_dir, "tom_select_controller.js")
+      )
+      FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/rendered_create_on_the_fly_config.js"),
+        File.join(package_dir, "rendered_create_on_the_fly_config.js")
       )
       File.write(
         File.join(stimulus_dir, "package.json"),
@@ -94,6 +99,35 @@ RSpec.describe "package metadata" do
 
         if (indexModule.TomSelectController !== controllerModule.default) {
           throw new Error("package root named export no longer matches the direct controller entrypoint")
+        }
+
+        if (typeof indexModule.readRenderedCreateOnTheFlyConfig !== "function") {
+          throw new Error("package root did not export readRenderedCreateOnTheFlyConfig")
+        }
+
+        const element = {
+          getAttribute(name) {
+            const attributes = {
+              "data-rails-fields-kit--tom-select-create-url-value": "/customers.json",
+              "data-rails-fields-kit--tom-select-create-param-value": "customer[name]",
+              "data-rails-fields-kit--tom-select-create-params-value": JSON.stringify({ account_id: 7 })
+            }
+
+            return Object.prototype.hasOwnProperty.call(attributes, name) ? attributes[name] : null
+          }
+        }
+
+        const config = indexModule.readRenderedCreateOnTheFlyConfig(element)
+        if (!config || config.createUrl !== "/customers.json") {
+          throw new Error("create-on-the-fly helper did not read the create_url value")
+        }
+
+        if (config.createParam !== "customer[name]") {
+          throw new Error("create-on-the-fly helper did not preserve the create param name")
+        }
+
+        if (config.createParams.account_id !== 7) {
+          throw new Error("create-on-the-fly helper did not decode create params")
         }
       JS
 
