@@ -204,6 +204,17 @@ For a representative create-on-the-fly failure lane, keep `create_url:` and `err
 
 Use `create` when the host app needs a success hook before ordinary selection events continue, and use `create-error` when the host app needs field-adjacent fallback copy or retry UI for failed inline creation. If `error_surface: true` is enabled, the failure event exposes `event.detail.surface`; keep the actual message and retry behavior in the host app. See [`events.md`](events.md) for the event payloads and [`field_helpers.md`](field_helpers.md) for the broader helper example inventory.
 
+If a host-app Stimulus controller or browser-side integration test needs to inspect the rendered create-on-the-fly contract without repeating raw data attribute names, the package root also exports a small reader:
+
+```js
+import { readRenderedCreateOnTheFlyConfig } from "rails_fields_kit"
+
+const config = readRenderedCreateOnTheFlyConfig(element)
+// => { createUrl, createParam, createParams } or null
+```
+
+Use this helper only to read the documented rendered contract. It does not execute the create request, render visible feedback, or change retry policy; those remain host-app responsibility.
+
 ## 6. Add controller endpoints
 
 ```ruby
