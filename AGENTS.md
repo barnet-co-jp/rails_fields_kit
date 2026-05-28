@@ -22,6 +22,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app setup note
 - `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states
 - `doc/native_field_visual_reference.html`: static visual reference for representative native helper states
+- `doc/table_metadata_visual_reference.html`: static visual reference for representative table metadata filter and editor lanes
 - `doc/*.md`: maintained public and maintainer-facing docs
 
 ## Docs sync rules

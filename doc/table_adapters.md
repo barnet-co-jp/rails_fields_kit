@@ -4,6 +4,8 @@ Rails Fields Kit can be used by table-oriented gems without forcing those gems t
 
 The adapter objects in this document expose small metadata protocols that other gems can read when Rails Fields Kit is present.
 
+For a product-neutral visual comparison of representative `rfk_table_filters(columns)` and `rfk_table_cell_editors(columns)` lanes, see [`table_metadata_visual_reference.html`](table_metadata_visual_reference.html).
+
 ## Filter input metadata
 
 Use `RailsFieldsKit::TableFilterInput` when a table column wants to describe a filter UI that should be rendered with Rails Fields Kit.
