@@ -164,6 +164,30 @@ If the host app wants a stable placeholder for inline error UI, opt in with `err
 
 The helper renders an empty placeholder next to the field, and request-failure events include that element as `event.detail.surface`. The gem still does not choose the message copy or retry behavior.
 
+For a representative selected preload lane, keep `selected:` and `selected_url:` on the same field and subscribe to the selected preload hooks explicitly:
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  selected_url: selected_customers_path(format: :json),
+  selected: @order.customer_id,
+  error_surface: true,
+  html: {
+    data: {
+      action: "rails-fields-kit--tom-select:selected-load->customers#selectedLoaded rails-fields-kit--tom-select:selected-load-error->customers#selectedLoadFailed"
+    }
+  } %>
+```
+
+Use this lane when an edit form starts from a saved ID and the host app wants the displayed label restored before the user begins searching.
+
+- `selected:` keeps the existing saved value on the field while Tom Select reconnects.
+- `selected_url:` points to the selected-option lookup endpoint, commonly an `rfk_find_with` action documented in [`controller_helpers.md`](controller_helpers.md).
+- `selected-load` tells the host app that the label restore completed and exposes the fetched option payloads.
+- `selected-load-error` gives the host app a dedicated fallback hook when label restore fails. If `error_surface: true` is enabled, the failure event also exposes `event.detail.surface`.
+
+Keep the visible fallback copy and any retry behavior in the host app. Rails Fields Kit only provides the selected preload request, event hooks, and the opt-in placeholder boundary. See [`events.md`](events.md) for the event payloads.
+
 For a representative create-on-the-fly failure lane, keep `create_url:` and `error_surface: true` on the same field and subscribe to the dedicated create hooks explicitly:
 
 ```erb
