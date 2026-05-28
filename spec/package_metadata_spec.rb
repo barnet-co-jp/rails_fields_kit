@@ -25,10 +25,15 @@ RSpec.describe "package metadata" do
         File.join(package_dir, "index.js"),
         File.read(File.join(repo_root, "app/javascript/rails_fields_kit/index.js"))
           .gsub('"./tom_select_controller"', '"./tom_select_controller.js"')
+          .gsub('"./rendered_option_payload_mapping"', '"./rendered_option_payload_mapping.js"')
       )
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
         File.join(package_dir, "tom_select_controller.js")
+      )
+      FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/rendered_option_payload_mapping.js"),
+        File.join(package_dir, "rendered_option_payload_mapping.js")
       )
       File.write(
         File.join(stimulus_dir, "package.json"),
@@ -94,6 +99,46 @@ RSpec.describe "package metadata" do
 
         if (indexModule.TomSelectController !== controllerModule.default) {
           throw new Error("package root named export no longer matches the direct controller entrypoint")
+        }
+
+        if (typeof indexModule.readRenderedOptionPayloadMapping !== "function") {
+          throw new Error("package root did not export readRenderedOptionPayloadMapping")
+        }
+
+        const element = {
+          getAttribute(name) {
+            const attributes = {
+              "data-rails-fields-kit--tom-select-kind-value": "combobox",
+              "data-rails-fields-kit--tom-select-value-field-value": "id",
+              "data-rails-fields-kit--tom-select-label-field-value": "name",
+              "data-rails-fields-kit--tom-select-search-field-value": "name,email",
+              "data-rails-fields-kit--tom-select-option-description-field-value": "email",
+              "data-rails-fields-kit--tom-select-option-badge-field-value": "status"
+            }
+
+            return Object.prototype.hasOwnProperty.call(attributes, name) ? attributes[name] : null
+          }
+        }
+
+        const mapping = indexModule.readRenderedOptionPayloadMapping(element)
+        if (!mapping || mapping.valueField !== "id") {
+          throw new Error("option payload mapping helper did not read the value field")
+        }
+
+        if (mapping.labelField !== "name") {
+          throw new Error("option payload mapping helper did not preserve the label field")
+        }
+
+        if (mapping.searchFields.join("|") !== "name|email") {
+          throw new Error("option payload mapping helper did not decode the search fields")
+        }
+
+        if (mapping.optionDescriptionField !== "email") {
+          throw new Error("option payload mapping helper did not read the description field")
+        }
+
+        if (mapping.optionBadgeField !== "status") {
+          throw new Error("option payload mapping helper did not read the badge field")
         }
       JS
 
