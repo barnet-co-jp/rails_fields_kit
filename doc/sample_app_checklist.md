@@ -63,6 +63,12 @@ If the sample app uses importmap, confirm the documented `config/importmap.rb` p
 
 If the sample app uses importmap, confirm the documented controller registration still works from the app's existing Stimulus boot file after those pins are added.
 
+If the release surface includes `readRenderedCreateOnTheFlyConfig(...)`, confirm the documented package-root helper import also resolves:
+
+```js
+import { readRenderedCreateOnTheFlyConfig } from "rails_fields_kit"
+```
+
 Load Tom Select CSS:
 
 ```js
@@ -153,6 +159,10 @@ Use one representative field with `create_url:` and whatever host-app fallback U
 
 Verify that same field can demonstrate the create-on-the-fly failure lane end to end:
 
+- if the release surface includes `readRenderedCreateOnTheFlyConfig(...)`, the representative field's rendered element can be inspected through `import { readRenderedCreateOnTheFlyConfig } from "rails_fields_kit"`
+- if that helper export is in scope, the representative `create_url:` field returns `{ createUrl, createParam, createParams }`
+- if that helper export is in scope, a comparable field without `create_url:` returns `null`
+- helper use stays at rendered config read rather than replacing request execution or visible feedback ownership
 - a failed create request dispatches `rails-fields-kit--tom-select:create-error`
 - the representative failure path leaves host-app fallback copy or retry UI visible near the field
 - if the field uses `error_surface: true`, the failure path still exposes the expected inline placeholder through `event.detail.surface`
