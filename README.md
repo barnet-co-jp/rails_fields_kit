@@ -93,6 +93,14 @@ You can also import the controller file directly:
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
+The same package-root entrypoint can also expose documented helper exports for host-app code. For example, `readRenderedErrorSurface(element)` reads the shared `error_surface` placeholder from a rendered Tom Select-backed field and returns `null` when that field did not opt in:
+
+```js
+import { readRenderedErrorSurface } from "rails_fields_kit"
+
+const surface = readRenderedErrorSurface(fieldElement)
+```
+
 For Vite or another JS bundler, the host app also needs to resolve the gem's `app/javascript` files. One option is to alias the documented import paths to the gem contents returned by `bundle show`:
 
 ```ts
@@ -136,7 +144,7 @@ import { TomSelectController } from "rails_fields_kit"
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint and also carries documented package-root helpers such as `readRenderedErrorSurface(...)`, so both controller registration and helper imports stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
 
 ## Usage
 
