@@ -111,7 +111,7 @@ RSpec.describe "package metadata" do
               "data-rails-fields-kit--tom-select-selected-url-value": "/customers/selected.json",
               "data-rails-fields-kit--tom-select-selected-param-value": "customer_id",
               "data-rails-fields-kit--tom-select-selected-multiple-param-value": "customer_ids",
-              "data-rails-fields-kit--tom-select-selected-query-params-value": "{\"account_id\":7}"
+              "data-rails-fields-kit--tom-select-selected-query-params-value": JSON.stringify({ account_id: 7 })
             }
 
             return Object.prototype.hasOwnProperty.call(attributes, name) ? attributes[name] : null
