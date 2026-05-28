@@ -69,6 +69,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm one representative `rfk_enum_select` lane preserves the current enum label and value mapping through edit-form redisplay or validation rerender without drifting into a hand-maintained arbitrary collection lane.
 - [ ] Confirm one representative native helper lane keeps `wrapper: true` label / hint / prefix / suffix rendering stable through validation rerender, and that a comparable `accessibility: false` example clearly drops the shared automatic wiring.
 - [ ] Confirm selected preload works in edit forms.
+- [ ] Confirm the documented `import { readRenderedSelectedPreloadConfig } from "rails_fields_kit"` path resolves for the release candidate and that the helper returns the current selected preload config for the representative `selected_url:` field while still returning `null` for a comparable no-`selected_url:` field.
 - [ ] Confirm one representative selected preload lane covers saved-ID label restore, `rails-fields-kit--tom-select:selected-load`, `rails-fields-kit--tom-select:selected-load-error`, and any host-app fallback or `error_surface:` boundary together.
 - [ ] Confirm create-on-the-fly works.
 - [ ] Confirm create-on-the-fly success dispatched `rails-fields-kit--tom-select:create` before the normal selection events when that hook is part of the release surface.
