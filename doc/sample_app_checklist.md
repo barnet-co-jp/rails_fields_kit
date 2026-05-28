@@ -134,6 +134,18 @@ Verify:
 
 If the release surface includes `RailsFieldsKit::RansackSuggestions.build`, also confirm the sample endpoint can return the expected predicate metadata without handing query parsing to the gem.
 
+## Verify remote search config helper export
+
+Use one representative rendered field that opts into `url:` and one comparable rendered field that stays outside the remote-search lane.
+
+Verify that same pair can demonstrate the helper-export contract end to end:
+
+- the documented package-root import `import { readRenderedRemoteSearchConfig } from "rails_fields_kit"` resolves in the sample app
+- `readRenderedRemoteSearchConfig(element)` returns the same `url`, `queryParam`, and fixed `queryParams` that the representative remote-search field is expected to expose
+- if the representative field relies on fixed `query_params:`, the helper reflects those values without the sample app re-encoding raw data attribute names
+- a comparable rendered field without `url:` returns `null`
+- the sample app uses the helper as rendered-config inspection only; request execution, visible feedback, and retry UI remain host-app responsibility
+
 ## Verify selected preload representative lane
 
 Use one representative server-rendered edit-form field with `selected_url:` and whatever host-app fallback UI or `error_surface:` wiring the release expects to support.
