@@ -110,7 +110,8 @@ RSpec.describe "package contents" do
       "doc/ransack_suggestions.md",
       "doc/table_adapters.md",
       "doc/tom_select_visual_reference.html",
-      "doc/native_field_visual_reference.html"
+      "doc/native_field_visual_reference.html",
+      "doc/table_metadata_visual_reference.html"
     )
   end
 
