@@ -158,6 +158,10 @@ Verify that same field can demonstrate the create-on-the-fly failure lane end to
 - if the field uses `error_surface: true`, the failure path still exposes the expected inline placeholder through `event.detail.surface`
 - a follow-up success or fresh interaction clears stale inline failure UI for that same field
 - retry policy and final visible copy still remain a host-app responsibility rather than a built-in Rails Fields Kit behavior
+- `import { readRenderedCreateOnTheFlyConfig } from "rails_fields_kit"` resolves from the same documented package-root entrypoint as the controller import
+- the representative `create_url:` field returns the documented `{ createUrl, createParam, createParams }` shape through `readRenderedCreateOnTheFlyConfig(...)`
+- a comparable field without `create_url:` returns `null` from `readRenderedCreateOnTheFlyConfig(...)`
+- the helper verification stays in rendered-config read only and does not turn request execution or visible feedback into gem responsibility
 
 ## Verify `rfk_autocomplete` representative suggestion-only lane
 
