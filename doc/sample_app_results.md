@@ -136,6 +136,16 @@ Notes:
 
 Notes:
 
+## Remote search config helper export checks
+
+- [ ] `import { readRenderedRemoteSearchConfig } from "rails_fields_kit"` resolved in the sample app
+- [ ] one representative remote-search field returned the documented `url`, `queryParam`, and `queryParams` through `readRenderedRemoteSearchConfig(...)`
+- [ ] representative fixed `query_params:` were reflected by that helper result when the field relied on them
+- [ ] a comparable rendered field without `url:` returned `null`
+- [ ] the sample app kept request execution, visible feedback, and retry UI in host-app code rather than treating this helper as more than rendered-config inspection
+
+Notes:
+
 ## Selected preload representative lane checks
 
 - [ ] one representative edit-form field with `selected_url:` covered the end-to-end selected preload lane
