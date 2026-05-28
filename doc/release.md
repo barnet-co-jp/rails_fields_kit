@@ -64,6 +64,8 @@ bundle exec rake build
    - `doc/select_migration.md`
    - `doc/field_helpers.md`
    - `doc/tom_select_visual_reference.html`
+   - `doc/native_field_visual_reference.html`
+   - `doc/table_metadata_visual_reference.html`
    - `doc/controller_helpers.md`
    - `doc/token_suggestions.md`
    - `doc/ransack_suggestions.md`
