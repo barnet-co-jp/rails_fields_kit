@@ -184,6 +184,14 @@ Direct import is also supported:
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
+The package root also exposes a helper for reading the documented remote search data contract from a rendered field:
+
+```js
+import { readRenderedRemoteSearchConfig } from "rails_fields_kit"
+```
+
+`readRenderedRemoteSearchConfig(element)` returns `{ url, queryParam, queryParams }` for a field that opts into `url:` and returns `null` otherwise. It only reads the rendered public contract. Request execution, visible feedback, and retry UI remain host-app responsibility.
+
 The package root also exposes a helper for reading the documented create-on-the-fly data contract from a rendered field:
 
 ```js
@@ -202,6 +210,8 @@ Remote endpoint extensions:
 - `selected_query_params:` adds fixed query parameters to selected preload requests.
 - `create_params:` adds fixed JSON fields to create requests.
 - `error_surface:` adds a generated placeholder id so request-failure events can expose `detail.surface` for host-app feedback.
+
+For host-app code that wants to inspect a rendered remote search lane without re-encoding raw data attribute names, use `readRenderedRemoteSearchConfig(element)` from the package root.
 
 For host-app code that wants to inspect a rendered create-on-the-fly lane without re-encoding raw data attribute names, use `readRenderedCreateOnTheFlyConfig(element)` from the package root.
 
