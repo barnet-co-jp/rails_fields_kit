@@ -70,6 +70,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm one representative native helper lane keeps `wrapper: true` label / hint / prefix / suffix rendering stable through validation rerender, and that a comparable `accessibility: false` example clearly drops the shared automatic wiring.
 - [ ] Confirm selected preload works in edit forms.
 - [ ] Confirm one representative selected preload lane covers saved-ID label restore, `rails-fields-kit--tom-select:selected-load`, `rails-fields-kit--tom-select:selected-load-error`, and any host-app fallback or `error_surface:` boundary together.
+- [ ] Confirm the package-root `readRenderedSelectedPreloadConfig(...)` helper resolves in the sample app, returns the documented config for that representative selected preload field, and stays `null` for a comparable field without `selected_url:`.
 - [ ] Confirm create-on-the-fly works.
 - [ ] Confirm create-on-the-fly success dispatched `rails-fields-kit--tom-select:create` before the normal selection events when that hook is part of the release surface.
 - [ ] Confirm `event.detail.input` and `event.detail.option` exposed the expected payload for the representative create success flow.
