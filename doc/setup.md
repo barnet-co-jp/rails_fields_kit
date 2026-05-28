@@ -136,6 +136,17 @@ Rails Fields Kit intentionally does not generate importmap-specific setup beyond
 <% end %>
 ```
 
+If a host-app Stimulus controller or browser-side integration test needs to inspect the rendered interaction config without repeating raw data attribute names or the `persist` fallback, the package root also exports a small reader:
+
+```js
+import { readRenderedInteractionConfig } from "rails_fields_kit"
+
+const interaction = readRenderedInteractionConfig(element)
+// => { maxOptions, maxItems, loadThrottle, delimiter, preload, openOnFocus, closeAfterSelect, hideSelected, persist } or null
+```
+
+Use this helper only to read the documented rendered contract. It does not create a Tom Select instance, take over runtime behavior, or move visible UI ownership into the gem.
+
 If a host-app Stimulus controller or browser-side integration test needs to inspect the rendered option payload mapping without repeating raw data attribute names or the `search_field:` split rule, the package root also exports a small reader:
 
 ```js
