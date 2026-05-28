@@ -109,7 +109,7 @@ RSpec.describe "Native helper wrapper and accessibility contract" do
       required: true
     )
 
-    expect(html).to include('class="rfk-field"')
+    expect(html).to include('class="rfk-field rfk-field--error"').or include('class="rfk-field--error rfk-field"')
     expect(html).to include(">Customer code</label>")
     expect(html).to include("Host app manages accessibility wiring")
     expect(html).to include(">#</span>")
