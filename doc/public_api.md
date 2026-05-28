@@ -172,11 +172,16 @@ The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_typ
 
 ## JavaScript exports
 
-The package exposes the Tom Select Stimulus controller from the JavaScript entrypoint:
+The package exposes the Tom Select Stimulus controller and a helper that resolves the opt-in request-failure placeholder from a rendered field:
 
 ```js
-import { TomSelectController } from "rails_fields_kit"
+import {
+  TomSelectController,
+  readRenderedErrorSurface
+} from "rails_fields_kit"
 ```
+
+`readRenderedErrorSurface(element)` returns the placeholder element referenced by the rendered field's `error_surface:` contract. It returns `null` for fields that did not opt into `error_surface:` and keeps the same resolution path when `error_surface_html:` customizes the wrapper element.
 
 Direct import is also supported:
 
