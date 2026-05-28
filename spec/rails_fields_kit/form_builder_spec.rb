@@ -325,6 +325,30 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("placeholder=\"Search or create a customer\"")
   end
 
+  it "keeps shared placeholder contract for custom error surfaces" do
+    html = form_builder.rfk_combobox(
+      :customer_id,
+      url: "/customers.json",
+      error_surface: true,
+      error_surface_html: {
+        class: "field-error",
+        data: { lane: "selected-preload" }
+      }
+    )
+    plain_html = form_builder.rfk_combobox(:customer_id, url: "/customers.json")
+
+    expect(html).to include("data-rails-fields-kit--tom-select-error-surface-id-value=\"dummy_model_customer_id_error_surface\"")
+    expect(html).to include("aria-describedby=\"dummy_model_customer_id_error_surface\"")
+    expect(html).to include("id=\"dummy_model_customer_id_error_surface\"")
+    expect(html).to include("hidden=\"hidden\"")
+    expect(html).to include("role=\"status\"")
+    expect(html).to include("aria-live=\"polite\"")
+    expect(html).to include("aria-atomic=\"true\"")
+    expect(html).to include("data-lane=\"selected-preload\"")
+    expect(html).to include("class=\"field-error rfk-tom-select-error-surface\"").or include("class=\"rfk-tom-select-error-surface field-error\"")
+    expect(plain_html).not_to include("dummy_model_customer_id_error_surface")
+  end
+
   it "renders a token search text input" do
     html = form_builder.rfk_token_search(
       :keyword,
