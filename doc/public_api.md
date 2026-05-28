@@ -172,11 +172,13 @@ The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_typ
 
 ## JavaScript exports
 
-The package exposes the Tom Select Stimulus controller from the JavaScript entrypoint:
+The package exposes the Tom Select Stimulus controller and selected preload config reader from the JavaScript entrypoint:
 
 ```js
-import { TomSelectController } from "rails_fields_kit"
+import { TomSelectController, readRenderedSelectedPreloadConfig } from "rails_fields_kit"
 ```
+
+`readRenderedSelectedPreloadConfig(element)` returns `{ selectedUrl, selectedParam, selectedMultipleParam, selectedQueryParams }` for a rendered field that opts into `selected_url:`. It returns `null` when the field does not expose selected preload wiring, and it only reads the documented rendered values. It does not start the preload request or change host-app ownership of selected label lookup behavior.
 
 Direct import is also supported:
 
