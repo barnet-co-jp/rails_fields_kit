@@ -64,6 +64,7 @@ Notes:
 - [ ] Tom Select package installed
 - [ ] `import { TomSelectController } from "rails_fields_kit"` resolved
 - [ ] `import TomSelectController from "rails_fields_kit/tom_select_controller"` resolved
+- [ ] `import { readRenderedErrorSurface } from "rails_fields_kit"` resolved
 - [ ] documented controller registration succeeded
 - [ ] importmap pins resolved `rails_fields_kit` and `rails_fields_kit/tom_select_controller` when importmap was used
 - [ ] documented controller registration still worked from the existing Stimulus boot file after adding those importmap pins
@@ -177,6 +178,16 @@ Notes:
 
 Notes:
 
+## `rfk_tags` representative tag-entry / create-on-the-fly lane checks
+
+- [ ] one representative `rfk_tags` field covered the end-to-end tag-entry lane with existing tags still visible
+- [ ] the same field accepted a next value without collapsing into the ordinary `rfk_multi_select` collection-backed flow
+- [ ] the helper-specific create affordance stayed readable as tag-entry or create-on-the-fly behavior for that field
+- [ ] a representative create success or create failure still left the host-app responsibility boundary readable for the same field
+- [ ] an edit form or validation rerender preserved the same selected tags when the representative lane also relied on `selected_url:`
+
+Notes:
+
 ## `rfk_grouped_select` representative optgroup-preserving lane checks
 
 - [ ] one representative `rfk_grouped_select` field covered the end-to-end optgroup-preserving lane
@@ -210,6 +221,16 @@ Notes:
 - [ ] the same allowed field list drove both the documented suggestion builder config and the host-app parser whitelist
 - [ ] submitted token text was turned into `params[:q]` by the host app parser or search object, not by Rails Fields Kit
 - [ ] the sample app treated Ransack suggestion payload as metadata only, not as query execution performed by the gem
+
+Notes:
+
+## `readRenderedErrorSurface(...)` representative helper lane checks
+
+- [ ] `import { readRenderedErrorSurface } from "rails_fields_kit"` resolved from the documented package-root path
+- [ ] one representative `error_surface: true` field returned the shared placeholder through `readRenderedErrorSurface(...)`
+- [ ] a comparable field without `error_surface: true` returned `null` from the same helper
+- [ ] a representative `error_surface_html:` field preserved its custom attrs while the helper still resolved the same shared placeholder element
+- [ ] the helper stayed a placeholder lookup surface only; visible retry UI and final message ownership remained in the host app
 
 Notes:
 
