@@ -138,6 +138,8 @@ Override precedence for Tom Select-backed helpers is:
 2. initializer defaults such as `config.default_loading_text`
 3. bundled locale-aware defaults (`I18n.locale`, with English fallback)
 
+For a quick side-by-side comparison of field-level override copy and shared fallback copy, see [`tom_select_visual_reference.html`](tom_select_visual_reference.html).
+
 ### `default_no_results_text`
 
 Text shown when no result is found.
