@@ -57,6 +57,14 @@ import DirectTomSelectController from "rails_fields_kit/tom_select_controller"
 console.assert(TomSelectController === DirectTomSelectController)
 ```
 
+Confirm a representative package-root helper export also resolves from the documented public entrypoint:
+
+```js
+import { readRenderedErrorSurface } from "rails_fields_kit"
+
+console.assert(typeof readRenderedErrorSurface === "function")
+```
+
 If the sample app uses a bundler alias or custom resolver, confirm it still resolves those documented import paths rather than an app-specific private path.
 
 If the sample app uses importmap, confirm the documented `config/importmap.rb` pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` resolve without switching to a private asset path or an undocumented pin name.
@@ -179,6 +187,17 @@ Verify that same field can demonstrate the collection-backed multiple-value cont
 - an edit form or validation rerender keeps the same selected values on that representative field
 - the representative field does not depend on `create_url:` or token-style parsing to remain understandable in the sample app
 
+## Verify `rfk_tags` representative tag-entry / create-on-the-fly lane
+
+Use one representative `rfk_tags` field with existing selected tags visible and create-on-the-fly support enabled when the host app wants that lane.
+
+Verify that same field can demonstrate the tag-entry contract end to end:
+
+- existing tags stay visible while the next value is typed into the same field
+- the helper-specific create affordance stays clearly in the tag-entry lane instead of reading like the ordinary `rfk_multi_select` collection-backed flow
+- a representative create success or create failure still leaves the host-app responsibility boundary readable for the same field
+- an edit form or validation rerender keeps the same selected tags visible when the representative lane also relies on `selected_url:`
+
 ## Verify `rfk_grouped_select` representative optgroup-preserving lane
 
 Use one representative `rfk_grouped_select` field backed by grouped server-rendered collections and keep that same field outside remote search or create-on-the-fly lanes.
@@ -218,6 +237,18 @@ If the release surface includes `RailsFieldsKit::RansackSuggestions.build`, also
 - the same allowed field list drives both the documented suggestion builder config and the host-app parser whitelist from `doc/ransack_suggestions.md`
 - submitted token text is turned into `params[:q]` by the host app parser or search object, not by Rails Fields Kit
 - the sample app treats that payload as metadata for a parser or search object, not as query execution performed by the gem
+
+## Verify `readRenderedErrorSurface(...)` representative helper lane
+
+Use one representative field with `error_surface: true`, one comparable field without opt-in, and one representative `error_surface_html:` customization lane.
+
+Verify that same helper lane can demonstrate the package-root helper contract end to end:
+
+- `import { readRenderedErrorSurface } from "rails_fields_kit"` resolves in the same documented package-root path as the controller export
+- the helper returns the shared `error_surface` placeholder for the representative opt-in field
+- the same helper returns `null` for a comparable field without `error_surface: true`
+- a representative `error_surface_html:` wrapper keeps its custom attrs while `readRenderedErrorSurface(...)` still resolves the same shared placeholder element
+- the helper remains a placeholder lookup surface only; visible retry UI and final message ownership still stay in the host app
 
 ## Verify visible feedback surfaces
 
