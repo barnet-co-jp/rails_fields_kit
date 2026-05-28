@@ -62,6 +62,9 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm the documented JavaScript import paths resolve in the sample app.
 - [ ] Confirm Tom Select CSS is loaded.
 - [ ] Confirm remote search works.
+- [ ] If the release surface includes `readRenderedRemoteSearchConfig(...)`, confirm `import { readRenderedRemoteSearchConfig } from "rails_fields_kit"` resolves in the sample app.
+- [ ] If the release surface includes `readRenderedRemoteSearchConfig(...)`, confirm one representative remote-search field returns the documented `{ url, queryParam, queryParams }` shape while a comparable rendered field without `url:` returns `null`.
+- [ ] If the release surface includes `readRenderedRemoteSearchConfig(...)`, confirm this helper stays in the rendered-config inspection lane and does not move request execution or visible feedback ownership into the gem.
 - [ ] Confirm one representative `rfk_select` lane keeps a server-rendered collection-backed selected value stable through edit-form redisplay or validation rerender, while `include_blank:`, representative `disabled:`, and representative `option_html:` stay aligned with current docs and do not depend on remote search or create-on-the-fly hooks.
 - [ ] Confirm one representative clearable `rfk_select` lane can return from a selected value to the documented blank or placeholder state with `allow_clear: true` while staying in the collection-backed single-value contract.
 - [ ] Confirm one representative `rfk_autocomplete` lane keeps remote suggestions in the typing-assist role while the submitted value stays free text, without depending on `selected_url:` or create-on-the-fly hooks.
