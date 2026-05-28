@@ -101,6 +101,8 @@ Use one representative `rfk_select` field backed by a server-rendered collection
 Verify that same field can demonstrate the collection-backed single-value contract end to end:
 
 - the representative field renders the current selected value from the documented server-rendered collection lane
+- if the representative field enables `allow_clear: true`, clearing that selected value returns the field to the documented blank or placeholder state
+- clearing the representative field still stays in the collection-backed single-value contract rather than drifting into a remote-search, token-metadata, or create-on-the-fly lane
 - an edit form or validation rerender keeps the same selected value on that representative field
 - representative `include_blank:` still exposes the documented blank-option behavior for that lane
 - representative `disabled:` options and `option_html:` attributes remain visible on that field without changing it into a remote-search or token-metadata lane
