@@ -184,6 +184,14 @@ Direct import is also supported:
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
+The package root also exposes a helper for reading the documented interaction config from a rendered field:
+
+```js
+import { readRenderedInteractionConfig } from "rails_fields_kit"
+```
+
+`readRenderedInteractionConfig(element)` returns `{ maxOptions, maxItems, loadThrottle, delimiter, preload, openOnFocus, closeAfterSelect, hideSelected, persist }` for a rendered Rails Fields Kit Tom Select field and returns `null` otherwise. It only reads the rendered public contract and preserves the current runtime responsibility boundary.
+
 The package root also exposes a helper for reading the documented option payload mapping from a rendered field:
 
 ```js
@@ -202,6 +210,8 @@ Remote endpoint extensions:
 - `selected_query_params:` adds fixed query parameters to selected preload requests.
 - `create_params:` adds fixed JSON fields to create requests.
 - `error_surface:` adds a generated placeholder id so request-failure events can expose `detail.surface` for host-app feedback.
+
+For host-app code that wants to inspect a rendered field's documented interaction config without re-encoding raw data attribute names or the `persist` fallback, use `readRenderedInteractionConfig(element)` from the package root.
 
 For host-app code that wants to inspect a rendered field's documented option payload mapping without re-encoding raw data attribute names or the `search_field:` split rule, use `readRenderedOptionPayloadMapping(element)` from the package root.
 
