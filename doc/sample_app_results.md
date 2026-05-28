@@ -156,6 +156,10 @@ Notes:
 - [ ] if that field used `error_surface: true`, the failure path still exposed the expected inline placeholder through `event.detail.surface`
 - [ ] a follow-up success or fresh interaction cleared stale inline failure UI for that same field
 - [ ] retry policy and final visible copy remained a host-app responsibility rather than a built-in Rails Fields Kit behavior
+- [ ] `import { readRenderedCreateOnTheFlyConfig } from "rails_fields_kit"` resolved from the documented package-root path
+- [ ] the representative `create_url:` field returned the documented `{ createUrl, createParam, createParams }` shape through `readRenderedCreateOnTheFlyConfig(...)`
+- [ ] a comparable field without `create_url:` returned `null` from `readRenderedCreateOnTheFlyConfig(...)`
+- [ ] helper verification stayed in rendered-config read only and did not turn request execution or visible feedback into gem responsibility
 
 Notes:
 
