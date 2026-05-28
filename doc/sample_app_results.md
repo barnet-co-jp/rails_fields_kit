@@ -145,6 +145,8 @@ Notes:
 - [ ] a representative failure path left user-understandable host-app fallback or visible feedback after `rails-fields-kit--tom-select:selected-load-error`
 - [ ] if that field used `error_surface: true`, the selected preload failure path still exposed the expected inline placeholder through `event.detail.surface`
 - [ ] a Turbo-driven validation rerender or same-form revisit still restored the label for that same representative field
+- [ ] one representative multiple-value field with `selected_url:` restored visible labels for saved IDs instead of leaving a raw ID-only state
+- [ ] if that multiple-value lane relied on a custom `selected_multiple_param:`, the selected preload request still used the documented key, and a comparable endpoint still accepted comma-separated `ids`
 
 Notes:
 
