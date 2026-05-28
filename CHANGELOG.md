@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
   - `query_params:` for fixed search query parameters.
   - `selected_query_params:` for fixed selected preload query parameters.
   - `create_params:` for fixed create-on-the-fly JSON fields.
+- `readRenderedSelectedPreloadConfig(element)` as a package-root JavaScript helper for reading `{ selectedUrl, selectedParam, selectedMultipleParam, selectedQueryParams }` from a rendered field that opts into `selected_url:` without moving selected preload requests, visible fallback copy, or retry UI into the gem.
 - Tom Select option pass-throughs for `max_items:`, `load_throttle:`, and `delimiter:`.
 - Opt-in `error_surface:` and `error_surface_html:` support for Tom Select-backed helpers so request-failure events can expose a stable nearby placeholder as `detail.surface` without moving visible error copy or retry UI into the gem.
 
