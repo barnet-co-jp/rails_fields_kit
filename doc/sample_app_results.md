@@ -72,6 +72,16 @@ Notes:
 
 Notes:
 
+## Interaction config helper export checks
+
+- [ ] `import { readRenderedInteractionConfig } from "rails_fields_kit"` resolved
+- [ ] one representative rendered field returned the documented interaction config helper shape
+- [ ] a representative default lane kept the documented null-or-default values without inventing runtime behavior
+- [ ] a representative custom override lane and a representative multiple-value lane still exposed the expected config differences
+- [ ] verification stayed limited to rendered config read rather than Tom Select instance creation or visible behavior ownership
+
+Notes:
+
 ## Form helper checks
 
 - [ ] `rfk_select`
@@ -92,6 +102,15 @@ Notes:
 - [ ] the field rendered the documented label, hint, prefix, and suffix while staying in the native helper family rather than a Tom Select lane
 - [ ] an edit form or validation rerender kept the same value and preserved the shared wrapper / accessibility wiring for that representative field
 - [ ] a comparable `accessibility: false` example clearly removed the automatic accessibility wiring that the release docs treat as opt-out behavior
+
+Notes:
+
+## Native helper representative non-editable lane checks
+
+- [ ] one representative wrapped native helper field covered the disabled current-value lane
+- [ ] a comparable wrapped native helper field covered the readonly current-value lane
+- [ ] disabled and readonly stayed distinct while preserving the same label, hint, prefix, and suffix wrapper contract
+- [ ] edit-form redisplay or validation rerender preserved the intended non-editable state for those representative fields
 
 Notes:
 
