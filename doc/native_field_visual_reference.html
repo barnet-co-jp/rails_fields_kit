@@ -134,6 +134,12 @@
         color: var(--warning);
       }
 
+      .tag.noneditable {
+        border-color: #b9d4cd;
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
       .tag.accessibility {
         border-color: #c9d7d9;
         background: #edf5f6;
@@ -187,6 +193,35 @@
         min-height: 48px;
         border: 1px solid var(--line-strong);
         background: #ffffff;
+      }
+
+      .control-row.disabled-state {
+        border-style: dashed;
+        border-color: #c5ccd1;
+        background: var(--disabled);
+      }
+
+      .control-row.disabled-state .input,
+      .control-row.disabled-state .textarea,
+      .control-row.disabled-state .affix {
+        background: var(--disabled);
+        color: #72818a;
+      }
+
+      .control-row.readonly-state {
+        background: #f7faf9;
+        border-color: #bfd4ce;
+      }
+
+      .control-row.readonly-state .input,
+      .control-row.readonly-state .textarea {
+        background: #f7faf9;
+        color: var(--ink);
+      }
+
+      .control-row.readonly-state .affix {
+        background: #edf5f2;
+        color: #4c635d;
       }
 
       .affix {
@@ -284,7 +319,7 @@
         <h1>Native Field Visual Reference</h1>
         <p class="lede">
           This page keeps native helpers in one quick visual entrypoint: the shared wrapper lane,
-          validation redisplay, affix-heavy inputs, and the accessibility opt-out boundary.
+          validation redisplay, affix-heavy inputs, non-editable states, and the accessibility opt-out boundary.
         </p>
         <div class="hero-links">
           <a href="field_helpers.md">Read helper details</a>
@@ -371,6 +406,38 @@
         </article>
 
         <article class="card">
+          <div class="tag noneditable">Non-editable states</div>
+          <h2>Disabled and readonly stay in the same wrapper lane</h2>
+          <p>
+            Both states still belong to the native helper family, but they split responsibilities: disabled communicates unavailability,
+            while readonly keeps the current value legible without offering an editing affordance.
+          </p>
+          <div class="example two-up">
+            <div class="field-block">
+              <div class="label-row">
+                <span>Contract code</span>
+              </div>
+              <div class="control-row disabled-state">
+                <span class="affix">#</span>
+                <div class="input">CN-0284</div>
+                <span class="affix trailing">locked</span>
+              </div>
+              <div class="hint">Disabled lane: muted, unavailable, and still tied to the same shared wrapper.</div>
+            </div>
+            <div class="field-block">
+              <div class="label-row">
+                <span>Billing reference</span>
+              </div>
+              <div class="control-row readonly-state">
+                <div class="input">Ref-2026-05</div>
+                <span class="affix trailing">readonly</span>
+              </div>
+              <div class="hint">Readonly lane: visible current value with copyable context, but no editing affordance.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
           <div class="tag accessibility">Accessibility boundary</div>
           <h2>Shared wiring versus host-app opt-out</h2>
           <p>
@@ -411,6 +478,7 @@
         <div class="checklist">
           <span>Shared wrapper contract: label, hint, affixes, validation redisplay.</span>
           <span>Native helper lane only: no remote search, selected preload, or create-on-the-fly semantics.</span>
+          <span>Disabled and readonly remain in the same native helper family while changing editability cues.</span>
           <span>Accessibility boundary stays explicit when the host app opts out.</span>
         </div>
       </section>
