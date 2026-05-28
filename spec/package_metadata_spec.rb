@@ -26,6 +26,7 @@ RSpec.describe "package metadata" do
         File.read(File.join(repo_root, "app/javascript/rails_fields_kit/index.js"))
           .gsub('"./tom_select_controller"', '"./tom_select_controller.js"')
           .gsub('"./rendered_create_on_the_fly_config"', '"./rendered_create_on_the_fly_config.js"')
+          .gsub('"./rendered_remote_search_config"', '"./rendered_remote_search_config.js"')
       )
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
@@ -34,6 +35,10 @@ RSpec.describe "package metadata" do
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/rendered_create_on_the_fly_config.js"),
         File.join(package_dir, "rendered_create_on_the_fly_config.js")
+      )
+      FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/rendered_remote_search_config.js"),
+        File.join(package_dir, "rendered_remote_search_config.js")
       )
       File.write(
         File.join(stimulus_dir, "package.json"),
@@ -105,7 +110,7 @@ RSpec.describe "package metadata" do
           throw new Error("package root did not export readRenderedCreateOnTheFlyConfig")
         }
 
-        const element = {
+        const createElement = {
           getAttribute(name) {
             const attributes = {
               "data-rails-fields-kit--tom-select-create-url-value": "/customers.json",
@@ -117,17 +122,46 @@ RSpec.describe "package metadata" do
           }
         }
 
-        const config = indexModule.readRenderedCreateOnTheFlyConfig(element)
-        if (!config || config.createUrl !== "/customers.json") {
+        const createConfig = indexModule.readRenderedCreateOnTheFlyConfig(createElement)
+        if (!createConfig || createConfig.createUrl !== "/customers.json") {
           throw new Error("create-on-the-fly helper did not read the create_url value")
         }
 
-        if (config.createParam !== "customer[name]") {
+        if (createConfig.createParam !== "customer[name]") {
           throw new Error("create-on-the-fly helper did not preserve the create param name")
         }
 
-        if (config.createParams.account_id !== 7) {
+        if (createConfig.createParams.account_id !== 7) {
           throw new Error("create-on-the-fly helper did not decode create params")
+        }
+
+        if (typeof indexModule.readRenderedRemoteSearchConfig !== "function") {
+          throw new Error("package root did not export readRenderedRemoteSearchConfig")
+        }
+
+        const remoteSearchElement = {
+          getAttribute(name) {
+            const attributes = {
+              "data-rails-fields-kit--tom-select-url-value": "/customers/search.json",
+              "data-rails-fields-kit--tom-select-query-param-value": "customer[name]",
+              "data-rails-fields-kit--tom-select-query-params-value": JSON.stringify({ account_id: 7 })
+            }
+
+            return Object.prototype.hasOwnProperty.call(attributes, name) ? attributes[name] : null
+          }
+        }
+
+        const remoteSearchConfig = indexModule.readRenderedRemoteSearchConfig(remoteSearchElement)
+        if (!remoteSearchConfig || remoteSearchConfig.url !== "/customers/search.json") {
+          throw new Error("remote search helper did not read the url value")
+        }
+
+        if (remoteSearchConfig.queryParam !== "customer[name]") {
+          throw new Error("remote search helper did not preserve the query param name")
+        }
+
+        if (remoteSearchConfig.queryParams.account_id !== 7) {
+          throw new Error("remote search helper did not decode query params")
         }
       JS
 
