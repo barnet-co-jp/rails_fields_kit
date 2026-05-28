@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rails Fields Kit Native Field Visual Reference</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page: #f6f1e8;
+        --surface: #fffdfa;
+        --surface-strong: #ffffff;
+        --ink: #233036;
+        --muted: #5f6d74;
+        --line: #d8d1c4;
+        --line-strong: #bbb09f;
+        --accent: #236a5b;
+        --accent-soft: #dcefe9;
+        --warning: #8c5c20;
+        --warning-soft: #f8ebd6;
+        --error: #8d3b4b;
+        --error-soft: #fae7ec;
+        --disabled: #eef1f3;
+        --disabled-ink: #516069;
+        --shadow: 0 18px 42px rgba(35, 48, 54, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at top left, rgba(35, 106, 91, 0.12), transparent 24%),
+          linear-gradient(180deg, #fbf8f1 0%, var(--page) 100%);
+        color: var(--ink);
+        font-family: "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 56px 0 72px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 18px;
+        margin-bottom: 34px;
+      }
+
+      .eyebrow {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h1 {
+        margin: 0;
+        font-family: Georgia, serif;
+        font-size: clamp(2.2rem, 4vw, 3.3rem);
+        line-height: 1.08;
+        font-weight: 700;
+      }
+
+      .lede {
+        max-width: 760px;
+        margin: 0;
+        font-size: 1rem;
+        color: var(--muted);
+      }
+
+      .hero-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .hero-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 0 14px;
+        border: 1px solid var(--line-strong);
+        background: rgba(255, 255, 255, 0.72);
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .hero-links a:hover {
+        border-color: var(--accent);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+      }
+
+      .card {
+        display: grid;
+        gap: 14px;
+        padding: 20px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .tag {
+        justify-self: start;
+        padding: 4px 8px;
+        border: 1px solid var(--line);
+        background: var(--surface-strong);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .tag.validation {
+        border-color: #e0bcc6;
+        background: var(--error-soft);
+        color: var(--error);
+      }
+
+      .tag.affixes {
+        border-color: #dfcaa8;
+        background: var(--warning-soft);
+        color: var(--warning);
+      }
+
+      .tag.accessibility {
+        border-color: #c9d7d9;
+        background: #edf5f6;
+        color: #245864;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 1.12rem;
+        line-height: 1.25;
+      }
+
+      .card p,
+      .callout p,
+      .checklist {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .example {
+        display: grid;
+        gap: 10px;
+        padding: 14px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface-strong);
+      }
+
+      .field-block {
+        display: grid;
+        gap: 8px;
+      }
+
+      .label-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 0.92rem;
+        font-weight: 600;
+      }
+
+      .required {
+        color: var(--accent);
+        font-size: 0.8rem;
+      }
+
+      .control-row {
+        display: flex;
+        align-items: stretch;
+        min-height: 48px;
+        border: 1px solid var(--line-strong);
+        background: #ffffff;
+      }
+
+      .affix {
+        display: inline-flex;
+        align-items: center;
+        padding: 0 12px;
+        background: #f5f2eb;
+        color: #57656c;
+        white-space: nowrap;
+        border-right: 1px solid var(--line);
+      }
+
+      .affix.trailing {
+        border-right: 0;
+        border-left: 1px solid var(--line);
+      }
+
+      .input,
+      .textarea {
+        flex: 1;
+        min-width: 0;
+        padding: 12px 14px;
+        color: var(--ink);
+        background: #ffffff;
+      }
+
+      .textarea {
+        min-height: 108px;
+      }
+
+      .hint {
+        color: var(--muted);
+        font-size: 0.87rem;
+      }
+
+      .error {
+        color: var(--error);
+        font-size: 0.87rem;
+        font-weight: 600;
+      }
+
+      .error-state .control-row {
+        border-color: #c98090;
+      }
+
+      .error-state .input,
+      .error-state .textarea {
+        background: #fffafb;
+      }
+
+      .two-up {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .muted-box {
+        display: grid;
+        gap: 6px;
+        padding: 12px;
+        background: #f7f4ee;
+        border: 1px solid var(--line);
+        font-size: 0.87rem;
+        color: var(--muted);
+      }
+
+      .callout {
+        margin-top: 22px;
+        padding: 16px 18px;
+        border: 1px solid var(--line-strong);
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .checklist {
+        display: grid;
+        gap: 6px;
+      }
+
+      .checklist span::before {
+        content: "• ";
+        color: var(--accent);
+      }
+
+      @media (max-width: 720px) {
+        .two-up {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">Rails Fields Kit</div>
+        <h1>Native Field Visual Reference</h1>
+        <p class="lede">
+          This page keeps native helpers in one quick visual entrypoint: the shared wrapper lane,
+          validation redisplay, affix-heavy inputs, and the accessibility opt-out boundary.
+        </p>
+        <div class="hero-links">
+          <a href="field_helpers.md">Read helper details</a>
+          <a href="public_api.md">Check public API</a>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <div class="tag">Shared wrapper lane</div>
+          <h2>Wrapped text field baseline</h2>
+          <p>
+            One representative native lane that keeps label, hint, prefix, suffix, and required state
+            together without drifting into a Tom Select workflow.
+          </p>
+          <div class="example">
+            <div class="field-block">
+              <div class="label-row">
+                <span>Customer code</span>
+                <span class="required">Required</span>
+              </div>
+              <div class="control-row">
+                <span class="affix">#</span>
+                <div class="input">AC-204</div>
+                <span class="affix trailing">required</span>
+              </div>
+              <div class="hint">Shown in the admin sidebar and printed on packing slips.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="tag validation">Validation redisplay</div>
+          <h2>Same lane after an invalid submit</h2>
+          <p>
+            Validation rerender keeps the same model-backed value visible and adds the shared inline
+            error presentation instead of switching to a different helper path.
+          </p>
+          <div class="example error-state">
+            <div class="field-block">
+              <div class="label-row">
+                <span>Support email</span>
+                <span class="required">Required</span>
+              </div>
+              <div class="control-row">
+                <div class="input">ops-team.example.com</div>
+              </div>
+              <div class="hint">Used for customer-facing notifications.</div>
+              <div class="error">Email must contain an @ sign.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="tag affixes">Prefix and suffix</div>
+          <h2>Affix-heavy amount and percentage lane</h2>
+          <p>
+            Native helpers can stay in ordinary HTML input territory while still carrying business-facing
+            prefixes and suffixes that make the field readable at a glance.
+          </p>
+          <div class="example two-up">
+            <div class="field-block">
+              <div class="label-row">
+                <span>Monthly budget</span>
+              </div>
+              <div class="control-row">
+                <span class="affix">JPY</span>
+                <div class="input">120000</div>
+                <span class="affix trailing">before tax</span>
+              </div>
+              <div class="hint">Representative `rfk_money_field` lane.</div>
+            </div>
+            <div class="field-block">
+              <div class="label-row">
+                <span>Discount rate</span>
+              </div>
+              <div class="control-row">
+                <div class="input">12</div>
+                <span class="affix trailing">%</span>
+              </div>
+              <div class="hint">Representative `rfk_percent_field` lane.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="tag accessibility">Accessibility boundary</div>
+          <h2>Shared wiring versus host-app opt-out</h2>
+          <p>
+            `accessibility: false` removes the shared automatic aria wiring, but it does not remove the
+            wrapped native helper lane itself.
+          </p>
+          <div class="example">
+            <div class="two-up">
+              <div class="muted-box">
+                <strong>Shared default</strong>
+                <span>Hint and error ids feed `aria-describedby` automatically.</span>
+                <span>`aria-invalid` and `aria-required` reflect the wrapper state.</span>
+              </div>
+              <div class="muted-box" style="background: var(--disabled); color: var(--disabled-ink);">
+                <strong>`accessibility: false`</strong>
+                <span>The host app owns aria wiring explicitly.</span>
+                <span>Label, hint, affixes, and validation redisplay still stay in the same visual lane.</span>
+              </div>
+            </div>
+            <div class="field-block">
+              <div class="label-row">
+                <span>Internal note</span>
+              </div>
+              <div class="control-row">
+                <div class="textarea">Handled by the host app's accessibility helper.</div>
+              </div>
+              <div class="hint">Representative `rfk_text_area` lane with wrapper preserved.</div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="callout">
+        <p>
+          Use this page as a quick comparison surface. `doc/field_helpers.md` remains the source of truth
+          for helper-by-helper guidance, responsibility boundaries, and option wording.
+        </p>
+        <div class="checklist">
+          <span>Shared wrapper contract: label, hint, affixes, validation redisplay.</span>
+          <span>Native helper lane only: no remote search, selected preload, or create-on-the-fly semantics.</span>
+          <span>Accessibility boundary stays explicit when the host app opts out.</span>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
