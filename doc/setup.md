@@ -136,6 +136,17 @@ Rails Fields Kit intentionally does not generate importmap-specific setup beyond
 <% end %>
 ```
 
+If a host-app Stimulus controller or browser-side integration test needs to inspect the rendered text override contract without repeating raw data attribute names or render-time fallback precedence, the package root also exports a small reader:
+
+```js
+import { readRenderedTextOverrides } from "rails_fields_kit"
+
+const textOverrides = readRenderedTextOverrides(element)
+// => { noResultsText, loadingText, createText } or null
+```
+
+Use this helper only to read the documented rendered contract. Field-level overrides, initializer defaults, and bundled locale-aware fallback are already reflected in the returned values. Visible copy ownership still remains in the host app.
+
 For a static collection that already works with `collection_select`, migrating to `rfk_select` is usually a form-helper-only change. Keep the same attribute name and normal Rails select options such as `include_blank:` or `prompt:` and let the registered Stimulus controller enhance the rendered select in place.
 
 ```erb
