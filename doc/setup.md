@@ -188,6 +188,17 @@ Use this lane when an edit form starts from a saved ID and the host app wants th
 
 Keep the visible fallback copy and any retry behavior in the host app. Rails Fields Kit only provides the selected preload request, event hooks, and the opt-in placeholder boundary. See [`events.md`](events.md) for the event payloads.
 
+If a host-app controller or integration test needs to inspect the rendered selected preload contract before those events fire, use the package-root helper instead of re-reading the raw data attributes yourself:
+
+```js
+import { readRenderedSelectedPreloadConfig } from "rails_fields_kit"
+
+const config = readRenderedSelectedPreloadConfig(fieldElement)
+// => { selectedUrl, selectedParam, selectedMultipleParam, selectedQueryParams } or null
+```
+
+This helper only reads the selected preload wiring that Rails Fields Kit rendered. The host app still owns the preload request itself, visible fallback copy, and retry behavior.
+
 For a representative create-on-the-fly failure lane, keep `create_url:` and `error_surface: true` on the same field and subscribe to the dedicated create hooks explicitly:
 
 ```erb
