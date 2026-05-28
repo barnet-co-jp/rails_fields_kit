@@ -65,6 +65,7 @@ Notes:
 - [ ] `import { TomSelectController } from "rails_fields_kit"` resolved
 - [ ] `import TomSelectController from "rails_fields_kit/tom_select_controller"` resolved
 - [ ] documented controller registration succeeded
+- [ ] `import { readRenderedCreateOnTheFlyConfig } from "rails_fields_kit"` resolved when that helper export was in scope
 - [ ] importmap pins resolved `rails_fields_kit` and `rails_fields_kit/tom_select_controller` when importmap was used
 - [ ] documented controller registration still worked from the existing Stimulus boot file after adding those importmap pins
 - [ ] Tom Select CSS loaded
@@ -151,6 +152,10 @@ Notes:
 ## Create-on-the-fly representative failure lane checks
 
 - [ ] one representative field with `create_url:` covered the end-to-end create-on-the-fly failure lane
+- [ ] `readRenderedCreateOnTheFlyConfig(...)` resolved from `rails_fields_kit` when that helper export was in scope
+- [ ] the representative `create_url:` field returned `{ createUrl, createParam, createParams }` when that helper export was in scope
+- [ ] a comparable field without `create_url:` returned `null` when that helper export was in scope
+- [ ] helper use stayed at rendered config read rather than replacing request execution or visible feedback ownership
 - [ ] a failed create request dispatched `rails-fields-kit--tom-select:create-error`
 - [ ] the representative failure path left host-app fallback copy or retry UI visible near the field
 - [ ] if that field used `error_surface: true`, the failure path still exposed the expected inline placeholder through `event.detail.surface`
