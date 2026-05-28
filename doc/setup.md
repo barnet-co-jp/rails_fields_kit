@@ -164,6 +164,17 @@ If the host app wants a stable placeholder for inline error UI, opt in with `err
 
 The helper renders an empty placeholder next to the field, and request-failure events include that element as `event.detail.surface`. The gem still does not choose the message copy or retry behavior.
 
+If a host-app Stimulus controller or browser-side integration test needs to inspect the rendered remote search contract without repeating raw data attribute names, the package root also exports a small reader:
+
+```js
+import { readRenderedRemoteSearchConfig } from "rails_fields_kit"
+
+const config = readRenderedRemoteSearchConfig(element)
+// => { url, queryParam, queryParams } or null
+```
+
+Use this helper only to read the documented rendered contract. It does not execute the search request, render visible feedback, or change retry policy; those remain host-app responsibility.
+
 For a representative selected preload lane, keep `selected:` and `selected_url:` on the same field and subscribe to the selected preload hooks explicitly:
 
 ```erb
