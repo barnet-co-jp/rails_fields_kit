@@ -234,6 +234,39 @@ This collects editable-cell metadata from a column list or table-like object and
 
 These helpers use native HTML inputs while sharing the same wrapper, hint, error, and accessibility behavior.
 
+If you want one representative lane before the per-helper snippets below, start with a wrapped text field and treat the rest of the native helper family as variations on that same shared contract.
+
+### Representative wrapper and accessibility lane
+
+```erb
+<%= f.rfk_text_field :customer_code,
+  wrapper: true,
+  label: "Customer code",
+  hint: "Shown in the admin sidebar",
+  prefix: "#",
+  suffix: "required",
+  required: true,
+  html: { autocomplete: "off" } %>
+```
+
+This representative lane keeps the native helper family in its ordinary HTML-input path while still showing the shared wrapper contract in one place:
+
+- `wrapper: true` renders the label, hint, and affixes around the native field.
+- edit-form redisplay and validation rerender keep using the same model-backed value instead of switching to a remote-search or Tom Select lane.
+- automatic accessibility wiring keeps the generated hint and error ids connected through `aria-describedby` and also manages `aria-invalid` / `aria-required` unless you opt out.
+
+When the host app needs to own that accessibility wiring itself, keep the same wrapper lane and opt out explicitly:
+
+```erb
+<%= f.rfk_text_field :customer_code,
+  wrapper: true,
+  label: "Customer code",
+  hint: "Host app manages accessibility wiring",
+  accessibility: false %>
+```
+
+`accessibility: false` only removes the shared automatic `aria-describedby`, `aria-invalid`, and `aria-required` output. The wrapped native field, label, hint, prefix, suffix, and validation redisplay behavior still stay in the same helper family.
+
 ### `rfk_text_field`
 
 ```erb
