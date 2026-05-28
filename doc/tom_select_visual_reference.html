@@ -416,6 +416,33 @@
         color: #5f5380;
       }
 
+      .text-overrides {
+        display: grid;
+        gap: 12px;
+      }
+
+      .copy-lane {
+        display: grid;
+        gap: 8px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        background: var(--surface-strong);
+      }
+
+      .copy-lane h3,
+      .copy-lane p {
+        margin: 0;
+      }
+
+      .copy-lane h3 {
+        font-size: 0.96rem;
+      }
+
+      .copy-lane p {
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
       .legend {
         margin-top: 28px;
         padding: 18px 20px;
@@ -804,6 +831,53 @@
             </div>
           </div>
           <p class="card-footer">Final permission or availability wording still belongs to the host app; this reference only shows the muted non-editable surface.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag">Text Overrides</span>
+            <h2>Field-level copy versus shared fallback copy</h2>
+            <p>Compares one field that overrides `loading_text:`, `no_results_text:`, and `create_text:` with a comparable lane that keeps initializer defaults or bundled locale-aware fallback.</p>
+          </div>
+          <div class="text-overrides" aria-hidden="true">
+            <div class="copy-lane">
+              <h3>Field-level override lane</h3>
+              <p>Use when a host app wants product-specific wording directly on the representative field.</p>
+              <div class="dropdown">
+                <div class="message">
+                  <strong>Searching support contacts...</strong>
+                  <span>Representative `loading_text:` override for a host-app specific lane.</span>
+                </div>
+                <div class="message empty">
+                  <strong>No support contacts match “northwind”</strong>
+                  <span>Representative `no_results_text:` override on the field itself.</span>
+                </div>
+                <div class="action">
+                  <strong>Create “Northwind Support”</strong>
+                  <span>Representative `create_text:` override without changing create-request ownership.</span>
+                </div>
+              </div>
+            </div>
+            <div class="copy-lane">
+              <h3>Initializer or bundled fallback lane</h3>
+              <p>Comparable field keeps shared defaults so the visible words come from the initializer or the bundled locale-aware fallback path.</p>
+              <div class="dropdown">
+                <div class="message">
+                  <strong>Loading...</strong>
+                  <span>Falls back when the field does not override loading copy.</span>
+                </div>
+                <div class="message empty">
+                  <strong>No results found</strong>
+                  <span>Same lane can stay on the documented fallback path instead of field-level wording.</span>
+                </div>
+                <div class="action">
+                  <strong>Add</strong>
+                  <span>Fallback create affordance stays reusable, while final success UI still belongs to the host app.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Use this comparison when configuration docs mention precedence: field-level copy wins first, shared defaults or bundled fallback fill in only when the field does not override the text.</p>
         </article>
 
         <article class="card">
