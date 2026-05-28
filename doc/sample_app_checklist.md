@@ -114,6 +114,18 @@ Verify that same field can demonstrate the collection-backed single-value contra
 - representative `disabled:` options and `option_html:` attributes remain visible on that field without changing it into a remote-search or token-metadata lane
 - the representative field does not depend on `url:`, `selected_url:`, or `create_url:` to remain understandable in the sample app
 
+## Verify clearable `rfk_select` representative lane
+
+Use that same representative collection-backed `rfk_select` field with `allow_clear: true` and keep it in the ordinary single-value helper family.
+
+Verify that same field can demonstrate clearability without drifting into a remote helper lane:
+
+- the representative field starts from a visible selected value before the clear action is exercised
+- the clear affordance returns that same field to the documented blank or placeholder state without changing the submitted-param contract
+- an edit form or validation rerender can still show the selected value again on that same field when the model keeps a value
+- the representative field remains collection-first and does not depend on `url:`, `selected_url:`, or `create_url:` just because `allow_clear: true` is enabled
+- the lane stays aligned with the `allow_clear` guidance in `field_helpers.md` and `select_migration.md` rather than reading like selected preload or create-on-the-fly behavior
+
 ## Verify controller helpers
 
 Add a controller with:
