@@ -46,6 +46,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/release.md`.
 - [ ] Review `doc/release_notes_0_1_1.md` for the current next-release draft.
 - [ ] Confirm `README.md` and `doc/public_api.md` still describe both documented JavaScript import paths: `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
+- [ ] If `readRenderedCreateOnTheFlyConfig(...)` is part of the release scope, confirm `README.md`, `doc/public_api.md`, and `doc/release_notes_0_1_1.md` describe it as a rendered-contract reader rather than a built-in create workflow.
 - [ ] Confirm token search and table integration docs still distinguish gem responsibilities from host app responsibilities.
 - [ ] Confirm release-prep docs, `doc/events.md`, and sample app verification all agree on whether create-on-the-fly success uses a dedicated `rails-fields-kit--tom-select:create` hook or only the generic selection events.
 
@@ -72,6 +73,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm selected preload works in edit forms.
 - [ ] Confirm one representative selected preload lane covers saved-ID label restore, `rails-fields-kit--tom-select:selected-load`, `rails-fields-kit--tom-select:selected-load-error`, and any host-app fallback or `error_surface:` boundary together.
 - [ ] Confirm create-on-the-fly works.
+- [ ] If `readRenderedCreateOnTheFlyConfig(...)` is part of the release scope, confirm the sample app resolves the package-root import, the representative `create_url:` field returns `{ createUrl, createParam, createParams }`, and a comparable field without `create_url:` returns `null`.
 - [ ] Confirm create-on-the-fly success dispatched `rails-fields-kit--tom-select:create` before the normal selection events when that hook is part of the release surface.
 - [ ] Confirm `event.detail.input` and `event.detail.option` exposed the expected payload for the representative create success flow.
 - [ ] Confirm one representative create-on-the-fly failure lane covers `rails-fields-kit--tom-select:create-error`, host-app fallback or retry UI, and any `error_surface:` boundary together.
