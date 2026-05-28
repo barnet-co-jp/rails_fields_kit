@@ -25,10 +25,15 @@ RSpec.describe "package metadata" do
         File.join(package_dir, "index.js"),
         File.read(File.join(repo_root, "app/javascript/rails_fields_kit/index.js"))
           .gsub('"./tom_select_controller"', '"./tom_select_controller.js"')
+          .gsub('"./rendered_selected_preload_config"', '"./rendered_selected_preload_config.js"')
       )
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
         File.join(package_dir, "tom_select_controller.js")
+      )
+      FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/rendered_selected_preload_config.js"),
+        File.join(package_dir, "rendered_selected_preload_config.js")
       )
       File.write(
         File.join(stimulus_dir, "package.json"),
@@ -94,6 +99,36 @@ RSpec.describe "package metadata" do
 
         if (indexModule.TomSelectController !== controllerModule.default) {
           throw new Error("package root named export no longer matches the direct controller entrypoint")
+        }
+
+        if (typeof indexModule.readRenderedSelectedPreloadConfig !== "function") {
+          throw new Error("package root did not export readRenderedSelectedPreloadConfig")
+        }
+
+        const element = {
+          getAttribute(name) {
+            const attributes = {
+              "data-rails-fields-kit--tom-select-selected-url-value": "/customers/selected.json",
+              "data-rails-fields-kit--tom-select-selected-param-value": "customer_id",
+              "data-rails-fields-kit--tom-select-selected-multiple-param-value": "customer_ids",
+              "data-rails-fields-kit--tom-select-selected-query-params-value": "{\"account_id\":7}"
+            }
+
+            return Object.prototype.hasOwnProperty.call(attributes, name) ? attributes[name] : null
+          }
+        }
+
+        const config = indexModule.readRenderedSelectedPreloadConfig(element)
+        if (!config || config.selectedUrl !== "/customers/selected.json") {
+          throw new Error("selected preload helper did not read the selected_url value")
+        }
+
+        if (config.selectedParam !== "customer_id" || config.selectedMultipleParam !== "customer_ids") {
+          throw new Error("selected preload helper did not preserve selected param names")
+        }
+
+        if (config.selectedQueryParams.account_id !== 7) {
+          throw new Error("selected preload helper did not decode selected query params")
         }
       JS
 
