@@ -118,6 +118,17 @@ Notes:
 
 Notes:
 
+## Clearable `rfk_select` representative lane checks
+
+- [ ] one representative collection-backed `rfk_select` field with `allow_clear: true` covered the clearable lane
+- [ ] the field started from a visible selected value before the clear action was exercised
+- [ ] the clear affordance returned that same field to the documented blank or placeholder state without changing the submitted-param contract
+- [ ] an edit form or validation rerender could still show the selected value again on that same field when the model kept a value
+- [ ] the representative field stayed collection-first and independent from `url:`, `selected_url:`, and `create_url:`
+- [ ] the lane stayed aligned with the `allow_clear` guidance in `doc/field_helpers.md` and `doc/select_migration.md`
+
+Notes:
+
 ## Controller helper checks
 
 - [ ] `rfk_search_with` returns remote options
