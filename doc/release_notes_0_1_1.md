@@ -4,7 +4,7 @@ This draft assumes the next release after `0.1.0` will be `0.1.1`.
 
 If release planning chooses a different version number, rename this file and keep the contents aligned with `CHANGELOG.md` instead of editing the `0.1.0` historical notes in place.
 
-Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public surface around token-oriented search, Ransack-compatible suggestion metadata, table metadata adapters, controller/helper integration details, a dedicated create-success event for create-on-the-fly flows, and opt-in inline request-failure placeholders while keeping query execution and JavaScript package ownership in the host application.
+Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public surface around token-oriented search, Ransack-compatible suggestion metadata, table metadata adapters, controller/helper integration details, a package-root helper for reading rendered create-on-the-fly config, a dedicated create-success event for create-on-the-fly flows, and opt-in inline request-failure placeholders while keeping query execution and JavaScript package ownership in the host application.
 
 ## Highlights
 
@@ -15,6 +15,7 @@ Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public
 - `rfk_table_filters` and `rfk_table_cell_editors` for rendering documented table metadata through a FormBuilder.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so controller helpers can match custom routes.
 - Fixed remote request params with `query_params:`, `selected_query_params:`, and `create_params:`.
+- `readRenderedCreateOnTheFlyConfig(...)` from the package root for reading `{ createUrl, createParam, createParams }` from a representative rendered field without re-encoding raw data attribute names in the host app.
 - `rails-fields-kit--tom-select:create` as a dedicated create-on-the-fly success hook with `event.detail.input` and `event.detail.option`.
 - Opt-in `error_surface:` / `error_surface_html:` helper options so request-failure events can expose a nearby placeholder as `event.detail.surface`.
 - A normalized Tom Select failure event detail shape across remote search, selected preload, and create-on-the-fly failures.
@@ -57,6 +58,7 @@ Metadata and builder APIs:
 - Ruby: `>= 3.1`
 - Tom Select must still be installed by the host application.
 - The host application still owns bundler or importmap setup for JavaScript entrypoints.
+- `readRenderedCreateOnTheFlyConfig(...)` only reads the rendered create-on-the-fly contract; request execution, visible feedback, and retry behavior remain host-app responsibilities.
 - Submitted token text parsing, `params[:q]` construction, authorization, scoping, pagination, and result execution remain host-app responsibilities.
 - Visible success UI, toast copy, and follow-up app behavior after `rails-fields-kit--tom-select:create` remain host-app responsibilities.
 - `error_surface:` only renders an opt-in nearby placeholder; visible error copy and retry behavior for that surface remain host-app responsibilities.
@@ -77,6 +79,7 @@ Before publishing, also confirm:
 - GitHub Actions CI is green for the exact release commit.
 - `doc/sample_app_results.md` is completed for the same branch head.
 - documented JavaScript import paths resolve in the sample app.
+- if `readRenderedCreateOnTheFlyConfig(...)` is in the release scope, the sample app resolves that package-root import and the representative field returns `{ createUrl, createParam, createParams }` while a comparable no-`create_url:` field returns `null`.
 - the sample app confirms `rails-fields-kit--tom-select:create`, `event.detail.input`, and `event.detail.option` when that release surface is in scope.
 - representative request-failure flows confirm `event.detail.surface` when `error_surface:` is in scope for the release, and any visible inline error copy still belongs to the host app.
 - `rails-fields-kit--tom-select:item-add` and `rails-fields-kit--tom-select:change` still describe the accepted selection after create succeeds.
@@ -87,7 +90,7 @@ Before publishing, also confirm:
 ## Suggested GitHub release body
 
 ```markdown
-Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token-oriented search helpers, metadata-only Ransack suggestion builders, table adapter metadata for rendering documented field helpers through existing host-app table definitions, a dedicated create-success event for create-on-the-fly flows, and opt-in inline request-failure placeholder hooks.
+Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token-oriented search helpers, metadata-only Ransack suggestion builders, table adapter metadata for rendering documented field helpers through existing host-app table definitions, a package-root helper for reading rendered create-on-the-fly config, a dedicated create-success event for create-on-the-fly flows, and opt-in inline request-failure placeholder hooks.
 
 ### Highlights
 
@@ -97,6 +100,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 - `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
 - `rfk_table_filters` and `rfk_table_cell_editors`
 - controller helper `action:` support and fixed request params
+- `readRenderedCreateOnTheFlyConfig(...)` for rendered create-on-the-fly contract reads
 - `rails-fields-kit--tom-select:create` with `event.detail.input` / `event.detail.option`
 - `error_surface:` / `error_surface_html:` with request-failure `event.detail.surface`
 - normalized Tom Select failure event detail payloads
@@ -109,7 +113,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 
 ### Responsibility boundary
 
-Rails Fields Kit still stops at UI helpers and metadata. Host applications remain responsible for token parsing, search execution, authorization, pagination, JavaScript package manager or importmap choices, visible success UI after create-on-the-fly succeeds, and visible error or retry UI around any opt-in `error_surface:` placeholder.
+Rails Fields Kit still stops at UI helpers and metadata. Host applications remain responsible for token parsing, search execution, authorization, pagination, JavaScript package manager or importmap choices, visible success UI after create-on-the-fly succeeds, visible error or retry UI around any opt-in `error_surface:` placeholder, and the actual create request flow beyond reading the rendered config contract.
 
 ### Verification
 
