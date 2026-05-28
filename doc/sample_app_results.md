@@ -86,6 +86,15 @@ Notes:
 
 Notes:
 
+## Native helper representative wrapper and accessibility lane checks
+
+- [ ] one representative native helper field covered the end-to-end `wrapper: true` lane
+- [ ] the field rendered the documented label, hint, prefix, and suffix while staying in the native helper family rather than a Tom Select lane
+- [ ] an edit form or validation rerender kept the same value and preserved the shared wrapper / accessibility wiring for that representative field
+- [ ] a comparable `accessibility: false` example clearly removed the automatic accessibility wiring that the release docs treat as opt-out behavior
+
+Notes:
+
 ## `collection_select` migration checks
 
 - [ ] documented `collection_select` to `rfk_select` swap preserved the same submitted attribute and redisplay behavior

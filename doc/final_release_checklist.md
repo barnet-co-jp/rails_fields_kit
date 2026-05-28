@@ -67,6 +67,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm one representative `rfk_multi_select` lane keeps a known collection-backed multiple-value flow, with the submitted value staying an ordinary array of selected IDs or values rather than a tag-entry or free-text creation lane.
 - [ ] Confirm one representative `rfk_grouped_select` lane preserves the documented optgroup structure while the submitted value stays an ordinary selected ID or value and does not depend on remote search or create-on-the-fly hooks.
 - [ ] Confirm one representative `rfk_enum_select` lane preserves the current enum label and value mapping through edit-form redisplay or validation rerender without drifting into a hand-maintained arbitrary collection lane.
+- [ ] Confirm one representative native helper lane keeps `wrapper: true` label / hint / prefix / suffix rendering stable through validation rerender, and that a comparable `accessibility: false` example clearly drops the shared automatic wiring.
 - [ ] Confirm selected preload works in edit forms.
 - [ ] Confirm one representative selected preload lane covers saved-ID label restore, `rails-fields-kit--tom-select:selected-load`, `rails-fields-kit--tom-select:selected-load-error`, and any host-app fallback or `error_surface:` boundary together.
 - [ ] Confirm create-on-the-fly works.
