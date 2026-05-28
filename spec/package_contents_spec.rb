@@ -86,14 +86,15 @@ RSpec.describe "package contents" do
     expect(repo_agents).to include(
       "- `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app setup note",
       "- `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states",
+      "- `doc/native_field_visual_reference.html`: static visual reference for representative native helper states",
       "sync `README.md`, `doc/setup.md`, `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`, and root inventory docs such as `Product Profile.md`",
-      "sync `README.md`, `doc/field_helpers.md`, and `doc/tom_select_visual_reference.html` together."
+      "sync `README.md`, `doc/field_helpers.md`, and any affected static visual reference together."
     )
 
     expect(product_profile).to include(
       "- `README.md`: public entrypoint and maintained docs map",
       "- `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs",
-      "- `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states"
+      "- `doc/tom_select_visual_reference.html` and `doc/native_field_visual_reference.html`: static visual references for representative Tom Select-backed and native helper states"
     )
   end
 
@@ -108,7 +109,8 @@ RSpec.describe "package contents" do
       "doc/token_suggestions.md",
       "doc/ransack_suggestions.md",
       "doc/table_adapters.md",
-      "doc/tom_select_visual_reference.html"
+      "doc/tom_select_visual_reference.html",
+      "doc/native_field_visual_reference.html"
     )
   end
 
