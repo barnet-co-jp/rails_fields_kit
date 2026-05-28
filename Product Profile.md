@@ -49,6 +49,7 @@ Host applications remain responsible for:
 
 - `README.md`: public entrypoint and maintained docs map
 - `CHANGELOG.md`: released and unreleased user-visible changes, plus the current release-prep baseline
+- `AGENTS.md`: repo-specific source-of-truth order, docs-sync expectations, and release-facing review inventory
 - `doc/setup.md`: maintained setup walkthrough
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
 - `doc/field_helpers.md` and `doc/controller_helpers.md`: public helper references
