@@ -69,6 +69,21 @@ Load Tom Select CSS:
 import "tom-select/dist/css/tom-select.css"
 ```
 
+## Verify interaction config helper export
+
+If the release surface includes `readRenderedInteractionConfig(element)` from the package root, confirm the documented helper import resolves in the sample app:
+
+```js
+import { readRenderedInteractionConfig } from "rails_fields_kit"
+```
+
+Verify:
+
+- one representative rendered field returns the documented interaction config shape from `doc/public_api.md` and `doc/setup.md`
+- a representative default lane still returns the documented null-or-default values without inventing new runtime behavior
+- a representative custom override lane and a representative multiple-value lane still expose the expected differences for settings such as `max_items:` and `delimiter:`
+- helper verification stays limited to rendered config read; Tom Select instance creation, request execution, and visible behavior remain host-app or runtime responsibility
+
 ## Verify form helpers
 
 Create a form that exercises:
@@ -82,6 +97,17 @@ Create a form that exercises:
 - `rfk_enum_select`
 - `rfk_token_search`
 - native helpers such as `rfk_text_field` and `rfk_money_field`
+
+## Verify native helper representative non-editable lane
+
+Use one wrapped native helper field in a representative `disabled:` lane and one comparable wrapped native helper field in a representative `readonly:` lane.
+
+Verify:
+
+- the disabled field still shows its current value while staying non-editable
+- the readonly field still shows its current value and stays distinct from the disabled lane
+- label, hint, prefix, and suffix from the shared wrapper contract remain visible for both lanes
+- edit-form redisplay or validation rerender preserves the intended non-editable state without turning authorization or business-rule ownership into a gem responsibility
 
 ## Verify `collection_select` migration path
 
