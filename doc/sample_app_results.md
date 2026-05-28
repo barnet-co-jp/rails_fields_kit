@@ -119,6 +119,16 @@ Notes:
 
 Notes:
 
+## Option payload mapping helper export representative lane checks
+
+- [ ] `import { readRenderedOptionPayloadMapping } from "rails_fields_kit"` resolved in the sample app
+- [ ] one representative rendered Rails Fields Kit Tom Select field returned the documented `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField`
+- [ ] `search_field:` came back in the documented final array shape rather than a raw data-attribute string
+- [ ] a comparable field without `option_description_field:` or `option_badge_field:` kept the same core mapping while leaving `optionDescriptionField` and `optionBadgeField` at `null`
+- [ ] the verification stayed limited to rendered config read, and request execution or visible option rendering remained a host-app responsibility
+
+Notes:
+
 ## Controller helper checks
 
 - [ ] `rfk_search_with` returns remote options
