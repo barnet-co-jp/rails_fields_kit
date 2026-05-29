@@ -95,6 +95,18 @@ Notes:
 
 Notes:
 
+## Native wrapper customization checks
+
+- [ ] `wrapper_html:` added a representative class or `data` attribute to the outer wrapper while keeping the configured `wrapper_class`
+- [ ] `label_html:`, `hint_html:`, and `error_html:` added representative attributes without losing generated label, hint, or validation error behavior
+- [ ] `control_html:`, `prefix_html:`, and `suffix_html:` added representative attributes on an affix field without changing the input value or submitted param shape
+- [ ] `html:` still targeted the input element itself, separate from generated wrapper pieces
+- [ ] hint / error ids still fed the shared accessibility wiring when `accessibility:` remained enabled
+- [ ] `accessibility: false` stayed an explicit opt-out from automatic aria wiring only, not from the wrapper customization lane
+- [ ] repo-wide initializer class defaults still provided the shared baseline while field-level `*_html` options only layered additional attributes for that field
+
+Notes:
+
 ## `collection_select` migration checks
 
 - [ ] documented `collection_select` to `rfk_select` swap preserved the same submitted attribute and redisplay behavior
