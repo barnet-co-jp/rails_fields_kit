@@ -166,7 +166,7 @@ These are useful proposals, not current public API, and should not distract from
 
 - mention fields for `@user` or `#tag` style textarea interactions; see #367
 - saved search selectors; see #377
-- field/operator suggestion registries
+- field/operator suggestion registries; see #405
 - slug helpers for title-to-slug workflows; see #373
 - masked inputs only if a clear Rails integration gap remains; see #378
 
