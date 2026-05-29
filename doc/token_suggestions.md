@@ -2,6 +2,8 @@
 
 `RailsFieldsKit::TokenSuggestions.build` creates option JSON for `rfk_token_search` suggestion endpoints. It helps applications offer operator, field, predicate, value, and saved-search suggestions without moving query parsing or search execution into Rails Fields Kit.
 
+For a static visual reference of how saved-search suggestions read beside field and value completions, see [`token_search_saved_search_visual_reference.html`](token_search_saved_search_visual_reference.html).
+
 ## Basic usage
 
 ```ruby
@@ -98,7 +100,7 @@ RailsFieldsKit::TokenSuggestions.build(
 )
 ```
 
-Saved searches receive a default `badge` of `"saved"` when not specified.
+Saved searches receive a default `badge` of `"saved"` when not specified. The visual reference keeps saved searches close to the same token suggestion option shape, while making the `saved` badge easy to distinguish from field and value completions.
 
 ## Output fields
 
