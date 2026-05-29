@@ -42,6 +42,26 @@ When enabled, Rails Fields Kit appends a hidden polite status placeholder near t
 
 The same shared option contract applies even when a given helper only uses part of the remote workflow set. For example, a field without create-on-the-fly support will never dispatch `create-error`, but it can still use `error_surface:` for `load-error` or `selected-load-error` when those hooks apply.
 
+### Shared plugin options
+
+All Tom Select-backed helpers can pass plugin names to Tom Select with `plugins:`. When a helper omits `plugins:`, Rails Fields Kit uses `config.default_plugins` from [`configuration.md`](configuration.md) as the app-wide fallback.
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  plugins: ["dropdown_input"] %>
+```
+
+Field-level `plugins:` replaces the initializer default for that one field. Use it for deliberate per-field differences rather than expecting it to merge with `config.default_plugins` automatically.
+
+Rails Fields Kit only passes the plugin names through to the rendered Tom Select configuration. The host app remains responsible for installing Tom Select, importing any plugin-specific assets, and understanding plugin-specific behavior.
+
+Helper defaults to keep in mind:
+
+- `rfk_tags` and `rfk_token_search` use `remove_button` by default when `plugins:` is omitted.
+- Passing `plugins:` to those helpers is an explicit override, so include `"remove_button"` yourself when you still want that behavior.
+- `allow_clear: true` adds `clear_button` to the effective plugin list for that field.
+
 ### `rfk_select`
 
 Use this for a normal single select that should get Tom Select behavior.
@@ -147,7 +167,7 @@ Use this for token-oriented search text such as `status:open assignee:matsuo key
   query_params: { context: "orders" } %>
 ```
 
-By default, `rfk_token_search` renders a text input with free-text creation enabled, uses a space delimiter, does not persist created options in the Tom Select option list, and enables Tom Select's `remove_button` plugin. Pass explicit `create:`, `persist:`, `delimiter:`, or `plugins:` options to override those defaults.
+By default, `rfk_token_search` renders a text input with free-text creation enabled, uses a space delimiter, does not persist created options in the Tom Select option list, and enables Tom Select's `remove_button` plugin. Pass explicit `create:`, `persist:`, `delimiter:`, or `plugins:` options to override those defaults. When you override `plugins:`, include `"remove_button"` yourself if the token UI should still show remove controls.
 
 Use [`controller_helpers.md`](controller_helpers.md) and [`token_suggestions.md`](token_suggestions.md) when the host app wants a maintained controller-side suggestion endpoint for operators, fields, predicates, values, or saved-search shortcuts.
 
@@ -173,6 +193,8 @@ Use this representative lane when the host app wants one field to stay in tag-en
 - existing selected tags stay visible while the next input is typed in the same field
 - `create_url:` is the maintained path when the host app allows create-on-the-fly tag creation for a missing tag
 - `selected_url:` keeps edit-form redisplay aligned when the form starts from saved IDs instead of already-rendered tag labels
+
+By default, `rfk_tags` enables Tom Select's `remove_button` plugin so selected tags can be removed inline. Pass explicit `plugins:` only when the host app intentionally wants to replace that helper default; include `"remove_button"` in the explicit list when the tag UI should keep the same removal affordance.
 
 Compared with `rfk_multi_select`, the interaction stays centered on tag entry and optional creation rather than on settling a known collection first. See [`tom_select_visual_reference.html`](tom_select_visual_reference.html) for the representative `Tags` state when you want the same lane as a quick static surface.
 
@@ -429,6 +451,7 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `max_items:` forwards Tom Select's maximum selected item count.
 - `load_throttle:` forwards Tom Select's remote load throttle in milliseconds.
 - `delimiter:` forwards Tom Select's delimiter option, useful for text-backed token inputs.
+- `plugins:` passes explicit Tom Select plugin names for one field and overrides `config.default_plugins` for that field.
 - `loading_text:`, `no_results_text:`, and `create_text:` override the bundled or initializer-provided Tom Select copy for one field only.
 - `error_surface:` adds a stable nearby placeholder for request-failure handlers.
 - `error_surface_html:` customizes that generated placeholder element.

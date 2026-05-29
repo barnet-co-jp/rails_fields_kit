@@ -82,9 +82,18 @@ Default: `nil`
 
 ### `default_plugins`
 
-Plugins applied to Tom Select-backed helpers by default.
+Plugins applied to Tom Select-backed helpers by default when the helper call does not pass `plugins:`.
 
 Default: `[]`
+
+Field-level `plugins:` replaces this initializer default for that one field. Use it when one helper needs a narrower or wider plugin list than the app-wide baseline.
+
+Some helpers seed their own representative plugin defaults before the initializer fallback is considered:
+
+- `rfk_tags` and `rfk_token_search` use Tom Select's `remove_button` plugin by default when `plugins:` is omitted, because those lanes are multiple-token entry surfaces where removing selected items is part of the expected interaction.
+- `allow_clear: true` adds Tom Select's `clear_button` plugin to the effective plugin list for that field.
+
+Rails Fields Kit passes plugin names through to the rendered Tom Select configuration. It does not install Tom Select plugins, import plugin-specific assets, or own plugin-specific behavior beyond the documented helper defaults. Keep those concerns in the host app's Tom Select setup.
 
 ### `default_min_length`
 
@@ -229,6 +238,10 @@ RailsFieldsKit.configure do |config|
   config.default_search_field = "name,email"
   config.default_min_length = 2
   config.default_max_options = 50
+
+  # Use only plugin names already available in your Tom Select setup.
+  # Field-level plugins: overrides this default for one helper.
+  # config.default_plugins = ["dropdown_input"]
 
   # Uncomment these when your host app wants repo-wide wording.
   # config.default_no_results_text = "No matches"
