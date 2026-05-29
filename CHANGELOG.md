@@ -29,34 +29,23 @@ All notable changes to this project will be documented in this file.
 - Tom Select failure events now share a consistent detail shape with `operation`, request context, `response`, `payload`, and `status` across remote search, selected preload, and create failures, and include `surface` when `error_surface: true` is enabled.
 - `rfk_table_filters` and `rfk_table_cell_editors` now render an empty safe string for nil table metadata inputs.
 - `RansackSuggestions` now preserves predicate aliases and duplicates generated value metadata, including custom output field payloads, so downstream mutation does not alter source field configuration.
-- `TableMetadata` now duplicates collected metadata hashes and nested options hashes from hash-like column objects so downstream mutation does not alter original column definitions.
-- `TableMetadata` now duplicates collected metadata hashes and nested options hashes so downstream mutation does not alter original column definitions.
-- `TableMetadata` now validates hash-like columns by requiring `to_hash` to return a Hash-like object.
-- `TableMetadata` now validates hash-like metadata objects by requiring `to_hash` to return a Hash-like object.
-- `TableMetadata` now reads only declared struct members for struct-like columns, avoiding `Enumerable#filter` when `filter` is not a member.
-- `TableMetadata` now reads object column metadata through public readers only and ignores private readers.
-- `TableMetadata` now prefers object metadata readers over `to_hash` when a column object exposes both protocols.
-- `TableMetadata` now keeps a single hash column definition intact instead of expanding it through `Hash#to_a`.
-- `TableMetadata` now keeps a single hash-like column definition intact instead of expanding it through `to_a`.
-- `TableMetadata` now keeps single object column definitions intact when a table-like object returns one column object.
-- `TableMetadata` now collects metadata from table-like objects whose `columns` reader returns a single hash column, hash-like column, or object column.
-- `TableMetadata` now collects metadata from enumerable column lists while preserving a single hash as one column definition.
-- `TableMetadata` now treats explicit `false` object metadata values as disabled metadata instead of falling through to alias readers.
-- `TableMetadata` now treats explicit `false` hash metadata values as disabled metadata instead of falling through to alias keys.
-- `TableMetadata` now treats explicit `false` hash-like column metadata values as disabled metadata instead of falling through to alias keys.
+- `TableMetadata` now duplicates collected metadata hashes and nested options hashes from hash, hash-like metadata, and hash-like column inputs so downstream mutation does not alter original column definitions.
+- `TableMetadata` now validates hash-like columns and hash-like metadata objects by requiring `to_hash` to return a Hash-like object.
+- `TableMetadata` now reads struct-like and object column metadata through safe public metadata readers, preferring explicit metadata readers over `to_hash` when both protocols are exposed while avoiding private readers or unrelated `Enumerable#filter` calls.
+- `TableMetadata` now keeps single hash, hash-like, and object column definitions intact instead of expanding them through `Hash#to_a`, `to_a`, or table-like single-column returns.
+- `TableMetadata` now collects metadata from table-like objects whose `columns` reader returns one column or enumerable column lists while preserving a single hash as one column definition.
+- `TableMetadata` now treats explicit `false` object, hash, and hash-like column metadata values as disabled metadata instead of falling through to alias readers or alias keys.
 - `TableMetadata` now treats table-like objects with `nil` columns as empty metadata.
 - `TableFilterInput.known_type?` and `TableCellInput.known_type?` now return `false` for nil or blank field type values.
 - `TableFilterInput.known_types` and `TableCellInput.known_types` now return duplicated arrays so callers cannot mutate the internal type list.
 - `TableFilterInput#field_name` and `TableCellInput#field_name` now return duplicated strings so callers cannot mutate metadata object internals.
 - `TableFilterInput#options` and `TableCellInput#options` now return duplicated hashes so callers cannot mutate metadata object internals.
 - `TableRenderer.field_helpers` now returns a duplicated hash so callers cannot mutate the internal helper mapping.
-- `TableRenderer.register_field_helper` now normalizes field type and helper name values before registration.
-- `TableRenderer.register_field_helper` now rejects nil or blank field type and helper name values.
-- `TableRenderer` now accepts hash-like metadata objects directly when they return valid hash metadata from `to_hash`.
+- `TableRenderer.register_field_helper` now normalizes field type and helper name values before registration and rejects nil or blank values.
+- `TableRenderer` now accepts valid hash-like metadata objects directly, rejects non Hash-like metadata, and validates hash-like metadata returned from `to_hash`.
 - `TableRenderer` now duplicates metadata options and hash-like options objects before returning call specs so downstream mutation does not alter the original metadata.
 - `TableRenderer` now normalizes field type and method strings for call specs and helper lookups.
 - `TableRenderer` now preserves render result order for filter and cell editor batches.
-- `TableRenderer` now rejects metadata that is not Hash-like and validates hash-like metadata objects returned from `to_hash`.
 - `TableRenderer` now preserves single hash-like metadata objects in batch APIs even when they implement `to_a`.
 - `TableRenderer` now normalizes batch inputs so nil becomes an empty list, a single hash becomes one metadata entry, arrays are preserved, enumerables are expanded, and other single objects are treated as one entry.
 - `TableRenderer` now reports missing or blank metadata `field_type` values with a dedicated error message.
