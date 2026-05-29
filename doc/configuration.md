@@ -137,6 +137,33 @@ Whether created options should persist in Tom Select.
 
 Default: `nil`
 
+## Field-level override precedence
+
+Tom Select-backed helpers use initializer defaults only when the helper call omits the matching field-level option. Passing the option on one helper changes that rendered field without changing the app-wide baseline.
+
+```ruby
+# config/initializers/rails_fields_kit.rb
+RailsFieldsKit.configure do |config|
+  config.default_query_param = "term"
+  config.default_value_field = "id"
+  config.default_label_field = "name"
+  config.default_search_field = "name,email"
+  config.default_max_options = 50
+end
+```
+
+```erb
+<%= form.rfk_autocomplete :assignee_id,
+  url: users_path,
+  query_param: "lookup",
+  value_field: "uuid",
+  label_field: "display_name",
+  search_field: "display_name,email",
+  max_options: 10 %>
+```
+
+That helper renders `lookup`, `uuid`, `display_name`, `display_name,email`, and `10` for its Tom Select data values. Other helpers that omit those options still use the initializer defaults. The same pattern applies to request parameter defaults (`query_param:`, `selected_param:`, `selected_multiple_param:`, `create_param:`), JSON field defaults (`value_field:`, `label_field:`, `search_field:`, `option_description_field:`, `option_badge_field:`), and Tom Select defaults (`min_length:`, `max_options:`, `preload:`, `open_on_focus:`, `close_after_select:`, `hide_selected:`, `persist:`).
+
 ## Render text defaults
 
 When the initializer leaves these values unset, Rails Fields Kit uses bundled locale-aware copy at render time. That keeps the default Tom Select wording closer to the host app locale without taking away existing override paths.
