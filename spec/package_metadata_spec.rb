@@ -45,6 +45,24 @@ RSpec.describe "package metadata" do
     end
   end
 
+  def rendered_tom_select_field_fixture_script
+    <<~JS
+      const renderedTomSelectField = (attributes = {}) => ({
+        attributes: {
+          "data-controller": "rails-fields-kit--tom-select",
+          ...attributes
+        },
+        getAttribute(name) { return this.attributes[name] ?? null },
+        hasAttribute(name) { return Object.prototype.hasOwnProperty.call(this.attributes, name) }
+      })
+
+      const plainField = () => ({
+        getAttribute() { return null },
+        hasAttribute() { return false }
+      })
+    JS
+  end
+
   def run_node_entrypoint_check(*paths, script:)
     stdout, stderr, status = Open3.capture3("node", "--input-type=module", "-e", script, *paths)
 
@@ -115,39 +133,25 @@ RSpec.describe "package metadata" do
           throw new Error("package root did not export tomSelectTextOverrideContract")
         }
 
-        const field = {
-          attributes: {
-            "data-controller": "rails-fields-kit--tom-select",
-            "data-rails-fields-kit--tom-select-no-results-text-value": "No customers found",
-            "data-rails-fields-kit--tom-select-loading-text-value": "Searching...",
-            "data-rails-fields-kit--tom-select-create-text-value": "Create"
-          },
-          getAttribute(name) { return this.attributes[name] ?? null },
-          hasAttribute(name) { return Object.prototype.hasOwnProperty.call(this.attributes, name) }
-        }
+        #{rendered_tom_select_field_fixture_script}
+
+        const field = renderedTomSelectField({
+          "data-rails-fields-kit--tom-select-no-results-text-value": "No customers found",
+          "data-rails-fields-kit--tom-select-loading-text-value": "Searching...",
+          "data-rails-fields-kit--tom-select-create-text-value": "Create"
+        })
 
         const contract = tomSelectTextOverrideContract(field)
         if (contract.noResultsText !== "No customers found") throw new Error("missing noResultsText")
         if (contract.loadingText !== "Searching...") throw new Error("missing loadingText")
         if (contract.createText !== "Create") throw new Error("missing createText")
 
-        const fallbackField = {
-          attributes: { "data-controller": "rails-fields-kit--tom-select" },
-          getAttribute(name) { return this.attributes[name] ?? null },
-          hasAttribute(name) { return Object.prototype.hasOwnProperty.call(this.attributes, name) }
-        }
-
-        const fallbackContract = tomSelectTextOverrideContract(fallbackField)
+        const fallbackContract = tomSelectTextOverrideContract(renderedTomSelectField())
         if (fallbackContract.noResultsText !== null) throw new Error("unexpected noResultsText fallback value")
         if (fallbackContract.loadingText !== null) throw new Error("unexpected loadingText fallback value")
         if (fallbackContract.createText !== null) throw new Error("unexpected createText fallback value")
 
-        const plainField = {
-          getAttribute() { return null },
-          hasAttribute() { return false }
-        }
-
-        if (tomSelectTextOverrideContract(plainField) !== null) {
+        if (tomSelectTextOverrideContract(plainField()) !== null) {
           throw new Error("non Rails Fields Kit field should not return a text contract")
         }
       JS
