@@ -21,10 +21,9 @@ RSpec.describe "package metadata" do
       FileUtils.mkdir_p(tom_select_dir)
 
       File.write(File.join(tmpdir, "package.json"), "{\n  \"type\": \"module\"\n}\n")
-      File.write(
-        File.join(package_dir, "index.js"),
-        File.read(File.join(repo_root, "app/javascript/rails_fields_kit/index.js"))
-          .gsub('"./tom_select_controller"', '"./tom_select_controller.js"')
+      FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/index.js"),
+        File.join(package_dir, "index.js")
       )
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
