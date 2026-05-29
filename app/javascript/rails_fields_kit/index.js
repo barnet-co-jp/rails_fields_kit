@@ -1,4 +1,4 @@
-import TomSelectController from "./tom_select_controller"
+import TomSelectController from "./tom_select_controller.js"
 
 const TOM_SELECT_CONTROLLER = "rails-fields-kit--tom-select"
 const TEXT_OVERRIDE_ATTRIBUTES = {
