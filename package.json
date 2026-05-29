@@ -3,6 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "check:js": "node --check app/javascript/rails_fields_kit/index.js && node --check app/javascript/rails_fields_kit/tom_select_controller.js"
+  },
   "exports": {
     ".": "./app/javascript/rails_fields_kit/index.js",
     "./tom_select_controller": "./app/javascript/rails_fields_kit/tom_select_controller.js"
