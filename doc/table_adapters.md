@@ -427,6 +427,14 @@ Use `RailsFieldsKit::TableRenderer.field_helpers`, `RailsFieldsKit::TableRendere
 
 ## Intended integration with Rails Table Preferences
 
+When Rails Fields Kit metadata is used alongside Rails Table Preferences, keep the public boundary explicit:
+
+- Rails Table Preferences owns table column state such as visibility, order, width, presets, saved filter state, sort state, and export metadata.
+- Rails Fields Kit owns field metadata and rendering assistance for the controls attached to those columns, including field type, helper mapping, remote suggestion URLs, selected preload settings, and adapter metadata such as `adapter: :ransack`.
+- The host application owns query execution, params construction, authorization, scoping, pagination, persistence, and user-visible success or error copy.
+
+That boundary keeps Rails Fields Kit as an optional metadata bridge. It should not require a hard dependency on Rails Table Preferences, and it should not turn `rfk_table_filters` into a helper-level Ransack DSL before the design proposal in `ROADMAP.md` and issue #33 is explicitly accepted.
+
 A host app or table helper can pass the metadata objects into column-like definitions:
 
 ```ruby
