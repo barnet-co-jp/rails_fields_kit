@@ -134,6 +134,12 @@
         color: var(--warning);
       }
 
+      .tag.focus {
+        border-color: #a8cfc3;
+        background: #e8f6f1;
+        color: var(--accent);
+      }
+
       .tag.customization {
         border-color: #c7d7cf;
         background: #edf6f1;
@@ -199,6 +205,23 @@
         min-height: 48px;
         border: 1px solid var(--line-strong);
         background: #ffffff;
+      }
+
+      .control-row.focus-visible-state {
+        border-color: var(--accent);
+        box-shadow:
+          0 0 0 3px rgba(35, 106, 91, 0.18),
+          inset 0 0 0 1px rgba(35, 106, 91, 0.30);
+      }
+
+      .control-row.focus-visible-state .input,
+      .control-row.focus-visible-state .textarea {
+        background: #fbfffd;
+      }
+
+      .control-row.focus-visible-state .affix {
+        background: #edf8f4;
+        color: #2d5f53;
       }
 
       .control-row.disabled-state {
@@ -344,8 +367,8 @@
         <h1>Native Field Visual Reference</h1>
         <p class="lede">
           This page keeps native helpers in one quick visual entrypoint: the shared wrapper lane,
-          validation redisplay, affix-heavy inputs, field-level wrapper customization, non-editable states,
-          and the accessibility opt-out boundary.
+          validation redisplay, affix-heavy inputs, keyboard focus visibility, field-level wrapper customization,
+          non-editable states, and the accessibility opt-out boundary.
         </p>
         <div class="hero-links">
           <a href="field_helpers.md">Read helper details</a>
@@ -427,6 +450,38 @@
                 <span class="affix trailing">%</span>
               </div>
               <div class="hint">Representative `rfk_percent_field` lane.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="tag focus">Keyboard focus</div>
+          <h2>Focus-visible ring stays clear around affixes</h2>
+          <p>
+            Keyboard focus should stay visible on the native wrapper lane even when prefixes, suffixes,
+            required markers, and helper text are all present.
+          </p>
+          <div class="example two-up">
+            <div class="field-block">
+              <div class="label-row">
+                <span>Invoice amount</span>
+                <span class="required">Required</span>
+              </div>
+              <div class="control-row focus-visible-state">
+                <span class="affix">USD</span>
+                <div class="input">2480</div>
+                <span class="affix trailing">net</span>
+              </div>
+              <div class="hint">Representative keyboard focus state for an affix-heavy `rfk_money_field`.</div>
+            </div>
+            <div class="field-block">
+              <div class="label-row">
+                <span>Internal note</span>
+              </div>
+              <div class="control-row focus-visible-state">
+                <div class="textarea">Tab focus remains visible without hiding the text area content.</div>
+              </div>
+              <div class="hint">Use this lane to compare single-line and text-area focus treatment.</div>
             </div>
           </div>
         </article>
@@ -537,6 +592,7 @@
         <div class="checklist">
           <span>Shared wrapper contract: label, hint, affixes, validation redisplay.</span>
           <span>Native helper lane only: no remote search, selected preload, or create-on-the-fly semantics.</span>
+          <span>Keyboard focus remains visible around affix-heavy fields and text areas.</span>
           <span>Field-level wrapper customization layers extra attributes onto the same generated pieces.</span>
           <span>Disabled and readonly remain in the same native helper family while changing editability cues.</span>
           <span>Accessibility boundary stays explicit when the host app opts out.</span>
