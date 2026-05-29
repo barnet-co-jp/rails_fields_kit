@@ -71,6 +71,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm one representative `rfk_grouped_select` lane preserves the documented optgroup structure while the submitted value stays an ordinary selected ID or value and does not depend on remote search or create-on-the-fly hooks.
 - [ ] Confirm one representative `rfk_enum_select` lane preserves the current enum label and value mapping through edit-form redisplay or validation rerender without drifting into a hand-maintained arbitrary collection lane.
 - [ ] Confirm one representative native helper lane keeps `wrapper: true` label / hint / prefix / suffix rendering stable through validation rerender, and that a comparable `accessibility: false` example clearly drops the shared automatic wiring.
+- [ ] Confirm one representative native helper lane uses `wrapper_html:` / `label_html:` / `hint_html:` / `error_html:` / `control_html:` / `prefix_html:` / `suffix_html:` for field-level wrapper attributes while `html:` remains scoped to the input element.
 - [ ] Confirm selected preload works in edit forms.
 - [ ] Confirm one representative selected preload lane covers saved-ID label restore, `rails-fields-kit--tom-select:selected-load`, `rails-fields-kit--tom-select:selected-load-error`, and any host-app fallback or `error_surface:` boundary together.
 - [ ] Confirm one representative multi-value selected preload lane restores visible labels for saved IDs and still uses the documented `selected_multiple_param:` or comma-separated `ids` contract when the endpoint relies on it.
