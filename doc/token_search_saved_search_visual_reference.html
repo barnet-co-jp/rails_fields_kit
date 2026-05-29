@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rails Fields Kit Saved Search Token Visual Reference</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page: #f6f4ed;
+        --surface: #fffefa;
+        --ink: #20302c;
+        --muted: #5f6f69;
+        --line: #d5d0c5;
+        --line-strong: #b7afa1;
+        --accent: #1f7a5a;
+        --token: #5a3d83;
+        --token-soft: #f4effd;
+        --saved: #265f75;
+        --saved-soft: #e5f4f8;
+        --field: #6f5731;
+        --field-soft: #fff1d9;
+        --shadow: 0 16px 36px rgba(28, 42, 36, 0.08);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #fbfaf5 0%, var(--page) 100%);
+        color: var(--ink);
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+
+      main {
+        width: min(1080px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 52px 0 72px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 16px;
+        margin-bottom: 30px;
+      }
+
+      .eyebrow {
+        color: var(--accent);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      p { margin: 0; }
+
+      h1 {
+        max-width: 840px;
+        font-family: "Fraunces", "Times New Roman", serif;
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        font-weight: 600;
+        line-height: 1.08;
+      }
+
+      .lede {
+        max-width: 760px;
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .hero-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .hero-links a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 40px;
+        padding: 0 14px;
+        border: 1px solid var(--line-strong);
+        background: rgba(255, 255, 255, 0.75);
+        color: var(--ink);
+        text-decoration: none;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+      }
+
+      .card {
+        display: grid;
+        gap: 14px;
+        padding: 20px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .card-header {
+        display: grid;
+        gap: 8px;
+      }
+
+      .tag {
+        justify-self: start;
+        padding: 4px 8px;
+        border: 1px solid #d5c6ec;
+        background: var(--token-soft);
+        color: var(--token);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .tag.saved {
+        border-color: #b9d9e3;
+        background: var(--saved-soft);
+        color: var(--saved);
+      }
+
+      h2 {
+        font-size: 1.08rem;
+        line-height: 1.22;
+      }
+
+      .card-header p,
+      .card-footer,
+      .legend {
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .control {
+        overflow: hidden;
+        border: 1px solid var(--line-strong);
+        background: #ffffff;
+      }
+
+      .control-top {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 54px;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .selection {
+        display: flex;
+        flex: 1;
+        flex-wrap: wrap;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .token {
+        display: inline-flex;
+        align-items: center;
+        max-width: 100%;
+        padding: 6px 10px;
+        border: 1px solid #c8d7ee;
+        background: #edf4ff;
+        color: #26466e;
+        font-weight: 600;
+      }
+
+      .inline-query {
+        align-self: center;
+        padding: 6px 0;
+        font-weight: 600;
+      }
+
+      .caret {
+        flex: none;
+        color: var(--muted);
+      }
+
+      .dropdown {
+        display: grid;
+        gap: 1px;
+        background: var(--line);
+      }
+
+      .option,
+      .message {
+        display: grid;
+        gap: 5px;
+        padding: 12px;
+        background: #ffffff;
+      }
+
+      .option-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .option-title strong {
+        min-width: 0;
+        font-size: 0.96rem;
+      }
+
+      .badge {
+        flex: none;
+        padding: 2px 7px;
+        border: 1px solid var(--line);
+        background: #f8f6ef;
+        color: #596761;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .badge.field {
+        border-color: #e1c79b;
+        background: var(--field-soft);
+        color: var(--field);
+      }
+
+      .badge.value {
+        border-color: #c8d7ee;
+        background: #edf4ff;
+        color: #26466e;
+      }
+
+      .badge.saved {
+        border-color: #b9d9e3;
+        background: var(--saved-soft);
+        color: var(--saved);
+      }
+
+      .option span,
+      .message span {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .option.saved-option {
+        border-left: 4px solid #5b9bb1;
+        background: #fbfdfe;
+      }
+
+      .message { background: #f8f6ef; }
+
+      .legend {
+        margin-top: 22px;
+        padding: 18px 20px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.76);
+      }
+
+      .legend strong { color: var(--ink); }
+
+      @media (max-width: 640px) {
+        main {
+          width: min(100% - 20px, 1080px);
+          padding-top: 40px;
+          padding-bottom: 56px;
+        }
+
+        .card { padding: 16px; }
+
+        .option-title {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div class="eyebrow">Rails Fields Kit</div>
+        <h1>Saved Search Token Visual Reference</h1>
+        <p class="lede">
+          A focused static reference for `rfk_token_search` suggestions that include saved searches.
+          It shows how the default `saved` badge reads next to field and value suggestions without implying that Rails Fields Kit owns search execution.
+        </p>
+        <div class="hero-links">
+          <a href="tom_select_visual_reference.html">Tom Select visual reference</a>
+          <a href="token_suggestions.md">Token suggestions docs</a>
+          <a href="../README.md">README</a>
+        </div>
+      </section>
+
+      <section class="grid" aria-label="Saved search token suggestion states">
+        <article class="card">
+          <div class="card-header">
+            <span class="tag">Token Suggestions</span>
+            <h2>Mixed field, value, and saved search suggestions</h2>
+            <p>Use this state when the current query can continue as a field token or jump to a saved search token.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection">
+                <span class="token">status:open</span>
+                <span class="inline-query">sav</span>
+              </div>
+              <div class="caret">v</div>
+            </div>
+            <div class="dropdown">
+              <div class="option">
+                <div class="option-title">
+                  <strong>saved:</strong>
+                  <span class="badge field">field</span>
+                </div>
+                <span>Continue typing a saved-search token prefix.</span>
+              </div>
+              <div class="option saved-option">
+                <div class="option-title">
+                  <strong>Mine</strong>
+                  <span class="badge saved">saved</span>
+                </div>
+                <span>My saved search</span>
+              </div>
+              <div class="option saved-option">
+                <div class="option-title">
+                  <strong>Recently updated</strong>
+                  <span class="badge saved">saved</span>
+                </div>
+                <span>Saved query owned by the host app.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">The saved suggestions stand out through the badge and edge accent while keeping the same option shape as other token suggestions.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag saved">Saved Token</span>
+            <h2>Saved search selected as structured query text</h2>
+            <p>Represents the settled input after the user chooses a saved-search suggestion.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection">
+                <span class="token">saved:mine</span>
+                <span class="token">status:open</span>
+              </div>
+              <div class="caret">v</div>
+            </div>
+            <div class="dropdown">
+              <div class="message">
+                <strong>The submitted query remains token text.</strong>
+                <span>Rails Fields Kit renders the suggestion option; parsing `saved:mine`, authorization, and query execution stay in the host app.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">This keeps saved searches visually close to token search, not a separate selector or persistence feature.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag">Comparison</span>
+            <h2>Badges keep suggestion kinds scannable</h2>
+            <p>Shows the badge contrast that helps reviewers distinguish saved searches from ordinary field and value completions.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection">
+                <span class="inline-query">sta</span>
+              </div>
+              <div class="caret">v</div>
+            </div>
+            <div class="dropdown">
+              <div class="option">
+                <div class="option-title">
+                  <strong>status:</strong>
+                  <span class="badge field">field</span>
+                </div>
+                <span>Workflow status</span>
+              </div>
+              <div class="option">
+                <div class="option-title">
+                  <strong>status:closed</strong>
+                  <span class="badge value">value</span>
+                </div>
+                <span>Suggested value for the status field.</span>
+              </div>
+              <div class="option saved-option">
+                <div class="option-title">
+                  <strong>Stalled orders</strong>
+                  <span class="badge saved">saved</span>
+                </div>
+                <span>Saved search shortcut supplied by the app.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">The visual difference comes from rendered option metadata, not from changing token parsing or helper behavior.</p>
+        </article>
+      </section>
+
+      <section class="legend">
+        <strong>Scope note.</strong>
+        This page is a static visual aid for saved-search suggestion options. Rails Fields Kit only builds and renders suggestion JSON; saved-search storage, authorization, and execution remain host-app responsibilities.
+      </section>
+    </main>
+  </body>
+</html>
