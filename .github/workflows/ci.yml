@@ -84,9 +84,7 @@ jobs:
           node-version: "22"
 
       - name: Check JavaScript syntax
-        run: |
-          node --check app/javascript/rails_fields_kit/index.js
-          node --check app/javascript/rails_fields_kit/tom_select_controller.js
+        run: npm run check:js
 
   gem_package:
     runs-on: ubuntu-latest
