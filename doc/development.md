@@ -29,6 +29,16 @@ BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rspec
 BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rspec
 ```
 
+## Check JavaScript locally
+
+The JavaScript syntax check uses Node 22.x, matching `package.json` and the GitHub Actions `javascript` job.
+
+```bash
+npm run check:js
+```
+
+This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies.
+
 ## Build locally
 
 ```bash
@@ -39,6 +49,7 @@ These are the primary local checks for branch-ready work:
 
 - `bundle exec standardrb`
 - `bundle exec rspec`
+- `npm run check:js`
 - `bundle exec rake build`
 
 When build fails, check these first:
@@ -58,7 +69,7 @@ Current CI adds these repository-level confirmations on top of the local workflo
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - Representative PR compatibility checks for Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
-- JavaScript syntax checks for `app/javascript/rails_fields_kit/*.js`
+- `npm run check:js` on Node 22.x for the JavaScript syntax lane
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 
 ## Release-related checks
