@@ -167,6 +167,8 @@ Bundled fallback:
 
 ## Wrapper class defaults
 
+These defaults set the repo-wide baseline classes appended to wrapper pieces. Use helper-level `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` when one field needs extra classes, `data`, or aria attributes without changing the initializer for every field.
+
 ### `wrapper_class`
 
 Class used for the outer field wrapper.
