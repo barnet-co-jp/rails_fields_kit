@@ -162,13 +162,13 @@ This integration should be implemented as an optional layer, not as a hard depen
 
 ## Longer-term candidates
 
-These are useful but should not distract from the core Tom Select-backed field kit.
+These are useful proposals, not current public API, and should not distract from the core Tom Select-backed field kit. Feature gate issues should decide the smallest useful slice and responsibility boundary before any candidate is documented as implemented behavior.
 
-- mention fields for `@user` or `#tag` style textarea interactions
-- saved search selectors
+- mention fields for `@user` or `#tag` style textarea interactions; see #367
+- saved search selectors; see #377
 - field/operator suggestion registries
-- slug helpers for title-to-slug workflows
-- masked inputs only if a clear Rails integration gap remains
+- slug helpers for title-to-slug workflows; see #373
+- masked inputs only if a clear Rails integration gap remains; see #378
 
 ## Design guardrails
 
