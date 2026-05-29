@@ -36,6 +36,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/tom_select_visual_reference.html`.
 - [ ] Review `doc/native_field_visual_reference.html`.
 - [ ] Review `doc/table_metadata_visual_reference.html`.
+- [ ] Confirm the static visual references above have a representative narrow/mobile viewport pass for wrapping, overflow, state visibility, and readable error surfaces before treating them as release-ready evidence.
 - [ ] Review `doc/controller_helpers.md`.
 - [ ] Review `doc/token_suggestions.md`.
 - [ ] Review `doc/ransack_suggestions.md`.
@@ -64,6 +65,10 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm the documented JavaScript import paths resolve in the sample app.
 - [ ] Confirm Tom Select CSS is loaded.
 - [ ] Confirm remote search works.
+- [ ] Confirm `doc/tom_select_visual_reference.html` remains usable at a narrow or mobile viewport, including representative loading, empty, create, disabled, multi, grouped, autocomplete, preload, tags, tokens, and error state cards without text overflow hiding the state meaning.
+- [ ] Confirm `doc/native_field_visual_reference.html` remains usable at a narrow or mobile viewport, including prefix, suffix, hint, disabled, readonly, and validation error states with readable labels and feedback copy.
+- [ ] Confirm `doc/table_metadata_visual_reference.html` remains usable at a narrow or mobile viewport, including filter and editor lanes without clipped control labels, badges, or helper text.
+- [ ] Confirm responsive visual-reference checks stay limited to layout overflow, text wrapping, and state visibility rather than changing runtime helper markup or host-app query behavior.
 - [ ] Confirm one representative `rfk_select` lane keeps a server-rendered collection-backed selected value stable through edit-form redisplay or validation rerender, while `include_blank:`, representative `disabled:`, and representative `option_html:` stay aligned with current docs and do not depend on remote search or create-on-the-fly hooks.
 - [ ] Confirm one representative clearable `rfk_select` lane can return from a selected value to the documented blank or placeholder state with `allow_clear: true` while staying in the collection-backed single-value contract.
 - [ ] Confirm one representative `rfk_autocomplete` lane keeps remote suggestions in the typing-assist role while the submitted value stays free text, without depending on `selected_url:` or create-on-the-fly hooks.
