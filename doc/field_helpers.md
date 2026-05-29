@@ -253,12 +253,18 @@ If you want one representative lane before the per-helper snippets below, start 
   prefix: "#",
   suffix: "required",
   required: true,
-  html: { autocomplete: "off" } %>
+  wrapper_html: { class: "customer-field", data: { controller: "field-shell" } },
+  label_html: { class: "customer-label" },
+  control_html: { class: "customer-control" },
+  prefix_html: { data: { role: "code-prefix" } },
+  suffix_html: { class: "customer-suffix" },
+  html: { autocomplete: "off", data: { role: "customer-code-input" } } %>
 ```
 
 This representative lane keeps the native helper family in its ordinary HTML-input path while still showing the shared wrapper contract in one place:
 
 - `wrapper: true` renders the label, hint, and affixes around the native field.
+- `html:` passes attributes to the input itself; `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` pass attributes to the generated wrapper pieces.
 - edit-form redisplay and validation rerender keep using the same model-backed value instead of switching to a remote-search or Tom Select lane.
 - automatic accessibility wiring keeps the generated hint and error ids connected through `aria-describedby` and also manages `aria-invalid` / `aria-required` unless you opt out.
 
@@ -273,6 +279,27 @@ When the host app needs to own that accessibility wiring itself, keep the same w
 ```
 
 `accessibility: false` only removes the shared automatic `aria-describedby`, `aria-invalid`, and `aria-required` output. The wrapped native field, label, hint, prefix, suffix, and validation redisplay behavior still stay in the same helper family.
+
+### Field-level wrapper customization
+
+Use the initializer defaults in [`configuration.md`](configuration.md) when the whole host app should share the same wrapper, label, hint, error, control, prefix, or suffix classes. Use the per-field `*_html` options when one field needs additional classes, `data`, or aria attributes for a Bootstrap, Tailwind, or design-system hook.
+
+Rails Fields Kit appends the configured default classes to any field-level class you pass. For example, `wrapper_html: { class: "customer-field" }` still receives the configured `wrapper_class`, and an invalid field also receives `field_error_class`.
+
+The wrapper customization options map to generated pieces this way:
+
+| Option | Generated piece |
+| --- | --- |
+| `wrapper_html:` | outer wrapper rendered by `wrapper: true` |
+| `label_html:` | generated label |
+| `hint_html:` | generated hint |
+| `error_html:` | generated validation error message |
+| `control_html:` | prefix/suffix control wrapper |
+| `prefix_html:` | prefix affix |
+| `suffix_html:` | suffix affix |
+| `html:` | input or select element itself |
+
+These options only customize rendered HTML attributes. They do not change validation behavior, remote loading, query parsing, or host-app authorization and scoping responsibilities.
 
 ### `rfk_text_field`
 
@@ -350,7 +377,10 @@ Most helpers support these options:
   hint: "Use the official name",
   prefix: "#",
   suffix: "required",
-  required: true %>
+  required: true,
+  wrapper_html: { class: "customer-field" },
+  label_html: { data: { role: "field-label" } },
+  html: { data: { role: "customer-name-input" } } %>
 ```
 
 Common options:
@@ -361,7 +391,7 @@ Common options:
 - `prefix:` and `suffix:` render affixes around the input.
 - `accessibility: false` disables automatic `aria-describedby`, `aria-invalid`, and `aria-required` output.
 - `html:` passes HTML attributes to the input/select.
-- `control_html:`, `prefix_html:`, and `suffix_html:` customize wrapper pieces.
+- `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` customize generated wrapper pieces without changing the helper family or host-app responsibility boundary.
 
 ## Collection options
 
