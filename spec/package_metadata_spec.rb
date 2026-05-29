@@ -100,4 +100,59 @@ RSpec.describe "package metadata" do
       run_node_entrypoint_check(index_entrypoint_path, controller_entrypoint_path, script:)
     end
   end
+
+  it "exports a package-root helper for the rendered Tom Select text override contract" do
+    build_entrypoint_sandbox do |tmpdir|
+      index_entrypoint_path = File.join(tmpdir, "app/javascript/rails_fields_kit/index.js")
+
+      script = <<~JS
+        import { pathToFileURL } from "node:url"
+
+        const indexUrl = pathToFileURL(process.argv[1]).href
+        const { tomSelectTextOverrideContract } = await import(indexUrl)
+
+        if (typeof tomSelectTextOverrideContract !== "function") {
+          throw new Error("package root did not export tomSelectTextOverrideContract")
+        }
+
+        const field = {
+          attributes: {
+            "data-controller": "rails-fields-kit--tom-select",
+            "data-rails-fields-kit--tom-select-no-results-text-value": "No customers found",
+            "data-rails-fields-kit--tom-select-loading-text-value": "Searching...",
+            "data-rails-fields-kit--tom-select-create-text-value": "Create"
+          },
+          getAttribute(name) { return this.attributes[name] ?? null },
+          hasAttribute(name) { return Object.prototype.hasOwnProperty.call(this.attributes, name) }
+        }
+
+        const contract = tomSelectTextOverrideContract(field)
+        if (contract.noResultsText !== "No customers found") throw new Error("missing noResultsText")
+        if (contract.loadingText !== "Searching...") throw new Error("missing loadingText")
+        if (contract.createText !== "Create") throw new Error("missing createText")
+
+        const fallbackField = {
+          attributes: { "data-controller": "rails-fields-kit--tom-select" },
+          getAttribute(name) { return this.attributes[name] ?? null },
+          hasAttribute(name) { return Object.prototype.hasOwnProperty.call(this.attributes, name) }
+        }
+
+        const fallbackContract = tomSelectTextOverrideContract(fallbackField)
+        if (fallbackContract.noResultsText !== null) throw new Error("unexpected noResultsText fallback value")
+        if (fallbackContract.loadingText !== null) throw new Error("unexpected loadingText fallback value")
+        if (fallbackContract.createText !== null) throw new Error("unexpected createText fallback value")
+
+        const plainField = {
+          getAttribute() { return null },
+          hasAttribute() { return false }
+        }
+
+        if (tomSelectTextOverrideContract(plainField) !== null) {
+          throw new Error("non Rails Fields Kit field should not return a text contract")
+        }
+      JS
+
+      run_node_entrypoint_check(index_entrypoint_path, script:)
+    end
+  end
 end
