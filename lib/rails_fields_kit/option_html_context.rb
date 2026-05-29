@@ -21,13 +21,13 @@ module RailsFieldsKit
           else
             value = rfk_read_selected_value(item, value_method)
             label = rfk_read_selected_label(item, label_method)
-            rfk_choice_with_html(label, value, item: item, disabled_values: disabled_values, option_html: option_html)
+            rfk_choice_with_html(label, value, disabled_values: disabled_values, option_html: option_html, item: item)
           end
         end
       end
     end
 
-    def rfk_choice_with_html(label, value, item: nil, disabled_values:, option_html:)
+    def rfk_choice_with_html(label, value, disabled_values:, option_html:, item: nil)
       html = rfk_option_html_for(value, option_html, label: label, item: item)
       html[:disabled] = true if disabled_values.include?(value.to_s)
       html.empty? ? [label, value] : [label, value, html]
