@@ -62,7 +62,7 @@ Host applications remain responsible for:
 - `doc/public_api.md`: intended stable API for 0.1.x
 - `doc/events.md`: Stimulus event contract
 - `doc/development.md`: local checks
-- `doc/release.md`, `doc/final_release_checklist.md`, `doc/sample_app_checklist.md`, and `doc/sample_app_results.md`: release-facing maintainer docs
+- `doc/release.md`, `doc/final_release_checklist.md`, `doc/sample_app_checklist.md`, `doc/sample_app_results.md`, and `doc/release_notes_0_1_1.md`: release-facing maintainer docs and current next-release draft
 
 ## Source-of-truth reminder
 
