@@ -1,8 +1,8 @@
 # Rails Fields Kit
 
-Rails Fields Kit is a Rails form helper kit for fields that are still awkward with native HTML inputs alone: searchable selects, editable comboboxes, tag inputs, autocomplete, token search inputs, and create-on-the-fly fields.
+Rails Fields Kit is a Rails form helper kit for fields that are still awkward with native HTML inputs alone: searchable selects, editable comboboxes, tag inputs, autocomplete, token search inputs, create-on-the-fly fields, native wrapper helpers, and table-oriented metadata helpers.
 
-The first focus is a Tom Select powered editable combobox for Rails forms.
+Tom Select-powered helpers remain the center of the gem for searchable selections and editable combobox workflows, while native wrappers and table metadata helpers round out the current public surface without taking over host-app search, authorization, or table persistence.
 
 ## Installation
 
