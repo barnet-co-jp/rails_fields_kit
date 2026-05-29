@@ -83,6 +83,20 @@ Create a form that exercises:
 - `rfk_token_search`
 - native helpers such as `rfk_text_field` and `rfk_money_field`
 
+## Verify native wrapper customization
+
+Use one representative native helper with `wrapper: true` and field-level wrapper customization options.
+
+Verify:
+
+- `wrapper_html:` can add a representative class or `data` attribute to the outer wrapper while keeping the configured `wrapper_class`
+- `label_html:`, `hint_html:`, and `error_html:` can add representative attributes without losing generated label, hint, or validation error behavior
+- `control_html:`, `prefix_html:`, and `suffix_html:` can add representative attributes on an affix field without changing the input value or submitted param shape
+- `html:` still targets the input element itself, separate from generated wrapper pieces
+- hint / error ids still feed the shared accessibility wiring when `accessibility:` remains enabled
+- `accessibility: false` remains an explicit opt-out from automatic aria wiring only, not from the wrapper customization lane
+- repo-wide class defaults from the initializer still provide the shared baseline; field-level `*_html` options only layer additional attributes for that field
+
 ## Verify `collection_select` migration path
 
 Create at least one server-rendered form that starts from the documented `collection_select` example in [`select_migration.md`](select_migration.md), then swap it to `rfk_select` and confirm:

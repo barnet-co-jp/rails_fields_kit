@@ -134,6 +134,12 @@
         color: var(--warning);
       }
 
+      .tag.customization {
+        border-color: #c7d7cf;
+        background: #edf6f1;
+        color: var(--accent);
+      }
+
       .tag.noneditable {
         border-color: #b9d4cd;
         background: var(--accent-soft);
@@ -222,6 +228,25 @@
       .control-row.readonly-state .affix {
         background: #edf5f2;
         color: #4c635d;
+      }
+
+      .custom-field {
+        border-left: 4px solid var(--accent);
+        padding-left: 10px;
+      }
+
+      .custom-field .label-row {
+        color: var(--accent);
+      }
+
+      .custom-field .control-row {
+        border-color: var(--accent);
+        box-shadow: inset 0 0 0 1px rgba(35, 106, 91, 0.18);
+      }
+
+      .custom-field .hint {
+        padding-left: 10px;
+        border-left: 2px solid var(--accent-soft);
       }
 
       .affix {
@@ -319,7 +344,8 @@
         <h1>Native Field Visual Reference</h1>
         <p class="lede">
           This page keeps native helpers in one quick visual entrypoint: the shared wrapper lane,
-          validation redisplay, affix-heavy inputs, non-editable states, and the accessibility opt-out boundary.
+          validation redisplay, affix-heavy inputs, field-level wrapper customization, non-editable states,
+          and the accessibility opt-out boundary.
         </p>
         <div class="hero-links">
           <a href="field_helpers.md">Read helper details</a>
@@ -406,6 +432,39 @@
         </article>
 
         <article class="card">
+          <div class="tag customization">Wrapper customization</div>
+          <h2>Field-level hooks without changing defaults</h2>
+          <p>
+            Per-field `wrapper_html`, `label_html`, `control_html`, `prefix_html`, and `suffix_html`
+            hooks let a host app add design-system classes or data attributes while keeping the same
+            native wrapper and accessibility contract.
+          </p>
+          <div class="example two-up">
+            <div class="field-block">
+              <div class="label-row">
+                <span>Default class lane</span>
+              </div>
+              <div class="control-row">
+                <span class="affix">ID</span>
+                <div class="input">C-1004</div>
+              </div>
+              <div class="hint">Initializer defaults supply the shared wrapper, label, control, and affix classes.</div>
+            </div>
+            <div class="field-block custom-field">
+              <div class="label-row">
+                <span>Field-specific hook lane</span>
+              </div>
+              <div class="control-row">
+                <span class="affix">ID</span>
+                <div class="input">C-1004</div>
+                <span class="affix trailing">verified</span>
+              </div>
+              <div class="hint">Extra field-level classes or data attributes layer onto the same generated pieces.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
           <div class="tag noneditable">Non-editable states</div>
           <h2>Disabled and readonly stay in the same wrapper lane</h2>
           <p>
@@ -478,6 +537,7 @@
         <div class="checklist">
           <span>Shared wrapper contract: label, hint, affixes, validation redisplay.</span>
           <span>Native helper lane only: no remote search, selected preload, or create-on-the-fly semantics.</span>
+          <span>Field-level wrapper customization layers extra attributes onto the same generated pieces.</span>
           <span>Disabled and readonly remain in the same native helper family while changing editability cues.</span>
           <span>Accessibility boundary stays explicit when the host app opts out.</span>
         </div>
