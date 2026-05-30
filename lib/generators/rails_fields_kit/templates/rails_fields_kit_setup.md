@@ -33,6 +33,7 @@ For a representative edit-form lane that uses `selected_url:` or `error_surface:
 - [ ] Register `rails-fields-kit--tom-select` on the app's existing Stimulus application.
 - [ ] If this app uses Vite or another bundler, add resolver or alias entries for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] If this app uses importmap, add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` in `config/importmap.rb`.
+- [ ] When host-app scripts import from `rails_fields_kit`, use `doc/public_api.md#javascript-exports` to confirm the current package-root exports and the rendered-field contract helper boundary.
 - [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.
 - [ ] Add the first `rfk_combobox` field and matching `rfk_search_with` / `rfk_find_with` / `rfk_create_with` endpoints.
 - [ ] Use `doc/controller_helpers.md` for the maintained endpoint option reference, including custom `action:` names.
