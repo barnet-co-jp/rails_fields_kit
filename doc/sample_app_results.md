@@ -289,6 +289,10 @@ Notes:
 - [ ] `rails-fields-kit--tom-select:item-add`
 - [ ] `rails-fields-kit--tom-select:item-remove`
 - [ ] `rails-fields-kit--tom-select:clear`
+- [ ] a representative single select or combobox dispatched `change` when the selected value changed
+- [ ] a representative multiple select or tags field dispatched `item-add` and `item-remove` for add/remove actions
+- [ ] a representative clearable field dispatched `clear` when its selected value was cleared
+- [ ] interaction forwarding events were recorded separately from remote `load` / `load-error`, create-on-the-fly, selected preload, and visible-feedback lanes
 - [ ] create-on-the-fly success dispatched the dedicated `create` event before the normal selection events continued
 - [ ] `event.detail.input` matched the submitted text for the create success case
 - [ ] `event.detail.option` exposed the created option payload needed by the host app
