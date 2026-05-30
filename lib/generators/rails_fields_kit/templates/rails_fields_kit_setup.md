@@ -13,10 +13,7 @@ For the maintained walkthrough and copyable examples, use the upstream docs:
 - Field helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/field_helpers.md>
 - Controller helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/controller_helpers.md>
 - Practical `rfk_select` migration guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/select_migration.md>
-- Visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_visual_reference.html>
-- Text override visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_text_override_visual_reference.html>
-- Native helper visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/native_field_visual_reference.html>
-- Table metadata visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/table_metadata_visual_reference.html>
+- Visual reference family: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/visual_references.md>
 - Selected preload release gate: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/selected_preload_release_gate.md>
 - Events: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/events.md>
 - Token suggestions: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/token_suggestions.md>
@@ -39,10 +36,7 @@ For a representative edit-form lane that uses `selected_url:` or `error_surface:
 - [ ] Use `doc/controller_helpers.md` for the maintained endpoint option reference, including custom `action:` names.
 - [ ] If this app is replacing a server-rendered `collection_select`, review the practical `rfk_select` migration guide before adding extra reinitializers or controller glue.
 - [ ] Use `doc/field_helpers.md` when choosing between `rfk_select`, `rfk_grouped_select`, `rfk_enum_select`, `rfk_combobox`, `rfk_autocomplete`, `rfk_token_search`, `rfk_tags`, and `rfk_multi_select`.
-- [ ] Use `doc/tom_select_visual_reference.html` when this app needs a quick visual comparison of representative Tom Select-backed states.
-- [ ] Use `doc/tom_select_text_override_visual_reference.html` when this app needs a focused visual comparison of configured Tom Select text override copy states.
-- [ ] Use `doc/native_field_visual_reference.html` when this app needs a quick visual comparison of representative native helper wrapper, validation, and non-editable states.
-- [ ] Use `doc/table_metadata_visual_reference.html` when this app needs a quick visual comparison of representative table filter, cell editor, and responsibility-boundary states.
+- [ ] Use `doc/visual_references.md` as the maintained visual reference family index when this app needs quick comparisons of Tom Select-backed, text override, native helper, or table metadata states.
 - [ ] Review remote option settings such as `selected_url:`, `option_description_field:`, and `option_badge_field:` in the public API guide before wiring richer selects.
 - [ ] If this app uses `selected_url:`, review `doc/selected_preload_release_gate.md` before release verification to confirm single and multiple selected preload request encoding expectations.
 - [ ] If this app uses `selected_url:` or `error_surface: true`, review `doc/setup.md` for the representative edit-form wiring and `doc/events.md` for `selected-load`, `selected-load-error`, and `detail.surface`.
