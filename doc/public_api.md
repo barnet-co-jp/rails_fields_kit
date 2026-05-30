@@ -219,3 +219,16 @@ Tom Select-backed `rfk_*` fields initialize from the controller's Stimulus `conn
 Events dispatched by the Tom Select controller are part of the public integration surface.
 
 See [`events.md`](events.md).
+
+## Internal implementation details
+
+These are not intended as stable public APIs:
+
+- private FormBuilder helper methods prefixed with `rfk_` but defined under `private`
+- internal normalization methods in `RailsFieldsKit::Searchable`
+- exact HTML structure of rich option rendering beyond documented classes/data and event payloads
+- generated documentation wording
+
+## Compatibility policy
+
+For the 0.1.x series, small API adjustments may still happen, but documented public APIs should not be removed without a changelog entry.
