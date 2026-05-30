@@ -49,7 +49,11 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/release.md`.
 - [ ] Review `doc/release_notes_0_1_1.md` for the current next-release draft.
 - [ ] Confirm `README.md` and `doc/public_api.md` still describe both documented JavaScript import paths: `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
-- [ ] Confirm package-root helper exports such as `tomSelectTextOverrideContract(element)` still resolve from `rails_fields_kit` when they are part of the release surface, and stay limited to rendered contract reads.
+- [ ] Confirm `doc/public_api.md#javascript-exports` is the source of truth for current package-root exports, and that release verification does not treat open-PR or proposal helper names as current public API.
+- [ ] Confirm the current package-root export matrix before release:
+  - [ ] `TomSelectController` resolves from `rails_fields_kit` for Stimulus registration.
+  - [ ] `tomSelectTextOverrideContract(element)` resolves from `rails_fields_kit`, reads only rendered `noResultsText`, `loadingText`, and `createText` contract values, and keeps visible copy / locale policy as host-app responsibilities.
+- [ ] Confirm future package-root helper exports are added to `doc/public_api.md#javascript-exports` before being added to this release verification matrix.
 - [ ] Confirm token search and table integration docs still distinguish gem responsibilities from host app responsibilities.
 - [ ] Confirm release-prep docs, `doc/events.md`, and sample app verification all agree on whether create-on-the-fly success uses a dedicated `rails-fields-kit--tom-select:create` hook or only the generic selection events.
 
