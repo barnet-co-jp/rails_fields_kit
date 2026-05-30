@@ -85,6 +85,9 @@ Accepted request params:
 - `id` for one value.
 - `ids` for multiple values.
 - comma-separated `ids`, such as `1,2,3`.
+- Rails array params such as `ids[]=1&ids[]=2`, once Rails has parsed them into an Array value for `params[:ids]`.
+
+The same string and Array handling applies when you use a custom `ids_param:`. Raw repeated query keys are only covered when the host app's request stack normalizes them to the configured param as an Array.
 
 The response can be a single option or an array of options depending on the request.
 
