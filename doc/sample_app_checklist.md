@@ -292,6 +292,13 @@ Listen for the events documented in [`events.md`](events.md):
 - `rails-fields-kit--tom-select:item-remove`
 - `rails-fields-kit--tom-select:clear`
 
+For interaction forwarding, keep at least one representative lane outside remote request lifecycle and visible-feedback checks, then confirm:
+
+- a single select or combobox dispatches `rails-fields-kit--tom-select:change` when the selected value changes
+- a multiple select or tags field dispatches `rails-fields-kit--tom-select:item-add` and `rails-fields-kit--tom-select:item-remove` for representative add/remove actions
+- a clearable field dispatches `rails-fields-kit--tom-select:clear` when the current value is cleared
+- the event listener records the forwarding events separately from `load`, `load-error`, `create`, `create-error`, and selected preload events
+
 For create-on-the-fly success, confirm:
 
 - the dedicated `rails-fields-kit--tom-select:create` hook is observed before the normal selection events continue
