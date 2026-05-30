@@ -7,22 +7,24 @@
     <style>
       :root {
         color-scheme: light;
-        --page: #f5f2ea;
-        --surface: #fffdf8;
-        --surface-strong: #ffffff;
-        --ink: #20302c;
-        --muted: #5f6f69;
-        --line: #d6d0c3;
-        --line-strong: #b8af9f;
-        --accent: #1f7a5a;
-        --accent-soft: #d9efe4;
-        --warning: #af6d1d;
-        --warning-soft: #f8e7c9;
-        --empty: #7c4a60;
-        --empty-soft: #f3dce7;
-        --error: #8a3847;
-        --error-soft: #fae7eb;
-        --shadow: 0 18px 40px rgba(28, 42, 36, 0.08);
+        --page: #f7f8fa;
+        --surface: #ffffff;
+        --surface-muted: #f3f5f7;
+        --ink: #17212b;
+        --muted: #5d6975;
+        --line: #d6dbe1;
+        --line-strong: #9da8b3;
+        --accent: #176b5f;
+        --accent-soft: #e6f4f1;
+        --info: #285f9f;
+        --info-soft: #eaf2fb;
+        --warning: #8a5a12;
+        --warning-soft: #fff3d8;
+        --empty: #6b4c84;
+        --empty-soft: #f2ecf8;
+        --error: #9f2438;
+        --error-soft: #fdecef;
+        --shadow: 0 1px 2px rgba(23, 33, 43, 0.06);
       }
 
       * {
@@ -31,9 +33,7 @@
 
       body {
         margin: 0;
-        background:
-          radial-gradient(circle at top left, rgba(31, 122, 90, 0.10), transparent 26%),
-          linear-gradient(180deg, #faf7f0 0%, var(--page) 100%);
+        background: var(--page);
         color: var(--ink);
         font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
         line-height: 1.5;
@@ -42,17 +42,19 @@
       main {
         width: min(1120px, calc(100% - 32px));
         margin: 0 auto;
-        padding: 56px 0 72px;
+        padding: 44px 0 60px;
       }
 
       .hero {
         display: grid;
-        gap: 18px;
-        margin-bottom: 34px;
+        gap: 14px;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--line);
       }
 
       .eyebrow {
-        font-size: 0.78rem;
+        font-size: 0.76rem;
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -61,51 +63,51 @@
 
       h1 {
         margin: 0;
-        font-family: "Fraunces", "Times New Roman", serif;
-        font-size: clamp(2.2rem, 4vw, 3.4rem);
-        font-weight: 600;
-        line-height: 1.05;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 650;
+        line-height: 1.08;
       }
 
       .lede {
-        max-width: 760px;
+        max-width: 780px;
         margin: 0;
-        font-size: 1.02rem;
+        font-size: 1rem;
         color: var(--muted);
       }
 
       .hero-links {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 10px;
       }
 
       .hero-links a {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 40px;
-        padding: 0 14px;
+        min-height: 38px;
+        padding: 0 12px;
         border: 1px solid var(--line-strong);
         color: var(--ink);
         text-decoration: none;
-        background: rgba(255, 255, 255, 0.72);
+        background: var(--surface);
       }
 
       .hero-links a:hover {
         border-color: var(--accent);
+        color: var(--accent);
       }
 
       .grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 18px;
+        gap: 14px;
       }
 
       .card {
         display: grid;
-        gap: 14px;
-        padding: 20px;
+        gap: 12px;
+        padding: 16px;
         border: 1px solid var(--line);
         background: var(--surface);
         box-shadow: var(--shadow);
@@ -113,129 +115,95 @@
 
       .card-header {
         display: grid;
-        gap: 8px;
+        gap: 7px;
       }
 
       .tag {
         justify-self: start;
-        padding: 4px 8px;
-        font-size: 0.74rem;
+        padding: 3px 7px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface-muted);
+        color: var(--ink);
+        font-size: 0.72rem;
         font-weight: 700;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.04em;
         text-transform: uppercase;
-        border: 1px solid var(--line);
-        background: var(--surface-strong);
       }
 
       .tag.loading {
-        border-color: #d9c792;
+        border-color: #d6b663;
         background: var(--warning-soft);
-        color: #77450d;
+        color: var(--warning);
       }
 
-      .tag.empty {
-        border-color: #d8b7c7;
+      .tag.empty,
+      .tag.autocomplete-empty,
+      .tag.tokens-empty {
+        border-color: #c6afd8;
         background: var(--empty-soft);
-        color: #6a314b;
+        color: var(--empty);
       }
 
       .tag.create {
-        border-color: #b7d9c9;
+        border-color: #9bcdbc;
         background: var(--accent-soft);
-        color: #185740;
+        color: var(--accent);
+      }
+
+      .tag.create-error,
+      .tag.error {
+        border-color: #e1a8b3;
+        background: var(--error-soft);
+        color: var(--error);
       }
 
       .tag.disabled {
         border-color: #c6cbd0;
         background: #eef1f3;
-        color: #48565f;
+        color: #48545f;
       }
 
-      .tag.multi {
-        border-color: #c8d7ee;
-        background: #edf4ff;
-        color: #2d4f7f;
-      }
-
-      .tag.grouped {
-        border-color: #d7d0f0;
-        background: #f4f0ff;
-        color: #5b4781;
-      }
-
+      .tag.multi,
+      .tag.preload,
       .tag.autocomplete {
-        border-color: #b9d8d2;
-        background: #ecf7f4;
-        color: #1d5f54;
+        border-color: #adc6e4;
+        background: var(--info-soft);
+        color: var(--info);
       }
 
-      .tag.autocomplete-empty {
-        border-color: #c7d9d5;
-        background: #f1f8f6;
-        color: #215d53;
-      }
-
-      .tag.preload {
-        border-color: #bbd2ea;
-        background: #ecf4ff;
-        color: #244d78;
-      }
-
-      .tag.tags {
-        border-color: #e2caa4;
-        background: #fff1db;
-        color: #8c5c18;
-      }
-
+      .tag.grouped,
+      .tag.tags,
       .tag.tokens {
-        border-color: #d5c6ec;
-        background: #f4effd;
-        color: #5a3d83;
-      }
-
-      .tag.tokens-empty {
-        border-color: #d9ccef;
-        background: #fbf7ff;
-        color: #65488b;
-      }
-
-      .tag.error {
-        border-color: #e2bcc6;
-        background: var(--error-soft);
-        color: var(--error);
-      }
-
-      .tag.create-error {
-        border-color: #efc8a6;
-        background: #fff2e6;
-        color: #8d4a1f;
+        border-color: #b9c9d5;
+        background: #eef5f8;
+        color: #315f72;
       }
 
       h2 {
         margin: 0;
-        font-size: 1.12rem;
-        line-height: 1.2;
+        font-size: 1.05rem;
+        line-height: 1.22;
       }
 
       .card-header p,
       .card-footer {
         margin: 0;
         color: var(--muted);
-        font-size: 0.94rem;
+        font-size: 0.91rem;
       }
 
       .control {
         border: 1px solid var(--line-strong);
-        background: var(--surface-strong);
+        background: var(--surface);
         overflow: hidden;
       }
 
       .control-top {
         display: flex;
         align-items: center;
-        gap: 10px;
-        min-height: 52px;
-        padding: 10px 12px;
+        gap: 9px;
+        min-height: 48px;
+        padding: 9px 11px;
         border-bottom: 1px solid var(--line);
       }
 
@@ -249,11 +217,11 @@
       .selection--multiple {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 7px;
       }
 
       .placeholder {
-        color: #84928d;
+        color: #737f8a;
       }
 
       .query {
@@ -262,7 +230,7 @@
 
       .inline-query {
         align-self: center;
-        padding: 6px 0;
+        padding: 5px 0;
         color: var(--ink);
         font-weight: 600;
         white-space: nowrap;
@@ -279,12 +247,12 @@
         align-items: center;
         justify-content: center;
         flex: none;
-        width: 28px;
-        height: 28px;
-        border: 1px solid #c9d8d1;
-        background: #f5fbf7;
-        color: #245846;
-        font-size: 0.94rem;
+        width: 26px;
+        height: 26px;
+        border: 1px solid #b8c6d2;
+        background: #f5f8fa;
+        color: #24485c;
+        font-size: 0.9rem;
         font-weight: 700;
       }
 
@@ -292,17 +260,17 @@
         display: inline-flex;
         align-items: center;
         max-width: 100%;
-        padding: 6px 10px;
-        border: 1px solid #bfd6cb;
-        background: #ecf7f1;
-        color: #184b39;
+        padding: 5px 9px;
+        border: 1px solid #b7d2c7;
+        background: var(--accent-soft);
+        color: #174c43;
         font-weight: 600;
       }
 
       .token.subtle {
-        border-color: #c8d7ee;
-        background: #edf4ff;
-        color: #26466e;
+        border-color: #c0d4ea;
+        background: var(--info-soft);
+        color: #2b5278;
       }
 
       .control.disabled {
@@ -322,11 +290,11 @@
 
       .status-note {
         flex: none;
-        padding: 4px 8px;
-        border: 1px solid #d8dde1;
-        background: #ffffff;
-        color: #6a747b;
-        font-size: 0.78rem;
+        padding: 3px 7px;
+        border: 1px solid #d1d7de;
+        background: var(--surface-muted);
+        color: #5f6b76;
+        font-size: 0.76rem;
         font-weight: 600;
       }
 
@@ -339,14 +307,15 @@
       .option,
       .message,
       .action {
-        padding: 12px;
-        background: var(--surface-strong);
+        padding: 10px 11px;
+        background: var(--surface);
       }
 
       .option strong,
-      .action strong {
+      .action strong,
+      .message strong {
         display: block;
-        font-size: 0.96rem;
+        font-size: 0.94rem;
       }
 
       .option span,
@@ -355,72 +324,73 @@
         display: block;
         margin-top: 4px;
         color: var(--muted);
-        font-size: 0.88rem;
+        font-size: 0.86rem;
       }
 
       .option-group-label {
-        padding: 10px 12px 8px;
-        background: #f6f1e7;
-        color: #5e675f;
-        font-size: 0.75rem;
+        padding: 9px 11px 7px;
+        background: var(--surface-muted);
+        color: #4f5f6d;
+        font-size: 0.74rem;
         font-weight: 700;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.04em;
         text-transform: uppercase;
       }
 
       .option.grouped-option {
-        padding-left: 20px;
+        padding-left: 18px;
       }
 
       .message {
-        background: #fff8ea;
-        color: #77450d;
+        background: var(--warning-soft);
+        color: var(--warning);
       }
 
       .message.empty {
-        background: #fff5f9;
-        color: #6a314b;
+        background: var(--empty-soft);
+        color: var(--empty);
       }
 
       .action {
-        background: #eef8f2;
-        color: #185740;
+        background: var(--accent-soft);
+        color: var(--accent);
       }
 
       .error-surface {
         display: grid;
         gap: 4px;
-        padding: 12px;
-        border-top: 1px solid #e7c7cf;
-        background: #fff7f8;
+        padding: 11px;
+        border-top: 1px solid #e1a8b3;
+        border-left: 4px solid var(--error);
+        background: var(--error-soft);
         color: var(--error);
       }
 
       .error-surface strong {
-        font-size: 0.96rem;
+        font-size: 0.94rem;
       }
 
       .error-surface span {
-        color: #7b5560;
-        font-size: 0.88rem;
+        color: #744a54;
+        font-size: 0.86rem;
       }
 
       .error-surface.custom-wrapper {
-        border-top: 1px solid #d8caee;
-        border-left: 4px solid #7b61ab;
-        background: #f8f4ff;
-        color: #5b4781;
+        border-top: 1px solid #c6afd8;
+        border-left-color: var(--empty);
+        background: var(--empty-soft);
+        color: var(--empty);
       }
 
       .error-surface.custom-wrapper span {
-        color: #5f5380;
+        color: #665071;
       }
 
       .legend {
-        margin-top: 28px;
-        padding: 18px 20px;
+        margin-top: 22px;
+        padding: 16px;
         border: 1px solid var(--line);
-        background: rgba(255, 255, 255, 0.72);
+        background: var(--surface);
         color: var(--muted);
       }
 
@@ -431,12 +401,12 @@
       @media (max-width: 640px) {
         main {
           width: min(100% - 20px, 1120px);
-          padding-top: 40px;
-          padding-bottom: 56px;
+          padding-top: 34px;
+          padding-bottom: 48px;
         }
 
         .card {
-          padding: 16px;
+          padding: 14px;
         }
       }
     </style>
@@ -448,7 +418,7 @@
         <h1>Tom Select Visual Reference</h1>
         <p class="lede">
           A product-neutral static reference for representative Tom Select-backed field states.
-          Use this page to review how common states read at a glance before wiring them into a host app.
+          Use this page as a diagnostic checklist for visible state differences before wiring helpers into a host app.
         </p>
         <div class="hero-links">
           <a href="field_helpers.md">Field helper reference</a>
@@ -469,14 +439,8 @@
               <div class="caret">▾</div>
             </div>
             <div class="dropdown">
-              <div class="option">
-                <strong>Example option</strong>
-                <span>Secondary description</span>
-              </div>
-              <div class="option">
-                <strong>Another option</strong>
-                <span>Badge or helper text can appear here</span>
-              </div>
+              <div class="option"><strong>Example option</strong><span>Secondary description</span></div>
+              <div class="option"><strong>Another option</strong><span>Badge or helper text can appear here</span></div>
             </div>
           </div>
           <p class="card-footer">The placeholder stays generic and leaves query parsing to the host app.</p>
@@ -489,18 +453,8 @@
             <p>Shows the ordinary settled state after one option has already been selected.</p>
           </div>
           <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="selection">
-                <span class="token">Example customer</span>
-              </div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="option">
-                <strong>Example customer</strong>
-                <span>Selected label with optional description</span>
-              </div>
-            </div>
+            <div class="control-top"><div class="selection"><span class="token">Example customer</span></div><div class="caret">▾</div></div>
+            <div class="dropdown"><div class="option"><strong>Example customer</strong><span>Selected label with optional description</span></div></div>
           </div>
           <p class="card-footer">Use this baseline when the choice is already settled and no preload-specific context needs to be shown.</p>
         </article>
@@ -509,22 +463,11 @@
           <div class="card-header">
             <span class="tag">Clearable</span>
             <h2>Chosen value with a visible clear affordance</h2>
-            <p>Represents the `allow_clear: true` lane where the field can return to its placeholder without switching to tag entry or multi selection.</p>
+            <p>Represents the `allow_clear: true` lane where the field can return to its placeholder.</p>
           </div>
           <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="selection">
-                <span class="token">Example customer</span>
-              </div>
-              <div class="clear-button">×</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="message">
-                <strong>Clear returns the field to its placeholder</strong>
-                <span>The single-select contract stays collection-backed even when the host app lets the current value be removed inline.</span>
-              </div>
-            </div>
+            <div class="control-top"><div class="selection"><span class="token">Example customer</span></div><div class="clear-button">×</div><div class="caret">▾</div></div>
+            <div class="dropdown"><div class="message"><strong>Clear returns the field to its placeholder</strong><span>The single-select contract stays collection-backed even when the host app lets the current value be removed inline.</span></div></div>
           </div>
           <p class="card-footer">Use this lane when prose docs mention clearability but the quick visual entrypoint also needs to show the visible remove affordance.</p>
         </article>
@@ -533,397 +476,139 @@
           <div class="card-header">
             <span class="tag preload">Selected Preload</span>
             <h2>Edit-form label restored before search</h2>
-            <p>Represents the `selected_url:` lane where a saved ID becomes a visible label before the user types a fresh query.</p>
+            <p>Represents the `selected_url:` lane where a saved ID becomes a visible label before a fresh query.</p>
           </div>
           <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="selection">
-                <span class="token subtle">Northwind Supplies</span>
-              </div>
-              <div class="status-note">Preloaded</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="message">
-                <strong>Selected label restored from saved value</strong>
-                <span>The field can stay settled until the next user-driven search, while `selected-load` and `selected-load-error` remain the maintained host-app hooks.</span>
-              </div>
-            </div>
+            <div class="control-top"><div class="selection"><span class="token subtle">Northwind Supplies</span></div><div class="status-note">Preloaded</div><div class="caret">▾</div></div>
+            <div class="dropdown"><div class="message"><strong>Selected label restored from saved value</strong><span>The field can stay settled until the next user-driven search, while `selected-load` and `selected-load-error` remain host-app hooks.</span></div></div>
           </div>
-          <p class="card-footer">Use this card to distinguish edit-form label restore from the ordinary selected state and from remote search success or failure.</p>
+          <p class="card-footer">Use this card to distinguish edit-form label restore from ordinary selected state and remote search success or failure.</p>
         </article>
 
         <article class="card">
           <div class="card-header">
             <span class="tag error">Selected Preload Failure</span>
             <h2>Saved label restore failed before a new search</h2>
-            <p>Represents the `selected-load-error` lane where an edit form starts from a saved ID but the host app shows a nearby fallback instead of a restored label.</p>
+            <p>Represents the `selected-load-error` lane when an edit form starts from a saved ID but the label restore fails.</p>
           </div>
           <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="placeholder">Search a replacement customer</div>
-              <div class="status-note">Restore failed</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="error-surface">
-              <strong>Unable to restore the saved customer label</strong>
-              <span>The host app can explain the preload failure beside the field while keeping remote search and recovery policy separate.</span>
-            </div>
+            <div class="control-top"><div class="placeholder">Search a replacement customer</div><div class="status-note">Restore failed</div><div class="caret">▾</div></div>
+            <div class="error-surface"><strong>Unable to restore the saved customer label</strong><span>The host app can explain the preload failure beside the field while keeping remote search and recovery policy separate.</span></div>
           </div>
-          <p class="card-footer">Keep this lane distinct from the generic remote-search failure card: the issue happened while restoring an already-saved value, not while querying for new options.</p>
+          <p class="card-footer">Keep this lane distinct from generic remote-search failure: the issue happened while restoring an already-saved value.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag autocomplete">Autocomplete</span>
-            <h2>Free-text query with assistive suggestions</h2>
-            <p>Represents `rfk_autocomplete` when the typed text itself is the submitted value and the dropdown only helps the user keep typing.</p>
-          </div>
+          <div class="card-header"><span class="tag autocomplete">Autocomplete</span><h2>Free-text query with assistive suggestions</h2><p>Represents `rfk_autocomplete` when typed text is the submitted value and dropdown suggestions only help typing.</p></div>
           <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="query">northwind sup</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="option">
-                <strong>Northwind Supplies</strong>
-                <span>Suggestion only: the field can stay free text even when the list helps the user finish typing.</span>
-              </div>
-              <div class="option">
-                <strong>Northwind Support Desk</strong>
-                <span>Use this state to keep autocomplete distinct from ID-backed combobox selection or structured token search.</span>
-              </div>
-            </div>
+            <div class="control-top"><div class="query">northwind sup</div><div class="caret">▾</div></div>
+            <div class="dropdown"><div class="option"><strong>Northwind Supplies</strong><span>Suggestion only: the field can stay free text even when the list helps the user finish typing.</span></div><div class="option"><strong>Northwind Support Desk</strong><span>Keep autocomplete distinct from ID-backed combobox selection or structured token search.</span></div></div>
           </div>
           <p class="card-footer">Unlike `rfk_combobox`, this helper does not make the suggestion list the canonical selected-ID contract on its own.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag autocomplete-empty">Autocomplete Empty</span>
-            <h2>No suggestions while free-text typing continues</h2>
-            <p>Represents the no-match lane for `rfk_autocomplete`, where an empty suggestion list does not turn the field into a read-only selection contract.</p>
-          </div>
+          <div class="card-header"><span class="tag autocomplete-empty">Autocomplete Empty</span><h2>No suggestions while free-text typing continues</h2><p>Represents the no-match lane for `rfk_autocomplete`, where an empty suggestion list stays editable.</p></div>
           <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="query">northwind zeta</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="message empty">
-                <strong>No matching suggestions yet</strong>
-                <span>The user can keep typing free text, while the host app still owns any follow-up wording or guidance.</span>
-              </div>
-            </div>
+            <div class="control-top"><div class="query">northwind zeta</div><div class="caret">▾</div></div>
+            <div class="dropdown"><div class="message empty"><strong>No matching suggestions yet</strong><span>The user can keep typing free text, while the host app still owns follow-up wording.</span></div></div>
           </div>
-          <p class="card-footer">Use this card to separate autocomplete's continue-typing lane from collection-backed empty states that stay constrained to existing options.</p>
+          <p class="card-footer">Use this card to separate autocomplete's continue-typing lane from collection-backed empty states.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag multi">Multi Select</span>
-            <h2>Multiple chosen values in a settled state</h2>
-            <p>Represents `rfk_multi_select` when the host app is choosing from a known collection, not creating tags.</p>
-          </div>
+          <div class="card-header"><span class="tag multi">Multi Select</span><h2>Multiple chosen values in a settled state</h2><p>Represents `rfk_multi_select` when the host app is choosing from a known collection, not creating tags.</p></div>
           <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="selection selection--multiple">
-                <span class="token subtle">Operations</span>
-                <span class="token subtle">Finance</span>
-                <span class="token subtle">Support</span>
-              </div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="option">
-                <strong>Operations</strong>
-                <span>One of several selected collection-backed values</span>
-              </div>
-              <div class="option">
-                <strong>Finance</strong>
-                <span>Keep this surface distinct from create-on-the-fly tag entry</span>
-              </div>
-            </div>
+            <div class="control-top"><div class="selection selection--multiple"><span class="token subtle">Operations</span><span class="token subtle">Finance</span><span class="token subtle">Support</span></div><div class="caret">▾</div></div>
+            <div class="dropdown"><div class="option"><strong>Operations</strong><span>One of several selected collection-backed values</span></div><div class="option"><strong>Finance</strong><span>Keep this surface distinct from create-on-the-fly tag entry</span></div></div>
           </div>
-          <p class="card-footer">Use `rfk_tags` when the interaction should feel like tag entry or optional creation, rather than ordinary multi selection.</p>
+          <p class="card-footer">Use `rfk_tags` when the interaction should feel like tag entry or optional creation.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag grouped">Grouped Select</span>
-            <h2>Grouped choices with visible optgroup headings</h2>
-            <p>Represents `rfk_grouped_select` when a known collection stays server-rendered but related options still need clear buckets.</p>
-          </div>
+          <div class="card-header"><span class="tag grouped">Grouped Select</span><h2>Grouped choices with visible optgroup headings</h2><p>Represents `rfk_grouped_select` when related options need clear buckets.</p></div>
           <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="placeholder">Choose an account owner</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="option-group-label">Current Accounts</div>
-              <div class="option grouped-option">
-                <strong>Acme North</strong>
-                <span>Representative option inside the first grouped collection</span>
-              </div>
-              <div class="option grouped-option">
-                <strong>Acme South</strong>
-                <span>Grouped select keeps category structure readable before a value is chosen</span>
-              </div>
-              <div class="option-group-label">Archived Accounts</div>
-              <div class="option grouped-option">
-                <strong>Legacy Retail</strong>
-                <span>Optgroup headings make archived or secondary sets easy to scan without changing helper semantics</span>
-              </div>
-            </div>
+            <div class="control-top"><div class="placeholder">Choose an account owner</div><div class="caret">▾</div></div>
+            <div class="dropdown"><div class="option-group-label">Current Accounts</div><div class="option grouped-option"><strong>Acme North</strong><span>Representative option inside the first grouped collection</span></div><div class="option grouped-option"><strong>Acme South</strong><span>Grouped select keeps category structure readable before a value is chosen</span></div><div class="option-group-label">Archived Accounts</div><div class="option grouped-option"><strong>Legacy Retail</strong><span>Optgroup headings make archived sets easy to scan without changing semantics</span></div></div>
           </div>
-          <p class="card-footer">Compared with ordinary `rfk_select`, this state keeps the grouped collection structure explicit instead of flattening every option into one list.</p>
+          <p class="card-footer">Compared with ordinary `rfk_select`, this state keeps the grouped collection structure explicit.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag">Enum</span>
-            <h2>Enum-backed status choice</h2>
-            <p>Represents `rfk_enum_select` when a Rails enum attribute keeps ordinary select semantics but still benefits from a clearer status-choice surface.</p>
-          </div>
+          <div class="card-header"><span class="tag">Enum</span><h2>Enum-backed status choice</h2><p>Represents `rfk_enum_select` when a Rails enum attribute keeps ordinary select semantics.</p></div>
           <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="selection">
-                <span class="token subtle">Published</span>
-              </div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="option">
-                <strong>Draft</strong>
-                <span>Representative enum-backed state before publication</span>
-              </div>
-              <div class="option">
-                <strong>Published</strong>
-                <span>The selected value still comes from the model's enum-backed attribute.</span>
-              </div>
-              <div class="option">
-                <strong>Archived</strong>
-                <span>Keep business-specific labels in the host app while this reference only shows the helper-specific shape.</span>
-              </div>
-            </div>
+            <div class="control-top"><div class="selection"><span class="token subtle">Published</span></div><div class="caret">▾</div></div>
+            <div class="dropdown"><div class="option"><strong>Draft</strong><span>Representative enum-backed state before publication</span></div><div class="option"><strong>Published</strong><span>The selected value still comes from the model's enum-backed attribute.</span></div><div class="option"><strong>Archived</strong><span>Keep business-specific labels in the host app.</span></div></div>
           </div>
-          <p class="card-footer">Compared with a generic collection select, the source of truth stays the enum-backed attribute rather than a hand-maintained option list.</p>
+          <p class="card-footer">The source of truth stays the enum-backed attribute rather than a hand-maintained option list.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag tags">Tags</span>
-            <h2>Tag entry with the next value in progress</h2>
-            <p>Represents `rfk_tags` when existing tokens stay visible and the same field is still ready to accept or create another tag.</p>
-          </div>
+          <div class="card-header"><span class="tag tags">Tags</span><h2>Tag entry with the next value in progress</h2><p>Represents `rfk_tags` when existing tokens stay visible and another tag can be created.</p></div>
           <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="selection selection--multiple">
-                <span class="token">Priority</span>
-                <span class="token">Internal</span>
-                <span class="inline-query">beta-pilot</span>
-              </div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="action">
-                <strong>Add “beta-pilot” as a new tag</strong>
-                <span>Compared with ordinary multi select, this surface keeps focus on tag entry and optional creation.</span>
-              </div>
-            </div>
+            <div class="control-top"><div class="selection selection--multiple"><span class="token">Priority</span><span class="token">Internal</span><span class="inline-query">beta-pilot</span></div><div class="caret">▾</div></div>
+            <div class="dropdown"><div class="action"><strong>Add “beta-pilot” as a new tag</strong><span>Compared with ordinary multi select, this surface keeps focus on tag entry and optional creation.</span></div></div>
           </div>
           <p class="card-footer">This card shows the helper-specific meaning that stays implicit in the generic create affordance.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag tokens">Token Search</span>
-            <h2>Structured query with the next clause in progress</h2>
-            <p>Represents `rfk_token_search` when the field already holds token text and the user is refining the next search clause.</p>
-          </div>
+          <div class="card-header"><span class="tag tokens">Token Search</span><h2>Structured query with the next clause in progress</h2><p>Represents `rfk_token_search` when the user is refining the next search clause.</p></div>
           <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="selection selection--multiple">
-                <span class="token subtle">status:open</span>
-                <span class="token subtle">assignee:matsuo</span>
-                <span class="inline-query">prio</span>
-              </div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="option">
-                <strong>priority:high</strong>
-                <span>Suggestion metadata helps finish the token text without choosing search semantics for the app.</span>
-              </div>
-              <div class="option">
-                <strong>priority:low</strong>
-                <span>Use this surface to keep structured token text distinct from create-on-the-fly tag entry.</span>
-              </div>
-            </div>
+            <div class="control-top"><div class="selection selection--multiple"><span class="token subtle">status:open</span><span class="token subtle">assignee:matsuo</span><span class="inline-query">prio</span></div><div class="caret">▾</div></div>
+            <div class="dropdown"><div class="option"><strong>priority:high</strong><span>Suggestion metadata helps finish the token text without choosing search semantics for the app.</span></div><div class="option"><strong>priority:low</strong><span>Keep structured token text distinct from create-on-the-fly tag entry.</span></div></div>
           </div>
-          <p class="card-footer">Suggestions help author token text, but parsing the submitted query and building `params[:q]` still belong to the host app.</p>
+          <p class="card-footer">Suggestions help author token text, but parsing the submitted query still belongs to the host app.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag tokens-empty">Token Search Empty</span>
-            <h2>No suggestions while token text stays editable</h2>
-            <p>Represents `rfk_token_search` when the next clause has no suggested completion yet, but the current token text still remains the user's draft query.</p>
-          </div>
+          <div class="card-header"><span class="tag tokens-empty">Token Search Empty</span><h2>No suggestions while token text stays editable</h2><p>Represents `rfk_token_search` when the next clause has no suggested completion yet.</p></div>
           <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="selection selection--multiple">
-                <span class="token subtle">status:open</span>
-                <span class="token subtle">assignee:matsuo</span>
-                <span class="inline-query">priority:urgentzz</span>
-              </div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="message empty">
-                <strong>No token suggestions for “priority:urgentzz”</strong>
-                <span>The text stays editable and submittable, while the host app still decides whether that unfinished clause is valid, ignored, or needs help copy.</span>
-              </div>
-            </div>
+            <div class="control-top"><div class="selection selection--multiple"><span class="token subtle">status:open</span><span class="token subtle">assignee:matsuo</span><span class="inline-query">priority:urgentzz</span></div><div class="caret">▾</div></div>
+            <div class="dropdown"><div class="message empty"><strong>No token suggestions for “priority:urgentzz”</strong><span>The text stays editable and submittable while the host app decides whether that clause is valid.</span></div></div>
           </div>
-          <p class="card-footer">Unlike the collection-backed `No Results` lane, this state keeps the structured token text itself as the current query draft instead of implying that only predefined options are allowed.</p>
+          <p class="card-footer">Unlike collection-backed `No Results`, this state keeps structured token text as the current query draft.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag disabled">Disabled</span>
-            <h2>Non-editable field with the current value</h2>
-            <p>Use when the host app keeps the selected value visible but does not allow edits.</p>
-          </div>
-          <div class="control disabled" aria-hidden="true">
-            <div class="control-top">
-              <div class="selection">
-                <span class="token">Archived customer</span>
-              </div>
-              <div class="status-note">Disabled</div>
-            </div>
-          </div>
-          <p class="card-footer">Final permission or availability wording still belongs to the host app; this reference only shows the muted non-editable surface.</p>
+          <div class="card-header"><span class="tag disabled">Disabled</span><h2>Non-editable field with the current value</h2><p>Use when the host app keeps the selected value visible but does not allow edits.</p></div>
+          <div class="control disabled" aria-hidden="true"><div class="control-top"><div class="selection"><span class="token">Archived customer</span></div><div class="status-note">Disabled</div></div></div>
+          <p class="card-footer">Final permission or availability wording still belongs to the host app.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag loading">Loading</span>
-            <h2>Remote query in progress</h2>
-            <p>Useful for remote combobox and token search flows while suggestions are loading.</p>
-          </div>
-          <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="query">exa</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="message">
-                <strong>Loading results</strong>
-                <span>Waiting for the host app endpoint</span>
-              </div>
-            </div>
-          </div>
+          <div class="card-header"><span class="tag loading">Loading</span><h2>Remote query in progress</h2><p>Useful for remote combobox and token search flows while suggestions are loading.</p></div>
+          <div class="control" aria-hidden="true"><div class="control-top"><div class="query">exa</div><div class="caret">▾</div></div><div class="dropdown"><div class="message"><strong>Loading results</strong><span>Waiting for the host app endpoint</span></div></div></div>
           <p class="card-footer">This reference illustrates the visible state only, not the request lifecycle.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag empty">No Results</span>
-            <h2>Collection-backed empty result set</h2>
-            <p>Use when the query returns no matches and the helper stays constrained to the documented option set.</p>
-          </div>
-          <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="query">zxq</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="message empty">
-                <strong>No matching options</strong>
-                <span>The host app still owns retry wording and follow-up guidance.</span>
-              </div>
-            </div>
-          </div>
-          <p class="card-footer">Keep empty-state copy light so collection-backed helpers do not imply extra search semantics beyond the current query.</p>
+          <div class="card-header"><span class="tag empty">No Results</span><h2>Collection-backed empty result set</h2><p>Use when the query returns no matches and the helper stays constrained to documented options.</p></div>
+          <div class="control" aria-hidden="true"><div class="control-top"><div class="query">zxq</div><div class="caret">▾</div></div><div class="dropdown"><div class="message empty"><strong>No matching options</strong><span>The host app still owns retry wording and follow-up guidance.</span></div></div></div>
+          <p class="card-footer">Keep empty-state copy light so collection-backed helpers do not imply extra search semantics.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag error">Error Surface</span>
-            <h2>Inline placeholder after request failure</h2>
-            <p>Use when `error_surface: true` keeps a small field-adjacent slot available for host-app error feedback.</p>
-          </div>
-          <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="query">exa</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="error-surface">
-              <strong>Unable to load matching options</strong>
-              <span>The host app can replace or clear this placeholder from the documented request-failure and follow-up hooks.</span>
-            </div>
-          </div>
-          <p class="card-footer">Keep the inline message product-neutral here; retry wording and business-specific recovery still belong to the host app.</p>
+          <div class="card-header"><span class="tag error">Error Surface</span><h2>Inline placeholder after request failure</h2><p>Use when `error_surface: true` keeps a small field-adjacent slot available for feedback.</p></div>
+          <div class="control" aria-hidden="true"><div class="control-top"><div class="query">exa</div><div class="caret">▾</div></div><div class="error-surface"><strong>Unable to load matching options</strong><span>The host app can replace or clear this placeholder from documented request-failure hooks.</span></div></div>
+          <p class="card-footer">Keep the inline message product-neutral; retry wording and recovery belong to the host app.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag error">Custom Wrapper</span>
-            <h2>Styled `error_surface_html:` variant</h2>
-            <p>Represents the same nearby placeholder contract after the host app changes wrapper classes or attributes through `error_surface_html:`.</p>
-          </div>
-          <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="query">exa</div>
-              <div class="status-note">field-error</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="error-surface custom-wrapper">
-              <strong>Unable to load matching options</strong>
-              <span>The host app can restyle the wrapper while keeping the same field-adjacent placeholder contract and event boundaries.</span>
-            </div>
-          </div>
-          <p class="card-footer">Use this lane to compare wrapper customization itself, not to introduce a new failure family or a different retry policy.</p>
+          <div class="card-header"><span class="tag error">Custom Wrapper</span><h2>Styled `error_surface_html:` variant</h2><p>Represents the same placeholder contract after the host app changes wrapper classes or attributes.</p></div>
+          <div class="control" aria-hidden="true"><div class="control-top"><div class="query">exa</div><div class="status-note">field-error</div><div class="caret">▾</div></div><div class="error-surface custom-wrapper"><strong>Unable to load matching options</strong><span>The host app can restyle the wrapper while keeping the same field-adjacent placeholder contract.</span></div></div>
+          <p class="card-footer">Use this lane to compare wrapper customization itself, not to introduce a different retry policy.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag create-error">Create Error</span>
-            <h2>Inline create failed beside the field</h2>
-            <p>Represents the `create-error` lane when a create-on-the-fly request fails and the host app uses the field-adjacent fallback surface to explain what happened.</p>
-          </div>
-          <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="query">New label</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="error-surface">
-              <strong>Unable to create “New label”</strong>
-              <span>The host app can keep validation or retry guidance close to the field without turning this state into a generic remote-search failure.</span>
-            </div>
-          </div>
-          <p class="card-footer">Use this card when create-on-the-fly fails after the user has already committed to a new value, leaving retry policy and recovery UI in host-app hands.</p>
+          <div class="card-header"><span class="tag create-error">Create Error</span><h2>Inline create failed beside the field</h2><p>Represents the `create-error` lane when a create-on-the-fly request fails.</p></div>
+          <div class="control" aria-hidden="true"><div class="control-top"><div class="query">New label</div><div class="caret">▾</div></div><div class="error-surface"><strong>Unable to create “New label”</strong><span>The host app can keep validation or retry guidance close to the field without turning this into a generic remote-search failure.</span></div></div>
+          <p class="card-footer">Use this card when create-on-the-fly fails after the user has committed to a new value.</p>
         </article>
 
         <article class="card">
-          <div class="card-header">
-            <span class="tag create">Create Enabled</span>
-            <h2>Create-on-the-fly affordance</h2>
-            <p>Applicable to helpers that allow turning the current input into a new option.</p>
-          </div>
-          <div class="control" aria-hidden="true">
-            <div class="control-top">
-              <div class="query">New label</div>
-              <div class="caret">▾</div>
-            </div>
-            <div class="dropdown">
-              <div class="action">
-                <strong>Create “New label”</strong>
-                <span>Confirmation, validation, and persistence still belong to the host app.</span>
-              </div>
-            </div>
-          </div>
+          <div class="card-header"><span class="tag create">Create Enabled</span><h2>Create-on-the-fly affordance</h2><p>Applicable to helpers that allow turning the current input into a new option.</p></div>
+          <div class="control" aria-hidden="true"><div class="control-top"><div class="query">New label</div><div class="caret">▾</div></div><div class="dropdown"><div class="action"><strong>Create “New label”</strong><span>Confirmation, validation, and persistence still belong to the host app.</span></div></div></div>
           <p class="card-footer">This keeps the visual cue narrow and avoids implying a full create workflow.</p>
         </article>
       </section>
