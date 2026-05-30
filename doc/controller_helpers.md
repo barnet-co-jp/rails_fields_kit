@@ -123,6 +123,14 @@ rfk_create_with(
 - `before_save:` hook called before `save`. Supports method name or callable. Returns `422` when false.
 - `wrap:` wraps the JSON response, commonly `"option"`.
 
+## Fixed request params and scoping
+
+FormBuilder options such as `query_params:`, `selected_query_params:`, and `create_params:` are request-shaping helpers. They add fixed values to the outgoing remote search, selected preload, or create request, but they do not move authorization, tenant scoping, validation, or assignment policy into Rails Fields Kit.
+
+Use fixed params for contextual values that the endpoint still verifies with server-side state. For example, an app may render `query_params: { account_id: current_account.id }` so the request carries an account hint, while the controller still scopes through a trusted relation such as `scope: -> { current_account.customers }` instead of trusting the incoming `params[:account_id]` by itself.
+
+The same boundary applies to create-on-the-fly fields: `create_params:` adds fixed JSON fields to the request body, but `rfk_create_with` should still use `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy to decide what can be persisted.
+
 ## `rfk_token_suggestions_with`
 
 Defines a lightweight token suggestion action, defaulting to `index`. Use it with `rfk_token_search` when suggestions are static, generated from controller context, or not tied to a single Active Record search relation.
