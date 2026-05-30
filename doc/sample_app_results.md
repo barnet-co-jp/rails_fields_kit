@@ -86,6 +86,18 @@ Notes:
 
 Notes:
 
+## Visual reference render checks
+
+Use this section when the release or PR changes one of the static visual reference HTML files.
+
+- Changed visual reference file(s):
+- Rendered artifact or screenshot link(s):
+- [ ] desktop viewport checked for state visibility, readable labels, and expected spacing
+- [ ] narrow/mobile viewport checked for wrapping, overflow, state visibility, and readable feedback copy
+- [ ] review notes call out any intentionally deferred visual follow-up instead of treating CI green as visual approval
+
+Notes:
+
 ## Native helper representative wrapper and accessibility lane checks
 
 - [ ] one representative native helper field covered the end-to-end `wrapper: true` lane
