@@ -13,14 +13,18 @@ RSpec.describe "package metadata" do
   def build_entrypoint_sandbox
     Dir.mktmpdir("rails-fields-kit-entrypoints") do |tmpdir|
       package_dir = File.join(tmpdir, "app/javascript/rails_fields_kit")
+      node_package_dir = File.join(tmpdir, "node_modules/rails_fields_kit")
+      node_package_entrypoint_dir = File.join(node_package_dir, "app/javascript/rails_fields_kit")
       stimulus_dir = File.join(tmpdir, "node_modules/@hotwired/stimulus")
       tom_select_dir = File.join(tmpdir, "node_modules/tom-select")
 
       FileUtils.mkdir_p(package_dir)
+      FileUtils.mkdir_p(node_package_entrypoint_dir)
       FileUtils.mkdir_p(stimulus_dir)
       FileUtils.mkdir_p(tom_select_dir)
 
       File.write(File.join(tmpdir, "package.json"), "{\n  \"type\": \"module\"\n}\n")
+      FileUtils.cp(package_json_path, File.join(node_package_dir, "package.json"))
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/index.js"),
         File.join(package_dir, "index.js")
@@ -28,6 +32,14 @@ RSpec.describe "package metadata" do
       FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
         File.join(package_dir, "tom_select_controller.js")
+      )
+      FileUtils.cp(
+        File.join(package_dir, "index.js"),
+        File.join(node_package_entrypoint_dir, "index.js")
+      )
+      FileUtils.cp(
+        File.join(package_dir, "tom_select_controller.js"),
+        File.join(node_package_entrypoint_dir, "tom_select_controller.js")
       )
       File.write(
         File.join(stimulus_dir, "package.json"),
@@ -62,8 +74,13 @@ RSpec.describe "package metadata" do
     JS
   end
 
-  def run_node_entrypoint_check(*paths, script:)
-    stdout, stderr, status = Open3.capture3("node", "--input-type=module", "-e", script, *paths)
+  def run_node_entrypoint_check(*paths, script:, chdir: nil)
+    command = ["node", "--input-type=module", "-e", script, *paths]
+    stdout, stderr, status = if chdir
+      Open3.capture3(*command, chdir: chdir)
+    else
+      Open3.capture3(*command)
+    end
 
     expect(status).to be_success, <<~MESSAGE
       expected documented JavaScript entrypoints to load successfully
@@ -115,6 +132,33 @@ RSpec.describe "package metadata" do
       JS
 
       run_node_entrypoint_check(index_entrypoint_path, controller_entrypoint_path, script:)
+    end
+  end
+
+  it "loads the package-name imports documented for host applications" do
+    build_entrypoint_sandbox do |tmpdir|
+      script = <<~JS
+        const rootModule = await import("rails_fields_kit")
+        const controllerModule = await import("rails_fields_kit/tom_select_controller")
+
+        if (typeof controllerModule.default !== "function") {
+          throw new Error("direct controller package import did not export a default controller class")
+        }
+
+        if (rootModule.default !== rootModule.TomSelectController) {
+          throw new Error("package root default export no longer matches the named TomSelectController export")
+        }
+
+        if (rootModule.TomSelectController !== controllerModule.default) {
+          throw new Error("package root named export no longer matches the direct controller package import")
+        }
+
+        if (typeof rootModule.tomSelectTextOverrideContract !== "function") {
+          throw new Error("package root import did not expose tomSelectTextOverrideContract")
+        }
+      JS
+
+      run_node_entrypoint_check(script:, chdir: tmpdir)
     end
   end
 
