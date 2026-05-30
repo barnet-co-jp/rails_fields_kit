@@ -48,6 +48,7 @@ Before release-oriented docs updates, review:
 - `CHANGELOG.md`
 - `doc/release.md`
 - `doc/final_release_checklist.md`
+- `doc/selected_preload_release_gate.md`
 - `doc/sample_app_checklist.md`
 - `doc/sample_app_results.md`
 - the current version-specific release note draft

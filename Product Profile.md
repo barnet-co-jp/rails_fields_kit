@@ -14,7 +14,7 @@ Rails Fields Kit is a Ruby gem that gives Rails applications a focused set of fo
 
 - wrap Tom Select in Rails-friendly helpers for naming, redisplay, validation, and accessibility
 - support remote search, selected preload, and create-on-the-fly workflows
-- expose stable integration points for controller helpers, token suggestion builders, and table metadata
+- expose stable integration points for controller helpers, token suggestion builders, JavaScript rendered-contract helpers, and table metadata
 - stay easy to adopt from ordinary Rails forms without taking over the whole frontend stack
 
 ## Responsibility boundary
@@ -35,6 +35,7 @@ Host applications remain responsible for:
 - controller helpers under `RailsFieldsKit::Searchable`
 - token suggestion builders including `RailsFieldsKit::TokenSuggestions.build` and `RailsFieldsKit::RansackSuggestions.build`
 - table metadata objects including `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
+- package-root JavaScript exports including `TomSelectController` and rendered-field contract helpers documented in `doc/public_api.md`
 - Stimulus events dispatched by `rails-fields-kit--tom-select`
 
 ## Current non-goals
@@ -63,7 +64,7 @@ Host applications remain responsible for:
 - `doc/public_api.md`: intended stable API for 0.1.x
 - `doc/events.md`: Stimulus event contract
 - `doc/development.md`: local checks
-- `doc/release.md`, `doc/final_release_checklist.md`, `doc/sample_app_checklist.md`, `doc/sample_app_results.md`, and `doc/release_notes_0_1_1.md`: release-facing maintainer docs and current next-release draft
+- `doc/release.md`, `doc/final_release_checklist.md`, `doc/selected_preload_release_gate.md`, `doc/sample_app_checklist.md`, `doc/sample_app_results.md`, and `doc/release_notes_0_1_1.md`: release-facing maintainer docs and current next-release draft
 
 ## Source-of-truth reminder
 
