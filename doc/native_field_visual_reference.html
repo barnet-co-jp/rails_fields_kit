@@ -7,22 +7,25 @@
     <style>
       :root {
         color-scheme: light;
-        --page: #f6f1e8;
-        --surface: #fffdfa;
+        --page: #f7f8fa;
+        --surface: #ffffff;
+        --surface-muted: #f3f5f7;
         --surface-strong: #ffffff;
-        --ink: #233036;
-        --muted: #5f6d74;
-        --line: #d8d1c4;
-        --line-strong: #bbb09f;
-        --accent: #236a5b;
-        --accent-soft: #dcefe9;
-        --warning: #8c5c20;
-        --warning-soft: #f8ebd6;
-        --error: #8d3b4b;
-        --error-soft: #fae7ec;
+        --ink: #17212b;
+        --muted: #5d6975;
+        --line: #d6dbe1;
+        --line-strong: #9da8b3;
+        --accent: #176b5f;
+        --accent-soft: #e6f4f1;
+        --info: #285f9f;
+        --info-soft: #eaf2fb;
+        --warning: #8a5a12;
+        --warning-soft: #fff3d8;
+        --error: #9f2438;
+        --error-soft: #fdecef;
         --disabled: #eef1f3;
-        --disabled-ink: #516069;
-        --shadow: 0 18px 42px rgba(35, 48, 54, 0.08);
+        --disabled-ink: #48545f;
+        --shadow: 0 1px 2px rgba(23, 33, 43, 0.06);
       }
 
       * {
@@ -31,28 +34,28 @@
 
       body {
         margin: 0;
-        background:
-          radial-gradient(circle at top left, rgba(35, 106, 91, 0.12), transparent 24%),
-          linear-gradient(180deg, #fbf8f1 0%, var(--page) 100%);
+        background: var(--page);
         color: var(--ink);
-        font-family: "Segoe UI", sans-serif;
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
         line-height: 1.5;
       }
 
       main {
         width: min(1120px, calc(100% - 32px));
         margin: 0 auto;
-        padding: 56px 0 72px;
+        padding: 44px 0 60px;
       }
 
       .hero {
         display: grid;
-        gap: 18px;
-        margin-bottom: 34px;
+        gap: 14px;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--line);
       }
 
       .eyebrow {
-        font-size: 0.78rem;
+        font-size: 0.76rem;
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -61,14 +64,13 @@
 
       h1 {
         margin: 0;
-        font-family: Georgia, serif;
-        font-size: clamp(2.2rem, 4vw, 3.3rem);
+        font-size: clamp(2rem, 4vw, 3rem);
         line-height: 1.08;
-        font-weight: 700;
+        font-weight: 650;
       }
 
       .lede {
-        max-width: 760px;
+        max-width: 780px;
         margin: 0;
         font-size: 1rem;
         color: var(--muted);
@@ -77,35 +79,36 @@
       .hero-links {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 10px;
       }
 
       .hero-links a {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 40px;
-        padding: 0 14px;
+        min-height: 38px;
+        padding: 0 12px;
         border: 1px solid var(--line-strong);
-        background: rgba(255, 255, 255, 0.72);
+        background: var(--surface);
         color: var(--ink);
         text-decoration: none;
       }
 
       .hero-links a:hover {
         border-color: var(--accent);
+        color: var(--accent);
       }
 
       .grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 18px;
+        gap: 14px;
       }
 
       .card {
         display: grid;
-        gap: 14px;
-        padding: 20px;
+        gap: 12px;
+        padding: 16px;
         border: 1px solid var(--line);
         background: var(--surface);
         box-shadow: var(--shadow);
@@ -113,54 +116,45 @@
 
       .tag {
         justify-self: start;
-        padding: 4px 8px;
-        border: 1px solid var(--line);
-        background: var(--surface-strong);
-        font-size: 0.74rem;
+        padding: 3px 7px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface-muted);
+        color: var(--ink);
+        font-size: 0.72rem;
         font-weight: 700;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.04em;
         text-transform: uppercase;
       }
 
       .tag.validation {
-        border-color: #e0bcc6;
+        border-color: #e1a8b3;
         background: var(--error-soft);
         color: var(--error);
       }
 
       .tag.affixes {
-        border-color: #dfcaa8;
+        border-color: #d6b663;
         background: var(--warning-soft);
         color: var(--warning);
       }
 
-      .tag.focus {
-        border-color: #a8cfc3;
-        background: #e8f6f1;
-        color: var(--accent);
-      }
-
-      .tag.customization {
-        border-color: #c7d7cf;
-        background: #edf6f1;
-        color: var(--accent);
-      }
-
+      .tag.focus,
+      .tag.customization,
       .tag.noneditable {
-        border-color: #b9d4cd;
+        border-color: #9bcdbc;
         background: var(--accent-soft);
         color: var(--accent);
       }
 
       .tag.accessibility {
-        border-color: #c9d7d9;
-        background: #edf5f6;
-        color: #245864;
+        border-color: #adc6e4;
+        background: var(--info-soft);
+        color: var(--info);
       }
 
       h2 {
         margin: 0;
-        font-size: 1.12rem;
+        font-size: 1.08rem;
         line-height: 1.25;
       }
 
@@ -175,9 +169,32 @@
       .example {
         display: grid;
         gap: 10px;
-        padding: 14px;
+        padding: 12px;
         border: 1px solid var(--line-strong);
+        border-left-width: 4px;
+        border-left-color: var(--line-strong);
         background: var(--surface-strong);
+      }
+
+      .example.validation-surface,
+      .error-state {
+        border-left-color: var(--error);
+        background: #fffafb;
+      }
+
+      .example.focus-surface {
+        border-left-color: var(--accent);
+        background: #fbfffd;
+      }
+
+      .example.noneditable-surface {
+        border-left-color: #74808b;
+        background: #f8fafb;
+      }
+
+      .example.accessibility-surface {
+        border-left-color: var(--info);
+        background: #fbfdff;
       }
 
       .field-block {
@@ -210,8 +227,8 @@
       .control-row.focus-visible-state {
         border-color: var(--accent);
         box-shadow:
-          0 0 0 3px rgba(35, 106, 91, 0.18),
-          inset 0 0 0 1px rgba(35, 106, 91, 0.30);
+          0 0 0 3px rgba(23, 107, 95, 0.18),
+          inset 0 0 0 1px rgba(23, 107, 95, 0.32);
       }
 
       .control-row.focus-visible-state .input,
@@ -220,13 +237,13 @@
       }
 
       .control-row.focus-visible-state .affix {
-        background: #edf8f4;
+        background: var(--accent-soft);
         color: #2d5f53;
       }
 
       .control-row.disabled-state {
         border-style: dashed;
-        border-color: #c5ccd1;
+        border-color: #aeb7bf;
         background: var(--disabled);
       }
 
@@ -234,23 +251,23 @@
       .control-row.disabled-state .textarea,
       .control-row.disabled-state .affix {
         background: var(--disabled);
-        color: #72818a;
+        color: #697681;
       }
 
       .control-row.readonly-state {
-        background: #f7faf9;
-        border-color: #bfd4ce;
+        background: #f8fafb;
+        border-color: #74808b;
       }
 
       .control-row.readonly-state .input,
       .control-row.readonly-state .textarea {
-        background: #f7faf9;
+        background: #f8fafb;
         color: var(--ink);
       }
 
       .control-row.readonly-state .affix {
-        background: #edf5f2;
-        color: #4c635d;
+        background: #edf1f4;
+        color: #4c5964;
       }
 
       .custom-field {
@@ -264,7 +281,7 @@
 
       .custom-field .control-row {
         border-color: var(--accent);
-        box-shadow: inset 0 0 0 1px rgba(35, 106, 91, 0.18);
+        box-shadow: inset 0 0 0 1px rgba(23, 107, 95, 0.18);
       }
 
       .custom-field .hint {
@@ -276,7 +293,7 @@
         display: inline-flex;
         align-items: center;
         padding: 0 12px;
-        background: #f5f2eb;
+        background: var(--surface-muted);
         color: #57656c;
         white-space: nowrap;
         border-right: 1px solid var(--line);
@@ -306,6 +323,8 @@
       }
 
       .error {
+        padding-left: 10px;
+        border-left: 3px solid var(--error);
         color: var(--error);
         font-size: 0.87rem;
         font-weight: 600;
@@ -330,17 +349,24 @@
         display: grid;
         gap: 6px;
         padding: 12px;
-        background: #f7f4ee;
+        background: var(--surface-muted);
         border: 1px solid var(--line);
+        border-left: 3px solid var(--line-strong);
         font-size: 0.87rem;
         color: var(--muted);
       }
 
+      .muted-box.opt-out {
+        background: var(--disabled);
+        border-left-color: var(--info);
+        color: var(--disabled-ink);
+      }
+
       .callout {
-        margin-top: 22px;
-        padding: 16px 18px;
+        margin-top: 18px;
+        padding: 14px 16px;
         border: 1px solid var(--line-strong);
-        background: rgba(255, 255, 255, 0.72);
+        background: var(--surface);
       }
 
       .checklist {
@@ -407,7 +433,7 @@
             Validation rerender keeps the same model-backed value visible and adds the shared inline
             error presentation instead of switching to a different helper path.
           </p>
-          <div class="example error-state">
+          <div class="example error-state validation-surface">
             <div class="field-block">
               <div class="label-row">
                 <span>Support email</span>
@@ -461,7 +487,7 @@
             Keyboard focus should stay visible on the native wrapper lane even when prefixes, suffixes,
             required markers, and helper text are all present.
           </p>
-          <div class="example two-up">
+          <div class="example two-up focus-surface">
             <div class="field-block">
               <div class="label-row">
                 <span>Invoice amount</span>
@@ -526,7 +552,7 @@
             Both states still belong to the native helper family, but they split responsibilities: disabled communicates unavailability,
             while readonly keeps the current value legible without offering an editing affordance.
           </p>
-          <div class="example two-up">
+          <div class="example two-up noneditable-surface">
             <div class="field-block">
               <div class="label-row">
                 <span>Contract code</span>
@@ -536,7 +562,7 @@
                 <div class="input">CN-0284</div>
                 <span class="affix trailing">locked</span>
               </div>
-              <div class="hint">Disabled lane: muted, unavailable, and still tied to the same shared wrapper.</div>
+              <div class="hint">Disabled lane: muted, dashed, unavailable, and still tied to the same shared wrapper.</div>
             </div>
             <div class="field-block">
               <div class="label-row">
@@ -546,7 +572,7 @@
                 <div class="input">Ref-2026-05</div>
                 <span class="affix trailing">readonly</span>
               </div>
-              <div class="hint">Readonly lane: visible current value with copyable context, but no editing affordance.</div>
+              <div class="hint">Readonly lane: visible current value with a solid border and no editing affordance.</div>
             </div>
           </div>
         </article>
@@ -558,14 +584,14 @@
             `accessibility: false` removes the shared automatic aria wiring, but it does not remove the
             wrapped native helper lane itself.
           </p>
-          <div class="example">
+          <div class="example accessibility-surface">
             <div class="two-up">
               <div class="muted-box">
                 <strong>Shared default</strong>
                 <span>Hint and error ids feed `aria-describedby` automatically.</span>
                 <span>`aria-invalid` and `aria-required` reflect the wrapper state.</span>
               </div>
-              <div class="muted-box" style="background: var(--disabled); color: var(--disabled-ink);">
+              <div class="muted-box opt-out">
                 <strong>`accessibility: false`</strong>
                 <span>The host app owns aria wiring explicitly.</span>
                 <span>Label, hint, affixes, and validation redisplay still stay in the same visual lane.</span>
