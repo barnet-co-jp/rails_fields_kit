@@ -8,7 +8,7 @@ For the maintained walkthrough and copyable examples, use the upstream docs:
 
 - Setup guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>
 - README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>
-- Public API, including package-root JavaScript exports: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>
+- Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>
 - Configuration: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration.md>
 - Field helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/field_helpers.md>
 - Controller helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/controller_helpers.md>
