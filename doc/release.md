@@ -75,6 +75,7 @@ bundle exec rake build
    - `doc/development.md`
    - `doc/sample_app_checklist.md`
    - `doc/sample_app_results.md`
+   - `doc/selected_preload_release_gate.md` when selected preload behavior is part of the release surface
    - `doc/final_release_checklist.md`
    - `doc/release.md`
    - `doc/release_notes_0_1_1.md` for the current next-release draft
@@ -87,6 +88,8 @@ bundle exec rake build
    ```
 
 9. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
+
+   When the release surface includes selected preload behavior, run the focused [`selected_preload_release_gate.md`](selected_preload_release_gate.md) before marking the sample app pass complete. Keep this check to the documented single-value and comma-separated multiple-ID request contract unless release planning explicitly changes that public surface.
 
    When the release surface includes create-on-the-fly success hooks, confirm the sample app and recorded results cover `rails-fields-kit--tom-select:create`, `event.detail.input`, `event.detail.option`, and the continued `item-add` / `change` flow. Visible success UI remains a host-app responsibility.
 
