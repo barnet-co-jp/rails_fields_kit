@@ -29,10 +29,10 @@ Common error detail fields:
   - Fired after remote search succeeds.
   - Detail: `{ query, options }`
 - `rails-fields-kit--tom-select:load-error`
-  - Fired after remote search fails or returns a non-2xx response.
+  - Fired after remote search fails, returns a non-2xx response, or returns 2xx JSON that is not an array, `{ options: [...] }`, or `{ results: [...] }`.
   - Detail: `{ operation, query, error, response, payload, status, surface }`
 
-Use these hooks when the host app wants to react to the fetched option set itself, for example by logging searches, updating nearby helper text, or showing a retry state.
+Use these hooks when the host app wants to react to the fetched option set itself, for example by logging searches, updating nearby helper text, or showing a retry state. A true empty search result should return `[]`, `{ options: [] }`, or `{ results: [] }`; other 2xx JSON shapes are treated as payload errors so endpoint drift does not look like a successful empty search.
 
 ## Selected preload
 
