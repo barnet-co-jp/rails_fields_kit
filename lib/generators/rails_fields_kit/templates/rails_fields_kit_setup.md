@@ -17,6 +17,7 @@ For the maintained walkthrough and copyable examples, use the upstream docs:
 - Text override visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_text_override_visual_reference.html>
 - Native helper visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/native_field_visual_reference.html>
 - Table metadata visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/table_metadata_visual_reference.html>
+- Selected preload release gate: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/selected_preload_release_gate.md>
 - Events: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/events.md>
 - Token suggestions: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/token_suggestions.md>
 - Ransack suggestions: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/ransack_suggestions.md>
@@ -42,6 +43,7 @@ For a representative edit-form lane that uses `selected_url:` or `error_surface:
 - [ ] Use `doc/native_field_visual_reference.html` when this app needs a quick visual comparison of representative native helper wrapper, validation, and non-editable states.
 - [ ] Use `doc/table_metadata_visual_reference.html` when this app needs a quick visual comparison of representative table filter, cell editor, and responsibility-boundary states.
 - [ ] Review remote option settings such as `selected_url:`, `option_description_field:`, and `option_badge_field:` in the public API guide before wiring richer selects.
+- [ ] If this app uses `selected_url:`, review `doc/selected_preload_release_gate.md` before release verification to confirm single and multiple selected preload request encoding expectations.
 - [ ] If this app uses `selected_url:` or `error_surface: true`, review `doc/setup.md` for the representative edit-form wiring and `doc/events.md` for `selected-load`, `selected-load-error`, and `detail.surface`.
 - [ ] If this app uses `rfk_token_search`, review `doc/token_suggestions.md` for suggestion endpoint basics and `doc/ransack_suggestions.md` when those suggestions should map to Ransack metadata.
 - [ ] If this app renders table filters or cell editors from metadata, review `doc/table_adapters.md` before wiring `rfk_table_filters` or `rfk_table_cell_editors`.
