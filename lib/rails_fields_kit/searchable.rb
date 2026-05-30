@@ -284,11 +284,12 @@ module RailsFieldsKit
       case suggestion
       when Hash
         normalized = suggestion.transform_keys(&:to_s)
-        value = normalized[value_key] || normalized["value"] || normalized["id"] || normalized["token"] || normalized["text"] || normalized["label"]
-        label = normalized[label_key] || normalized["text"] || normalized["label"] || normalized["name"] || value
+        value = rfk_token_suggestion_value_for(normalized, value_key, "value", "id", "token", "text", "label")
+        label = rfk_token_suggestion_value_for(normalized, label_key, "text", "label", "name")
+        label = value if label.nil?
         option = {value_key => value, label_key => label}
-        option[description_key] = normalized[description_key] || normalized["description"] if normalized.key?(description_key) || normalized.key?("description")
-        option[badge_key] = normalized[badge_key] || normalized["badge"] if normalized.key?(badge_key) || normalized.key?("badge")
+        option[description_key] = rfk_token_suggestion_value_for(normalized, description_key, "description") if normalized.key?(description_key) || normalized.key?("description")
+        option[badge_key] = rfk_token_suggestion_value_for(normalized, badge_key, "badge") if normalized.key?(badge_key) || normalized.key?("badge")
         normalized.each do |key, value_for_key|
           option[key] = value_for_key unless option.key?(key)
         end
@@ -298,6 +299,17 @@ module RailsFieldsKit
       else
         {value_key => suggestion.to_s, label_key => suggestion.to_s}
       end
+    end
+
+    def rfk_token_suggestion_value_for(normalized, *keys)
+      keys.each do |key|
+        next unless normalized.key?(key)
+
+        value = normalized[key]
+        return value unless value.nil?
+      end
+
+      nil
     end
 
     def rfk_token_suggestion_matches?(option, query)
