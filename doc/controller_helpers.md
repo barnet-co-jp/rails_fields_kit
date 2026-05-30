@@ -209,6 +209,8 @@ Wrapped responses are supported:
 
 ## Suggested routes
 
+The common editable combobox setup can keep create-on-the-fly on the standard RESTful `POST /customers` route while adding only selected lookup and token suggestions as collection `GET` actions:
+
 ```ruby
 resources :customers do
   collection do
@@ -216,6 +218,29 @@ resources :customers do
     get :search_tokens
   end
 end
+```
+
+This route set gives the controller helpers separate endpoint roles:
+
+- `GET /customers` for remote search when `rfk_search_with action: :index` is used with `url: customers_path(format: :json)`.
+- `GET /customers/selected` for selected preload when `rfk_find_with action: :selected` is used with `selected_url: selected_customers_path(format: :json)`.
+- `GET /customers/search_tokens` for token suggestions when `rfk_token_suggestions_with action: :search_tokens` is used with a token suggestion URL.
+- `POST /customers` for create-on-the-fly when `rfk_create_with action: :create` is used with `create_url: customers_path`.
+
+If the host app should not share its ordinary resource create action with create-on-the-fly, add a dedicated collection `POST` route and point both `action:` and `create_url:` at that route instead:
+
+```ruby
+resources :customers do
+  collection do
+    get :selected
+    get :search_tokens
+    post :create_option
+  end
+end
+```
+
+```ruby
+rfk_create_with action: :create_option, model: Customer, value: :id, label: :name, create_attribute: :name
 ```
 
 Then map actions as needed:
