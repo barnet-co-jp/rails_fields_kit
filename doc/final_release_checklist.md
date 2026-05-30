@@ -49,6 +49,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/release.md`.
 - [ ] Review `doc/release_notes_0_1_1.md` for the current next-release draft.
 - [ ] Confirm `README.md` and `doc/public_api.md` still describe both documented JavaScript import paths: `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
+- [ ] Confirm package-root helper exports such as `tomSelectTextOverrideContract(element)` still resolve from `rails_fields_kit` when they are part of the release surface, and stay limited to rendered contract reads.
 - [ ] Confirm token search and table integration docs still distinguish gem responsibilities from host app responsibilities.
 - [ ] Confirm release-prep docs, `doc/events.md`, and sample app verification all agree on whether create-on-the-fly success uses a dedicated `rails-fields-kit--tom-select:create` hook or only the generic selection events.
 
@@ -86,6 +87,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm one representative create-on-the-fly failure lane covers `rails-fields-kit--tom-select:create-error`, host-app fallback or retry UI, and any `error_surface:` boundary together.
 - [ ] Confirm request-failure events expose `event.detail.surface` when `error_surface:` is part of the release surface.
 - [ ] Confirm at least one representative `error_surface_html:` lane keeps its custom class or wrapper attrs without losing the shared placeholder `id`, hidden default, `role`, `aria-live`, or `aria-atomic` contract.
+- [ ] Confirm one representative `tomSelectTextOverrideContract(element)` lane imports the helper from `rails_fields_kit`, reads the documented `noResultsText`, `loadingText`, and `createText` rendered contract from a field-level override example and a fallback example, and keeps visible copy and locale policy as host-app responsibilities.
 - [ ] Confirm one representative Turbo reconnect lane covers page replacement or same-form revisit without duplicate Tom Select initialization, confirms pending load / selected-load / create requests are aborted or ignored on disconnect, and verifies selected preload or remote search still works after reconnect without a host-app reinitializer.
 - [ ] Confirm visible success UI remained a host-app responsibility rather than a built-in Rails Fields Kit surface.
 - [ ] Confirm visible error or retry UI around any opt-in `error_surface:` placeholder remained a host-app responsibility.
