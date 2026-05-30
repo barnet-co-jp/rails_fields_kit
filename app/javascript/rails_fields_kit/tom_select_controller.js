@@ -124,16 +124,16 @@ export default class extends Controller {
   }
 
   optionTemplate(data, escape, kind) {
-    const label = escape(data[this.labelFieldValue] || "")
+    const label = escape(this.displayValue(data[this.labelFieldValue]))
     const description = this.hasOptionDescriptionFieldValue ? data[this.optionDescriptionFieldValue] : null
     const badge = this.hasOptionBadgeFieldValue ? data[this.optionBadgeFieldValue] : null
     const parts = [`<div class="rfk-${kind}">`]
 
     parts.push("<div class=\"rfk-option-main\">")
     parts.push(`<span class="rfk-option-label">${label}</span>`)
-    if (badge) parts.push(`<span class="rfk-option-badge">${escape(badge)}</span>`)
+    if (this.hasPresentValue(badge)) parts.push(`<span class="rfk-option-badge">${escape(this.displayValue(badge))}</span>`)
     parts.push("</div>")
-    if (description) parts.push(`<div class="rfk-option-description">${escape(description)}</div>`)
+    if (this.hasPresentValue(description)) parts.push(`<div class="rfk-option-description">${escape(this.displayValue(description))}</div>`)
     parts.push("</div>")
 
     return parts.join("")
@@ -288,7 +288,7 @@ export default class extends Controller {
   }
 
   selectedValuesNeedingOptions() {
-    return this.selectedValues().filter((value) => value && !this.tomSelect.options[value])
+    return this.selectedValues().filter((value) => this.hasPresentValue(value) && !this.tomSelect.options[value])
   }
 
   selectedValues() {
@@ -447,6 +447,14 @@ export default class extends Controller {
     return false
   }
 
+  hasPresentValue(value) {
+    return value !== null && value !== undefined && value !== ""
+  }
+
+  displayValue(value) {
+    return this.hasPresentValue(value) ? String(value) : ""
+  }
+
   csrfToken() {
     const element = document.querySelector("meta[name='csrf-token']")
     return element && element.content
@@ -454,7 +462,7 @@ export default class extends Controller {
 
   escape(value) {
     const div = document.createElement("div")
-    div.textContent = value || ""
+    div.textContent = this.displayValue(value)
     return div.innerHTML
   }
 }
