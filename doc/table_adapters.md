@@ -43,12 +43,14 @@ filter = RailsFieldsKit::TableFilterInput.from_type(
 )
 ```
 
-Use `known_type?` when table integrations want to validate a configured field type before rendering:
+Use `known_type?` when table integrations want to validate that a configured filter type is one of the built-in Rails Fields Kit factory types before rendering:
 
 ```ruby
 RailsFieldsKit::TableFilterInput.known_type?(field_type)
 RailsFieldsKit::TableFilterInput.known_types
 ```
+
+`known_types` is intentionally limited to the built-in factory family. It does not include custom mappings added with `TableRenderer.register_field_helper`; use `TableRenderer.registered_field_type?` when validation needs to include those custom renderable types.
 
 ```ruby
 filter.to_table_filter
@@ -178,12 +180,14 @@ editor = RailsFieldsKit::TableCellInput.from_type(
 )
 ```
 
-Use `known_type?` when table integrations want to validate a configured editor type before rendering:
+Use `known_type?` when table integrations want to validate that a configured editor type is one of the built-in Rails Fields Kit factory types before rendering:
 
 ```ruby
 RailsFieldsKit::TableCellInput.known_type?(field_type)
 RailsFieldsKit::TableCellInput.known_types
 ```
+
+`known_types` is intentionally limited to the built-in factory family. It does not include custom mappings added with `TableRenderer.register_field_helper`; use `TableRenderer.registered_field_type?` when validation needs to include those custom renderable types.
 
 ```ruby
 editor.to_table_cell_editor
@@ -370,6 +374,8 @@ RailsFieldsKit::TableRenderer.helper_for(:combobox)
 RailsFieldsKit::TableRenderer.registered_field_type?(:combobox)
 ```
 
+For validation, keep the two surfaces separate: `TableFilterInput.known_type?` and `TableCellInput.known_type?` answer whether a field type belongs to the built-in metadata factory family; `TableRenderer.registered_field_type?` answers whether the current renderer registry can render it, including custom registrations.
+
 The renderer is intentionally thin. It maps documented Rails Fields Kit `field_type` values to FormBuilder helper names and does not own table preference persistence, query parsing, authorization, or result rendering.
 
 ## Custom table field helpers
@@ -387,6 +393,26 @@ filter = {
   method: "code",
   options: { prefix: "#" }
 }
+
+RailsFieldsKit::TableRenderer.filter_call(filter)
+# => {
+#      helper: :custom_table_field,
+#      method: :code,
+#      options: { prefix: "#" }
+#    }
+```
+
+Custom field types can still travel through the metadata objects. They are not added to `TableFilterInput.known_types` or `TableCellInput.known_types`; their renderability is checked by the renderer registry.
+
+```ruby
+filter = RailsFieldsKit::TableFilterInput.from_type(
+  :custom_field,
+  :code,
+  prefix: "#"
+)
+
+RailsFieldsKit::TableRenderer.registered_field_type?(:custom_field)
+# => true
 
 RailsFieldsKit::TableRenderer.filter_call(filter)
 # => {
