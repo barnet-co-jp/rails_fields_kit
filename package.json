@@ -7,7 +7,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "check:js": "node --check app/javascript/rails_fields_kit/index.js && node --check app/javascript/rails_fields_kit/tom_select_controller.js"
+    "check:js": "node --check app/javascript/rails_fields_kit/index.js && node --check app/javascript/rails_fields_kit/tom_select_controller.js && node scripts/check_package_exports.mjs"
   },
   "exports": {
     ".": "./app/javascript/rails_fields_kit/index.js",
