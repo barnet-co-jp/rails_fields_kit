@@ -172,29 +172,30 @@ The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_typ
 
 ## JavaScript exports
 
-The package exposes the Tom Select Stimulus controller from the JavaScript entrypoint:
+Current package-root exports from `rails_fields_kit`:
+
+| Export | Kind | Responsibility boundary |
+| --- | --- | --- |
+| `TomSelectController` | Stimulus controller | Registers Rails Fields Kit's Tom Select-backed field behavior on the rendered element. Host apps still own Stimulus boot, Tom Select installation, endpoint behavior, authorization, query parsing, visible feedback copy, and retry UI. |
+| `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
+
+Package-root imports use the documented entrypoint:
 
 ```js
-import { TomSelectController } from "rails_fields_kit"
+import { TomSelectController, tomSelectTextOverrideContract } from "rails_fields_kit"
+
+const copyContract = tomSelectTextOverrideContract(fieldElement)
 ```
 
-Direct import is also supported:
+Direct controller import is also supported when the host app wants only the controller file:
 
 ```js
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
-The package root also exposes small rendered-field contract helpers. These helpers read data attributes that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance:
+Rendered-field contract helpers stay read-only. They inspect data attributes that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance.
 
-```js
-import { tomSelectTextOverrideContract } from "rails_fields_kit"
-
-const copyContract = tomSelectTextOverrideContract(fieldElement)
-```
-
-`tomSelectTextOverrideContract(element)` returns the documented text override values for a rendered Tom Select field: `noResultsText`, `loadingText`, and `createText`. It returns `null` when the element does not look like a Rails Fields Kit Tom Select field and does not carry any text override attributes. This helper stays in the rendered contract read lane; visible copy ownership, locale resolution, request execution, query parsing, retry UI, and validation feedback remain host-app responsibilities.
-
-Future package-root helpers should follow the same boundary: read the rendered Rails Fields Kit contract or configuration from an element, but do not take over request lifecycles or application-specific behavior.
+Future package-root helpers should follow the same boundary: read the rendered Rails Fields Kit contract or configuration from an element, but do not take over request lifecycles, locale resolution, visible feedback, query parsing, retry UI, validation feedback, or other application-specific behavior. Proposal or open-PR helper names are not current public API until they are merged and listed in the table above.
 
 ## Stimulus values
 
@@ -218,16 +219,3 @@ Tom Select-backed `rfk_*` fields initialize from the controller's Stimulus `conn
 Events dispatched by the Tom Select controller are part of the public integration surface.
 
 See [`events.md`](events.md).
-
-## Internal implementation details
-
-These are not intended as stable public APIs:
-
-- private FormBuilder helper methods prefixed with `rfk_` but defined under `private`
-- internal normalization methods in `RailsFieldsKit::Searchable`
-- exact HTML structure of rich option rendering beyond documented classes/data and event payloads
-- generated documentation wording
-
-## Compatibility policy
-
-For the 0.1.x series, small API adjustments may still happen, but documented public APIs should not be removed without a changelog entry.
