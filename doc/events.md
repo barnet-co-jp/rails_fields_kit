@@ -23,6 +23,14 @@ Common error detail fields:
 - `status`: HTTP status when available, otherwise `null`
 - `surface`: opt-in placeholder element when `error_surface: true` is enabled, otherwise `null`
 
+## Request cancellation and stale responses
+
+Remote search, selected preload, and create-on-the-fly requests are tracked per operation. When a newer request for the same operation starts, the older request is aborted and any stale callback from that older request is ignored.
+
+Rails Fields Kit only dispatches success or failure events for the latest still-current request. Aborted requests, disconnect-time aborts, and stale responses do not dispatch `load`, `selected-load`, `create`, `load-error`, `selected-load-error`, or `create-error` events.
+
+Use the failure events for server errors, non-2xx responses, and payload-shape errors from the current request. If the host app needs a loading indicator or retry affordance that reacts to request start, pair these hooks with host-owned state from the interaction that started the request. Rails Fields Kit does not dispatch a separate request-start event or render built-in loading, retry, or fallback UI.
+
 ## Remote search
 
 - `rails-fields-kit--tom-select:load`
