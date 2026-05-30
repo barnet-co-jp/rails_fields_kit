@@ -17,6 +17,13 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include('this.dispatch("load", { detail: { query, options } })')
   end
 
+  it "keeps remote search empty collections distinct from invalid success payloads" do
+    expect(source).to include("if (this.remoteSearchPayloadIsCollection(json)) return json")
+    expect(source).to include('new Error("Rails Fields Kit remote search response must be an array or wrapped array")')
+    expect(source).to include("remoteSearchPayloadIsCollection(json) {")
+    expect(source).to include("Array.isArray(json) || (json && Array.isArray(json.options)) || (json && Array.isArray(json.results))")
+  end
+
   it "appends fixed query params before adding the remote search query" do
     expect(source).to include('this.appendParams(url, this.queryParamsValue)')
     expect(source).to include('url.searchParams.set(this.queryParamValue, query)')
