@@ -48,4 +48,22 @@ RSpec.describe "table known field types" do
     expect(filter.to_table_filter).to include(field_type: "custom_field", method: "code")
     expect(editor.to_table_cell_editor).to include(field_type: "custom_field", method: "code")
   end
+
+  it "uses the renderer registry to validate custom metadata renderability" do
+    RailsFieldsKit::TableRenderer.register_field_helper(:custom_field, :custom_table_field)
+
+    filter = RailsFieldsKit::TableFilterInput.from_type(:custom_field, :code, prefix: "#")
+    editor = RailsFieldsKit::TableCellInput.from_type(:custom_field, :code, prefix: "#")
+
+    expect(RailsFieldsKit::TableRenderer.filter_call(filter)).to eq(
+      helper: :custom_table_field,
+      method: :code,
+      options: {prefix: "#"}
+    )
+    expect(RailsFieldsKit::TableRenderer.cell_editor_call(editor)).to eq(
+      helper: :custom_table_field,
+      method: :code,
+      options: {prefix: "#"}
+    )
+  end
 end
