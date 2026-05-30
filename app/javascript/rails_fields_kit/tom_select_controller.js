@@ -316,11 +316,7 @@ export default class extends Controller {
 
     fetch(this.createUrlValue, this.requestOptions({
       method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-CSRF-Token": this.csrfToken()
-      },
+      headers: this.createRequestHeaders(),
       body: JSON.stringify({ ...this.createParamsValue, [this.createParamValue]: input })
     }, signal))
       .then((response) => this.handleCreateResponse(response))
@@ -339,6 +335,18 @@ export default class extends Controller {
         callback(false)
       })
       .finally(() => this.finishRequest("create", token))
+  }
+
+  createRequestHeaders() {
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    }
+    const csrfToken = this.csrfToken()
+
+    if (csrfToken) headers["X-CSRF-Token"] = csrfToken
+
+    return headers
   }
 
   handleCreateResponse(response) {
