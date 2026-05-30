@@ -226,7 +226,14 @@ export default class extends Controller {
 
   handleLoadResponse(response) {
     return response.json().catch(() => ({})).then((json) => {
-      if (response.ok) return json
+      if (response.ok) {
+        if (this.remoteSearchPayloadIsCollection(json)) return json
+
+        const error = new Error("Rails Fields Kit remote search response must be an array or wrapped array")
+        error.response = response
+        error.payload = json
+        throw error
+      }
 
       const error = new Error("Rails Fields Kit remote search request failed")
       error.response = response
@@ -411,6 +418,10 @@ export default class extends Controller {
         url.searchParams.set(key, value)
       }
     })
+  }
+
+  remoteSearchPayloadIsCollection(json) {
+    return Array.isArray(json) || (json && Array.isArray(json.options)) || (json && Array.isArray(json.results))
   }
 
   normalizeOptions(json) {
