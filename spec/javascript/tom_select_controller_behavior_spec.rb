@@ -63,6 +63,82 @@ RSpec.describe "Tom Select controller behavior" do
     MESSAGE
   end
 
+  it "keeps falsy remote option values renderable while skipping empty rich fields" do
+    build_controller_sandbox do |controller_path|
+      script = <<~JS
+        import { pathToFileURL } from "node:url"
+
+        const assert = (condition, message) => {
+          if (!condition) throw new Error(message)
+        }
+
+        const controllerUrl = pathToFileURL(process.argv[1]).href
+        const Controller = (await import(controllerUrl)).default
+        const controller = new Controller()
+
+        controller.labelFieldValue = "text"
+        controller.hasOptionDescriptionFieldValue = true
+        controller.optionDescriptionFieldValue = "description"
+        controller.hasOptionBadgeFieldValue = true
+        controller.optionBadgeFieldValue = "badge"
+
+        const escape = (value) => String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+
+        const html = controller.optionTemplate({ text: 0, description: false, badge: 0 }, escape, "option")
+
+        assert(html.includes('<span class="rfk-option-label">0</span>'), "numeric zero label should render")
+        assert(html.includes('<span class="rfk-option-badge">0</span>'), "numeric zero badge should render")
+        assert(html.includes('<div class="rfk-option-description">false</div>'), "boolean false description should render")
+
+        const emptyHtml = controller.optionTemplate({ text: null, description: "", badge: null }, escape, "option")
+
+        assert(emptyHtml.includes('<span class="rfk-option-label"></span>'), "empty label should render as an empty string")
+        assert(!emptyHtml.includes("rfk-option-badge"), "null badge should be skipped")
+        assert(!emptyHtml.includes("rfk-option-description"), "empty description should be skipped")
+
+        const escapedHtml = controller.optionTemplate({ text: "<b>safe</b>", description: 0, badge: false }, escape, "option")
+        assert(escapedHtml.includes("&lt;b&gt;safe&lt;/b&gt;"), "Tom Select escape callback should still escape labels")
+      JS
+
+      run_node_behavior_check(controller_path, script:)
+    end
+  end
+
+  it "keeps falsy selected values eligible for selected preload" do
+    build_controller_sandbox do |controller_path|
+      script = <<~JS
+        import { pathToFileURL } from "node:url"
+
+        const assert = (condition, message) => {
+          if (!condition) throw new Error(message)
+        }
+
+        const controllerUrl = pathToFileURL(process.argv[1]).href
+        const Controller = (await import(controllerUrl)).default
+        const controller = new Controller()
+
+        controller.tomSelect = {
+          options: { present: { value: "present", text: "Present" } },
+          getValue() {
+            return [0, false, "", null, undefined, "present", "missing"]
+          }
+        }
+
+        const values = controller.selectedValuesNeedingOptions()
+
+        assert(values.length === 3, `expected three missing selected values, got ${JSON.stringify(values)}`)
+        assert(values[0] === 0, "numeric zero should need selected preload when no option exists")
+        assert(values[1] === false, "boolean false should need selected preload when no option exists")
+        assert(values[2] === "missing", "non-empty missing value should still need selected preload")
+      JS
+
+      run_node_behavior_check(controller_path, script:)
+    end
+  end
+
   it "dispatches request error details and marks the opt-in error surface" do
     build_controller_sandbox do |controller_path|
       script = <<~JS
