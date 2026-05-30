@@ -146,6 +146,7 @@
         color: var(--accent);
       }
 
+      .tag.metadata,
       .tag.accessibility {
         border-color: #adc6e4;
         background: var(--info-soft);
@@ -192,6 +193,7 @@
         background: #f8fafb;
       }
 
+      .example.metadata-surface,
       .example.accessibility-surface {
         border-left-color: var(--info);
         background: #fbfdff;
@@ -345,6 +347,31 @@
         gap: 12px;
       }
 
+      .metadata-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .metadata-row {
+        display: grid;
+        grid-template-columns: minmax(92px, 0.75fr) minmax(0, 1.25fr);
+        gap: 8px;
+        align-items: start;
+        padding: 9px 10px;
+        border: 1px solid var(--line);
+        background: var(--surface-muted);
+        font-size: 0.87rem;
+      }
+
+      .metadata-key {
+        color: var(--ink);
+        font-weight: 700;
+      }
+
+      .metadata-value {
+        color: var(--muted);
+      }
+
       .muted-box {
         display: grid;
         gap: 6px;
@@ -383,6 +410,10 @@
         .two-up {
           grid-template-columns: 1fr;
         }
+
+        .metadata-row {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
@@ -393,8 +424,8 @@
         <h1>Native Field Visual Reference</h1>
         <p class="lede">
           This page keeps native helpers in one quick visual entrypoint: the shared wrapper lane,
-          validation redisplay, affix-heavy inputs, keyboard focus visibility, field-level wrapper customization,
-          non-editable states, and the accessibility opt-out boundary.
+          validation redisplay, affix-heavy inputs, input metadata defaults, keyboard focus visibility,
+          field-level wrapper customization, non-editable states, and the accessibility opt-out boundary.
         </p>
         <div class="hero-links">
           <a href="field_helpers.md">Read helper details</a>
@@ -477,6 +508,32 @@
               </div>
               <div class="hint">Representative `rfk_percent_field` lane.</div>
             </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="tag metadata">Input metadata defaults</div>
+          <h2>Money, percent, and phone stay native</h2>
+          <p>
+            Current helper defaults add small browser hints such as `inputmode` and `autocomplete`
+            without introducing masked input, formatting, or validation behavior.
+          </p>
+          <div class="example metadata-surface">
+            <div class="metadata-list">
+              <div class="metadata-row">
+                <span class="metadata-key">`rfk_money_field`</span>
+                <span class="metadata-value">`inputmode="decimal"` with optional prefix or suffix copy.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">`rfk_percent_field`</span>
+                <span class="metadata-value">`inputmode="decimal"` while the `%` suffix remains visual context.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">`rfk_phone_field`</span>
+                <span class="metadata-value">`autocomplete="tel"` for the browser's native telephone autofill lane.</span>
+              </div>
+            </div>
+            <div class="hint">Reference-only lane: documents current helper defaults without changing production markup.</div>
           </div>
         </article>
 
@@ -618,6 +675,7 @@
         <div class="checklist">
           <span>Shared wrapper contract: label, hint, affixes, validation redisplay.</span>
           <span>Native helper lane only: no remote search, selected preload, or create-on-the-fly semantics.</span>
+          <span>Input metadata defaults stay visible without adding masks, formatting, or validation policy.</span>
           <span>Keyboard focus remains visible around affix-heavy fields and text areas.</span>
           <span>Field-level wrapper customization layers extra attributes onto the same generated pieces.</span>
           <span>Disabled and readonly remain in the same native helper family while changing editability cues.</span>
