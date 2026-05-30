@@ -102,6 +102,9 @@ jobs:
       - name: Build gem package
         run: gem build rails_fields_kit.gemspec
 
+      - name: Verify packaged JavaScript exports
+        run: ruby scripts/check_gem_package_exports.rb rails_fields_kit-*.gem
+
       - name: Install built gem
         run: gem install rails_fields_kit-*.gem
 
