@@ -37,7 +37,7 @@ The JavaScript syntax check uses Node 22.x, matching `package.json` and the GitH
 npm run check:js
 ```
 
-This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies.
+This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It also runs a lightweight package `exports` import smoke in a temporary Node sandbox, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
 
 ## Build locally
 
@@ -69,7 +69,7 @@ Current CI adds these repository-level confirmations on top of the local workflo
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - Representative PR compatibility checks for Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
-- `npm run check:js` on Node 22.x for the JavaScript syntax lane
+- `npm run check:js` on Node 22.x for the JavaScript syntax and package exports import lane
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 
 ## Release-related checks
