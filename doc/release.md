@@ -51,7 +51,7 @@ bundle exec rake build
 
 6. Confirm the latest GitHub Actions CI run is green for the commit you plan to release.
 
-   This is the final branch-head confirmation for lint, RSpec, JavaScript syntax, and gem package/install smoke checks.
+   This is the final branch-head confirmation for lint, RSpec, JavaScript syntax, and gem package/install smoke checks. The gem package check also verifies that the built artifact contains `package.json` and the JavaScript files referenced by its public `exports` map.
 
 7. Review documentation.
 
