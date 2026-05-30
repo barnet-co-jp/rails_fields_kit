@@ -15,6 +15,7 @@ function documentedPackageRootExports(markdown) {
     .split("\n")
     .map((line) => line.match(/^\| `(?<exportName>[^`]+)` \|/)?.groups?.exportName)
     .filter(Boolean)
+    .map((exportName) => exportName.replace(/\(.*\)$/, ""))
 }
 
 async function assertPublicApiDocsMatchExpectedExports() {
