@@ -75,6 +75,8 @@ rfk_find_with(
   label_field: "name",
   description_field: "email",
   badge_field: "status",
+  id_param: :id,
+  ids_param: :ids,
   scope: -> { current_account.customers },
   wrap: "option"
 )
@@ -85,6 +87,32 @@ Accepted request params:
 - `id` for one value.
 - `ids` for multiple values.
 - comma-separated `ids`, such as `1,2,3`.
+
+When a field customizes selected preload request names, keep the FormBuilder option and endpoint option in sync:
+
+| FormBuilder option | Outgoing selected preload param | `rfk_find_with` option |
+| --- | --- | --- |
+| `selected_param: "customer_id"` | `customer_id` for one value | `id_param: :customer_id` |
+| `selected_multiple_param: "customer_ids"` | `customer_ids` for multiple values | `ids_param: :customer_ids` |
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  selected_url: selected_customers_path(format: :json),
+  selected: @order.customer_id,
+  selected_param: "customer_id" %>
+```
+
+```ruby
+rfk_find_with(
+  action: :selected,
+  model: Customer,
+  value: :id,
+  label: :name,
+  id_param: :customer_id
+)
+```
+
+For multiple selected values, `selected_multiple_param:` changes the request key only; the value can still be comma-separated, such as `customer_ids=1,2,3`, and `rfk_find_with ids_param:` reads that key.
 
 The response can be a single option or an array of options depending on the request.
 
