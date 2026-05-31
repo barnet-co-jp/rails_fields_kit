@@ -28,6 +28,8 @@ The RSpec suite includes Node-sandbox checks for the documented `rails_fields_ki
 
 It also includes a lightweight repository-local documentation link check for `README.md` and `doc/**/*.{md,html}`. The check verifies relative file targets only; external URLs and in-page anchors are intentionally outside its scope.
 
+The configuration documentation drift spec compares `RailsFieldsKit::Configuration` public initializer keys with `doc/configuration.md` quick reference rows and detailed headings. Keep new configuration keys, field-level override notes, and stable nil / locale-aware default boundaries aligned there when the initializer surface changes.
+
 Representative compatibility checks are also useful before review or release:
 
 ```bash
