@@ -39,6 +39,8 @@ npm run check:js
 
 This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It also runs a lightweight package `exports` import smoke in a temporary Node sandbox, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
 
+The package export smoke keeps a readable expected named-export list in `scripts/check_package_exports.mjs` and compares it with the JavaScript exports table in `doc/public_api.md`. When adding a package-root helper, update both together so docs/API drift is caught by `npm run check:js`.
+
 ## Build locally
 
 ```bash
