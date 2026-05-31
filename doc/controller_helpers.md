@@ -117,7 +117,7 @@ rfk_find_with(
 
 For multiple selected values, `selected_multiple_param:` changes the request key only; the value can still be comma-separated, such as `customer_ids=1,2,3`, and `rfk_find_with ids_param:` reads that key.
 
-The response can be a single option or an array of options depending on the request.
+The response can be a single option, a wrapped option, an array of options, or a wrapped collection depending on the request. See [Output shape](#output-shape) for the supported collection wrappers.
 
 ## `rfk_create_with`
 
@@ -277,15 +277,23 @@ badge_field: "status"
 }
 ```
 
-Wrapped responses are supported:
+Remote search and selected preload can return option collections as a raw array or as a wrapped collection. Both `options` and `results` are supported collection wrapper keys:
 
 ```json
 { "options": [ { "id": 1, "name": "Acme Corp" } ] }
 ```
 
 ```json
+{ "results": [ { "id": 1, "name": "Acme Corp" } ] }
+```
+
+Selected preload can also return a single option directly or wrapped under `option`:
+
+```json
 { "option": { "id": 1, "name": "Acme Corp" } }
 ```
+
+`results` is only a collection wrapper for remote search and selected preload. Create-on-the-fly responses use a single option object or the `option` wrapper; Rails Fields Kit does not treat `results` as pagination metadata or an arbitrary response adapter contract.
 
 ## Suggested routes
 
