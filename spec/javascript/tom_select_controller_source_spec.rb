@@ -29,6 +29,14 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include('url.searchParams.set(this.queryParamValue, query)')
   end
 
+  it "keeps fixed request params falsy-aware and array-friendly" do
+    expect(source).to include("appendParams(url, params = {}) {")
+    expect(source).to include("if (Array.isArray(value)) {")
+    expect(source).to include("value.forEach((item) => url.searchParams.append(key, item))")
+    expect(source).to include("} else if (value !== null && value !== undefined) {")
+    expect(source).to include("url.searchParams.set(key, value)")
+  end
+
   it "dispatches selected preload success with requested values and resolved options" do
     expect(source).to include('this.dispatch("selected-load", { detail: { options, values: requestedValues } })')
   end
