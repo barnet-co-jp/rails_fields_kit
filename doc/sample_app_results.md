@@ -293,16 +293,21 @@ Notes:
 
 - [ ] `rails-fields-kit--tom-select:load`
 - [ ] `rails-fields-kit--tom-select:load-error`
+- [ ] `rails-fields-kit--tom-select:selected-load`
+- [ ] `rails-fields-kit--tom-select:selected-load-error`
 - [ ] `rails-fields-kit--tom-select:create`
 - [ ] `rails-fields-kit--tom-select:create-error`
 - [ ] `rails-fields-kit--tom-select:change`
 - [ ] `rails-fields-kit--tom-select:item-add`
 - [ ] `rails-fields-kit--tom-select:item-remove`
 - [ ] `rails-fields-kit--tom-select:clear`
+- [ ] a representative selected preload success dispatched `selected-load` with the requested saved value or values and resolved options
+- [ ] a representative selected preload failure dispatched `selected-load-error` separately from remote search and create-on-the-fly failures
+- [ ] selected preload event evidence stayed tied to the `selected_url:` lane rather than ordinary remote search
 - [ ] a representative single select or combobox dispatched `change` when the selected value changed
 - [ ] a representative multiple select or tags field dispatched `item-add` and `item-remove` for add/remove actions
 - [ ] a representative clearable field dispatched `clear` when its selected value was cleared
-- [ ] interaction forwarding events were recorded separately from remote `load` / `load-error`, create-on-the-fly, selected preload, and visible-feedback lanes
+- [ ] interaction forwarding events were recorded separately from remote `load` / `load-error`, selected preload, create-on-the-fly, and visible-feedback lanes
 - [ ] create-on-the-fly success dispatched the dedicated `create` event before the normal selection events continued
 - [ ] `event.detail.input` matched the submitted text for the create success case
 - [ ] `event.detail.option` exposed the created option payload needed by the host app
