@@ -10,8 +10,10 @@ RSpec.describe "FormBuilder error surface source" do
     expect(source).to include("rfk_apply_error_surface_accessibility!(html_options, error_surface_id) if error_surface")
   end
 
-  it "derives a stable shared placeholder id from the object name and method" do
-    expect(source).to include('def rfk_error_surface_id(method)')
+  it "derives a stable shared placeholder id from explicit HTML id or the object name and method" do
+    expect(source).to include("def rfk_error_surface_id(method, error_surface_html = {})")
+    expect(source).to include('explicit_id = error_surface_html[:id] || error_surface_html["id"]')
+    expect(source).to include("return explicit_id unless explicit_id.nil? || explicit_id.to_s.empty?")
     expect(source).to include('"#{object_name}_#{method}_error_surface"')
   end
 
@@ -24,7 +26,8 @@ RSpec.describe "FormBuilder error surface source" do
 
   it "preserves the shared placeholder contract when host apps add custom HTML" do
     expect(source).to include("surface_options = error_surface_html.dup")
-    expect(source).to include("surface_options[:id] ||= error_surface_id")
+    expect(source).to include("surface_options[:id] = error_surface_id")
+    expect(source).to include('surface_options.delete("id")')
     expect(source).to include('surface_options[:hidden] = true unless surface_options.key?(:hidden)')
     expect(source).to include('surface_options[:role] ||= "status"')
     expect(source).to include('surface_options[:"aria-live"] ||= "polite"')
