@@ -62,8 +62,9 @@ module RailsFieldsKit
     end
 
     def rfk_enum_select(method, enum: nil, **options)
-      enum_values = enum || object.class.public_send(method.to_s.pluralize)
-      collection = enum_values.keys.map { |key| [rfk_enum_label(method, key), key] }
+      explicit_enum = !enum.nil?
+      enum_values = explicit_enum ? enum : object.class.public_send(method.to_s.pluralize)
+      collection = enum_values.keys.map { |key| [rfk_enum_label(method, key, explicit: explicit_enum), key] }
       rfk_tom_select_field(method, :select, collection: collection, **options)
     end
 
@@ -458,7 +459,9 @@ module RailsFieldsKit
       [label, value]
     end
 
-    def rfk_enum_label(method, value)
+    def rfk_enum_label(method, value, explicit: false)
+      return value.to_s.humanize if explicit && !object.class.respond_to?(:human_attribute_name)
+
       object.class.human_attribute_name("#{method}.#{value}", default: value.to_s.humanize)
     end
 
