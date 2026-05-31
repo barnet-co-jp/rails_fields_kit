@@ -306,7 +306,7 @@
 
       <section class="summary" aria-label="Visual reference family summary">
         <div class="summary-item">
-          <strong>5</strong>
+          <strong>6</strong>
           <span>individual references</span>
         </div>
         <div class="summary-item">
@@ -330,6 +330,7 @@
         </div>
         <div class="quick-list" aria-label="Direct visual reference links">
           <a href="tom_select_visual_reference.html">Tom Select states</a>
+          <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
           <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
           <a href="native_field_visual_reference.html">Native helper states</a>
           <a href="table_metadata_visual_reference.html">Table metadata</a>
@@ -359,6 +360,23 @@
               <li>Keep host-app search, authorization, pagination, and result execution out of scope.</li>
             </ul>
             <a class="reference-link" href="tom_select_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">request failure</span>
+                <span class="tag info">error surface</span>
+              </div>
+              <h3>Tom Select request failures</h3>
+              <p>Focused `error_surface: true` states for hidden, revealed, restore-failure, create-failure, and custom-wrapper feedback.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect request-failure feedback without treating retry UI or request lifecycle behavior as built in?</p>
+            <ul>
+              <li>Compare hidden slot, load error, selected-load error, create error, and custom wrapper states.</li>
+              <li>Keep default visible messages, retry actions, reveal timing, and request behavior with the host app.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_request_failure_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
