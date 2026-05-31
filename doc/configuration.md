@@ -265,6 +265,34 @@ Bundled fallback:
 - `en`: `"Add"`
 - `ja`: `"追加"`
 
+## Request-failure feedback policy
+
+`error_surface:` and `error_surface_html:` stay field-level helper options. They are not initializer defaults because request-failure UI usually depends on the endpoint, surrounding layout, copy, retry affordance, and authorization or validation policy owned by the host app.
+
+When the host app wants the same request-failure placeholder policy across many remote fields, keep that reuse in the host app. A view helper, partial, or FormBuilder extension can pass the same field-level options without adding a Rails Fields Kit initializer key:
+
+```ruby
+module RemoteFieldFeedbackHelper
+  def rfk_remote_error_surface_options
+    {
+      error_surface: true,
+      error_surface_html: {
+        class: "remote-field-feedback",
+        data: { controller: "remote-field-feedback" }
+      }
+    }
+  end
+end
+```
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  **rfk_remote_error_surface_options %>
+```
+
+Use that host-owned wrapper to standardize placeholder classes or event-handler wiring. Keep visible message text, retry buttons, endpoint validation, analytics, and authorization decisions in the host app that receives the `load-error`, `selected-load-error`, or `create-error` event. If a future initializer-level default is added by a separate feature decision, update this section after that public surface lands; until then, do not set a `default_error_surface` configuration key.
+
 ## Wrapper class defaults
 
 These defaults set the repo-wide baseline classes appended to wrapper pieces. Use helper-level `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` when one field needs extra classes, `data`, or aria attributes without changing the initializer for every field.
