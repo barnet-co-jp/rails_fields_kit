@@ -3,6 +3,8 @@
 require "json"
 require "rubygems/package"
 require "stringio"
+require "tempfile"
+require "tmpdir"
 require "zlib"
 
 gem_path = ARGV.fetch(0) do
@@ -36,18 +38,88 @@ end
 
 exports = JSON.parse(package_json).fetch("exports")
 required_exports = [".", "./tom_select_controller"]
+expected_package_root_named_exports = ["TomSelectController", "tomSelectTextOverrideContract"]
 missing_exports = required_exports.reject { |export_name| exports.key?(export_name) }
 
 abort "package.json is missing exports: #{missing_exports.join(", ")}" unless missing_exports.empty?
 
-missing_files = required_exports.filter_map do |export_name|
+def export_target_path(exports, export_name)
   target = exports.fetch(export_name)
   target = target.fetch("import") if target.is_a?(Hash)
-  target_path = target.to_s.delete_prefix("./")
+  target.to_s.delete_prefix("./")
+end
 
-  "#{export_name} -> #{target}" unless entries.key?(target_path)
+missing_files = required_exports.filter_map do |export_name|
+  target_path = export_target_path(exports, export_name)
+
+  "#{export_name} -> #{target_path}" unless entries.key?(target_path)
 end
 
 abort "built gem is missing exported JavaScript files: #{missing_files.join(", ")}" unless missing_files.empty?
+
+Dir.mktmpdir("rails-fields-kit-built-gem-import-") do |dir|
+  package_root = File.join(dir, "node_modules", "rails_fields_kit")
+  FileUtils.mkdir_p(package_root)
+
+  entries.each do |path, content|
+    next unless path == "package.json" || path.start_with?("app/javascript/rails_fields_kit/")
+
+    destination = File.join(package_root, path)
+    FileUtils.mkdir_p(File.dirname(destination))
+    File.binwrite(destination, content)
+  end
+
+  FileUtils.mkdir_p(File.join(dir, "node_modules", "@hotwired", "stimulus"))
+  File.write(
+    File.join(dir, "node_modules", "@hotwired", "stimulus", "package.json"),
+    "{\n  \"type\": \"module\"\n}\n"
+  )
+  File.write(
+    File.join(dir, "node_modules", "@hotwired", "stimulus", "index.js"),
+    "export class Controller {\n  static values = {}\n}\n"
+  )
+
+  FileUtils.mkdir_p(File.join(dir, "node_modules", "tom-select"))
+  File.write(
+    File.join(dir, "node_modules", "tom-select", "package.json"),
+    "{\n  \"type\": \"module\"\n}\n"
+  )
+  File.write(
+    File.join(dir, "node_modules", "tom-select", "index.js"),
+    <<~JS
+      export default class TomSelect {
+        constructor(element, options = {}) {
+          this.element = element
+          this.options = options
+        }
+
+        destroy() {}
+      }
+    JS
+  )
+
+  probe_path = File.join(dir, "probe.mjs")
+  File.write(
+    probe_path,
+    <<~JS
+      import rootDefault, * as packageRoot from "rails_fields_kit"
+      import directDefault from "rails_fields_kit/tom_select_controller"
+      import assert from "node:assert/strict"
+
+      const expectedNamedExports = #{JSON.generate(expected_package_root_named_exports)}
+
+      expectedNamedExports.forEach((exportName) => {
+        assert.ok(exportName in packageRoot, `package root should expose documented export ${exportName}`)
+      })
+      assert.equal(rootDefault, packageRoot.TomSelectController, "package root default export should match TomSelectController")
+      assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")
+      assert.equal(typeof packageRoot.tomSelectTextOverrideContract, "function", "package root should expose documented text override helper")
+    JS
+  )
+
+  unless system("node", probe_path, chdir: dir)
+    abort "built gem JavaScript package import smoke failed"
+  end
+end
 
 puts "rails_fields_kit built gem package exports check passed"
