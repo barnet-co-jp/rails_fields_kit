@@ -265,6 +265,66 @@
         font-size: 0.86rem;
       }
 
+      .metadata-lane {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 14px;
+      }
+
+      .metadata-card {
+        display: grid;
+        gap: 10px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .metadata-card header {
+        display: grid;
+        gap: 6px;
+      }
+
+      .metadata-card h3 {
+        font-size: 1rem;
+      }
+
+      .metadata-card p {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .metadata-list {
+        display: grid;
+        gap: 6px;
+      }
+
+      .metadata-row {
+        display: grid;
+        grid-template-columns: minmax(7rem, 0.42fr) 1fr;
+        gap: 8px;
+        padding: 7px 8px;
+        border: 1px solid var(--line);
+        background: var(--surface-muted);
+        color: var(--ink);
+        font-size: 0.86rem;
+      }
+
+      .metadata-key {
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .metadata-value {
+        overflow-wrap: anywhere;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
+      .metadata-empty {
+        color: var(--muted);
+        font-style: italic;
+      }
+
       .checklist {
         display: grid;
         gap: 12px;
@@ -295,8 +355,13 @@
           padding-bottom: 48px;
         }
 
-        .state-card {
+        .state-card,
+        .metadata-card {
           padding: 14px;
+        }
+
+        .metadata-row {
+          grid-template-columns: 1fr;
         }
 
         .hero-links a,
@@ -393,10 +458,59 @@
         </div>
       </section>
 
+      <section aria-labelledby="metadata-title">
+        <div class="section-heading">
+          <h2 id="metadata-title">Operation and status metadata lane</h2>
+          <p>These examples expose the dataset values a host app can read for styling or lightweight feedback. They are labels for review, not built-in visible messages or retry actions.</p>
+        </div>
+
+        <div class="metadata-lane">
+          <article class="metadata-card">
+            <header>
+              <span class="tag">Load metadata</span>
+              <h3>Remote search failure with HTTP status</h3>
+              <p>Use when the field was loading options from the remote search endpoint.</p>
+            </header>
+            <div class="metadata-list" aria-label="Load error metadata sample">
+              <div class="metadata-row"><span class="metadata-key">state</span><span class="metadata-value">load-error</span></div>
+              <div class="metadata-row"><span class="metadata-key">operation</span><span class="metadata-value">load</span></div>
+              <div class="metadata-row"><span class="metadata-key">status</span><span class="metadata-value">503</span></div>
+            </div>
+          </article>
+
+          <article class="metadata-card">
+            <header>
+              <span class="tag">Selected metadata</span>
+              <h3>Saved selection restore failure</h3>
+              <p>Use when a form has a saved value but selected option preload could not restore the label.</p>
+            </header>
+            <div class="metadata-list" aria-label="Selected load error metadata sample">
+              <div class="metadata-row"><span class="metadata-key">state</span><span class="metadata-value">selected-load-error</span></div>
+              <div class="metadata-row"><span class="metadata-key">operation</span><span class="metadata-value">selected-load</span></div>
+              <div class="metadata-row"><span class="metadata-key">status</span><span class="metadata-value">404</span></div>
+            </div>
+          </article>
+
+          <article class="metadata-card">
+            <header>
+              <span class="tag">Create metadata</span>
+              <h3>Create request failed without response status</h3>
+              <p>Use when the create-on-the-fly request failed before a reliable HTTP status was available.</p>
+            </header>
+            <div class="metadata-list" aria-label="Create error metadata sample">
+              <div class="metadata-row"><span class="metadata-key">state</span><span class="metadata-value">create-error</span></div>
+              <div class="metadata-row"><span class="metadata-key">operation</span><span class="metadata-value">create</span></div>
+              <div class="metadata-row"><span class="metadata-key">status</span><span class="metadata-empty">not set</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section class="checklist" aria-labelledby="checklist-title">
         <h2 id="checklist-title">Review checklist</h2>
         <ul>
           <li>Confirm hidden, revealed, restore-failure, create-failure, and custom-wrapper states stay readable on desktop and narrow viewports.</li>
+          <li>Confirm operation and status metadata labels wrap without relying on color alone.</li>
           <li>Keep `load-error`, `selected-load-error`, and `create-error` as host-app hooks rather than full lifecycle simulations.</li>
           <li>Do not add default visible error copy, built-in retry UI, request behavior, or production helper markup from this artifact.</li>
         </ul>
