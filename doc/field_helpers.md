@@ -238,6 +238,12 @@ Use this for Rails enum attributes.
 <%= f.rfk_enum_select :status %>
 ```
 
+By default, the helper reads the enum-like source from the model class method that matches the pluralized attribute name, such as `Order.statuses` for `:status`. It renders those enum keys as the submitted values, so the field stays in the same Rails enum parameter flow as an ordinary select over `Order.statuses.keys`.
+
+Labels come from the model class I18n path Rails exposes through `human_attribute_name`, using keys such as `status.open` and falling back to the humanized enum key when no translation is present. Keep explicit `enum:` source support aligned with #590 before documenting broader non-Rails enum shapes here.
+
+`rfk_enum_select` is still collection-first. Use remote helpers such as `rfk_combobox` for endpoint-backed option lookup, and keep Ransack filters or table metadata adapter behavior in their dedicated docs.
+
 ## Table metadata helpers
 
 Use these helpers when table column definitions already carry Rails Fields Kit metadata through `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, compatible hashes, hash-like column objects, or table-like objects that respond to `columns`.
