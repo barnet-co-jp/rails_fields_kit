@@ -267,6 +267,7 @@ module RailsFieldsKit
       html_options[:aria] ||= {}
       existing_described_by = html_options[:aria][:describedby] || html_options[:aria]["describedby"]
       described_by.unshift(existing_described_by) if existing_described_by
+      html_options[:aria].delete("describedby")
       html_options[:aria][:describedby] = described_by.join(" ") if described_by.any?
       html_options[:aria][:invalid] = true if errors.any?
       html_options[:aria][:required] = true if html_options[:required]
@@ -277,6 +278,7 @@ module RailsFieldsKit
       existing_described_by = html_options[:aria][:describedby] || html_options[:aria]["describedby"]
       described_by = Array(existing_described_by.to_s.split(/\s+/)).reject(&:empty?)
       described_by << error_surface_id unless described_by.include?(error_surface_id)
+      html_options[:aria].delete("describedby")
       html_options[:aria][:describedby] = described_by.join(" ")
     end
 
