@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
+require "fileutils"
 require "json"
 require "rubygems/package"
 require "stringio"
-require "tempfile"
 require "tmpdir"
 require "zlib"
 
