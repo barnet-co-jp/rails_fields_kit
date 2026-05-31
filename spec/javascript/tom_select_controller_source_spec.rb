@@ -13,6 +13,13 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include('loading: () => `<div class="loading" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.loadingTextValue)}</div>`')
   end
 
+  it "escapes rich option renderer content before rendering it" do
+    expect(source).to include("const label = escape(this.displayValue(data[this.labelFieldValue]))")
+    expect(source).to include('if (this.hasPresentValue(badge)) parts.push(`<span class="rfk-option-badge">${escape(this.displayValue(badge))}</span>`)')
+    expect(source).to include('if (this.hasPresentValue(description)) parts.push(`<div class="rfk-option-description">${escape(this.displayValue(description))}</div>`)')
+    expect(source).to include('option_create: (data, escape) => `<div class="create">${escape(this.createTextValue)} <strong>${escape(data.input)}</strong></div>`')
+  end
+
   it "dispatches remote search success with query and options" do
     expect(source).to include('this.dispatch("load", { detail: { query, options } })')
   end
