@@ -37,6 +37,7 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | If you want to... | Start here |
 | --- | --- |
 | Set up a host app | [`doc/setup.md`](doc/setup.md) |
+| Check supported Ruby / Rails and repository JavaScript boundaries | [`doc/support_boundary.md`](doc/support_boundary.md) |
 | Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md), [`doc/select_migration.md`](doc/select_migration.md) |
 | See or compare rendered UI states quickly | [`doc/visual_references.md`](doc/visual_references.md) for the visual reference family, including Tom Select, text override copy, native helper, table metadata, and saved-search token states |
 | Review public API, package-root JavaScript exports, and integration contracts | [`doc/public_api.md`](doc/public_api.md), [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md), [`doc/table_adapters.md`](doc/table_adapters.md), [`doc/events.md`](doc/events.md), [`doc/configuration.md`](doc/configuration.md) |
