@@ -1,0 +1,35 @@
+# Rails Fields Kit Support Boundary
+
+This page summarizes the current version boundary that is already encoded in the gem metadata, package metadata, and CI matrix. It does not change the supported version policy.
+
+## Host app Ruby and Rails boundary
+
+Rails Fields Kit is published as a Ruby gem for Rails host applications.
+
+- Ruby: `>= 3.1`
+- Rails: `>= 7.0`, `< 9.0`
+
+The source of truth for these install-time boundaries is `rails_fields_kit.gemspec`.
+
+## Repository compatibility checks
+
+GitHub Actions runs the main Ruby checks on Ruby 3.3 and adds representative pull-request compatibility checks for:
+
+| Rails | Ruby | Gemfile |
+| --- | --- | --- |
+| 7.0 | 3.1 | `gemfiles/rails_7_0.gemfile` |
+| 8.0 | 3.3 | `gemfiles/rails_8_0.gemfile` |
+
+These checks are representative CI coverage, not a separate host-app setup step.
+
+## JavaScript and Node boundary
+
+Rails Fields Kit ships JavaScript entrypoints for the Stimulus controller and package-root helper exports, but the host app still chooses its JavaScript bundling or importmap strategy.
+
+The repository JavaScript check uses Node 22.x because `package.json` declares `engines.node` as `22.x` and the GitHub Actions `javascript` job runs `npm run check:js` on Node 22. This is the boundary for repository-local JavaScript checks and package export smoke tests.
+
+Host applications still need to install Tom Select and register the Rails Fields Kit Stimulus controller with their own JavaScript toolchain. See `doc/setup.md` for setup examples and `doc/development.md` for local check commands.
+
+## What this page does not define
+
+This page does not add support for new Ruby, Rails, or Node versions. It also does not change CI matrix coverage, package metadata, generator behavior, Tom Select installation, bundler setup, importmap pinning, or host-app runtime responsibility.

@@ -2,6 +2,10 @@
 
 This document summarizes the local development checks and how they relate to GitHub Actions.
 
+## Support boundary
+
+For the current host-app Ruby / Rails boundary and the repository-local Node check boundary, see [`support_boundary.md`](support_boundary.md). Keep that page aligned with `rails_fields_kit.gemspec`, `package.json`, and `.github/workflows/ci.yml` when version metadata or CI coverage changes.
+
 ## Install dependencies
 
 ```bash
