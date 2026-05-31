@@ -10,7 +10,9 @@ end
 
 ## Quick reference
 
-Use this table to find the initializer key, field-level override, and default behavior before jumping into the detailed sections below.
+Use these grouped tables to find the initializer key, field-level override, and default behavior before jumping into the detailed sections below. Field-level options win over initializer defaults for the one rendered helper.
+
+### Controller and remote request params
 
 | Initializer key | Default or fallback | Field-level override | Applies to | Notes |
 | --- | --- | --- | --- | --- |
@@ -19,11 +21,21 @@ Use this table to find the initializer key, field-level override, and default be
 | `default_selected_param` | `"id"` | `selected_param:` | `selected_url:` for one value | Selected preload parameter for single-value fields. |
 | `default_selected_multiple_param` | `"ids"` | `selected_multiple_param:` | `selected_url:` for multiple values | Selected preload parameter for multi-value fields. |
 | `default_create_param` | `"text"` | `create_param:` | Create-on-the-fly helpers | Request parameter sent to `create_url:`. |
+
+### JSON field mapping and option metadata
+
+| Initializer key | Default or fallback | Field-level override | Applies to | Notes |
+| --- | --- | --- | --- | --- |
 | `default_value_field` | `"value"` | `value_field:` | JSON-backed option helpers | JSON key read for option values. |
 | `default_label_field` | `"text"` | `label_field:` | JSON-backed option helpers | JSON key read for option labels. |
 | `default_search_field` | `"text"` | `search_field:` | Tom Select search config | Use a comma-separated string for multiple fields. |
 | `default_option_description_field` | `nil` | `option_description_field:` | Option rendering metadata | `nil` means no secondary description field is rendered. |
 | `default_option_badge_field` | `nil` | `option_badge_field:` | Option rendering metadata | `nil` means no badge field is rendered. |
+
+### Tom Select interaction defaults
+
+| Initializer key | Default or fallback | Field-level override | Applies to | Notes |
+| --- | --- | --- | --- | --- |
 | `default_plugins` | `[]` | `plugins:` | Tom Select-backed helpers | Helper defaults can seed plugins first; `allow_clear: true` adds `clear_button`. |
 | `default_min_length` | `0` | `min_length:` | Remote loading | Minimum query length before loading starts. |
 | `default_max_options` | `nil` | `max_options:` | Tom Select dropdowns | `nil` leaves the Tom Select data value unset. |
@@ -32,9 +44,25 @@ Use this table to find the initializer key, field-level override, and default be
 | `default_close_after_select` | `nil` | `close_after_select:` | Tom Select selection behavior | `nil` leaves the Tom Select data value unset. |
 | `default_hide_selected` | `nil` | `hide_selected:` | Tom Select selected-option behavior | `nil` leaves the Tom Select data value unset. |
 | `default_persist` | `nil` | `persist:` | Create-on-the-fly / token helpers | `nil` leaves the Tom Select data value unset; some helpers can pass their own default. |
+
+For Tom Select defaults whose initializer value is `nil`, Rails Fields Kit omits that data value so the host app's Tom Select setup or Tom Select's own defaults can decide the behavior.
+
+### Render text and visible feedback
+
+| Initializer key | Default or fallback | Field-level override | Applies to | Notes |
+| --- | --- | --- | --- | --- |
 | `default_no_results_text` | bundled locale-aware copy | `no_results_text:` | Render text | Unset initializer values use bundled I18n copy with English fallback. |
 | `default_loading_text` | bundled locale-aware copy | `loading_text:` | Render text | Unset initializer values use bundled I18n copy with English fallback. |
 | `default_create_text` | bundled locale-aware copy | `create_text:` | Render text | Unset initializer values use bundled I18n copy with English fallback. |
+
+Render text defaults are different from `nil` Tom Select settings: leaving the initializer unset uses Rails Fields Kit's bundled locale-aware copy.
+
+Request-failure feedback options such as `error_surface:` and `error_surface_html:` are field-level helper options, not initializer keys. See [shared request-failure feedback options](field_helpers.md#shared-request-failure-feedback-options) for the `load-error`, `selected-load-error`, and `create-error` surfaces.
+
+### Wrapper and affix classes
+
+| Initializer key | Default or fallback | Field-level override | Applies to | Notes |
+| --- | --- | --- | --- | --- |
 | `wrapper_class` | `"rfk-field"` | `wrapper_html:` | Native and Tom Select wrappers | Appended to wrapper classes when `wrapper:` renders a wrapper. |
 | `label_class` | `"rfk-label"` | `label_html:` | Labels | Appended to generated label classes. |
 | `hint_class` | `"rfk-hint"` | `hint_html:` | Hints | Appended to generated hint classes. |
@@ -43,8 +71,6 @@ Use this table to find the initializer key, field-level override, and default be
 | `control_class` | `"rfk-control"` | `control_html:` | Prefix / suffix control wrappers | Appended when a field renders `prefix:` or `suffix:`. |
 | `prefix_class` | `"rfk-prefix"` | `prefix_html:` | Prefix elements | Appended to generated prefix classes. |
 | `suffix_class` | `"rfk-suffix"` | `suffix_html:` | Suffix elements | Appended to generated suffix classes. |
-
-Field-level options win over initializer defaults for the one rendered helper. For Tom Select defaults whose initializer value is `nil`, Rails Fields Kit omits that data value so the host app's Tom Select setup or Tom Select's own defaults can decide the behavior. Render text defaults are different: leaving the initializer unset uses Rails Fields Kit's bundled locale-aware copy.
 
 ## Controller
 
