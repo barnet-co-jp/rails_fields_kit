@@ -115,6 +115,8 @@ Use this for searchable remote selects and editable comboboxes.
   option_badge_field: "status" %>
 ```
 
+For remote search, current public behavior is a JSON `GET` request to `url:`. Rails Fields Kit appends `query_params:` to that URL as fixed query string scope first, then sets `query_param:` to the typed query value. The host app owns that endpoint's authorization, scoping, and response records; use `selected_url:` for selected-option preload and `create_url:` for create-on-the-fly JSON `POST` requests instead of mixing those request shapes into the remote search endpoint.
+
 #### Representative `error_surface` example
 
 The shared request-failure feedback options above apply here too. This combobox example is representative, not combobox-only:
@@ -452,7 +454,7 @@ Use boolean `disabled: true` to disable the whole select. Use array/value `disab
 
 Tom Select-backed helpers that call remote endpoints accept these request-shaping options:
 
-- `query_params:` adds fixed query parameters to the remote search URL.
+- `query_params:` adds fixed query parameters to the remote search `GET` URL before the typed query is applied.
 - `selected_query_params:` adds fixed query parameters to the selected-option preload URL.
 - `create_params:` adds fixed JSON fields to create-on-the-fly POST requests.
 - `max_items:` forwards Tom Select's maximum selected item count.
@@ -474,9 +476,10 @@ Example:
   url: customers_path(format: :json),
   selected_url: selected_customers_path(format: :json),
   create_url: customers_path,
+  query_param: "q",
   query_params: { account_id: current_account.id },
   selected_query_params: { account_id: current_account.id },
   create_params: { account_id: current_account.id } %>
 ```
 
-The main query value still uses `query_param:`. Selected values still use `selected_param:` or `selected_multiple_param:`. Create input text still uses `create_param:`.
+For remote search, `url:` receives a JSON `GET` request. Rails Fields Kit appends `query_params:` as fixed query string scope and then sets `query_param:` to the current typed query value. Selected values still use `selected_url:` with `selected_param:` or `selected_multiple_param:`, and create input text still uses `create_url:` with JSON `create_params:` plus `create_param:`.
