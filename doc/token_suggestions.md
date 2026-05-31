@@ -123,6 +123,21 @@ RailsFieldsKit::TokenSuggestions.build(
 )
 ```
 
+## Query matching
+
+`rfk_token_suggestions_with` filters suggestions after each suggestion has been normalized into the rendered option payload. A non-empty query is compared case-insensitively against every rendered option value, not only the value and label fields.
+
+With default field names, the following values can therefore match the endpoint query:
+
+- `value` and `text`
+- `description`
+- `badge`
+- any additional metadata values preserved on a hash suggestion
+
+The same rule applies when `value_field:`, `label_field:`, `description_field:`, or `badge_field:` use custom output names: the final rendered payload values are searched. For example, a custom `kind: "saved-search"` badge or `help: "Weekly saved queue"` description can make that option match even when the token itself does not contain the query text.
+
+This is intentional current behavior for suggestion filtering. Saved-search suggestions with `badge: "saved"`, descriptive helper text, or host-app metadata may appear because those values match the query. Keep sensitive values out of suggestion metadata, and pre-filter or omit fields in the host application when only token or label matching should be exposed.
+
 ## Responsibility boundary
 
 `TokenSuggestions.build` only produces suggestion option JSON. The submitted search text still belongs to the host application, search object, Ransack integration, or another dedicated search layer. Rails Fields Kit does not parse arbitrary token expressions into SQL or decide model-specific search semantics.
