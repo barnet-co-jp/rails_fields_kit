@@ -16,6 +16,7 @@ Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public
 - Table metadata collection and renderer fixes that keep hash-like, object, enumerable, nil, and disabled metadata inputs predictable without changing table persistence or query execution ownership.
 - `tomSelectTextOverrideContract(element)` for reading rendered Tom Select text override values from package-root JavaScript imports.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so controller helpers can match custom routes.
+- Multiple selected preload endpoints can accept Rails array params in addition to comma-separated `ids`, including custom `ids_param:` names.
 - Fixed remote request params with `query_params:`, `selected_query_params:`, and `create_params:`.
 - Tom Select option pass-throughs for `max_items:`, `load_throttle:`, and `delimiter:`.
 - `rails-fields-kit--tom-select:create` as a dedicated create-on-the-fly success hook with `event.detail.input` and `event.detail.option`.
@@ -29,7 +30,7 @@ Use `CHANGELOG.md` as the exhaustive release-history source of truth. This draft
 
 Before cutting the release, compare this draft with the current `Unreleased` entries and confirm it still covers these categories:
 
-- Added: token search and suggestion metadata, table metadata and rendering, JavaScript exports, controller action routing, fixed remote request params, Tom Select option pass-throughs, create-success events, and opt-in request-failure placeholders.
+- Added: token search and suggestion metadata, table metadata and rendering, JavaScript exports, controller action routing, selected preload array params, fixed remote request params, Tom Select option pass-throughs, create-success events, and opt-in request-failure placeholders.
 - Fixed: remote request lifecycle and event details, token and Ransack suggestion metadata immutability, table metadata collection edge cases, table input and renderer immutability, and TableRenderer input normalization and error messages.
 
 Do not add open-PR or proposal helper names here until they have landed in the release branch and `CHANGELOG.md` has the corresponding current entry.
@@ -53,7 +54,7 @@ FormBuilder helpers:
 Controller helpers:
 
 - `rfk_search_with`
-- `rfk_find_with`
+- `rfk_find_with` for selected option lookup endpoints, including comma-separated `ids` and Rails array params for multiple selected preload
 - `rfk_create_with`
 - `rfk_token_suggestions_with`
 
@@ -82,6 +83,7 @@ JavaScript package-root exports:
 - Visible success UI, toast copy, and follow-up app behavior after `rails-fields-kit--tom-select:create` remain host-app responsibilities.
 - `error_surface:` only renders an opt-in nearby placeholder; visible error copy and retry behavior for that surface remain host-app responsibilities.
 - Request cancellation and stale-response handling do not create request-start, retry, fallback, success, or failure UI; host applications that need those states should pair Rails Fields Kit events with host-owned interaction state.
+- Multiple selected preload still accepts comma-separated `ids`; Rails-style array params are supported when the host application's request stack has normalized repeated keys such as `ids[]` into an Array.
 - Table metadata helpers expose rendering metadata only; they do not take over table preference persistence or query execution.
 
 ## Verification expectations
@@ -123,7 +125,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 - `rfk_table_filters` and `rfk_table_cell_editors`
 - table metadata collection and renderer robustness fixes for hash-like, object, enumerable, nil, and disabled metadata inputs
 - `tomSelectTextOverrideContract(element)` for rendered Tom Select text override values
-- controller helper `action:` support and fixed request params
+- controller helper `action:` support, selected preload array params, and fixed request params
 - Tom Select option pass-throughs for `max_items:`, `load_throttle:`, and `delimiter:`
 - `rails-fields-kit--tom-select:create` with `event.detail.input` / `event.detail.option`
 - `error_surface:` / `error_surface_html:` with request-failure `event.detail.surface`
@@ -138,7 +140,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 
 ### Responsibility boundary
 
-Rails Fields Kit still stops at UI helpers and metadata. Host applications remain responsible for token parsing, search execution, authorization, pagination, JavaScript package manager or importmap choices, visible copy and locale policy for rendered text overrides, visible success UI after create-on-the-fly succeeds, visible error or retry UI around any opt-in `error_surface:` placeholder, and any host-owned loading or retry state around aborted or stale requests.
+Rails Fields Kit still stops at UI helpers and metadata. Host applications remain responsible for token parsing, search execution, authorization, pagination, JavaScript package manager or importmap choices, visible copy and locale policy for rendered text overrides, visible success UI after create-on-the-fly succeeds, visible error or retry UI around any opt-in `error_surface:` placeholder, and any host-owned loading or retry state around aborted or stale requests. Multiple selected preload supports Rails array params only after the host app request stack normalizes repeated keys such as `ids[]` into an Array.
 
 ### Verification
 
