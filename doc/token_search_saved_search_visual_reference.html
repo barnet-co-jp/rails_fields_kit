@@ -177,6 +177,7 @@
       .token {
         display: inline-flex;
         align-items: center;
+        gap: 6px;
         max-width: 100%;
         padding: 5px 9px;
         border: 1px solid #b9cce5;
@@ -189,6 +190,34 @@
         border-color: #b9d5cc;
         background: var(--saved-soft);
         color: var(--saved);
+      }
+
+      .token.value {
+        border-color: #d0cce8;
+        background: var(--value-soft);
+        color: var(--value);
+      }
+
+      .token-label {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .token-kind {
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .token-remove {
+        flex: none;
+        padding-left: 6px;
+        border-left: 1px solid currentColor;
+        color: inherit;
+        opacity: 0.72;
+        font-size: 0.86rem;
+        line-height: 1;
       }
 
       .inline-query {
@@ -326,7 +355,7 @@
         <div class="eyebrow">Rails Fields Kit</div>
         <h1>Saved Search Token Visual Reference</h1>
         <p class="lede">
-          A focused static reference for `rfk_token_search` suggestions that include saved searches.
+          A focused static reference for `rfk_token_search` suggestions that include saved searches, space-delimited token text, and multi-token wrapping.
           It shows how the default `saved` badge reads next to field and value suggestions without implying that Rails Fields Kit owns search execution.
         </p>
         <div class="hero-links">
@@ -413,6 +442,32 @@
 
         <article class="card">
           <div class="card-header">
+            <span class="tag">Delimiter State</span>
+            <h2>Space-delimited multi-token query wraps cleanly</h2>
+            <p>Shows the default token-search shape after several tokens have been created from space-delimited text.</p>
+          </div>
+          <div class="control" aria-hidden="true">
+            <div class="control-top">
+              <div class="selection">
+                <span class="token saved"><span class="token-kind">saved</span><span class="token-label">saved:mine</span><span class="token-remove">x</span></span>
+                <span class="token"><span class="token-kind">field</span><span class="token-label">status:open</span><span class="token-remove">x</span></span>
+                <span class="token value"><span class="token-kind">field</span><span class="token-label">assignee:matsuo</span><span class="token-remove">x</span></span>
+                <span class="token"><span class="token-kind">free</span><span class="token-label">renewal</span><span class="token-remove">x</span></span>
+              </div>
+              <div class="caret">v</div>
+            </div>
+            <div class="dropdown">
+              <div class="message">
+                <strong>Spaces create more token text; they do not define query semantics.</strong>
+                <span>The reference keeps delimiter, remove-button, and wrapping states visible while parser rules, saved-search lookup, and execution remain host-app responsibilities.</span>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Token kind text and remove affordances remain visible when the selected values wrap, so reviewers can check narrow viewports without relying on color alone.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
             <span class="tag">Comparison</span>
             <h2>Badges keep suggestion kinds scannable</h2>
             <p>Shows the badge and kind-label contrast that helps reviewers distinguish saved searches from ordinary field and value completions.</p>
@@ -466,15 +521,16 @@
         <p>Use this checklist when reviewing the saved-search token state across desktop and narrow viewports.</p>
         <ul>
           <li><strong>Desktop:</strong> saved-search options remain visually comparable with field and value options while the left edge accent and `kind: saved search` label are easy to scan.</li>
-          <li><strong>Narrow viewport:</strong> long option titles and helper copy wrap inside the dropdown without clipping the badge, token, or card boundary.</li>
-          <li><strong>Kind reading:</strong> saved, field, and value suggestions can be distinguished by visible text and layout, not color alone.</li>
+          <li><strong>Narrow viewport:</strong> long option titles, multi-token selections, remove affordances, and helper copy wrap inside the dropdown without clipping the badge, token, or card boundary.</li>
+          <li><strong>Delimiter reading:</strong> the space-delimited multi-token state remains readable without implying that Rails Fields Kit owns token parsing or query execution.</li>
+          <li><strong>Kind reading:</strong> saved, field, value, and free-text suggestions can be distinguished by visible text and layout, not color alone.</li>
           <li><strong>Boundary:</strong> the examples continue to show Rails Fields Kit rendering suggestion metadata while parsing, saved-search execution, storage, and authorization stay with the host app.</li>
         </ul>
       </section>
 
       <section class="legend">
         <strong>Scope note.</strong>
-        This page is a static visual aid for saved-search suggestion options. Rails Fields Kit only builds and renders suggestion JSON; saved-search storage, authorization, and execution remain host-app responsibilities.
+        This page is a static visual aid for saved-search suggestion options and space-delimited token wrapping. Rails Fields Kit only builds and renders suggestion JSON; saved-search storage, authorization, parsing, and execution remain host-app responsibilities.
       </section>
     </main>
   </body>
