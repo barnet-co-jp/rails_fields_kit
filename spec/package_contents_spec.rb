@@ -62,7 +62,7 @@ RSpec.describe "package contents" do
       "- [ ] Install Tom Select with the JavaScript toolchain already used by this app.",
       "- [ ] Register `rails-fields-kit--tom-select` on the app's existing Stimulus application.",
       "- [ ] If this app uses Vite or another bundler, add resolver or alias entries for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.",
-      "- [ ] If this app uses importmap, add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` in `config/importmap.rb`.",
+      "- [ ] If this app uses importmap, run `rails generate rails_fields_kit:install --importmap` when `config/importmap.rb` exists, or add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.",
       "- [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.",
       "- [ ] Add the first `rfk_combobox` field and matching `rfk_search_with` / `rfk_find_with` / `rfk_create_with` endpoints.",
       "- [ ] Use `doc/controller_helpers.md` for the maintained endpoint option reference, including custom `action:` names.",
