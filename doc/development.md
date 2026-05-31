@@ -43,9 +43,11 @@ The JavaScript syntax check uses Node 22.x, matching `package.json` and the GitH
 npm run check:js
 ```
 
-This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It also runs a lightweight package `exports` import smoke in a temporary Node sandbox, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
+This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It also runs lightweight Node sandbox checks for package `exports` import wiring and the Tom Select create-on-the-fly JSON request headers, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
 
 The package export smoke derives package-root named-export expectations from the JavaScript exports table in `doc/public_api.md` and fails if those documented exports are missing from the package root. Helper-specific assertions stay limited to representative contract checks, so adding a new documented package-root helper should not require updating a second fixed export list in the smoke script.
+
+The create request header smoke keeps the existing create-on-the-fly contract visible: JSON `Accept` / `Content-Type` headers are always sent, and a Rails CSRF meta token is copied to `X-CSRF-Token` when present without requiring one in non-Rails or test-only DOMs.
 
 ## Build locally
 
@@ -77,7 +79,7 @@ Current CI adds these repository-level confirmations on top of the local workflo
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - Representative PR compatibility checks for Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
-- `npm run check:js` on Node 22.x for the JavaScript syntax and package exports import lane
+- `npm run check:js` on Node 22.x for the JavaScript syntax, package exports import lane, and Tom Select create request header smoke
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 
 ## Release-related checks
