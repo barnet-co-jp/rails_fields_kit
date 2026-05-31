@@ -10,6 +10,8 @@ RSpec.describe "package contents" do
   let(:repo_agents) { File.read(repo_agents_path) }
   let(:product_profile_path) { File.expand_path("../Product Profile.md", __dir__) }
   let(:product_profile) { File.read(product_profile_path) }
+  let(:visual_references_path) { File.expand_path("../doc/visual_references.md", __dir__) }
+  let(:visual_references) { File.read(visual_references_path) }
   let(:generated_setup_note_path) do
     File.expand_path("../lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md", __dir__)
   end
@@ -94,8 +96,33 @@ RSpec.describe "package contents" do
     expect(product_profile).to include(
       "- `README.md`: public entrypoint and maintained docs map",
       "- `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs",
-      "- `doc/tom_select_visual_reference.html` and `doc/native_field_visual_reference.html`: static visual references for representative Tom Select-backed and native helper states"
+      "- `doc/visual_references.md`: maintained visual reference family map and scope notes",
+      "- `doc/visual_reference_index.html`: one-screen reviewer entrypoint for the static visual reference family",
+      "- `doc/tom_select_visual_reference.html` and `doc/native_field_visual_reference.html`: static visual references for representative Tom Select-backed and native helper states",
+      "- `doc/tom_select_request_failure_visual_reference.html`: static visual reference for opt-in request-failure feedback and `error_surface: true` lanes"
     )
+  end
+
+  it "keeps the visual reference family map aligned with packaged static artifacts" do
+    visual_reference_paths = [
+      "doc/visual_reference_index.html",
+      "doc/tom_select_visual_reference.html",
+      "doc/tom_select_request_failure_visual_reference.html",
+      "doc/tom_select_text_override_visual_reference.html",
+      "doc/native_field_visual_reference.html",
+      "doc/table_metadata_visual_reference.html",
+      "doc/token_search_saved_search_visual_reference.html"
+    ]
+
+    expect(specification.files).to include("doc/visual_references.md", *visual_reference_paths)
+    expect(product_profile).to include("- `doc/visual_references.md`: maintained visual reference family map and scope notes")
+
+    visual_reference_paths.each do |path|
+      link = path.delete_prefix("doc/")
+
+      expect(product_profile).to include("`#{path}`")
+      expect(visual_references).to include("[`#{link}`](#{link})")
+    end
   end
 
   it "ships the maintained public reference docs linked from README and setup" do
