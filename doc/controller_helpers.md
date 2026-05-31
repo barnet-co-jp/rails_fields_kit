@@ -151,6 +151,47 @@ rfk_create_with(
 - `before_save:` hook called before `save`. Supports method name or callable. Returns `422` when false.
 - `wrap:` wraps the JSON response, commonly `"option"`.
 
+### Create request contract
+
+When a FormBuilder field has `create_url:`, the Tom Select controller sends create-on-the-fly input as a JSON `POST` request to that URL. The request includes these headers:
+
+- `Accept: application/json`
+- `Content-Type: application/json`
+- `X-CSRF-Token` when the page has a Rails `<meta name="csrf-token">` tag
+
+The JSON body merges fixed `create_params:` values first, then writes the user's input under `create_param:`. With this field:
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  create_url: customers_path,
+  create_param: "name",
+  create_params: { account_id: current_account.id } %>
+```
+
+Rails Fields Kit posts a body shaped like this:
+
+```json
+{ "account_id": 123, "name": "New Customer" }
+```
+
+The endpoint-side `rfk_create_with create_param:` option must read the same key that the field sends:
+
+```ruby
+rfk_create_with(
+  action: :create,
+  model: Customer,
+  value: :id,
+  label: :name,
+  create_attribute: :name,
+  create_param: "name",
+  assign: ->(_customer) { { account_id: current_account.id } }
+)
+```
+
+`create_params:` is only request shaping. Treat incoming fixed values as hints or context from the rendered page; keep tenant scoping, authentication, authorization, CSRF policy, model validation, and persisted assignment decisions in the host app controller/model layer. Prefer `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy for server-side enforcement.
+
+Use the standard RESTful `POST /customers` action when create-on-the-fly should share the host app's ordinary resource create path. Use a dedicated collection `POST` action when the option creation flow needs a narrower authorization policy, assignment rule, or response shape than the normal resource create action.
+
 ## Fixed request params and scoping
 
 FormBuilder options such as `query_params:`, `selected_query_params:`, and `create_params:` are request-shaping helpers. They add fixed values to the outgoing remote search, selected preload, or create request, but they do not move authorization, tenant scoping, validation, or assignment policy into Rails Fields Kit.
