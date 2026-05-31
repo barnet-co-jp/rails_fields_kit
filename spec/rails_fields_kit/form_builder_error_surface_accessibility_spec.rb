@@ -47,7 +47,7 @@ RSpec.describe "RailsFieldsKit::FormBuilder error surface accessibility" do
   end
 
   def describedby_tokens(html)
-    html.match(/aria-describedby="([^"]+)"/).fetch(1).split
+    html.match(/aria-describedby="([^"]+)"/)[1].split
   end
 
   around do |example|
