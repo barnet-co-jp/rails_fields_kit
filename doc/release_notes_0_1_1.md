@@ -4,7 +4,7 @@ This draft assumes the next release after `0.1.0` will be `0.1.1`.
 
 If release planning chooses a different version number, rename this file and keep the contents aligned with `CHANGELOG.md` instead of editing the `0.1.0` historical notes in place.
 
-Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public surface around token-oriented search, Ransack-compatible suggestion metadata, table metadata adapters, controller/helper integration details, a dedicated create-success event for create-on-the-fly flows, package-root rendered-field contract helpers, and opt-in inline request-failure placeholders while keeping query execution, visible copy ownership, and JavaScript package ownership in the host application.
+Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public surface around token-oriented search, Ransack-compatible suggestion metadata, table metadata adapters, controller/helper integration details, a dedicated create-success event for create-on-the-fly flows, package-root rendered-field contract helpers, Tom Select integration options, and opt-in inline request-failure placeholders while keeping query execution, visible copy ownership, and JavaScript package ownership in the host application.
 
 ## Highlights
 
@@ -13,13 +13,26 @@ Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public
 - `RailsFieldsKit::RansackSuggestions.build` for Ransack-compatible token suggestion metadata without requiring or executing Ransack.
 - `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer` for table-oriented metadata integration.
 - `rfk_table_filters` and `rfk_table_cell_editors` for rendering documented table metadata through a FormBuilder.
+- Table metadata collection and renderer fixes that keep hash-like, object, enumerable, nil, and disabled metadata inputs predictable without changing table persistence or query execution ownership.
 - `tomSelectTextOverrideContract(element)` for reading rendered Tom Select text override values from package-root JavaScript imports.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so controller helpers can match custom routes.
 - Fixed remote request params with `query_params:`, `selected_query_params:`, and `create_params:`.
+- Tom Select option pass-throughs for `max_items:`, `load_throttle:`, and `delimiter:`.
 - `rails-fields-kit--tom-select:create` as a dedicated create-on-the-fly success hook with `event.detail.input` and `event.detail.option`.
 - Opt-in `error_surface:` / `error_surface_html:` helper options so request-failure events can expose a nearby placeholder as `event.detail.surface`.
 - A normalized Tom Select failure event detail shape across remote search, selected preload, and create-on-the-fly failures.
 - Documented request cancellation behavior: aborted requests, disconnect-time aborts, and stale responses do not dispatch success or failure events.
+
+## Relationship to `CHANGELOG.md` Unreleased
+
+Use `CHANGELOG.md` as the exhaustive release-history source of truth. This draft is the reviewer-facing and GitHub-release-facing summary for the current `Unreleased` section.
+
+Before cutting the release, compare this draft with the current `Unreleased` entries and confirm it still covers these categories:
+
+- Added: token search and suggestion metadata, table metadata and rendering, JavaScript exports, controller action routing, fixed remote request params, Tom Select option pass-throughs, create-success events, and opt-in request-failure placeholders.
+- Fixed: remote request lifecycle and event details, token and Ransack suggestion metadata immutability, table metadata collection edge cases, table input and renderer immutability, and TableRenderer input normalization and error messages.
+
+Do not add open-PR or proposal helper names here until they have landed in the release branch and `CHANGELOG.md` has the corresponding current entry.
 
 ## Main helpers and builders
 
@@ -87,6 +100,7 @@ Before publishing, also confirm:
 - `doc/sample_app_results.md` is completed for the same branch head.
 - documented JavaScript import paths resolve in the sample app.
 - package-root helper exports such as `tomSelectTextOverrideContract(element)` can be imported from `rails_fields_kit` when that release surface is in scope.
+- Tom Select option pass-throughs such as `max_items:`, `load_throttle:`, and `delimiter:` remain documented only as helper-to-controller options rather than JavaScript package ownership.
 - the sample app confirms `rails-fields-kit--tom-select:create`, `event.detail.input`, and `event.detail.option` when that release surface is in scope.
 - representative request-failure flows confirm `event.detail.surface` when `error_surface:` is in scope for the release, and any visible inline error copy still belongs to the host app.
 - aborted requests, disconnect-time aborts, and stale responses do not dispatch Tom Select success or failure events.
@@ -98,7 +112,7 @@ Before publishing, also confirm:
 ## Suggested GitHub release body
 
 ```markdown
-Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token-oriented search helpers, metadata-only Ransack suggestion builders, table adapter metadata for rendering documented field helpers through existing host-app table definitions, package-root rendered-field contract helpers, a dedicated create-success event for create-on-the-fly flows, and opt-in inline request-failure placeholder hooks.
+Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token-oriented search helpers, metadata-only Ransack suggestion builders, table adapter metadata for rendering documented field helpers through existing host-app table definitions, package-root rendered-field contract helpers, Tom Select option pass-throughs, a dedicated create-success event for create-on-the-fly flows, and opt-in inline request-failure placeholder hooks.
 
 ### Highlights
 
@@ -107,8 +121,10 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 - `RailsFieldsKit::RansackSuggestions.build` for metadata-only Ransack-compatible suggestions
 - `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
 - `rfk_table_filters` and `rfk_table_cell_editors`
+- table metadata collection and renderer robustness fixes for hash-like, object, enumerable, nil, and disabled metadata inputs
 - `tomSelectTextOverrideContract(element)` for rendered Tom Select text override values
 - controller helper `action:` support and fixed request params
+- Tom Select option pass-throughs for `max_items:`, `load_throttle:`, and `delimiter:`
 - `rails-fields-kit--tom-select:create` with `event.detail.input` / `event.detail.option`
 - `error_surface:` / `error_surface_html:` with request-failure `event.detail.surface`
 - normalized Tom Select failure event detail payloads
