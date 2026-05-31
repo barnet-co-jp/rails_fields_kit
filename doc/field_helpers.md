@@ -287,7 +287,7 @@ If you want one representative lane before the per-helper snippets below, start 
 This representative lane keeps the native helper family in its ordinary HTML-input path while still showing the shared wrapper contract in one place:
 
 - `wrapper: true` renders the label, hint, and affixes around the native field.
-- `html:` passes attributes to the input itself; `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, and `prefix_html:`, and `suffix_html:` pass attributes to the generated wrapper pieces.
+- `html:` passes attributes to the input itself; `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` pass attributes to the generated wrapper pieces.
 - edit-form redisplay and validation rerender keep using the same model-backed value instead of switching to a remote-search or Tom Select lane.
 - automatic accessibility wiring keeps the generated hint and error ids connected through `aria-describedby` and also manages `aria-invalid` / `aria-required` unless you opt out.
 
