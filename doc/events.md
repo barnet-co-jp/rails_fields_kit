@@ -17,7 +17,7 @@ Use those attributes for host-owned CSS, analytics, or lightweight event handler
 ## Event map
 
 | Workflow | Success surface | Failure surface | Notes |
-| --- | --- | --- |
+| --- | --- | --- | --- |
 | Remote search | `rails-fields-kit--tom-select:load` | `rails-fields-kit--tom-select:load-error` | Use when the app needs the fetched option payloads. |
 | Selected preload | `rails-fields-kit--tom-select:selected-load` | `rails-fields-kit--tom-select:selected-load-error` | Use when edit forms need labels for already-selected IDs. |
 | Create-on-the-fly | `rails-fields-kit--tom-select:create`, `rails-fields-kit--tom-select:item-add`, and `rails-fields-kit--tom-select:change` | `rails-fields-kit--tom-select:create-error` | Use `create` when the app needs a dedicated hook before ordinary selection events. |
@@ -80,59 +80,7 @@ Use `create` when the host app needs to distinguish inline creation from ordinar
 Create failure keeps its own dedicated event:
 
 - `rails-fields-kit--tom-select:create-error`
-  - Fired after create-on-the-fly fails or returns a non-2xx response.
+  - Fired when the create endpoint fails, returns a non-2xx response, or returns a 2xx JSON payload that does not describe an option.
   - Detail: `{ operation, input, error, response, payload, status, surface }`
 
-Use `create-error` when the host app wants to show validation feedback, retry affordances, or analytics for failed inline creation.
-
-For a copyable field example that wires `create_url:`, `create`, `create-error`, and `error_surface: true` together on one field, see [`setup.md`](setup.md). Keep the actual visible copy and retry policy in the host app, even when the app writes that feedback into `detail.surface`.
-
-If the host app writes its inline error copy into `detail.surface`, keep that copy inside the placeholder element itself. The controller clears and hides that placeholder before a fresh remote request, after successful selected preload or create, and again when forwarded interaction events such as `change`, `item-add`, `item-remove`, or `clear` fire.
-
-If the app mirrors the same error in another element, clear that extra UI from the same success or follow-up hooks. Rails Fields Kit only resets the opt-in placeholder that it rendered.
-
-## Interaction forwarding
-
-These events forward common Tom Select interactions:
-
-- `rails-fields-kit--tom-select:change`
-  - Detail: `{ value, values }`
-- `rails-fields-kit--tom-select:item-add`
-  - Detail: `{ value, item, values }`
-- `rails-fields-kit--tom-select:item-remove`
-  - Detail: `{ value, item, values }`
-- `rails-fields-kit--tom-select:clear`
-  - Detail: `{ values }`
-
-These are useful even when the field does not use remote search or create-on-the-fly.
-
-## Choosing the right hook
-
-- Use `load` / `selected-load` when the app cares about fetched option payloads.
-- Use `create` when the app needs a dedicated success hook for inline creation.
-- Use `item-add` / `change` when the app cares that the selection actually changed after Tom Select accepted the value.
-- Use `load-error`, `selected-load-error`, or `create-error` when the app wants visible error UI, retry UI, or logging.
-- Use `detail.surface` with `error_surface: true` when the app wants a stable placeholder next to the field without replacing the controller.
-- Keep visible feedback in the host app. Rails Fields Kit only dispatches the events.
-
-Example:
-
-```erb
-<%= f.rfk_combobox :customer_id,
-  url: customers_path(format: :json),
-  error_surface: true,
-  html: {
-    data: {
-      action: "rails-fields-kit--tom-select:create->customers#created rails-fields-kit--tom-select:create-error->customers#error rails-fields-kit--tom-select:item-add->customers#selected"
-    }
-  } %>
-```
-
-```js
-error(event) {
-  const { surface, payload } = event.detail
-  if (!surface) return
-
-  surface.textContent = payload?.error || "Unable to load options"
-}
-```
+Keep the visible fallback, retry affordance, and error copy in the host app. Rails Fields Kit only exposes the event detail and optional placeholder surface so the app can decide how to respond.
