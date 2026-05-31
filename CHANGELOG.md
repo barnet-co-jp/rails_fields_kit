@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 #### Remote request lifecycle and events
 
 - Tom Select failure events now share a consistent detail shape with `operation`, request context, `response`, `payload`, and `status` across remote search, selected preload, and create failures, and include `surface` when `error_surface: true` is enabled.
+- Remote search, selected preload, and create-on-the-fly now document that aborted requests, disconnect-time aborts, and stale responses do not dispatch success or failure events; failure events remain limited to current request errors.
 
 #### Token and Ransack suggestion metadata
 

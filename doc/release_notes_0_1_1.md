@@ -19,6 +19,7 @@ Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public
 - `rails-fields-kit--tom-select:create` as a dedicated create-on-the-fly success hook with `event.detail.input` and `event.detail.option`.
 - Opt-in `error_surface:` / `error_surface_html:` helper options so request-failure events can expose a nearby placeholder as `event.detail.surface`.
 - A normalized Tom Select failure event detail shape across remote search, selected preload, and create-on-the-fly failures.
+- Documented request cancellation behavior: aborted requests, disconnect-time aborts, and stale responses do not dispatch success or failure events.
 
 ## Main helpers and builders
 
@@ -67,6 +68,7 @@ JavaScript package-root exports:
 - Submitted token text parsing, `params[:q]` construction, authorization, scoping, pagination, and result execution remain host-app responsibilities.
 - Visible success UI, toast copy, and follow-up app behavior after `rails-fields-kit--tom-select:create` remain host-app responsibilities.
 - `error_surface:` only renders an opt-in nearby placeholder; visible error copy and retry behavior for that surface remain host-app responsibilities.
+- Request cancellation and stale-response handling do not create request-start, retry, fallback, success, or failure UI; host applications that need those states should pair Rails Fields Kit events with host-owned interaction state.
 - Table metadata helpers expose rendering metadata only; they do not take over table preference persistence or query execution.
 
 ## Verification expectations
@@ -87,6 +89,7 @@ Before publishing, also confirm:
 - package-root helper exports such as `tomSelectTextOverrideContract(element)` can be imported from `rails_fields_kit` when that release surface is in scope.
 - the sample app confirms `rails-fields-kit--tom-select:create`, `event.detail.input`, and `event.detail.option` when that release surface is in scope.
 - representative request-failure flows confirm `event.detail.surface` when `error_surface:` is in scope for the release, and any visible inline error copy still belongs to the host app.
+- aborted requests, disconnect-time aborts, and stale responses do not dispatch Tom Select success or failure events.
 - `rails-fields-kit--tom-select:item-add` and `rails-fields-kit--tom-select:change` still describe the accepted selection after create succeeds.
 - token suggestion and Ransack suggestion metadata checks pass if those surfaces are in scope for the release.
 - table metadata helpers or `TableRenderer` call-spec paths are covered if they are in scope for the release.
@@ -109,6 +112,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 - `rails-fields-kit--tom-select:create` with `event.detail.input` / `event.detail.option`
 - `error_surface:` / `error_surface_html:` with request-failure `event.detail.surface`
 - normalized Tom Select failure event detail payloads
+- documented request cancellation and stale-response no-event boundaries
 
 ### Compatibility
 
@@ -118,7 +122,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 
 ### Responsibility boundary
 
-Rails Fields Kit still stops at UI helpers and metadata. Host applications remain responsible for token parsing, search execution, authorization, pagination, JavaScript package manager or importmap choices, visible copy and locale policy for rendered text overrides, visible success UI after create-on-the-fly succeeds, and visible error or retry UI around any opt-in `error_surface:` placeholder.
+Rails Fields Kit still stops at UI helpers and metadata. Host applications remain responsible for token parsing, search execution, authorization, pagination, JavaScript package manager or importmap choices, visible copy and locale policy for rendered text overrides, visible success UI after create-on-the-fly succeeds, visible error or retry UI around any opt-in `error_surface:` placeholder, and any host-owned loading or retry state around aborted or stale requests.
 
 ### Verification
 
