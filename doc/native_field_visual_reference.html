@@ -495,7 +495,7 @@
         <h1>Native Field Visual Reference</h1>
         <p class="lede">
           Diagnostic QA surface for the native helper family: wrapper, validation, affixes, metadata,
-          focus, customization, non-editable states, and the accessibility opt-out boundary.
+          focus, customization, non-editable states, generated aria ids, and the accessibility opt-out boundary.
         </p>
         <div class="hero-links">
           <a href="field_helpers.md">Read helper details</a>
@@ -505,6 +505,7 @@
 
       <div class="review-strip" aria-label="Review checklist summary">
         <span class="review-pill">State comparison first</span>
+        <span class="review-pill">Generated aria id scan</span>
         <span class="review-pill">Desktop and narrow viewport scan</span>
         <span class="review-pill">Static artifact only</span>
         <span class="review-pill">No helper or runtime behavior changes</span>
@@ -741,6 +742,51 @@
             </div>
           </div>
         </article>
+
+        <article class="card">
+          <div class="tag accessibility">Generated id wiring</div>
+          <h2>Repeated and custom-id previews stay explicit</h2>
+          <p>
+            When a host app renders the same object and method more than once, this lane keeps the current
+            generated ids visible without introducing a new helper option or runtime behavior.
+          </p>
+          <div class="example accessibility-surface">
+            <div class="two-up">
+              <div class="muted-box">
+                <strong>Current generated lane</strong>
+                <span>`customer_support_email_hint`</span>
+                <span>`customer_support_email_error`</span>
+                <span>`aria-describedby` points at the generated hint and error ids.</span>
+              </div>
+              <div class="muted-box opt-out">
+                <strong>Repeated or custom `id:` lane</strong>
+                <span>Host apps should check duplicate ids when the same field appears twice.</span>
+                <span>Custom input ids do not automatically rename generated hint or error ids.</span>
+              </div>
+            </div>
+            <div class="field-block error-state">
+              <div class="label-row">
+                <span>Preview support email</span>
+                <span class="required">Required</span>
+              </div>
+              <div class="control-row">
+                <div class="input">ops-team.example.com</div>
+              </div>
+              <div class="hint">aria-describedby="customer_support_email_hint customer_support_email_error"</div>
+              <div class="error">Generated error id: customer_support_email_error</div>
+            </div>
+            <div class="metadata-list">
+              <div class="metadata-row">
+                <span class="metadata-key">Review scope</span>
+                <span class="metadata-value">Static visual reference only; #624 owns behavior/spec decisions.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">Boundary</span>
+                <span class="metadata-value">Use this card to spot id collision risk before adding preview or repeated lanes.</span>
+              </div>
+            </div>
+          </div>
+        </article>
       </section>
 
       <section class="callout">
@@ -757,6 +803,7 @@
           <span>Field-level wrapper customization layers extra attributes onto the same generated pieces.</span>
           <span>Disabled and readonly remain in the same native helper family while changing editability cues.</span>
           <span>Accessibility boundary stays explicit when the host app opts out.</span>
+          <span>Generated id wiring remains visible without claiming #624's behavior/spec decision.</span>
         </div>
       </section>
     </main>
