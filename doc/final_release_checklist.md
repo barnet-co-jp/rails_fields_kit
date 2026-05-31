@@ -74,6 +74,17 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm Tom Select CSS is loaded.
 - [ ] Confirm remote search works.
 - [ ] Confirm `doc/visual_references.md` remains accurate as the family index for Tom Select, text override copy, native helper, table metadata, and saved search token visual references.
+
+Record visual reference and sample app evidence in a compact matrix before treating the detailed checks below as complete. Keep the evidence in `doc/sample_app_results.md` or the release PR comment, and include artifact, viewport, state lane, responsibility boundary, and evidence location for each changed or release-critical visual surface.
+
+| Artifact | Viewport checked | State or lane checked | Responsibility boundary confirmed | Evidence location |
+| --- | --- | --- | --- | --- |
+| `doc/tom_select_visual_reference.html` | desktop + narrow/mobile | loading, empty, create, disabled, multi, grouped, autocomplete, preload, tags, tokens, error, and any release-scoped helper lane | host app still owns endpoint behavior, visible feedback copy, retry UI, query parsing, token parsing, and create authorization | `doc/sample_app_results.md` or release PR comment |
+| `doc/tom_select_text_override_visual_reference.html` | desktop + narrow/mobile | field-level copy override and fallback contract lanes | Rails Fields Kit exposes rendered copy contract; host app still owns locale policy and visible copy decisions | `doc/sample_app_results.md` or release PR comment |
+| `doc/native_field_visual_reference.html` | desktop + narrow/mobile | prefix, suffix, hint, disabled, readonly, validation error, wrapper customization, and accessibility opt-out lanes | Rails Fields Kit owns wrapper / aria wiring only when enabled; host app still owns validation copy and field semantics | `doc/sample_app_results.md` or release PR comment |
+| `doc/table_metadata_visual_reference.html` | desktop + narrow/mobile | filter and editor lanes | Rails Fields Kit exposes metadata / call-spec rendering boundaries without taking over table persistence or query execution | `doc/sample_app_results.md` or release PR comment |
+| `doc/token_search_saved_search_visual_reference.html` | desktop + narrow/mobile | saved-search token states | Rails Fields Kit provides token UI and suggestion metadata only; host app still owns parsing, execution, saved-search authorization, and result filtering | `doc/sample_app_results.md` or release PR comment |
+
 - [ ] Confirm `doc/tom_select_visual_reference.html` remains usable at a narrow or mobile viewport, including representative loading, empty, create, disabled, multi, grouped, autocomplete, preload, tags, tokens, and error state cards without text overflow hiding the state meaning.
 - [ ] Confirm `doc/tom_select_text_override_visual_reference.html` remains usable at a narrow or mobile viewport, including field-level copy override and fallback contract lanes without clipped labels or hidden state copy.
 - [ ] Confirm `doc/native_field_visual_reference.html` remains usable at a narrow or mobile viewport, including prefix, suffix, hint, disabled, readonly, and validation error states with readable labels and feedback copy.
