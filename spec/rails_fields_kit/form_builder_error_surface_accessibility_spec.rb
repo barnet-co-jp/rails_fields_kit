@@ -6,9 +6,9 @@ RSpec.describe "RailsFieldsKit::FormBuilder error surface accessibility" do
   include ActionView::Helpers::TagHelper
   include ActionView::Context
 
-  DummyModel = Struct.new(:customer_id) do
+  ErrorSurfaceDummyModel = Struct.new(:customer_id) do
     def self.model_name
-      ActiveModel::Name.new(self, nil, "DummyModel")
+      ActiveModel::Name.new(self, nil, "ErrorSurfaceDummyModel")
     end
 
     def persisted?
@@ -20,9 +20,9 @@ RSpec.describe "RailsFieldsKit::FormBuilder error surface accessibility" do
     end
   end
 
-  ErrorModel = Struct.new(:status) do
+  ErrorSurfaceErrorModel = Struct.new(:status) do
     def self.model_name
-      ActiveModel::Name.new(self, nil, "ErrorModel")
+      ActiveModel::Name.new(self, nil, "ErrorSurfaceErrorModel")
     end
 
     def persisted?
@@ -42,7 +42,7 @@ RSpec.describe "RailsFieldsKit::FormBuilder error surface accessibility" do
     false
   end
 
-  def form_builder(model = DummyModel.new(nil), object_name = :dummy_model)
+  def form_builder(model = ErrorSurfaceDummyModel.new(nil), object_name = :error_surface_dummy_model)
     ActionView::Helpers::FormBuilder.new(object_name, model, self, {})
   end
 
@@ -63,17 +63,17 @@ RSpec.describe "RailsFieldsKit::FormBuilder error surface accessibility" do
       error_surface: true,
       html: {
         aria: {
-          describedby: " custom_help   dummy_model_customer_id_error_surface  extra_help "
+          describedby: " custom_help   error_surface_dummy_model_customer_id_error_surface  extra_help "
         }
       }
     )
 
     expect(describedby_tokens(html)).to eq([
       "custom_help",
-      "dummy_model_customer_id_error_surface",
+      "error_surface_dummy_model_customer_id_error_surface",
       "extra_help"
     ])
-    expect(describedby_tokens(html).count("dummy_model_customer_id_error_surface")).to eq(1)
+    expect(describedby_tokens(html).count("error_surface_dummy_model_customer_id_error_surface")).to eq(1)
   end
 
   it "preserves string keyed aria-describedby values when appending the error surface id" do
@@ -91,12 +91,12 @@ RSpec.describe "RailsFieldsKit::FormBuilder error surface accessibility" do
     expect(describedby_tokens(html)).to eq([
       "custom_help",
       "extra_help",
-      "dummy_model_customer_id_error_surface"
+      "error_surface_dummy_model_customer_id_error_surface"
     ])
   end
 
   it "keeps wrapper hint and validation error ids with custom describedby values" do
-    html = form_builder(ErrorModel.new("bad"), :error_model).rfk_select(
+    html = form_builder(ErrorSurfaceErrorModel.new("bad"), :error_surface_error_model).rfk_select(
       :status,
       collection: { "Bad" => "bad" },
       wrapper: true,
@@ -111,14 +111,14 @@ RSpec.describe "RailsFieldsKit::FormBuilder error surface accessibility" do
 
     expect(describedby_tokens(html)).to eq([
       "custom_help",
-      "error_model_status_hint",
-      "error_model_status_error",
-      "error_model_status_error_surface"
+      "error_surface_error_model_status_hint",
+      "error_surface_error_model_status_error",
+      "error_surface_error_model_status_error_surface"
     ])
   end
 
   it "keeps accessibility false scoped to wrapper-generated ids" do
-    html = form_builder(ErrorModel.new("bad"), :error_model).rfk_select(
+    html = form_builder(ErrorSurfaceErrorModel.new("bad"), :error_surface_error_model).rfk_select(
       :status,
       collection: { "Bad" => "bad" },
       wrapper: true,
@@ -134,9 +134,9 @@ RSpec.describe "RailsFieldsKit::FormBuilder error surface accessibility" do
 
     expect(describedby_tokens(html)).to eq([
       "custom_help",
-      "error_model_status_error_surface"
+      "error_surface_error_model_status_error_surface"
     ])
-    expect(html).to include("id=\"error_model_status_hint\"")
-    expect(html).to include("id=\"error_model_status_error\"")
+    expect(html).to include("id=\"error_surface_error_model_status_hint\"")
+    expect(html).to include("id=\"error_surface_error_model_status_error\"")
   end
 end
