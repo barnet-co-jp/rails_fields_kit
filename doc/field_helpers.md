@@ -270,6 +270,8 @@ This collects editable-cell metadata from a column list or table-like object and
 
 These helpers use native HTML inputs while sharing the same wrapper, hint, error, and accessibility behavior.
 
+Rails Fields Kit does not currently provide dedicated `rfk_date_field`, `rfk_time_field`, or `rfk_color_field` helpers. When those browser-native controls already fit the host app, keep them on ordinary Rails helpers or host-app markup and reserve Rails Fields Kit native wrappers for fields that need the shared wrapper, affix, validation, or accessibility conventions listed below. A future helper proposal should justify the extra wrapper contract instead of assuming every native input type belongs in this gem.
+
 For a product-neutral visual comparison of representative native helper states, see [`native_field_visual_reference.html`](native_field_visual_reference.html).
 
 If you want one representative lane before the per-helper snippets below, start with a wrapped text field and treat the rest of the native helper family as variations on that same shared contract.
