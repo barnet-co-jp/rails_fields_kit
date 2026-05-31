@@ -285,6 +285,8 @@ Listen for the events documented in [`events.md`](events.md):
 
 - `rails-fields-kit--tom-select:load`
 - `rails-fields-kit--tom-select:load-error`
+- `rails-fields-kit--tom-select:selected-load`
+- `rails-fields-kit--tom-select:selected-load-error`
 - `rails-fields-kit--tom-select:create`
 - `rails-fields-kit--tom-select:create-error`
 - `rails-fields-kit--tom-select:change`
@@ -292,12 +294,19 @@ Listen for the events documented in [`events.md`](events.md):
 - `rails-fields-kit--tom-select:item-remove`
 - `rails-fields-kit--tom-select:clear`
 
+For selected preload, confirm:
+
+- the representative `selected_url:` field dispatches `rails-fields-kit--tom-select:selected-load` after selected labels are resolved
+- `event.detail.values` matches the requested saved value or values, and `event.detail.options` contains the resolved option payloads
+- a representative selected preload failure dispatches `rails-fields-kit--tom-select:selected-load-error` separately from remote search and create-on-the-fly failures
+- selected preload success and failure checks stay tied to the selected preload lane rather than the ordinary remote search `load` / `load-error` lane
+
 For interaction forwarding, keep at least one representative lane outside remote request lifecycle and visible-feedback checks, then confirm:
 
 - a single select or combobox dispatches `rails-fields-kit--tom-select:change` when the selected value changes
 - a multiple select or tags field dispatches `rails-fields-kit--tom-select:item-add` and `rails-fields-kit--tom-select:item-remove` for representative add/remove actions
 - a clearable field dispatches `rails-fields-kit--tom-select:clear` when the current value is cleared
-- the event listener records the forwarding events separately from `load`, `load-error`, `create`, `create-error`, and selected preload events
+- the event listener records the forwarding events separately from `load`, `load-error`, `selected-load`, `selected-load-error`, `create`, `create-error`, and visible-feedback lanes
 
 For create-on-the-fly success, confirm:
 
