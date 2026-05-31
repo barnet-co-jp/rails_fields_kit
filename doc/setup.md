@@ -88,7 +88,13 @@ resolve: {
 }
 ```
 
-For importmap, keep Tom Select on the host app's normal pinning flow and pin the Rails Fields Kit entrypoints explicitly:
+For importmap, keep Tom Select on the host app's normal pinning flow and pin the Rails Fields Kit entrypoints explicitly. When `config/importmap.rb` already exists, the install generator can append the Rails Fields Kit pins without taking over Tom Select or other importmap policy:
+
+```bash
+rails generate rails_fields_kit:install --importmap
+```
+
+The opt-in generator path adds the two Rails Fields Kit pins below when they are not already present. If the app does not have `config/importmap.rb`, add the pins manually instead:
 
 ```ruby
 # config/importmap.rb
@@ -116,7 +122,7 @@ Use the stylesheet pipeline or bundler already used by the application.
 import "tom-select/dist/css/tom-select.css"
 ```
 
-Rails Fields Kit intentionally does not generate importmap-specific setup beyond the documented manual pins above.
+Rails Fields Kit only edits importmap setup when `--importmap` is passed and `config/importmap.rb` exists. Other JavaScript setup remains a host-app responsibility.
 
 ## 5. Add a searchable combobox
 
