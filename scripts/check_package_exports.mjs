@@ -6,7 +6,6 @@ import assert from "node:assert/strict"
 
 const repoRoot = process.cwd()
 const sandboxRoot = await mkdtemp(path.join(tmpdir(), "rails-fields-kit-package-exports-"))
-const expectedPackageRootNamedExports = ["TomSelectController", "tomSelectTextOverrideContract"]
 
 function documentedPackageRootExports(markdown) {
   const javascriptExportsSection = markdown.split("## JavaScript exports", 2)[1] ?? ""
@@ -18,14 +17,21 @@ function documentedPackageRootExports(markdown) {
     .map((exportName) => exportName.replace(/\(.*\)$/, ""))
 }
 
-async function assertPublicApiDocsMatchExpectedExports() {
+async function packageRootNamedExportsFromDocs() {
   const publicApiDocs = await readFile(path.join(repoRoot, "doc", "public_api.md"), "utf8")
+  const documentedExports = documentedPackageRootExports(publicApiDocs)
 
-  assert.deepEqual(
-    documentedPackageRootExports(publicApiDocs),
-    expectedPackageRootNamedExports,
-    "doc/public_api.md JavaScript exports table is out of sync with package export smoke expectations"
+  assert.ok(
+    documentedExports.length > 0,
+    "doc/public_api.md JavaScript exports table must document at least one package-root export"
   )
+  assert.equal(
+    new Set(documentedExports).size,
+    documentedExports.length,
+    "doc/public_api.md JavaScript exports table must not document duplicate package-root exports"
+  )
+
+  return documentedExports
 }
 
 async function writeStubPackage(packageName, source) {
@@ -37,8 +43,7 @@ async function writeStubPackage(packageName, source) {
 }
 
 try {
-  await assertPublicApiDocsMatchExpectedExports()
-
+  const expectedPackageRootNamedExports = await packageRootNamedExportsFromDocs()
   const packageRoot = path.join(sandboxRoot, "node_modules", "rails_fields_kit")
 
   await mkdir(packageRoot, { recursive: true })
