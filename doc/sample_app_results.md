@@ -272,12 +272,22 @@ Notes:
 
 ## Turbo reconnect checks
 
+- Evidence location:
+- Tested lane(s):
+  - [ ] selected preload
+  - [ ] remote search
+  - [ ] create-on-the-fly
+  - [ ] visible request-failure feedback
+  - [ ] other:
 - [ ] Tom Select initializes on first render without a host-app `setupXxx()` helper
-- [ ] Turbo-driven validation rerender reconnects the replaced field
-- [ ] same-form revisit through Turbo reconnects the field
+- [ ] Turbo-driven validation rerender reconnects the replaced field without duplicate Tom Select initialization
+- [ ] same-form revisit through Turbo reconnects the field without duplicate Tom Select initialization
+- [ ] representative selected preload, remote search, and create-on-the-fly lanes still work after reconnect when they are in scope for this release
+- [ ] pending requests from a disconnected field did not leave stale success or error UI in the manually observed result; deeper request lifecycle guarantees stay in the runtime quality lane
 - [ ] no separate `turbo:load` reinitializer was needed for normal `rfk_*` usage
 
 Notes:
+- Remaining caveats / follow-up:
 
 ## Event checks
 
