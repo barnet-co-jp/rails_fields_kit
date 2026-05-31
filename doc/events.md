@@ -6,6 +6,14 @@ These events are integration hooks. Rails Fields Kit does not render visible suc
 
 When a field is rendered with `error_surface: true`, the controller also includes `detail.surface` on request-failure events. That surface is an opt-in empty placeholder element near the field where the host app can render its own message or retry UI.
 
+Rails Fields Kit marks that placeholder with request state metadata before dispatching the failure event. The attributes use the same operation and status values as the event detail:
+
+- `data-rfk-error-state="error"`
+- `data-rfk-error-operation="load"`, `"selected-load"`, or `"create"`
+- `data-rfk-error-status` when an HTTP status is available
+
+Use those attributes for host-owned CSS, analytics, or lightweight event handlers that need to tell remote search, selected preload, and create-on-the-fly failures apart. They do not make Rails Fields Kit responsible for visible message text, retry UI, loading UI, or endpoint policy. The controller clears the attributes when it hides the opt-in placeholder.
+
 ## Event map
 
 | Workflow | Success surface | Failure surface | Notes |
