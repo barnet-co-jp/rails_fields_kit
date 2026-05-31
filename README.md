@@ -58,7 +58,11 @@ For a side-by-side chooser and helper-specific examples, see [`doc/field_helpers
 
 ## JavaScript setup
 
-Install Tom Select with the JavaScript toolchain your app already uses:
+Use [`doc/setup.md`](doc/setup.md) as the maintained setup walkthrough. This README keeps the two common JavaScript routes separate so host apps can follow the route that matches their existing toolchain.
+
+### Bundler or Vite route
+
+Install Tom Select with the JavaScript package manager your app already uses:
 
 ```bash
 yarn add tom-select
@@ -68,7 +72,7 @@ npm install tom-select
 pnpm add tom-select
 ```
 
-Register the Rails Fields Kit Stimulus controller in your application:
+Register the Rails Fields Kit Stimulus controller on the Stimulus application your app already boots:
 
 ```js
 import { application } from "controllers/application"
@@ -88,12 +92,6 @@ application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
 If Stimulus is already started elsewhere, reuse that application instead of calling `Application.start()` a second time.
-
-You can also import the controller file directly:
-
-```js
-import TomSelectController from "rails_fields_kit/tom_select_controller"
-```
 
 For Vite or another JS bundler, the host app also needs to resolve the gem's `app/javascript` files. One option is to alias the documented import paths to the gem contents returned by `bundle show`:
 
@@ -120,7 +118,15 @@ Load Tom Select's CSS through your application's stylesheet pipeline or bundler:
 import "tom-select/dist/css/tom-select.css"
 ```
 
-For importmap, keep Tom Select on the host app's normal pinning flow and pin the Rails Fields Kit entrypoints explicitly:
+### Importmap route
+
+For importmap, keep Tom Select on the host app's normal pinning flow and pin the Rails Fields Kit entrypoints explicitly. When `config/importmap.rb` already exists, the install generator can append the Rails Fields Kit pins without taking over Tom Select or other importmap policy:
+
+```bash
+rails generate rails_fields_kit:install --importmap
+```
+
+The opt-in generator path adds the two Rails Fields Kit pins below when they are not already present. If the app does not have `config/importmap.rb`, add the pins manually instead:
 
 ```ruby
 # config/importmap.rb
@@ -138,7 +144,15 @@ import { TomSelectController } from "rails_fields_kit"
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `tomSelectTextOverrideContract(...)`; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
+### Direct imports and package exports
+
+You can also import the controller file directly:
+
+```js
+import TomSelectController from "rails_fields_kit/tom_select_controller"
+```
+
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `tomSelectTextOverrideContract(...)`; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
 
 ## Usage
 
