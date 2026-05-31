@@ -69,13 +69,17 @@ try {
     `import rootDefault, * as packageRoot from "rails_fields_kit"\n` +
       `import directDefault from "rails_fields_kit/tom_select_controller"\n` +
       `import assert from "node:assert/strict"\n\n` +
-      `const expectedNamedExports = ${JSON.stringify(expectedPackageRootNamedExports)}\n\n` +
+      `const expectedNamedExports = ${JSON.stringify(expectedPackageRootNamedExports)}\n` +
+      `const documentedCallableHelperExports = ["tomSelectTextOverrideContract", "nativeFieldAccessibilityContract"]\n\n` +
       `expectedNamedExports.forEach((exportName) => {\n` +
       `  assert.ok(exportName in packageRoot, \`package root should expose documented export ${"${exportName}"}\`)\n` +
       `})\n` +
       `assert.equal(rootDefault, packageRoot.TomSelectController, "package root default export should match TomSelectController")\n` +
       `assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")\n` +
-      `assert.equal(typeof packageRoot.tomSelectTextOverrideContract, "function", "package root should expose documented text override helper")\n`
+      `documentedCallableHelperExports.forEach((exportName) => {\n` +
+      `  assert.ok(expectedNamedExports.includes(exportName), \`doc/public_api.md JavaScript exports table should document callable helper ${"${exportName}"}\`)\n` +
+      `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented helper ${"${exportName}"} as a callable function\`)\n` +
+      `})\n`
   )
 
   await import(pathToFileURL(probePath).href)
