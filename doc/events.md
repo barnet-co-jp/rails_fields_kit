@@ -6,6 +6,8 @@ These events are integration hooks. Rails Fields Kit does not render visible suc
 
 When a field is rendered with `error_surface: true`, the controller also includes `detail.surface` on request-failure events. That surface is an opt-in empty placeholder element near the field where the host app can render its own message or retry UI.
 
+By default, Rails Fields Kit generates the placeholder id from the form object and method, such as `dummy_model_customer_id_error_surface`. If the same object and method are rendered more than once on a page, pass an explicit `error_surface_html: { id: "..." }` for each field instance. The explicit id is used consistently for the surface element, the field's `aria-describedby`, and the controller data value that resolves `event.detail.surface`.
+
 Rails Fields Kit marks that placeholder with request state metadata before dispatching the failure event. The attributes use the same operation and status values as the event detail:
 
 - `data-rfk-error-state="error"`

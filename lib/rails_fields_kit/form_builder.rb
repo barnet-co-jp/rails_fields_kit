@@ -139,7 +139,7 @@ module RailsFieldsKit
       selected_choices = rfk_normalize_selected(selected, value_method: value_method, label_method: label_method)
       plugins = rfk_option_or_default(options, :plugins, config.default_plugins)
       plugins = Array(plugins) | ["clear_button"] if allow_clear
-      error_surface_id = rfk_error_surface_id(method) if error_surface
+      error_surface_id = rfk_error_surface_id(method, error_surface_html) if error_surface
 
       rfk_assign_data_value(data, :url, options.delete(:url))
       rfk_assign_data_value(data, :selected_url, options.delete(:selected_url))
@@ -291,7 +291,10 @@ module RailsFieldsKit
       "#{object_name}_#{method}_error"
     end
 
-    def rfk_error_surface_id(method)
+    def rfk_error_surface_id(method, error_surface_html = {})
+      explicit_id = error_surface_html[:id] || error_surface_html["id"]
+      return explicit_id unless explicit_id.nil? || explicit_id.to_s.empty?
+
       "#{object_name}_#{method}_error_surface"
     end
 
@@ -313,7 +316,8 @@ module RailsFieldsKit
 
     def rfk_append_error_surface(field_html, error_surface_id, error_surface_html)
       surface_options = error_surface_html.dup
-      surface_options[:id] ||= error_surface_id
+      surface_options[:id] = error_surface_id
+      surface_options.delete("id")
       surface_options[:hidden] = true unless surface_options.key?(:hidden)
       surface_options[:role] ||= "status"
       surface_options[:"aria-live"] ||= "polite"
