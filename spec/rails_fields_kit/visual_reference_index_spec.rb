@@ -10,11 +10,10 @@ RSpec.describe "visual reference documentation index" do
     expect(index_links).to eq(markdown_links)
   end
 
-  it "keeps the HTML summary count aligned with the individual references" do
-    reference_count = visual_reference_links(markdown_map).size
-    summary_count = html_index.match(%r{<strong>(?<count>\d+)</strong>\s*<span>individual references</span>}m)[:count].to_i
-
-    expect(summary_count).to eq(reference_count)
+  it "keeps the HTML summary focused on the maintained map and index update points" do
+    expect(html_index).to include("Use visual_references.md as the maintained artifact list.")
+    expect(html_index).to include("Keep quick links and cards aligned when references change.")
+    expect(html_index).to include("List only references that have landed on main.")
   end
 
   private
