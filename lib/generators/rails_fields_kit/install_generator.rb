@@ -12,17 +12,23 @@ module RailsFieldsKit
 
       source_root File.expand_path("templates", __dir__)
 
-      desc "Creates Rails Fields Kit configuration and setup notes."
+      desc "Creates Rails Fields Kit configuration and optional setup notes."
       class_option :importmap,
         type: :boolean,
         default: false,
         desc: "Append Rails Fields Kit importmap pins when config/importmap.rb exists."
+      class_option :skip_setup_notes,
+        type: :boolean,
+        default: false,
+        desc: "Skip generating doc/rails_fields_kit_setup.md while still creating the initializer."
 
       def copy_initializer
         template "rails_fields_kit.rb", "config/initializers/rails_fields_kit.rb"
       end
 
       def copy_setup_notes
+        return if options[:skip_setup_notes]
+
         copy_file "rails_fields_kit_setup.md", "doc/rails_fields_kit_setup.md"
       end
 
@@ -60,12 +66,20 @@ module RailsFieldsKit
         say "  2. Register RailsFieldsKit::TomSelectController in your Stimulus application."
         say "  3. Load tom-select/dist/css/tom-select.css from your app stylesheet or bundler."
         say "  4. #{importmap_next_step}"
-        say "See doc/rails_fields_kit_setup.md for examples."
+        say setup_notes_next_step
       end
 
       private
 
       attr_accessor :importmap_pin_status
+
+      def setup_notes_next_step
+        if options[:skip_setup_notes]
+          "Setup examples remain in the maintained guide: https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md"
+        else
+          "See doc/rails_fields_kit_setup.md for examples."
+        end
+      end
 
       def importmap_next_step
         case importmap_pin_status
