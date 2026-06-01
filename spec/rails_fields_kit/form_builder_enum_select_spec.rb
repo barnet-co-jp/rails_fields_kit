@@ -81,4 +81,17 @@ RSpec.describe "RailsFieldsKit::FormBuilder rfk_enum_select explicit enum bounda
     expect(html).to include("value=\"archived\"")
     expect(html).to include(">Archived</option>")
   end
+
+  it "allows explicit enum values when the form has no object" do
+    html = form_builder(nil, :search).rfk_enum_select(
+      :status,
+      enum: { "needs_review" => "needs_review", "approved" => "approved" }
+    )
+
+    expect(html).to include("name=\"search[status]\"")
+    expect(html).to include("value=\"needs_review\"")
+    expect(html).to include(">Needs review</option>")
+    expect(html).to include("value=\"approved\"")
+    expect(html).to include(">Approved</option>")
+  end
 end
