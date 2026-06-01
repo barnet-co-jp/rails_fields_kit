@@ -7,7 +7,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "check:js": "node --check app/javascript/rails_fields_kit/index.js && node --check app/javascript/rails_fields_kit/tom_select_controller.js && node scripts/check_package_exports.mjs && node scripts/check_tom_select_create_headers.mjs && node scripts/check_tom_select_error_surface.mjs"
+    "check:js": "node --check app/javascript/rails_fields_kit/index.js && node --check app/javascript/rails_fields_kit/tom_select_controller.js && node scripts/check_package_exports.mjs && node scripts/check_tom_select_create_headers.mjs && node scripts/check_tom_select_error_surface.mjs && node scripts/check_tom_select_label_fallback.mjs"
   },
   "exports": {
     ".": "./app/javascript/rails_fields_kit/index.js",
