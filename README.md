@@ -376,4 +376,4 @@ Rails enum-like attributes can use `rfk_enum_select`:
 
 ### Multiple selects and tags
 
-Use `rfk_multi_select` for ordinary multiple selects and `rfk_tags` when the UI should feel like tag entry or create-on-the-fly tag creation. Both render array-style parameter names and Rails' hidden blank input by default, so clearing all selected values still submits an empty value.
+Use `rfk_multi_select` for ordinary multiple selects and `rfk_tags` for tag-style inputs. Both render array-style parameter names and Rails' hidden blank input by default, so clearing all selected values still submits an empty value.
