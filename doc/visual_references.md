@@ -18,7 +18,7 @@ Start from [`visual_reference_index.html`](visual_reference_index.html) when you
 
 ## How to use this family
 
-- For release verification, start from [`final_release_checklist.md`](final_release_checklist.md) and record manual evidence in [`sample_app_results.md`](sample_app_results.md) when a release or PR changes a visual reference.
+- For release verification, start from [`final_release_checklist.md`](final_release_checklist.md) and record manual evidence in [`sample_app_results.md`](sample_app_results.md) or the release PR comment when a release or PR changes the one-screen index or a visual reference artifact.
 - For design review, start with [`visual_reference_index.html`](visual_reference_index.html) when you need to pick a lane, then use the relevant static HTML file directly and keep comments tied to the lane it represents.
 - For native helper wrapper review, use [`native_field_visual_reference.html`](native_field_visual_reference.html) to check label, hint, affix, required marker, validation, noneditable, accessibility, generated-id, and narrow viewport stress lanes without treating the static artifact as production CSS or runtime behavior.
 - For request-failure feedback, use the index task picker or [`tom_select_request_failure_visual_reference.html`](tom_select_request_failure_visual_reference.html) to review the `error_surface: true` slot and operation/status metadata while keeping retry copy, reveal timing, and request lifecycle behavior with the host app.
