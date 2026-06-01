@@ -57,6 +57,12 @@ Use these to support rich Tom Select rendering.
 - `description_field:` output JSON key for the description.
 - `badge_field:` output JSON key for the badge.
 
+### Remote option label fallback
+
+Remote search, selected preload, and create-on-the-fly options should include the configured `label_field:` whenever the endpoint knows a display label. If an option is missing that field, or the value is `null`, `undefined`, or an empty string in the browser, the Tom Select renderer falls back to the configured `value_field:` for the visible label. Explicit label values such as `0` or `false` are still displayed as labels.
+
+This fallback is display-only. It does not change the submitted value, option payload, endpoint response shape, authorization boundary, or request lifecycle.
+
 ## `rfk_find_with`
 
 Defines a selected-option lookup action, defaulting to `show`.

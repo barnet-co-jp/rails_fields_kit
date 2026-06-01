@@ -124,7 +124,7 @@ export default class extends Controller {
   }
 
   optionTemplate(data, escape, kind) {
-    const label = escape(this.displayValue(data[this.labelFieldValue]))
+    const label = escape(this.optionLabel(data))
     const description = this.hasOptionDescriptionFieldValue ? data[this.optionDescriptionFieldValue] : null
     const badge = this.hasOptionBadgeFieldValue ? data[this.optionBadgeFieldValue] : null
     const parts = [`<div class="rfk-${kind}">`]
@@ -137,6 +137,13 @@ export default class extends Controller {
     parts.push("</div>")
 
     return parts.join("")
+  }
+
+  optionLabel(data) {
+    const label = data[this.labelFieldValue]
+    if (this.hasPresentValue(label)) return this.displayValue(label)
+
+    return this.displayValue(data[this.valueFieldValue])
   }
 
   searchFields() {
