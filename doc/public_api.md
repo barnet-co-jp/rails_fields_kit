@@ -2,6 +2,21 @@
 
 This document summarizes the public API intended to be stable for the 0.1.x series.
 
+## Quick navigation
+
+- [Ruby entrypoint](#ruby-entrypoint)
+- [Configuration](#configuration)
+- [FormBuilder helpers](#formbuilder-helpers)
+- [Controller helpers](#controller-helpers)
+- [Token suggestion builders](#token-suggestion-builders)
+- [Table metadata adapters](#table-metadata-adapters)
+- [JavaScript exports](#javascript-exports)
+- [Stimulus values](#stimulus-values)
+- [Stimulus lifecycle contract](#stimulus-lifecycle-contract)
+- [Stimulus events](#stimulus-events)
+- [Internal implementation details](#internal-implementation-details)
+- [Compatibility policy](#compatibility-policy)
+
 ## Ruby entrypoint
 
 ```ruby
@@ -99,7 +114,9 @@ Public classes:
 - `RailsFieldsKit::TableRenderer`
 - `RailsFieldsKit::TableMetadata`
 
-Public metadata methods:
+Public metadata methods are grouped by class so reviewers can scan the contract without reading one long mixed list.
+
+### TableFilterInput methods
 
 - `RailsFieldsKit::TableFilterInput.known_types`
 - `RailsFieldsKit::TableFilterInput.known_type?`
@@ -125,6 +142,9 @@ Public metadata methods:
 - `RailsFieldsKit::TableFilterInput#to_h`
 - `RailsFieldsKit::TableFilterInput#to_hash`
 - `RailsFieldsKit::TableFilterInput#to_table_filter`
+
+### TableCellInput methods
+
 - `RailsFieldsKit::TableCellInput.known_types`
 - `RailsFieldsKit::TableCellInput.known_type?`
 - `RailsFieldsKit::TableCellInput.from_type`
@@ -148,12 +168,18 @@ Public metadata methods:
 - `RailsFieldsKit::TableCellInput#to_h`
 - `RailsFieldsKit::TableCellInput#to_hash`
 - `RailsFieldsKit::TableCellInput#to_table_cell_editor`
+
+### TableMetadata methods
+
 - `RailsFieldsKit::TableMetadata.filters`
 - `RailsFieldsKit::TableMetadata.cell_editors`
 - `RailsFieldsKit::TableMetadata.filter_calls`
 - `RailsFieldsKit::TableMetadata.cell_editor_calls`
 - `RailsFieldsKit::TableMetadata.render_filters`
 - `RailsFieldsKit::TableMetadata.render_cell_editors`
+
+### TableRenderer methods
+
 - `RailsFieldsKit::TableRenderer.field_helpers`
 - `RailsFieldsKit::TableRenderer.helper_for`
 - `RailsFieldsKit::TableRenderer.registered_field_type?`
