@@ -47,6 +47,24 @@ RSpec.describe RailsFieldsKit::Generators::InstallGenerator do
     expect(read_file("config/importmap.rb")).to eq("# existing importmap\n")
   end
 
+  it "skips only the generated setup note when requested" do
+    write_file "config/importmap.rb", "# existing importmap\n"
+
+    run_generator ["--skip-setup-notes"]
+
+    expect(File).to exist(File.join(destination_root, "config/initializers/rails_fields_kit.rb"))
+    expect(File).not_to exist(File.join(destination_root, "doc/rails_fields_kit_setup.md"))
+    expect(read_file("config/importmap.rb")).to eq("# existing importmap\n")
+  end
+
+  it "points skipped setup notes users back to the maintained setup guide" do
+    output = capture_generator_output ["--skip-setup-notes"]
+
+    expect(output).to include("Setup examples remain in the maintained guide")
+    expect(output).to include("doc/setup.md")
+    expect(output).not_to include("See doc/rails_fields_kit_setup.md")
+  end
+
   it "keeps importmap opt-in guidance when importmap is not requested" do
     write_file "config/importmap.rb", "# existing importmap\n"
 
@@ -62,6 +80,18 @@ RSpec.describe RailsFieldsKit::Generators::InstallGenerator do
 
     expect(read_file("config/importmap.rb")).to include(
       "pin \"tom-select\"",
+      "pin \"rails_fields_kit\", to: \"rails_fields_kit/index.js\"",
+      "pin \"rails_fields_kit/tom_select_controller\", to: \"rails_fields_kit/tom_select_controller.js\""
+    )
+  end
+
+  it "supports setup note opt-out together with importmap opt-in" do
+    write_file "config/importmap.rb", "pin \"tom-select\"\n"
+
+    run_generator ["--skip-setup-notes", "--importmap"]
+
+    expect(File).not_to exist(File.join(destination_root, "doc/rails_fields_kit_setup.md"))
+    expect(read_file("config/importmap.rb")).to include(
       "pin \"rails_fields_kit\", to: \"rails_fields_kit/index.js\"",
       "pin \"rails_fields_kit/tom_select_controller\", to: \"rails_fields_kit/tom_select_controller.js\""
     )
