@@ -33,6 +33,7 @@ These fields form the center of the gem.
   - Rails enum-friendly select helper.
 - Native wrappers
   - Text, text area, number, money, percent, email, URL, phone, and search fields with consistent labels, hints, errors, prefixes, suffixes, and accessibility behavior.
+  - These helpers are current public API; the package-root `nativeFieldAccessibilityContract(element)` helper can read their rendered accessibility wiring, but Rails Fields Kit still leaves validation copy, focus management, and app-specific feedback behavior to the host app.
 
 ## Phase 2: Better remote option workflows
 
@@ -47,6 +48,7 @@ Current progress:
 - documented endpoint response shapes for search, find, and create
 - scoped request context through `query_params:`, `selected_query_params:`, and `create_params:`
 - Tom Select pass-throughs such as `max_items:`, `load_throttle:`, and `delimiter:`
+- package-root JavaScript exports for `TomSelectController` and read-only rendered-field contract helpers documented in `doc/public_api.md`; these helpers inspect rendered Rails Fields Kit contracts without taking over request execution, locale resolution, query parsing, retry UI, or visible feedback
 
 ## Phase 3: Search input helpers
 
@@ -159,6 +161,17 @@ MVP scope:
 - avoid owning the search execution layer
 
 This integration should be implemented as an optional layer, not as a hard dependency from the core gem.
+
+## Current docs and review artifacts
+
+The maintained docs should make the difference between current public API, review artifacts, and future proposals visible:
+
+- `README.md` is the public entrypoint and docs map.
+- `doc/public_api.md` is the intended stable API inventory for the 0.1.x series, including package-root JavaScript exports, FormBuilder helpers, controller helpers, table metadata adapters, Stimulus values, and events.
+- `doc/visual_references.md` and `doc/visual_reference_index.html` are maintained review entrypoints for landed static visual reference artifacts. They help reviewers inspect representative rendered states, but they do not define production runtime behavior or make proposal-only helper names current public API.
+- `Product Profile.md` and `AGENTS.md` summarize maintainer-facing source-of-truth order and responsibility boundaries.
+
+When a future feature lands, update the current public API docs and any affected review artifacts first, then keep this roadmap aligned with that landed behavior without rewriting proposal lanes as implemented contract.
 
 ## Longer-term candidates
 
