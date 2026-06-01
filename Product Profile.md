@@ -67,6 +67,7 @@ Host applications remain responsible for:
 - `doc/table_adapters.md`: table metadata bridge
 - `doc/public_api.md`: intended stable API for 0.1.x
 - `doc/events.md`: Stimulus event contract
+- `doc/tom_select_turbo_lifecycle.md`: Turbo and Stimulus connect/disconnect lifecycle boundary for Tom Select-backed helpers
 - `doc/development.md`: local checks
 - `doc/release.md`, `doc/final_release_checklist.md`, `doc/selected_preload_release_gate.md`, `doc/sample_app_checklist.md`, `doc/sample_app_results.md`, and `doc/release_notes_0_1_1.md`: release-facing maintainer docs and current next-release draft
 
