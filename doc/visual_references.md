@@ -2,7 +2,7 @@
 
 Use these static HTML references as quick QA and design-review entrypoints for Rails Fields Kit's representative rendered states. They are documentation artifacts only; production helper markup, runtime behavior, and host-app query or persistence responsibilities stay in the code and topic docs.
 
-Start from [`visual_reference_index.html`](visual_reference_index.html) when you want a one-screen reviewer entrypoint for the full family. Use this Markdown map when you need the maintained source-of-truth list and scope notes.
+Start from [`visual_reference_index.html`](visual_reference_index.html) when you want a one-screen reviewer entrypoint for the full family. Use its task picker when you know the reviewer job, such as release verification, design or copy review, request-failure feedback, or table integration boundary checks. Use this Markdown map when you need the maintained source-of-truth list and scope notes.
 
 ## Reference map
 
@@ -20,7 +20,8 @@ Start from [`visual_reference_index.html`](visual_reference_index.html) when you
 
 - For release verification, start from [`final_release_checklist.md`](final_release_checklist.md) and record manual evidence in [`sample_app_results.md`](sample_app_results.md) when a release or PR changes a visual reference.
 - For design review, start with [`visual_reference_index.html`](visual_reference_index.html) when you need to pick a lane, then use the relevant static HTML file directly and keep comments tied to the lane it represents.
-- For Tom Select request-failure feedback, use [`tom_select_request_failure_visual_reference.html`](tom_select_request_failure_visual_reference.html) to review the `error_surface: true` slot and operation/status metadata while keeping retry copy, reveal timing, and request lifecycle behavior with the host app.
+- For request-failure feedback, use the index task picker or [`tom_select_request_failure_visual_reference.html`](tom_select_request_failure_visual_reference.html) to review the `error_surface: true` slot and operation/status metadata while keeping retry copy, reveal timing, and request lifecycle behavior with the host app.
+- For table integration boundary checks, use the index task picker to choose between metadata-driven filters/editors and saved-search token suggestion states.
 - For token suggestion behavior, delimiter visibility, and saved-search option shape, use [`token_suggestions.md`](token_suggestions.md) as the source of truth and treat the saved-search visual reference as a static review artifact.
 - If a new visual reference is added, update this map, the HTML index, and the README docs map after the reference lands on `main`.
 - Do not use this index to document proposal-only helper names or unmerged feature lanes as current public API.
