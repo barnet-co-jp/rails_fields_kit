@@ -6,26 +6,29 @@ RSpec.describe "Tom Select error surface accessibility contract" do
   include ActionView::Helpers::TagHelper
   include ActionView::Context
 
-  ErrorSurfaceContractModel = Struct.new(:customer_id) do
-    def self.model_name
-      ActiveModel::Name.new(self, nil, "ErrorSurfaceContractModel")
-    end
-
-    def persisted?
-      false
-    end
-
-    def to_key
-      nil
-    end
-  end
-
   def protect_against_forgery?
     false
   end
 
+  def error_surface_contract_model_class
+    @error_surface_contract_model_class ||= Class.new(Struct.new(:customer_id)) do
+      def self.model_name
+        ActiveModel::Name.new(self, nil, "ErrorSurfaceContractModel")
+      end
+
+      def persisted?
+        false
+      end
+
+      def to_key
+        nil
+      end
+    end
+  end
+
   def form_builder
-    ActionView::Helpers::FormBuilder.new(:error_surface_contract_model, ErrorSurfaceContractModel.new(nil), self, {})
+    model = error_surface_contract_model_class.new(nil)
+    ActionView::Helpers::FormBuilder.new(:error_surface_contract_model, model, self, {})
   end
 
   around do |example|
