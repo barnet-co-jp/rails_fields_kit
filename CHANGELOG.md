@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 #### JavaScript exports and Tom Select integration
 
 - `tomSelectTextOverrideContract(element)` from the package root for host-app scripts that need to read rendered Tom Select text override values without reaching into the Stimulus controller instance.
+- `nativeFieldAccessibilityContract(element)` from the package root for host-app scripts that need to read rendered native input accessibility wiring without taking over id generation, validation messages, focus management, or visible feedback.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so generated endpoint actions can match custom routes.
 - `rfk_find_with` supports Rails array params for multiple selected option preload in addition to comma-separated `ids`, including custom `ids_param:` names.
 - Remote request extension options for Tom Select-backed helpers:
