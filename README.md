@@ -84,7 +84,7 @@ import { TomSelectController } from "rails_fields_kit"
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
-If your app starts Stimulus from `app/frontend/entrypoints/application.js` or another Vite entrypoint, register the controller on that same application instead:
+If your app starts Stimulus from `app/frontend/entrypoints/application.js` or another Vite entrypoint, register the controller on that existing application instead:
 
 ```js
 import { Application } from "@hotwired/stimulus"
@@ -94,15 +94,7 @@ const application = Application.start()
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
-If the host app already started Stimulus elsewhere, reuse that application instead of calling `Application.start()` again.
-
-Rails Fields Kit relies on Stimulus `connect()` for initialization and reconnect. In Turbo-enabled apps, replacing or revisiting a server-rendered form should not require a separate host-app `turbo:load` reinitializer for normal `rfk_*` fields.
-
-Direct import is also supported:
-
-```js
-import TomSelectController from "rails_fields_kit/tom_select_controller"
-```
+If Stimulus is already started elsewhere, reuse that application instead of calling `Application.start()` a second time.
 
 For Vite or another JS bundler, the host app also needs to resolve the gem's `app/javascript` files. One option is to alias the documented import paths to the gem contents returned by `bundle show`:
 
@@ -123,6 +115,14 @@ resolve: {
 }
 ```
 
+Load Tom Select's CSS through your application's stylesheet pipeline or bundler:
+
+```js
+import "tom-select/dist/css/tom-select.css"
+```
+
+### Importmap route
+
 For importmap, keep Tom Select on the host app's normal pinning flow and pin the Rails Fields Kit entrypoints explicitly. When `config/importmap.rb` already exists, the install generator can append the Rails Fields Kit pins without taking over Tom Select or other importmap policy:
 
 ```bash
@@ -138,7 +138,7 @@ pin "rails_fields_kit", to: "rails_fields_kit/index.js"
 pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
 ```
 
-Then register the controller from the file where the host app already boots Stimulus:
+Then register the controller from the file where your app already boots Stimulus:
 
 ```js
 import { application } from "controllers/application"
@@ -147,196 +147,233 @@ import { TomSelectController } from "rails_fields_kit"
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as `rails_fields_kit/tom_select_controller`, so both documented import paths stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
+### Direct imports and package exports
 
-The package root also exposes read-only rendered-field contract helpers, including `nativeFieldAccessibilityContract(element)` for native wrapper accessibility wiring. Import those helpers from `rails_fields_kit` only when host-app scripts need to inspect already-rendered labels, hints, errors, and wrapper elements; controller registration, validation messages, focus management, and visible feedback remain separate host-app responsibilities. Use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the current source of truth for the helper list and return shape.
-
-## 4. Load Tom Select CSS
-
-Use the stylesheet pipeline or bundler already used by the application.
+You can also import the controller file directly:
 
 ```js
-import "tom-select/dist/css/tom-select.css"
+import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
-Rails Fields Kit only edits importmap setup when `--importmap` is passed and `config/importmap.rb` exists. Other JavaScript setup remains a host-app responsibility.
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `tomSelectTextOverrideContract(...)`; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
 
-## 5. Use a helper
+## Usage
+
+### Editable combobox
 
 ```erb
-<%= form_with model: @project do |f| %>
-  <%= f.rfk_select :category_id,
-    collection: Category.order(:name),
-    collection_value_method: :id,
-    collection_label_method: :name %>
+<%= form_with model: @order do |f| %>
+  <%= f.rfk_combobox :customer_id,
+    url: customers_path(format: :json),
+    selected_url: selected_customers_path(format: :json),
+    create_url: customers_path,
+    selected: @order.customer_id,
+    value_field: "id",
+    label_field: "name",
+    search_field: "name,email",
+    query_param: "q",
+    selected_param: "id",
+    selected_multiple_param: "ids",
+    create_param: "name",
+    min_length: 2,
+    max_options: 50,
+    preload: true,
+    open_on_focus: true,
+    close_after_select: true,
+    hide_selected: true,
+    persist: false,
+    no_results_text: "No customers found",
+    loading_text: "Searching...",
+    create_text: "Create",
+    option_description_field: "email",
+    option_badge_field: "status",
+    query_params: { account_id: current_account.id },
+    selected_query_params: { account_id: current_account.id },
+    create_params: { account_id: current_account.id },
+    placeholder: "Search or create a customer" %>
 <% end %>
 ```
 
-For a placeholder, set `prompt:`. For initial selection, pass `selected:`.
+`selected:` preloads the current option for edit forms before remote search runs. It accepts a record, a `{ value:, text: }` hash, a `{ id:, name: }` hash, an ID value, or an array of any of those for multiple fields.
 
-To customize visible helper copy without changing every call site, use initializer defaults:
+When `selected_url:` is provided, Rails Fields Kit can load missing selected option labels from the server after Tom Select connects. This is useful when the form only has stored IDs and not the display labels. For one value it sends `selected_param`, default `id`; for multiple values it sends `selected_multiple_param`, default `ids`.
+
+Selected preload dispatches these Stimulus events:
+
+- `rails-fields-kit--tom-select:selected-load`
+- `rails-fields-kit--tom-select:selected-load-error`
+
+Remote options can include extra fields for richer rendering:
+
+```json
+[
+  { "id": 1, "name": "Example Customer", "email": "hello@example.com", "status": "active" }
+]
+```
+
+Then set `option_description_field:` and `option_badge_field:` to show those fields in Tom Select's dropdown and selected item rendering.
+
+The search endpoint can return an array:
+
+```json
+[
+  { "id": 1, "name": "Example Customer" }
+]
+```
+
+or a wrapped result:
+
+```json
+{ "options": [{ "id": 1, "name": "Example Customer" }] }
+```
+
+The selected preload endpoint can return one option, a wrapped option, an array, or a wrapped array:
+
+```json
+{ "option": { "id": 1, "name": "Example Customer" } }
+```
+
+The create endpoint should return the created option object:
+
+```json
+{ "id": 2, "name": "New Customer" }
+```
+
+When the create endpoint returns a non-2xx response, Rails Fields Kit does not add a fallback free-text option. It dispatches a `rails-fields-kit--tom-select:create-error` event with the failed input and error payload so your application can show a validation message.
+
+### Token search
+
+Use `rfk_token_search` when you want a search box for structured phrases such as `status:open assignee:matsuo keyword`, while keeping query parsing and result filtering in your application or search object.
+
+```erb
+<%= form_with url: orders_path, method: :get do |f| %>
+  <%= f.rfk_token_search :query,
+    url: search_token_suggestions_path(format: :json),
+    placeholder: "status:open keyword",
+    max_items: 20,
+    load_throttle: 250,
+    query_params: { context: "orders" } %>
+<% end %>
+```
+
+Use `RailsFieldsKit::TokenSuggestions.build` with `rfk_token_suggestions_with` to generate operator, field, predicate, value, and saved-search suggestions for the endpoint.
 
 ```ruby
-# config/initializers/rails_fields_kit.rb
-RailsFieldsKit.configure do |config|
-  config.default_texts.no_results = "No matching customers"
-  config.default_texts.loading = "Loading customers..."
-  config.default_texts.create = "Create %{input}"
-  config.default_texts.create_loading = "Creating %{input}..."
-  config.default_texts.create_error = "Could not create %{input}"
-end
-```
+# config/routes.rb
+get "search_token_suggestions", to: "search_token_suggestions#index"
 
-To override one field, pass `texts:`:
-
-```erb
-<%= f.rfk_combobox :customer_id,
-  url: customers_path(format: :json),
-  create_url: customers_path,
-  texts: {
-    no_results: "No customers match this search",
-    create_error: "Could not create this customer"
-  } %>
-```
-
-For a representative request-failure lane, enable `error_surface: true` and subscribe to the documented failure hooks:
-
-```erb
-<%= f.rfk_combobox :customer_id,
-  url: customers_path(format: :json),
-  selected_url: selected_customer_path(@order, format: :json),
-  error_surface: true,
-  html: {
-    data: {
-      action: "rails-fields-kit--tom-select:load-error->customers#loadFailed rails-fields-kit--tom-select:selected-load-error->customers#selectedLoadFailed rails-fields-kit--tom-select:create-error->customers#createFailed"
-    }
-  } %>
-```
-
-The helper renders an empty placeholder next to the field, and request-failure events include that element as `event.detail.surface`. The gem still does not choose the message copy or retry behavior.
-
-For a representative selected preload lane, keep `selected:` and `selected_url:` on the same field and subscribe to the selected preload hooks explicitly:
-
-```erb
-<%= f.rfk_combobox :customer_id,
-  url: customers_path(format: :json),
-  selected_url: selected_customers_path(format: :json),
-  selected: @order.customer_id,
-  error_surface: true,
-  html: {
-    data: {
-      action: "rails-fields-kit--tom-select:selected-load->customers#selectedLoaded rails-fields-kit--tom-select:selected-load-error->customers#selectedLoadFailed"
-    }
-  } %>
-```
-
-Use this lane when an edit form starts from a saved ID and the host app wants the displayed label restored before the user begins searching.
-
-- `selected:` keeps the existing saved value on the field while Tom Select reconnects.
-- `selected_url:` points to the selected-option lookup endpoint, commonly an `rfk_find_with` action documented in [`controller_helpers.md`](doc/controller_helpers.md).
-- `selected-load` tells the host app that the label restore completed and exposes the fetched option payloads.
-- `selected-load-error` gives the host app a dedicated fallback hook when label restore fails. If `error_surface: true` is enabled, the failure event also exposes `event.detail.surface`.
-
-Keep the visible fallback copy and any retry behavior in the host app. Rails Fields Kit only provides the selected preload request, event hooks, and the opt-in placeholder boundary. See [`events.md`](doc/events.md) for the event payloads.
-
-For a representative create-on-the-fly failure lane, keep `create_url:` and `error_surface: true` on the same field and subscribe to the dedicated create hooks explicitly:
-
-```erb
-<%= f.rfk_combobox :customer_id,
-  url: customers_path(format: :json),
-  create_url: customers_path,
-  error_surface: true,
-  html: {
-    data: {
-      action: "rails-fields-kit--tom-select:create->customers#created rails-fields-kit--tom-select:create-error->customers#createFailed"
-    }
-  } %>
-```
-
-Use `create` when the host app needs a success hook before ordinary selection events continue, and use `create-error` when the host app needs field-adjacent fallback copy or retry UI for failed inline creation. If `error_surface: true` is enabled, the failure event exposes `event.detail.surface`; keep the actual message and retry behavior in the host app. See [`events.md`](doc/events.md) for the event payloads and [`field_helpers.md`](doc/field_helpers.md) for the broader helper example inventory.
-
-## 6. Add controller endpoints
-
-```ruby
-class CustomersController < ApplicationController
+class SearchTokenSuggestionsController < ApplicationController
   include RailsFieldsKit::Searchable
 
-  rfk_search_with(
-    model: Customer,
-    value: :id,
-    label: :name,
-    search: [:name, :email],
-    description: :email,
-    badge: :status,
-    value_field: "id",
-    label_field: "name",
-    description_field: "email",
-    badge_field: "status",
-    scope: -> { current_account.customers.active },
-    order: { name: :asc },
-    distinct: true,
+  rfk_token_suggestions_with(
+    action: :index,
+    suggestions: ->(_query) {
+      RailsFieldsKit::TokenSuggestions.build(
+        fields: {
+          status: { label: "Status", values: %w[open closed] },
+          assignee: "Assignee"
+        },
+        saved_searches: [
+          { token: "saved:mine", label: "Mine", description: "My saved search" }
+        ]
+      )
+    },
     wrap: "options"
   )
-
-  rfk_find_with(
-    model: Customer,
-    value: :id,
-    label: :name,
-    description: :email,
-    badge: :status,
-    value_field: "id",
-    label_field: "name",
-    description_field: "email",
-    badge_field: "status",
-    scope: -> { current_account.customers },
-    wrap: "option"
-  )
-
-  rfk_create_with(
-    model: Customer,
-    value: :id,
-    label: :name,
-    create_attribute: :name,
-    create_param: "name",
-    assign: ->(_customer) { { account_id: current_account.id } },
-    authorize: ->(customer) { policy(customer).create? },
-    wrap: "option"
-  )
 end
 ```
 
-The default `index` / `show` / `create` action names keep the shortest setup path. When the host app already uses route names such as `selected` or `search_tokens`, map the helpers to those action names directly instead of adding adapter actions around them.
+This endpoint only returns suggestion option JSON. Submitted token text still belongs to the host application's parser, search object, or Ransack layer.
+
+For a current Ransack-oriented path, keep the same `rfk_token_search` field and switch the suggestion builder:
 
 ```ruby
-resources :customers, only: [] do
-  collection do
-    get :search
-    get :selected
-    post :create_customer
-  end
-end
-
-class CustomersController < ApplicationController
-  include RailsFieldsKit::Searchable
-
-  rfk_search_with action: :search, model: Customer, value: :id, label: :name, search: [:name, :email]
-  rfk_find_with action: :selected, model: Customer, value: :id, label: :name
-  rfk_create_with action: :create_customer, model: Customer, value: :id, label: :name, create_attribute: :name
-end
+rfk_token_suggestions_with(
+  action: :index,
+  suggestions: ->(_query) {
+    RailsFieldsKit::RansackSuggestions.build(
+      fields: {
+        status: :status_eq,
+        assignee: :assignee_name_cont
+      }
+    )
+  },
+  wrap: "options"
+)
 ```
 
-Keep the detailed option reference in [`controller_helpers.md`](doc/controller_helpers.md). This setup walkthrough only needs the minimal reminder that custom `action:` names are part of the current public surface.
+This remains metadata-first. Rails Fields Kit helps the field advertise allowed tokens, but the host app still parses the submitted text and turns it into `params[:q]` or an equivalent search object input. Helper-level DSL examples such as `rfk_token_search ..., adapter: :ransack` stay in `ROADMAP.md` as future proposals, not current public API. See [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), and [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) for the maintained reference.
 
-## 7. Listen to events when needed
+### Table metadata helpers
 
-See [`events.md`](doc/events.md) for the Stimulus events emitted by the Tom Select controller.
+If a table helper or host app already describes filters and cell editors as column metadata, Rails Fields Kit can render the current public field helpers from that metadata without taking over query execution or persistence.
 
-Remote search and selected preload have dedicated success and failure events. Create-on-the-fly success also has a dedicated `rails-fields-kit--tom-select:create` hook before the normal `item-add` / `change` interaction events continue, while `create-error` remains the dedicated failure hook. When `error_surface: true` is enabled, request-failure events also expose `event.detail.surface` so the host app can render inline error UI without replacing the controller.
+```ruby
+columns = [
+  {
+    key: :customer_id,
+    filter_input: RailsFieldsKit::TableFilterInput.combobox(
+      :customer_id,
+      url: customers_path(format: :json),
+      selected_url: selected_customers_path(format: :json),
+      value_field: "id",
+      label_field: "name"
+    )
+  },
+  {
+    key: :status,
+    cell_editor: RailsFieldsKit::TableCellInput.enum_select(:status)
+  }
+]
+```
 
-Visible success or error UI remains a host-app responsibility.
+```erb
+<%= form_with model: @table_preferences do |f| %>
+  <%= f.rfk_table_filters(columns) %>
+  <%= f.rfk_table_cell_editors(columns) %>
+<% end %>
+```
 
-Before release, verify the intended placeholder, loading, no-results, and create-error copy in a sample app and record it in [`sample_app_checklist.md`](doc/sample_app_checklist.md) and [`sample_app_results.md`](doc/sample_app_results.md).
+This keeps the table gem or host app responsible for collecting column definitions, executing queries, and saving preferences. Rails Fields Kit only turns the documented metadata into FormBuilder helper calls. For the full protocol, renderer call specs, and Ransack-oriented metadata notes, see [`doc/table_adapters.md`](doc/table_adapters.md).
+
+### Object collections, grouped selects, and enum selects
+
+Collections can be arrays of pairs, hashes, or model-like objects:
+
+```erb
+<%= f.rfk_select :customer_id,
+  collection: @customers,
+  collection_value_method: :id,
+  collection_label_method: :name %>
+```
+
+Grouped selects render `<optgroup>` elements:
+
+```erb
+<%= f.rfk_grouped_select :customer_id,
+  grouped_collection: {
+    "Active" => [["Acme Corp", 1]],
+    "Archived" => [["Old Corp", 2]]
+  } %>
+```
+
+Options can be disabled or receive per-option HTML attributes:
+
+```erb
+<%= f.rfk_select :status,
+  collection: { "Draft" => "draft", "Published" => "published" },
+  disabled: ["published"],
+  option_html: {
+    "draft" => { data: { color: "gray" } }
+  } %>
+```
+
+Rails enum-like attributes can use `rfk_enum_select`:
+
+```erb
+<%= f.rfk_enum_select :status %>
+```
 
 ### Multiple selects and tags
 
-Use `rfk_multi_select` for ordinary multiple selects and `rfk_tags` for tag-style inputs. Both render array-style parameter names and Rails' hidden blank input by default, so clearing all selected values still submits an empty value.
+Use `rfk_multi_select` for ordinary multiple selects and `rfk_tags` when the UI should feel like tag entry or create-on-the-fly tag creation. Both render array-style parameter names and Rails' hidden blank input by default, so clearing all selected values still submits an empty value.
