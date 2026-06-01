@@ -27,12 +27,14 @@ module RailsFieldsKit
       end
 
       def add_importmap_pins
+        self.importmap_pin_status = :not_requested
         return unless options[:importmap]
 
         importmap_path = "config/importmap.rb"
         absolute_path = File.join(destination_root, importmap_path)
 
         unless File.exist?(absolute_path)
+          self.importmap_pin_status = :missing_file
           say "config/importmap.rb was not found; add Rails Fields Kit importmap pins manually if this app uses importmap.", :yellow
           return
         end
@@ -42,11 +44,13 @@ module RailsFieldsKit
         end
 
         if missing_pins.empty?
+          self.importmap_pin_status = :already_present
           say "Rails Fields Kit importmap pins already exist.", :green
           return
         end
 
         append_to_file importmap_path, "\n#{importmap_pin_lines(missing_pins)}\n"
+        self.importmap_pin_status = :added
       end
 
       def show_next_steps
@@ -55,11 +59,26 @@ module RailsFieldsKit
         say "  1. Install Tom Select with your app's JavaScript toolchain: yarn add tom-select"
         say "  2. Register RailsFieldsKit::TomSelectController in your Stimulus application."
         say "  3. Load tom-select/dist/css/tom-select.css from your app stylesheet or bundler."
-        say "  4. If this app uses importmap, run with --importmap or add the documented pins manually."
+        say "  4. #{importmap_next_step}"
         say "See doc/rails_fields_kit_setup.md for examples."
       end
 
       private
+
+      attr_accessor :importmap_pin_status
+
+      def importmap_next_step
+        case importmap_pin_status
+        when :added
+          "Rails Fields Kit importmap pins were added to config/importmap.rb."
+        when :already_present
+          "Rails Fields Kit importmap pins already exist in config/importmap.rb."
+        when :missing_file
+          "config/importmap.rb was not found; add the documented pins manually if this app uses importmap."
+        else
+          "If this app uses importmap, run with --importmap or add the documented pins manually."
+        end
+      end
 
       def importmap_pin_present?(path, name)
         File.read(path).match?(/^\s*pin\s+["']#{Regexp.escape(name)}["']/)
