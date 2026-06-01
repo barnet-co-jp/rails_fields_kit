@@ -10,6 +10,18 @@ RSpec.describe "visual reference documentation index" do
     expect(index_links).to eq(markdown_links)
   end
 
+  it "keeps each mapped reference available from the quick links or review cards" do
+    markdown_reference_links.each do |reference|
+      next if reference == "visual_reference_index.html"
+
+      expect(index_link_occurrences(reference)).to be_positive, "expected #{reference} to be linked from the HTML index"
+    end
+  end
+
+  it "keeps every review card tied to a mapped visual reference" do
+    expect(review_card_links).to match_array(markdown_reference_links - ["visual_reference_index.html"])
+  end
+
   it "keeps the HTML summary focused on the maintained map and index update points" do
     expect(html_index).to include("Use visual_references.md as the maintained artifact list.")
     expect(html_index).to include("Keep quick links and cards aligned when references change.")
@@ -24,6 +36,20 @@ RSpec.describe "visual reference documentation index" do
       .compact
       .uniq
       .sort
+  end
+
+  def markdown_reference_links
+    visual_reference_links(markdown_map)
+  end
+
+  def review_card_links
+    html_index.scan(/<a class="reference-link" href="([^"]+_visual_reference\.html)">/)
+      .flatten
+      .sort
+  end
+
+  def index_link_occurrences(reference)
+    html_index.scan(/href="#{Regexp.escape(reference)}"/).size
   end
 
   def markdown_map
