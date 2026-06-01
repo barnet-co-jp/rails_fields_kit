@@ -7,19 +7,22 @@
     <style>
       :root {
         color-scheme: light;
-        --page: #f6f8f5;
+        --page: #f7f8fa;
         --surface: #ffffff;
-        --ink: #21312c;
-        --muted: #65756f;
-        --line: #d5ddd7;
-        --line-strong: #aebdb5;
-        --accent: #236a5b;
-        --accent-soft: #e4f3ef;
-        --warning: #8b5e18;
-        --warning-soft: #fff5dd;
-        --empty: #74445c;
-        --empty-soft: #f7e8ef;
-        --shadow: 0 16px 34px rgba(27, 43, 36, 0.08);
+        --surface-muted: #f3f5f7;
+        --ink: #17212b;
+        --muted: #5d6975;
+        --line: #d6dbe1;
+        --line-strong: #9da8b3;
+        --accent: #176b5f;
+        --accent-soft: #e6f4f1;
+        --info: #285f9f;
+        --info-soft: #eaf2fb;
+        --warning: #8a5a12;
+        --warning-soft: #fff3d8;
+        --empty: #6b4c84;
+        --empty-soft: #f2ecf8;
+        --shadow: 0 1px 2px rgba(23, 33, 43, 0.06);
       }
 
       * {
@@ -28,27 +31,28 @@
 
       body {
         margin: 0;
-        background: linear-gradient(180deg, #fbfcfa 0%, var(--page) 100%);
+        background: var(--page);
         color: var(--ink);
         font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
         line-height: 1.5;
       }
 
       main {
-        width: min(1080px, calc(100% - 32px));
+        width: min(1120px, calc(100% - 32px));
         margin: 0 auto;
-        padding: 48px 0 64px;
+        padding: 44px 0 60px;
       }
 
       .hero {
         display: grid;
-        gap: 12px;
-        max-width: 760px;
-        margin-bottom: 28px;
+        gap: 14px;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--line);
       }
 
       .eyebrow {
-        font-size: 0.78rem;
+        font-size: 0.76rem;
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -67,7 +71,7 @@
       }
 
       h2 {
-        font-size: 1.08rem;
+        font-size: 1.05rem;
       }
 
       p {
@@ -81,38 +85,44 @@
         color: var(--muted);
       }
 
+      .lede {
+        max-width: 780px;
+        font-size: 1rem;
+      }
+
       .hero-links {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-        margin-top: 6px;
       }
 
       .hero-links a {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         min-height: 38px;
         padding: 0 12px;
         border: 1px solid var(--line-strong);
         color: var(--ink);
         text-decoration: none;
-        background: rgba(255, 255, 255, 0.82);
+        background: var(--surface);
       }
 
       .hero-links a:hover {
         border-color: var(--accent);
+        color: var(--accent);
       }
 
       .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 14px;
       }
 
       .card {
         display: grid;
-        gap: 14px;
-        padding: 18px;
+        gap: 12px;
+        padding: 16px;
         border: 1px solid var(--line);
         background: var(--surface);
         box-shadow: var(--shadow);
@@ -125,42 +135,46 @@
 
       .tag {
         justify-self: start;
-        padding: 4px 8px;
-        border: 1px solid var(--line);
-        background: #f9fbfa;
-        color: var(--accent);
+        padding: 3px 7px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface-muted);
+        color: var(--ink);
         font-size: 0.72rem;
         font-weight: 700;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.04em;
         text-transform: uppercase;
       }
 
       .tag.override {
+        border-color: #9bcdbc;
         background: var(--accent-soft);
+        color: var(--accent);
       }
 
       .tag.default {
-        background: var(--warning-soft);
-        color: var(--warning);
+        border-color: #adc6e4;
+        background: var(--info-soft);
+        color: var(--info);
       }
 
       .tag.fallback {
+        border-color: #c6afd8;
         background: var(--empty-soft);
         color: var(--empty);
       }
 
       .control {
         border: 1px solid var(--line-strong);
-        background: #ffffff;
+        background: var(--surface);
         overflow: hidden;
       }
 
       .control-top {
         display: flex;
         align-items: center;
-        gap: 10px;
-        min-height: 52px;
-        padding: 10px 12px;
+        gap: 9px;
+        min-height: 48px;
+        padding: 9px 11px;
         border-bottom: 1px solid var(--line);
       }
 
@@ -171,11 +185,17 @@
       }
 
       .placeholder {
-        color: #84928d;
+        color: #737f8a;
+      }
+
+      .query {
+        color: var(--ink);
       }
 
       .caret {
+        flex: none;
         color: var(--muted);
+        font-size: 0.92rem;
       }
 
       .dropdown {
@@ -187,25 +207,34 @@
       .message,
       .action {
         display: grid;
-        gap: 3px;
-        padding: 10px;
+        gap: 5px;
+        padding: 10px 11px;
         border: 1px solid var(--line);
-        background: #fbfdfb;
+        border-left-width: 4px;
+        background: #fbfcfd;
       }
 
       .message.empty {
-        border-color: #e1c2d0;
+        border-color: #c6afd8;
         background: var(--empty-soft);
       }
 
       .message.loading {
-        border-color: #ead6a4;
+        border-color: #d6b663;
         background: var(--warning-soft);
       }
 
       .action {
-        border-color: #b8d9cc;
+        border-color: #9bcdbc;
         background: var(--accent-soft);
+      }
+
+      .state-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--muted);
       }
 
       .message span,
@@ -221,7 +250,8 @@
         margin-top: 18px;
         padding: 16px;
         border: 1px solid var(--line);
-        background: rgba(255, 255, 255, 0.72);
+        background: var(--surface);
+        box-shadow: var(--shadow);
       }
 
       .comparison-note ul {
@@ -231,7 +261,7 @@
 
       @media (max-width: 640px) {
         main {
-          width: min(100% - 20px, 1080px);
+          width: min(100% - 20px, 1120px);
           padding-top: 36px;
         }
 
@@ -251,7 +281,7 @@
         <div class="eyebrow">Rails Fields Kit</div>
         <h1>Tom Select Text Override Visual Reference</h1>
         <p class="lede">
-          A static comparison for `no_results_text:`, `loading_text:`, and `create_text:` so reviewers can see how field-level copy, initializer defaults, and bundled fallback copy differ without changing runtime text resolution.
+          A static QA reference for `no_results_text:`, `loading_text:`, and `create_text:` so reviewers can compare field-level copy, initializer defaults, and bundled fallback copy without changing runtime text resolution.
         </p>
         <div class="hero-links">
           <a href="tom_select_visual_reference.html">Tom Select visual reference</a>
@@ -274,6 +304,7 @@
             </div>
             <div class="dropdown">
               <div class="message empty">
+                <span class="state-label">No results state</span>
                 <strong>No customers match this search</strong>
                 <span>`no_results_text:` is scoped to the rendered field, while follow-up guidance still belongs to the host app.</span>
               </div>
@@ -295,6 +326,7 @@
             </div>
             <div class="dropdown">
               <div class="message loading">
+                <span class="state-label">Loading state</span>
                 <strong>Searching shared customer data</strong>
                 <span>`loading_text:` can come from initializer defaults when every field should use the same loading vocabulary.</span>
               </div>
@@ -316,6 +348,7 @@
             </div>
             <div class="dropdown">
               <div class="action">
+                <span class="state-label">Create state</span>
                 <strong>Create "New label"</strong>
                 <span>`create_text:` changes the affordance text only; confirmation, validation, and persistence stay in the host app.</span>
               </div>
