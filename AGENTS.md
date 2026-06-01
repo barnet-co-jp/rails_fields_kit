@@ -55,4 +55,5 @@ Before release-oriented docs updates, review:
 - `doc/selected_preload_release_gate.md`
 - `doc/sample_app_checklist.md`
 - `doc/sample_app_results.md`
-- the current version-specific release note draft
+- `doc/release_notes_0_1_1.md`: current version-specific release note draft; update this bullet when the maintained current release note moves to a new version file
+- `doc/release_notes_0_1_0.md`: historical release note reference kept in the packaged docs map
