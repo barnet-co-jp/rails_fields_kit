@@ -22,9 +22,9 @@ RSpec.describe "visual reference documentation index" do
     expect(review_card_links).to match_array(markdown_reference_links - ["visual_reference_index.html"])
   end
 
-  it "keeps the HTML summary focused on the maintained map and index update points" do
+  it "keeps the HTML summary focused on the maintained map, helper families, and landed references" do
     expect(html_index).to include("Use visual_references.md as the maintained artifact list.")
-    expect(html_index).to include("Keep quick links and cards aligned when references change.")
+    expect(html_index).to include("Choose by helper family before opening a focused lane.")
     expect(html_index).to include("List only references that have landed on main.")
   end
 
