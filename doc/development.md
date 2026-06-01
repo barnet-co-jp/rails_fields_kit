@@ -47,7 +47,7 @@ npm run check:js
 
 This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It also runs lightweight Node sandbox checks for package `exports` import wiring, Tom Select create-on-the-fly JSON request headers, and Tom Select error-surface metadata, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
 
-The package export smoke derives package-root named-export expectations from the JavaScript exports table in `doc/public_api.md` and fails if those documented exports are missing from the package root. Helper-specific assertions stay limited to representative contract checks, so adding a new documented package-root helper should not require updating a second fixed export list in the smoke script.
+The package export smoke derives package-root named-export expectations from the JavaScript exports table in `doc/public_api.md` and fails if those documented exports are missing from the package root. Helper-specific callable assertions are currently limited to the rendered-field contract helpers listed in `scripts/check_package_exports.mjs`, so adding a new documented callable package-root helper still needs the smoke script's callable-helper list or extraction logic to be updated until that guard is fully table-driven.
 
 The Tom Select controller smokes share an internal sandbox harness for the Stimulus and Tom Select stubs, controller import, and cleanup. That harness is repository-local test setup only; it does not add a new JavaScript test framework or change the public package entrypoints.
 
