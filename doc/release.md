@@ -80,6 +80,8 @@ bundle exec rake build
    - `doc/release.md`
    - `doc/release_notes_0_1_1.md` for the current next-release draft
 
+   While reviewing `CHANGELOG.md` and the release note draft, keep their roles separate: `CHANGELOG.md` is the exhaustive release-history source, and `doc/release_notes_0_1_1.md` is the reviewer-facing and GitHub-release-facing summary. Confirm the release note highlights are backed by landed `Unreleased` entries, avoid proposal or open-PR behavior, and check that major categories such as token search, table metadata, JavaScript exports, request lifecycle, install generator, and release-scoped event surfaces are not missing from one side.
+
 8. Confirm version.
 
    ```ruby
@@ -103,9 +105,13 @@ bundle exec rake build
    ## 0.1.1 - YYYY-MM-DD
    ```
 
+   Keep the moved changelog entry as the detailed source of truth for landed behavior, and leave proposal or open-PR behavior out until it has landed in the release branch.
+
 2. Prepare the version-specific release note draft.
 
    Update `doc/release_notes_0_1_1.md` when the next release remains `0.1.1`. If release planning chooses a different version number, rename that draft and use `doc/release_notes_0_1_0.md` as the historical reference instead of editing the historical notes in place.
+
+   Before using it for a GitHub Release, compare the draft against the moved changelog entry. The release note should summarize user-facing highlights and responsibility boundaries, not replace the detailed changelog entries.
 
 3. Commit release metadata.
 
