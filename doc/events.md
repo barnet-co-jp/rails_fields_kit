@@ -8,6 +8,8 @@ When a field is rendered with `error_surface: true`, the controller also include
 
 By default, Rails Fields Kit generates the placeholder id from the form object and method, such as `dummy_model_customer_id_error_surface`. If the same object and method are rendered more than once on a page, pass an explicit `error_surface_html: { id: "..." }` for each field instance. The explicit id is used consistently for the surface element, the field's `aria-describedby`, and the controller data value that resolves `event.detail.surface`.
 
+The generated placeholder is hidden until the controller exposes a request failure, and defaults to `role="status"`, `aria-live="polite"`, `aria-atomic="true"`, and the `rfk-tom-select-error-surface` class. Those defaults make the empty element safe for host-owned accessible feedback without adding visible copy. Host applications can pass explicit `role`, `aria-live`, or `aria-atomic` values through `error_surface_html:` when a field needs a different live-region contract, but Rails Fields Kit still owns only the placeholder wiring.
+
 Rails Fields Kit marks that placeholder with request state metadata before dispatching the failure event. The attributes use the same operation and status values as the event detail:
 
 - `data-rfk-error-state="error"`
