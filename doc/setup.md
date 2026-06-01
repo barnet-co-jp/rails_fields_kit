@@ -2,7 +2,7 @@
 
 This guide is the maintained setup walkthrough for Rails Fields Kit.
 
-Use the generated `doc/rails_fields_kit_setup.md` in your host app as a short checklist and place for app-specific notes. When the setup flow changes, update this file first and keep the generated note focused on linking back here.
+Use the generated `doc/rails_fields_kit_setup.md` in your host app as a short checklist and place for app-specific notes. Host apps that keep setup notes elsewhere can run the install generator with `--skip-setup-notes`; that skips only the generated docs artifact while this guide remains the maintained source of truth. When the setup flow changes, update this file first and keep the generated note focused on linking back here.
 
 ## 1. Add the gem
 
@@ -17,12 +17,20 @@ bundle install
 rails generate rails_fields_kit:install
 ```
 
-The generator creates:
+By default, the generator creates:
 
 - `config/initializers/rails_fields_kit.rb`
 - `doc/rails_fields_kit_setup.md`
 
 Treat `doc/rails_fields_kit_setup.md` as a host-app checklist. This `doc/setup.md` file is the detailed setup reference and source of truth for examples.
+
+If the host app does not keep generated docs artifacts in `doc/`, skip only the setup notes:
+
+```bash
+rails generate rails_fields_kit:install --skip-setup-notes
+```
+
+That path still creates `config/initializers/rails_fields_kit.rb`; use this guide for the maintained setup examples.
 
 ## 2. Install Tom Select
 
