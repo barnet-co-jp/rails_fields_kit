@@ -1,19 +1,5 @@
-import { mkdtemp, mkdir, cp, writeFile, rm } from "node:fs/promises"
-import { tmpdir } from "node:os"
-import path from "node:path"
-import { pathToFileURL } from "node:url"
 import assert from "node:assert/strict"
-
-const repoRoot = process.cwd()
-const sandboxRoot = await mkdtemp(path.join(tmpdir(), "rails-fields-kit-error-surface-"))
-
-async function writeStubPackage(packageName, source) {
-  const packageRoot = path.join(sandboxRoot, "node_modules", ...packageName.split("/"))
-
-  await mkdir(packageRoot, { recursive: true })
-  await writeFile(path.join(packageRoot, "package.json"), "{\n  \"type\": \"module\"\n}\n")
-  await writeFile(path.join(packageRoot, "index.js"), source)
-}
+import { withTomSelectControllerSandbox } from "./tom_select_smoke_harness.mjs"
 
 function withDocument(surface, assertion) {
   const previousDocument = globalThis.document
@@ -42,21 +28,7 @@ function buildController(ControllerClass) {
   return controller
 }
 
-try {
-  await writeStubPackage(
-    "@hotwired/stimulus",
-    "export class Controller {\n  static values = {}\n}\n"
-  )
-  await writeStubPackage(
-    "tom-select",
-    "export default class TomSelect {\n  constructor(element, options = {}) {\n    this.element = element\n    this.options = options\n  }\n\n  destroy() {}\n}\n"
-  )
-
-  const controllerSource = path.join(repoRoot, "app", "javascript", "rails_fields_kit", "tom_select_controller.js")
-  const controllerPath = path.join(sandboxRoot, "tom_select_controller.js")
-  await cp(controllerSource, controllerPath)
-
-  const { default: TomSelectController } = await import(pathToFileURL(controllerPath).href)
+await withTomSelectControllerSandbox("rails-fields-kit-error-surface-", ({ TomSelectController }) => {
   const controller = buildController(TomSelectController)
   const surface = {
     hidden: true,
@@ -84,8 +56,6 @@ try {
     assert.equal(surface.dataset.rfkErrorStatus, undefined)
     assert.equal(surface.textContent, "")
   })
+})
 
-  console.log("rails_fields_kit Tom Select error surface smoke passed")
-} finally {
-  await rm(sandboxRoot, { recursive: true, force: true })
-}
+console.log("rails_fields_kit Tom Select error surface smoke passed")
