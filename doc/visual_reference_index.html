@@ -351,7 +351,7 @@
           <a href="tom_select_visual_reference.html">Tom Select states</a>
           <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
           <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
-          <a href="native_field_visual_reference.html">Native helper states</a>
+          <a href="native_field_visual_reference.html">Native helper narrow stress</a>
           <a href="table_metadata_visual_reference.html">Table metadata</a>
           <a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a>
         </div>
@@ -390,14 +390,14 @@
                 <span class="tag warning">copy</span>
               </div>
               <h3>Design and copy review</h3>
-              <p>Inspect helper chrome, labels, hint text, configured empty/loading copy, and wrapping behavior.</p>
+              <p>Inspect helper chrome, labels, hint text, native affix readability, configured empty/loading copy, and wrapping behavior.</p>
             </header>
             <ul>
-              <li>Compare native helper layout and text override examples.</li>
-              <li>Keep product-specific localization with the host app.</li>
+              <li>Compare native helper layout, long label stress, and text override examples.</li>
+              <li>Keep native search fields separate from Tom Select-backed search or token suggestions.</li>
             </ul>
             <nav class="task-links" aria-label="Design and copy review references">
-              <a href="native_field_visual_reference.html">Native helper states</a>
+              <a href="native_field_visual_reference.html">Native narrow stress</a>
               <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
             </nav>
           </article>
@@ -505,14 +505,15 @@
               <div class="tag-row">
                 <span class="tag primary">native helpers</span>
                 <span class="tag info">accessibility</span>
+                <span class="tag warning">narrow stress</span>
               </div>
               <h3>Native helper states</h3>
-              <p>Wrapper, label, hint, prefix, suffix, readonly, disabled, validation, customization, and accessibility wiring examples.</p>
+              <p>Wrapper, label, hint, prefix, suffix, readonly, disabled, validation, customization, accessibility wiring, and narrow-width stress examples.</p>
             </header>
-            <p class="review-question"><strong>Question:</strong> do native helper states remain legible while staying separate from Tom Select-backed behavior?</p>
+            <p class="review-question"><strong>Question:</strong> do native helper states remain legible under long label, hint, error, and affix stress while staying separate from Tom Select-backed behavior?</p>
             <ul>
-              <li>Inspect field chrome, text wrapping, and visible state differences.</li>
-              <li>Do not use this lane to change FormBuilder behavior or generated markup.</li>
+              <li>Inspect field chrome, text wrapping, required marker, prefix/suffix, and visible state differences.</li>
+              <li>Do not use this lane to change FormBuilder behavior, generated markup, or Tom Select-backed search behavior.</li>
             </ul>
             <a class="reference-link" href="native_field_visual_reference.html">Open reference</a>
           </article>
