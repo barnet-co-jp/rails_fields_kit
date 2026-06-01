@@ -12,6 +12,7 @@ This guide describes the lightweight release flow for Rails Fields Kit.
 ```bash
 bundle exec standardrb
 bundle exec rspec
+npm run check:js
 bundle exec rake build
 ```
 
@@ -43,17 +44,25 @@ bundle exec rake build
    bundle exec rspec
    ```
 
-5. Build the gem locally.
+5. Run the JavaScript smoke checks locally.
+
+   ```bash
+   npm run check:js
+   ```
+
+   These checks mirror the repository-local JavaScript confirmation described in [`doc/development.md`](development.md), including the package exports import lane and Tom Select request lifecycle smokes.
+
+6. Build the gem locally.
 
    ```bash
    bundle exec rake build
    ```
 
-6. Confirm the latest GitHub Actions CI run is green for the commit you plan to release.
+7. Confirm the latest GitHub Actions CI run is green for the commit you plan to release.
 
    This is the final branch-head confirmation for lint, RSpec, JavaScript syntax, and gem package/install smoke checks. The gem package check also verifies that the built artifact contains `package.json` and the JavaScript files referenced by its public `exports` map.
 
-7. Review documentation.
+8. Review documentation.
 
    - `README.md`
    - `Product Profile.md`
@@ -83,14 +92,14 @@ bundle exec rake build
 
    While reviewing `CHANGELOG.md` and the release note draft, keep their roles separate: `CHANGELOG.md` is the exhaustive release-history source, and `doc/release_notes_0_1_1.md` is the reviewer-facing and GitHub-release-facing summary. Confirm the release note highlights are backed by landed `Unreleased` entries, avoid proposal or open-PR behavior, and check that major categories such as token search, table metadata, JavaScript exports, request lifecycle, install generator, and release-scoped event surfaces are not missing from one side.
 
-8. Confirm version.
+9. Confirm version.
 
    ```ruby
    # lib/rails_fields_kit/version.rb
    RailsFieldsKit::VERSION = "x.y.z"
    ```
 
-9. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
+10. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
 
    When the release surface includes selected preload behavior, run the focused [`selected_preload_release_gate.md`](selected_preload_release_gate.md) before marking the sample app pass complete. Keep this check to the documented single-value and comma-separated multiple-ID request contract unless release planning explicitly changes that public surface.
 
