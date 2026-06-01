@@ -72,6 +72,7 @@ bundle exec rake build
    - `doc/table_adapters.md`
    - `doc/configuration.md`
    - `doc/events.md`
+   - `doc/tom_select_turbo_lifecycle.md`
    - `doc/development.md`
    - `doc/sample_app_checklist.md`
    - `doc/sample_app_results.md`
@@ -94,6 +95,8 @@ bundle exec rake build
    When the release surface includes selected preload behavior, run the focused [`selected_preload_release_gate.md`](selected_preload_release_gate.md) before marking the sample app pass complete. Keep this check to the documented single-value and comma-separated multiple-ID request contract unless release planning explicitly changes that public surface.
 
    When the release surface includes create-on-the-fly success hooks, confirm the sample app and recorded results cover `rails-fields-kit--tom-select:create`, `event.detail.input`, `event.detail.option`, and the continued `item-add` / `change` flow. Visible success UI remains a host-app responsibility.
+
+   When the release surface includes Turbo reconnect behavior, use [`tom_select_turbo_lifecycle.md`](tom_select_turbo_lifecycle.md) as the focused boundary and QA reference. Keep verification to Stimulus connect/disconnect cleanup, request abort or stale-response behavior, and post-reconnect selected preload or remote search behavior unless release planning explicitly changes the lifecycle contract.
 
 ## Release steps
 
