@@ -34,13 +34,14 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/select_migration.md`.
 - [ ] Review `doc/field_helpers.md`.
 - [ ] Review `doc/visual_references.md` as the visual reference family index, and confirm it still matches the README Docs map.
+- [ ] Review `doc/visual_reference_index.html` as the one-screen reviewer navigation artifact.
 - [ ] Review `doc/tom_select_visual_reference.html`.
 - [ ] Review `doc/tom_select_request_failure_visual_reference.html`.
 - [ ] Review `doc/tom_select_text_override_visual_reference.html`.
 - [ ] Review `doc/native_field_visual_reference.html`.
 - [ ] Review `doc/table_metadata_visual_reference.html`.
 - [ ] Review `doc/token_search_saved_search_visual_reference.html`.
-- [ ] Confirm the static visual reference family above has a representative narrow/mobile viewport pass for wrapping, overflow, state visibility, and readable error surfaces before treating those files as release-ready evidence.
+- [ ] Confirm the static visual reference family above, including the one-screen index, has a representative narrow/mobile viewport pass for wrapping, overflow, state visibility, and readable error surfaces before treating those files as release-ready evidence.
 - [ ] Review `doc/controller_helpers.md`.
 - [ ] Review `doc/token_suggestions.md`.
 - [ ] Review `doc/ransack_suggestions.md`.
@@ -80,6 +81,7 @@ Record visual reference and sample app evidence in a compact matrix before treat
 
 | Artifact | Viewport checked | State or lane checked | Responsibility boundary confirmed | Evidence location |
 | --- | --- | --- | --- | --- |
+| `doc/visual_reference_index.html` | desktop + narrow/mobile | task picker, quick links, and reference card scanability | index only guides reviewers to the right static artifact; individual helper behavior stays with the referenced visual file and topic docs | `doc/sample_app_results.md` or release PR comment |
 | `doc/tom_select_visual_reference.html` | desktop + narrow/mobile | loading, empty, create, disabled, multi, grouped, autocomplete, preload, tags, tokens, error, and any release-scoped helper lane | host app still owns endpoint behavior, visible feedback copy, retry UI, query parsing, token parsing, and create authorization | `doc/sample_app_results.md` or release PR comment |
 | `doc/tom_select_request_failure_visual_reference.html` | desktop + narrow/mobile | hidden placeholder, revealed request failure, selected preload restore failure, create failure, and custom wrapper lanes | Rails Fields Kit exposes an opt-in error surface and event payload; host app still owns retry UI, final visible copy, and request lifecycle policy | `doc/sample_app_results.md` or release PR comment |
 | `doc/tom_select_text_override_visual_reference.html` | desktop + narrow/mobile | field-level copy override and fallback contract lanes | Rails Fields Kit exposes rendered copy contract; host app still owns locale policy and visible copy decisions | `doc/sample_app_results.md` or release PR comment |
@@ -87,6 +89,7 @@ Record visual reference and sample app evidence in a compact matrix before treat
 | `doc/table_metadata_visual_reference.html` | desktop + narrow/mobile | filter and editor lanes | Rails Fields Kit exposes metadata / call-spec rendering boundaries without taking over table persistence or query execution | `doc/sample_app_results.md` or release PR comment |
 | `doc/token_search_saved_search_visual_reference.html` | desktop + narrow/mobile | saved-search token states | Rails Fields Kit provides token UI and suggestion metadata only; host app still owns parsing, execution, saved-search authorization, and result filtering | `doc/sample_app_results.md` or release PR comment |
 
+- [ ] Confirm `doc/visual_reference_index.html` remains usable at a narrow or mobile viewport, including task picker buttons, quick links, and reference cards without treating index navigation as helper behavior evidence.
 - [ ] Confirm `doc/tom_select_visual_reference.html` remains usable at a narrow or mobile viewport, including representative loading, empty, create, disabled, multi, grouped, autocomplete, preload, tags, tokens, and error state cards without text overflow hiding the state meaning.
 - [ ] Confirm `doc/tom_select_request_failure_visual_reference.html` remains usable at a narrow or mobile viewport, including hidden placeholder, revealed request failure, selected preload restore failure, create failure, and custom wrapper state cards without implying built-in retry UI or request lifecycle handling.
 - [ ] Confirm `doc/tom_select_text_override_visual_reference.html` remains usable at a narrow or mobile viewport, including field-level copy override and fallback contract lanes without clipped labels or hidden state copy.
