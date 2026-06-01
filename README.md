@@ -19,12 +19,12 @@ bundle install
 rails generate rails_fields_kit:install
 ```
 
-The install generator creates:
+By default, the install generator creates:
 
 - `config/initializers/rails_fields_kit.rb`
 - `doc/rails_fields_kit_setup.md`
 
-Use the generated `doc/rails_fields_kit_setup.md` in your host app as a short checklist and place for app-specific notes. The maintained setup walkthrough and source of truth for setup examples stays in this repository at [`doc/setup.md`](doc/setup.md).
+Use the generated `doc/rails_fields_kit_setup.md` in your host app as a short checklist and place for app-specific notes. If your app keeps setup notes elsewhere, run `rails generate rails_fields_kit:install --skip-setup-notes` to skip only that generated docs artifact while still creating the initializer. The maintained setup walkthrough and source of truth for setup examples stays in this repository at [`doc/setup.md`](doc/setup.md).
 
 Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and controller-side helpers. It does not install Tom Select or choose a JavaScript bundling strategy for your app.
 
