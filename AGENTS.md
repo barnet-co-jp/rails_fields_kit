@@ -20,8 +20,10 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `lib/rails_fields_kit/searchable.rb`: controller-side search, find, create, and token suggestion helpers
 - `lib/rails_fields_kit/table_*`: table metadata and renderer support
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app setup note
+- `doc/visual_references.md`: maintained map for the static visual reference family and each artifact's scope
 - `doc/visual_reference_index.html`: static index for choosing the right visual reference artifact during design or release review
 - `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states
+- `doc/tom_select_request_failure_visual_reference.html`: static visual reference for opt-in request-failure feedback, operation/status metadata, and `error_surface: true` lanes
 - `doc/tom_select_text_override_visual_reference.html`: static visual reference for configured Tom Select text override copy states
 - `doc/native_field_visual_reference.html`: static visual reference for representative native helper states
 - `doc/table_metadata_visual_reference.html`: static visual reference for representative table metadata filter and editor lanes
