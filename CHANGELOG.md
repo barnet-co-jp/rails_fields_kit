@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Release digest
+
+The next release is primarily about making the 0.1.x public surface easier to adopt without moving host-app responsibilities into the gem:
+
+- Token-oriented search helpers and suggestion builders make structured search inputs easier to wire while keeping query parsing and execution in the host application.
+- Table metadata adapters and FormBuilder rendering helpers let table integrations describe Rails Fields Kit fields without taking over table persistence or query ownership.
+- Package-root JavaScript exports, Tom Select request options, create-success events, and opt-in request-failure surfaces improve integration hooks around rendered fields.
+- The fixed entries below mostly harden request lifecycle docs, suggestion metadata immutability, and table metadata normalization so release reviewers can distinguish user-facing additions from quality fixes.
+
+The detailed entries remain the exhaustive source of truth for release review. Keep proposal or open-PR behavior out of this section until it has landed in the release branch.
+
 ### Added
 
 #### Token search and suggestion metadata
