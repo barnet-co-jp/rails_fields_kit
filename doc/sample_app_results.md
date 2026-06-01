@@ -92,6 +92,13 @@ Use this section when the release or PR changes one of the static visual referen
 
 - Changed visual reference file(s):
 - Rendered artifact or screenshot link(s):
+
+Use the matrix below for changed or release-critical visual references before treating the checkbox pass as complete. Keep static visual artifact evidence separate from runtime sample-app lanes; the matrix records what was rendered, not new helper behavior.
+
+| Artifact | Viewport checked | State or lane checked | Responsibility boundary confirmed | Evidence location |
+| --- | --- | --- | --- | --- |
+|  |  |  |  |  |
+
 - [ ] desktop viewport checked for state visibility, readable labels, and expected spacing
 - [ ] narrow/mobile viewport checked for wrapping, overflow, state visibility, and readable feedback copy
 - [ ] review notes call out any intentionally deferred visual follow-up instead of treating CI green as visual approval
