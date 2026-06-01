@@ -7,19 +7,33 @@ import assert from "node:assert/strict"
 const repoRoot = process.cwd()
 const sandboxRoot = await mkdtemp(path.join(tmpdir(), "rails-fields-kit-package-exports-"))
 
-function documentedPackageRootExports(markdown) {
+function documentedPackageRootExportRows(markdown) {
   const javascriptExportsSection = markdown.split("## JavaScript exports", 2)[1] ?? ""
 
   return javascriptExportsSection
     .split("\n")
-    .map((line) => line.match(/^\| `(?<exportName>[^`]+)` \|/)?.groups?.exportName)
+    .map((line) => {
+      const match = line.match(/^\| `(?<exportName>[^`]+)` \| (?<kind>[^|]+) \|/)
+      if (!match?.groups) return null
+
+      return {
+        exportName: match.groups.exportName.replace(/\(.*\)$/, ""),
+        kind: match.groups.kind.trim()
+      }
+    })
     .filter(Boolean)
-    .map((exportName) => exportName.replace(/\(.*\)$/, ""))
+}
+
+function documentedCallableHelperExports(exportRows) {
+  return exportRows
+    .filter(({ kind }) => /\bcontract reader\b/i.test(kind))
+    .map(({ exportName }) => exportName)
 }
 
 async function packageRootNamedExportsFromDocs() {
   const publicApiDocs = await readFile(path.join(repoRoot, "doc", "public_api.md"), "utf8")
-  const documentedExports = documentedPackageRootExports(publicApiDocs)
+  const documentedExportRows = documentedPackageRootExportRows(publicApiDocs)
+  const documentedExports = documentedExportRows.map(({ exportName }) => exportName)
 
   assert.ok(
     documentedExports.length > 0,
@@ -31,7 +45,16 @@ async function packageRootNamedExportsFromDocs() {
     "doc/public_api.md JavaScript exports table must not document duplicate package-root exports"
   )
 
-  return documentedExports
+  const callableHelperExports = documentedCallableHelperExports(documentedExportRows)
+  assert.ok(
+    callableHelperExports.length > 0,
+    "doc/public_api.md JavaScript exports table must document at least one callable contract reader"
+  )
+
+  return {
+    documentedExports,
+    callableHelperExports
+  }
 }
 
 async function writeStubPackage(packageName, source) {
@@ -43,7 +66,10 @@ async function writeStubPackage(packageName, source) {
 }
 
 try {
-  const expectedPackageRootNamedExports = await packageRootNamedExportsFromDocs()
+  const {
+    documentedExports: expectedPackageRootNamedExports,
+    callableHelperExports: expectedCallableHelperExports
+  } = await packageRootNamedExportsFromDocs()
   const packageRoot = path.join(sandboxRoot, "node_modules", "rails_fields_kit")
 
   await mkdir(packageRoot, { recursive: true })
@@ -70,15 +96,14 @@ try {
       `import directDefault from "rails_fields_kit/tom_select_controller"\n` +
       `import assert from "node:assert/strict"\n\n` +
       `const expectedNamedExports = ${JSON.stringify(expectedPackageRootNamedExports)}\n` +
-      `const documentedCallableHelperExports = ["tomSelectTextOverrideContract", "nativeFieldAccessibilityContract"]\n\n` +
+      `const expectedCallableHelperExports = ${JSON.stringify(expectedCallableHelperExports)}\n\n` +
       `expectedNamedExports.forEach((exportName) => {\n` +
       `  assert.ok(exportName in packageRoot, \`package root should expose documented export ${"${exportName}"}\`)\n` +
       `})\n` +
       `assert.equal(rootDefault, packageRoot.TomSelectController, "package root default export should match TomSelectController")\n` +
       `assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")\n` +
-      `documentedCallableHelperExports.forEach((exportName) => {\n` +
-      `  assert.ok(expectedNamedExports.includes(exportName), \`doc/public_api.md JavaScript exports table should document callable helper ${"${exportName}"}\`)\n` +
-      `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented helper ${"${exportName}"} as a callable function\`)\n` +
+      `expectedCallableHelperExports.forEach((exportName) => {\n` +
+      `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)\n` +
       `})\n`
   )
 
