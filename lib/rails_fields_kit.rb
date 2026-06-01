@@ -10,6 +10,7 @@ require "rails_fields_kit/table_cell_input"
 require "rails_fields_kit/table_renderer"
 require "rails_fields_kit/table_metadata"
 require "rails_fields_kit/engine"
+require "rails_fields_kit/selected_hash_normalization"
 
 module RailsFieldsKit
   class Error < StandardError; end
