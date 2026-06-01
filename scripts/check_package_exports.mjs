@@ -7,8 +7,19 @@ import assert from "node:assert/strict"
 const repoRoot = process.cwd()
 const sandboxRoot = await mkdtemp(path.join(tmpdir(), "rails-fields-kit-package-exports-"))
 
+function markdownSection(markdown, heading) {
+  const headingLine = `${heading}\n`
+  const headingIndex = markdown.indexOf(headingLine)
+  if (headingIndex === -1) return ""
+
+  const sectionRemainder = markdown.slice(headingIndex + headingLine.length)
+  const nextHeadingIndex = sectionRemainder.search(/\n##\s+/)
+
+  return nextHeadingIndex === -1 ? sectionRemainder : sectionRemainder.slice(0, nextHeadingIndex)
+}
+
 function documentedPackageRootExportRows(markdown) {
-  const javascriptExportsSection = markdown.split("## JavaScript exports", 2)[1] ?? ""
+  const javascriptExportsSection = markdownSection(markdown, "## JavaScript exports")
 
   return javascriptExportsSection
     .split("\n")
