@@ -1,6 +1,8 @@
 # Practical `rfk_select` Migration Guide
 
-Use this guide when you want to replace an existing server-rendered Rails `collection_select` with `rfk_select` while keeping the same model attribute, submitted params, and normal validation rerender behavior.
+Use this guide when you want to replace existing server-rendered Rails select fields with Rails Fields Kit helpers while keeping the same model attribute, submitted params, and normal validation rerender behavior.
+
+The first lane covers a single-value `collection_select` to `rfk_select` migration. The multi-value lane later in this guide covers ordinary multiple select or checkbox-style collections moving to `rfk_multi_select`, with a short boundary note for `rfk_tags`.
 
 ## Start from the existing Rails select
 
@@ -55,6 +57,68 @@ If the host app already builds labels with extra context, pass an array of pairs
 
 This is useful when the app wants to decide label text in Ruby instead of adding custom controller code or frontend rendering.
 
+## Move an ordinary multiple select to `rfk_multi_select`
+
+When the existing field already submits an array of IDs or values, keep that same array-backed attribute and switch only the rendered helper lane:
+
+```erb
+<%= form_with model: @document_set do |f| %>
+  <%= f.collection_select :category_ids,
+    @categories,
+    :id,
+    :name,
+    {},
+    multiple: true %>
+<% end %>
+```
+
+```erb
+<%= form_with model: @document_set do |f| %>
+  <%= f.rfk_multi_select :category_ids,
+    collection: @categories,
+    collection_value_method: :id,
+    collection_label_method: :name,
+    placeholder: "Choose categories" %>
+<% end %>
+```
+
+What should stay explicit in the host app:
+
+- `:category_ids` still submits multiple values, so the controller should permit an array, such as `category_ids: []`.
+- Edit forms and validation rerenders should continue to assign the model or form object with the selected IDs before rendering.
+- The collection remains the source of valid options. Use `rfk_combobox` or another remote helper when choices should come from endpoint-backed search.
+- `rfk_multi_select` is not a tag creation workflow. It keeps ordinary multiple selection over a known collection.
+
+## Move checkbox-style collections only when the interaction should become select-like
+
+A checkbox collection and `rfk_multi_select` can both submit arrays, but they are different interactions. Use `rfk_multi_select` when the form should become a compact select-style control over a known collection:
+
+```erb
+<%= f.rfk_multi_select :role_ids,
+  collection: @roles,
+  collection_value_method: :id,
+  collection_label_method: :name,
+  label: "Roles",
+  hint: "Choose one or more roles for this account." %>
+```
+
+Keep checkbox UI when the host app needs all options visible without opening a control, when each option needs custom inline explanation, or when the page layout relies on separate checkbox elements.
+
+## Use `rfk_tags` only for tag-entry workflows
+
+Reach for `rfk_tags` when the same field should feel like tag entry, keep selected tags visible inline, or optionally create missing tags through a host-owned endpoint:
+
+```erb
+<%= f.rfk_tags :tag_ids,
+  collection: @tags,
+  collection_value_method: :id,
+  collection_label_method: :name,
+  selected: @post.tag_ids,
+  placeholder: "Add tags" %>
+```
+
+For tags, the host app still owns tag persistence, authorization, duplicate handling, and any `create_url:` endpoint. Rails Fields Kit wires the field and Tom Select behavior; it does not decide which tags may be created or how created tags are saved.
+
 ## Option guidelines
 
 Use these options with the same responsibility split as an ordinary Rails form:
@@ -83,7 +147,7 @@ A common wrapped admin-form example looks like this:
 
 Do not add `selected:` for an ordinary collection-backed select just to preserve the current value. Rails already redisplays the assigned model attribute for normal edit and invalid-rerender flows.
 
-Use `selected:` only when the current label is not already present in the rendered collection, such as remote comboboxes or values loaded later.
+Use `selected:` only when the current label is not already present in the rendered collection, such as remote comboboxes, tag fields that start from IDs without labels, or values loaded later.
 
 ## What Rails Fields Kit does not take over
 
@@ -93,5 +157,6 @@ This migration pattern keeps the gem focused on the field helper and Tom Select 
 - controller and policy behavior
 - app-specific CSS and page layout
 - any custom search semantics behind the option source
+- tag creation, authorization, and persistence rules
 
 For the helper reference, including grouped, remote, and multi-value variants, see [`field_helpers.md`](field_helpers.md).
