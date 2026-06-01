@@ -114,6 +114,8 @@ application.register("rails-fields-kit--tom-select", TomSelectController)
 
 `rails_fields_kit/index.js` re-exports the same controller as `rails_fields_kit/tom_select_controller`, so both documented import paths stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
 
+The package root also exposes read-only rendered-field contract helpers, including `nativeFieldAccessibilityContract(element)` for native wrapper accessibility wiring. Import those helpers from `rails_fields_kit` only when host-app scripts need to inspect already-rendered labels, hints, errors, and wrapper elements; controller registration, validation messages, focus management, and visible feedback remain separate host-app responsibilities. Use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the current source of truth for the helper list and return shape.
+
 ## 4. Load Tom Select CSS
 
 Use the stylesheet pipeline or bundler already used by the application.
