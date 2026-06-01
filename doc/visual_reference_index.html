@@ -50,11 +50,11 @@
       }
 
       .eyebrow {
+        color: var(--accent);
         font-size: 0.76rem;
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: var(--accent);
       }
 
       h1,
@@ -77,21 +77,24 @@
         font-size: 1rem;
       }
 
+      a {
+        color: inherit;
+      }
+
       .hero-links,
       .quick-list,
-      .task-links {
+      .task-links,
+      .family-links {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
       }
 
-      a {
-        color: inherit;
-      }
-
       .hero-links a,
       .quick-list a,
-      .task-links a {
+      .task-links a,
+      .family-links a,
+      .reference-link {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -106,6 +109,7 @@
       .hero-links a:hover,
       .quick-list a:hover,
       .task-links a:hover,
+      .family-links a:hover,
       .reference-link:hover {
         border-color: var(--accent);
         color: var(--accent);
@@ -153,6 +157,7 @@
         color: var(--muted);
       }
 
+      .family-grid,
       .task-grid,
       .reference-grid {
         display: grid;
@@ -160,29 +165,34 @@
         gap: 14px;
       }
 
+      .family-card,
       .task-card,
       .reference-card {
         display: grid;
         gap: 12px;
+        align-content: start;
         padding: 16px;
         border: 1px solid var(--line);
         background: var(--surface);
         box-shadow: var(--shadow);
       }
 
-      .task-card {
-        align-content: start;
-      }
-
+      .family-card header,
       .task-card header,
       .reference-card header {
         display: grid;
         gap: 8px;
       }
 
+      .family-card h3,
       .task-card h3 {
         font-size: 1rem;
         line-height: 1.25;
+      }
+
+      .reference-card h3 {
+        font-size: 1.05rem;
+        line-height: 1.22;
       }
 
       .tag-row {
@@ -223,11 +233,8 @@
         color: var(--warning);
       }
 
-      .reference-card h3 {
-        font-size: 1.05rem;
-        line-height: 1.22;
-      }
-
+      .family-card p,
+      .family-card li,
       .task-card p,
       .task-card li,
       .reference-card p,
@@ -246,6 +253,7 @@
         font-size: 0.92rem;
       }
 
+      .family-card ul,
       .task-card ul,
       .reference-card ul,
       .workflow ol {
@@ -254,14 +262,6 @@
       }
 
       .reference-link {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 38px;
-        padding: 0 12px;
-        border: 1px solid var(--line-strong);
-        background: var(--surface);
-        text-decoration: none;
         justify-self: start;
       }
 
@@ -304,6 +304,7 @@
         .hero-links a,
         .quick-list a,
         .task-links a,
+        .family-links a,
         .reference-link {
           width: 100%;
         }
@@ -329,8 +330,8 @@
           <span>Use visual_references.md as the maintained artifact list.</span>
         </div>
         <div class="summary-item">
-          <strong>HTML</strong>
-          <span>Keep quick links and cards aligned when references change.</span>
+          <strong>Families</strong>
+          <span>Choose by helper family before opening a focused lane.</span>
         </div>
         <div class="summary-item">
           <strong>Runtime</strong>
@@ -354,6 +355,72 @@
           <a href="native_field_visual_reference.html">Native helper narrow stress</a>
           <a href="table_metadata_visual_reference.html">Table metadata</a>
           <a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a>
+        </div>
+      </section>
+
+      <section aria-labelledby="family-picker-title">
+        <div class="section-heading">
+          <h2 id="family-picker-title">Pick by helper family</h2>
+          <p>Use these stable family groups when the reference set grows. They keep the first choice tied to the helper surface instead of a fragile artifact count.</p>
+        </div>
+
+        <div class="family-grid">
+          <article class="family-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">Tom Select</span>
+                <span class="tag info">remote states</span>
+              </div>
+              <h3>Search-backed controls</h3>
+              <p>Start here for selects, comboboxes, autocomplete, tags, token search, request feedback, and configured helper copy.</p>
+            </header>
+            <ul>
+              <li>Use the core states for layout and viewport checks.</li>
+              <li>Use focused lanes only when error feedback or copy overrides are the review topic.</li>
+            </ul>
+            <nav class="family-links" aria-label="Tom Select helper family references">
+              <a href="tom_select_visual_reference.html">Core states</a>
+              <a href="tom_select_request_failure_visual_reference.html">Request feedback</a>
+              <a href="tom_select_text_override_visual_reference.html">Copy overrides</a>
+            </nav>
+          </article>
+
+          <article class="family-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">native helpers</span>
+                <span class="tag warning">forms</span>
+              </div>
+              <h3>Native field wrappers</h3>
+              <p>Use this family for text-like inputs, labels, hints, affixes, validation copy, non-editable states, and narrow viewport stress.</p>
+            </header>
+            <ul>
+              <li>Confirm wrapper density and copy wrapping without treating the artifact as production CSS.</li>
+              <li>Keep native browser semantics separate from Tom Select-backed search behavior.</li>
+            </ul>
+            <nav class="family-links" aria-label="Native helper family references">
+              <a href="native_field_visual_reference.html">Native helper states</a>
+            </nav>
+          </article>
+
+          <article class="family-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">metadata</span>
+                <span class="tag info">token search</span>
+              </div>
+              <h3>Table and token bridges</h3>
+              <p>Use these lanes when the question is whether generated field metadata or saved-search suggestions stay inside their ownership boundary.</p>
+            </header>
+            <ul>
+              <li>Use table metadata for filter and editor helper contracts.</li>
+              <li>Use saved-search tokens for suggestion shape, badges, wrapping, and source-of-truth boundaries.</li>
+            </ul>
+            <nav class="family-links" aria-label="Table and token bridge references">
+              <a href="table_metadata_visual_reference.html">Table metadata</a>
+              <a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a>
+            </nav>
+          </article>
         </div>
       </section>
 
@@ -561,7 +628,7 @@
         </div>
         <div class="workflow">
           <ol>
-            <li>Choose the reviewer task, lane, or release gate that matches the current PR or design question.</li>
+            <li>Choose the reviewer task, helper family, lane, or release gate that matches the current PR or design question.</li>
             <li>Open the individual static HTML reference and compare desktop and narrow viewport readability.</li>
             <li>Record release or PR evidence in sample_app_results.md when the artifact changes or gates a release.</li>
             <li>Update visual_references.md and this index when a new visual reference lands on main.</li>
