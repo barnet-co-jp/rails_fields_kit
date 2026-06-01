@@ -10,7 +10,7 @@ The next release is primarily about making the 0.1.x public surface easier to ad
 
 - Token-oriented search helpers and suggestion builders make structured search inputs easier to wire while keeping query parsing and execution in the host application.
 - Table metadata adapters and FormBuilder rendering helpers let table integrations describe Rails Fields Kit fields without taking over table persistence or query ownership.
-- Package-root JavaScript exports, Tom Select request options, create-success events, and opt-in request-failure surfaces improve integration hooks around rendered fields.
+- Package-root JavaScript exports, Tom Select request options, create-success events, install generator setup-note opt-out, and opt-in request-failure surfaces improve integration hooks around rendered fields and host-app setup.
 - The fixed entries below mostly harden request lifecycle docs, suggestion metadata immutability, and table metadata normalization so release reviewers can distinguish user-facing additions from quality fixes.
 
 The detailed entries remain the exhaustive source of truth for release review. Keep proposal or open-PR behavior out of this section until it has landed in the release branch.
@@ -32,6 +32,10 @@ The detailed entries remain the exhaustive source of truth for release review. K
 - `RailsFieldsKit::TableMetadata` for collecting Rails Fields Kit filter/editor metadata from table column definitions and table-like objects that respond to `columns`, including common alias keys such as `filter_input`, `search_filter`, `cell_editor`, and `cell_input`, render shortcuts for collected filters and editors, and duplication safety for collected metadata hashes from hash, hash-like metadata, and hash-like column inputs.
 - `RailsFieldsKit::TableRenderer` for turning table filter/editor metadata into FormBuilder call specs or dispatching them through a form builder, including ordered batch rendering APIs, custom table field helper registration with normalized field/helper names, normalized field type and method handling, duplication safety for metadata options and hash-like options objects, duplicated mapping introspection, and mapping helper APIs.
 - `rfk_table_filters` and `rfk_table_cell_editors` for rendering table metadata directly from a FormBuilder, including mixed hash/object/hash-like columns, enumerator columns, hash-like column inputs, table-like object inputs, custom table helper registrations, reset behavior, and safe-buffer rendering contracts.
+
+#### Install generator
+
+- `rails generate rails_fields_kit:install --skip-setup-notes` lets host apps skip only the generated `doc/rails_fields_kit_setup.md` artifact while still creating `config/initializers/rails_fields_kit.rb` and leaving Tom Select / importmap setup ownership unchanged.
 
 #### JavaScript exports and Tom Select integration
 
