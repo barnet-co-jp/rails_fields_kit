@@ -22,6 +22,9 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm `CHANGELOG.md` has an entry for the release version and date.
 - [ ] Confirm `CHANGELOG.md` has a fresh `Unreleased` section for the next cycle.
 - [ ] Prepare or update `doc/release_notes_0_1_1.md` for the current next-release draft. If release planning chooses a different version number, rename that draft and keep `doc/release_notes_0_1_0.md` as the historical reference.
+- [ ] Compare the release note draft with `CHANGELOG.md` before publishing: treat `CHANGELOG.md` as the exhaustive release-history source and the release note as the reviewer-facing / GitHub-release-facing summary.
+- [ ] Confirm release note highlights are backed by landed `CHANGELOG.md` entries and do not include proposal-only or open-PR behavior.
+- [ ] Confirm major 0.1.1 categories are not one-sided between the release notes and changelog: token search, table metadata, JavaScript exports, request lifecycle, install generator setup-note opt-out, and release-scoped event surfaces.
 - [ ] If request-failure placeholder support is part of the release scope, confirm `CHANGELOG.md` and `doc/release_notes_0_1_1.md` mention `error_surface:` / `error_surface_html:` and `event.detail.surface` without implying built-in retry UI.
 
 ## Documentation
