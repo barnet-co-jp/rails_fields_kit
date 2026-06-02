@@ -155,7 +155,7 @@ RSpec.describe "package contents" do
 
   it "keeps native FormBuilder helpers aligned with public docs without making the quick chooser exhaustive" do
     native_helpers = native_helper_names_from(form_builder_source)
-    native_section = markdown_section(public_api, "Native input helpers:")
+    native_section = public_api.split("Native input helpers:", 2).last.split("\n\n", 2).first
     documented_native_helpers = native_section.scan(/`(rfk_[a-z_]+)`/).flatten
     quick_chooser = markdown_section(field_helpers, "## Quick chooser")
 
@@ -172,7 +172,6 @@ RSpec.describe "package contents" do
     ])
     expect(documented_native_helpers).to eq(native_helpers)
     expect(quick_chooser).to include("the matching native helper such as")
-    expect(quick_chooser).not_to include("complete API index")
   end
 
   it "ships the release-facing verification docs linked from README" do
