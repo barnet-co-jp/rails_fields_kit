@@ -6,18 +6,23 @@ RSpec.describe "Tom Select controller source" do
   let(:source) { File.read(File.expand_path("../../app/javascript/rails_fields_kit/tom_select_controller.js", __dir__)) }
 
   it "announces no-results state through a polite status region" do
-    expect(source).to include('no_results: () => `<div class="no-results" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.noResultsTextValue)}</div>`')
+    expect(source).to include('no_results: () => `<div class="no-results" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.renderText(this.noResultsTextValue, "No results found"))}</div>`')
   end
 
   it "announces loading state through a polite status region" do
-    expect(source).to include('loading: () => `<div class="loading" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.loadingTextValue)}</div>`')
+    expect(source).to include('loading: () => `<div class="loading" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.renderText(this.loadingTextValue, "Loading..."))}</div>`')
   end
 
   it "escapes rich option renderer content before rendering it" do
     expect(source).to include("const label = escape(this.optionLabel(data))")
     expect(source).to include('if (this.hasPresentValue(badge)) parts.push(`<span class="rfk-option-badge">${escape(this.displayValue(badge))}</span>`)')
     expect(source).to include('if (this.hasPresentValue(description)) parts.push(`<div class="rfk-option-description">${escape(this.displayValue(description))}</div>`)')
-    expect(source).to include('option_create: (data, escape) => `<div class="create">${escape(this.createTextValue)} <strong>${escape(data.input)}</strong></div>`')
+    expect(source).to include('option_create: (data, escape) => `<div class="create">${escape(this.renderText(this.createTextValue, "Add"))} <strong>${escape(data.input)}</strong></div>`')
+  end
+
+  it "falls back missing render text values without overriding present values" do
+    expect(source).to include("renderText(value, fallback) {")
+    expect(source).to include("return this.hasPresentValue(value) ? value : fallback")
   end
 
   it "falls back missing option labels to the option value for display only" do
