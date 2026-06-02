@@ -23,9 +23,7 @@
         --shadow: 0 1px 2px rgba(23, 33, 43, 0.06);
       }
 
-      * {
-        box-sizing: border-box;
-      }
+      * { box-sizing: border-box; }
 
       body {
         margin: 0;
@@ -57,16 +55,11 @@
         text-transform: uppercase;
       }
 
-      h1,
-      h2,
-      h3,
-      p {
-        margin: 0;
-      }
+      h1, h2, h3, p { margin: 0; }
 
       h1 {
         max-width: 800px;
-        font-size: clamp(2rem, 4vw, 3rem);
+        font-size: 2.2rem;
         font-weight: 650;
         line-height: 1.08;
       }
@@ -75,10 +68,6 @@
         max-width: 780px;
         color: var(--muted);
         font-size: 1rem;
-      }
-
-      a {
-        color: inherit;
       }
 
       .hero-links,
@@ -122,10 +111,15 @@
         margin-bottom: 24px;
       }
 
-      .summary-item {
+      .summary-item,
+      .family-card,
+      .task-card,
+      .reference-card,
+      .workflow {
         display: grid;
-        gap: 5px;
-        padding: 14px;
+        gap: 12px;
+        align-content: start;
+        padding: 16px;
         border: 1px solid var(--line);
         background: var(--surface);
         box-shadow: var(--shadow);
@@ -136,9 +130,18 @@
         line-height: 1;
       }
 
-      .summary-item span {
+      .summary-item span,
+      .section-heading p,
+      .family-card p,
+      .family-card li,
+      .task-card p,
+      .task-card li,
+      .reference-card p,
+      .reference-card li,
+      .workflow li,
+      .scope-note {
         color: var(--muted);
-        font-size: 0.88rem;
+        font-size: 0.92rem;
       }
 
       .section-heading {
@@ -152,10 +155,7 @@
         line-height: 1.2;
       }
 
-      .section-heading p {
-        max-width: 760px;
-        color: var(--muted);
-      }
+      .section-heading p { max-width: 760px; }
 
       .family-grid,
       .task-grid,
@@ -163,36 +163,6 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 14px;
-      }
-
-      .family-card,
-      .task-card,
-      .reference-card {
-        display: grid;
-        gap: 12px;
-        align-content: start;
-        padding: 16px;
-        border: 1px solid var(--line);
-        background: var(--surface);
-        box-shadow: var(--shadow);
-      }
-
-      .family-card header,
-      .task-card header,
-      .reference-card header {
-        display: grid;
-        gap: 8px;
-      }
-
-      .family-card h3,
-      .task-card h3 {
-        font-size: 1rem;
-        line-height: 1.25;
-      }
-
-      .reference-card h3 {
-        font-size: 1.05rem;
-        line-height: 1.22;
       }
 
       .tag-row {
@@ -233,18 +203,6 @@
         color: var(--warning);
       }
 
-      .family-card p,
-      .family-card li,
-      .task-card p,
-      .task-card li,
-      .reference-card p,
-      .reference-card li,
-      .workflow li,
-      .scope-note {
-        color: var(--muted);
-        font-size: 0.92rem;
-      }
-
       .review-question {
         padding: 10px 12px;
         border-left: 3px solid var(--accent);
@@ -253,26 +211,12 @@
         font-size: 0.92rem;
       }
 
-      .family-card ul,
-      .task-card ul,
-      .reference-card ul,
-      .workflow ol {
+      ul, ol {
         margin: 0;
         padding-left: 20px;
       }
 
-      .reference-link {
-        justify-self: start;
-      }
-
-      .workflow {
-        display: grid;
-        gap: 14px;
-        padding: 16px;
-        border: 1px solid var(--line);
-        background: var(--surface);
-        box-shadow: var(--shadow);
-      }
+      .reference-link { justify-self: start; }
 
       .workflow ol {
         display: grid;
@@ -291,23 +235,18 @@
           padding: 28px 0 44px;
         }
 
-        .summary {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
+        .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       }
 
       @media (max-width: 480px) {
-        .summary {
-          grid-template-columns: 1fr;
-        }
+        h1 { font-size: 1.8rem; }
+        .summary { grid-template-columns: 1fr; }
 
         .hero-links a,
         .quick-list a,
         .task-links a,
         .family-links a,
-        .reference-link {
-          width: 100%;
-        }
+        .reference-link { width: 100%; }
       }
     </style>
   </head>
@@ -353,6 +292,7 @@
           <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
           <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
           <a href="native_field_visual_reference.html">Native helper narrow stress</a>
+          <a href="configuration_wrapper_class_visual_reference.html">Wrapper class configuration</a>
           <a href="table_metadata_visual_reference.html">Table metadata</a>
           <a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a>
         </div>
@@ -392,7 +332,7 @@
                 <span class="tag warning">forms</span>
               </div>
               <h3>Native field wrappers</h3>
-              <p>Use this family for text-like inputs, labels, hints, affixes, validation copy, non-editable states, and narrow viewport stress.</p>
+              <p>Use this family for text-like inputs, labels, hints, affixes, validation copy, non-editable states, and class pass-through checks.</p>
             </header>
             <ul>
               <li>Confirm wrapper density and copy wrapping without treating the artifact as production CSS.</li>
@@ -400,6 +340,7 @@
             </ul>
             <nav class="family-links" aria-label="Native helper family references">
               <a href="native_field_visual_reference.html">Native helper states</a>
+              <a href="configuration_wrapper_class_visual_reference.html">Configured classes</a>
             </nav>
           </article>
 
@@ -460,11 +401,12 @@
               <p>Inspect helper chrome, labels, hint text, native affix readability, configured empty/loading copy, and wrapping behavior.</p>
             </header>
             <ul>
-              <li>Compare native helper layout, long label stress, and text override examples.</li>
+              <li>Compare native helper layout, long label stress, configured wrapper classes, and text override examples.</li>
               <li>Keep native search fields separate from Tom Select-backed search or token suggestions.</li>
             </ul>
             <nav class="task-links" aria-label="Design and copy review references">
               <a href="native_field_visual_reference.html">Native narrow stress</a>
+              <a href="configuration_wrapper_class_visual_reference.html">Wrapper class configuration</a>
               <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
             </nav>
           </article>
@@ -583,6 +525,23 @@
               <li>Do not use this lane to change FormBuilder behavior, generated markup, or Tom Select-backed search behavior.</li>
             </ul>
             <a class="reference-link" href="native_field_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">native helpers</span>
+                <span class="tag info">configuration</span>
+              </div>
+              <h3>Configuration wrapper classes</h3>
+              <p>Initializer-driven wrapper, label, hint, error, control, prefix, and suffix class examples.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers see configured classes as host-app pass-through instead of bundled CSS framework support?</p>
+            <ul>
+              <li>Compare default `rfk-*` classes with host-app classes and validation class examples.</li>
+              <li>Keep framework CSS, spacing, colors, validation copy, and layout integration with the host app.</li>
+            </ul>
+            <a class="reference-link" href="configuration_wrapper_class_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
