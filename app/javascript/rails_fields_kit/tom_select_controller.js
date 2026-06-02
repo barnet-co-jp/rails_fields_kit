@@ -117,9 +117,9 @@ export default class extends Controller {
     return {
       option: (data, escape) => this.optionTemplate(data, escape, "option"),
       item: (data, escape) => this.optionTemplate(data, escape, "item"),
-      no_results: () => `<div class="no-results" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.noResultsTextValue)}</div>`,
-      loading: () => `<div class="loading" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.loadingTextValue)}</div>`,
-      option_create: (data, escape) => `<div class="create">${escape(this.createTextValue)} <strong>${escape(data.input)}</strong></div>`
+      no_results: () => `<div class="no-results" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.renderText(this.noResultsTextValue, "No results found"))}</div>`,
+      loading: () => `<div class="loading" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.renderText(this.loadingTextValue, "Loading..."))}</div>`,
+      option_create: (data, escape) => `<div class="create">${escape(this.renderText(this.createTextValue, "Add"))} <strong>${escape(data.input)}</strong></div>`
     }
   }
 
@@ -452,6 +452,10 @@ export default class extends Controller {
     if (json) return json
 
     return false
+  }
+
+  renderText(value, fallback) {
+    return this.hasPresentValue(value) ? value : fallback
   }
 
   hasPresentValue(value) {
