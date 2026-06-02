@@ -5,7 +5,7 @@ require "pathname"
 
 RSpec.describe "documentation example drift" do
   def read_doc(path)
-    Pathname.new(File.expand_path("../#{path}", __dir__)).read
+    Pathname.new(File.expand_path("../../#{path}", __dir__)).read
   end
 
   it "keeps README and setup JavaScript examples aligned on public entrypoints" do
