@@ -28,3 +28,12 @@ Start from [`visual_reference_index.html`](visual_reference_index.html) when you
 - For token suggestion behavior, delimiter visibility, and saved-search option shape, use [`token_suggestions.md`](token_suggestions.md) as the source of truth and treat the saved-search visual reference as a static review artifact.
 - If a new visual reference is added, update this map, the HTML index, and the README docs map after the reference lands on `main`.
 - Do not use this index to document proposal-only helper names or unmerged feature lanes as current public API.
+
+## Configuration wrapper review bridge
+
+Use this bridge when a release or design review includes [`configuration_wrapper_class_visual_reference.html`](configuration_wrapper_class_visual_reference.html).
+
+- Start from the `Configuration wrapper classes` entry in [`visual_reference_index.html`](visual_reference_index.html) when the reviewer needs a one-screen path, or open the artifact directly when the review is limited to initializer-driven class behavior.
+- Compare the default `rfk-*` lane, the host-app class pass-through lane, and the validation class lane together. Treat those lanes as evidence for rendered class ownership, not as approval of a CSS framework, production stylesheet, or helper markup change.
+- Record evidence in the `Visual reference render checks` matrix in [`sample_app_results.md`](sample_app_results.md) when the artifact changed for the release. If the review happens in a pull request instead, link the rendered artifact or screenshot in the release PR comment and keep the note tied to the same three lanes.
+- Keep configuration API, runtime helper behavior, production CSS ownership, and browser screenshot approval policy outside this bridge. Open a separate issue if those questions need product or maintainer review.
