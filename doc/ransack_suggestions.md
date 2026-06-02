@@ -4,6 +4,8 @@
 
 This helper does not require the `ransack` gem and does not call `Model.ransack`. It only helps the UI expose allowed fields, predicates, values, operators, and saved searches. The host application remains responsible for parsing the submitted token text, mapping it into `params[:q]`, authorization, scoping, and result pagination.
 
+If you are deciding how token suggestions, Ransack-oriented suggestions, table metadata, and future registry proposals relate to each other, start with [`shared_metadata_navigation.md`](shared_metadata_navigation.md).
+
 ## Basic usage
 
 ```ruby
@@ -177,6 +179,8 @@ RailsFieldsKit::RansackSuggestions.build(
 ## Shared metadata source pattern
 
 When a host app keeps one allowed field/operator source for token search, Ransack suggestions, and table filter metadata, derive the Ransack builder input from that source instead of introducing a Rails Fields Kit registry object.
+
+For the current/proposal boundary and the shortest reading order across token suggestions, Ransack suggestions, table metadata, and roadmap material, see [`shared_metadata_navigation.md`](shared_metadata_navigation.md).
 
 ```ruby
 ORDER_SEARCH_FIELDS = {
