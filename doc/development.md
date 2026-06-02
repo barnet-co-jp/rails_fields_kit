@@ -47,11 +47,13 @@ The JavaScript syntax check uses Node 22.x, matching `package.json` and the GitH
 npm run check:js
 ```
 
-This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It also runs lightweight Node sandbox checks for package `exports` import wiring, Tom Select create-on-the-fly JSON request headers, Tom Select error-surface metadata, Tom Select Turbo lifecycle behavior, and Tom Select label fallback rendering, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
+This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It also runs lightweight Node sandbox checks for package `exports` import wiring, Tom Select fixed query params append behavior, Tom Select create-on-the-fly JSON request headers, Tom Select error-surface metadata, Tom Select Turbo lifecycle behavior, and Tom Select label fallback rendering, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
 
 The package export smoke derives package-root named-export expectations from the JavaScript exports table in `doc/public_api.md` and stops reading at the next level-2 heading, so later public API tables are not treated as package-root export rows. It also derives callable helper assertions from rows whose `Kind` marks them as contract readers, while keeping the `TomSelectController` class export, package-root default export, and direct controller entrypoint checks separate.
 
 The Tom Select controller smokes share an internal sandbox harness for the Stimulus and Tom Select stubs, controller import, and cleanup. That harness is repository-local test setup only; it does not add a new JavaScript test framework or change the public package entrypoints.
+
+The fixed query params smoke keeps configured request params visible: scalar values are appended, array values keep all representative entries, `null` / `undefined` values are skipped, and existing query params can coexist with appended params.
 
 The create request header smoke keeps the existing create-on-the-fly contract visible: JSON `Accept` / `Content-Type` headers are always sent, and a Rails CSRF meta token is copied to `X-CSRF-Token` when present without requiring one in non-Rails or test-only DOMs.
 
@@ -89,7 +91,7 @@ Current CI adds these repository-level confirmations on top of the local workflo
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - Representative PR compatibility checks for Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
-- `npm run check:js` on Node 22.x for the JavaScript syntax, package exports import lane, Tom Select create request header smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, and Tom Select label fallback smoke
+- `npm run check:js` on Node 22.x for the JavaScript syntax, package exports import lane, Tom Select fixed query params smoke, Tom Select create request header smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, and Tom Select label fallback smoke
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 
 ## Release-related checks
