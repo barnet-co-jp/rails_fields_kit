@@ -36,6 +36,8 @@ The repository documentation drift spec covers two narrow repository-maintenance
 
 The setup example documentation drift spec keeps the JavaScript setup signals in `README.md` and `doc/setup.md` aligned for package-root imports, direct controller imports, bundler aliases, and importmap pins without freezing the full prose.
 
+The suggestion payload documentation drift spec keeps `TokenSuggestions` and `RansackSuggestions` docs aligned with representative option payload keys, custom output field names, and Ransack metadata keys without freezing full examples or prose.
+
 Representative compatibility checks are also useful before review or release:
 
 ```bash
