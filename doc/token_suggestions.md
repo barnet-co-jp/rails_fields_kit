@@ -4,6 +4,8 @@
 
 For a static visual reference of how saved-search suggestions read beside field and value completions, see [`token_search_saved_search_visual_reference.html`](token_search_saved_search_visual_reference.html).
 
+If you are deciding how token suggestions, Ransack-oriented suggestions, table metadata, and future registry proposals relate to each other, start with [`shared_metadata_navigation.md`](shared_metadata_navigation.md).
+
 ## Basic usage
 
 ```ruby
@@ -141,6 +143,8 @@ This is intentional current behavior for suggestion filtering. Saved-search sugg
 ## Shared metadata source pattern
 
 Applications can keep their own field and operator metadata in one place, then pass derived views of that source into the current builders. This is the first feature-gate direction for field/operator suggestion registries: a docs pattern that avoids adding a public Rails Fields Kit registry object.
+
+For the current/proposal boundary and the shortest reading order across token suggestions, Ransack suggestions, table metadata, and roadmap material, see [`shared_metadata_navigation.md`](shared_metadata_navigation.md).
 
 ```ruby
 ORDER_SEARCH_FIELDS = {
