@@ -17,6 +17,7 @@ bundle exec rake build
 ```
 
 - Before release, rerun those local checks on the latest `main` and confirm GitHub Actions CI succeeds for the exact release candidate commit.
+- The GitHub Actions Rails compatibility matrix runs for pull requests and `main` pushes using the same representative Rails 7.0 / Ruby 3.1 and Rails 8.0 / Ruby 3.3 lanes. Keep the matrix representative rather than expanding release evidence into a full Rails/Ruby cross-product.
 
 ## Pre-release checklist
 
@@ -60,7 +61,9 @@ bundle exec rake build
 
 7. Confirm the latest GitHub Actions CI run is green for the commit you plan to release.
 
-   This is the final branch-head confirmation for lint, RSpec, JavaScript syntax, and gem package/install smoke checks. The gem package check also verifies that the built artifact contains `package.json` and the JavaScript files referenced by its public `exports` map.
+   This is the final branch-head confirmation for lint, RSpec, JavaScript syntax, gem package/install smoke checks, and the representative Rails compatibility matrix. The gem package check also verifies that the built artifact contains `package.json` and the JavaScript files referenced by its public `exports` map.
+
+   The compatibility matrix intentionally stays small: it confirms the oldest supported representative lane and the current Rails 8 representative lane on pull requests and on `main` after merge. Do not add every Rails/Ruby combination unless release planning explicitly accepts the extra CI time and maintenance cost.
 
 8. Review documentation.
 
