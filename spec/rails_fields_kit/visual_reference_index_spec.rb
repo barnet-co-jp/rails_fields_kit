@@ -28,6 +28,23 @@ RSpec.describe "visual reference documentation index" do
     expect(html_index).to include("List only references that have landed on main.")
   end
 
+  it "keeps the README docs map pointed at the maintained visual reference family" do
+    expect(readme_visual_reference_row).to include("[`doc/visual_references.md`](doc/visual_references.md)")
+    expect(readme_visual_reference_row).not_to match(%r{doc/[^\s|]*_visual_reference\.html})
+
+    [
+      "visual reference family",
+      "Tom Select",
+      "text override",
+      "native helper",
+      "table metadata",
+      "saved-search token"
+    ].each do |representative_term|
+      expect(readme_visual_reference_row).to include(representative_term),
+        "expected README visual reference row to mention #{representative_term.inspect}"
+    end
+  end
+
   private
 
   def visual_reference_links(source)
@@ -52,12 +69,20 @@ RSpec.describe "visual reference documentation index" do
     html_index.scan(/href="#{Regexp.escape(reference)}"/).size
   end
 
+  def readme_visual_reference_row
+    readme.lines.find { |line| line.include?("doc/visual_references.md") } || ""
+  end
+
   def markdown_map
     File.read(repository_root.join("doc/visual_references.md"))
   end
 
   def html_index
     File.read(repository_root.join("doc/visual_reference_index.html"))
+  end
+
+  def readme
+    File.read(repository_root.join("README.md"))
   end
 
   def repository_root
