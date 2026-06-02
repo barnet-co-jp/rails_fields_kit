@@ -109,6 +109,45 @@ For a copyable host-app example that turns submitted token text into `params[:q]
 
 The helper-level DSL shown in `ROADMAP.md`, such as `rfk_table_filters @table_preferences, adapter: :ransack`, is still a future proposal. Current integrations should keep preparing metadata first and then render it through `rfk_table_filters(columns)`.
 
+## Shared metadata source pattern
+
+When token suggestions, Ransack suggestions, and table filters should advertise the same allowed fields, keep that metadata in the host app and pass derived maps into each current Rails Fields Kit surface. This is a docs pattern, not a public registry object.
+
+```ruby
+ORDER_SEARCH_FIELDS = {
+  status: {
+    label: "Status",
+    values: %w[open closed],
+    ransack_predicate: :status_eq
+  },
+  assignee: {
+    label: "Assignee",
+    ransack_predicate: :assignee_name_cont
+  }
+}.freeze
+
+ransack_fields = ORDER_SEARCH_FIELDS.transform_values do |config|
+  {
+    label: config.fetch(:label),
+    predicate: config.fetch(:ransack_predicate),
+    values: config[:values]
+  }.compact
+end
+
+filter = RailsFieldsKit::TableFilterInput.ransack_filter(
+  :query,
+  fields: ransack_fields,
+  url: search_tokens_path(format: :json),
+  param_name: :q
+)
+```
+
+Use the same derived `ransack_fields` map with `RailsFieldsKit::RansackSuggestions.build` when the token suggestion endpoint should expose the same predicates. Use a smaller view of `ORDER_SEARCH_FIELDS` with `RailsFieldsKit::TokenSuggestions.build` when the endpoint only needs general field and value suggestions.
+
+Rails Fields Kit still only receives ordinary builder arguments and table metadata. The host app owns the allowed-field source, current-user filtering, submitted token parsing, `params[:q]` construction, authorization, and Ransack execution.
+
+For the suggestion-builder views of the same source, see [`token_suggestions.md`](token_suggestions.md#shared-metadata-source-pattern) and [`ransack_suggestions.md`](ransack_suggestions.md#shared-metadata-source-pattern).
+
 ## Native field metadata
 
 `TableFilterInput` and `TableCellInput` also cover the native helper family listed in [`public_api.md`](public_api.md), so a table integration can stay metadata-first even when it does not need Tom Select.
