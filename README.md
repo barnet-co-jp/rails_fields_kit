@@ -49,6 +49,22 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | Prepare or verify a release | [`doc/release.md`](doc/release.md), [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/selected_preload_release_gate.md`](doc/selected_preload_release_gate.md) |
 | Review release-facing notes | [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md), [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) |
 
+## First field quickstart
+
+After the gem install, generator, Tom Select package install, Stimulus controller registration, and Tom Select CSS import are in place, try the first field with a server-rendered collection before adding remote endpoints:
+
+```erb
+<%= form_with model: @order do |f| %>
+  <%= f.rfk_select :customer_id,
+    collection: @customers,
+    collection_value_method: :id,
+    collection_label_method: :name,
+    include_blank: "Select a customer" %>
+<% end %>
+```
+
+This keeps the submitted params the same shape as an ordinary Rails select while confirming that the Rails helper, Stimulus controller, and Tom Select assets are wired together. Move to `rfk_combobox` only when the host app needs remote search, selected preload, or create-on-the-fly behavior; the host app still owns those endpoints, authorization, scoping, and any result execution. Use [`doc/setup.md`](doc/setup.md) for the full setup walkthrough and [`doc/field_helpers.md`](doc/field_helpers.md) when choosing the next helper.
+
 ## Choosing a helper
 
 - Use `rfk_select` when you already have a server-rendered collection and want the submitted param shape to stay the same as an ordinary Rails select.
