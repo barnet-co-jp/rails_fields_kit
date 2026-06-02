@@ -4,6 +4,7 @@ This document summarizes the public API intended to be stable for the 0.1.x seri
 
 ## Quick navigation
 
+- [Surface summary](#surface-summary)
 - [Ruby entrypoint](#ruby-entrypoint)
 - [Configuration](#configuration)
 - [FormBuilder helpers](#formbuilder-helpers)
@@ -16,6 +17,20 @@ This document summarizes the public API intended to be stable for the 0.1.x seri
 - [Stimulus events](#stimulus-events)
 - [Internal implementation details](#internal-implementation-details)
 - [Compatibility policy](#compatibility-policy)
+
+## Surface summary
+
+| Area | Current public surface | Detailed docs |
+| --- | --- | --- |
+| Ruby setup | `require "rails_fields_kit"`, `RailsFieldsKit.configure`, configuration accessors | [`configuration.md`](configuration.md) |
+| FormBuilder helpers | Tom Select-backed helpers, table metadata helpers, and native wrapper helpers | [`field_helpers.md`](field_helpers.md), [`select_migration.md`](select_migration.md) |
+| Controller helpers | Remote option JSON, selected preload, create-on-the-fly, and token suggestion endpoint helpers | [`controller_helpers.md`](controller_helpers.md) |
+| Token suggestions | Builder objects for token suggestion metadata and Ransack-compatible suggestion metadata | [`token_suggestions.md`](token_suggestions.md), [`ransack_suggestions.md`](ransack_suggestions.md) |
+| Table metadata | Metadata objects, collector methods, call-spec helpers, and renderer helpers for optional table integrations | [`table_adapters.md`](table_adapters.md) |
+| JavaScript package root | `TomSelectController` plus read-only rendered-field contract helpers | [JavaScript exports](#javascript-exports) |
+| Stimulus integration | FormBuilder-generated values, lifecycle expectations, and controller events | [`events.md`](events.md) |
+
+Use the sections below for the exact public names. The linked docs provide examples and host-app responsibility boundaries; this file is the compact public API index.
 
 ## Ruby entrypoint
 
@@ -114,6 +129,15 @@ Public classes:
 - `RailsFieldsKit::TableRenderer`
 - `RailsFieldsKit::TableMetadata`
 
+Class responsibilities:
+
+| Class | Public role | Notes |
+| --- | --- | --- |
+| `RailsFieldsKit::TableFilterInput` | Describes a filter UI that can later be rendered with Rails Fields Kit helpers. | Includes factory methods for built-in field types and `ransack_filter` for Ransack-compatible token-search metadata. |
+| `RailsFieldsKit::TableCellInput` | Describes an editable cell UI that can later be rendered with Rails Fields Kit helpers. | Mirrors the built-in field type family used by filter metadata, without the Ransack-specific filter entrypoint. |
+| `RailsFieldsKit::TableMetadata` | Collects filter and cell editor metadata from columns or table-like objects. | Can return metadata hashes, FormBuilder call specs, or ordered render result arrays. |
+| `RailsFieldsKit::TableRenderer` | Maps metadata into FormBuilder helper calls or render results. | Owns the field type registry and custom helper mapping for table integrations. |
+
 Public metadata methods are grouped by class so reviewers can scan the contract without reading one long mixed list.
 
 ### TableFilterInput methods
@@ -200,13 +224,17 @@ The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_typ
 
 ## JavaScript exports
 
-Current package-root exports from `rails_fields_kit`:
+Package-root imports use the documented `rails_fields_kit` entrypoint. The current exports are split between the Stimulus controller and read-only rendered-field contract readers.
+
+### Current package-root exports
 
 | Export | Kind | Responsibility boundary |
 | --- | --- | --- |
 | `TomSelectController` | Stimulus controller | Registers Rails Fields Kit's Tom Select-backed field behavior on the rendered element. Host apps still own Stimulus boot, Tom Select installation, endpoint behavior, authorization, query parsing, visible feedback copy, and retry UI. |
 | `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
+
+### Import patterns
 
 Package-root imports use the documented entrypoint:
 
@@ -226,6 +254,8 @@ Direct controller import is also supported when the host app wants only the cont
 ```js
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
+
+### Contract reader boundary
 
 Rendered-field contract helpers stay read-only. They inspect data attributes and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance or duplicating wrapper traversal.
 
