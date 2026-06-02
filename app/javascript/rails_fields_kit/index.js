@@ -6,6 +6,7 @@ const TEXT_OVERRIDE_ATTRIBUTES = {
   loadingText: "data-rails-fields-kit--tom-select-loading-text-value",
   createText: "data-rails-fields-kit--tom-select-create-text-value"
 }
+const PLUGINS_ATTRIBUTE = "data-rails-fields-kit--tom-select-plugins-value"
 const NATIVE_FIELD_TAGS = new Set(["input", "select", "textarea"])
 const NATIVE_FIELD_WRAPPER_SELECTOR = ".rfk-field"
 const NATIVE_FIELD_HINT_CLASS = "rfk-hint"
@@ -18,6 +19,17 @@ function hasTomSelectController(element) {
 
 function textOverrideValue(element, attributeName) {
   return element.hasAttribute(attributeName) ? element.getAttribute(attributeName) : null
+}
+
+function pluginValues(element) {
+  if (!element.hasAttribute(PLUGINS_ATTRIBUTE)) return []
+
+  try {
+    const plugins = JSON.parse(element.getAttribute(PLUGINS_ATTRIBUTE))
+    return Array.isArray(plugins) ? plugins : []
+  } catch {
+    return []
+  }
 }
 
 function isNativeFormControl(element) {
@@ -63,6 +75,19 @@ export function tomSelectTextOverrideContract(element) {
   if (!hasTomSelectController(element) && Object.values(contract).every((value) => value === null)) return null
 
   return contract
+}
+
+export function tomSelectPluginContract(element) {
+  if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function") return null
+  if (!hasTomSelectController(element) && !element.hasAttribute(PLUGINS_ATTRIBUTE)) return null
+
+  const plugins = pluginValues(element)
+
+  return {
+    plugins,
+    hasClearButton: plugins.includes("clear_button"),
+    hasRemoveButton: plugins.includes("remove_button")
+  }
 }
 
 export function nativeFieldAccessibilityContract(element) {
