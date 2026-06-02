@@ -20,6 +20,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `lib/rails_fields_kit/searchable.rb`: controller-side search, find, create, and token suggestion helpers
 - `lib/rails_fields_kit/table_*`: table metadata and renderer support
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app setup note
+- `doc/support_boundary.md`: supported Ruby / Rails / Node boundaries and representative CI evidence
 - `doc/visual_references.md`: maintained map for the static visual reference family and each artifact's scope
 - `doc/visual_reference_index.html`: static index for choosing the right visual reference artifact during design or release review
 - `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states
@@ -34,7 +35,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 
 ## Docs sync rules
 
-- Keep `README.md`, `doc/setup.md`, `doc/public_api.md`, `doc/field_helpers.md`, `doc/controller_helpers.md`, `doc/configuration.md`, `doc/token_suggestions.md`, `doc/ransack_suggestions.md`, `doc/table_adapters.md`, `doc/select_migration.md`, `doc/events.md`, `doc/tom_select_turbo_lifecycle.md`, and any affected topic doc aligned when the current public surface changes.
+- Keep `README.md`, `doc/setup.md`, `doc/support_boundary.md`, `doc/public_api.md`, `doc/field_helpers.md`, `doc/controller_helpers.md`, `doc/configuration.md`, `doc/token_suggestions.md`, `doc/ransack_suggestions.md`, `doc/table_adapters.md`, `doc/select_migration.md`, `doc/events.md`, `doc/tom_select_turbo_lifecycle.md`, and any affected topic doc aligned when the current public surface or support boundary changes.
 - Do not document roadmap examples as current public API unless the code and `doc/public_api.md` already support them.
 - Keep host-app responsibilities explicit. Rails Fields Kit does not own query parsing, authorization, pagination, or the host app's JavaScript package manager setup.
 - When setup guidance or docs discoverability changes, sync `README.md`, `doc/setup.md`, `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`, and root inventory docs such as `Product Profile.md` when they summarize maintainer-facing entrypoints.
@@ -52,6 +53,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 Before release-oriented docs updates, review:
 
 - `CHANGELOG.md`
+- `doc/support_boundary.md`
 - `doc/release.md`
 - `doc/final_release_checklist.md`
 - `doc/selected_preload_release_gate.md`
