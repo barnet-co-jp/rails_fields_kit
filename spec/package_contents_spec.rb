@@ -155,7 +155,7 @@ RSpec.describe "package contents" do
 
   it "keeps native FormBuilder helpers aligned with public docs without making the quick chooser exhaustive" do
     native_helpers = native_helper_names_from(form_builder_source)
-    native_section = public_api.split("Native input helpers:", 2).last.split("\n\n", 2).first
+    native_section = public_api.match(/Native input helpers:\n\n(?<list>(?:- `rfk_[a-z_]+`\n)+)/)[:list]
     documented_native_helpers = native_section.scan(/`(rfk_[a-z_]+)`/).flatten
     quick_chooser = markdown_section(field_helpers, "## Quick chooser")
 
