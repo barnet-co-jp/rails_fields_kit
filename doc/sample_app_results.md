@@ -2,6 +2,17 @@
 
 Use this file to record manual verification results before publishing a release.
 
+Use the route map below to choose the evidence lane for the release or PR under review. Keep release-wide checks separate from feature-specific evidence; this file records what was manually verified, not a new release gate or runtime contract.
+
+| Review goal | Start with | Use when |
+| --- | --- | --- |
+| Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. |
+| JavaScript setup | JavaScript setup checks, event checks, Turbo reconnect checks | The release touches package-root exports, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. |
+| Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, native wrapper customization checks | Native helper wrapper, class, hint/error, affix, or accessibility wiring changed. |
+| Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. |
+| Remote lifecycle feedback | Selected preload representative lane checks, create-on-the-fly representative failure lane checks, visible feedback checks | Selected preload, remote search, create-on-the-fly, request-failure, or visible fallback behavior changed. |
+| Token and table metadata | Token suggestion and Ransack suggestion metadata checks, table metadata checks | Token suggestions, saved-search metadata, Ransack metadata, table filters, or cell editor metadata changed. |
+
 ## Target release
 
 - Version:
