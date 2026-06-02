@@ -512,6 +512,7 @@
       <div class="review-strip" aria-label="Review checklist summary">
         <span class="review-pill">State comparison first</span>
         <span class="review-pill">Generated aria id scan</span>
+        <span class="review-pill">Rendered contract reader scan</span>
         <span class="review-pill">Desktop and narrow viewport scan</span>
         <span class="review-pill">Static artifact only</span>
         <span class="review-pill">No helper or runtime behavior changes</span>
@@ -756,6 +757,42 @@
         </article>
 
         <article class="card">
+          <div class="tag accessibility">Rendered contract reader</div>
+          <h2>Helper-readable wrapper, hint, and error lane</h2>
+          <p>
+            `nativeFieldAccessibilityContract(element)` reads the rendered pieces only; this lane shows
+            which visual elements map to ids, hint, error, and wrapper without changing native helper markup.
+          </p>
+          <div class="example accessibility-surface">
+            <div class="field-block error-state">
+              <div class="label-row">
+                <span>Support escalation email</span>
+                <span class="required">Required</span>
+              </div>
+              <div class="control-row">
+                <div class="input">ops-team.example.com</div>
+              </div>
+              <div class="hint">id="support_escalation_email_hint"; read as `hintElement`.</div>
+              <div class="error">id="support_escalation_email_error"; read as `errorElement`.</div>
+            </div>
+            <div class="metadata-list">
+              <div class="metadata-row">
+                <span class="metadata-key">`describedByIds`</span>
+                <span class="metadata-value">`support_escalation_email_hint`, `support_escalation_email_error`.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">`wrapperElement`</span>
+                <span class="metadata-value">Nearest `.rfk-field`; the helper does not create or restyle the wrapper.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">No-config lane</span>
+                <span class="metadata-value">Missing hint or error stays `null` / empty array instead of being inferred.</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
           <div class="tag accessibility">Accessibility boundary</div>
           <h2>Shared wiring versus host-app opt-out</h2>
           <p>
@@ -847,6 +884,7 @@
           <span>Keyboard focus remains visible around affix-heavy fields and text areas.</span>
           <span>Field-level wrapper customization layers extra attributes onto the same generated pieces.</span>
           <span>Disabled and readonly remain in the same native helper family while changing editability cues.</span>
+          <span>Rendered accessibility contract reader maps wrapper, hint, error, and describedby ids without owning markup.</span>
           <span>Accessibility boundary stays explicit when the host app opts out.</span>
           <span>Generated id wiring remains visible without claiming #624's behavior/spec decision.</span>
         </div>
