@@ -33,6 +33,7 @@ For a representative edit-form lane that uses `selected_url:` or `error_surface:
 - [ ] If this app uses importmap, run `rails generate rails_fields_kit:install --importmap` when `config/importmap.rb` exists, or add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] When host-app scripts import from `rails_fields_kit`, use `doc/public_api.md#javascript-exports` to confirm the current package-root exports and the rendered-field contract helper boundary.
 - [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.
+- [ ] Start with the README first field quickstart or setup guide `rfk_select` lane when this app only needs to confirm a server-rendered collection before adding remote endpoints.
 - [ ] Add the first `rfk_combobox` field and matching `rfk_search_with` / `rfk_find_with` / `rfk_create_with` endpoints.
 - [ ] Use `doc/controller_helpers.md` for the maintained endpoint option reference, including custom `action:` names.
 - [ ] If this app is replacing a server-rendered `collection_select`, review the practical `rfk_select` migration guide before adding extra reinitializers or controller glue.
