@@ -4,6 +4,13 @@ This guide is the maintained setup walkthrough for Rails Fields Kit.
 
 Use the generated `doc/rails_fields_kit_setup.md` in your host app as a short checklist and place for app-specific notes. Host apps that keep setup notes elsewhere can run the install generator with `--skip-setup-notes`; that skips only the generated docs artifact while this guide remains the maintained source of truth. When the setup flow changes, update this file first and keep the generated note focused on linking back here.
 
+Before reading the JavaScript examples, choose the route that matches the host app's existing toolchain:
+
+- Bundler / Vite route: install Tom Select with the app's package manager, register the Rails Fields Kit Stimulus controller on the Stimulus application the app already boots, and add a bundler alias when the gem's `app/javascript` entrypoints are not resolved automatically.
+- Importmap route: keep Tom Select on the host app's normal pinning flow, add the Rails Fields Kit pins with the opt-in generator or manually, and register the same Stimulus controller from the file where the app already boots Stimulus.
+
+Both routes use the same controller identifier and helper markup. Rails Fields Kit does not choose the JavaScript policy for the host app; it only documents the package entrypoints and, for importmap users, provides an opt-in generator path for its own pins. If Stimulus is already started elsewhere, reuse that application instead of calling `Application.start()` again.
+
 ## 1. Add the gem
 
 ```ruby
