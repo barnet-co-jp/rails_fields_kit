@@ -12,6 +12,12 @@ RSpec.describe "package contents" do
   let(:product_profile) { File.read(product_profile_path) }
   let(:visual_references_path) { File.expand_path("../doc/visual_references.md", __dir__) }
   let(:visual_references) { File.read(visual_references_path) }
+  let(:public_api_path) { File.expand_path("../doc/public_api.md", __dir__) }
+  let(:public_api) { File.read(public_api_path) }
+  let(:field_helpers_path) { File.expand_path("../doc/field_helpers.md", __dir__) }
+  let(:field_helpers) { File.read(field_helpers_path) }
+  let(:form_builder_path) { File.expand_path("../lib/rails_fields_kit/form_builder.rb", __dir__) }
+  let(:form_builder_source) { File.read(form_builder_path) }
   let(:generated_setup_note_path) do
     File.expand_path("../lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md", __dir__)
   end
@@ -147,6 +153,27 @@ RSpec.describe "package contents" do
     )
   end
 
+  it "keeps native FormBuilder helpers aligned with public docs without making the quick chooser exhaustive" do
+    native_helpers = native_helper_names_from(form_builder_source)
+    native_section = public_api.match(/Native input helpers:\n\n(?<list>(?:- `rfk_[a-z_]+`\n)+)/)[:list]
+    documented_native_helpers = native_section.scan(/`(rfk_[a-z_]+)`/).flatten
+    quick_chooser = markdown_section(field_helpers, "## Quick chooser")
+
+    expect(native_helpers).to eq(%w[
+      rfk_text_field
+      rfk_text_area
+      rfk_number_field
+      rfk_money_field
+      rfk_percent_field
+      rfk_email_field
+      rfk_url_field
+      rfk_phone_field
+      rfk_search_field
+    ])
+    expect(documented_native_helpers).to eq(native_helpers)
+    expect(quick_chooser).to include("the matching native helper such as")
+  end
+
   it "ships the release-facing verification docs linked from README" do
     expect(specification.files).to include(
       "doc/development.md",
@@ -157,5 +184,15 @@ RSpec.describe "package contents" do
       "doc/release_notes_0_1_1.md",
       "doc/release_notes_0_1_0.md"
     )
+  end
+
+  def native_helper_names_from(source)
+    source.scan(/^    def (rfk_[a-z_]+).*?\n(.*?)^    end/m).filter_map do |helper_name, body|
+      helper_name if body.include?("rfk_native_field(")
+    end
+  end
+
+  def markdown_section(document, heading)
+    document.split(heading, 2).last.split(/\n(?=##?\s)/, 2).first
   end
 end
