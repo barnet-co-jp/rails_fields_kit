@@ -28,8 +28,10 @@ Rails Fields Kit ships JavaScript entrypoints for the Stimulus controller and pa
 
 The repository JavaScript check uses Node 22.x because `package.json` declares `engines.node` as `22.x` and the GitHub Actions `javascript` job runs `npm run check:js` on Node 22. This is the boundary for repository-local JavaScript checks and package export smoke tests.
 
-Host applications still need to install Tom Select and register the Rails Fields Kit Stimulus controller with their own JavaScript toolchain. See `doc/setup.md` for setup examples and `doc/development.md` for local check commands.
+That Node 22.x boundary is not a Tom Select runtime support policy for host applications. Rails Fields Kit does not publish a required Tom Select package version, pin source, CDN source, plugin list, plugin asset policy, or package-manager lockfile policy. Host applications choose and review those Tom Select runtime dependencies through their own JavaScript toolchain.
+
+Host applications still need to install Tom Select, load any Tom Select CSS or plugin assets they enable, and register the Rails Fields Kit Stimulus controller with their own JavaScript toolchain. See `doc/setup.md` for setup examples and `doc/development.md` for local check commands.
 
 ## What this page does not define
 
-This page does not add support for new Ruby, Rails, or Node versions. It also does not change CI matrix coverage, package metadata, generator behavior, Tom Select installation, bundler setup, importmap pinning, or host-app runtime responsibility.
+This page does not add support for new Ruby, Rails, or Node versions. It also does not change CI matrix coverage, package metadata, generator behavior, Tom Select installation, Tom Select version ownership, plugin asset ownership, bundler setup, importmap pinning, or host-app runtime responsibility.
