@@ -94,6 +94,18 @@ Host app responsibilities should remain explicit:
 - parsing submitted token search text into Ransack params
 - handling authorization, scoping, and result pagination
 
+Feature gate: shared field/operator metadata registry (#405)
+
+The smallest useful slice is a docs/proposal pattern for a host app owned metadata source that can feed existing Rails Fields Kit surfaces:
+
+- `TokenSuggestions.build` for general token, field, predicate, value, and saved-search suggestion option JSON
+- `RansackSuggestions.build` when the same field list needs Ransack predicate metadata in suggestion payloads
+- `TableFilterInput.ransack_filter` when table-oriented metadata should point at the same allowed field/predicate set
+
+This is not a current public registry API. The first step should document how applications can keep one allowed field/operator map and pass derived views of it into the current builders. A future Ruby registry object should be split into its own feature issue, and a sample drift check should be split into a quality issue if it becomes useful.
+
+The registry direction must not move query parsing, Active Record relation construction, authorization, allowed predicate enforcement, or Ransack configuration into Rails Fields Kit. Those remain host app responsibilities even when suggestion metadata is centralized.
+
 Future proposal, not current public API:
 
 ```erb
@@ -179,7 +191,7 @@ These are useful proposals, not current public API, and should not distract from
 
 - mention fields for `@user` or `#tag` style textarea interactions; see #367
 - saved search selectors; see #377
-- field/operator suggestion registries; see #405
+- field/operator suggestion registries; see #405. The first accepted gate is docs/proposal only; do not add a public Ruby registry before a follow-up feature issue accepts that API.
 - slug helpers for title-to-slug workflows; see #373
 - masked inputs only if a clear Rails integration gap remains; see #378
 
