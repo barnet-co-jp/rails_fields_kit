@@ -69,12 +69,19 @@ bundle exec rake build
    - `AGENTS.md`
    - `CHANGELOG.md`
    - `doc/setup.md`
+   - `doc/support_boundary.md`
    - `doc/public_api.md`
    - `doc/select_migration.md`
    - `doc/field_helpers.md`
+   - `doc/visual_references.md`
+   - `doc/visual_reference_index.html`
    - `doc/tom_select_visual_reference.html`
+   - `doc/tom_select_request_failure_visual_reference.html`
+   - `doc/tom_select_text_override_visual_reference.html`
    - `doc/native_field_visual_reference.html`
+   - `doc/configuration_wrapper_class_visual_reference.html`
    - `doc/table_metadata_visual_reference.html`
+   - `doc/token_search_saved_search_visual_reference.html`
    - `doc/controller_helpers.md`
    - `doc/token_suggestions.md`
    - `doc/ransack_suggestions.md`
@@ -89,6 +96,8 @@ bundle exec rake build
    - `doc/final_release_checklist.md`
    - `doc/release.md`
    - `doc/release_notes_0_1_1.md` for the current next-release draft
+
+   Use `doc/visual_references.md` and `doc/visual_reference_index.html` as the review entrypoints for the static visual reference family, then open the individual artifact that matches the release surface. Do not treat proposal-only lanes or unmerged visual references as release-ready evidence.
 
    While reviewing `CHANGELOG.md` and the release note draft, keep their roles separate: `CHANGELOG.md` is the exhaustive release-history source, and `doc/release_notes_0_1_1.md` is the reviewer-facing and GitHub-release-facing summary. Confirm the release note highlights are backed by landed `Unreleased` entries, avoid proposal or open-PR behavior, and check that major categories such as token search, table metadata, JavaScript exports, request lifecycle, install generator, and release-scoped event surfaces are not missing from one side.
 
