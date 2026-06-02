@@ -23,6 +23,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 - `rfk_token_suggestions_with` for lightweight token suggestion JSON endpoints that can use static suggestions, controller methods, or callables.
 - `RailsFieldsKit::TokenSuggestions.build` for composing operator, field, predicate, value, and saved-search suggestion option JSON.
 - `RailsFieldsKit::RansackSuggestions.build` for composing Ransack-compatible token suggestion metadata without requiring or executing Ransack, including predicate aliases, custom output field mappings, and mutation-safe value metadata handling.
+- Host-app owned shared field/operator metadata can now be documented as a reusable pattern across `RailsFieldsKit::TokenSuggestions.build`, `RailsFieldsKit::RansackSuggestions.build`, and `RailsFieldsKit::TableFilterInput.ransack_filter` without introducing a public Ruby registry API; token parsing, authorization, Ransack configuration, and search execution remain host-app responsibilities.
 
 #### Table metadata and rendering
 
