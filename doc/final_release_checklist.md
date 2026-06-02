@@ -65,6 +65,10 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm future package-root helper exports are added to `doc/public_api.md#javascript-exports` before being added to this release verification matrix.
 - [ ] Confirm token search and table integration docs still distinguish gem responsibilities from host app responsibilities.
 - [ ] Confirm release-prep docs, `doc/events.md`, and sample app verification all agree on whether create-on-the-fly success uses a dedicated `rails-fields-kit--tom-select:create` hook or only the generic selection events.
+- [ ] For downstream host-app adoption reviews, record the upstream Rails Fields Kit evidence and host-app smoke separately before publishing or recommending a pinned ref:
+  - [ ] Upstream evidence comes from current Rails Fields Kit docs and package checks, such as `doc/public_api.md`, `doc/setup.md`, `doc/field_helpers.md`, `doc/controller_helpers.md`, `doc/table_adapters.md`, `doc/events.md`, `doc/configuration.md`, the visual reference index, and JavaScript export smoke checks.
+  - [ ] Downstream smoke records the host app surface checked, such as the pinned ref, JavaScript controller wiring, initializer, representative form, preload or selected-value lane, invalid rerender, rollback target, and evidence location.
+  - [ ] Keep host-app-specific field names, params, validation copy, authorization, endpoint behavior, and target SHA decisions in the downstream issue or PR rather than treating them as Rails Fields Kit public contract.
 
 ## Generated files
 
