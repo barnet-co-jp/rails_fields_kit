@@ -165,7 +165,7 @@ RailsFieldsKit::TokenSuggestions.build(
 
 Use this pattern when the host app wants one allowed field list to feed token suggestions, Ransack-oriented suggestions, and table filter metadata. Rails Fields Kit still receives ordinary `fields:`, `operators:`, and `predicates:` arguments; it does not own the registry, enforce authorization, or parse submitted tokens.
 
-For the Ransack-specific view of the same metadata source, see [`ransack_suggestions.md`](ransack_suggestions.md#shared-metadata-source-pattern).
+For the Ransack-specific view of the same metadata source, see [`ransack_suggestions.md`](ransack_suggestions.md#shared-metadata-source-pattern). For the table filter metadata view, see [`table_adapters.md`](table_adapters.md#shared-metadata-source-pattern).
 
 ## Responsibility boundary
 

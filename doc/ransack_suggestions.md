@@ -204,7 +204,7 @@ RailsFieldsKit::RansackSuggestions.build(fields: ransack_fields)
 
 The same `ransack_fields` map can also be passed to `RailsFieldsKit::TableFilterInput.ransack_filter` when table metadata should advertise the same allowed predicates. The host app still decides whether submitted tokens become `params[:q]`, which predicates are allowed for the current user, and how Ransack is executed.
 
-For the general token suggestion view of the same metadata source, see [`token_suggestions.md`](token_suggestions.md#shared-metadata-source-pattern).
+For the general token suggestion view of the same metadata source, see [`token_suggestions.md`](token_suggestions.md#shared-metadata-source-pattern). For the table filter metadata view, see [`table_adapters.md`](table_adapters.md#shared-metadata-source-pattern).
 
 ## Responsibility boundary
 
