@@ -30,6 +30,7 @@ rfk_search_with(
   order: { name: :asc },
   distinct: true,
   limit: 20,
+  minimum_query_length: 1,
   wrap: "options"
 )
 ```
@@ -43,10 +44,32 @@ rfk_search_with(
 - `search:` columns searched with the query string.
 - `query_param:` request parameter name for the query. Defaults to `q`.
 - `limit:` maximum number of records. Defaults to `20`.
+- `minimum_query_length:` endpoint-side minimum query length. Defaults to `0`, preserving blank-query initial options.
 - `scope:` base relation. Supports relation object, symbol scope, or callable evaluated in the controller instance.
 - `order:` order passed to the relation.
 - `distinct:` calls `distinct` before ordering/limiting.
 - `wrap:` wraps the JSON response, commonly `"options"`.
+
+### Blank query policy
+
+By default, `rfk_search_with` allows a blank query and returns the limited initial option list from the scoped relation. This keeps existing remote selects and comboboxes compatible with preload-style option lists.
+
+Use `minimum_query_length:` when the endpoint itself should return no options until the incoming query is long enough:
+
+```ruby
+rfk_search_with(
+  model: Customer,
+  value: :id,
+  label: :name,
+  search: [:name, :email],
+  minimum_query_length: 1,
+  wrap: "options"
+)
+```
+
+When the query is shorter than the endpoint minimum, the helper returns an empty options payload and preserves the configured `wrap:` shape, such as `{ "options": [] }`. It does not change authorization, tenant scoping, query parsing, Ransack integration, or Tom Select request lifecycle behavior.
+
+FormBuilder's field-level `min_length:` is a browser-side loading hint for the bundled Tom Select controller. `minimum_query_length:` is the server endpoint policy for direct requests, custom Tom Select configs, or host apps that do not want blank queries to expose initial options. Use both when the UI and endpoint should enforce the same minimum.
 
 ### Rich option fields
 
