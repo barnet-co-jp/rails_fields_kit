@@ -63,10 +63,12 @@ Notes:
 
 - [ ] Tom Select package installed
 - [ ] `import { TomSelectController } from "rails_fields_kit"` resolved
+- [ ] `import { nativeFieldAccessibilityContract } from "rails_fields_kit"` resolved
 - [ ] `import TomSelectController from "rails_fields_kit/tom_select_controller"` resolved
 - [ ] documented controller registration succeeded
 - [ ] importmap pins resolved `rails_fields_kit` and `rails_fields_kit/tom_select_controller` when importmap was used
 - [ ] documented controller registration still worked from the existing Stimulus boot file after adding those importmap pins
+- [ ] at least one rendered native helper field was readable through `nativeFieldAccessibilityContract(element)` without adding a new package-root helper export
 - [ ] Tom Select CSS loaded
 - [ ] browser console has no import errors
 
@@ -109,6 +111,7 @@ Notes:
 
 - [ ] one representative native helper field covered the end-to-end `wrapper: true` lane
 - [ ] the field rendered the documented label, hint, prefix, and suffix while staying in the native helper family rather than a Tom Select lane
+- [ ] `nativeFieldAccessibilityContract(element)` read the representative field's rendered `describedByIds`, `hintElement`, `errorElement`, and `wrapperElement` contract from package-root import code
 - [ ] an edit form or validation rerender kept the same value and preserved the shared wrapper / accessibility wiring for that representative field
 - [ ] a comparable `accessibility: false` example clearly removed the automatic accessibility wiring that the release docs treat as opt-out behavior
 
