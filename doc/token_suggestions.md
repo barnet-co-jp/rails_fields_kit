@@ -138,6 +138,35 @@ The same rule applies when `value_field:`, `label_field:`, `description_field:`,
 
 This is intentional current behavior for suggestion filtering. Saved-search suggestions with `badge: "saved"`, descriptive helper text, or host-app metadata may appear because those values match the query. Keep sensitive values out of suggestion metadata, and pre-filter or omit fields in the host application when only token or label matching should be exposed.
 
+## Shared metadata source pattern
+
+Applications can keep their own field and operator metadata in one place, then pass derived views of that source into the current builders. This is the first feature-gate direction for field/operator suggestion registries: a docs pattern that avoids adding a public Rails Fields Kit registry object.
+
+```ruby
+ORDER_SEARCH_FIELDS = {
+  status: {
+    label: "Status",
+    values: %w[open closed],
+    ransack_predicate: :status_eq
+  },
+  assignee: {
+    label: "Assignee",
+    ransack_predicate: :assignee_name_cont
+  }
+}.freeze
+
+RailsFieldsKit::TokenSuggestions.build(
+  fields: ORDER_SEARCH_FIELDS.transform_values { |config|
+    config.slice(:label, :values)
+  },
+  operators: ["OR", "not()"]
+)
+```
+
+Use this pattern when the host app wants one allowed field list to feed token suggestions, Ransack-oriented suggestions, and table filter metadata. Rails Fields Kit still receives ordinary `fields:`, `operators:`, and `predicates:` arguments; it does not own the registry, enforce authorization, or parse submitted tokens.
+
+For the Ransack-specific view of the same metadata source, see [`ransack_suggestions.md`](ransack_suggestions.md#shared-metadata-source-pattern).
+
 ## Responsibility boundary
 
 `TokenSuggestions.build` only produces suggestion option JSON. The submitted search text still belongs to the host application, search object, Ransack integration, or another dedicated search layer. Rails Fields Kit does not parse arbitrary token expressions into SQL or decide model-specific search semantics.

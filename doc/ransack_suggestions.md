@@ -174,6 +174,38 @@ RailsFieldsKit::RansackSuggestions.build(
 )
 ```
 
+## Shared metadata source pattern
+
+When a host app keeps one allowed field/operator source for token search, Ransack suggestions, and table filter metadata, derive the Ransack builder input from that source instead of introducing a Rails Fields Kit registry object.
+
+```ruby
+ORDER_SEARCH_FIELDS = {
+  status: {
+    label: "Status",
+    values: %w[open closed],
+    ransack_predicate: :status_eq
+  },
+  assignee: {
+    label: "Assignee",
+    ransack_predicate: :assignee_name_cont
+  }
+}.freeze
+
+ransack_fields = ORDER_SEARCH_FIELDS.transform_values do |config|
+  {
+    label: config.fetch(:label),
+    predicate: config.fetch(:ransack_predicate),
+    values: config[:values]
+  }.compact
+end
+
+RailsFieldsKit::RansackSuggestions.build(fields: ransack_fields)
+```
+
+The same `ransack_fields` map can also be passed to `RailsFieldsKit::TableFilterInput.ransack_filter` when table metadata should advertise the same allowed predicates. The host app still decides whether submitted tokens become `params[:q]`, which predicates are allowed for the current user, and how Ransack is executed.
+
+For the general token suggestion view of the same metadata source, see [`token_suggestions.md`](token_suggestions.md#shared-metadata-source-pattern).
+
 ## Responsibility boundary
 
 Rails Fields Kit intentionally stops at suggestion metadata. A typical application still needs to:
