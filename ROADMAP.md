@@ -104,6 +104,10 @@ The smallest useful slice is a docs/proposal pattern for a host app owned metada
 
 This is not a current public registry API. The first step should document how applications can keep one allowed field/operator map and pass derived views of it into the current builders. A future Ruby registry object should be split into its own feature issue, and a sample drift check should be split into a quality issue if it becomes useful.
 
+Move from the docs pattern to a Ruby registry API only when the current builders show repeated host-app duplication that a narrow metadata aggregation object can remove. The accepted surface should stay limited to field/operator/value suggestion metadata and derived builder inputs; it should not change `TokenSuggestions.build`, `RansackSuggestions.build`, `TableFilterInput.ransack_filter`, FormBuilder helper signatures, or any rendered response shape.
+
+A Ruby registry spike should document non-goals before implementation: no token query parser, no Active Record relation construction, no allowed predicate enforcement, no Ransack auto configuration, no authorization policy, and no table preference persistence or search execution integration. If those boundaries cannot be kept, keep the docs pattern as the current solution and defer the API.
+
 The registry direction must not move query parsing, Active Record relation construction, authorization, allowed predicate enforcement, or Ransack configuration into Rails Fields Kit. Those remain host app responsibilities even when suggestion metadata is centralized.
 
 Future proposal, not current public API:
