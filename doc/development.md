@@ -36,8 +36,6 @@ The repository documentation drift spec covers two narrow repository-maintenance
 
 The setup example documentation drift spec keeps the JavaScript setup signals in `README.md` and `doc/setup.md` aligned for package-root imports, direct controller imports, bundler aliases, and importmap pins without freezing the full prose.
 
-The shared metadata documentation drift spec keeps the representative `ORDER_SEARCH_FIELDS` pattern aligned across `doc/token_suggestions.md`, `doc/ransack_suggestions.md`, and `doc/table_adapters.md` while preserving the boundary that metadata remains host-app-owned, not a Rails Fields Kit registry API.
-
 Representative compatibility checks are also useful before review or release:
 
 ```bash
