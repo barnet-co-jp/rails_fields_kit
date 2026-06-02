@@ -53,6 +53,8 @@ npm install tom-select
 pnpm add tom-select
 ```
 
+Rails Fields Kit intentionally does not publish or enforce a Tom Select package version range, pin source, CDN choice, or plugin asset policy. Keep those decisions with the host application's package manager or importmap conventions, and record any app-specific version or plugin choices in the host app's own setup notes. The examples in this guide show the package name and Rails Fields Kit wiring only; they are not a replacement for the host app's normal JavaScript dependency review.
+
 ## 3. Register the Stimulus controller
 
 For the default `stimulus-rails` layout, register the controller on the shared application from `controllers/application`:
@@ -127,7 +129,7 @@ import { TomSelectController } from "rails_fields_kit"
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as `rails_fields_kit/tom_select_controller`, so both documented import paths stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source and any additional importmap conventions to the host app.
+`rails_fields_kit/index.js` re-exports the same controller as `rails_fields_kit/tom_select_controller`, so both documented import paths stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source, package version, plugin pins, and any additional importmap conventions to the host app.
 
 The package root also exposes read-only rendered-field contract helpers, including `nativeFieldAccessibilityContract(element)` for native wrapper accessibility wiring. Import those helpers from `rails_fields_kit` only when host-app scripts need to inspect already-rendered labels, hints, errors, and wrapper elements; controller registration, validation messages, focus management, and visible feedback remain separate host-app responsibilities. Use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the current source of truth for the helper list and return shape.
 
@@ -138,6 +140,8 @@ Use the stylesheet pipeline or bundler already used by the application.
 ```js
 import "tom-select/dist/css/tom-select.css"
 ```
+
+If the host app enables Tom Select plugins or theme packages that need additional styles or assets, load those through the same host-app pipeline. Rails Fields Kit does not choose plugin asset policy or bundle plugin-specific CSS for the app.
 
 Rails Fields Kit only edits importmap setup when `--importmap` is passed and `config/importmap.rb` exists. Other JavaScript setup remains a host-app responsibility.
 
