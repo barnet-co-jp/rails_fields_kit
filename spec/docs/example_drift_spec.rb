@@ -4,8 +4,6 @@ require "spec_helper"
 require "pathname"
 
 RSpec.describe "documentation example drift" do
-  repository_root = Pathname.new(File.expand_path("../..", __dir__))
-
   def read_doc(path)
     Pathname.new(File.expand_path("../#{path}", __dir__)).read
   end
