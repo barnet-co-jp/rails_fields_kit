@@ -3,6 +3,7 @@ import { readdir, readFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
+const CHECK_RUNNER = "check_javascript.mjs"
 const intentionalStandaloneCheckScripts = new Set([
   // Add scripts/check_*.mjs entries here only when a smoke is intentionally not part of check:js.
 ].map(normalizeScriptPath))
@@ -58,6 +59,7 @@ async function smokeScriptsUnder(repoRoot) {
   const entries = await readdir(scriptsDir)
 
   return entries
+    .filter((entry) => entry !== CHECK_RUNNER)
     .filter((entry) => /^check_.*\.mjs$/.test(entry))
     .map((entry) => normalizeScriptPath(path.join("scripts", entry)))
     .sort()
@@ -65,7 +67,7 @@ async function smokeScriptsUnder(repoRoot) {
 
 async function runInventoryCheck() {
   const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
-  const runnerSource = await readFile(path.join(repoRoot, "scripts", "check_javascript.mjs"), "utf8")
+  const runnerSource = await readFile(path.join(repoRoot, "scripts", CHECK_RUNNER), "utf8")
   const actualScripts = await smokeScriptsUnder(repoRoot)
   const { expectedScripts } = evaluateInventory({ actualScripts, runnerSource })
 
