@@ -188,6 +188,7 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 - `RailsFieldsKit::TableCellInput.url_field`
 - `RailsFieldsKit::TableCellInput.phone_field`
 - `RailsFieldsKit::TableCellInput.search_field`
+- `RailsFieldsKit::TableCellInput.token_search`
 - `RailsFieldsKit::TableCellInput#to_h`
 - `RailsFieldsKit::TableCellInput#to_hash`
 - `RailsFieldsKit::TableCellInput#to_table_cell_editor`
