@@ -10,6 +10,8 @@ RSpec.describe "package contents" do
   let(:repo_agents) { File.read(repo_agents_path) }
   let(:product_profile_path) { File.expand_path("../Product Profile.md", __dir__) }
   let(:product_profile) { File.read(product_profile_path) }
+  let(:readme_path) { File.expand_path("../README.md", __dir__) }
+  let(:readme) { File.read(readme_path) }
   let(:visual_references_path) { File.expand_path("../doc/visual_references.md", __dir__) }
   let(:visual_references) { File.read(visual_references_path) }
   let(:public_api_path) { File.expand_path("../doc/public_api.md", __dir__) }
@@ -184,6 +186,50 @@ RSpec.describe "package contents" do
     expect(quick_chooser).to include("the matching native helper such as")
   end
 
+  it "keeps the FormBuilder helper inventory aligned between public API docs and helper docs" do
+    public_helpers = form_builder_helper_names_from(public_api)
+    detailed_helper_sections = field_helpers.scan(/^### `(rfk_[a-z_]+)`/).flatten
+    readme_chooser = markdown_section(readme, "## Choosing a helper")
+
+    expect(public_helpers).to eq(%w[
+      rfk_select
+      rfk_combobox
+      rfk_autocomplete
+      rfk_tags
+      rfk_multi_select
+      rfk_grouped_select
+      rfk_enum_select
+      rfk_token_search
+      rfk_table_filters
+      rfk_table_cell_editors
+      rfk_text_field
+      rfk_text_area
+      rfk_number_field
+      rfk_money_field
+      rfk_percent_field
+      rfk_email_field
+      rfk_url_field
+      rfk_phone_field
+      rfk_search_field
+    ])
+    expect(detailed_helper_sections).to include(*public_helpers)
+    expect(readme).to include("[`doc/field_helpers.md`](doc/field_helpers.md)")
+    expect(readme_chooser).to include(
+      "`rfk_select`",
+      "`rfk_combobox`",
+      "`rfk_autocomplete`",
+      "`rfk_token_search`",
+      "`rfk_multi_select`",
+      "`rfk_tags`",
+      "`rfk_grouped_select`",
+      "`rfk_enum_select`",
+      "`rfk_text_field`",
+      "`rfk_money_field`",
+      "`rfk_phone_field`",
+      "`rfk_search_field`"
+    )
+  end
+
   it "ships the release-facing verification docs linked from README" do
     expect(specification.files).to include(
       "doc/development.md",
@@ -200,6 +246,10 @@ RSpec.describe "package contents" do
     source.scan(/^    def (rfk_[a-z_]+).*?\n(.*?)^    end/m).filter_map do |helper_name, body|
       helper_name if body.include?("rfk_native_field(")
     end
+  end
+
+  def form_builder_helper_names_from(document)
+    markdown_section(document, "## FormBuilder helpers").scan(/^- `(rfk_[a-z_]+)`/).flatten
   end
 
   def markdown_section(document, heading)
