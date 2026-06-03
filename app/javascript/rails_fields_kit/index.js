@@ -50,6 +50,14 @@ function nativeFieldWrapper(element) {
   return element.closest?.(NATIVE_FIELD_WRAPPER_SELECTOR) || null
 }
 
+function nativeFieldRenderedState(element) {
+  return {
+    required: element.required === true || element.hasAttribute("required"),
+    disabled: element.disabled === true || element.hasAttribute("disabled"),
+    readonly: element.readOnly === true || element.hasAttribute("readonly")
+  }
+}
+
 export function tomSelectTextOverrideContract(element) {
   if (!element || typeof element.getAttribute !== "function") return null
 
@@ -78,7 +86,8 @@ export function nativeFieldAccessibilityContract(element) {
     describedByElements,
     hintElement: firstElementWithClass(describedByElements, NATIVE_FIELD_HINT_CLASS),
     errorElement: firstElementWithClass(describedByElements, NATIVE_FIELD_ERROR_CLASS),
-    wrapperElement: nativeFieldWrapper(element)
+    wrapperElement: nativeFieldWrapper(element),
+    ...nativeFieldRenderedState(element)
   }
 }
 
