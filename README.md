@@ -44,7 +44,7 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | Build remote search, selected preload, create, or token suggestion endpoints | [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) |
 | Handle Stimulus events or request-failure surfaces | [`doc/events.md`](doc/events.md) |
 | Configure initializer defaults and field-level override precedence | [`doc/configuration.md`](doc/configuration.md) |
-| Work with optional table metadata | [`doc/table_adapters.md`](doc/table_adapters.md) |
+| Work with optional table metadata | [`doc/table_adapters.md`](doc/table_adapters.md), [`doc/table_group_html.md`](doc/table_group_html.md) |
 | Run local checks | [`doc/development.md`](doc/development.md) |
 | Prepare or verify a release | [`doc/release.md`](doc/release.md), [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/selected_preload_release_gate.md`](doc/selected_preload_release_gate.md) |
 | Review release-facing notes | [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md), [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) |
@@ -352,7 +352,7 @@ columns = [
 <% end %>
 ```
 
-This keeps the table gem or host app responsible for collecting column definitions, executing queries, and saving preferences. Rails Fields Kit only turns the documented metadata into FormBuilder helper calls. For the full protocol, renderer call specs, and Ransack-oriented metadata notes, see [`doc/table_adapters.md`](doc/table_adapters.md).
+This keeps the table gem or host app responsible for collecting column definitions, executing queries, and saving preferences. Rails Fields Kit only turns the documented metadata into FormBuilder helper calls. For the full protocol, renderer call specs, and Ransack-oriented metadata notes, see [`doc/table_adapters.md`](doc/table_adapters.md). For optional group-level wrapper attributes on the direct FormBuilder helpers, see [`doc/table_group_html.md`](doc/table_group_html.md).
 
 ### Object collections, grouped selects, and enum selects
 
