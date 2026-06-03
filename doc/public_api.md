@@ -232,6 +232,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | --- | --- | --- |
 | `TomSelectController` | Stimulus controller | Registers Rails Fields Kit's Tom Select-backed field behavior on the rendered element. Host apps still own Stimulus boot, Tom Select installation, endpoint behavior, authorization, query parsing, visible feedback copy, and retry UI. |
 | `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
+| `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when the field has no selected preload lane. It does not fetch selected options, mutate Tom Select, render fallback UI, or own retry behavior. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
 
 ### Import patterns
@@ -242,11 +243,13 @@ Package-root imports use the documented entrypoint:
 import {
   TomSelectController,
   nativeFieldAccessibilityContract,
+  readRenderedSelectedPreloadConfig,
   tomSelectTextOverrideContract
 } from "rails_fields_kit"
 
 const accessibilityContract = nativeFieldAccessibilityContract(inputElement)
 const copyContract = tomSelectTextOverrideContract(fieldElement)
+const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
 ```
 
 Direct controller import is also supported when the host app wants only the controller file:
