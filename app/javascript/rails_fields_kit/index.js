@@ -50,11 +50,15 @@ function nativeFieldWrapper(element) {
   return element.closest?.(NATIVE_FIELD_WRAPPER_SELECTOR) || null
 }
 
+function nativeFieldHasAttribute(element, attributeName) {
+  return element.hasAttribute?.(attributeName) === true
+}
+
 function nativeFieldRenderedState(element) {
   return {
-    required: element.required === true || element.hasAttribute("required"),
-    disabled: element.disabled === true || element.hasAttribute("disabled"),
-    readonly: element.readOnly === true || element.hasAttribute("readonly")
+    required: element.required === true || nativeFieldHasAttribute(element, "required"),
+    disabled: element.disabled === true || nativeFieldHasAttribute(element, "disabled"),
+    readonly: element.readOnly === true || nativeFieldHasAttribute(element, "readonly")
   }
 }
 
