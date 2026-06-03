@@ -33,6 +33,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 - `RailsFieldsKit::TableMetadata` for collecting Rails Fields Kit filter/editor metadata from table column definitions and table-like objects that respond to `columns`, including common alias keys such as `filter_input`, `search_filter`, `cell_editor`, and `cell_input`, render shortcuts for collected filters and editors, and duplication safety for collected metadata hashes from hash, hash-like metadata, and hash-like column inputs.
 - `RailsFieldsKit::TableRenderer` for turning table filter/editor metadata into FormBuilder call specs or dispatching them through a form builder, including ordered batch rendering APIs, custom table field helper registration with normalized field/helper names, normalized field type and method handling, duplication safety for metadata options and hash-like options objects, duplicated mapping introspection, and mapping helper APIs.
 - `rfk_table_filters` and `rfk_table_cell_editors` for rendering table metadata directly from a FormBuilder, including mixed hash/object/hash-like columns, enumerator columns, hash-like column inputs, table-like object inputs, custom table helper registrations, reset behavior, and safe-buffer rendering contracts.
+- `group_html:` for `rfk_table_filters` and `rfk_table_cell_editors` when a host app needs one group-level outer `<div>` around direct FormBuilder output; table layout, persistence, query execution, and visible save/error copy remain host-app or table-integration responsibilities.
 
 #### Install generator
 
