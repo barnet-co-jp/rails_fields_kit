@@ -18,6 +18,8 @@
         --accent-soft: #e6f4f1;
         --info: #285f9f;
         --info-soft: #eaf2fb;
+        --focus: #2f5fb3;
+        --focus-soft: #e8f0ff;
         --warning: #8a5a12;
         --warning-soft: #fff3d8;
         --empty: #6b4c84;
@@ -113,6 +115,11 @@
         box-shadow: var(--shadow);
       }
 
+      .card.focus-review {
+        grid-column: 1 / -1;
+        border-color: #adc6e4;
+      }
+
       .card-header {
         display: grid;
         gap: 7px;
@@ -165,7 +172,8 @@
 
       .tag.multi,
       .tag.preload,
-      .tag.autocomplete {
+      .tag.autocomplete,
+      .tag.focus {
         border-color: #adc6e4;
         background: var(--info-soft);
         color: var(--info);
@@ -196,6 +204,11 @@
         border: 1px solid var(--line-strong);
         background: var(--surface);
         overflow: hidden;
+      }
+
+      .control.is-focused {
+        border-color: var(--focus);
+        box-shadow: 0 0 0 3px rgba(47, 95, 179, 0.16);
       }
 
       .control-top {
@@ -273,6 +286,14 @@
         color: #2b5278;
       }
 
+      .token.is-focused {
+        outline: 2px solid var(--focus);
+        outline-offset: 2px;
+        border-color: var(--focus);
+        background: var(--focus-soft);
+        color: #1f3f78;
+      }
+
       .control.disabled {
         border-color: #c6cbd0;
         background: #f4f5f6;
@@ -309,6 +330,21 @@
       .action {
         padding: 10px 11px;
         background: var(--surface);
+      }
+
+      .option.is-active {
+        position: relative;
+        background: var(--focus-soft);
+        outline: 2px solid var(--focus);
+        outline-offset: -2px;
+      }
+
+      .option.is-active::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 4px;
+        background: var(--focus);
       }
 
       .option strong,
@@ -356,6 +392,39 @@
         color: var(--accent);
       }
 
+      .focus-review-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .focus-pane {
+        display: grid;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .focus-pane h3 {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.25;
+      }
+
+      .focus-pane p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+
+      .focus-checklist {
+        display: grid;
+        gap: 6px;
+        margin: 0;
+        padding-left: 1.1rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
       .error-surface {
         display: grid;
         gap: 4px;
@@ -396,6 +465,12 @@
 
       .legend strong {
         color: var(--ink);
+      }
+
+      @media (max-width: 760px) {
+        .focus-review-grid {
+          grid-template-columns: 1fr;
+        }
       }
 
       @media (max-width: 640px) {
@@ -457,6 +532,44 @@
             <div class="dropdown"><div class="option"><strong>Example customer</strong><span>Selected label with optional description</span></div></div>
           </div>
           <p class="card-footer">Use this baseline when the choice is already settled and no preload-specific context needs to be shown.</p>
+        </article>
+
+        <article class="card focus-review">
+          <div class="card-header">
+            <span class="tag focus">Keyboard Focus</span>
+            <h2>Focused control, active option, and selected item focus</h2>
+            <p>Static review lane for focus readability only. Actual keyboard mechanics remain Tom Select runtime behavior and host-app responsibility.</p>
+          </div>
+          <div class="focus-review-grid" aria-hidden="true">
+            <div class="focus-pane">
+              <h3>Focused control</h3>
+              <div class="control is-focused">
+                <div class="control-top"><div class="query">northwind</div><div class="status-note">Focus</div><div class="caret">▾</div></div>
+                <div class="dropdown"><div class="option"><strong>Northwind Supplies</strong><span>Focus chrome should stay visible around the full field without hiding the query text.</span></div></div>
+              </div>
+              <p>Use this to check label, hint, badge, and description density around a focused field.</p>
+            </div>
+            <div class="focus-pane">
+              <h3>Active option</h3>
+              <div class="control is-focused">
+                <div class="control-top"><div class="query">support</div><div class="caret">▾</div></div>
+                <div class="dropdown"><div class="option is-active"><strong>Support Desk</strong><span>Active option text and secondary description remain readable inside the highlight.</span></div><div class="option"><strong>Support Archive</strong><span>Nearby options keep normal contrast for comparison.</span></div></div>
+              </div>
+              <p>Use this to inspect the highlighted row without treating the static page as keyboard automation.</p>
+            </div>
+            <div class="focus-pane">
+              <h3>Selected item focus</h3>
+              <div class="control is-focused">
+                <div class="control-top"><div class="selection selection--multiple"><span class="token subtle">Operations</span><span class="token subtle is-focused">Finance</span><span class="inline-query">sup</span></div><div class="caret">▾</div></div>
+                <div class="dropdown"><div class="message"><strong>Selected item focus stays visible</strong><span>Token wrapping and the in-progress query should not crowd each other at narrow widths.</span></div></div>
+              </div>
+              <p>Use this to review selected item affordance for multi-select, tags, and token-like lanes.</p>
+            </div>
+          </div>
+          <ul class="focus-checklist">
+            <li>Check desktop and narrow viewport for clipped labels, hidden focus rings, or unreadable active-option text.</li>
+            <li>Keep runtime keyboard behavior, event handling, and production CSS out of this static artifact.</li>
+          </ul>
         </article>
 
         <article class="card">
@@ -616,7 +729,7 @@
       <section class="legend">
         <strong>Scope note.</strong>
         This page is a static visual aid. The maintained contract for helper options, Stimulus events,
-        selected preload, token parsing, and create-on-the-fly responsibilities remains in the README and helper docs.
+        selected preload, token parsing, focus/keyboard behavior, and create-on-the-fly responsibilities remains in the README and helper docs.
       </section>
     </main>
   </body>
