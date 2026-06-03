@@ -292,7 +292,7 @@
           <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
           <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
           <a href="native_field_visual_reference.html">Native helper narrow stress</a>
-          <a href="configuration_wrapper_class_visual_reference.html">Wrapper class configuration</a>
+          <a href="configuration_wrapper_class_visual_reference.html">Wrapper class narrow lane</a>
           <a href="table_metadata_visual_reference.html">Table metadata</a>
           <a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a>
         </div>
@@ -336,11 +336,12 @@
             </header>
             <ul>
               <li>Confirm wrapper density and copy wrapping without treating the artifact as production CSS.</li>
+              <li>Use configured class review to check long labels, affixes, hint, and error copy at narrow width.</li>
               <li>Keep native browser semantics separate from Tom Select-backed search behavior.</li>
             </ul>
             <nav class="family-links" aria-label="Native helper family references">
               <a href="native_field_visual_reference.html">Native helper states</a>
-              <a href="configuration_wrapper_class_visual_reference.html">Configured classes</a>
+              <a href="configuration_wrapper_class_visual_reference.html">Configured class narrow lane</a>
             </nav>
           </article>
 
@@ -402,11 +403,12 @@
             </header>
             <ul>
               <li>Compare native helper layout, long label stress, configured wrapper classes, and text override examples.</li>
+              <li>Check configured wrapper classes at narrow width when host-app class names, affixes, hints, or error copy are under review.</li>
               <li>Keep native search fields separate from Tom Select-backed search or token suggestions.</li>
             </ul>
             <nav class="task-links" aria-label="Design and copy review references">
               <a href="native_field_visual_reference.html">Native narrow stress</a>
-              <a href="configuration_wrapper_class_visual_reference.html">Wrapper class configuration</a>
+              <a href="configuration_wrapper_class_visual_reference.html">Wrapper class narrow lane</a>
               <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
             </nav>
           </article>
@@ -532,13 +534,14 @@
               <div class="tag-row">
                 <span class="tag primary">native helpers</span>
                 <span class="tag info">configuration</span>
+                <span class="tag warning">narrow lane</span>
               </div>
               <h3>Configuration wrapper classes</h3>
               <p>Initializer-driven wrapper, label, hint, error, control, prefix, and suffix class examples.</p>
             </header>
-            <p class="review-question"><strong>Question:</strong> can reviewers see configured classes as host-app pass-through instead of bundled CSS framework support?</p>
+            <p class="review-question"><strong>Question:</strong> can reviewers see configured classes as host-app pass-through instead of bundled CSS framework support, even under narrow label / affix / hint stress?</p>
             <ul>
-              <li>Compare default `rfk-*` classes with host-app classes and validation class examples.</li>
+              <li>Compare default `rfk-*` classes with host-app classes, validation class examples, and the narrow viewport review lane.</li>
               <li>Keep framework CSS, spacing, colors, validation copy, and layout integration with the host app.</li>
             </ul>
             <a class="reference-link" href="configuration_wrapper_class_visual_reference.html">Open reference</a>
