@@ -2,6 +2,20 @@
 
 Use this checklist before publishing a release.
 
+## Choose where to record evidence
+
+Use the checklist below to decide what to exercise, then record only the evidence needed for the release or PR under review. Keep release-wide evidence in [`sample_app_results.md`](sample_app_results.md). For a narrow PR that is not a release candidate, a PR comment is enough when it names the checked lane, branch or commit, and result.
+
+| Lane | Record in `sample_app_results.md` when... | PR comment is enough when... | Evidence to capture |
+| --- | --- | --- | --- |
+| Release baseline | Preparing a release candidate or release PR | Never; keep release baseline evidence in the results file | version, tester, gem source, branch head CI, local checks, generator result |
+| Host-app setup and package-root exports | Setup, importmap, bundler, Stimulus registration, generated notes, or package-root helper exports are in release scope | A narrow docs/spec PR only confirms one export or setup note signal | import path or command checked, branch/commit, pass/fail notes; screenshots are not expected unless a visual surface changed |
+| Visual references | A static visual reference, one-screen index, visual lane, or release-critical rendered state changed | A small visual docs PR needs review notes before release evidence is collected | artifact, viewport, state or lane, responsibility boundary, evidence location |
+| Native, remote, token, table, Turbo, and event lanes | The release candidate depends on that behavior family | A focused feature PR checks one representative lane and does not claim release readiness | lane name, representative field or endpoint, observed event/result, host-app responsibility boundary |
+| Deferred or blocked evidence | A release candidate intentionally carries known caveats | A PR needs human visual/browser verification or a follow-up issue | blocker, required human check, follow-up issue or PR link |
+
+Avoid duplicating the whole checklist into a PR comment. Use the comment for scoped evidence and use `sample_app_results.md` as the primary release evidence log.
+
 ## Prepare a Rails app
 
 Use a Rails 7+ application with Stimulus enabled.
