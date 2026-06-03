@@ -247,4 +247,75 @@ RSpec.describe "table metadata objects" do
       expect(input.to_table_cell_editor).to include(field_type: "combobox")
     end
   end
+
+  describe RailsFieldsKit::TableMetadata do
+    it "treats nil and empty column sources as empty metadata lists" do
+      empty_table = Struct.new(:columns).new([])
+
+      expect(described_class.filters(nil)).to eq([])
+      expect(described_class.cell_editors([])).to eq([])
+      expect(described_class.filter_calls(empty_table)).to eq([])
+    end
+
+    it "treats single hash and object columns as one metadata-bearing column" do
+      object_column = Struct.new(:filter).new(
+        type: "rails_fields_kit",
+        field_type: "token_search",
+        method: "query",
+        options: { url: "/tokens.json" }
+      )
+
+      expect(described_class.filters(filter: { type: "text", method: "name" })).to eq([
+        { type: "text", method: "name" }
+      ])
+      expect(described_class.filters(object_column)).to eq([
+        {
+          type: "rails_fields_kit",
+          field_type: "token_search",
+          method: "query",
+          options: { url: "/tokens.json" }
+        }
+      ])
+    end
+
+    it "uses a table-like object's columns reader as the source of truth" do
+      table = Struct.new(:columns, :filter).new(
+        [{ "filter" => { type: "select", method: "status" } }],
+        { type: "text", method: "ignored" }
+      )
+
+      expect(described_class.filters(table)).to eq([
+        { type: "select", method: "status" }
+      ])
+    end
+
+    it "keeps invalid hash-like column and metadata boundaries explicit" do
+      invalid_hash_like = Class.new do
+        def to_hash
+          "not a hash"
+        end
+      end
+
+      expect { described_class.filters([invalid_hash_like.new]) }
+        .to raise_error(ArgumentError, "table column to_hash must return a hash")
+      expect { described_class.filters([{ filter: invalid_hash_like.new }]) }
+        .to raise_error(ArgumentError, "table metadata to_hash must return a hash")
+    end
+
+    it "duplicates metadata hashes and nested options before returning them" do
+      source_options = { url: "/customers.json" }
+      source_metadata = { type: "rails_fields_kit", method: "customer_id", options: source_options }
+      filter_metadata = described_class.filters([{ filter: source_metadata }]).first
+
+      filter_metadata[:options][:url] = "/mutated.json"
+      filter_metadata[:method] = "mutated"
+
+      expect(source_metadata).to eq(
+        type: "rails_fields_kit",
+        method: "customer_id",
+        options: { url: "/customers.json" }
+      )
+      expect(source_options).to eq(url: "/customers.json")
+    end
+  end
 end
