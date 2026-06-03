@@ -198,7 +198,9 @@ RSpec.describe "package contents" do
     )
     expect(remote_field_helper_section).to include(
       "request-shaping options",
-      "host app owns that endpoint's authorization, scoping, and response records"
+      "Rails Fields Kit appends `query_params:` as fixed query string scope",
+      "Selected values still use `selected_url:` with `selected_param:` or `selected_multiple_param:`",
+      "create input text still uses `create_url:` with JSON `create_params:` plus `create_param:`"
     )
   end
 
