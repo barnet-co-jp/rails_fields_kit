@@ -154,6 +154,7 @@ RSpec.describe "package contents" do
       "doc/controller_helpers.md",
       "doc/configuration.md",
       "doc/events.md",
+      "doc/tom_select_turbo_lifecycle.md",
       "doc/token_suggestions.md",
       "doc/ransack_suggestions.md",
       "doc/table_adapters.md",
