@@ -115,7 +115,28 @@ try {
       `assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")\n` +
       `expectedCallableHelperExports.forEach((exportName) => {\n` +
       `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)\n` +
-      `})\n`
+      `})\n\n` +
+      `const wrapperElement = { marker: "rfk-field-wrapper" }\n` +
+      `function fakeNativeField(tagName, attributes = {}, properties = {}) {\n` +
+      `  return {\n` +
+      `    tagName,\n` +
+      `    ...properties,\n` +
+      `    ownerDocument: { getElementById() { return null } },\n` +
+      `    getAttribute(name) { return attributes[name] ?? null },\n` +
+      `    hasAttribute(name) { return Object.prototype.hasOwnProperty.call(attributes, name) },\n` +
+      `    closest(selector) { return selector === ".rfk-field" ? wrapperElement : null }\n` +
+      `  }\n` +
+      `}\n\n` +
+      `const requiredInputContract = packageRoot.nativeFieldAccessibilityContract(fakeNativeField("input", { required: "" }))\n` +
+      `assert.equal(requiredInputContract.required, true, "native input contract should expose required state")\n` +
+      `assert.equal(requiredInputContract.disabled, false, "native input contract should expose false disabled state")\n` +
+      `assert.equal(requiredInputContract.readonly, false, "native input contract should expose false readonly state")\n` +
+      `assert.equal(requiredInputContract.wrapperElement, wrapperElement, "native state expansion should preserve wrapperElement")\n\n` +
+      `const disabledSelectContract = packageRoot.nativeFieldAccessibilityContract(fakeNativeField("select", { disabled: "" }))\n` +
+      `assert.equal(disabledSelectContract.disabled, true, "native select contract should expose disabled state")\n\n` +
+      `const readonlyTextareaContract = packageRoot.nativeFieldAccessibilityContract(fakeNativeField("textarea", {}, { readOnly: true }))\n` +
+      `assert.equal(readonlyTextareaContract.readonly, true, "native textarea contract should expose readonly state")\n` +
+      `assert.equal(packageRoot.nativeFieldAccessibilityContract(fakeNativeField("div")), null, "non-native elements should keep null contract behavior")\n`
   )
 
   await import(pathToFileURL(probePath).href)
