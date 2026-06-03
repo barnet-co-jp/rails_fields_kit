@@ -101,6 +101,14 @@ bundle exec rake build
 
    While reviewing `CHANGELOG.md` and the release note draft, keep their roles separate: `CHANGELOG.md` is the exhaustive release-history source, and `doc/release_notes_0_1_1.md` is the reviewer-facing and GitHub-release-facing summary. Confirm the release note highlights are backed by landed `Unreleased` entries, avoid proposal or open-PR behavior, and check that major categories such as token search, table metadata, JavaScript exports, request lifecycle, install generator, and release-scoped event surfaces are not missing from one side.
 
+   For a merge train with docs-only, spec-only, and runtime behavior PRs open at the same time, review release-facing docs only after each PR has landed on the branch being released. Use the merged PR body and linked issue as the boundary evidence, then decide the smallest release-facing update that fits the landed change:
+
+   - docs-only syncs usually need at most a changelog or release-note wording check, and may need no release note highlight when they only clarify existing behavior.
+   - spec-only or docs drift guards usually stay out of user-facing release highlights unless they protect a newly documented public contract.
+   - runtime behavior changes should get a changelog entry, and the release note draft should mention them only when the behavior is user-facing or changes integration expectations.
+   - stacked PRs should be reviewed in merge order so a dependent guard or follow-up does not describe behavior before its base PR has landed.
+   - PR-local notes about skipped local checks or connector-only verification should be rechecked on the final release candidate instead of copied into release notes.
+
 9. Confirm version.
 
    ```ruby
@@ -126,13 +134,13 @@ bundle exec rake build
    ## 0.1.1 - YYYY-MM-DD
    ```
 
-   Keep the moved changelog entry as the detailed source of truth for landed behavior, and leave proposal or open-PR behavior out until it has landed in the release branch.
+   Keep the moved changelog entry as the detailed source of truth for landed behavior, and leave proposal or open-PR behavior out until it has landed in the release branch. When multiple PRs landed close together, group detailed entries by the behavior that shipped rather than by PR number, and keep docs-only clarifications separate from runtime behavior changes so reviewers can see which items affect host-app integration.
 
 2. Prepare the version-specific release note draft.
 
    Update `doc/release_notes_0_1_1.md` when the next release remains `0.1.1`. If release planning chooses a different version number, rename that draft and use `doc/release_notes_0_1_0.md` as the historical reference instead of editing the historical notes in place.
 
-   Before using it for a GitHub Release, compare the draft against the moved changelog entry. The release note should summarize user-facing highlights and responsibility boundaries, not replace the detailed changelog entries.
+   Before using it for a GitHub Release, compare the draft against the moved changelog entry. The release note should summarize user-facing highlights and responsibility boundaries, not replace the detailed changelog entries. If a landed PR only adds a docs guard, release checklist wording, or other review aid, keep it out of the release note highlights unless it changes what host apps should adopt or verify.
 
 3. Commit release metadata.
 
