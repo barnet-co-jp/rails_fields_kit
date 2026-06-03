@@ -188,7 +188,6 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 - `RailsFieldsKit::TableCellInput.url_field`
 - `RailsFieldsKit::TableCellInput.phone_field`
 - `RailsFieldsKit::TableCellInput.search_field`
-- `RailsFieldsKit::TableCellInput.token_search`
 - `RailsFieldsKit::TableCellInput#to_h`
 - `RailsFieldsKit::TableCellInput#to_hash`
 - `RailsFieldsKit::TableCellInput#to_table_cell_editor`
@@ -232,7 +231,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | --- | --- | --- |
 | `TomSelectController` | Stimulus controller | Registers Rails Fields Kit's Tom Select-backed field behavior on the rendered element. Host apps still own Stimulus boot, Tom Select installation, endpoint behavior, authorization, query parsing, visible feedback copy, and retry UI. |
 | `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
-| `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
+| `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
 
 ### Import patterns
 
@@ -258,6 +257,8 @@ import TomSelectController from "rails_fields_kit/tom_select_controller"
 ### Contract reader boundary
 
 Rendered-field contract helpers stay read-only. They inspect data attributes and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance or duplicating wrapper traversal.
+
+For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`.
 
 Future package-root helpers should follow the same boundary: read the rendered Rails Fields Kit contract or configuration from an element, but do not take over request lifecycles, locale resolution, visible feedback, query parsing, retry UI, validation feedback, or other application-specific behavior. Proposal or open-PR helper names are not current public API until they are merged and listed in the table above.
 
