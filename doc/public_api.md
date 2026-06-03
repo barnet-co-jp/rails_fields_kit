@@ -283,7 +283,14 @@ Tom Select-backed `rfk_*` fields initialize from the controller's Stimulus `conn
 
 Events dispatched by the Tom Select controller are part of the public integration surface.
 
-See [`events.md`](events.md).
+The compact event family includes:
+
+- remote search success / failure: `load`, `load-error`
+- selected preload success / failure: `selected-load`, `selected-load-error`
+- create-on-the-fly success / failure: `create`, `create-error`
+- forwarded interaction events: `change`, `item-add`, `item-remove`, `clear`
+
+Use [`events.md`](events.md) as the source of truth for exact event names, payload shapes, request cancellation behavior, `detail.surface`, and host-app visible feedback responsibilities.
 
 ## Internal implementation details
 
