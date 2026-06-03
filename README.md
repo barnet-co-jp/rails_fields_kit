@@ -38,7 +38,7 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | --- | --- |
 | Set up a host app | [`doc/setup.md`](doc/setup.md) |
 | Check supported Ruby / Rails and repository JavaScript boundaries | [`doc/support_boundary.md`](doc/support_boundary.md) |
-| Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md), [`doc/select_migration.md`](doc/select_migration.md) |
+| Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md), [`doc/select_migration.md`](doc/select_migration.md), [`doc/enum_select.md`](doc/enum_select.md) for the focused `rfk_enum_select` source boundary |
 | See or compare rendered UI states quickly | [`doc/visual_references.md`](doc/visual_references.md) for the visual reference family, including Tom Select, text override copy, native helper, native narrow viewport stress, configuration wrapper classes, table metadata, and saved-search token states |
 | Review stable public API and package-root JavaScript exports | [`doc/public_api.md`](doc/public_api.md) |
 | Build remote search, selected preload, create, or token suggestion endpoints | [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) |
@@ -245,6 +245,8 @@ or a wrapped result:
 { "options": [{ "id": 1, "name": "Example Customer" }] }
 ```
 
+Use [`doc/controller_helpers.md`](doc/controller_helpers.md#blank-query-policy) for the endpoint-side `minimum_query_length:` boundary. FormBuilder `min_length:` is the browser-side loading hint; the controller helper option is the server policy for blank or too-short direct requests.
+
 The selected preload endpoint can return one option, a wrapped option, an array, or a wrapped array:
 
 ```json
@@ -391,6 +393,8 @@ Rails enum-like attributes can use `rfk_enum_select`:
 ```erb
 <%= f.rfk_enum_select :status %>
 ```
+
+For explicit `enum:` hashes, keys remain the submitted values and labels stay on the model I18n / humanized-key path. Use [`doc/enum_select.md`](doc/enum_select.md) for that boundary; arbitrary label/value DSLs, remote enum options, and PORO enum adapters are not current public APIs.
 
 ### Multiple selects and tags
 
