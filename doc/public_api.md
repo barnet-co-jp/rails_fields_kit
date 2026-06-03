@@ -32,6 +32,8 @@ This document summarizes the public API intended to be stable for the 0.1.x seri
 
 Use the sections below for the exact public names. The linked docs provide examples and host-app responsibility boundaries; this file is the compact public API index.
 
+When comparing token suggestions, Ransack-oriented suggestions, table metadata, and roadmap registry proposals, use [`shared_metadata_navigation.md`](shared_metadata_navigation.md) as the boundary map. It points back here for current public names and keeps host-app metadata patterns separate from future helper-level adapter or registry APIs.
+
 ## Ruby entrypoint
 
 ```ruby
