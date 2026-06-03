@@ -206,6 +206,7 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 ### TableRenderer methods
 
 - `RailsFieldsKit::TableRenderer.field_helpers`
+- `RailsFieldsKit::TableRenderer.registered_field_types`
 - `RailsFieldsKit::TableRenderer.helper_for`
 - `RailsFieldsKit::TableRenderer.registered_field_type?`
 - `RailsFieldsKit::TableRenderer.register_field_helper`
@@ -218,6 +219,8 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 - `RailsFieldsKit::TableRenderer.render_filters`
 - `RailsFieldsKit::TableRenderer.render_cell_editor`
 - `RailsFieldsKit::TableRenderer.render_cell_editors`
+
+Use `TableRenderer.registered_field_types` when an integration needs a mutation-safe list of renderable field type names, including custom mappings registered with `TableRenderer.register_field_helper`, without exposing the helper method names. `TableFilterInput.known_types` and `TableCellInput.known_types` remain limited to the built-in factory family.
 
 The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `to_h` and `to_hash` return the same metadata hash as `to_table_filter` or `to_table_cell_editor`.
 
