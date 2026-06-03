@@ -10,6 +10,10 @@ const checks = [
     args: ["--check", "app/javascript/rails_fields_kit/tom_select_controller.js"]
   },
   {
+    name: "JavaScript smoke inventory",
+    args: ["scripts/check_javascript_smoke_inventory.mjs"]
+  },
+  {
     name: "package exports smoke",
     args: ["scripts/check_package_exports.mjs"]
   },
