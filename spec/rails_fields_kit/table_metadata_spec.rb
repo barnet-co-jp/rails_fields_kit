@@ -259,10 +259,12 @@ RSpec.describe "table metadata objects" do
 
     it "treats single hash and object columns as one metadata-bearing column" do
       object_column = Struct.new(:filter).new(
-        type: "rails_fields_kit",
-        field_type: "token_search",
-        method: "query",
-        options: { url: "/tokens.json" }
+        {
+          type: "rails_fields_kit",
+          field_type: "token_search",
+          method: "query",
+          options: { url: "/tokens.json" }
+        }
       )
 
       expect(described_class.filters(filter: { type: "text", method: "name" })).to eq([
