@@ -10,6 +10,8 @@ For `rfk_grouped_select` visual review, use the Tom Select core reference's `Gro
 
 For native helper accessibility-contract follow-up, use the native helper reference as the visual lane and the release checklist or sample app evidence log as the recording lane. Keep those two artifacts linked by the checked helper state and viewport instead of duplicating helper markup or runtime contract details in this map.
 
+For uppercase visual-reference microcopy such as tags, metadata chips, and optgroup labels, review readable spacing across the family before widening letter spacing. Keep the static artifacts product-neutral and favor unexpanded letter spacing when the copy is already short, dense, and scan-oriented.
+
 ## Reference map
 
 | Reference | Use it to review | Primary release or design question |
@@ -29,6 +31,7 @@ For native helper accessibility-contract follow-up, use the native helper refere
 - For README first field quickstart review, open [`tom_select_visual_reference.html`](tom_select_visual_reference.html) and inspect the idle `rfk_select` / server-rendered collection lane before looking at remote combobox, preload, token search, or create-on-the-fly states.
 - For grouped select review, open [`tom_select_visual_reference.html`](tom_select_visual_reference.html) and inspect the `Grouped Select` lane for optgroup heading readability, representative option labels, and the collection-backed boundary before looking at remote search or create-on-the-fly lanes.
 - For design review, start with [`visual_reference_index.html`](visual_reference_index.html) when you need to pick a lane. Use the helper-family picker for Tom Select-backed controls, native field wrappers, or table/token bridge questions, then keep comments tied to the lane it represents.
+- For uppercase microcopy review, inspect tags, metadata chips, optgroup labels, and similar short labels at desktop and narrow widths. Avoid widened letter spacing unless it clearly improves scanning without making dense labels harder to read.
 - For native helper accessibility-contract review, open [`native_field_visual_reference.html`](native_field_visual_reference.html), check the relevant wrapper / label / hint / error / generated-id lane in desktop and narrow viewport, then record the same lane name and viewport in [`sample_app_results.md`](sample_app_results.md) or the release PR comment.
 - For native helper wrapper review, use [`native_field_visual_reference.html`](native_field_visual_reference.html) to check label, hint, affix, required marker, validation, noneditable, accessibility, generated-id, and narrow viewport stress lanes without treating the static artifact as production CSS or runtime behavior.
 - For initializer-driven class review, use [`configuration_wrapper_class_visual_reference.html`](configuration_wrapper_class_visual_reference.html) during release or design review when the change touches configured wrapper, label, hint, error, control, prefix, or suffix classes. Record the checked lane and viewport in [`sample_app_results.md`](sample_app_results.md)'s visual reference render matrix or in the release PR comment, and keep the evidence focused on class pass-through rather than helper behavior.
