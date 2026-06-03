@@ -26,7 +26,7 @@ This document summarizes the public API intended to be stable for the 0.1.x seri
 | FormBuilder helpers | Tom Select-backed helpers, table metadata helpers, and native wrapper helpers | [`field_helpers.md`](field_helpers.md), [`select_migration.md`](select_migration.md), [`enum_select.md`](enum_select.md) |
 | Controller helpers | Remote option JSON, selected preload, create-on-the-fly, and token suggestion endpoint helpers | [`controller_helpers.md`](controller_helpers.md) |
 | Token suggestions | Builder objects for token suggestion metadata and Ransack-compatible suggestion metadata | [`token_suggestions.md`](token_suggestions.md), [`ransack_suggestions.md`](ransack_suggestions.md) |
-| Table metadata | Metadata objects, collector methods, call-spec helpers, and renderer helpers for optional table integrations | [`table_adapters.md`](table_adapters.md) |
+| Table metadata | Metadata objects, collector methods, call-spec helpers, renderer helpers, and custom renderer registry mapping for optional table integrations | [`table_adapters.md`](table_adapters.md) |
 | JavaScript package root | `TomSelectController` plus read-only rendered-field contract helpers | [JavaScript exports](#javascript-exports) |
 | Stimulus integration | FormBuilder-generated values, lifecycle expectations, and controller events | [`events.md`](events.md) |
 
@@ -139,7 +139,7 @@ Class responsibilities:
 | `RailsFieldsKit::TableMetadata` | Collects filter and cell editor metadata from columns or table-like objects. | Can return metadata hashes, FormBuilder call specs, or ordered render result arrays. |
 | `RailsFieldsKit::TableRenderer` | Maps metadata into FormBuilder helper calls or render results. | Owns the field type registry and custom helper mapping for table integrations. |
 
-Public metadata methods are grouped by class so reviewers can scan the contract without reading one long mixed list.
+Public metadata methods are grouped by class so reviewers can scan the contract without reading one long mixed list. Use [`table_adapters.md`](table_adapters.md) as the source of truth for examples, custom renderer registry setup, and the difference between built-in factory types and custom renderable mappings.
 
 ### TableFilterInput methods
 
@@ -221,7 +221,7 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 
 The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `to_h` and `to_hash` return the same metadata hash as `to_table_filter` or `to_table_cell_editor`.
 
-`TableFilterInput.ransack_filter` is the current public entrypoint when table-oriented code wants Ransack-compatible token-search metadata. `TableMetadata` can collect metadata from Hash columns, hash-like columns that respond to `to_hash`, object columns with public metadata readers, enumerable column lists, and table-like objects that respond to `columns`. Explicit `false` filter/editor metadata disables that slot instead of falling through to alias keys or readers. `TableRenderer` can turn collected metadata into FormBuilder call specs or dispatch it to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol and Rails Table Preferences integration notes.
+`TableFilterInput.ransack_filter` is the current public entrypoint when table-oriented code wants Ransack-compatible token-search metadata. `TableMetadata` can collect metadata from Hash columns, hash-like columns that respond to `to_hash`, object columns with public metadata readers, enumerable column lists, and table-like objects that respond to `columns`. Explicit `false` filter/editor metadata disables that slot instead of falling through to alias keys or readers. `TableRenderer` can turn collected metadata into FormBuilder call specs or dispatch it to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol, custom registry examples, and Rails Table Preferences integration notes.
 
 ## JavaScript exports
 
