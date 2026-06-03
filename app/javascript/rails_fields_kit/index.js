@@ -8,6 +8,7 @@ const TEXT_OVERRIDE_ATTRIBUTES = {
 }
 const NATIVE_FIELD_TAGS = new Set(["input", "select", "textarea"])
 const NATIVE_FIELD_WRAPPER_SELECTOR = ".rfk-field"
+const NATIVE_FIELD_LABEL_SELECTOR = "label"
 const NATIVE_FIELD_HINT_CLASS = "rfk-hint"
 const NATIVE_FIELD_ERROR_CLASS = "rfk-error"
 
@@ -50,6 +51,23 @@ function nativeFieldWrapper(element) {
   return element.closest?.(NATIVE_FIELD_WRAPPER_SELECTOR) || null
 }
 
+function cssEscape(value) {
+  if (typeof CSS !== "undefined" && typeof CSS.escape === "function") return CSS.escape(String(value))
+
+  return String(value).replace(/\\/g, "\\\\").replace(/"/g, "\\\"")
+}
+
+function nativeFieldLabel(element, wrapperElement = nativeFieldWrapper(element)) {
+  const id = element.getAttribute("id")
+
+  if (id) {
+    const labelElement = element.ownerDocument?.querySelector?.(`label[for="${cssEscape(id)}"]`) || null
+    if (labelElement) return labelElement
+  }
+
+  return wrapperElement?.querySelector?.(NATIVE_FIELD_LABEL_SELECTOR) || null
+}
+
 export function tomSelectTextOverrideContract(element) {
   if (!element || typeof element.getAttribute !== "function") return null
 
@@ -72,13 +90,15 @@ export function nativeFieldAccessibilityContract(element) {
   const describedByElements = describedByIds
     .map((id) => elementById(element, id))
     .filter(Boolean)
+  const wrapperElement = nativeFieldWrapper(element)
 
   return {
     describedByIds,
     describedByElements,
+    labelElement: nativeFieldLabel(element, wrapperElement),
     hintElement: firstElementWithClass(describedByElements, NATIVE_FIELD_HINT_CLASS),
     errorElement: firstElementWithClass(describedByElements, NATIVE_FIELD_ERROR_CLASS),
-    wrapperElement: nativeFieldWrapper(element)
+    wrapperElement
   }
 }
 
