@@ -36,6 +36,8 @@ The repository documentation drift spec covers two narrow repository-maintenance
 
 The setup example documentation drift spec keeps the JavaScript setup signals in `README.md` and `doc/setup.md` aligned for package-root imports, direct controller imports, bundler aliases, and importmap pins without freezing the full prose.
 
+The FormBuilder helper inventory drift spec keeps the compact helper list in `doc/public_api.md` aligned with detailed helper sections in `doc/field_helpers.md`, while checking only representative README chooser entries so the README can stay concise instead of becoming an exhaustive API mirror.
+
 Representative compatibility checks are also useful before review or release:
 
 ```bash
