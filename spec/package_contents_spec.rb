@@ -6,6 +6,8 @@ require "spec_helper"
 RSpec.describe "package contents" do
   let(:gemspec_path) { File.expand_path("../rails_fields_kit.gemspec", __dir__) }
   let(:specification) { Gem::Specification.load(gemspec_path) }
+  let(:readme_path) { File.expand_path("../README.md", __dir__) }
+  let(:readme) { File.read(readme_path) }
   let(:repo_agents_path) { File.expand_path("../AGENTS.md", __dir__) }
   let(:repo_agents) { File.read(repo_agents_path) }
   let(:product_profile_path) { File.expand_path("../Product Profile.md", __dir__) }
@@ -16,6 +18,8 @@ RSpec.describe "package contents" do
   let(:public_api) { File.read(public_api_path) }
   let(:field_helpers_path) { File.expand_path("../doc/field_helpers.md", __dir__) }
   let(:field_helpers) { File.read(field_helpers_path) }
+  let(:controller_helpers_path) { File.expand_path("../doc/controller_helpers.md", __dir__) }
+  let(:controller_helpers) { File.read(controller_helpers_path) }
   let(:form_builder_path) { File.expand_path("../lib/rails_fields_kit/form_builder.rb", __dir__) }
   let(:form_builder_source) { File.read(form_builder_path) }
   let(:generated_setup_note_path) do
@@ -161,6 +165,40 @@ RSpec.describe "package contents" do
       "doc/tom_select_visual_reference.html",
       "doc/native_field_visual_reference.html",
       "doc/table_metadata_visual_reference.html"
+    )
+  end
+
+  it "keeps remote workflow request option examples visible across representative docs" do
+    option_names = %w[
+      query_params
+      selected_query_params
+      create_params
+      selected_param
+      selected_multiple_param
+      create_param
+    ]
+    controller_reference = [
+      markdown_section(controller_helpers, "## `rfk_find_with`"),
+      markdown_section(controller_helpers, "## `rfk_create_with`"),
+      markdown_section(controller_helpers, "## Fixed request params and scoping")
+    ].join("\n")
+    remote_field_helper_section = markdown_section(field_helpers, "## Remote option options")
+
+    option_names.each do |option_name|
+      expected_signal = "#{option_name}:"
+
+      expect(controller_reference).to include(expected_signal)
+      expect(remote_field_helper_section).to include(expected_signal)
+      expect(readme).to include(expected_signal)
+    end
+
+    expect(controller_reference).to include(
+      "request-shaping helpers",
+      "host app controller/model layer"
+    )
+    expect(remote_field_helper_section).to include(
+      "request-shaping options",
+      "host app owns that endpoint's authorization, scoping, and response records"
     )
   end
 
