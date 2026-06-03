@@ -107,7 +107,17 @@ try {
       `import directDefault from "rails_fields_kit/tom_select_controller"\n` +
       `import assert from "node:assert/strict"\n\n` +
       `const expectedNamedExports = ${JSON.stringify(expectedPackageRootNamedExports)}\n` +
-      `const expectedCallableHelperExports = ${JSON.stringify(expectedCallableHelperExports)}\n\n` +
+      `const expectedCallableHelperExports = ${JSON.stringify(expectedCallableHelperExports)}\n` +
+      `const tomSelectController = "rails-fields-kit--tom-select"\n` +
+      `const queryParamsAttribute = "data-rails-fields-kit--tom-select-query-params-value"\n` +
+      `const selectedQueryParamsAttribute = "data-rails-fields-kit--tom-select-selected-query-params-value"\n` +
+      `const createParamsAttribute = "data-rails-fields-kit--tom-select-create-params-value"\n\n` +
+      `function fakeElement(attributes = {}) {\n` +
+      `  return {\n` +
+      `    getAttribute(name) { return Object.prototype.hasOwnProperty.call(attributes, name) ? attributes[name] : null },\n` +
+      `    hasAttribute(name) { return Object.prototype.hasOwnProperty.call(attributes, name) }\n` +
+      `  }\n` +
+      `}\n\n` +
       `expectedNamedExports.forEach((exportName) => {\n` +
       `  assert.ok(exportName in packageRoot, \`package root should expose documented export ${"${exportName}"}\`)\n` +
       `})\n` +
@@ -115,7 +125,32 @@ try {
       `assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")\n` +
       `expectedCallableHelperExports.forEach((exportName) => {\n` +
       `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)\n` +
-      `})\n`
+      `})\n\n` +
+      `assert.deepEqual(\n` +
+      `  packageRoot.tomSelectRequestParamsContract(fakeElement({\n` +
+      `    "data-controller": tomSelectController,\n` +
+      `    [queryParamsAttribute]: JSON.stringify({ account_id: 42, tags: ["open", "vip"] }),\n` +
+      `    [selectedQueryParamsAttribute]: JSON.stringify({ include_archived: false }),\n` +
+      `    [createParamsAttribute]: JSON.stringify({ source: "inline" })\n` +
+      `  })),\n` +
+      `  {\n` +
+      `    queryParams: { account_id: 42, tags: ["open", "vip"] },\n` +
+      `    selectedQueryParams: { include_archived: false },\n` +
+      `    createParams: { source: "inline" }\n` +
+      `  },\n` +
+      `  "request params contract should expose rendered fixed params as plain objects"\n` +
+      `)\n` +
+      `assert.deepEqual(\n` +
+      `  packageRoot.tomSelectRequestParamsContract(fakeElement({ "data-controller": tomSelectController })),\n` +
+      `  { queryParams: {}, selectedQueryParams: {}, createParams: {} },\n` +
+      `  "request params contract should return empty objects for unspecified params on a Rails Fields Kit field"\n` +
+      `)\n` +
+      `assert.deepEqual(\n` +
+      `  packageRoot.tomSelectRequestParamsContract(fakeElement({ [queryParamsAttribute]: "not-json" })),\n` +
+      `  { queryParams: {}, selectedQueryParams: {}, createParams: {} },\n` +
+      `  "request params contract should keep invalid rendered JSON predictable"\n` +
+      `)\n` +
+      `assert.equal(packageRoot.tomSelectRequestParamsContract(fakeElement()), null, "request params contract should ignore unrelated elements")\n`
   )
 
   await import(pathToFileURL(probePath).href)
