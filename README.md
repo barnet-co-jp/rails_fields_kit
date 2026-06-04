@@ -67,15 +67,21 @@ This keeps the submitted params the same shape as an ordinary Rails select while
 
 ## Choosing a helper
 
-- Use `rfk_select` when you already have a server-rendered collection and want the submitted param shape to stay the same as an ordinary Rails select.
-- Use `rfk_combobox` when options come from remote search, selected preload, or create-on-the-fly endpoints and the submitted value should still be a selected ID or value.
-- Use `rfk_autocomplete` when the submitted value itself is free text and suggestions are only there to help typing.
-- Use `rfk_token_search` when the input should accept structured token text such as `status:open assignee:matsuo keyword`; Rails Fields Kit can suggest tokens, but the host app still parses and executes the query.
-- Use `rfk_multi_select` for ordinary multiple selected values, and `rfk_tags` when the UI should feel like tag entry or create-on-the-fly tag creation.
-- Use `rfk_grouped_select` for `<optgroup>` collections and `rfk_enum_select` for Rails enum attributes.
-- Use the native wrapper helpers such as `rfk_text_field`, `rfk_money_field`, `rfk_phone_field`, and `rfk_search_field` when a native browser input is enough and you only want consistent labels, hints, validation errors, prefixes, suffixes, and accessibility wiring.
+Use this table as the first pass when deciding which helper family to start with. README keeps the chooser compact; [`doc/field_helpers.md`](doc/field_helpers.md) remains the maintained source for helper-specific examples and option notes.
 
-For a side-by-side chooser and helper-specific examples, see [`doc/field_helpers.md`](doc/field_helpers.md). For rendered native wrapper states, see [`doc/native_field_visual_reference.html`](doc/native_field_visual_reference.html).
+| Helper | Submitted value | Use when... | Endpoint and ownership notes |
+| --- | --- | --- | --- |
+| `rfk_select` | A single selected ID or value from a server-rendered collection | You can start from a normal Rails select or `collection_select` flow. | No remote endpoint is required; Rails select options still own blank or prompt wording. See [`doc/select_migration.md`](doc/select_migration.md). |
+| `rfk_multi_select` | An array of selected IDs or values from a known collection | The UI should stay an ordinary multiple select rather than tag entry. | No remote endpoint is required for the collection-first lane. |
+| `rfk_grouped_select` | A selected ID or value from grouped `<optgroup>` choices | The collection is already grouped by category, status, or another server-side grouping. | No remote endpoint is required; Rails Fields Kit preserves the grouped collection structure. |
+| `rfk_enum_select` | Rails enum keys as submitted values | The field is backed by a Rails enum-like attribute. | No remote endpoint is required; keep arbitrary label/value DSLs and remote enum options out of this lane. |
+| `rfk_combobox` | A selected ID or value, often restored from a saved record | Options come from remote search, selected preload, or create-on-the-fly behavior. | Host apps own the JSON endpoints, authorization, scoping, validation, and result execution. Use [`doc/controller_helpers.md`](doc/controller_helpers.md) for maintained endpoint helpers. |
+| `rfk_autocomplete` | Free text | Suggestions should help typing, but the submitted value remains the user's text. | The suggestion endpoint is optional to the UX; it does not switch the field into a selected-ID contract. |
+| `rfk_tags` | An array of tag IDs, values, or created tag values | The field should feel like tag entry or allow create-on-the-fly tag creation. | Host apps own tag lookup, creation policy, validation, and authorization when remote endpoints are used. |
+| `rfk_token_search` | Structured token text such as `status:open keyword` | The UI should suggest operators, fields, values, or saved searches for a search box. | Rails Fields Kit can return suggestion option JSON, but token parsing, `params[:q]` construction, query execution, and authorization stay in the host app. See [`doc/token_suggestions.md`](doc/token_suggestions.md). |
+| Native wrapper helpers such as `rfk_text_field`, `rfk_text_area`, `rfk_money_field`, and `rfk_search_field` | The ordinary native input value | A browser-native input is enough and you only want shared labels, hints, validation errors, affixes, and accessibility wiring. | No Tom Select or remote endpoint is involved. For rendered native wrapper states, see [`doc/native_field_visual_reference.html`](doc/native_field_visual_reference.html). |
+
+As a rule of thumb, start with `rfk_select` when a server-rendered collection is enough, move to `rfk_combobox` when option lookup or label restore must come from remote endpoints, choose `rfk_autocomplete` when the submitted value is free text, and use `rfk_token_search` only when the submitted text is structured query syntax that the host app will parse later.
 
 ## JavaScript setup
 
