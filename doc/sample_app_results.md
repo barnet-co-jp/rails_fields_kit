@@ -294,17 +294,22 @@ Notes:
 ## Turbo reconnect checks
 
 - Evidence location:
-- Tested lane(s):
-  - [ ] selected preload
-  - [ ] remote search
-  - [ ] create-on-the-fly
-  - [ ] visible request-failure feedback
-  - [ ] other:
+- Static visual reference evidence:
+  - Artifact:
+  - Viewport(s):
+  - [ ] `doc/tom_select_turbo_reconnect_visual_reference.html` was reviewed as a static visual lane for single-wrapper, restored ordinary state, and duplicate-wrapper caution only
+- Runtime / sample app evidence:
+  - Tested lane(s):
+    - [ ] selected preload
+    - [ ] remote search
+    - [ ] create-on-the-fly
+    - [ ] visible request-failure feedback
+    - [ ] other:
 - [ ] Tom Select initializes on first render without a host-app `setupXxx()` helper
 - [ ] Turbo-driven validation rerender reconnects the replaced field without duplicate Tom Select initialization
 - [ ] same-form revisit through Turbo reconnects the field without duplicate Tom Select initialization
 - [ ] representative selected preload, remote search, and create-on-the-fly lanes still work after reconnect when they are in scope for this release
-- [ ] pending requests from a disconnected field did not leave stale success or error UI in the manually observed result; deeper request lifecycle guarantees stay in the runtime quality lane
+- [ ] pending requests from a disconnected field did not leave stale success or error UI in the manually observed result; deeper request lifecycle guarantees stay in `npm run check:js` and `doc/tom_select_turbo_lifecycle.md`
 - [ ] no separate `turbo:load` reinitializer was needed for normal `rfk_*` usage
 
 Notes:
