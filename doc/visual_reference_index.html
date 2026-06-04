@@ -289,6 +289,7 @@
         </div>
         <div class="quick-list" aria-label="Direct visual reference links">
           <a href="tom_select_visual_reference.html">Tom Select states</a>
+          <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
           <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
           <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
           <a href="native_field_visual_reference.html">Native helper narrow stress</a>
@@ -312,14 +313,15 @@
                 <span class="tag info">remote states</span>
               </div>
               <h3>Search-backed controls</h3>
-              <p>Start here for selects, comboboxes, autocomplete, tags, token search, request feedback, and configured helper copy.</p>
+              <p>Start here for selects, comboboxes, autocomplete, tags, token search, Turbo reconnect, request feedback, and configured helper copy.</p>
             </header>
             <ul>
               <li>Use the core states for layout and viewport checks.</li>
-              <li>Use focused lanes only when error feedback or copy overrides are the review topic.</li>
+              <li>Use focused lanes only when lifecycle boundaries, error feedback, or copy overrides are the review topic.</li>
             </ul>
             <nav class="family-links" aria-label="Tom Select helper family references">
               <a href="tom_select_visual_reference.html">Core states</a>
+              <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
               <a href="tom_select_request_failure_visual_reference.html">Request feedback</a>
               <a href="tom_select_text_override_visual_reference.html">Copy overrides</a>
             </nav>
@@ -473,6 +475,23 @@
               <li>Keep host-app search, authorization, pagination, and result execution out of scope.</li>
             </ul>
             <a class="reference-link" href="tom_select_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">Turbo</span>
+                <span class="tag info">reconnect</span>
+              </div>
+              <h3>Tom Select Turbo reconnect</h3>
+              <p>Focused single-wrapper restored field, ordinary settled-field appearance, and duplicate-wrapper caution states.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect Turbo restoration cues without treating request aborts, stale response guards, or reconnect implementation as static visual behavior?</p>
+            <ul>
+              <li>Compare the restored field and duplicate-wrapper caution lanes.</li>
+              <li>Keep lifecycle correctness in tom_select_turbo_lifecycle.md and JavaScript smoke checks.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_turbo_reconnect_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
