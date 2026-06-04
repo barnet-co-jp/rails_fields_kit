@@ -9,6 +9,7 @@ await withTomSelectControllerSandbox("rails-fields-kit-query-params-", ({ TomSel
     account_id: 42,
     scope: "active",
     facet: ["vip", "recent"],
+    mixed: ["kept", null, undefined, ""],
     empty: null,
     missing: undefined
   })
@@ -16,6 +17,7 @@ await withTomSelectControllerSandbox("rails-fields-kit-query-params-", ({ TomSel
   assert.equal(searchUrl.searchParams.get("account_id"), "42")
   assert.equal(searchUrl.searchParams.get("scope"), "active")
   assert.deepEqual(searchUrl.searchParams.getAll("facet"), ["existing", "vip", "recent"])
+  assert.deepEqual(searchUrl.searchParams.getAll("mixed"), ["kept", "null", "undefined", ""])
   assert.equal(searchUrl.searchParams.has("empty"), false)
   assert.equal(searchUrl.searchParams.has("missing"), false)
 

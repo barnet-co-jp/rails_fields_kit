@@ -279,6 +279,18 @@ Notes:
 
 ## Table metadata checks
 
+Use this section when table metadata is part of the release surface, or when `doc/table_metadata_visual_reference.html` is release-critical evidence even though the static artifact itself did not change.
+
+- Visual reference artifact:
+- Viewport(s) checked:
+- Table metadata lane(s) checked:
+  - [ ] filters
+  - [ ] Ransack token filter metadata
+  - [ ] native field metadata
+  - [ ] cell editors
+  - [ ] custom helper mapping
+- Evidence location:
+- [ ] `doc/table_metadata_visual_reference.html` was checked for the same representative lane(s) recorded above when visual evidence is in scope
 - [ ] `RailsFieldsKit::TableFilterInput` metadata renders through the documented helper path
 - [ ] `RailsFieldsKit::TableCellInput` metadata renders through the documented helper path
 - [ ] `rfk_table_filters` renders collected filter metadata

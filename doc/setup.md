@@ -249,8 +249,6 @@ class CustomersController < ApplicationController
     description_field: "email",
     badge_field: "status",
     scope: -> { current_account.customers.active },
-    order: { name: :asc },
-    distinct: true,
     wrap: "options"
   )
 
@@ -301,7 +299,9 @@ class CustomersController < ApplicationController
 end
 ```
 
-Keep the detailed option reference in [`controller_helpers.md`](controller_helpers.md). This setup walkthrough only needs the minimal reminder that custom `action:` names are part of the current public surface.
+Remote fields can use FormBuilder `min_length:` as a browser-side loading hint. Use `rfk_search_with minimum_query_length:` when the endpoint itself should return empty options for blank or too-short direct requests, custom Tom Select configs, or other callers that bypass the bundled browser hint.
+
+Keep the detailed option reference in [`controller_helpers.md`](controller_helpers.md). This setup walkthrough only needs the minimal reminder that custom `action:` names and endpoint-side query minimums are part of the current public surface.
 
 ## 7. Listen to events when needed
 
