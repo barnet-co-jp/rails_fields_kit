@@ -95,6 +95,8 @@ When replacing an existing `collection_select`, keep the same model attribute an
 
 For collection-backed `rfk_select`, Rails still uses the same field name, so existing strong params and normal save flows do not need extra changes just because the form helper changed. Edit-form redisplay and validation rerender also keep using the model value already assigned to `company_id`, so the selected option is preserved the same way as an ordinary Rails select.
 
+Option-level metadata also stays in this rendered collection lane. Use value-array `disabled:` to render specific unavailable choices and `option_html:` to pass per-option attributes such as `data` or classes onto the generated `<option>` tags before Tom Select connects. Treat those attributes as display metadata for already-rendered choices; authorization, dynamic visibility, remote option payload mapping, and rich Tom Select renderer behavior still belong to the host app endpoint or separate helper lane.
+
 Use `selected:` only when the field needs to preload a value that is not already present in the rendered collection, such as a remote combobox or a collection loaded later.
 
 - ordinary selected state and clearable selected state both stay in the same collection-backed `rfk_select` lane
@@ -116,6 +118,8 @@ Use this for searchable remote selects and editable comboboxes.
 ```
 
 For remote search, current public behavior is a JSON `GET` request to `url:`. Rails Fields Kit appends `query_params:` to that URL as fixed query string scope first, then sets `query_param:` to the typed query value. The host app owns that endpoint's authorization, scoping, and response records; use `selected_url:` for selected-option preload and `create_url:` for create-on-the-fly JSON `POST` requests instead of mixing those request shapes into the remote search endpoint.
+
+`min_length:` is only the browser-side loading hint passed to the bundled Tom Select controller. When the endpoint itself must reject blank or too-short direct requests, pair it with `rfk_search_with minimum_query_length:` in [`controller_helpers.md#blank-query-policy`](controller_helpers.md#blank-query-policy) instead of relying on the field option as a server policy.
 
 #### Representative `error_surface` example
 
@@ -448,7 +452,9 @@ Option-level customization:
   } %>
 ```
 
-Use boolean `disabled: true` to disable the whole select. Use array/value `disabled:` to disable specific options.
+Use boolean `disabled: true` to disable the whole select. Use array/value `disabled:` to disable specific options. `option_html:` accepts a hash keyed by rendered option value, or a callable that returns an attribute hash for that value, and Rails Fields Kit passes those attributes to Rails' generated `<option>` element.
+
+`option_html:` is collection metadata, not an authorization or visibility policy. Keep tenant scoping, dynamic option filtering, and remote result shaping in the host app endpoint or collection query before rendering the field.
 
 `include_blank:` and `prompt:` keep using the normal Rails `select` option behavior, so a `collection_select` to `rfk_select` migration can preserve blank-option wording without changing controller or model code.
 
@@ -459,6 +465,9 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `query_params:` adds fixed query parameters to the remote search `GET` URL before the typed query is applied.
 - `selected_query_params:` adds fixed query parameters to the selected-option preload URL.
 - `create_params:` adds fixed JSON fields to create-on-the-fly POST requests.
+- `min_length:` forwards Tom Select's browser-side `shouldLoad` threshold for remote loading. It does not protect the endpoint from direct blank or too-short requests.
+- `preload:` forwards Tom Select's preload option for initial browser-side loading. Whether a blank query returns options is still the endpoint policy.
+- `open_on_focus:` forwards Tom Select's focus-opening behavior. Pair it with an endpoint blank-query policy when focus should not expose initial options.
 - `max_items:` forwards Tom Select's maximum selected item count.
 - `load_throttle:` forwards Tom Select's remote load throttle in milliseconds.
 - `delimiter:` forwards Tom Select's delimiter option, useful for text-backed token inputs.
@@ -485,3 +494,5 @@ Example:
 ```
 
 For remote search, `url:` receives a JSON `GET` request. Rails Fields Kit appends `query_params:` as fixed query string scope and then sets `query_param:` to the current typed query value. Selected values still use `selected_url:` with `selected_param:` or `selected_multiple_param:`, and create input text still uses `create_url:` with JSON `create_params:` plus `create_param:`.
+
+Use [`controller_helpers.md#blank-query-policy`](controller_helpers.md#blank-query-policy) when the endpoint should enforce the same minimum as a field-level `min_length:` setting. `minimum_query_length:` is the server-side policy; `min_length:`, `preload:`, and `open_on_focus:` only shape the browser-side Tom Select lifecycle.
