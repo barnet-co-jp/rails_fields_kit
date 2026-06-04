@@ -52,6 +52,21 @@ module RailsFieldsKit
         registered_field_helpers[normalized_field_type] = normalized_helper_name.to_sym
       end
 
+      def unregister_field_helper(field_type)
+        normalized_field_type = normalize_field_type(field_type)
+
+        if normalized_field_type.empty?
+          raise ArgumentError, field_type.nil? ? "table field type is required" : "field type is required"
+        end
+
+        default_helper = DEFAULT_FIELD_HELPERS[normalized_field_type]
+        if default_helper
+          registered_field_helpers[normalized_field_type] = default_helper
+        else
+          registered_field_helpers.delete(normalized_field_type)
+        end
+      end
+
       def reset_field_helpers!
         @field_helpers = DEFAULT_FIELD_HELPERS.dup
       end
