@@ -20,7 +20,7 @@ RSpec.describe "visual reference family index" do
     linked_files = visual_reference_links_from(visual_references)
 
     linked_files.each do |file_name|
-      expect(File.exist?(File.join(doc_dir, file_name))).to be(true), "expected doc/#{file_name} to exist"
+      expect(File.exist?(File.join(doc_dir, file_name))).to be(true)
     end
   end
 
