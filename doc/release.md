@@ -118,6 +118,8 @@ bundle exec rake build
 
 10. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
 
+   Confirm the host app's Tom Select package version, pin source, plugin CSS, and plugin-specific asset loading through that app's normal JavaScript dependency review. Rails Fields Kit documents and packages its own import paths, but it does not fix, detect, or auto-correct Tom Select versions or plugin asset policy as part of the gem release gate.
+
    When the release surface includes selected preload behavior, run the focused [`selected_preload_release_gate.md`](selected_preload_release_gate.md) before marking the sample app pass complete. Keep this check to the documented single-value and comma-separated multiple-ID request contract unless release planning explicitly changes that public surface.
 
    When the release surface includes create-on-the-fly success hooks, confirm the sample app and recorded results cover `rails-fields-kit--tom-select:create`, `event.detail.input`, `event.detail.option`, and the continued `item-add` / `change` flow. Visible success UI remains a host-app responsibility.
