@@ -137,7 +137,7 @@ Class responsibilities:
 | `RailsFieldsKit::TableFilterInput` | Describes a filter UI that can later be rendered with Rails Fields Kit helpers. | Includes factory methods for built-in field types and `ransack_filter` for Ransack-compatible token-search metadata. |
 | `RailsFieldsKit::TableCellInput` | Describes an editable cell UI that can later be rendered with Rails Fields Kit helpers. | Mirrors the built-in field type family used by filter metadata, without the Ransack-specific filter entrypoint. |
 | `RailsFieldsKit::TableMetadata` | Collects filter and cell editor metadata from columns or table-like objects. | Can return metadata hashes, FormBuilder call specs, or ordered render result arrays. |
-| `RailsFieldsKit::TableRenderer` | Maps metadata into FormBuilder helper calls or render results. | Owns the field type registry and custom helper mapping for table integrations. |
+| `RailsFieldsKit::TableRenderer` | Maps metadata into FormBuilder helper calls or render results. | Owns the field type registry, custom helper mapping, and field type introspection for table integrations. |
 
 Public metadata methods are grouped by class so reviewers can scan the contract without reading one long mixed list. Use [`table_adapters.md`](table_adapters.md) as the source of truth for examples, custom renderer registry setup, and the difference between built-in factory types and custom renderable mappings.
 
@@ -206,6 +206,7 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 ### TableRenderer methods
 
 - `RailsFieldsKit::TableRenderer.field_helpers`
+- `RailsFieldsKit::TableRenderer.registered_field_types`
 - `RailsFieldsKit::TableRenderer.helper_for`
 - `RailsFieldsKit::TableRenderer.registered_field_type?`
 - `RailsFieldsKit::TableRenderer.register_field_helper`
@@ -220,6 +221,8 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 - `RailsFieldsKit::TableRenderer.render_cell_editors`
 
 The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `to_h` and `to_hash` return the same metadata hash as `to_table_filter` or `to_table_cell_editor`.
+
+`TableFilterInput.known_types` and `TableCellInput.known_types` describe the built-in metadata factory families. `TableRenderer.registered_field_types` describes the currently renderable registry and includes custom field types registered with `register_field_helper`. It returns field type strings only; integrations that need helper names should keep using the existing `field_helpers` mapping.
 
 `TableFilterInput.ransack_filter` is the current public entrypoint when table-oriented code wants Ransack-compatible token-search metadata. `TableMetadata` can collect metadata from Hash columns, hash-like columns that respond to `to_hash`, object columns with public metadata readers, enumerable column lists, and table-like objects that respond to `columns`. Explicit `false` filter/editor metadata disables that slot instead of falling through to alias keys or readers. `TableRenderer` can turn collected metadata into FormBuilder call specs or dispatch it to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol, custom registry examples, and Rails Table Preferences integration notes.
 
