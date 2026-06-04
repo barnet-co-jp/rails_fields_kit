@@ -304,7 +304,7 @@ export default class extends Controller {
   }
 
   applySelectedOptions(json, requestedValues = []) {
-    const options = this.normalizeSelectedOptions(json)
+    const options = this.normalizeSelectedOptions(json).filter((option) => this.optionHasValue(option))
     options.forEach((option) => {
       this.tomSelect.addOption(option)
       this.tomSelect.addItem(option[this.valueFieldValue], true)
@@ -318,7 +318,7 @@ export default class extends Controller {
     if (Array.isArray(json)) return json
     if (json && Array.isArray(json.options)) return json.options
     if (json && Array.isArray(json.results)) return json.results
-    if (json && json.option) return [json.option]
+    if (json && this.hasOwnProperty(json, "option")) return [json.option]
     if (json) return [json]
 
     return []
@@ -448,10 +448,22 @@ export default class extends Controller {
   }
 
   normalizeCreatedOption(json) {
-    if (json && json.option) return json.option
-    if (json) return json
+    const option = json && this.hasOwnProperty(json, "option") ? json.option : json
 
-    return false
+    return this.optionHasValue(option) ? option : false
+  }
+
+  optionHasValue(option) {
+    return Boolean(
+      option &&
+        typeof option === "object" &&
+        !Array.isArray(option) &&
+        this.hasPresentValue(option[this.valueFieldValue])
+    )
+  }
+
+  hasOwnProperty(object, property) {
+    return Object.prototype.hasOwnProperty.call(object, property)
   }
 
   renderText(value, fallback) {
