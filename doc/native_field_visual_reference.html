@@ -501,7 +501,8 @@
         <h1>Native Field Visual Reference</h1>
         <p class="lede">
           Diagnostic QA surface for the native helper family: wrapper, validation, affixes, metadata,
-          focus, customization, non-editable states, narrow viewport stress, generated aria ids, and the accessibility opt-out boundary.
+          focus, customization, non-editable states, narrow viewport stress, generated aria ids, multiline text areas,
+          and the accessibility opt-out boundary.
         </p>
         <div class="hero-links">
           <a href="field_helpers.md">Read helper details</a>
@@ -513,6 +514,7 @@
         <span class="review-pill">State comparison first</span>
         <span class="review-pill">Generated aria id scan</span>
         <span class="review-pill">Rendered contract reader scan</span>
+        <span class="review-pill">Multiline textarea scan</span>
         <span class="review-pill">Desktop and narrow viewport scan</span>
         <span class="review-pill">Static artifact only</span>
         <span class="review-pill">No helper or runtime behavior changes</span>
@@ -560,6 +562,44 @@
               </div>
               <div class="hint">Used for customer-facing notifications.</div>
               <div class="error">Email must contain an @ sign.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="tag validation">Multiline textarea</div>
+          <h2>Text area with long hint and validation copy</h2>
+          <p>
+            `rfk_text_area` keeps the shared native wrapper contract while allowing multiple lines, long content,
+            and error text to wrap inside the same card.
+          </p>
+          <div class="example error-state validation-surface">
+            <div class="field-block">
+              <div class="label-row">
+                <span>Operational handoff note</span>
+                <span class="required">Required</span>
+              </div>
+              <div class="control-row">
+                <div class="textarea">
+                  Confirm the customer impact, the internal owner, and the next review window before the request moves to finance approval.
+                </div>
+              </div>
+              <div class="hint">
+                Keep the note short enough for the review table, but include the handoff owner, expected customer response, and any deadline that affects support routing.
+              </div>
+              <div class="error">
+                Handoff note is too vague; add the owner and the next action before saving.
+              </div>
+            </div>
+            <div class="metadata-list">
+              <div class="metadata-row">
+                <span class="metadata-key">Helper lane</span>
+                <span class="metadata-value">Representative `rfk_text_area` state; the sample does not add autosize, masking, or production CSS behavior.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">Narrow check</span>
+                <span class="metadata-value">At 460px, textarea content, hint, and error copy wrap below the label without horizontal overflow.</span>
+              </div>
             </div>
           </div>
         </article>
@@ -879,6 +919,7 @@
           <span>Hero scale stays below the state cards so reviewers scan helper states first.</span>
           <span>Shared wrapper contract: label, hint, affixes, validation redisplay.</span>
           <span>Native helper lane only: no remote search, selected preload, or create-on-the-fly semantics.</span>
+          <span>Multiline `rfk_text_area` keeps long content, long hints, and validation copy readable in one native wrapper lane.</span>
           <span>Input metadata defaults stay visible without adding masks, formatting, or validation policy.</span>
           <span>Narrow viewport stress keeps long label, hint, error, required marker, and money affixes readable.</span>
           <span>Keyboard focus remains visible around affix-heavy fields and text areas.</span>
