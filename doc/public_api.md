@@ -209,6 +209,7 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 - `RailsFieldsKit::TableRenderer.helper_for`
 - `RailsFieldsKit::TableRenderer.registered_field_type?`
 - `RailsFieldsKit::TableRenderer.register_field_helper`
+- `RailsFieldsKit::TableRenderer.unregister_field_helper`
 - `RailsFieldsKit::TableRenderer.reset_field_helpers!`
 - `RailsFieldsKit::TableRenderer.filter_call`
 - `RailsFieldsKit::TableRenderer.filter_calls`
@@ -222,6 +223,8 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `to_h` and `to_hash` return the same metadata hash as `to_table_filter` or `to_table_cell_editor`.
 
 `TableFilterInput.ransack_filter` is the current public entrypoint when table-oriented code wants Ransack-compatible token-search metadata. `TableMetadata` can collect metadata from Hash columns, hash-like columns that respond to `to_hash`, object columns with public metadata readers, enumerable column lists, and table-like objects that respond to `columns`. Explicit `false` filter/editor metadata disables that slot instead of falling through to alias keys or readers. `TableRenderer` can turn collected metadata into FormBuilder call specs or dispatch it to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol, custom registry examples, and Rails Table Preferences integration notes.
+
+`TableRenderer.unregister_field_helper(field_type)` removes a custom-only renderer mapping from the current registry. If a built-in field type was temporarily overridden with `register_field_helper`, unregistering that built-in type restores the default helper instead of making the built-in type unknown. Use `reset_field_helpers!` when a test or integration needs to discard all custom mappings at once. The registry APIs do not change `TableFilterInput.known_types`, `TableCellInput.known_types`, table preference persistence, UI generation, or authorization policy.
 
 ## JavaScript exports
 
