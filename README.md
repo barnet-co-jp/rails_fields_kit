@@ -44,6 +44,7 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | Build remote search, selected preload, create, or token suggestion endpoints | [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) |
 | Understand shared token, Ransack, and table metadata boundaries | [`doc/shared_metadata_navigation.md`](doc/shared_metadata_navigation.md) for the reading order across current public APIs, host-app metadata patterns, and ROADMAP proposals |
 | Handle Stimulus events or request-failure surfaces | [`doc/events.md`](doc/events.md) |
+| Review Turbo / Stimulus reconnect lifecycle | [`doc/tom_select_turbo_lifecycle.md`](doc/tom_select_turbo_lifecycle.md) |
 | Configure initializer defaults and field-level override precedence | [`doc/configuration.md`](doc/configuration.md) |
 | Work with optional table metadata or custom renderer mappings | [`doc/table_adapters.md`](doc/table_adapters.md) for adapter metadata, renderer call specs, and custom registry mapping; [`doc/table_group_html.md`](doc/table_group_html.md) for group-level wrapper attributes |
 | Run local checks | [`doc/development.md`](doc/development.md) |
