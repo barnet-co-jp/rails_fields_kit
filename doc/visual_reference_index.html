@@ -203,6 +203,16 @@
         color: var(--warning);
       }
 
+      .task-card header {
+        display: grid;
+        gap: 8px;
+      }
+
+      .task-card .task-links a {
+        flex: 1 1 190px;
+        text-align: center;
+      }
+
       .review-question {
         padding: 10px 12px;
         border-left: 3px solid var(--accent);
@@ -368,7 +378,7 @@
       <section aria-labelledby="task-picker-title">
         <div class="section-heading">
           <h2 id="task-picker-title">Pick by reviewer task</h2>
-          <p>Start from the task that matches the PR or release question, then open the focused artifact. These routes reuse the same landed references and do not add new visual lanes.</p>
+          <p>Start from the task that matches the PR or release question, then open the primary artifact first. Secondary links are there only when the review needs a neighboring lane; they do not introduce proposal-only artifacts.</p>
         </div>
 
         <div class="task-grid">
@@ -379,14 +389,15 @@
                 <span class="tag info">broad scan</span>
               </div>
               <h3>Release verification</h3>
-              <p>Check whether the current reference family is still readable before recording release evidence.</p>
+              <p>Use when a release or PR needs visual evidence that landed references still read well at desktop and narrow widths.</p>
             </header>
             <ul>
-              <li>Open the core Tom Select and native helper lanes first.</li>
-              <li>Record changed artifact evidence in sample_app_results.md.</li>
+              <li>Start with the core Tom Select artifact for the broadest helper coverage.</li>
+              <li>Use native helper states when the release touches native wrapper, label, hint, validation, or affix surfaces.</li>
+              <li>Record changed artifact evidence in sample_app_results.md or the release PR comment.</li>
             </ul>
             <nav class="task-links" aria-label="Release verification references">
-              <a href="tom_select_visual_reference.html">Tom Select states</a>
+              <a href="tom_select_visual_reference.html">Primary: Tom Select states</a>
               <a href="native_field_visual_reference.html">Native helper states</a>
             </nav>
           </article>
@@ -398,15 +409,16 @@
                 <span class="tag warning">copy</span>
               </div>
               <h3>Design and copy review</h3>
-              <p>Inspect helper chrome, labels, hint text, native affix readability, configured empty/loading copy, and wrapping behavior.</p>
+              <p>Use when the change is about labels, hints, helper chrome, copy overrides, class pass-through, or narrow wrapping.</p>
             </header>
             <ul>
-              <li>Compare native helper layout, long label stress, configured wrapper classes, and text override examples.</li>
+              <li>Start with native narrow stress for field copy, affixes, validation, and long labels.</li>
+              <li>Use wrapper classes for host-app class pass-through, then text overrides only for configured Tom Select copy.</li>
               <li>Keep native search fields separate from Tom Select-backed search or token suggestions.</li>
             </ul>
             <nav class="task-links" aria-label="Design and copy review references">
-              <a href="native_field_visual_reference.html">Native narrow stress</a>
-              <a href="configuration_wrapper_class_visual_reference.html">Wrapper class configuration</a>
+              <a href="native_field_visual_reference.html">Primary: native stress</a>
+              <a href="configuration_wrapper_class_visual_reference.html">Wrapper classes</a>
               <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
             </nav>
           </article>
@@ -418,14 +430,15 @@
                 <span class="tag info">feedback</span>
               </div>
               <h3>Request-failure feedback</h3>
-              <p>Review error-surface feedback without treating retry UI or request lifecycle behavior as built in.</p>
+              <p>Use when a PR touches `error_surface: true`, load failure copy, selected-load failure, or operation metadata.</p>
             </header>
             <ul>
-              <li>Use the focused request-failure artifact for status and operation metadata.</li>
-              <li>Check text override copy only when the PR changes configured messages.</li>
+              <li>Start with request failures for the focused error-surface lane.</li>
+              <li>Open text overrides only when configured no-results, loading, or create copy is part of the review.</li>
+              <li>Keep retry actions, reveal timing, and request lifecycle behavior with the host app.</li>
             </ul>
             <nav class="task-links" aria-label="Request-failure feedback references">
-              <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
+              <a href="tom_select_request_failure_visual_reference.html">Primary: request failures</a>
               <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
             </nav>
           </article>
@@ -436,15 +449,16 @@
                 <span class="tag primary">table metadata</span>
                 <span class="tag info">token search</span>
               </div>
-              <h3>Table integration boundaries</h3>
-              <p>Confirm that metadata-driven filters, editors, and token suggestions stay separate from table persistence and query execution.</p>
+              <h3>Table and token boundaries</h3>
+              <p>Use when the review question is whether metadata-driven filters, editors, or token suggestions stay inside their ownership boundary.</p>
             </header>
             <ul>
-              <li>Open table metadata for generated filter/editor lanes.</li>
-              <li>Open saved-search tokens when suggestion shape or wrapping is the review question.</li>
+              <li>Start with table metadata for generated filter/editor lanes.</li>
+              <li>Use saved-search tokens when suggestion shape, badges, delimiter visibility, or multi-token wrapping is the review topic.</li>
+              <li>Keep table persistence, query execution, token parsing, and authorization outside Rails Fields Kit.</li>
             </ul>
-            <nav class="task-links" aria-label="Table integration boundary references">
-              <a href="table_metadata_visual_reference.html">Table metadata</a>
+            <nav class="task-links" aria-label="Table and token boundary references">
+              <a href="table_metadata_visual_reference.html">Primary: table metadata</a>
               <a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a>
             </nav>
           </article>
