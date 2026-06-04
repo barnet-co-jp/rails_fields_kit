@@ -108,6 +108,12 @@ try {
       `import assert from "node:assert/strict"\n\n` +
       `const expectedNamedExports = ${JSON.stringify(expectedPackageRootNamedExports)}\n` +
       `const expectedCallableHelperExports = ${JSON.stringify(expectedCallableHelperExports)}\n\n` +
+      `function tomSelectElement(value) {\n` +
+      `  return {\n` +
+      `    getAttribute(name) { return name === "data-controller" ? "rails-fields-kit--tom-select" : null },\n` +
+      `    tomselect: { getValue() { return value } }\n` +
+      `  }\n` +
+      `}\n\n` +
       `expectedNamedExports.forEach((exportName) => {\n` +
       `  assert.ok(exportName in packageRoot, \`package root should expose documented export ${"${exportName}"}\`)\n` +
       `})\n` +
@@ -115,7 +121,17 @@ try {
       `assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")\n` +
       `expectedCallableHelperExports.forEach((exportName) => {\n` +
       `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)\n` +
-      `})\n`
+      `})\n\n` +
+      `assert.deepEqual(packageRoot.tomSelectSelectionContract(tomSelectElement("42")), { values: ["42"] })\n` +
+      `assert.deepEqual(packageRoot.tomSelectSelectionContract(tomSelectElement(["1", "2"])), { values: ["1", "2"] })\n` +
+      `assert.deepEqual(packageRoot.tomSelectSelectionContract(tomSelectElement("")), { values: [""] })\n\n` +
+      `const sourceValues = ["a", "b"]\n` +
+      `const selectionContract = packageRoot.tomSelectSelectionContract(tomSelectElement(sourceValues))\n` +
+      `selectionContract.values.push("c")\n` +
+      `assert.deepEqual(sourceValues, ["a", "b"], "selection contract should not expose Tom Select's value array for mutation")\n\n` +
+      `assert.equal(packageRoot.tomSelectSelectionContract(null), null)\n` +
+      `assert.equal(packageRoot.tomSelectSelectionContract({ getAttribute() { return "rails-fields-kit--tom-select" } }), null)\n` +
+      `assert.equal(packageRoot.tomSelectSelectionContract({ getAttribute() { return "other-controller" }, tomselect: { getValue() { return "42" } } }), null)\n`
   )
 
   await import(pathToFileURL(probePath).href)
