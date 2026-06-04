@@ -8,6 +8,7 @@ Use it as a lightweight adoption checklist for wiring Rails Fields Kit into this
 
 Use this first pass to prove one server-rendered field before adding remote endpoints or richer Tom Select behavior.
 
+- [ ] Run `rails rails_fields_kit:doctor` after installation to review detectable setup state and manual checklist items.
 - [ ] Confirm `config/initializers/rails_fields_kit.rb` matches this app's needs.
 - [ ] Install Tom Select with the JavaScript toolchain already used by this app.
 - [ ] Register `rails-fields-kit--tom-select` on the app's existing Stimulus application.
@@ -39,6 +40,7 @@ Use this section after the first server-rendered field is working.
 - [ ] If this app uses `selected_url:` or `error_surface: true`, review `doc/setup.md` for the representative edit-form wiring and `doc/events.md` for `selected-load`, `selected-load-error`, and `detail.surface`.
 - [ ] If this app uses importmap, run `rails generate rails_fields_kit:install --importmap` when `config/importmap.rb` exists, or add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] If this app uses Vite or another bundler, add resolver or alias entries for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
+- [ ] Use the doctor output as a read-only prompt; Tom Select package install, Stimulus registration, CSS import, and bundler aliases remain host-app manual checks.
 
 ## Migration and helper selection
 
