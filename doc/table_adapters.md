@@ -269,6 +269,19 @@ columns = [
 
 `RailsFieldsKit::TableMetadata` can collect Rails Fields Kit filter/editor metadata from hash-like or object-like column definitions. It also accepts a table-like object that responds to `columns`.
 
+Use this collector when the source is still a table or column definition. Use `RailsFieldsKit::TableRenderer` directly only after you already have filter/editor metadata objects or metadata hashes.
+
+| Source shape | Example | Collector behavior |
+| --- | --- | --- |
+| `nil` source | `TableMetadata.filters(nil)` | Returns an empty list. |
+| Array of column hashes or objects | `[{ filter: ... }, column]` | Reads each column in order. |
+| Enumerable column source | `columns.each` | Converts the enumerable to an ordered list. |
+| Single hash column | `{ filter_input: ... }` | Treats the hash as one column definition, not as key-value pairs. |
+| Table-like object | `OpenStruct.new(columns: columns)` | Reads `columns` first, then applies the same source rules to the returned value. |
+| Hash-like source with metadata keys | `source.to_hash #=> { filter: ... }` | Treats the hash-like object as one column when it has filter/editor metadata keys. |
+| Object column with metadata reader | `Struct.new(:filter).new(...)` | Reads declared metadata readers such as `filter` or `cell_editor`. |
+| Already-normalized metadata list | `[TableFilterInput.search_field(:q)]` | Pass this to `TableRenderer.filter_calls` / `cell_editor_calls`, not to the column collector. |
+
 ```ruby
 columns = [
   {
@@ -317,6 +330,8 @@ single_object_table = OpenStruct.new(
 ```
 
 Filter aliases are also recognized: `filter`, `filter_input`, and `search_filter`. Cell editor aliases are `editor`, `cell_editor`, and `cell_input`. These names work as hash keys or public object methods. For struct-like objects, only declared members are considered metadata readers so inherited `Enumerable` methods such as `filter` are ignored.
+
+A column with no recognized metadata key is ignored. A recognized metadata value of `nil` or explicit `false` is skipped, so host integrations can hide a filter/editor without removing the rest of the column definition. Hash-like metadata values are normalized through `to_hash`, and `to_hash` must return a Hash-like object.
 
 It also exposes convenience methods that collect metadata and immediately convert it to FormBuilder call specs:
 

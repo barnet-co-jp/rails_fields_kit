@@ -6,10 +6,14 @@ require "spec_helper"
 RSpec.describe "package contents" do
   let(:gemspec_path) { File.expand_path("../rails_fields_kit.gemspec", __dir__) }
   let(:specification) { Gem::Specification.load(gemspec_path) }
+  let(:readme_path) { File.expand_path("../README.md", __dir__) }
+  let(:readme) { File.read(readme_path) }
   let(:repo_agents_path) { File.expand_path("../AGENTS.md", __dir__) }
   let(:repo_agents) { File.read(repo_agents_path) }
   let(:product_profile_path) { File.expand_path("../Product Profile.md", __dir__) }
   let(:product_profile) { File.read(product_profile_path) }
+  let(:setup_doc_path) { File.expand_path("../doc/setup.md", __dir__) }
+  let(:setup_doc) { File.read(setup_doc_path) }
   let(:visual_references_path) { File.expand_path("../doc/visual_references.md", __dir__) }
   let(:visual_references) { File.read(visual_references_path) }
   let(:public_api_path) { File.expand_path("../doc/public_api.md", __dir__) }
@@ -80,6 +84,7 @@ RSpec.describe "package contents" do
       "## Remote endpoints and richer selects",
       "- [ ] Add the first `rfk_combobox` field and matching `rfk_search_with` / `rfk_find_with` / `rfk_create_with` endpoints.",
       "- [ ] Use `doc/controller_helpers.md` for the maintained endpoint option reference, including custom `action:` names.",
+      "- [ ] If this app uses FormBuilder `min_length:`, review the controller helper blank-query policy before deciding whether the matching endpoint also needs `minimum_query_length:`.",
       "- [ ] Review remote option settings such as `selected_url:`, `option_description_field:`, and `option_badge_field:` in the public API guide before wiring richer selects.",
       "- [ ] If this app uses `selected_url:` or `error_surface: true`, review `doc/setup.md` for the representative edit-form wiring and `doc/events.md` for `selected-load`, `selected-load-error`, and `detail.surface`.",
       "- [ ] If this app uses importmap, run `rails generate rails_fields_kit:install --importmap` when `config/importmap.rb` exists, or add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.",
@@ -102,6 +107,28 @@ RSpec.describe "package contents" do
       "- Remote endpoint follow-up:",
       "- Release verification notes:",
       "- Follow-up tasks:"
+    )
+  end
+
+  it "keeps README and setup JavaScript helper summaries pointed at the public API source of truth" do
+    javascript_exports = markdown_section(public_api, "## JavaScript exports")
+
+    expect(javascript_exports).to include(
+      "### Current package-root exports",
+      "`TomSelectController`",
+      "rendered-field contract reader",
+      "Future package-root helpers should follow the same boundary"
+    )
+
+    expect(readme).to include(
+      "`rails_fields_kit/index.js` re-exports the same controller",
+      "read-only rendered-field contract helpers",
+      "use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary"
+    )
+
+    expect(setup_doc).to include(
+      "The package root also exposes read-only rendered-field contract helpers",
+      "Use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the current source of truth for the helper list and return shape"
     )
   end
 
@@ -154,6 +181,7 @@ RSpec.describe "package contents" do
       "doc/controller_helpers.md",
       "doc/configuration.md",
       "doc/events.md",
+      "doc/tom_select_turbo_lifecycle.md",
       "doc/token_suggestions.md",
       "doc/ransack_suggestions.md",
       "doc/table_adapters.md",
