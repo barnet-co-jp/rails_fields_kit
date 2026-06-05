@@ -38,7 +38,11 @@ end
 
 exports = JSON.parse(package_json).fetch("exports")
 required_exports = [".", "./tom_select_controller"]
-expected_package_root_named_exports = ["TomSelectController", "tomSelectTextOverrideContract"]
+expected_package_root_named_exports = [
+  "TomSelectController",
+  "tomSelectPluginContract",
+  "tomSelectTextOverrideContract"
+]
 missing_exports = required_exports.reject { |export_name| exports.key?(export_name) }
 
 abort "package.json is missing exports: #{missing_exports.join(", ")}" unless missing_exports.empty?
@@ -114,6 +118,7 @@ Dir.mktmpdir("rails-fields-kit-built-gem-import-") do |dir|
       assert.equal(rootDefault, packageRoot.TomSelectController, "package root default export should match TomSelectController")
       assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")
       assert.equal(typeof packageRoot.tomSelectTextOverrideContract, "function", "package root should expose documented text override helper")
+      assert.equal(typeof packageRoot.tomSelectPluginContract, "function", "package root should expose documented plugin contract helper")
     JS
   )
 
