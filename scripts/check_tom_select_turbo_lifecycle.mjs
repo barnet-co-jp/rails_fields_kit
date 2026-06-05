@@ -4,23 +4,36 @@ import { withTomSelectControllerSandbox } from "./tom_select_smoke_harness.mjs"
 await withTomSelectControllerSandbox("rails-fields-kit-turbo-lifecycle-", ({ TomSelectController }) => {
   const source = TomSelectController.toString()
 
-  assert.match(source, /disconnect\(\)\s*{[\s\S]*this\.connected = false/)
-  assert.match(source, /disconnect\(\)\s*{[\s\S]*this\.abortAllRequests\(\)/)
-  assert.match(source, /disconnect\(\)\s*{[\s\S]*this\.tomSelect\.destroy\(\)/)
-  assert.match(source, /disconnect\(\)\s*{[\s\S]*this\.tomSelect = null/)
   assert.doesNotMatch(source, /turbo:load/)
 
   const controller = new TomSelectController()
-  let aborted = 0
+  const abortedOperations = []
   let destroyed = 0
+
   controller.connected = true
-  controller.abortAllRequests = () => { aborted += 1 }
+  controller.requestControllers = {
+    load: { abort: () => { abortedOperations.push("load") } },
+    "selected-load": { abort: () => { abortedOperations.push("selected-load") } },
+    create: { abort: () => { abortedOperations.push("create") } }
+  }
+  controller.requestTokens = {
+    load: Symbol("load"),
+    "selected-load": Symbol("selected-load"),
+    create: Symbol("create")
+  }
   controller.tomSelect = { destroy: () => { destroyed += 1 } }
 
   controller.disconnect()
 
   assert.equal(controller.connected, false)
-  assert.equal(aborted, 1)
+  assert.deepEqual(abortedOperations.sort(), ["create", "load", "selected-load"])
+  assert.deepEqual(controller.requestControllers, {})
+  assert.deepEqual(controller.requestTokens, {})
+  assert.equal(destroyed, 1)
+  assert.equal(controller.tomSelect, null)
+
+  controller.disconnect()
+
   assert.equal(destroyed, 1)
   assert.equal(controller.tomSelect, null)
 })
