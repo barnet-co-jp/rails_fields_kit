@@ -115,7 +115,48 @@ try {
       `assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")\n` +
       `expectedCallableHelperExports.forEach((exportName) => {\n` +
       `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)\n` +
-      `})\n`
+      `})\n\n` +
+      `const hintElement = {\n` +
+      `  getAttribute: (name) => name === "class" ? "rfk-hint" : null,\n` +
+      `  classList: { contains: (className) => className === "rfk-hint" }\n` +
+      `}\n` +
+      `const errorElement = {\n` +
+      `  getAttribute: (name) => name === "class" ? "rfk-error" : null,\n` +
+      `  classList: { contains: (className) => className === "rfk-error" }\n` +
+      `}\n` +
+      `const explicitLabelElement = { getAttribute: (name) => name === "for" ? "customer_email" : null }\n` +
+      `const wrapperLabelElement = { getAttribute: () => null }\n` +
+      `const wrapperElement = { querySelector: (selector) => selector === "label" ? wrapperLabelElement : null }\n` +
+      `const ownerDocument = {\n` +
+      `  getElementById: (id) => ({ "customer_email_hint": hintElement, "customer_email_error": errorElement }[id] || null),\n` +
+      `  querySelectorAll: (selector) => selector === "label" ? [explicitLabelElement] : []\n` +
+      `}\n` +
+      `const nativeInput = {\n` +
+      `  tagName: "INPUT",\n` +
+      `  ownerDocument,\n` +
+      `  closest: (selector) => selector === ".rfk-field" ? wrapperElement : null,\n` +
+      `  getAttribute: (name) => ({\n` +
+      `    id: "customer_email",\n` +
+      `    "aria-describedby": "customer_email_hint customer_email_error customer_email_hint"\n` +
+      `  }[name] || null)\n` +
+      `}\n` +
+      `const nativeContract = packageRoot.nativeFieldAccessibilityContract(nativeInput)\n` +
+      `assert.deepEqual(nativeContract.describedByIds, ["customer_email_hint", "customer_email_error"], "native contract should de-duplicate described-by ids")\n` +
+      `assert.equal(nativeContract.hintElement, hintElement, "native contract should expose hint element")\n` +
+      `assert.equal(nativeContract.errorElement, errorElement, "native contract should expose error element")\n` +
+      `assert.equal(nativeContract.wrapperElement, wrapperElement, "native contract should expose wrapper element")\n` +
+      `assert.equal(nativeContract.labelElement, explicitLabelElement, "native contract should prefer explicit label[for] association")\n\n` +
+      `const wrapperOnlyInput = {\n` +
+      `  tagName: "TEXTAREA",\n` +
+      `  ownerDocument: { getElementById: () => null, querySelectorAll: () => [] },\n` +
+      `  closest: (selector) => selector === ".rfk-field" ? wrapperElement : null,\n` +
+      `  getAttribute: () => null\n` +
+      `}\n` +
+      `assert.equal(\n` +
+      `  packageRoot.nativeFieldAccessibilityContract(wrapperOnlyInput).labelElement,\n` +
+      `  wrapperLabelElement,\n` +
+      `  "native contract should fall back to a label inside the field wrapper"\n` +
+      `)\n`
   )
 
   await import(pathToFileURL(probePath).href)
