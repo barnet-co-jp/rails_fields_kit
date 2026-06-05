@@ -8,9 +8,11 @@ Use it as a lightweight adoption checklist for wiring Rails Fields Kit into this
 
 Use this first pass to prove one server-rendered field before adding remote endpoints or richer Tom Select behavior.
 
+- [ ] Run `rails rails_fields_kit:doctor` after installation to review detectable setup state and manual checklist items.
 - [ ] Confirm `config/initializers/rails_fields_kit.rb` matches this app's needs.
 - [ ] Install Tom Select with the JavaScript toolchain already used by this app.
 - [ ] Register `rails-fields-kit--tom-select` on the app's existing Stimulus application.
+- [ ] For Turbo-enabled apps, let the registered Stimulus controller handle normal `rfk_*` field reconnects; do not add a separate host-app `turbo:load` reinitializer unless custom markup lives outside Stimulus-managed DOM.
 - [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.
 - [ ] Follow the README first field quickstart or the setup guide `rfk_select` lane before adding remote endpoints.
 - [ ] Record the first Rails Fields Kit field and any app-specific ownership notes below.
@@ -21,6 +23,7 @@ These upstream docs remain the source of truth for copyable examples, public API
 
 - README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>
 - Setup guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>
+- Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
 - Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>
 - Configuration: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration.md>
 - Field helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/field_helpers.md>
@@ -32,10 +35,12 @@ Use this section after the first server-rendered field is working.
 
 - [ ] Add the first `rfk_combobox` field and matching `rfk_search_with` / `rfk_find_with` / `rfk_create_with` endpoints.
 - [ ] Use `doc/controller_helpers.md` for the maintained endpoint option reference, including custom `action:` names.
+- [ ] If this app uses FormBuilder `min_length:`, review the controller helper blank-query policy before deciding whether the matching endpoint also needs `minimum_query_length:`.
 - [ ] Review remote option settings such as `selected_url:`, `option_description_field:`, and `option_badge_field:` in the public API guide before wiring richer selects.
 - [ ] If this app uses `selected_url:` or `error_surface: true`, review `doc/setup.md` for the representative edit-form wiring and `doc/events.md` for `selected-load`, `selected-load-error`, and `detail.surface`.
 - [ ] If this app uses importmap, run `rails generate rails_fields_kit:install --importmap` when `config/importmap.rb` exists, or add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] If this app uses Vite or another bundler, add resolver or alias entries for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
+- [ ] Use the doctor output as a read-only prompt; Tom Select package install, Stimulus registration, CSS import, and bundler aliases remain host-app manual checks.
 
 ## Migration and helper selection
 
@@ -58,6 +63,7 @@ Use these references before shipping remote preloads, table metadata surfaces, o
 ## Reference links
 
 - Practical `rfk_select` migration guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/select_migration.md>
+- Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
 - Visual reference family: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/visual_references.md>
 - Tom Select visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_visual_reference.html>
 - Selected preload release gate: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/selected_preload_release_gate.md>
