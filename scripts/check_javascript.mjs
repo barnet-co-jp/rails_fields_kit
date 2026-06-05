@@ -10,6 +10,10 @@ const checks = [
     args: ["--check", "app/javascript/rails_fields_kit/tom_select_controller.js"]
   },
   {
+    name: "JavaScript smoke inventory guard",
+    args: ["scripts/check_javascript_smoke_inventory.mjs"]
+  },
+  {
     name: "package exports smoke",
     args: ["scripts/check_package_exports.mjs"]
   },
@@ -22,7 +26,7 @@ const checks = [
     args: ["scripts/check_tom_select_interaction_events.mjs"]
   },
   {
-    name: "Tom Select create headers smoke",
+    name: "Tom Select create headers and response normalization smoke",
     args: ["scripts/check_tom_select_create_headers.mjs"]
   },
   {
@@ -40,6 +44,14 @@ const checks = [
   {
     name: "Tom Select render text fallback smoke",
     args: ["scripts/check_tom_select_render_text_fallback.mjs"]
+  },
+  {
+    name: "Tom Select plugin contract smoke",
+    args: ["scripts/check_tom_select_plugin_contract.mjs"]
+  },
+  {
+    name: "selected preload config contract smoke",
+    args: ["scripts/check_selected_preload_config_contract.mjs"]
   }
 ]
 
