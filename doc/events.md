@@ -108,7 +108,7 @@ These events forward common Tom Select interactions:
 - `rails-fields-kit--tom-select:clear`
   - Detail: `{ values }`
 
-These are useful even when the field does not use remote search or create-on-the-fly.
+These are useful even when the field does not use remote search or create-on-the-fly. The `values` array mirrors Tom Select's current value after Rails Fields Kit normalizes it with the same helper used by the other interaction events. For single-value fields, Tom Select's scalar cleared value is wrapped, so a clear event typically has `values: [""]`. For multiple-value fields, clear keeps Tom Select's empty array shape as `values: []`.
 
 ## Choosing the right hook
 
