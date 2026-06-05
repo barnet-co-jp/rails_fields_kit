@@ -16,6 +16,57 @@ Use this page when you need one allowed field/operator list to feed token sugges
 - Host-app pattern: keeping one app-owned metadata source and passing derived hashes into the current builders. Rails Fields Kit receives ordinary arguments; it does not own the source registry.
 - Future proposal: helper-level adapter DSLs or a Rails Fields Kit-owned field/operator registry shown in `ROADMAP.md` before they are accepted and added to the public API docs.
 
+## Host-app owned example
+
+Keep the shared source in the application, then derive the view each current Rails Fields Kit surface needs.
+
+```ruby
+ORDER_SEARCH_FIELDS = {
+  status: {
+    label: "Status",
+    values: %w[open closed],
+    ransack_predicate: :status_eq
+  },
+  assignee: {
+    label: "Assignee",
+    ransack_predicate: :assignee_name_cont
+  }
+}.freeze
+
+# General token suggestions for `rfk_token_search` endpoints.
+token_fields = ORDER_SEARCH_FIELDS.transform_values do |config|
+  config.slice(:label, :values)
+end
+
+RailsFieldsKit::TokenSuggestions.build(
+  fields: token_fields,
+  operators: ["OR", "not()"]
+)
+
+# Ransack-oriented suggestions for the same allowed field list.
+ransack_fields = ORDER_SEARCH_FIELDS.transform_values do |config|
+  {
+    label: config.fetch(:label),
+    predicate: config.fetch(:ransack_predicate),
+    values: config[:values]
+  }.compact
+end
+
+RailsFieldsKit::RansackSuggestions.build(fields: ransack_fields)
+
+# Table metadata can advertise the same Ransack-oriented fields.
+RailsFieldsKit::TableFilterInput.ransack_filter(
+  :query,
+  fields: ransack_fields,
+  url: search_tokens_path(format: :json),
+  param_name: :q
+)
+```
+
+This pattern only centralizes suggestion and metadata inputs. The host application still owns current-user filtering, submitted token parsing, `params[:q]` construction, authorization, Active Record relation construction, Ransack execution, pagination, and user-visible feedback.
+
+Do not treat this example as a registry API. There is no Rails Fields Kit-owned field/operator registry, helper-level Ransack adapter DSL, or query execution path in the current 0.1.x public API.
+
 ## Non-goals
 
 This navigation page does not add a registry API, token parser, Ransack execution path, authorization policy, table preference persistence contract, or visual reference artifact. It only keeps the current docs easier to scan without changing runtime behavior.
