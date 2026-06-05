@@ -40,6 +40,8 @@ The setup example documentation drift spec keeps the JavaScript setup signals in
 
 The suggestion payload documentation drift spec keeps `TokenSuggestions` and `RansackSuggestions` docs aligned with representative option payload keys, custom output field names, and Ransack metadata keys without freezing full examples or prose.
 
+The FormBuilder helper inventory docs spec keeps the compact helper list in `doc/public_api.md` aligned with detailed helper sections in `doc/field_helpers.md`, while checking only representative README chooser entries so the README can stay concise instead of becoming an exhaustive API mirror.
+
 Representative compatibility checks are also useful before review or release:
 
 ```bash
