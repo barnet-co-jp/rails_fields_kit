@@ -6,16 +6,24 @@ require "spec_helper"
 RSpec.describe "package contents" do
   let(:gemspec_path) { File.expand_path("../rails_fields_kit.gemspec", __dir__) }
   let(:specification) { Gem::Specification.load(gemspec_path) }
+  let(:readme_path) { File.expand_path("../README.md", __dir__) }
+  let(:readme) { File.read(readme_path) }
   let(:repo_agents_path) { File.expand_path("../AGENTS.md", __dir__) }
   let(:repo_agents) { File.read(repo_agents_path) }
   let(:product_profile_path) { File.expand_path("../Product Profile.md", __dir__) }
   let(:product_profile) { File.read(product_profile_path) }
+  let(:setup_doc_path) { File.expand_path("../doc/setup.md", __dir__) }
+  let(:setup_doc) { File.read(setup_doc_path) }
   let(:visual_references_path) { File.expand_path("../doc/visual_references.md", __dir__) }
   let(:visual_references) { File.read(visual_references_path) }
   let(:public_api_path) { File.expand_path("../doc/public_api.md", __dir__) }
   let(:public_api) { File.read(public_api_path) }
   let(:field_helpers_path) { File.expand_path("../doc/field_helpers.md", __dir__) }
   let(:field_helpers) { File.read(field_helpers_path) }
+  let(:sample_app_checklist_path) { File.expand_path("../doc/sample_app_checklist.md", __dir__) }
+  let(:sample_app_checklist) { File.read(sample_app_checklist_path) }
+  let(:sample_app_results_path) { File.expand_path("../doc/sample_app_results.md", __dir__) }
+  let(:sample_app_results) { File.read(sample_app_results_path) }
   let(:form_builder_path) { File.expand_path("../lib/rails_fields_kit/form_builder.rb", __dir__) }
   let(:form_builder_source) { File.read(form_builder_path) }
   let(:generated_setup_note_path) do
@@ -103,6 +111,28 @@ RSpec.describe "package contents" do
       "- Remote endpoint follow-up:",
       "- Release verification notes:",
       "- Follow-up tasks:"
+    )
+  end
+
+  it "keeps README and setup JavaScript helper summaries pointed at the public API source of truth" do
+    javascript_exports = markdown_section(public_api, "## JavaScript exports")
+
+    expect(javascript_exports).to include(
+      "### Current package-root exports",
+      "`TomSelectController`",
+      "rendered-field contract reader",
+      "Future package-root helpers should follow the same boundary"
+    )
+
+    expect(readme).to include(
+      "`rails_fields_kit/index.js` re-exports the same controller",
+      "read-only rendered-field contract helpers",
+      "use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary"
+    )
+
+    expect(setup_doc).to include(
+      "The package root also exposes read-only rendered-field contract helpers",
+      "Use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the current source of truth for the helper list and return shape"
     )
   end
 
@@ -195,6 +225,28 @@ RSpec.describe "package contents" do
       "doc/release.md",
       "doc/release_notes_0_1_1.md",
       "doc/release_notes_0_1_0.md"
+    )
+  end
+
+  it "keeps grouped select sample app evidence lanes aligned" do
+    checklist_lane = markdown_section(
+      sample_app_checklist,
+      "## Verify `rfk_grouped_select` representative optgroup-preserving lane"
+    )
+    results_lane = markdown_section(
+      sample_app_results,
+      "## `rfk_grouped_select` representative optgroup-preserving lane checks"
+    )
+
+    expect(checklist_lane).to include(
+      "optgroup-preserving contract end to end",
+      "ordinary selected ID or value lane rather than a remote-search or token-metadata lane",
+      "does not depend on `url:`, `selected_url:`, or `create_url:`"
+    )
+    expect(results_lane).to include(
+      "optgroup-preserving lane",
+      "ordinary selected ID or value lane rather than a remote-search or token-metadata lane",
+      "stayed independent from `url:`, `selected_url:`, and `create_url:`"
     )
   end
 

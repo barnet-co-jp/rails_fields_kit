@@ -32,6 +32,8 @@ This document summarizes the public API intended to be stable for the 0.1.x seri
 
 Use the sections below for the exact public names. The linked docs provide examples and host-app responsibility boundaries; this file is the compact public API index.
 
+When comparing token suggestions, Ransack-oriented suggestions, table metadata, and roadmap registry proposals, use [`shared_metadata_navigation.md`](shared_metadata_navigation.md) as the boundary map. It points back here for current public names and keeps host-app metadata patterns separate from future helper-level adapter or registry APIs.
+
 ## Ruby entrypoint
 
 ```ruby
@@ -84,6 +86,8 @@ Native input helpers:
 - `rfk_phone_field`
 - `rfk_search_field`
 
+Native wrapper helpers pass ordinary Rails/native input attributes such as `maxlength`, `minlength`, `pattern`, `required`, `autocomplete`, and `inputmode` to the rendered input through top-level field options or `html:`. Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around that input; character counters, masking, browser validation-message policy, browser validation behavior, and server-side validation rules remain host-app responsibility.
+
 See [`field_helpers.md`](field_helpers.md) for details.
 See [`select_migration.md`](select_migration.md) for a practical server-rendered `collection_select` to `rfk_select` migration pattern.
 See [`enum_select.md`](enum_select.md) for the `rfk_enum_select` explicit `enum:` hash boundary, including keys-as-submitted-values behavior and the non-goal boundary around arbitrary label/value DSLs or remote enum option lookup.
@@ -95,6 +99,8 @@ Tom Select-backed `rfk_*` helpers also support opt-in `error_surface:` and `erro
 Tom Select-backed helpers also support field-level `allow_clear: true` for fields that should expose Tom Select's `clear_button` affordance. Rails Fields Kit adds `clear_button` to that field's effective plugin list, while Tom Select installation, plugin-specific assets, clear affordance styling, and empty-state wording remain host-app or Rails select-option responsibility. Explicit `plugins:` values still replace initializer defaults for the field; use [`field_helpers.md`](field_helpers.md) for the helper-level examples and override notes.
 
 `rfk_table_filters` and `rfk_table_cell_editors` are the direct FormBuilder rendering path. They collect table metadata and return safe-buffer helper output for ordinary Rails views. `TableMetadata.filter_calls` / `cell_editor_calls` and `TableRenderer.filter_call` / `cell_editor_call` are the call-spec path for table integrations that want to inspect or rearrange helper, method, and options before rendering. The batch convenience APIs `TableMetadata.render_filters` / `render_cell_editors` and `TableRenderer.render_filters` / `render_cell_editors` stay in that renderer lane and return ordered render result arrays rather than redefining the helper-level safe-buffer contract.
+
+`rfk_table_filters(columns, group_html: ...)` and `rfk_table_cell_editors(columns, group_html: ...)` can add attributes to one outer group wrapper around the joined helper output. `group_html:` is separate from field-level `wrapper_html:` and does not make Rails Fields Kit own table layout, query execution, persistence, or semantic `fieldset` / `legend` generation; use [`table_group_html.md`](table_group_html.md) for examples and the detailed boundary.
 
 ## Controller helpers
 
@@ -206,6 +212,7 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 ### TableRenderer methods
 
 - `RailsFieldsKit::TableRenderer.field_helpers`
+- `RailsFieldsKit::TableRenderer.registered_field_types`
 - `RailsFieldsKit::TableRenderer.helper_for`
 - `RailsFieldsKit::TableRenderer.registered_field_type?`
 - `RailsFieldsKit::TableRenderer.register_field_helper`
@@ -218,6 +225,8 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 - `RailsFieldsKit::TableRenderer.render_filters`
 - `RailsFieldsKit::TableRenderer.render_cell_editor`
 - `RailsFieldsKit::TableRenderer.render_cell_editors`
+
+Use `TableRenderer.registered_field_types` when an integration needs a mutation-safe list of renderable field type names, including custom mappings registered with `TableRenderer.register_field_helper`, without exposing the helper method names. `TableFilterInput.known_types` and `TableCellInput.known_types` remain limited to the built-in factory family.
 
 The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `to_h` and `to_hash` return the same metadata hash as `to_table_filter` or `to_table_cell_editor`.
 
@@ -233,7 +242,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | --- | --- | --- |
 | `TomSelectController` | Stimulus controller | Registers Rails Fields Kit's Tom Select-backed field behavior on the rendered element. Host apps still own Stimulus boot, Tom Select installation, endpoint behavior, authorization, query parsing, visible feedback copy, and retry UI. |
 | `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
-| `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
+| `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
 
 ### Import patterns
 
@@ -259,6 +268,8 @@ import TomSelectController from "rails_fields_kit/tom_select_controller"
 ### Contract reader boundary
 
 Rendered-field contract helpers stay read-only. They inspect data attributes and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance or duplicating wrapper traversal.
+
+For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`.
 
 Future package-root helpers should follow the same boundary: read the rendered Rails Fields Kit contract or configuration from an element, but do not take over request lifecycles, locale resolution, visible feedback, query parsing, retry UI, validation feedback, or other application-specific behavior. Proposal or open-PR helper names are not current public API until they are merged and listed in the table above.
 

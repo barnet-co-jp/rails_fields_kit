@@ -42,7 +42,9 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | See or compare rendered UI states quickly | [`doc/visual_references.md`](doc/visual_references.md) for the visual reference family, including Tom Select, text override copy, native helper, native narrow viewport stress, configuration wrapper classes, table metadata, and saved-search token states |
 | Review stable public API and package-root JavaScript exports | [`doc/public_api.md`](doc/public_api.md) |
 | Build remote search, selected preload, create, or token suggestion endpoints | [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) |
+| Understand shared token, Ransack, and table metadata boundaries | [`doc/shared_metadata_navigation.md`](doc/shared_metadata_navigation.md) for the reading order across current public APIs, host-app metadata patterns, and ROADMAP proposals |
 | Handle Stimulus events or request-failure surfaces | [`doc/events.md`](doc/events.md) |
+| Review Turbo / Stimulus reconnect lifecycle | [`doc/tom_select_turbo_lifecycle.md`](doc/tom_select_turbo_lifecycle.md) |
 | Configure initializer defaults and field-level override precedence | [`doc/configuration.md`](doc/configuration.md) |
 | Work with optional table metadata or custom renderer mappings | [`doc/table_adapters.md`](doc/table_adapters.md) for adapter metadata, renderer call specs, and custom registry mapping; [`doc/table_group_html.md`](doc/table_group_html.md) for group-level wrapper attributes |
 | Run local checks | [`doc/development.md`](doc/development.md) |
@@ -173,7 +175,7 @@ You can also import the controller file directly:
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `tomSelectTextOverrideContract(...)`; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `tomSelectTextOverrideContract(...)` for Tom Select copy values and `nativeFieldAccessibilityContract(...)` for native wrapper accessibility wiring; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
 
 ## Usage
 

@@ -21,4 +21,11 @@ RSpec.describe "packaged files" do
       "lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md"
     )
   end
+
+  it "includes setup doctor files" do
+    expect(files).to include(
+      "lib/rails_fields_kit/setup_doctor.rb",
+      "lib/tasks/rails_fields_kit.rake"
+    )
+  end
 end

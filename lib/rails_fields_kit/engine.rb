@@ -17,5 +17,9 @@ module RailsFieldsKit
         ActionView::Helpers::FormBuilder.include RailsFieldsKit::FormBuilder
       end
     end
+
+    rake_tasks do
+      load root.join("lib/tasks/rails_fields_kit.rake").to_s
+    end
   end
 end

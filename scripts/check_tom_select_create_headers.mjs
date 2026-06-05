@@ -45,6 +45,18 @@ await withTomSelectControllerSandbox("rails-fields-kit-create-headers-", ({ TomS
       "Content-Type": "application/json"
     })
   })
+
+  const wrappedOption = { value: "tokyo", text: "Tokyo" }
+  assert.deepEqual(
+    controller.normalizeCreatedOption({ option: wrappedOption }),
+    wrappedOption
+  )
+
+  const rawOption = { value: "kyoto", text: "Kyoto", region: "kansai" }
+  assert.deepEqual(controller.normalizeCreatedOption(rawOption), rawOption)
+
+  assert.equal(controller.normalizeCreatedOption(null), false)
+  assert.equal(controller.normalizeCreatedOption(undefined), false)
 })
 
-console.log("rails_fields_kit Tom Select create request header smoke passed")
+console.log("rails_fields_kit Tom Select create request header and response normalization smoke passed")
