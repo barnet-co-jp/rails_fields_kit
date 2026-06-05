@@ -20,6 +20,10 @@ RSpec.describe "package contents" do
   let(:public_api) { File.read(public_api_path) }
   let(:field_helpers_path) { File.expand_path("../doc/field_helpers.md", __dir__) }
   let(:field_helpers) { File.read(field_helpers_path) }
+  let(:sample_app_checklist_path) { File.expand_path("../doc/sample_app_checklist.md", __dir__) }
+  let(:sample_app_checklist) { File.read(sample_app_checklist_path) }
+  let(:sample_app_results_path) { File.expand_path("../doc/sample_app_results.md", __dir__) }
+  let(:sample_app_results) { File.read(sample_app_results_path) }
   let(:form_builder_path) { File.expand_path("../lib/rails_fields_kit/form_builder.rb", __dir__) }
   let(:form_builder_source) { File.read(form_builder_path) }
   let(:generated_setup_note_path) do
@@ -221,6 +225,28 @@ RSpec.describe "package contents" do
       "doc/release.md",
       "doc/release_notes_0_1_1.md",
       "doc/release_notes_0_1_0.md"
+    )
+  end
+
+  it "keeps grouped select sample app evidence lanes aligned" do
+    checklist_lane = markdown_section(
+      sample_app_checklist,
+      "## Verify `rfk_grouped_select` representative optgroup-preserving lane"
+    )
+    results_lane = markdown_section(
+      sample_app_results,
+      "## `rfk_grouped_select` representative optgroup-preserving lane checks"
+    )
+
+    expect(checklist_lane).to include(
+      "optgroup-preserving contract end to end",
+      "ordinary selected ID or value lane rather than a remote-search or token-metadata lane",
+      "does not depend on `url:`, `selected_url:`, or `create_url:`"
+    )
+    expect(results_lane).to include(
+      "optgroup-preserving lane",
+      "ordinary selected ID or value lane rather than a remote-search or token-metadata lane",
+      "stayed independent from `url:`, `selected_url:`, and `create_url:`"
     )
   end
 
