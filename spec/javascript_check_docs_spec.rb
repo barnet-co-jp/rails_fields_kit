@@ -1,0 +1,52 @@
+# frozen_string_literal: true
+
+require "json"
+require "yaml"
+require "spec_helper"
+
+RSpec.describe "JavaScript check documentation" do
+  let(:repo_root) { File.expand_path("..", __dir__) }
+  let(:development_doc) { File.read(File.join(repo_root, "doc/development.md")) }
+  let(:package_json) { JSON.parse(File.read(File.join(repo_root, "package.json"))) }
+  let(:workflow) do
+    YAML.safe_load(
+      File.read(File.join(repo_root, ".github/workflows/ci.yml")),
+      aliases: true
+    )
+  end
+  let(:check_javascript_source) { File.read(File.join(repo_root, "scripts/check_javascript.mjs")) }
+
+  it "keeps the Node 22 JavaScript check boundary aligned across package metadata, CI, and docs" do
+    javascript_steps = workflow.fetch("jobs").fetch("javascript").fetch("steps")
+    node_setup_step = javascript_steps.find { |step| step["uses"]&.start_with?("actions/setup-node@") }
+
+    expect(package_json.fetch("engines").fetch("node")).to eq("22.x")
+    expect(node_setup_step.fetch("with").fetch("node-version")).to eq("22")
+    expect(development_doc).to include(
+      "The JavaScript syntax check uses Node 22.x, matching `package.json` and the GitHub Actions `javascript` job.",
+      "`npm run check:js` on Node 22.x"
+    )
+  end
+
+  it "keeps the check:js runner inventory represented in the development guide" do
+    expected_check_signals = {
+      "syntax: package entrypoint" => "public package entrypoint",
+      "syntax: Tom Select controller" => "Tom Select controller source",
+      "package exports smoke" => "package `exports` import wiring",
+      "Tom Select query params smoke" => "Tom Select fixed query params",
+      "Tom Select interaction events smoke" => "Tom Select forwarded interaction event payloads",
+      "Tom Select create headers smoke" => "Tom Select create-on-the-fly JSON request headers",
+      "Tom Select error surface smoke" => "Tom Select error-surface metadata",
+      "Tom Select Turbo lifecycle smoke" => "Tom Select Turbo lifecycle behavior",
+      "Tom Select label fallback smoke" => "Tom Select label fallback rendering",
+      "Tom Select render text fallback smoke" => "Tom Select render text fallback rendering"
+    }
+
+    runner_check_names = check_javascript_source.scan(/name: "([^"]+)"/).flatten
+
+    expect(runner_check_names).to eq(expected_check_signals.keys)
+    expected_check_signals.each_value do |documentation_signal|
+      expect(development_doc).to include(documentation_signal)
+    end
+  end
+end
