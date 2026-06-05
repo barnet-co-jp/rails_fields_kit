@@ -39,6 +39,14 @@ rails generate rails_fields_kit:install --skip-setup-notes
 
 That path still creates `config/initializers/rails_fields_kit.rb`; use this guide for the maintained setup examples.
 
+After installation, run the read-only setup doctor when you want a quick visibility check:
+
+```bash
+rails rails_fields_kit:doctor
+```
+
+The doctor reports whether the initializer exists and, when `config/importmap.rb` exists, whether the Rails Fields Kit importmap pins are present. It also prints manual checklist items for Tom Select package install, Stimulus registration, CSS import, and bundler aliases. Those manual items do not fail the task; they stay host-app responsibilities because Rails Fields Kit cannot safely infer every JavaScript toolchain.
+
 ## 2. Install Tom Select
 
 Rails Fields Kit provides Rails helpers and a Stimulus controller, but it does not install Tom Select or choose a JavaScript bundling strategy.
