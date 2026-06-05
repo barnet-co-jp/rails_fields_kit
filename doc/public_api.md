@@ -83,6 +83,7 @@ Native input helpers:
 - `rfk_url_field`
 - `rfk_phone_field`
 - `rfk_search_field`
+- `rfk_password_field`
 
 Native wrapper helpers pass ordinary Rails/native input attributes such as `maxlength`, `minlength`, `pattern`, `required`, `autocomplete`, and `inputmode` to the rendered input through top-level field options or `html:`. Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around that input; character counters, masking, browser validation-message policy, browser validation behavior, and server-side validation rules remain host-app responsibility.
 
