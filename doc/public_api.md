@@ -305,7 +305,7 @@ Use [`events.md`](events.md) as the source of truth for exact event names, paylo
 
 These are not intended as stable public APIs:
 
-- private FormBuilder helper methods prefixed with `rfk` but defined under `private`
+- private FormBuilder helper methods prefixed with `rfk_` but defined under `private`
 - internal normalization methods in `RailsFieldsKit::Searchable`
 - exact HTML structure of rich option rendering beyond documented classes/data and event payloads
 - generated documentation wording
