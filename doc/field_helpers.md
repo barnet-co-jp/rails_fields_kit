@@ -301,6 +301,18 @@ This representative lane keeps the native helper family in its ordinary HTML-inp
 - edit-form redisplay and validation rerender keep using the same model-backed value instead of switching to a remote-search or Tom Select lane.
 - automatic accessibility wiring keeps the generated hint and error ids connected through `aria-describedby` and also manages `aria-invalid` / `aria-required` unless you opt out.
 
+Native wrapper helpers also pass ordinary Rails field options to the rendered input. Put simple Rails helper options such as `maxlength:`, `minlength:`, `pattern:`, `required:`, `autocomplete:`, `inputmode:`, `disabled:`, or `readonly:` at the top level when you want the same shape as a Rails native helper; use `html:` when you want to group input attributes next to wrapper customization. If the same attribute is present in both places, the `html:` value wins because it is merged into the field options last.
+
+```erb
+<%= f.rfk_text_field :customer_code,
+  wrapper: true,
+  maxlength: 12,
+  pattern: "[A-Z0-9-]+",
+  html: { autocomplete: "off" } %>
+```
+
+Those attributes stay browser-native and host-app behavior. Rails Fields Kit does not add character counters, input masks, browser validation-message policy, or server-side validation rules for native wrapper helpers; it only keeps the wrapper, hint, error, affix, and accessibility wiring around the native input.
+
 When the host app needs to own that accessibility wiring itself, keep the same wrapper lane and opt out explicitly:
 
 ```erb

@@ -7,10 +7,16 @@ module RailsFieldsKit
     extend ActiveSupport::Concern
 
     class_methods do
-      def rfk_search_with(model:, label:, search:, action: :index, value: :id, limit: 20, query_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, distinct: false, wrap: nil)
+      def rfk_search_with(model:, label:, search:, action: :index, value: :id, limit: 20, query_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, distinct: false, minimum_query_length: 0, wrap: nil)
         define_method(action) do
           query_key = query_param || RailsFieldsKit.configuration.default_query_param
           query = params[query_key].to_s
+
+          if query.strip.length < minimum_query_length.to_i
+            render json: rfk_wrap_options([], wrap: wrap)
+            next
+          end
+
           relation = rfk_search_scope(model, scope)
 
           if query.present?

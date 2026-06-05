@@ -39,9 +39,8 @@ jobs:
       - name: Run RSpec
         run: bundle exec rspec
 
-  pr_rails_matrix:
-    if: github.event_name == 'pull_request'
-    name: PR compatibility (Rails ${{ matrix.rails }}, Ruby ${{ matrix.ruby-version }})
+  rails_matrix:
+    name: Rails compatibility (Rails ${{ matrix.rails }}, Ruby ${{ matrix.ruby-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
