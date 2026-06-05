@@ -20,6 +20,8 @@ RSpec.describe "package contents" do
   let(:public_api) { File.read(public_api_path) }
   let(:field_helpers_path) { File.expand_path("../doc/field_helpers.md", __dir__) }
   let(:field_helpers) { File.read(field_helpers_path) }
+  let(:controller_helpers_path) { File.expand_path("../doc/controller_helpers.md", __dir__) }
+  let(:controller_helpers) { File.read(controller_helpers_path) }
   let(:sample_app_checklist_path) { File.expand_path("../doc/sample_app_checklist.md", __dir__) }
   let(:sample_app_checklist) { File.read(sample_app_checklist_path) }
   let(:sample_app_results_path) { File.expand_path("../doc/sample_app_results.md", __dir__) }
@@ -192,6 +194,42 @@ RSpec.describe "package contents" do
       "doc/tom_select_visual_reference.html",
       "doc/native_field_visual_reference.html",
       "doc/table_metadata_visual_reference.html"
+    )
+  end
+
+  it "keeps remote workflow request option examples visible across representative docs" do
+    option_names = %w[
+      query_params
+      selected_query_params
+      create_params
+      selected_param
+      selected_multiple_param
+      create_param
+    ]
+    controller_reference = [
+      markdown_section(controller_helpers, "## `rfk_find_with`"),
+      markdown_section(controller_helpers, "## `rfk_create_with`"),
+      markdown_section(controller_helpers, "## Fixed request params and scoping")
+    ].join("\n")
+    remote_field_helper_section = markdown_section(field_helpers, "## Remote option options")
+
+    option_names.each do |option_name|
+      expected_signal = "#{option_name}:"
+
+      expect(controller_reference).to include(expected_signal)
+      expect(remote_field_helper_section).to include(expected_signal)
+      expect(readme).to include(expected_signal)
+    end
+
+    expect(controller_reference).to include(
+      "request-shaping helpers",
+      "host app controller/model layer"
+    )
+    expect(remote_field_helper_section).to include(
+      "request-shaping options",
+      "Rails Fields Kit appends `query_params:` as fixed query string scope",
+      "Selected values still use `selected_url:` with `selected_param:` or `selected_multiple_param:`",
+      "create input text still uses `create_url:` with JSON `create_params:` plus `create_param:`"
     )
   end
 
