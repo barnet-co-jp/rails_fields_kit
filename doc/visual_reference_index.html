@@ -36,7 +36,26 @@
       main {
         width: min(1120px, calc(100% - 32px));
         margin: 0 auto;
-        padding: 44px 0 60px;
+        padding: 40px 0 56px;
+      }
+
+      h1, h2, h3, p { margin: 0; }
+
+      h1 {
+        max-width: 800px;
+        font-size: 2.15rem;
+        font-weight: 650;
+        line-height: 1.1;
+      }
+
+      h2 {
+        font-size: 1.32rem;
+        line-height: 1.2;
+      }
+
+      h3 {
+        font-size: 1.02rem;
+        line-height: 1.25;
       }
 
       .hero {
@@ -51,54 +70,50 @@
         color: var(--accent);
         font-size: 0.76rem;
         font-weight: 700;
-        letter-spacing: 0.08em;
+        letter-spacing: 0;
         text-transform: uppercase;
       }
 
-      h1, h2, h3, p { margin: 0; }
-
-      h1 {
-        max-width: 800px;
-        font-size: 2.2rem;
-        font-weight: 650;
-        line-height: 1.08;
+      .lede,
+      .section-heading p,
+      .card p,
+      .card li,
+      .workflow li,
+      .scope-note {
+        color: var(--muted);
+        font-size: 0.92rem;
       }
 
       .lede {
         max-width: 780px;
-        color: var(--muted);
         font-size: 1rem;
       }
 
-      .hero-links,
-      .quick-list,
-      .task-links,
-      .family-links {
+      .links {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
+        align-items: stretch;
       }
 
-      .hero-links a,
-      .quick-list a,
-      .task-links a,
-      .family-links a,
+      .links a,
       .reference-link {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         min-height: 38px;
-        padding: 0 12px;
+        max-width: 100%;
+        padding: 8px 12px;
         border: 1px solid var(--line-strong);
         background: var(--surface);
         color: var(--ink);
+        line-height: 1.25;
+        text-align: center;
         text-decoration: none;
+        overflow-wrap: anywhere;
       }
 
-      .hero-links a:hover,
-      .quick-list a:hover,
-      .task-links a:hover,
-      .family-links a:hover,
+      .links a:hover,
       .reference-link:hover {
         border-color: var(--accent);
         color: var(--accent);
@@ -112,10 +127,9 @@
       }
 
       .summary-item,
-      .family-card,
-      .task-card,
-      .reference-card,
+      .card,
       .workflow {
+        min-width: 0;
         display: grid;
         gap: 12px;
         align-content: start;
@@ -126,22 +140,15 @@
       }
 
       .summary-item strong {
-        font-size: 1.35rem;
+        font-size: 1.28rem;
         line-height: 1;
+        overflow-wrap: anywhere;
       }
 
-      .summary-item span,
-      .section-heading p,
-      .family-card p,
-      .family-card li,
-      .task-card p,
-      .task-card li,
-      .reference-card p,
-      .reference-card li,
-      .workflow li,
-      .scope-note {
+      .summary-item span {
         color: var(--muted);
-        font-size: 0.92rem;
+        font-size: 0.9rem;
+        overflow-wrap: anywhere;
       }
 
       .section-heading {
@@ -150,19 +157,17 @@
         margin: 28px 0 14px;
       }
 
-      .section-heading h2 {
-        font-size: 1.35rem;
-        line-height: 1.2;
-      }
-
       .section-heading p { max-width: 760px; }
 
-      .family-grid,
-      .task-grid,
-      .reference-grid {
+      .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 14px;
+      }
+
+      .card header {
+        display: grid;
+        gap: 8px;
       }
 
       .tag-row {
@@ -174,15 +179,18 @@
       .tag {
         display: inline-flex;
         align-items: center;
+        max-width: 100%;
         min-height: 24px;
-        padding: 2px 7px;
+        padding: 3px 7px;
         border: 1px solid var(--line-strong);
         background: var(--surface-muted);
         color: var(--ink);
         font-size: 0.72rem;
         font-weight: 700;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
+        letter-spacing: 0;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+        text-transform: none;
       }
 
       .tag.primary {
@@ -203,14 +211,9 @@
         color: var(--warning);
       }
 
-      .task-card header {
-        display: grid;
-        gap: 8px;
-      }
-
-      .task-card .task-links a {
-        flex: 1 1 190px;
-        text-align: center;
+      ul, ol {
+        margin: 0;
+        padding-left: 20px;
       }
 
       .review-question {
@@ -219,14 +222,13 @@
         background: var(--accent-soft);
         color: #244d47;
         font-size: 0.92rem;
+        overflow-wrap: anywhere;
       }
 
-      ul, ol {
-        margin: 0;
-        padding-left: 20px;
+      .reference-link {
+        justify-self: start;
+        text-align: left;
       }
-
-      .reference-link { justify-self: start; }
 
       .workflow ol {
         display: grid;
@@ -245,18 +247,28 @@
           padding: 28px 0 44px;
         }
 
-        .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        h1 { font-size: 1.78rem; }
+        h2 { font-size: 1.18rem; }
+
+        .summary {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .links a,
+        .reference-link {
+          flex: 1 1 220px;
+        }
       }
 
       @media (max-width: 480px) {
-        h1 { font-size: 1.8rem; }
+        main { width: min(100% - 20px, 1120px); }
         .summary { grid-template-columns: 1fr; }
-
-        .hero-links a,
-        .quick-list a,
-        .task-links a,
-        .family-links a,
-        .reference-link { width: 100%; }
+        .summary-item, .card, .workflow { padding: 14px; }
+        .links a, .reference-link { width: 100%; }
       }
     </style>
   </head>
@@ -266,7 +278,7 @@
         <div class="eyebrow">Rails Fields Kit static docs artifact</div>
         <h1 id="page-title">Visual Reference Index</h1>
         <p class="lede">Start here when you need to choose a static HTML reference for release QA or design review. Each reference is documentation-only and keeps production helper markup, runtime behavior, search execution, authorization, and persistence out of scope.</p>
-        <nav class="hero-links" aria-label="Related documentation">
+        <nav class="links" aria-label="Related documentation">
           <a href="visual_references.md">Reference map</a>
           <a href="final_release_checklist.md">Release checklist</a>
           <a href="sample_app_results.md">Manual evidence log</a>
@@ -283,8 +295,8 @@
           <span>Choose by helper family before opening a focused lane.</span>
         </div>
         <div class="summary-item">
-          <strong>Runtime</strong>
-          <span>No helper, JavaScript, request, or persistence behavior changes.</span>
+          <strong>Narrow</strong>
+          <span>Links, tags, and task cards wrap without hiding the review route.</span>
         </div>
         <div class="summary-item">
           <strong>Main</strong>
@@ -297,7 +309,7 @@
           <h2 id="quick-links-title">Pick by artifact</h2>
           <p>Use the shortest matching lane first. If the review question is not listed here, check the Markdown reference map before treating an unmerged proposal as current public API.</p>
         </div>
-        <div class="quick-list" aria-label="Direct visual reference links">
+        <div class="links" aria-label="Direct visual reference links">
           <a href="tom_select_visual_reference.html">Tom Select states</a>
           <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
           <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
@@ -314,8 +326,8 @@
           <p>Use these stable family groups when the reference set grows. They keep the first choice tied to the helper surface instead of a fragile artifact count.</p>
         </div>
 
-        <div class="family-grid">
-          <article class="family-card">
+        <div class="grid">
+          <article class="card">
             <header>
               <div class="tag-row">
                 <span class="tag primary">Tom Select</span>
@@ -328,17 +340,17 @@
               <li>Use the core states for layout and viewport checks.</li>
               <li>Use focused lanes only when error feedback or copy overrides are the review topic.</li>
             </ul>
-            <nav class="family-links" aria-label="Tom Select helper family references">
+            <nav class="links" aria-label="Tom Select helper family references">
               <a href="tom_select_visual_reference.html">Core states</a>
               <a href="tom_select_request_failure_visual_reference.html">Request feedback</a>
               <a href="tom_select_text_override_visual_reference.html">Copy overrides</a>
             </nav>
           </article>
 
-          <article class="family-card">
+          <article class="card">
             <header>
               <div class="tag-row">
-                <span class="tag primary">native helpers</span>
+                <span class="tag primary">Native helpers</span>
                 <span class="tag warning">forms</span>
               </div>
               <h3>Native field wrappers</h3>
@@ -348,26 +360,26 @@
               <li>Confirm wrapper density and copy wrapping without treating the artifact as production CSS.</li>
               <li>Keep native browser semantics separate from Tom Select-backed search behavior.</li>
             </ul>
-            <nav class="family-links" aria-label="Native helper family references">
+            <nav class="links" aria-label="Native helper family references">
               <a href="native_field_visual_reference.html">Native helper states</a>
               <a href="configuration_wrapper_class_visual_reference.html">Configured classes</a>
             </nav>
           </article>
 
-          <article class="family-card">
+          <article class="card">
             <header>
               <div class="tag-row">
-                <span class="tag primary">metadata</span>
+                <span class="tag primary">Metadata</span>
                 <span class="tag info">token search</span>
               </div>
               <h3>Table and token bridges</h3>
-              <p>Use these lanes when the question is whether generated field metadata or saved-search suggestions stay inside their ownership boundary.</p>
+              <p>Use these lanes when generated field metadata or saved-search suggestions need to stay inside their ownership boundary.</p>
             </header>
             <ul>
               <li>Use table metadata for filter and editor helper contracts.</li>
               <li>Use saved-search tokens for suggestion shape, badges, wrapping, and source-of-truth boundaries.</li>
             </ul>
-            <nav class="family-links" aria-label="Table and token bridge references">
+            <nav class="links" aria-label="Table and token bridge references">
               <a href="table_metadata_visual_reference.html">Table metadata</a>
               <a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a>
             </nav>
@@ -378,87 +390,83 @@
       <section aria-labelledby="task-picker-title">
         <div class="section-heading">
           <h2 id="task-picker-title">Pick by reviewer task</h2>
-          <p>Start from the task that matches the PR or release question, then open the primary artifact first. Secondary links are there only when the review needs a neighboring lane; they do not introduce proposal-only artifacts.</p>
+          <p>Start from the task that matches the PR or release question, then open the focused artifact. These routes reuse landed references and keep task labels readable on narrow screens.</p>
         </div>
 
-        <div class="task-grid">
-          <article class="task-card">
+        <div class="grid">
+          <article class="card">
             <header>
               <div class="tag-row">
                 <span class="tag primary">release gate</span>
                 <span class="tag info">broad scan</span>
               </div>
               <h3>Release verification</h3>
-              <p>Use when a release or PR needs visual evidence that landed references still read well at desktop and narrow widths.</p>
+              <p>Check whether the current reference family is still readable before recording release evidence.</p>
             </header>
             <ul>
-              <li>Start with the core Tom Select artifact for the broadest helper coverage.</li>
-              <li>Use native helper states when the release touches native wrapper, label, hint, validation, or affix surfaces.</li>
-              <li>Record changed artifact evidence in sample_app_results.md or the release PR comment.</li>
+              <li>Open the core Tom Select and native helper lanes first.</li>
+              <li>Record changed artifact evidence in sample_app_results.md.</li>
             </ul>
-            <nav class="task-links" aria-label="Release verification references">
-              <a href="tom_select_visual_reference.html">Primary: Tom Select states</a>
+            <nav class="links" aria-label="Release verification references">
+              <a href="tom_select_visual_reference.html">Tom Select states</a>
               <a href="native_field_visual_reference.html">Native helper states</a>
             </nav>
           </article>
 
-          <article class="task-card">
+          <article class="card">
             <header>
               <div class="tag-row">
                 <span class="tag primary">design review</span>
                 <span class="tag warning">copy</span>
               </div>
               <h3>Design and copy review</h3>
-              <p>Use when the change is about labels, hints, helper chrome, copy overrides, class pass-through, or narrow wrapping.</p>
+              <p>Inspect helper chrome, labels, hint text, native affix readability, configured empty/loading copy, and wrapping behavior.</p>
             </header>
             <ul>
-              <li>Start with native narrow stress for field copy, affixes, validation, and long labels.</li>
-              <li>Use wrapper classes for host-app class pass-through, then text overrides only for configured Tom Select copy.</li>
+              <li>Compare native helper layout, long label stress, configured wrapper classes, and text override examples.</li>
               <li>Keep native search fields separate from Tom Select-backed search or token suggestions.</li>
             </ul>
-            <nav class="task-links" aria-label="Design and copy review references">
-              <a href="native_field_visual_reference.html">Primary: native stress</a>
-              <a href="configuration_wrapper_class_visual_reference.html">Wrapper classes</a>
+            <nav class="links" aria-label="Design and copy review references">
+              <a href="native_field_visual_reference.html">Native narrow stress</a>
+              <a href="configuration_wrapper_class_visual_reference.html">Wrapper class configuration</a>
               <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
             </nav>
           </article>
 
-          <article class="task-card">
+          <article class="card">
             <header>
               <div class="tag-row">
                 <span class="tag primary">request failure</span>
                 <span class="tag info">feedback</span>
               </div>
               <h3>Request-failure feedback</h3>
-              <p>Use when a PR touches `error_surface: true`, load failure copy, selected-load failure, or operation metadata.</p>
+              <p>Review error-surface feedback without treating retry UI or request lifecycle behavior as built in.</p>
             </header>
             <ul>
-              <li>Start with request failures for the focused error-surface lane.</li>
-              <li>Open text overrides only when configured no-results, loading, or create copy is part of the review.</li>
-              <li>Keep retry actions, reveal timing, and request lifecycle behavior with the host app.</li>
+              <li>Use the focused request-failure artifact for status and operation metadata.</li>
+              <li>Check text override copy only when the PR changes configured messages.</li>
             </ul>
-            <nav class="task-links" aria-label="Request-failure feedback references">
-              <a href="tom_select_request_failure_visual_reference.html">Primary: request failures</a>
+            <nav class="links" aria-label="Request-failure feedback references">
+              <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
               <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
             </nav>
           </article>
 
-          <article class="task-card">
+          <article class="card">
             <header>
               <div class="tag-row">
                 <span class="tag primary">table metadata</span>
                 <span class="tag info">token search</span>
               </div>
-              <h3>Table and token boundaries</h3>
-              <p>Use when the review question is whether metadata-driven filters, editors, or token suggestions stay inside their ownership boundary.</p>
+              <h3>Table integration boundaries</h3>
+              <p>Confirm that metadata-driven filters, editors, and token suggestions stay separate from table persistence and query execution.</p>
             </header>
             <ul>
-              <li>Start with table metadata for generated filter/editor lanes.</li>
-              <li>Use saved-search tokens when suggestion shape, badges, delimiter visibility, or multi-token wrapping is the review topic.</li>
-              <li>Keep table persistence, query execution, token parsing, and authorization outside Rails Fields Kit.</li>
+              <li>Open table metadata for generated filter/editor lanes.</li>
+              <li>Open saved-search tokens when suggestion shape or wrapping is the review question.</li>
             </ul>
-            <nav class="task-links" aria-label="Table and token boundary references">
-              <a href="table_metadata_visual_reference.html">Primary: table metadata</a>
+            <nav class="links" aria-label="Table integration boundary references">
+              <a href="table_metadata_visual_reference.html">Table metadata</a>
               <a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a>
             </nav>
           </article>
@@ -471,8 +479,8 @@
           <p>Each lane names the artifact, the primary thing to inspect, and the boundary that should stay outside Rails Fields Kit.</p>
         </div>
 
-        <div class="reference-grid">
-          <article class="reference-card">
+        <div class="grid">
+          <article class="card">
             <header>
               <div class="tag-row">
                 <span class="tag primary">core helpers</span>
@@ -489,7 +497,7 @@
             <a class="reference-link" href="tom_select_visual_reference.html">Open reference</a>
           </article>
 
-          <article class="reference-card">
+          <article class="card">
             <header>
               <div class="tag-row">
                 <span class="tag primary">request failure</span>
@@ -506,7 +514,7 @@
             <a class="reference-link" href="tom_select_request_failure_visual_reference.html">Open reference</a>
           </article>
 
-          <article class="reference-card">
+          <article class="card">
             <header>
               <div class="tag-row">
                 <span class="tag warning">copy</span>
@@ -523,7 +531,7 @@
             <a class="reference-link" href="tom_select_text_override_visual_reference.html">Open reference</a>
           </article>
 
-          <article class="reference-card">
+          <article class="card">
             <header>
               <div class="tag-row">
                 <span class="tag primary">native helpers</span>
@@ -531,7 +539,7 @@
                 <span class="tag warning">narrow stress</span>
               </div>
               <h3>Native helper states</h3>
-              <p>Wrapper, label, hint, prefix, suffix, readonly, disabled, validation, customization, accessibility wiring, and narrow-width stress examples.</p>
+              <p>Wrapper, label, hint, prefix, suffix, readonly, disabled, validation, multiline textarea, accessibility wiring, and narrow-width stress examples.</p>
             </header>
             <p class="review-question"><strong>Question:</strong> do native helper states remain legible under long label, hint, error, and affix stress while staying separate from Tom Select-backed behavior?</p>
             <ul>
@@ -541,7 +549,7 @@
             <a class="reference-link" href="native_field_visual_reference.html">Open reference</a>
           </article>
 
-          <article class="reference-card">
+          <article class="card">
             <header>
               <div class="tag-row">
                 <span class="tag primary">native helpers</span>
@@ -558,7 +566,7 @@
             <a class="reference-link" href="configuration_wrapper_class_visual_reference.html">Open reference</a>
           </article>
 
-          <article class="reference-card">
+          <article class="card">
             <header>
               <div class="tag-row">
                 <span class="tag primary">table metadata</span>
@@ -575,7 +583,7 @@
             <a class="reference-link" href="table_metadata_visual_reference.html">Open reference</a>
           </article>
 
-          <article class="reference-card">
+          <article class="card">
             <header>
               <div class="tag-row">
                 <span class="tag primary">token search</span>
@@ -597,7 +605,7 @@
       <section aria-labelledby="workflow-title">
         <div class="section-heading">
           <h2 id="workflow-title">Suggested review flow</h2>
-          <p>Keep the artifact review small and evidence-driven so it does not drift into implementation or proposal review.</p>
+          <p>Keep artifact review small and evidence-driven so it does not drift into implementation or proposal review.</p>
         </div>
         <div class="workflow">
           <ol>
