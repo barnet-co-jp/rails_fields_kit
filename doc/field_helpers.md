@@ -117,6 +117,8 @@ Use this for searchable remote selects and editable comboboxes.
 
 For remote search, current public behavior is a JSON `GET` request to `url:`. Rails Fields Kit appends `query_params:` to that URL as fixed query string scope first, then sets `query_param:` to the typed query value. The host app owns that endpoint's authorization, scoping, and response records; use `selected_url:` for selected-option preload and `create_url:` for create-on-the-fly JSON `POST` requests instead of mixing those request shapes into the remote search endpoint.
 
+Fixed `query_params:` and `selected_query_params:` values are URL query params. Array values are sent as repeated query entries for the same key, while `null` / `undefined` values are skipped instead of being serialized. `create_params:` uses a different lane: those fixed values are merged into the create-on-the-fly JSON request body before the user's `create_param:` value is written.
+
 #### Representative `error_surface` example
 
 The shared request-failure feedback options above apply here too. This combobox example is representative, not combobox-only:
@@ -479,6 +481,8 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `error_surface:` adds a stable nearby placeholder for request-failure handlers.
 - `error_surface_html:` customizes that generated placeholder element.
 
+For remote search and selected-option preload, fixed params are URL query params. Scalar values are set on the request URL, array values are appended as repeated query entries for the same key, and `null` / `undefined` values are skipped. `create_params:` is separate: Rails Fields Kit merges those fixed values into the create-on-the-fly JSON body, not the request URL.
+
 When neither the field nor the initializer sets those values, Rails Fields Kit falls back to bundled locale-aware copy at render time. The bundled baseline currently includes English and Japanese, and falls back to English when a locale-specific key is not present.
 
 Use `config.default_loading_text`, `config.default_no_results_text`, and `config.default_create_text` in the initializer when the whole host app should share the same baseline wording. Use the helper options above when a single field needs different copy.
@@ -491,7 +495,7 @@ Example:
   selected_url: selected_customers_path(format: :json),
   create_url: customers_path,
   query_param: "q",
-  query_params: { account_id: current_account.id },
+  query_params: { account_id: current_account.id, region: ["east", "priority"] },
   selected_query_params: { account_id: current_account.id },
   create_params: { account_id: current_account.id } %>
 ```
