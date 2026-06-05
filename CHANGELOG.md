@@ -47,7 +47,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 #### JavaScript exports and Tom Select integration
 
 - `tomSelectTextOverrideContract(element)` from the package root for host-app scripts that need to read rendered Tom Select text override values without reaching into the Stimulus controller instance.
-- `nativeFieldAccessibilityContract(element)` from the package root for host-app scripts that need to read rendered native input accessibility wiring without taking over id generation, validation messages, focus management, or visible feedback.
+- `nativeFieldAccessibilityContract(element)` from the package root for host-app scripts that need to read rendered native input accessibility wiring, including the resolved label association, without taking over id generation, label text, validation messages, focus management, or visible feedback.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so generated endpoint actions can match custom routes.
 - `rfk_search_with minimum_query_length:` for endpoints that should return empty options for blank or too-short queries while keeping the default blank-query initial options behavior when omitted. FormBuilder `min_length:` remains a browser-side loading hint, and authorization, scoping, query parsing, Ransack integration, and Tom Select lifecycle remain host-app responsibilities.
 - `rfk_find_with` supports Rails array params for multiple selected option preload in addition to comma-separated `ids`, including custom `ids_param:` names.
