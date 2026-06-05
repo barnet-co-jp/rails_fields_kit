@@ -110,7 +110,7 @@ Current CI adds these repository-level confirmations on top of the local workflo
 
 - `bundle exec standardrb`
 - `bundle exec rspec`
-- Representative PR compatibility checks for Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
+- Representative Rails compatibility checks for pull requests and `main` pushes: Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
 - `npm run check:js` on Node 22.x for the JavaScript syntax, smoke inventory, package exports import lane, Tom Select fixed query params smoke, Tom Select forwarded interaction event smoke, Tom Select create request header and response normalization smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, Tom Select label fallback smoke, Tom Select render text fallback smoke, Tom Select plugin contract smoke, and selected preload config smoke
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 
