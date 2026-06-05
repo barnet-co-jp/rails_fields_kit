@@ -13,14 +13,14 @@ The source of truth for these install-time boundaries is `rails_fields_kit.gemsp
 
 ## Repository compatibility checks
 
-GitHub Actions runs the main Ruby checks on Ruby 3.3 and adds representative pull-request compatibility checks for:
+GitHub Actions runs the main Ruby checks on Ruby 3.3 and adds representative Rails compatibility checks for pull requests and `main` pushes:
 
 | Rails | Ruby | Gemfile |
 | --- | --- | --- |
 | 7.0 | 3.1 | `gemfiles/rails_7_0.gemfile` |
 | 8.0 | 3.3 | `gemfiles/rails_8_0.gemfile` |
 
-These checks are representative CI coverage, not a separate host-app setup step.
+These checks are representative CI coverage, not a separate host-app setup step or a full Rails/Ruby support matrix.
 
 ## JavaScript and Node boundary
 
