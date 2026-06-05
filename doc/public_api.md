@@ -94,7 +94,7 @@ Current Ransack-oriented public surface stays metadata-first. `rfk_token_search`
 
 Tom Select-backed `rfk_*` helpers also support opt-in `error_surface:` and `error_surface_html:` options for fields that should expose a stable nearby placeholder on request failures. When enabled, request-failure events described in [`events.md`](events.md) can include that placeholder as `detail.surface`, while visible error copy and retry UI remain host-app responsibility.
 
-Tom Select-backed helpers also support field-level `allow_clear: true` for fields that should expose Tom Select's `clear_button` affordance. Rails Fields Kit adds `clear_button` to that field's effective plugin list, while Tom Select installation, plugin-specific assets, clear affordance styling, and empty-state wording remain host-app or Rails select-option responsibility. Explicit `plugins:` values still replace initializer defaults for the field; use [`field_helpers.md`](field_helpers.md) for the helper-level examples and override notes.
+Tom Select-backed helpers also support field-level `allow_clear: true` for fields that should expose Tom Select's `clear_button` affordance. Rails Fields Kit adds `clear_button` to that field's effective plugin list, while Tom Select installation, plugin-specific assets, clear affordance styling, and empty-state wording remain host-app or Rails select-option responsibility. Explicit `plugins:` values still replace initializer defaults for the field; use [`field_helpers.md`](field_helpers.md) for the helper-level examples and override notes. JavaScript host code that needs to inspect the rendered effective plugin list can use `tomSelectPluginContract(element)` from the package root without reaching into Tom Select's instance or plugin objects.
 
 `rfk_table_filters` and `rfk_table_cell_editors` are the direct FormBuilder rendering path. They collect table metadata and return safe-buffer helper output for ordinary Rails views. `TableMetadata.filter_calls` / `cell_editor_calls` and `TableRenderer.filter_call` / `cell_editor_call` are the call-spec path for table integrations that want to inspect or rearrange helper, method, and options before rendering. The batch convenience APIs `TableMetadata.render_filters` / `render_cell_editors` and `TableRenderer.render_filters` / `render_cell_editors` stay in that renderer lane and return ordered render result arrays rather than redefining the helper-level safe-buffer contract.
 
@@ -236,6 +236,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | Export | Kind | Responsibility boundary |
 | --- | --- | --- |
 | `TomSelectController` | Stimulus controller | Registers Rails Fields Kit's Tom Select-backed field behavior on the rendered element. Host apps still own Stimulus boot, Tom Select installation, endpoint behavior, authorization, query parsing, visible feedback copy, and retry UI. |
+| `tomSelectPluginContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered effective plugin data and returns `plugins` plus derived `clearable`, or `null` for non-element or non-Rails-Fields-Kit Tom Select inputs. It does not expose the Tom Select instance, plugin objects, selection mutation APIs, plugin asset loading, styling, or lifecycle state. |
 | `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
 
@@ -247,10 +248,12 @@ Package-root imports use the documented entrypoint:
 import {
   TomSelectController,
   nativeFieldAccessibilityContract,
+  tomSelectPluginContract,
   tomSelectTextOverrideContract
 } from "rails_fields_kit"
 
 const accessibilityContract = nativeFieldAccessibilityContract(inputElement)
+const pluginContract = tomSelectPluginContract(fieldElement)
 const copyContract = tomSelectTextOverrideContract(fieldElement)
 ```
 
@@ -263,6 +266,8 @@ import TomSelectController from "rails_fields_kit/tom_select_controller"
 ### Contract reader boundary
 
 Rendered-field contract helpers stay read-only. They inspect data attributes and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance or duplicating wrapper traversal.
+
+`tomSelectPluginContract(element)` treats the rendered plugin list as the source of truth. `allow_clear: true` is visible as `clearable: true` when `clear_button` is in that effective plugin list, including when Rails Fields Kit added it to an explicit `plugins:` override for the field. Missing, empty, or invalid plugin data returns an empty plugin list and `clearable: false` instead of throwing.
 
 Future package-root helpers should follow the same boundary: read the rendered Rails Fields Kit contract or configuration from an element, but do not take over request lifecycles, locale resolution, visible feedback, query parsing, retry UI, validation feedback, or other application-specific behavior. Proposal or open-PR helper names are not current public API until they are merged and listed in the table above.
 
@@ -300,7 +305,7 @@ Use [`events.md`](events.md) as the source of truth for exact event names, paylo
 
 These are not intended as stable public APIs:
 
-- private FormBuilder helper methods prefixed with `rfk_` but defined under `private`
+- private FormBuilder helper methods prefixed with `rfk` but defined under `private`
 - internal normalization methods in `RailsFieldsKit::Searchable`
 - exact HTML structure of rich option rendering beyond documented classes/data and event payloads
 - generated documentation wording
