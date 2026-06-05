@@ -108,6 +108,81 @@ try {
       `import assert from "node:assert/strict"\n\n` +
       `const expectedNamedExports = ${JSON.stringify(expectedPackageRootNamedExports)}\n` +
       `const expectedCallableHelperExports = ${JSON.stringify(expectedCallableHelperExports)}\n\n` +
+      `class FakeDocument {\n` +
+      `  constructor() {\n` +
+      `    this.all = []\n` +
+      `    this.elementsById = new Map()\n` +
+      `  }\n\n` +
+      `  register(element) {\n` +
+      `    element.ownerDocument = this\n` +
+      `    this.all.push(element)\n\n` +
+      `    const id = element.getAttribute("id")\n` +
+      `    if (id) this.elementsById.set(id, element)\n\n` +
+      `    element.children.forEach((child) => this.register(child))\n` +
+      `    return element\n` +
+      `  }\n\n` +
+      `  getElementById(id) {\n` +
+      `    return this.elementsById.get(id) || null\n` +
+      `  }\n\n` +
+      `  querySelector(selector) {\n` +
+      `    const match = selector.match(/^label\\[for="(.+)"\\]$/)\n` +
+      `    if (!match) return null\n\n` +
+      `    const forValue = match[1].replace(/\\\\"/g, "\\\"").replace(/\\\\\\\\/g, "\\\\")\n` +
+      `    return this.all.find((element) => element.tagName === "LABEL" && element.getAttribute("for") === forValue) || null\n` +
+      `  }\n` +
+      `}\n\n` +
+      `class FakeElement {\n` +
+      `  constructor(tagName, attributes = {}, children = []) {\n` +
+      `    this.tagName = tagName.toUpperCase()\n` +
+      `    this.attributes = attributes\n` +
+      `    this.children = []\n` +
+      `    this.parentElement = null\n` +
+      `    this.ownerDocument = null\n\n` +
+      `    children.forEach((child) => this.appendChild(child))\n` +
+      `  }\n\n` +
+      `  get classList() {\n` +
+      `    return {\n` +
+      `      contains: (className) => (this.getAttribute("class") || "").split(/\\s+/).includes(className)\n` +
+      `    }\n` +
+      `  }\n\n` +
+      `  appendChild(child) {\n` +
+      `    child.parentElement = this\n` +
+      `    this.children.push(child)\n` +
+      `    return child\n` +
+      `  }\n\n` +
+      `  getAttribute(name) {\n` +
+      `    return Object.hasOwn(this.attributes, name) ? this.attributes[name] : null\n` +
+      `  }\n\n` +
+      `  hasAttribute(name) {\n` +
+      `    return Object.hasOwn(this.attributes, name)\n` +
+      `  }\n\n` +
+      `  closest(selector) {\n` +
+      `    if (selector !== ".rfk-field") return null\n\n` +
+      `    let current = this\n` +
+      `    while (current) {\n` +
+      `      if (current.classList.contains("rfk-field")) return current\n` +
+      `      current = current.parentElement\n` +
+      `    }\n\n` +
+      `    return null\n` +
+      `  }\n\n` +
+      `  querySelector(selector) {\n` +
+      `    const matches = (element) => selector === "label" && element.tagName === "LABEL"\n` +
+      `    const visit = (element) => {\n` +
+      `      if (matches(element)) return element\n\n` +
+      `      for (const child of element.children) {\n` +
+      `        const match = visit(child)\n` +
+      `        if (match) return match\n` +
+      `      }\n\n` +
+      `      return null\n` +
+      `    }\n\n` +
+      `    return visit(this)\n` +
+      `  }\n` +
+      `}\n\n` +
+      `function buildDocumentWithWrapper(children) {\n` +
+      `  const document = new FakeDocument()\n` +
+      `  const wrapper = document.register(new FakeElement("div", { class: "rfk-field" }, children))\n` +
+      `  return { document, wrapper }\n` +
+      `}\n\n` +
       `expectedNamedExports.forEach((exportName) => {\n` +
       `  assert.ok(exportName in packageRoot, \`package root should expose documented export ${"${exportName}"}\`)\n` +
       `})\n` +
@@ -115,7 +190,27 @@ try {
       `assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")\n` +
       `expectedCallableHelperExports.forEach((exportName) => {\n` +
       `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)\n` +
-      `})\n`
+      `})\n\n` +
+      `const label = new FakeElement("label", { for: "order_customer_name" })\n` +
+      `const input = new FakeElement("input", { id: "order_customer_name", "aria-describedby": "customer_hint customer_error" })\n` +
+      `const hint = new FakeElement("p", { id: "customer_hint", class: "rfk-hint" })\n` +
+      `const error = new FakeElement("p", { id: "customer_error", class: "rfk-error" })\n` +
+      `const { wrapper } = buildDocumentWithWrapper([label, input, hint, error])\n` +
+      `const accessibilityContract = packageRoot.nativeFieldAccessibilityContract(input)\n\n` +
+      `assert.deepEqual(accessibilityContract.describedByIds, ["customer_hint", "customer_error"])\n` +
+      `assert.deepEqual(accessibilityContract.describedByElements, [hint, error])\n` +
+      `assert.equal(accessibilityContract.labelElement, label, "native accessibility contract should expose the associated label element")\n` +
+      `assert.equal(accessibilityContract.hintElement, hint)\n` +
+      `assert.equal(accessibilityContract.errorElement, error)\n` +
+      `assert.equal(accessibilityContract.wrapperElement, wrapper)\n\n` +
+      `const fallbackLabel = new FakeElement("label")\n` +
+      `const fallbackInput = new FakeElement("textarea")\n` +
+      `buildDocumentWithWrapper([fallbackLabel, fallbackInput])\n` +
+      `assert.equal(packageRoot.nativeFieldAccessibilityContract(fallbackInput).labelElement, fallbackLabel, "native accessibility contract should fall back to a wrapper label")\n\n` +
+      `const missingLabelInput = new FakeElement("select")\n` +
+      `buildDocumentWithWrapper([missingLabelInput])\n` +
+      `assert.equal(packageRoot.nativeFieldAccessibilityContract(missingLabelInput).labelElement, null, "native accessibility contract should return null when no label exists")\n` +
+      `assert.equal(packageRoot.nativeFieldAccessibilityContract(new FakeElement("div")), null, "native accessibility contract should ignore non-native elements")\n`
   )
 
   await import(pathToFileURL(probePath).href)

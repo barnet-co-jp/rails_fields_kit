@@ -201,6 +201,11 @@
         background: #fffafb;
       }
 
+      .example.narrow-review-surface {
+        border-left-color: var(--warning);
+        background: #fffdf7;
+      }
+
       .two-up {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -220,6 +225,11 @@
         gap: 10px;
         font-size: 0.9rem;
         font-weight: 650;
+      }
+
+      .label-text {
+        min-width: 0;
+        overflow-wrap: anywhere;
       }
 
       .required {
@@ -338,6 +348,14 @@
         overflow-wrap: anywhere;
       }
 
+      .review-checks {
+        display: grid;
+        gap: 7px;
+        padding-left: 18px;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
       .callout {
         display: grid;
         gap: 10px;
@@ -402,6 +420,7 @@
         <span class="review-pill">Initializer class defaults only</span>
         <span class="review-pill">Host app owns CSS</span>
         <span class="review-pill">Native wrapper examples</span>
+        <span class="review-pill">Narrow viewport lane</span>
         <span class="review-pill">Static artifact only</span>
       </div>
 
@@ -416,7 +435,7 @@
           <div class="example">
             <div class="field-block">
               <div class="label-row">
-                <span>Customer code</span>
+                <span class="label-text">Customer code</span>
                 <span class="required">Required</span>
               </div>
               <div class="control-row">
@@ -439,7 +458,7 @@
           <div class="example customized-surface">
             <div class="field-block host-field">
               <div class="label-row host-label">
-                <span>Customer code</span>
+                <span class="label-text">Customer code</span>
                 <span class="required">Required</span>
               </div>
               <div class="control-row host-control">
@@ -462,7 +481,7 @@
           <div class="example error-surface">
             <div class="field-block host-field invalid-field">
               <div class="label-row host-label">
-                <span>Support email</span>
+                <span class="label-text">Support email</span>
                 <span class="required">Required</span>
               </div>
               <div class="control-row">
@@ -472,6 +491,34 @@
               <div class="error-text">Example error class: `invalid-feedback`; message ownership is unchanged.</div>
             </div>
           </div>
+        </article>
+
+        <article class="card">
+          <div class="tag boundary">Narrow review lane</div>
+          <h2>Class-heavy wrappers should still wrap cleanly</h2>
+          <p>
+            This lane is the narrow viewport checkpoint for long labels, affixes, hint text, and error copy.
+            It demonstrates pass-through readability without promising bundled framework CSS.
+          </p>
+          <div class="example narrow-review-surface">
+            <div class="field-block host-field invalid-field">
+              <div class="label-row host-label">
+                <span class="label-text">Long localized label for a billing contact identifier used in imports</span>
+                <span class="required">Required</span>
+              </div>
+              <div class="control-row host-control">
+                <span class="affix host-affix">acct:</span>
+                <div class="input">enterprise-customer-reference-2026</div>
+                <span class="affix trailing host-affix">locked</span>
+              </div>
+              <div class="hint host-hint">Review at a narrow viewport: label, affixes, value text, and hint should wrap without overlapping.</div>
+              <div class="error-text">Example error class: host app owns the final validation copy and spacing.</div>
+            </div>
+          </div>
+          <ul class="review-checks">
+            <li>Check desktop and narrow viewport readability before recording release evidence.</li>
+            <li>Keep the conclusion about class pass-through, not production CSS framework support.</li>
+          </ul>
         </article>
 
         <article class="card">
@@ -503,7 +550,8 @@
       <section class="callout">
         <p>
           Use `doc/configuration.md` as the source of truth for initializer keys and override precedence.
-          This static page only visualizes the class-pass-through boundary for design review.
+          This static page only visualizes the class-pass-through boundary for design review. When checking the narrow lane,
+          record the viewport and whether long labels, affixes, hints, and error text remain readable without treating this artifact as bundled CSS support.
         </p>
       </section>
     </main>
