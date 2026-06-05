@@ -50,6 +50,18 @@ function nativeFieldWrapper(element) {
   return element.closest?.(NATIVE_FIELD_WRAPPER_SELECTOR) || null
 }
 
+function explicitLabelFor(element) {
+  const id = element.getAttribute("id")
+  if (!id) return null
+
+  const labels = Array.from(element.ownerDocument?.querySelectorAll?.("label") || [])
+  return labels.find((label) => label.getAttribute?.("for") === id) || null
+}
+
+function nativeFieldLabel(element, wrapperElement) {
+  return explicitLabelFor(element) || wrapperElement?.querySelector?.("label") || null
+}
+
 export function tomSelectTextOverrideContract(element) {
   if (!element || typeof element.getAttribute !== "function") return null
 
@@ -72,13 +84,15 @@ export function nativeFieldAccessibilityContract(element) {
   const describedByElements = describedByIds
     .map((id) => elementById(element, id))
     .filter(Boolean)
+  const wrapperElement = nativeFieldWrapper(element)
 
   return {
     describedByIds,
     describedByElements,
     hintElement: firstElementWithClass(describedByElements, NATIVE_FIELD_HINT_CLASS),
     errorElement: firstElementWithClass(describedByElements, NATIVE_FIELD_ERROR_CLASS),
-    wrapperElement: nativeFieldWrapper(element)
+    wrapperElement,
+    labelElement: nativeFieldLabel(element, wrapperElement)
   }
 }
 
