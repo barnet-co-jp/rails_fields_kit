@@ -51,6 +51,22 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
     end
   end
 
+  it "reports importmap pins with unexpected targets" do
+    Dir.mktmpdir do |root|
+      write_file(root, "config/importmap.rb", <<~RUBY)
+        pin "rails_fields_kit", to: "rails_fields_kit.js"
+        pin "rails_fields_kit/tom_select_controller"
+      RUBY
+
+      importmap_check = check_for(described_class.new(root: root), :importmap)
+
+      expect(importmap_check.status).to eq(:missing)
+      expect(importmap_check.message).to include("unexpected targets")
+      expect(importmap_check.message).to include("rails_fields_kit (expected rails_fields_kit/index.js, found rails_fields_kit.js)")
+      expect(importmap_check.message).to include("rails_fields_kit/tom_select_controller (expected rails_fields_kit/tom_select_controller.js, found no explicit target)")
+    end
+  end
+
   it "reports missing importmap pins without treating toolchain variance as an invocation failure" do
     Dir.mktmpdir do |root|
       write_file(root, "config/importmap.rb", <<~RUBY)
