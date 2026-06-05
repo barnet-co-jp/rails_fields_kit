@@ -79,11 +79,20 @@ module RailsFieldsKit
         )
       end
 
+      content = path.read
       missing_pins = IMPORTMAP_PINS.keys.reject do |name|
-        importmap_pin_present?(path.read, name)
+        importmap_pin_declared?(content, name)
+      end
+      target_mismatches = IMPORTMAP_PINS.filter_map do |name, expected_target|
+        next unless importmap_pin_declared?(content, name)
+
+        actual_target = importmap_pin_target(content, name)
+        next if actual_target == expected_target
+
+        [name, expected_target, actual_target]
       end
 
-      if missing_pins.empty?
+      if missing_pins.empty? && target_mismatches.empty?
         Check.new(
           key: :importmap,
           label: "Importmap pins",
@@ -91,11 +100,17 @@ module RailsFieldsKit
           message: "Rails Fields Kit importmap pins are present in config/importmap.rb."
         )
       else
+        message_parts = []
+        message_parts << "Missing Rails Fields Kit importmap pins: #{missing_pins.join(", ")}." unless missing_pins.empty?
+        unless target_mismatches.empty?
+          message_parts << "Rails Fields Kit importmap pins with unexpected targets: #{format_importmap_target_mismatches(target_mismatches)}."
+        end
+
         Check.new(
           key: :importmap,
           label: "Importmap pins",
           status: :missing,
-          message: "Missing Rails Fields Kit importmap pins: #{missing_pins.join(", ")}."
+          message: message_parts.join(" ")
         )
       end
     end
@@ -111,8 +126,20 @@ module RailsFieldsKit
       end
     end
 
-    def importmap_pin_present?(content, name)
+    def importmap_pin_declared?(content, name)
       content.match?(/^\s*pin\s+["']#{Regexp.escape(name)}["']/)
+    end
+
+    def importmap_pin_target(content, name)
+      match = content.match(/^\s*pin\s+["']#{Regexp.escape(name)}["'](?:\s*,\s*to:\s*["']([^"']+)["'])?/)
+      match && match[1]
+    end
+
+    def format_importmap_target_mismatches(target_mismatches)
+      target_mismatches.map do |name, expected_target, actual_target|
+        actual_target_label = actual_target || "no explicit target"
+        "#{name} (expected #{expected_target}, found #{actual_target_label})"
+      end.join(", ")
     end
 
     def format_check(check)
