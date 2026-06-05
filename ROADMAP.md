@@ -96,6 +96,8 @@ Host app responsibilities should remain explicit:
 
 Feature gate: shared field/operator metadata registry (#405)
 
+Before treating this roadmap lane as implementation guidance, use [`doc/shared_metadata_navigation.md`](doc/shared_metadata_navigation.md) to separate current public API, host-app metadata patterns, and future registry or adapter proposals. The current public names remain listed in [`doc/public_api.md`](doc/public_api.md).
+
 The smallest useful slice is a docs/proposal pattern for a host app owned metadata source that can feed existing Rails Fields Kit surfaces:
 
 - `TokenSuggestions.build` for general token, field, predicate, value, and saved-search suggestion option JSON
@@ -184,6 +186,7 @@ The maintained docs should make the difference between current public API, revie
 
 - `README.md` is the public entrypoint and docs map.
 - `doc/public_api.md` is the intended stable API inventory for the 0.1.x series, including package-root JavaScript exports, FormBuilder helpers, controller helpers, table metadata adapters, Stimulus values, and events.
+- `doc/shared_metadata_navigation.md` is the short boundary map for shared token, Ransack, and table metadata patterns; it points readers back to the current API inventory and away from treating roadmap-only registry or adapter examples as implemented contract.
 - `doc/visual_references.md` and `doc/visual_reference_index.html` are maintained review entrypoints for landed static visual reference artifacts. They help reviewers inspect representative rendered states, but they do not define production runtime behavior or make proposal-only helper names current public API.
 - `Product Profile.md` and `AGENTS.md` summarize maintainer-facing source-of-truth order and responsibility boundaries.
 

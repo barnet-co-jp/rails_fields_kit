@@ -9,6 +9,7 @@ require "rails_fields_kit/table_filter_input"
 require "rails_fields_kit/table_cell_input"
 require "rails_fields_kit/table_renderer"
 require "rails_fields_kit/table_metadata"
+require "rails_fields_kit/setup_doctor"
 require "rails_fields_kit/engine"
 require "rails_fields_kit/selected_hash_normalization"
 
