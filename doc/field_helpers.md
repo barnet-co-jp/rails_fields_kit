@@ -234,6 +234,8 @@ Use this when options should be grouped with `<optgroup>`.
   } %>
 ```
 
+Use this representative lane when the host app already has a server-rendered grouped collection and wants to preserve those group labels while submitting the ordinary selected ID or value. Keep remote search, selected preload, create-on-the-fly, token metadata, and future optgroup metadata work in their own helper lanes. See [`grouped_select.md`](grouped_select.md) for the focused collection-backed boundary and review checklist.
+
 ### `rfk_enum_select`
 
 Use this for Rails enum attributes.
