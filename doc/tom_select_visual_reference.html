@@ -42,55 +42,56 @@
       main {
         width: min(1120px, calc(100% - 32px));
         margin: 0 auto;
-        padding: 44px 0 60px;
+        padding: 32px 0 52px;
       }
 
       .hero {
         display: grid;
-        gap: 14px;
-        margin-bottom: 24px;
-        padding-bottom: 20px;
+        gap: 10px;
+        margin-bottom: 16px;
+        padding-bottom: 16px;
         border-bottom: 1px solid var(--line);
       }
 
       .eyebrow {
-        font-size: 0.76rem;
+        font-size: 0.74rem;
         font-weight: 700;
-        letter-spacing: 0.08em;
+        letter-spacing: 0;
         text-transform: uppercase;
         color: var(--accent);
       }
 
       h1 {
         margin: 0;
-        font-size: clamp(2rem, 4vw, 3rem);
+        font-size: 1.8rem;
         font-weight: 650;
-        line-height: 1.08;
+        line-height: 1.12;
       }
 
       .lede {
-        max-width: 780px;
+        max-width: 760px;
         margin: 0;
-        font-size: 1rem;
+        font-size: 0.96rem;
         color: var(--muted);
       }
 
       .hero-links {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
       }
 
       .hero-links a {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 38px;
-        padding: 0 12px;
+        min-height: 34px;
+        padding: 0 11px;
         border: 1px solid var(--line-strong);
         color: var(--ink);
         text-decoration: none;
         background: var(--surface);
+        font-size: 0.9rem;
       }
 
       .hero-links a:hover {
@@ -98,16 +99,39 @@
         color: var(--accent);
       }
 
+      .review-checklist {
+        display: grid;
+        gap: 8px;
+        margin: 0 0 18px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--muted);
+        box-shadow: var(--shadow);
+      }
+
+      .review-checklist h2 {
+        color: var(--ink);
+      }
+
+      .review-checklist ul {
+        display: grid;
+        gap: 5px;
+        margin: 0;
+        padding-left: 18px;
+        font-size: 0.89rem;
+      }
+
       .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(252px, 1fr));
+        gap: 12px;
       }
 
       .card {
         display: grid;
-        gap: 12px;
-        padding: 16px;
+        gap: 10px;
+        padding: 14px;
         border: 1px solid var(--line);
         background: var(--surface);
         box-shadow: var(--shadow);
@@ -115,7 +139,7 @@
 
       .card-header {
         display: grid;
-        gap: 7px;
+        gap: 6px;
       }
 
       .tag {
@@ -124,9 +148,9 @@
         border: 1px solid var(--line-strong);
         background: var(--surface-muted);
         color: var(--ink);
-        font-size: 0.72rem;
+        font-size: 0.7rem;
         font-weight: 700;
-        letter-spacing: 0.04em;
+        letter-spacing: 0;
         text-transform: uppercase;
       }
 
@@ -181,15 +205,15 @@
 
       h2 {
         margin: 0;
-        font-size: 1.05rem;
-        line-height: 1.22;
+        font-size: 1rem;
+        line-height: 1.24;
       }
 
       .card-header p,
       .card-footer {
         margin: 0;
         color: var(--muted);
-        font-size: 0.91rem;
+        font-size: 0.88rem;
       }
 
       .control {
@@ -201,9 +225,9 @@
       .control-top {
         display: flex;
         align-items: center;
-        gap: 9px;
-        min-height: 48px;
-        padding: 9px 11px;
+        gap: 8px;
+        min-height: 44px;
+        padding: 8px 10px;
         border-bottom: 1px solid var(--line);
       }
 
@@ -217,7 +241,7 @@
       .selection--multiple {
         display: flex;
         flex-wrap: wrap;
-        gap: 7px;
+        gap: 6px;
       }
 
       .placeholder {
@@ -230,7 +254,7 @@
 
       .inline-query {
         align-self: center;
-        padding: 5px 0;
+        padding: 4px 0;
         color: var(--ink);
         font-weight: 600;
         white-space: nowrap;
@@ -239,7 +263,7 @@
       .caret {
         flex: none;
         color: var(--muted);
-        font-size: 0.92rem;
+        font-size: 0.9rem;
       }
 
       .clear-button {
@@ -247,12 +271,12 @@
         align-items: center;
         justify-content: center;
         flex: none;
-        width: 26px;
-        height: 26px;
+        width: 24px;
+        height: 24px;
         border: 1px solid #b8c6d2;
         background: #f5f8fa;
         color: #24485c;
-        font-size: 0.9rem;
+        font-size: 0.88rem;
         font-weight: 700;
       }
 
@@ -260,7 +284,7 @@
         display: inline-flex;
         align-items: center;
         max-width: 100%;
-        padding: 5px 9px;
+        padding: 4px 8px;
         border: 1px solid #b7d2c7;
         background: var(--accent-soft);
         color: #174c43;
@@ -294,7 +318,7 @@
         border: 1px solid #d1d7de;
         background: var(--surface-muted);
         color: #5f6b76;
-        font-size: 0.76rem;
+        font-size: 0.74rem;
         font-weight: 600;
       }
 
@@ -307,7 +331,7 @@
       .option,
       .message,
       .action {
-        padding: 10px 11px;
+        padding: 8px 10px;
         background: var(--surface);
       }
 
@@ -315,25 +339,25 @@
       .action strong,
       .message strong {
         display: block;
-        font-size: 0.94rem;
+        font-size: 0.91rem;
       }
 
       .option span,
       .message span,
       .action span {
         display: block;
-        margin-top: 4px;
+        margin-top: 3px;
         color: var(--muted);
-        font-size: 0.86rem;
+        font-size: 0.84rem;
       }
 
       .option-group-label {
-        padding: 9px 11px 7px;
+        padding: 8px 10px 6px;
         background: var(--surface-muted);
         color: #4f5f6d;
-        font-size: 0.74rem;
+        font-size: 0.72rem;
         font-weight: 700;
-        letter-spacing: 0.04em;
+        letter-spacing: 0;
         text-transform: uppercase;
       }
 
@@ -359,7 +383,7 @@
       .error-surface {
         display: grid;
         gap: 4px;
-        padding: 11px;
+        padding: 10px;
         border-top: 1px solid #e1a8b3;
         border-left: 4px solid var(--error);
         background: var(--error-soft);
@@ -367,12 +391,12 @@
       }
 
       .error-surface strong {
-        font-size: 0.94rem;
+        font-size: 0.91rem;
       }
 
       .error-surface span {
         color: #744a54;
-        font-size: 0.86rem;
+        font-size: 0.84rem;
       }
 
       .error-surface.custom-wrapper {
@@ -387,11 +411,12 @@
       }
 
       .legend {
-        margin-top: 22px;
-        padding: 16px;
+        margin-top: 18px;
+        padding: 14px;
         border: 1px solid var(--line);
         background: var(--surface);
         color: var(--muted);
+        font-size: 0.9rem;
       }
 
       .legend strong {
@@ -401,12 +426,17 @@
       @media (max-width: 640px) {
         main {
           width: min(100% - 20px, 1120px);
-          padding-top: 34px;
-          padding-bottom: 48px;
+          padding-top: 26px;
+          padding-bottom: 44px;
         }
 
+        h1 {
+          font-size: 1.55rem;
+        }
+
+        .review-checklist,
         .card {
-          padding: 14px;
+          padding: 12px;
         }
       }
     </style>
@@ -417,13 +447,22 @@
         <div class="eyebrow">Rails Fields Kit</div>
         <h1>Tom Select Visual Reference</h1>
         <p class="lede">
-          A product-neutral static reference for representative Tom Select-backed field states.
-          Use this page as a diagnostic checklist for visible state differences before wiring helpers into a host app.
+          A compact static reference for representative Tom Select-backed field states.
+          Use it as a diagnostic checklist for visible state differences before wiring helpers into a host app.
         </p>
         <div class="hero-links">
           <a href="field_helpers.md">Field helper reference</a>
           <a href="../README.md">README</a>
         </div>
+      </section>
+
+      <section class="review-checklist" aria-labelledby="review-checklist-title">
+        <h2 id="review-checklist-title">Release QA focus</h2>
+        <ul>
+          <li>Scan state cards first; hero and links stay secondary.</li>
+          <li>Check badge, placeholder, token, and error copy readability at desktop and narrow widths.</li>
+          <li>Keep endpoint behavior, retry policy, and host-app copy decisions in the topic docs.</li>
+        </ul>
       </section>
 
       <section class="grid" aria-label="Representative Tom Select states">
