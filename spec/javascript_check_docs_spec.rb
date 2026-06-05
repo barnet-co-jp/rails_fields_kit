@@ -32,14 +32,17 @@ RSpec.describe "JavaScript check documentation" do
     expected_check_signals = {
       "syntax: package entrypoint" => "public package entrypoint",
       "syntax: Tom Select controller" => "Tom Select controller source",
+      "JavaScript smoke inventory guard" => "JavaScript smoke inventory guard",
       "package exports smoke" => "package `exports` import wiring",
       "Tom Select query params smoke" => "Tom Select fixed query params",
       "Tom Select interaction events smoke" => "Tom Select forwarded interaction event payloads",
-      "Tom Select create headers smoke" => "Tom Select create-on-the-fly JSON request headers",
+      "Tom Select create headers and response normalization smoke" => "Tom Select create-on-the-fly JSON request headers and success response normalization",
       "Tom Select error surface smoke" => "Tom Select error-surface metadata",
       "Tom Select Turbo lifecycle smoke" => "Tom Select Turbo lifecycle behavior",
       "Tom Select label fallback smoke" => "Tom Select label fallback rendering",
-      "Tom Select render text fallback smoke" => "Tom Select render text fallback rendering"
+      "Tom Select render text fallback smoke" => "Tom Select render text fallback rendering",
+      "Tom Select plugin contract smoke" => "Tom Select plugin contract reading",
+      "selected preload config contract smoke" => "selected preload config reading"
     }
 
     runner_check_names = check_javascript_source.scan(/name: "([^"]+)"/).flatten
