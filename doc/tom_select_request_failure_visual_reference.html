@@ -376,7 +376,7 @@
       <section class="hero" aria-labelledby="page-title">
         <div class="eyebrow">Rails Fields Kit static docs artifact</div>
         <h1 id="page-title">Tom Select Request Failure Reference</h1>
-        <p class="lede">Use this focused lane to review the field-adjacent `error_surface: true` placeholder states without implying built-in retry UI, default error copy, or request lifecycle behavior.</p>
+        <p class="lede">Use this focused lane to review the field-adjacent `error_surface: true` placeholder states, request metadata, and duplicate field id boundaries without implying built-in retry UI, default error copy, or request lifecycle behavior.</p>
         <nav class="hero-links" aria-label="Related documentation">
           <a href="visual_reference_index.html">Visual reference index</a>
           <a href="tom_select_visual_reference.html">Tom Select states</a>
@@ -506,17 +506,66 @@
         </div>
       </section>
 
+      <section aria-labelledby="duplicate-id-title">
+        <div class="section-heading">
+          <h2 id="duplicate-id-title">Duplicate field id boundary</h2>
+          <p>Use this lane when the same object and method appear more than once on a page. Each instance should pass a distinct `error_surface_html: { id: ... }` so the placeholder, `aria-describedby`, and request-failure event detail point to the intended slot.</p>
+        </div>
+
+        <div class="metadata-lane">
+          <article class="metadata-card">
+            <header>
+              <span class="tag neutral">Review risk</span>
+              <h3>Generated id reused across repeated fields</h3>
+              <p>The static artifact calls out the collision pattern reviewers should look for; it does not change helper id generation.</p>
+            </header>
+            <div class="metadata-list" aria-label="Repeated generated id sample">
+              <div class="metadata-row"><span class="metadata-key">modal field</span><span class="metadata-value">order_customer_id_error_surface</span></div>
+              <div class="metadata-row"><span class="metadata-key">sidebar field</span><span class="metadata-value">order_customer_id_error_surface</span></div>
+              <div class="metadata-row"><span class="metadata-key">review cue</span><span class="metadata-value">same object/method needs explicit ids</span></div>
+            </div>
+          </article>
+
+          <article class="metadata-card">
+            <header>
+              <span class="tag custom">Explicit ids</span>
+              <h3>Host app names each error surface</h3>
+              <p>When the host app supplies unique ids, assistive wiring and request-failure hooks can stay scoped to each visible field instance.</p>
+            </header>
+            <div class="metadata-list" aria-label="Explicit error surface id sample">
+              <div class="metadata-row"><span class="metadata-key">modal id</span><span class="metadata-value">order_customer_modal_error_surface</span></div>
+              <div class="metadata-row"><span class="metadata-key">sidebar id</span><span class="metadata-value">order_customer_sidebar_error_surface</span></div>
+              <div class="metadata-row"><span class="metadata-key">aligned with</span><span class="metadata-value">aria-describedby + detail.surface</span></div>
+            </div>
+          </article>
+
+          <article class="metadata-card">
+            <header>
+              <span class="tag">Boundary</span>
+              <h3>Stable slot only, not retry policy</h3>
+              <p>The helper exposes the field-adjacent slot and event target; product-specific copy, reveal timing, and recovery action remain host-app decisions.</p>
+            </header>
+            <div class="metadata-list" aria-label="Host app boundary sample">
+              <div class="metadata-row"><span class="metadata-key">helper owns</span><span class="metadata-value">stable placeholder id and surface target</span></div>
+              <div class="metadata-row"><span class="metadata-key">host owns</span><span class="metadata-value">message, reveal timing, retry action</span></div>
+              <div class="metadata-row"><span class="metadata-key">review source</span><span class="metadata-value">field_helpers.md + docs/events.md</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
       <section class="checklist" aria-labelledby="checklist-title">
         <h2 id="checklist-title">Review checklist</h2>
         <ul>
           <li>Confirm hidden, revealed, restore-failure, create-failure, and custom-wrapper states stay readable on desktop and narrow viewports.</li>
           <li>Confirm operation and status metadata labels wrap without relying on color alone.</li>
+          <li>When the same object/method appears more than once, confirm explicit ids keep `aria-describedby`, placeholder id, and `detail.surface` aligned per instance.</li>
           <li>Keep `load-error`, `selected-load-error`, and `create-error` as host-app hooks rather than full lifecycle simulations.</li>
           <li>Do not add default visible error copy, built-in retry UI, request behavior, or production helper markup from this artifact.</li>
         </ul>
       </section>
 
-      <p class="scope-note"><strong>Scope note.</strong> This page is a static visual aid. The maintained contract for `error_surface: true`, `error_surface_html:`, and Tom Select-backed request-failure hooks remains in the helper docs and runtime code.</p>
+      <p class="scope-note"><strong>Scope note.</strong> This page is a static visual aid. The maintained contract for `error_surface: true`, `error_surface_html:`, duplicate object/method id handling, and Tom Select-backed request-failure hooks remains in the helper docs and runtime code.</p>
     </main>
   </body>
 </html>
