@@ -16,15 +16,18 @@ RSpec.describe "JavaScript check documentation" do
   end
   let(:check_javascript_source) { File.read(File.join(repo_root, "scripts/check_javascript.mjs")) }
 
-  it "keeps the Node 22 JavaScript check boundary aligned across package metadata, CI, and docs" do
-    javascript_steps = workflow.fetch("jobs").fetch("javascript").fetch("steps")
+  it "keeps the Node JavaScript check boundary aligned across package metadata, CI, and docs" do
+    javascript_job = workflow.fetch("jobs").fetch("javascript")
+    javascript_steps = javascript_job.fetch("steps")
     node_setup_step = javascript_steps.find { |step| step["uses"]&.start_with?("actions/setup-node@") }
+    node_versions = javascript_job.fetch("strategy").fetch("matrix").fetch("node-version")
 
-    expect(package_json.fetch("engines").fetch("node")).to eq("22.x")
-    expect(node_setup_step.fetch("with").fetch("node-version")).to eq("22")
+    expect(package_json.fetch("engines").fetch("node")).to eq("22.x || 24.x")
+    expect(node_versions).to eq(["22", "24"])
+    expect(node_setup_step.fetch("with").fetch("node-version")).to eq("${{ matrix.node-version }}")
     expect(development_doc).to include(
-      "The JavaScript syntax check uses Node 22.x, matching `package.json` and the GitHub Actions `javascript` job.",
-      "`npm run check:js` on Node 22.x"
+      "The JavaScript syntax check uses Node 22.x and Node 24.x, matching `package.json` and the GitHub Actions `javascript` matrix.",
+      "`npm run check:js` on Node 22.x and Node 24.x"
     )
   end
 
