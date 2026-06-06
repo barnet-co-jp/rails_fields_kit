@@ -117,6 +117,10 @@ Use this for searchable remote selects and editable comboboxes.
 
 For remote search, current public behavior is a JSON `GET` request to `url:`. Rails Fields Kit appends `query_params:` to that URL as fixed query string scope first, then sets `query_param:` to the typed query value. The host app owns that endpoint's authorization, scoping, and response records; use `selected_url:` for selected-option preload and `create_url:` for create-on-the-fly JSON `POST` requests instead of mixing those request shapes into the remote search endpoint.
 
+`open_on_focus:` and `preload:` are passed through to Tom Select for the remote field; Rails Fields Kit does not add a separate blank-query policy around that combination. If the host app expects focus to show initial suggestions, confirm that the endpoint deliberately accepts the resulting blank or initial query and returns an appropriately scoped, limited result set. `min_length:` is a client-side load gate before the request is made; it does not decide what the server should return for an allowed blank query.
+
+Fixed `query_params:` and `selected_query_params:` values are URL query params. Array values are sent as repeated query entries for the same key, while `null` / `undefined` values are skipped instead of being serialized. `create_params:` uses a different lane: those fixed values are merged into the create-on-the-fly JSON request body before the user's `create_param:` value is written.
+
 #### Representative `error_surface` example
 
 The shared request-failure feedback options above apply here too. This combobox example is representative, not combobox-only:
@@ -232,6 +236,8 @@ Use this when options should be grouped with `<optgroup>`.
   } %>
 ```
 
+Use this representative lane when the host app already has a server-rendered grouped collection and wants to preserve those group labels while submitting the ordinary selected ID or value. Keep remote search, selected preload, create-on-the-fly, token metadata, and future optgroup metadata work in their own helper lanes. See [`grouped_select.md`](grouped_select.md) for the focused collection-backed boundary and review checklist.
+
 ### `rfk_enum_select`
 
 Use this for Rails enum attributes.
@@ -300,6 +306,18 @@ This representative lane keeps the native helper family in its ordinary HTML-inp
 - `html:` passes attributes to the input itself; `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` pass attributes to the generated wrapper pieces.
 - edit-form redisplay and validation rerender keep using the same model-backed value instead of switching to a remote-search or Tom Select lane.
 - automatic accessibility wiring keeps the generated hint and error ids connected through `aria-describedby` and also manages `aria-invalid` / `aria-required` unless you opt out.
+
+Native wrapper helpers also pass ordinary Rails field options to the rendered input. Put simple Rails helper options such as `maxlength:`, `minlength:`, `pattern:`, `required:`, `autocomplete:`, `inputmode:`, `disabled:`, or `readonly:` at the top level when you want the same shape as a Rails native helper; use `html:` when you want to group input attributes next to wrapper customization. If the same attribute is present in both places, the `html:` value wins because it is merged into the field options last.
+
+```erb
+<%= f.rfk_text_field :customer_code,
+  wrapper: true,
+  maxlength: 12,
+  pattern: "[A-Z0-9-]+",
+  html: { autocomplete: "off" } %>
+```
+
+Those attributes stay browser-native and host-app behavior. Rails Fields Kit does not add character counters, input masks, browser validation-message policy, or server-side validation rules for native wrapper helpers; it only keeps the wrapper, hint, error, affix, and accessibility wiring around the native input.
 
 When the host app needs to own that accessibility wiring itself, keep the same wrapper lane and opt out explicitly:
 
@@ -431,15 +449,6 @@ Common options:
 Select-like helpers accept array, hash, and object collections.
 
 ```erb
-<%= f.rfk_select :customer_id,
-  collection: @customers,
-  collection_value_method: :id,
-  collection_label_method: :name %>
-```
-
-Option-level customization:
-
-```erb
 <%= f.rfk_select :status,
   collection: { "Draft" => "draft", "Published" => "published" },
   disabled: ["published"],
@@ -459,6 +468,9 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `query_params:` adds fixed query parameters to the remote search `GET` URL before the typed query is applied.
 - `selected_query_params:` adds fixed query parameters to the selected-option preload URL.
 - `create_params:` adds fixed JSON fields to create-on-the-fly POST requests.
+- `preload:` forwards Tom Select's preload option. For remote search fields, any blank or initial load it permits is still governed by the host app endpoint.
+- `open_on_focus:` forwards Tom Select's open-on-focus option. It can reveal already loaded options or work with `preload:` depending on the Tom Select flow, but it does not create a Rails Fields Kit server-side blank-query policy.
+- `min_length:` gates client-side remote loading before a request is sent. It is separate from endpoint-side rules for whether blank or short queries return options.
 - `max_items:` forwards Tom Select's maximum selected item count.
 - `load_throttle:` forwards Tom Select's remote load throttle in milliseconds.
 - `delimiter:` forwards Tom Select's delimiter option, useful for text-backed token inputs.
@@ -466,6 +478,8 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `loading_text:`, `no_results_text:`, and `create_text:` override the bundled or initializer-provided Tom Select copy for one field only.
 - `error_surface:` adds a stable nearby placeholder for request-failure handlers.
 - `error_surface_html:` customizes that generated placeholder element.
+
+For remote search and selected-option preload, fixed params are URL query params. Scalar values are set on the request URL, array values are appended as repeated query entries for the same key, and `null` / `undefined` values are skipped. `create_params:` is separate: Rails Fields Kit merges those fixed values into the create-on-the-fly JSON body, not the request URL.
 
 When neither the field nor the initializer sets those values, Rails Fields Kit falls back to bundled locale-aware copy at render time. The bundled baseline currently includes English and Japanese, and falls back to English when a locale-specific key is not present.
 
@@ -479,9 +493,11 @@ Example:
   selected_url: selected_customers_path(format: :json),
   create_url: customers_path,
   query_param: "q",
-  query_params: { account_id: current_account.id },
+  query_params: { account_id: current_account.id, region: ["east", "priority"] },
   selected_query_params: { account_id: current_account.id },
   create_params: { account_id: current_account.id } %>
 ```
 
 For remote search, `url:` receives a JSON `GET` request. Rails Fields Kit appends `query_params:` as fixed query string scope and then sets `query_param:` to the current typed query value. Selected values still use `selected_url:` with `selected_param:` or `selected_multiple_param:`, and create input text still uses `create_url:` with JSON `create_params:` plus `create_param:`.
+
+If a field combines `open_on_focus: true` and `preload: true`, treat the initial request volume and blank-query response as host-app endpoint policy. Rails Fields Kit passes the options through and keeps `min_length:` as the client-side request gate; it does not decide whether the endpoint should return popular options, scoped defaults, or an empty list for a blank query.

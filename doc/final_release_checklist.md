@@ -54,6 +54,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/token_suggestions.md`.
 - [ ] Review `doc/ransack_suggestions.md`.
 - [ ] Review `doc/table_adapters.md`.
+- [ ] Review `doc/table_group_html.md` when table metadata helpers use group-level wrappers; keep `doc/table_adapters.md` as the source of truth for table metadata behavior.
 - [ ] Review `doc/configuration.md`.
 - [ ] Review `doc/events.md`.
 - [ ] Review `doc/tom_select_turbo_lifecycle.md`.

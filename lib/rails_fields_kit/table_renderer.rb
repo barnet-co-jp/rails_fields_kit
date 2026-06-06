@@ -29,6 +29,10 @@ module RailsFieldsKit
         registered_field_helpers.dup
       end
 
+      def registered_field_types
+        registered_field_helpers.keys
+      end
+
       def helper_for(field_type)
         registered_field_helpers[normalize_field_type(field_type)]
       end
