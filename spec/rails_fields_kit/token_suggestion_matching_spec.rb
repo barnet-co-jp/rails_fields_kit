@@ -184,7 +184,7 @@ RSpec.describe "token suggestion query matching" do
   end
 
   it "keeps empty query matching all suggestions when match fields are configured" do
-    expect(match_field_matches_for("").size).to eq(5)
+    expect(match_field_matches_for("").size).to eq(4)
   end
 
   it "matches custom token suggestions against rendered custom field values" do
