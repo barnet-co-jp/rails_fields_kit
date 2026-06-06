@@ -180,7 +180,9 @@ module RailsFieldsKit
         raise ArgumentError, "table metadata method is required" unless method
 
         options = call.fetch(:options).dup
-        options[:_rfk_table_filter_metadata] = true if table_filter && call.fetch(:helper) == :rfk_token_search
+        if table_filter && call.fetch(:helper) == :rfk_token_search && options.key?(:adapter)
+          options[:_rfk_table_filter_metadata] = true
+        end
 
         form_builder.public_send(call.fetch(:helper), method, **options)
       end
