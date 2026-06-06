@@ -17,6 +17,7 @@ bundle exec rake build
 ```
 
 - Before release, rerun those local checks on the latest `main` and confirm GitHub Actions CI succeeds for the exact release candidate commit.
+- The GitHub Actions Rails compatibility matrix runs for pull requests and `main` pushes using the same representative Rails 7.0 / Ruby 3.1 and Rails 8.0 / Ruby 3.3 lanes. Keep the matrix representative rather than expanding release evidence into a full Rails/Ruby cross-product.
 
 ## Pre-release checklist
 
@@ -60,7 +61,9 @@ bundle exec rake build
 
 7. Confirm the latest GitHub Actions CI run is green for the commit you plan to release.
 
-   This is the final branch-head confirmation for lint, RSpec, JavaScript syntax, and gem package/install smoke checks. The gem package check also verifies that the built artifact contains `package.json` and the JavaScript files referenced by its public `exports` map.
+   This is the final branch-head confirmation for lint, RSpec, JavaScript syntax, gem package/install smoke checks, and the representative Rails compatibility matrix. The gem package check also verifies that the built artifact contains `package.json` and the JavaScript files referenced by its public `exports` map.
+
+   The compatibility matrix intentionally stays small: it confirms the oldest supported representative lane and the current Rails 8 representative lane on pull requests and on `main` after merge. Do not add every Rails/Ruby combination unless release planning explicitly accepts the extra CI time and maintenance cost.
 
 8. Review documentation.
 
@@ -101,6 +104,14 @@ bundle exec rake build
 
    While reviewing `CHANGELOG.md` and the release note draft, keep their roles separate: `CHANGELOG.md` is the exhaustive release-history source, and `doc/release_notes_0_1_1.md` is the reviewer-facing and GitHub-release-facing summary. Confirm the release note highlights are backed by landed `Unreleased` entries, avoid proposal or open-PR behavior, and check that major categories such as token search, table metadata, JavaScript exports, request lifecycle, install generator, and release-scoped event surfaces are not missing from one side.
 
+   For a merge train with docs-only, spec-only, and runtime behavior PRs open at the same time, review release-facing docs only after each PR has landed on the branch being released. Use the merged PR body and linked issue as the boundary evidence, then decide the smallest release-facing update that fits the landed change:
+
+   - docs-only syncs usually need at most a changelog or release-note wording check, and may need no release note highlight when they only clarify existing behavior.
+   - spec-only or docs drift guards usually stay out of user-facing release highlights unless they protect a newly documented public contract.
+   - runtime behavior changes should get a changelog entry, and the release note draft should mention them only when the behavior is user-facing or changes integration expectations.
+   - stacked PRs should be reviewed in merge order so a dependent guard or follow-up does not describe behavior before its base PR has landed.
+   - PR-local notes about skipped local checks or connector-only verification should be rechecked on the final release candidate instead of copied into release notes.
+
 9. Confirm version.
 
    ```ruby
@@ -109,6 +120,16 @@ bundle exec rake build
    ```
 
 10. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
+
+   Confirm the host app's Tom Select package version, pin source, plugin CSS, and plugin-specific asset loading through that app's normal JavaScript dependency review. Rails Fields Kit documents and packages its own import paths, but it does not fix, detect, or auto-correct Tom Select versions or plugin asset policy as part of the gem release gate.
+
+   After the install generator runs, run the read-only setup doctor in the sample app:
+
+   ```bash
+   rails rails_fields_kit:doctor
+   ```
+
+   Record whether it reports the initializer and, when importmap is present, the Rails Fields Kit pins. Treat Tom Select package install, Stimulus registration, CSS import, and bundler alias output as manual checklist reminders rather than automatic pass/fail gates or auto-fix behavior.
 
    When the release surface includes selected preload behavior, run the focused [`selected_preload_release_gate.md`](selected_preload_release_gate.md) before marking the sample app pass complete. Keep this check to the documented single-value and comma-separated multiple-ID request contract unless release planning explicitly changes that public surface.
 
@@ -126,13 +147,13 @@ bundle exec rake build
    ## 0.1.1 - YYYY-MM-DD
    ```
 
-   Keep the moved changelog entry as the detailed source of truth for landed behavior, and leave proposal or open-PR behavior out until it has landed in the release branch.
+   Keep the moved changelog entry as the detailed source of truth for landed behavior, and leave proposal or open-PR behavior out until it has landed in the release branch. When multiple PRs landed close together, group detailed entries by the behavior that shipped rather than by PR number, and keep docs-only clarifications separate from runtime behavior changes so reviewers can see which items affect host-app integration.
 
 2. Prepare the version-specific release note draft.
 
    Update `doc/release_notes_0_1_1.md` when the next release remains `0.1.1`. If release planning chooses a different version number, rename that draft and use `doc/release_notes_0_1_0.md` as the historical reference instead of editing the historical notes in place.
 
-   Before using it for a GitHub Release, compare the draft against the moved changelog entry. The release note should summarize user-facing highlights and responsibility boundaries, not replace the detailed changelog entries.
+   Before using it for a GitHub Release, compare the draft against the moved changelog entry. The release note should summarize user-facing highlights and responsibility boundaries, not replace the detailed changelog entries. If a landed PR only adds a docs guard, release checklist wording, or other review aid, keep it out of the release note highlights unless it changes what host apps should adopt or verify.
 
 3. Commit release metadata.
 

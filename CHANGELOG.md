@@ -11,11 +11,16 @@ The next release is primarily about making the 0.1.x public surface easier to ad
 - Token-oriented search helpers and suggestion builders make structured search inputs easier to wire while keeping query parsing and execution in the host application.
 - Table metadata adapters and FormBuilder rendering helpers let table integrations describe Rails Fields Kit fields without taking over table persistence or query ownership.
 - Package-root JavaScript exports, Tom Select request options, create-success events, install generator setup-note opt-out, and opt-in request-failure surfaces improve integration hooks around rendered fields and host-app setup.
+- Controller helper and FormBuilder documentation now call out landed endpoint-side query minimums and enum source boundaries without turning search execution or arbitrary enum adapters into gem-owned behavior.
 - The fixed entries below mostly harden request lifecycle docs, suggestion metadata immutability, and table metadata normalization so release reviewers can distinguish user-facing additions from quality fixes.
 
 The detailed entries remain the exhaustive source of truth for release review. Keep proposal or open-PR behavior out of this section until it has landed in the release branch.
 
 ### Added
+
+#### FormBuilder helpers
+
+- `rfk_enum_select` now has a focused explicit `enum:` hash guide for Rails enum-shaped sources. Hash keys remain the submitted values, labels stay on the model I18n / humanized-key path, and arbitrary label/value DSLs, remote enum option lookup, and PORO enum adapters remain outside the current public surface.
 
 #### Token search and suggestion metadata
 
@@ -33,6 +38,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 - `RailsFieldsKit::TableMetadata` for collecting Rails Fields Kit filter/editor metadata from table column definitions and table-like objects that respond to `columns`, including common alias keys such as `filter_input`, `search_filter`, `cell_editor`, and `cell_input`, render shortcuts for collected filters and editors, and duplication safety for collected metadata hashes from hash, hash-like metadata, and hash-like column inputs.
 - `RailsFieldsKit::TableRenderer` for turning table filter/editor metadata into FormBuilder call specs or dispatching them through a form builder, including ordered batch rendering APIs, custom table field helper registration with normalized field/helper names, normalized field type and method handling, duplication safety for metadata options and hash-like options objects, duplicated mapping introspection, and mapping helper APIs.
 - `rfk_table_filters` and `rfk_table_cell_editors` for rendering table metadata directly from a FormBuilder, including mixed hash/object/hash-like columns, enumerator columns, hash-like column inputs, table-like object inputs, custom table helper registrations, reset behavior, and safe-buffer rendering contracts.
+- `group_html:` for `rfk_table_filters` and `rfk_table_cell_editors` when a host app needs one group-level outer `<div>` around direct FormBuilder output; table layout, persistence, query execution, and visible save/error copy remain host-app or table-integration responsibilities.
 
 #### Install generator
 
@@ -43,6 +49,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 - `tomSelectTextOverrideContract(element)` from the package root for host-app scripts that need to read rendered Tom Select text override values without reaching into the Stimulus controller instance.
 - `nativeFieldAccessibilityContract(element)` from the package root for host-app scripts that need to read rendered native input accessibility wiring without taking over id generation, validation messages, focus management, or visible feedback.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so generated endpoint actions can match custom routes.
+- `rfk_search_with minimum_query_length:` for endpoints that should return empty options for blank or too-short queries while keeping the default blank-query initial options behavior when omitted. FormBuilder `min_length:` remains a browser-side loading hint, and authorization, scoping, query parsing, Ransack integration, and Tom Select lifecycle remain host-app responsibilities.
 - `rfk_find_with` supports Rails array params for multiple selected option preload in addition to comma-separated `ids`, including custom `ids_param:` names.
 - Remote request extension options for Tom Select-backed helpers:
   - `query_params:` for fixed search query parameters.
@@ -53,10 +60,15 @@ The detailed entries remain the exhaustive source of truth for release review. K
 
 ### Fixed
 
+#### Packaging and bundled locales
+
+- Bundled Tom Select locale YAML files are now included in the gem package so the existing I18n-backed default `no_results_text`, `loading_text`, and `create_text` copy remains available to host apps without changing locale wording or JavaScript localization ownership.
+
 #### Remote request lifecycle and events
 
 - Tom Select failure events now share a consistent detail shape with `operation`, request context, `response`, `payload`, and `status` across remote search, selected preload, and create failures, and include `surface` when `error_surface: true` is enabled.
 - Remote search, selected preload, and create-on-the-fly now document that aborted requests, disconnect-time aborts, and stale responses do not dispatch success or failure events; failure events remain limited to current request errors.
+- Remote option rendering now falls back to the configured value field for the visible label when the configured label field is missing or blank; this is display-only and does not change submitted values, endpoint payloads, authorization, or request lifecycle behavior.
 
 #### Token and Ransack suggestion metadata
 

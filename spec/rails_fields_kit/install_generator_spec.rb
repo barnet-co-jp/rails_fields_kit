@@ -19,9 +19,15 @@ RSpec.describe RailsFieldsKit::Generators::InstallGenerator do
     expect(File.file?(File.join(source_root, "rails_fields_kit_setup.md"))).to be(true)
   end
 
+  it "uses the setup doctor importmap pins" do
+    expect(described_class::IMPORTMAP_PINS).to eq(RailsFieldsKit::SetupDoctor::IMPORTMAP_PINS)
+  end
+
   it "keeps generated setup notes aligned with the current public API" do
     setup_notes = File.read(File.join(described_class.source_root, "rails_fields_kit_setup.md"))
 
+    expect(setup_notes).to include("rails rails_fields_kit:doctor")
+    expect(setup_notes).to include("Use the doctor output as a read-only prompt")
     expect(setup_notes).to include("selected_url:")
     expect(setup_notes).to include("rfk_search_with")
     expect(setup_notes).to include("rfk_find_with")

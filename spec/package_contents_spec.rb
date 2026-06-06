@@ -6,16 +6,26 @@ require "spec_helper"
 RSpec.describe "package contents" do
   let(:gemspec_path) { File.expand_path("../rails_fields_kit.gemspec", __dir__) }
   let(:specification) { Gem::Specification.load(gemspec_path) }
+  let(:readme_path) { File.expand_path("../README.md", __dir__) }
+  let(:readme) { File.read(readme_path) }
   let(:repo_agents_path) { File.expand_path("../AGENTS.md", __dir__) }
   let(:repo_agents) { File.read(repo_agents_path) }
   let(:product_profile_path) { File.expand_path("../Product Profile.md", __dir__) }
   let(:product_profile) { File.read(product_profile_path) }
+  let(:setup_doc_path) { File.expand_path("../doc/setup.md", __dir__) }
+  let(:setup_doc) { File.read(setup_doc_path) }
   let(:visual_references_path) { File.expand_path("../doc/visual_references.md", __dir__) }
   let(:visual_references) { File.read(visual_references_path) }
   let(:public_api_path) { File.expand_path("../doc/public_api.md", __dir__) }
   let(:public_api) { File.read(public_api_path) }
   let(:field_helpers_path) { File.expand_path("../doc/field_helpers.md", __dir__) }
   let(:field_helpers) { File.read(field_helpers_path) }
+  let(:controller_helpers_path) { File.expand_path("../doc/controller_helpers.md", __dir__) }
+  let(:controller_helpers) { File.read(controller_helpers_path) }
+  let(:sample_app_checklist_path) { File.expand_path("../doc/sample_app_checklist.md", __dir__) }
+  let(:sample_app_checklist) { File.read(sample_app_checklist_path) }
+  let(:sample_app_results_path) { File.expand_path("../doc/sample_app_results.md", __dir__) }
+  let(:sample_app_results) { File.read(sample_app_results_path) }
   let(:form_builder_path) { File.expand_path("../lib/rails_fields_kit/form_builder.rb", __dir__) }
   let(:form_builder_source) { File.read(form_builder_path) }
   let(:generated_setup_note_path) do
@@ -80,6 +90,7 @@ RSpec.describe "package contents" do
       "## Remote endpoints and richer selects",
       "- [ ] Add the first `rfk_combobox` field and matching `rfk_search_with` / `rfk_find_with` / `rfk_create_with` endpoints.",
       "- [ ] Use `doc/controller_helpers.md` for the maintained endpoint option reference, including custom `action:` names.",
+      "- [ ] If this app uses FormBuilder `min_length:`, review the controller helper blank-query policy before deciding whether the matching endpoint also needs `minimum_query_length:`.",
       "- [ ] Review remote option settings such as `selected_url:`, `option_description_field:`, and `option_badge_field:` in the public API guide before wiring richer selects.",
       "- [ ] If this app uses `selected_url:` or `error_surface: true`, review `doc/setup.md` for the representative edit-form wiring and `doc/events.md` for `selected-load`, `selected-load-error`, and `detail.surface`.",
       "- [ ] If this app uses importmap, run `rails generate rails_fields_kit:install --importmap` when `config/importmap.rb` exists, or add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.",
@@ -102,6 +113,28 @@ RSpec.describe "package contents" do
       "- Remote endpoint follow-up:",
       "- Release verification notes:",
       "- Follow-up tasks:"
+    )
+  end
+
+  it "keeps README and setup JavaScript helper summaries pointed at the public API source of truth" do
+    javascript_exports = markdown_section(public_api, "## JavaScript exports")
+
+    expect(javascript_exports).to include(
+      "### Current package-root exports",
+      "`TomSelectController`",
+      "rendered-field contract reader",
+      "Future package-root helpers should follow the same boundary"
+    )
+
+    expect(readme).to include(
+      "`rails_fields_kit/index.js` re-exports the same controller",
+      "read-only rendered-field contract helpers",
+      "use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary"
+    )
+
+    expect(setup_doc).to include(
+      "The package root also exposes read-only rendered-field contract helpers",
+      "Use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the current source of truth for the helper list and return shape"
     )
   end
 
@@ -164,6 +197,42 @@ RSpec.describe "package contents" do
     )
   end
 
+  it "keeps remote workflow request option examples visible across representative docs" do
+    option_names = %w[
+      query_params
+      selected_query_params
+      create_params
+      selected_param
+      selected_multiple_param
+      create_param
+    ]
+    controller_reference = [
+      markdown_section(controller_helpers, "## `rfk_find_with`"),
+      markdown_section(controller_helpers, "## `rfk_create_with`"),
+      markdown_section(controller_helpers, "## Fixed request params and scoping")
+    ].join("\n")
+    remote_field_helper_section = markdown_section(field_helpers, "## Remote option options")
+
+    option_names.each do |option_name|
+      expected_signal = "#{option_name}:"
+
+      expect(controller_reference).to include(expected_signal)
+      expect(remote_field_helper_section).to include(expected_signal)
+      expect(readme).to include(expected_signal)
+    end
+
+    expect(controller_reference).to include(
+      "request-shaping helpers",
+      "host app controller/model layer"
+    )
+    expect(remote_field_helper_section).to include(
+      "request-shaping options",
+      "Rails Fields Kit appends `query_params:` as fixed query string scope",
+      "Selected values still use `selected_url:` with `selected_param:` or `selected_multiple_param:`",
+      "create input text still uses `create_url:` with JSON `create_params:` plus `create_param:`"
+    )
+  end
+
   it "keeps native FormBuilder helpers aligned with public docs without making the quick chooser exhaustive" do
     native_helpers = native_helper_names_from(form_builder_source)
     native_section = public_api.match(/Native input helpers:\n\n(?<list>(?:- `rfk_[a-z_]+`\n)+)/)[:list]
@@ -194,6 +263,28 @@ RSpec.describe "package contents" do
       "doc/release.md",
       "doc/release_notes_0_1_1.md",
       "doc/release_notes_0_1_0.md"
+    )
+  end
+
+  it "keeps grouped select sample app evidence lanes aligned" do
+    checklist_lane = markdown_section(
+      sample_app_checklist,
+      "## Verify `rfk_grouped_select` representative optgroup-preserving lane"
+    )
+    results_lane = markdown_section(
+      sample_app_results,
+      "## `rfk_grouped_select` representative optgroup-preserving lane checks"
+    )
+
+    expect(checklist_lane).to include(
+      "optgroup-preserving contract end to end",
+      "ordinary selected ID or value lane rather than a remote-search or token-metadata lane",
+      "does not depend on `url:`, `selected_url:`, or `create_url:`"
+    )
+    expect(results_lane).to include(
+      "optgroup-preserving lane",
+      "ordinary selected ID or value lane rather than a remote-search or token-metadata lane",
+      "stayed independent from `url:`, `selected_url:`, and `create_url:`"
     )
   end
 

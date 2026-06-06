@@ -3,6 +3,7 @@
 require "active_support/core_ext/module/delegation"
 require "rails/engine"
 require "rails_fields_kit/form_builder"
+require "rails_fields_kit/form_builder_table_groups"
 require "rails_fields_kit/option_html_context"
 
 module RailsFieldsKit
@@ -15,6 +16,10 @@ module RailsFieldsKit
       ActiveSupport.on_load(:action_view) do
         ActionView::Helpers::FormBuilder.include RailsFieldsKit::FormBuilder
       end
+    end
+
+    rake_tasks do
+      load root.join("lib/tasks/rails_fields_kit.rake").to_s
     end
   end
 end

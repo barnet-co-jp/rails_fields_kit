@@ -261,6 +261,40 @@ RSpec.describe RailsFieldsKit::Searchable do
     end
   end
 
+  class FakeMinimumQueryLengthController
+    include RailsFieldsKit::Searchable
+
+    attr_accessor :params
+    attr_reader :rendered_json
+
+    rfk_search_with(
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      search: :name,
+      value_field: "id",
+      label_field: "name",
+      minimum_query_length: 1,
+      wrap: "options"
+    )
+
+    rfk_search_with(
+      action: :strict,
+      model: FakeModel,
+      value: :id,
+      label: :name,
+      search: :name,
+      value_field: "id",
+      label_field: "name",
+      minimum_query_length: 3,
+      wrap: "options"
+    )
+
+    def render(json:, status: :ok)
+      @rendered_json = json
+    end
+  end
+
   class FakeRichController
     include RailsFieldsKit::Searchable
 
@@ -457,6 +491,17 @@ RSpec.describe RailsFieldsKit::Searchable do
     expect(controller.rendered_json).to eq([{ "id" => 1, "name" => "Acme Corp" }])
   end
 
+  it "keeps blank query initial options by default" do
+    controller = FakeController.new
+    controller.params = {}
+
+    controller.index
+
+    expect(controller.rendered_status).to eq(:ok)
+    expect(controller.rendered_json).to eq([{ "id" => 1, "name" => "Acme Corp" }])
+    expect(FakeModel.last_relation.where_args).to eq([])
+  end
+
   it "supports custom action names" do
     controller = FakeCustomActionController.new
     controller.params = { "q" => "Acme", "id" => "1", "name" => "Created" }
@@ -488,6 +533,27 @@ RSpec.describe RailsFieldsKit::Searchable do
     controller.index
 
     expect(controller.rendered_json).to eq({ "options" => [{ "id" => 1, "name" => "Acme Corp" }, { "id" => 2, "name" => "Beta LLC" }] })
+  end
+
+  it "returns wrapped empty options when query is shorter than the endpoint minimum" do
+    controller = FakeMinimumQueryLengthController.new
+    FakeModel.last_relation = nil
+    controller.params = { "q" => "" }
+
+    controller.index
+
+    expect(controller.rendered_json).to eq({ "options" => [] })
+    expect(FakeModel.last_relation).to be_nil
+  end
+
+  it "searches when query meets the endpoint minimum" do
+    controller = FakeMinimumQueryLengthController.new
+    controller.params = { "q" => "Acm" }
+
+    controller.strict
+
+    expect(controller.rendered_json).to eq({ "options" => [{ "id" => 1, "name" => "Acme Corp" }, { "id" => 2, "name" => "Beta LLC" }] })
+    expect(FakeModel.last_relation.where_args).not_to eq([])
   end
 
   it "renders selected option by id" do

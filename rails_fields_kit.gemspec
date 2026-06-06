@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir.chdir(__dir__) do
     Dir[
       "{app,lib}/**/*",
+      "config/locales/**/*.yml",
       "doc/**/*.md",
       "doc/**/*.html",
       "CHANGELOG.md",
