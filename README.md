@@ -406,7 +406,7 @@ Options can be disabled or receive per-option HTML attributes:
 Rails enum-like attributes can use `rfk_enum_select`:
 
 ```erb
-<%= f.rfk_enum_select %>
+<%= f.rfk_enum_select :status %>
 ```
 
 For explicit `enum:` hashes, keys remain the submitted values and labels stay on the model I18n / humanized-key path. Use [`doc/enum_select.md`](doc/enum_select.md) for that boundary; arbitrary label/value DSLs, remote enum options, and PORO enum adapters are not current public APIs.
