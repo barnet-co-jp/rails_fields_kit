@@ -191,6 +191,57 @@ try {
       `expectedCallableHelperExports.forEach((exportName) => {\n` +
       `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)\n` +
       `})\n\n` +
+      `assert.equal(packageRoot.tomSelectRequestContract(null), null, "request contract reader should ignore missing elements")\n` +
+      `assert.equal(packageRoot.tomSelectRequestContract(new FakeElement("input", { "data-controller": "other" })), null, "request contract reader should ignore non-Rails Fields Kit Tom Select elements")\n` +
+      `assert.deepEqual(\n` +
+      `  packageRoot.tomSelectRequestContract(new FakeElement("select", {\n` +
+      `    "data-controller": "other rails-fields-kit--tom-select",\n` +
+      `    "data-rails-fields-kit--tom-select-url-value": "/people",\n` +
+      `    "data-rails-fields-kit--tom-select-selected-url-value": "/people/selected",\n` +
+      `    "data-rails-fields-kit--tom-select-create-url-value": "/people",\n` +
+      `    "data-rails-fields-kit--tom-select-query-param-value": "term",\n` +
+      `    "data-rails-fields-kit--tom-select-selected-param-value": "person_id",\n` +
+      `    "data-rails-fields-kit--tom-select-selected-multiple-param-value": "person_ids",\n` +
+      `    "data-rails-fields-kit--tom-select-create-param-value": "name",\n` +
+      `    "data-rails-fields-kit--tom-select-min-length-value": "2",\n` +
+      `    "data-rails-fields-kit--tom-select-error-surface-id-value": "person-error"\n` +
+      `  })),\n` +
+      `  {\n` +
+      `    controller: "rails-fields-kit--tom-select",\n` +
+      `    hasRemoteSearch: true,\n` +
+      `    hasSelectedPreload: true,\n` +
+      `    hasCreateEndpoint: true,\n` +
+      `    url: "/people",\n` +
+      `    selectedUrl: "/people/selected",\n` +
+      `    createUrl: "/people",\n` +
+      `    queryParam: "term",\n` +
+      `    selectedParam: "person_id",\n` +
+      `    selectedMultipleParam: "person_ids",\n` +
+      `    createParam: "name",\n` +
+      `    minLength: 2,\n` +
+      `    errorSurfaceId: "person-error"\n` +
+      `  },\n` +
+      `  "request contract reader should expose rendered request lanes without executing requests"\n` +
+      `)\n` +
+      `assert.deepEqual(\n` +
+      `  packageRoot.tomSelectRequestContract(new FakeElement("select", { "data-controller": "rails-fields-kit--tom-select" })),\n` +
+      `  {\n` +
+      `    controller: "rails-fields-kit--tom-select",\n` +
+      `    hasRemoteSearch: false,\n` +
+      `    hasSelectedPreload: false,\n` +
+      `    hasCreateEndpoint: false,\n` +
+      `    url: null,\n` +
+      `    selectedUrl: null,\n` +
+      `    createUrl: null,\n` +
+      `    queryParam: "q",\n` +
+      `    selectedParam: "id",\n` +
+      `    selectedMultipleParam: "ids",\n` +
+      `    createParam: "text",\n` +
+      `    minLength: 0,\n` +
+      `    errorSurfaceId: null\n` +
+      `  },\n` +
+      `  "request contract reader should expose safe defaults for local Tom Select-backed fields"\n` +
+      `)\n\n` +
       `const label = new FakeElement("label", { for: "order_customer_name" })\n` +
       `const input = new FakeElement("input", { id: "order_customer_name", "aria-describedby": "customer_hint customer_error" })\n` +
       `const hint = new FakeElement("p", { id: "customer_hint", class: "rfk-hint" })\n` +
