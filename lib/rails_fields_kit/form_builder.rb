@@ -119,11 +119,12 @@ module RailsFieldsKit
       wrapper_options = rfk_extract_wrapper_options(options)
       html_options = options.delete(:html) || {}
       rfk_promote_html_options!(options, html_options)
-      rfk_strip_table_adapter_metadata!(options) if field_kind == :token_search
+      table_adapter_metadata = rfk_extract_table_adapter_metadata!(options) if field_kind == :token_search
       rfk_apply_accessibility!(method, html_options, wrapper_options)
       data = html_options[:data] ||= {}
       data[:controller] = [data[:controller], config.controller_name].compact.join(" ")
       data[:rails_fields_kit__tom_select_kind_value] = field_kind
+      rfk_assign_table_adapter_metadata!(data, table_adapter_metadata) if table_adapter_metadata
 
       grouped_collection = options.delete(:grouped_collection)
       disabled = options.delete(:disabled)
@@ -233,11 +234,23 @@ module RailsFieldsKit
       html_options[:disabled] = options.delete(:disabled) if [true, false].include?(options[:disabled])
     end
 
-    def rfk_strip_table_adapter_metadata!(options)
+    def rfk_extract_table_adapter_metadata!(options)
+      expose_metadata = options.delete(:_rfk_table_filter_metadata)
+      metadata = {}
+
       TABLE_ADAPTER_METADATA_KEYS.each do |key|
-        options.delete(key)
-        options.delete(key.to_s)
+        value = options.delete(key)
+        value = options.delete(key.to_s) if value.nil?
+        metadata[key] = value unless value.nil?
       end
+
+      expose_metadata && metadata[:adapter] ? metadata : nil
+    end
+
+    def rfk_assign_table_adapter_metadata!(data, metadata)
+      rfk_assign_raw_data_value(data, :rails_fields_kit_table_filter_adapter, metadata[:adapter])
+      rfk_assign_raw_data_value(data, :rails_fields_kit_table_filter_param_name, metadata[:param_name])
+      rfk_assign_raw_data_value(data, :rails_fields_kit_table_filter_fields, metadata[:fields])
     end
 
     def rfk_extract_wrapper_options(options)
@@ -383,6 +396,13 @@ module RailsFieldsKit
 
       data_key = "rails_fields_kit__tom_select_#{key}_value"
       data[data_key] = (value.is_a?(Array) || value.is_a?(Hash)) ? JSON.generate(value) : value
+    end
+
+    def rfk_assign_raw_data_value(data, key, value)
+      return if value.nil?
+      return if value.respond_to?(:empty?) && value.empty?
+
+      data[key] = (value.is_a?(Array) || value.is_a?(Hash)) ? JSON.generate(value) : value
     end
 
     def rfk_choices_with_selected(collection, selected_choices:, value_method:, label_method:, disabled: nil, option_html: {})
