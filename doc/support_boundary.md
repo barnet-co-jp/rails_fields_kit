@@ -26,7 +26,7 @@ These checks are representative CI coverage, not a separate host-app setup step.
 
 Rails Fields Kit ships JavaScript entrypoints for the Stimulus controller and package-root helper exports, but the host app still chooses its JavaScript bundling or importmap strategy.
 
-The repository JavaScript check uses Node 22.x and Node 24.x because `package.json` declares `engines.node` as `22.x || 24.x` and the GitHub Actions `javascript` job runs `npm run check:js` on both Node lines. This is the boundary for repository-local JavaScript checks and package export smoke tests.
+The package metadata boundary is Node 22.x || 24.x. The repository JavaScript check uses Node 22.x and Node 24.x because `package.json` declares `engines.node` as `22.x || 24.x` and the GitHub Actions `javascript` job runs `npm run check:js` on both Node lines. This is the boundary for repository-local JavaScript checks and package export smoke tests.
 
 That Node 22.x / 24.x boundary is not a Tom Select runtime support policy for host applications. Rails Fields Kit does not publish a required Tom Select package version, pin source, CDN source, plugin list, plugin asset policy, or package-manager lockfile policy. Host applications choose and review those Tom Select runtime dependencies through their own JavaScript toolchain.
 
