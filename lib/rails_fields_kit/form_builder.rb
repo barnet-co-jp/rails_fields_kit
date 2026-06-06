@@ -199,7 +199,7 @@ module RailsFieldsKit
           collection,
           selected_choices: selected_choices,
           value_method: collection_value_method,
-          label_method: label_method,
+          label_method: collection_label_method,
           disabled: disabled,
           option_html: option_html
         )
@@ -247,7 +247,9 @@ module RailsFieldsKit
         metadata[key] = value unless value.nil?
       end
 
-      expose_metadata && metadata[:adapter] ? metadata : nil
+      return nil unless expose_metadata && metadata[:adapter]
+
+      metadata
     end
 
     def rfk_assign_table_adapter_metadata!(data, metadata)
