@@ -178,7 +178,17 @@ You can also import the controller file directly:
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `tomSelectTextOverrideContract(...)` for Tom Select copy values and `nativeFieldAccessibilityContract(...)` for native wrapper accessibility wiring; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `readRenderedSelectedPreloadConfig(...)` for selected preload config, `tomSelectTextOverrideContract(...)` for Tom Select copy values, and `nativeFieldAccessibilityContract(...)` for native wrapper accessibility wiring; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
+
+For example, host-app scripts can inspect selected preload config that Rails Fields Kit already rendered without executing the selected preload request themselves:
+
+```js
+import { readRenderedSelectedPreloadConfig } from "rails_fields_kit"
+
+const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
+```
+
+That helper returns rendered config for host-app inspection only. Endpoint authorization, request execution, visible fallback copy, and retry UI remain host-app responsibilities.
 
 ## Usage
 
