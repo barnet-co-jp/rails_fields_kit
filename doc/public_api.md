@@ -100,6 +100,8 @@ Tom Select-backed helpers also support field-level `allow_clear: true` for field
 
 `rfk_table_filters` and `rfk_table_cell_editors` are the direct FormBuilder rendering path. They collect table metadata and return safe-buffer helper output for ordinary Rails views. `TableMetadata.filter_calls` / `cell_editor_calls` and `TableRenderer.filter_call` / `cell_editor_call` are the call-spec path for table integrations that want to inspect or rearrange helper, method, and options before rendering. The batch convenience APIs `TableMetadata.render_filters` / `render_cell_editors` and `TableRenderer.render_filters` / `render_cell_editors` stay in that renderer lane and return ordered render result arrays rather than redefining the helper-level safe-buffer contract.
 
+When `rfk_table_filters(columns)` renders a `TableFilterInput.ransack_filter`, the rendered field carries narrow table-filter metadata attributes for `adapter`, `param_name`, and `fields`. Use `readRenderedTableFilterMetadata(element)` from the JavaScript package root when host-app scripts or table integrations need to read that metadata from the rendered field. Plain `rfk_token_search` calls and non-table render paths do not expose these table metadata attributes.
+
 `rfk_table_filters(columns, group_html: ...)` and `rfk_table_cell_editors(columns, group_html: ...)` can add attributes to one outer group wrapper around the joined helper output. `group_html:` is separate from field-level `wrapper_html:` and does not make Rails Fields Kit own table layout, query execution, persistence, or semantic `fieldset` / `legend` generation; use [`table_group_html.md`](table_group_html.md) for examples and the detailed boundary.
 
 ## Controller helpers
@@ -243,6 +245,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `TomSelectController` | Stimulus controller | Registers Rails Fields Kit's Tom Select-backed field behavior on the rendered element. Host apps still own Stimulus boot, Tom Select installation, endpoint behavior, authorization, query parsing, visible feedback copy, and retry UI. |
 | `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
+| `readRenderedTableFilterMetadata(element)` | rendered-field contract reader | Reads table-filter metadata attributes rendered by `rfk_table_filters(columns)` and returns `adapter`, `paramName`, and `fields`, or `null` when the element does not carry table filter metadata. It does not parse submitted token text, construct query params, execute Ransack, or own table state. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
 
 ### Import patterns
@@ -254,12 +257,14 @@ import {
   TomSelectController,
   nativeFieldAccessibilityContract,
   readRenderedSelectedPreloadConfig,
+  readRenderedTableFilterMetadata,
   tomSelectTextOverrideContract
 } from "rails_fields_kit"
 
 const accessibilityContract = nativeFieldAccessibilityContract(inputElement)
 const copyContract = tomSelectTextOverrideContract(fieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
+const tableFilterMetadata = readRenderedTableFilterMetadata(fieldElement)
 ```
 
 Direct controller import is also supported when the host app wants only the controller file:
@@ -271,6 +276,8 @@ import TomSelectController from "rails_fields_kit/tom_select_controller"
 ### Contract reader boundary
 
 Rendered-field contract helpers stay read-only. They inspect data attributes and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance or duplicating wrapper traversal.
+
+For table filter metadata, `readRenderedTableFilterMetadata(element)` only reads the adapter metadata rendered by the table filter path. Host apps still own token parsing, `params[:q]` construction, authorization, result scoping, and query execution.
 
 For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`.
 
