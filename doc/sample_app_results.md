@@ -35,6 +35,7 @@ Use the route map below to choose the evidence lane for the release or PR under 
 ```bash
 bundle exec standardrb
 bundle exec rspec
+npm run check:js
 bundle exec rake build
 ```
 
@@ -42,6 +43,7 @@ Result:
 
 - [ ] StandardRB passed
 - [ ] RSpec passed
+- [ ] JavaScript smoke check passed
 - [ ] Gem build passed
 - [ ] No RubyGems validation warnings
 
