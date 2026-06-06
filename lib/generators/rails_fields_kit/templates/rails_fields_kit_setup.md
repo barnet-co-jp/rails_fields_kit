@@ -49,6 +49,7 @@ Use these checks when replacing existing form helpers or choosing a helper famil
 - [ ] If this app is replacing a server-rendered `collection_select`, review the practical `rfk_select` migration guide before adding extra reinitializers or controller glue.
 - [ ] Use `doc/field_helpers.md` when choosing between `rfk_select`, `rfk_grouped_select`, `rfk_enum_select`, `rfk_combobox`, `rfk_autocomplete`, `rfk_token_search`, `rfk_tags`, and `rfk_multi_select`.
 - [ ] If this app uses `rfk_token_search`, review `doc/token_suggestions.md` for suggestion endpoint basics and `doc/ransack_suggestions.md` when those suggestions should map to Ransack metadata.
+- [ ] If token suggestions, Ransack-oriented suggestions, and table filters share one app-owned metadata source, use `doc/shared_metadata_navigation.md` as the boundary map before copying patterns into this app's notes.
 - [ ] If this app renders table filters or cell editors from metadata, review `doc/table_adapters.md` before wiring `rfk_table_filters` or `rfk_table_cell_editors`.
 
 ## Release verification and visual review
@@ -70,6 +71,7 @@ Use these references before shipping remote preloads, table metadata surfaces, o
 - Events: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/events.md>
 - Token suggestions: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/token_suggestions.md>
 - Ransack suggestions: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/ransack_suggestions.md>
+- Shared metadata navigation: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/shared_metadata_navigation.md>
 - Table adapter metadata: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/table_adapters.md>
 
 For a representative edit-form lane that uses `selected_url:` or `error_surface: true`, start with the setup guide and then review the events reference for `selected-load`, `selected-load-error`, and `detail.surface`.
