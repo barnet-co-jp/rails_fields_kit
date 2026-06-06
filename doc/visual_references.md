@@ -16,6 +16,8 @@ For package-root contract reader review, use [`public_api.md#javascript-exports`
 
 For native helper accessibility-contract follow-up, use the native helper reference as the visual lane and the release checklist or sample app evidence log as the recording lane. Keep those two artifacts linked by the checked helper state and viewport instead of duplicating helper markup or runtime contract details in this map.
 
+For setup doctor output review, use [`setup_doctor_output_review.md`](setup_doctor_output_review.md) as the release-evidence lane for CLI diagnostic readability. Keep it separate from the field UI visual references: it reviews `[OK]`, `[MISSING]`, `[MANUAL]`, and target-mismatch scanability without changing setup doctor runtime behavior or output wording.
+
 For `rfk_text_area` multiline review, use the native helper reference's multiline textarea lane. It keeps long textarea content, long hint copy, and validation copy in the same native wrapper surface while leaving autosize, production CSS, browser validation, and helper markup behavior out of scope.
 
 For uppercase visual-reference microcopy such as tags, metadata chips, and optgroup labels, review readable spacing across the family before widening letter spacing. Keep the static artifacts product-neutral and favor unexpanded letter spacing when the copy is already short, dense, and scan-oriented.
@@ -36,6 +38,7 @@ For uppercase visual-reference microcopy such as tags, metadata chips, and optgr
 ## How to use this family
 
 - For release verification, start from [`final_release_checklist.md`](final_release_checklist.md) and record manual evidence in [`sample_app_results.md`](sample_app_results.md) or the release PR comment when a release or PR changes the one-screen index or a visual reference artifact.
+- For setup doctor output review, use [`setup_doctor_output_review.md`](setup_doctor_output_review.md) when the release or PR changes setup diagnostics or setup evidence. Treat it as a CLI diagnostic evidence lane, not a field UI visual reference or a source of runtime wording changes.
 - For package-root contract reader review, first open [`public_api.md#javascript-exports`](public_api.md#javascript-exports) to confirm the current landed export and boundary, then use [`visual_reference_index.html`](visual_reference_index.html)'s contract-reader task to jump to the relevant rendered-state artifact.
 - For README first field quickstart review, open [`tom_select_visual_reference.html`](tom_select_visual_reference.html) and inspect the idle `rfk_select` / server-rendered collection lane before looking at remote combobox, preload, token search, or create-on-the-fly states.
 - For selected preload restore or failure review, open [`tom_select_visual_reference.html`](tom_select_visual_reference.html) and inspect the `Selected Preload` and `Selected Preload Failure` lanes. Use the focused request-failure reference only when the review needs operation/status metadata or the `error_surface: true` slot.
