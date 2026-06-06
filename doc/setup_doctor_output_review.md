@@ -51,6 +51,7 @@ rails rails_fields_kit:doctor
 Review notes:
 
 - Target mismatch evidence should show the expected target and the observed target in the same line.
+- When evidence is recorded from a narrow terminal or wrapped Markdown view, the wrapped continuation should still keep `expected target ...` before `but found ...` so reviewers can pair the expected and observed values without re-running the command.
 - `no explicit target` should read as a concrete diagnostic, not as an empty or crashed state.
 - CSS import and bundler alias checks remain host-app responsibilities unless a future issue explicitly changes the doctor behavior.
 
@@ -60,6 +61,8 @@ Use this checklist when recording release or PR evidence:
 
 - [ ] `[OK]`, `[MISSING]`, and `[MANUAL]` labels are visually easy to distinguish in the recorded output.
 - [ ] Missing importmap target output includes both expected and observed target values.
+- [ ] Narrow-width evidence says whether the output was reviewed in a standard terminal width, a wrapped Markdown/code-block view, or both.
+- [ ] Wrapped mismatch lines still make the expected target and observed target relationship readable without changing setup doctor wording.
 - [ ] Manual checklist lines are not described as failed automatic checks.
 - [ ] Evidence notes say whether the app under review is importmap, jsbundling, bundler-managed JavaScript, or another setup path.
 - [ ] Any deferred follow-up is recorded as docs/setup policy work, not as a visual reference failure.
