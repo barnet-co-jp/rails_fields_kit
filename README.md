@@ -26,6 +26,8 @@ By default, the install generator creates:
 
 Use the generated `doc/rails_fields_kit_setup.md` in your host app as a short checklist and place for app-specific notes. If your app keeps setup notes elsewhere, run `rails generate rails_fields_kit:install --skip-setup-notes` to skip only that generated docs artifact while still creating the initializer. The maintained setup walkthrough and source of truth for setup examples stays in this repository at [`doc/setup.md`](doc/setup.md).
 
+After generator setup, `rails rails_fields_kit:doctor` can inspect the host app's setup visibility without changing files. It reports initializer and importmap pin presence, then leaves Tom Select package install, Stimulus registration, CSS import, and bundler alias confirmation as manual host-app checks. See [`doc/setup.md`](doc/setup.md) for the maintained doctor boundary.
+
 Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and controller-side helpers. It does not install Tom Select or choose a JavaScript bundling strategy for your app.
 
 For the current direction and integration priorities, see the repository roadmap: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/ROADMAP.md>.
@@ -37,6 +39,7 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | If you want to... | Start here |
 | --- | --- |
 | Set up a host app | [`doc/setup.md`](doc/setup.md) |
+| Check setup visibility after install | [`doc/setup.md`](doc/setup.md) for `rails rails_fields_kit:doctor` and its read-only/manual-check boundary |
 | Check supported Ruby / Rails and repository JavaScript boundaries | [`doc/support_boundary.md`](doc/support_boundary.md) |
 | Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md), [`doc/field_helpers.md#rfk_grouped_select`](doc/field_helpers.md#rfk_grouped_select) for grouped `<optgroup>` choices, [`doc/select_migration.md`](doc/select_migration.md), [`doc/enum_select.md`](doc/enum_select.md) for the focused `rfk_enum_select` source boundary |
 | See or compare rendered UI states quickly | [`doc/visual_references.md`](doc/visual_references.md) for the visual reference family, including Tom Select, text override copy, native helper, native narrow viewport stress, configuration wrapper classes, table metadata, and saved-search token states |

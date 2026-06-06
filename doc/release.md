@@ -123,6 +123,14 @@ bundle exec rake build
 
    Confirm the host app's Tom Select package version, pin source, plugin CSS, and plugin-specific asset loading through that app's normal JavaScript dependency review. Rails Fields Kit documents and packages its own import paths, but it does not fix, detect, or auto-correct Tom Select versions or plugin asset policy as part of the gem release gate.
 
+   After the install generator runs, run the read-only setup doctor in the sample app:
+
+   ```bash
+   rails rails_fields_kit:doctor
+   ```
+
+   Record whether it reports the initializer and, when importmap is present, the Rails Fields Kit pins. Treat Tom Select package install, Stimulus registration, CSS import, and bundler alias output as manual checklist reminders rather than automatic pass/fail gates or auto-fix behavior.
+
    When the release surface includes selected preload behavior, run the focused [`selected_preload_release_gate.md`](selected_preload_release_gate.md) before marking the sample app pass complete. Keep this check to the documented single-value and comma-separated multiple-ID request contract unless release planning explicitly changes that public surface.
 
    When the release surface includes create-on-the-fly success hooks, confirm the sample app and recorded results cover `rails-fields-kit--tom-select:create`, `event.detail.input`, `event.detail.option`, and the continued `item-add` / `change` flow. Visible success UI remains a host-app responsibility.
