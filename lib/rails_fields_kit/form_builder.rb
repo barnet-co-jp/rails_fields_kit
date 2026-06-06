@@ -179,8 +179,11 @@ module RailsFieldsKit
 
       html_options[:multiple] = options.delete(:multiple) if options.key?(:multiple)
       html_options[:placeholder] = options.delete(:placeholder) if options.key?(:placeholder)
+      render_text_field = field_kind == :autocomplete ||
+        (html_options[:multiple] == false && options[:as] == :text) ||
+        field_kind == :token_search
 
-      field_html = if field_kind == :autocomplete || html_options[:multiple] == false && options[:as] == :text || field_kind == :token_search
+      field_html = if render_text_field
         text_field(method, options.merge(html_options).except(:as))
       elsif grouped_collection
         grouped_choices = rfk_normalize_grouped_collection(
