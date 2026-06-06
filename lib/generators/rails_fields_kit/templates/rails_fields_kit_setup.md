@@ -9,6 +9,7 @@ Use it as a lightweight adoption checklist for wiring Rails Fields Kit into this
 Use this first pass to prove one server-rendered field before adding remote endpoints or richer Tom Select behavior.
 
 - [ ] Run `rails rails_fields_kit:doctor` after installation to review detectable setup state, importmap pin target diagnostics, and manual checklist items.
+- [ ] When recording setup doctor evidence, use the upstream setup doctor output review to distinguish setup behavior from CLI output readability and to avoid treating `[MANUAL]` lines as automatic failures.
 - [ ] Confirm `config/initializers/rails_fields_kit.rb` matches this app's needs.
 - [ ] Install Tom Select with the JavaScript toolchain already used by this app.
 - [ ] Register `rails-fields-kit--tom-select` on the app's existing Stimulus application.
@@ -23,6 +24,7 @@ These upstream docs remain the source of truth for copyable examples, public API
 
 - README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>
 - Setup guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>
+- Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>
 - Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
 - Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>
 - Configuration: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration.md>
@@ -65,6 +67,7 @@ Use these references before shipping remote preloads, table metadata surfaces, o
 ## Reference links
 
 - Practical `rfk_select` migration guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/select_migration.md>
+- Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>
 - Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
 - Visual reference family: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/visual_references.md>
 - Tom Select visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_visual_reference.html>
