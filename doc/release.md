@@ -94,6 +94,7 @@ bundle exec rake build
    - `doc/tom_select_turbo_lifecycle.md`
    - `doc/development.md`
    - `doc/sample_app_checklist.md`
+   - `doc/package_root_helper_release_evidence.md` when package-root read-only helper exports are part of the release evidence scope
    - `doc/sample_app_results.md`
    - `doc/selected_preload_release_gate.md` when selected preload behavior is part of the release surface
    - `doc/final_release_checklist.md`
@@ -122,6 +123,8 @@ bundle exec rake build
 10. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
 
    Confirm the host app's Tom Select package version, pin source, plugin CSS, and plugin-specific asset loading through that app's normal JavaScript dependency review. Rails Fields Kit documents and packages its own import paths, but it does not fix, detect, or auto-correct Tom Select versions or plugin asset policy as part of the gem release gate.
+
+   When package-root read-only helper exports are in scope, use [`package_root_helper_release_evidence.md`](package_root_helper_release_evidence.md) to choose representative helper checks before recording the final sample-app or release PR evidence. Keep `doc/public_api.md#javascript-exports` as the source of truth for the exported helper list and return-shape boundary.
 
    After the install generator runs, run the read-only setup doctor in the sample app:
 
