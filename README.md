@@ -51,7 +51,7 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | Configure initializer defaults and field-level override precedence | [`doc/configuration.md`](doc/configuration.md) |
 | Work with optional table metadata or custom renderer mappings | [`doc/table_adapters.md`](doc/table_adapters.md) for adapter metadata, renderer call specs, and custom registry mapping; [`doc/table_group_html.md`](doc/table_group_html.md) for group-level wrapper attributes |
 | Run local checks | [`doc/development.md`](doc/development.md) |
-| Prepare or verify a release | [`doc/release.md`](doc/release.md), [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/selected_preload_release_gate.md`](doc/selected_preload_release_gate.md) |
+| Prepare or verify a release | [`doc/release.md`](doc/release.md), [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/selected_preload_release_gate.md`](doc/selected_preload_release_gate.md), [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) for package-root helper evidence |
 | Review release-facing notes | [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md), [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) |
 
 ## First field quickstart
@@ -178,7 +178,7 @@ You can also import the controller file directly:
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `readRenderedSelectedPreloadConfig(...)` for selected preload config, `tomSelectTextOverrideContract(...)` for Tom Select copy values, and `nativeFieldAccessibilityContract(...)` for native wrapper accessibility wiring; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `readRenderedSelectedPreloadConfig(...)` for selected preload config, `tomSelectTextOverrideContract(...)` for Tom Select copy values, and `nativeFieldAccessibilityContract(...)` for native wrapper accessibility wiring; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. When preparing release or sample-app evidence for the helper lane in scope, use [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) instead of expanding this README into a helper inventory. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
 
 For example, host-app scripts can inspect selected preload config that Rails Fields Kit already rendered without executing the selected preload request themselves:
 
@@ -406,7 +406,7 @@ Options can be disabled or receive per-option HTML attributes:
 Rails enum-like attributes can use `rfk_enum_select`:
 
 ```erb
-<%= f.rfk_enum_select :status %>
+<%= f.rfk_enum_select %>
 ```
 
 For explicit `enum:` hashes, keys remain the submitted values and labels stay on the model I18n / humanized-key path. Use [`doc/enum_select.md`](doc/enum_select.md) for that boundary; arbitrary label/value DSLs, remote enum options, and PORO enum adapters are not current public APIs.
