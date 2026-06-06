@@ -199,7 +199,7 @@ module RailsFieldsKit
           collection,
           selected_choices: selected_choices,
           value_method: collection_value_method,
-          label_method: collection_label_method,
+          label_method: label_method,
           disabled: disabled,
           option_html: option_html
         )
@@ -257,6 +257,8 @@ module RailsFieldsKit
     end
 
     def rfk_extract_wrapper_options(options)
+      accessibility = options.key?(:accessibility) ? options.delete(:accessibility) : true
+
       {
         label: options.delete(:label),
         hint: options.delete(:hint),
@@ -270,7 +272,7 @@ module RailsFieldsKit
         control_html: options.delete(:control_html) || {},
         prefix_html: options.delete(:prefix_html) || {},
         suffix_html: options.delete(:suffix_html) || {},
-        accessibility: options.key?(:accessibility) ? options.delete(:accessibility) : true
+        accessibility: accessibility
       }
     end
 
