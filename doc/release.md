@@ -72,6 +72,7 @@ bundle exec rake build
    - `AGENTS.md`
    - `CHANGELOG.md`
    - `doc/setup.md`
+   - `doc/setup_doctor_output_review.md` when setup doctor output or setup evidence is part of the release surface
    - `doc/support_boundary.md`
    - `doc/public_api.md`
    - `doc/select_migration.md`
@@ -133,6 +134,8 @@ bundle exec rake build
    ```
 
    Record whether it reports the initializer and, when importmap is present, the Rails Fields Kit pins. Treat Tom Select package install, Stimulus registration, CSS import, and bundler alias output as manual checklist reminders rather than automatic pass/fail gates or auto-fix behavior.
+
+   When recording or reviewing setup doctor CLI output evidence, use [`setup_doctor_output_review.md`](setup_doctor_output_review.md) for the `[OK]`, `[MISSING]`, `[MANUAL]`, and target-mismatch scanability lanes. Keep that artifact as review evidence, not as the source of runtime wording or setup policy.
 
    When the release surface includes selected preload behavior, run the focused [`selected_preload_release_gate.md`](selected_preload_release_gate.md) before marking the sample app pass complete. Keep this check to the documented single-value and comma-separated multiple-ID request contract unless release planning explicitly changes that public surface.
 
