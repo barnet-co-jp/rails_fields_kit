@@ -26,7 +26,7 @@ RSpec.describe "JavaScript check documentation" do
     expect(node_versions).to eq(["22", "24"])
     expect(node_setup_step.fetch("with").fetch("node-version")).to eq("${{ matrix.node-version }}")
     expect(development_doc).to include(
-      "The JavaScript syntax check uses Node 22.x and Node 24.x, matching `package.json` and the GitHub Actions `javascript` matrix.",
+      "The JavaScript syntax check uses Node 22.x and Node 24.x, matching `package.json` and the GitHub Actions `javascript` job matrix.",
       "`npm run check:js` on Node 22.x and Node 24.x"
     )
   end
