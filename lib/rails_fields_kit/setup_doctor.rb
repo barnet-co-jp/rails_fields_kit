@@ -13,7 +13,7 @@ module RailsFieldsKit
       ["Tom Select package", "Install Tom Select with the JavaScript package manager already used by this app."],
       ["Stimulus registration", "Register rails-fields-kit--tom-select on the Stimulus application this app already boots."],
       ["CSS import", "Load tom-select/dist/css/tom-select.css from the app stylesheet or bundler entrypoint."],
-      ["Bundler alias", "If this app uses Vite or another bundler, verify the rails_fields_kit import aliases in that toolchain."]
+      ["Bundler alias", "If this app uses Vite or another bundler, verify that the host toolchain resolves the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths; this doctor does not inspect or rewrite bundler config."]
     ].freeze
 
     Check = Struct.new(:key, :label, :status, :message, keyword_init: true)

@@ -39,7 +39,7 @@ RSpec.describe "repository documentation drift guards" do
     ruby_requirement = gemspec[/spec\.required_ruby_version = "([^"]+)"/, 1]
     rails_requirements = gemspec[/spec\.add_dependency "rails", (.+)$/, 1].scan(/"([^"]+)"/).flatten
     node_engine = package_json.fetch("engines").fetch("node")
-    node_major = node_engine.delete_suffix(".x")
+    node_majors = node_engine.scan(/(\d+)\.x/).flatten
     representative_rows = workflow.scan(/rails: "([^"]+)"\n\s+ruby-version: "([^"]+)"\n\s+gemfile: (gemfiles\/[^\s]+)/)
 
     expect(support_boundary).to include("- Ruby: `#{ruby_requirement}`")
@@ -47,7 +47,9 @@ RSpec.describe "repository documentation drift guards" do
     expect(support_boundary).to include("Node #{node_engine}")
     expect(development_doc).to include("Node #{node_engine}")
     expect(development_doc).to include("`package.json`", "GitHub Actions `javascript` job")
-    expect(workflow).to include("node-version: \"#{node_major}\"")
+    node_majors.each do |node_major|
+      expect(workflow).to include("\"#{node_major}\"")
+    end
 
     representative_rows.each do |rails_version, ruby_version, gemfile|
       expect(support_boundary).to include("| #{rails_version} | #{ruby_version} | `#{gemfile}` |")

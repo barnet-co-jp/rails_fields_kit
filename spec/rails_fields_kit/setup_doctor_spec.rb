@@ -85,6 +85,8 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       expect(output.string).to include("[MANUAL] Stimulus registration")
       expect(output.string).to include("[MANUAL] CSS import")
       expect(output.string).to include("[MANUAL] Bundler alias")
+      expect(output.string).to include("rails_fields_kit and rails_fields_kit/tom_select_controller")
+      expect(output.string).to include("does not inspect or rewrite bundler config")
     end
   end
 end

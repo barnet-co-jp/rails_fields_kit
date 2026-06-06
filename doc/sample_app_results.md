@@ -97,6 +97,7 @@ Notes:
 - [ ] importmap pins resolved `rails_fields_kit` and `rails_fields_kit/tom_select_controller` when importmap was used
 - [ ] documented controller registration still worked from the existing Stimulus boot file after adding those importmap pins
 - [ ] at least one rendered native helper field was readable through `nativeFieldAccessibilityContract(element)` without adding a new package-root helper export
+- [ ] when `readRenderedSelectedPreloadConfig(element)` was in release scope, the package-root import resolved and the rendered selected preload config evidence was recorded using `doc/package_root_helper_release_evidence.md`
 - [ ] Tom Select CSS loaded
 - [ ] browser console has no import errors
 
@@ -157,6 +158,24 @@ Notes:
 
 Notes:
 
+## Native constraint attribute checks
+
+Use this section when native helper constraint pass-through is release-critical evidence. Keep it separate from the wrapper / accessibility lane: this section records input attributes reaching the rendered input, not a new validation UI or masking contract.
+
+- Representative helper:
+- Representative field:
+- Evidence location:
+
+- [ ] `maxlength` or `minlength` reached the rendered input when supplied through top-level field options or `html:`
+- [ ] `pattern` reached the rendered input when supplied through top-level field options or `html:`
+- [ ] `autocomplete` reached the rendered input when supplied through top-level field options or `html:`
+- [ ] `inputmode` reached the rendered input when supplied through top-level field options or `html:`
+- [ ] any checked `required`, `disabled`, or `readonly` state stayed limited to ordinary native input state and did not imply a Rails Fields Kit-owned validation-message policy
+- [ ] the same field still kept its wrapper / hint / error / affix and accessibility wiring responsibilities aligned with the native helper docs
+- [ ] validation copy, browser validation-message behavior, masking, character counters, and server-side validation remained host-app responsibilities
+
+Notes:
+
 ## `collection_select` migration checks
 
 - [ ] documented `collection_select` to `rfk_select` swap preserved the same submitted attribute and redisplay behavior
@@ -203,6 +222,7 @@ Notes:
 - [ ] one representative edit-form field with `selected_url:` covered the end-to-end selected preload lane
 - [ ] saved ID only initial state restored the selected label through `selected_url:`
 - [ ] representative fixed `selected_query_params:` still reached the selected preload request
+- [ ] when package-root helper evidence was in scope, `readRenderedSelectedPreloadConfig(element)` matched the rendered `selectedUrl`, param names, and `selectedQueryParams` without counting as selected preload request execution
 - [ ] `rails-fields-kit--tom-select:selected-load` was observed before the field settled into its normal selected state
 - [ ] a representative failure path left user-understandable host-app fallback or visible feedback after `rails-fields-kit--tom-select:selected-load-error`
 - [ ] if that field used `error_surface: true`, the selected preload failure path still exposed the expected inline placeholder through `event.detail.surface`

@@ -39,7 +39,7 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | If you want to... | Start here |
 | --- | --- |
 | Set up a host app | [`doc/setup.md`](doc/setup.md) |
-| Check setup visibility after install | [`doc/setup.md`](doc/setup.md) for `rails rails_fields_kit:doctor` and its read-only/manual-check boundary |
+| Check setup visibility after install | [`doc/setup.md`](doc/setup.md) for `rails rails_fields_kit:doctor` and its read-only/manual-check boundary; [`doc/setup_doctor_output_review.md`](doc/setup_doctor_output_review.md) for CLI diagnostic evidence review |
 | Check supported Ruby / Rails and repository JavaScript boundaries | [`doc/support_boundary.md`](doc/support_boundary.md) |
 | Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md), [`doc/field_helpers.md#rfk_grouped_select`](doc/field_helpers.md#rfk_grouped_select) for grouped `<optgroup>` choices, [`doc/select_migration.md`](doc/select_migration.md), [`doc/enum_select.md`](doc/enum_select.md) for the focused `rfk_enum_select` source boundary |
 | See or compare rendered UI states quickly | [`doc/visual_references.md`](doc/visual_references.md) for the visual reference family, including Tom Select, text override copy, native helper, native narrow viewport stress, configuration wrapper classes, table metadata, and saved-search token states |

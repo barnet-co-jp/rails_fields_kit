@@ -8,6 +8,8 @@ Use the checklist below to decide what to exercise, then record only the evidenc
 
 When package-root read-only helper exports are in scope, use [`package_root_helper_release_evidence.md`](package_root_helper_release_evidence.md) to choose representative helper checks before recording the result.
 
+When TableMetadata collection source shapes are in scope, use [`table_metadata_collection_evidence.md`](table_metadata_collection_evidence.md) to choose representative hash-like, table-like, and explicit false checks before recording the result.
+
 | Lane | Record in `sample_app_results.md` when... | PR comment is enough when... | Evidence to capture |
 | --- | --- | --- | --- |
 | Release baseline | Preparing a release candidate or release PR | Never; keep release baseline evidence in the results file | version, tester, gem source, branch head CI, local checks, generator result |
