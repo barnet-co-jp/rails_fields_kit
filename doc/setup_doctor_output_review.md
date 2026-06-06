@@ -9,6 +9,16 @@ Use this focused docs/design artifact when a release or PR changes setup doctor 
 - Confirm that importmap target mismatch output is readable after the target-drift diagnostic landed.
 - Keep command behavior, wording source, host app setup policy, and auto-fix decisions outside this artifact.
 
+## Release Evidence Handoff
+
+Use this artifact as the review aid for setup doctor evidence, then record the release result in the sample app evidence flow rather than duplicating the full CLI output in every PR.
+
+- Use `doc/sample_app_checklist.md` to decide whether setup doctor evidence belongs in the release baseline or the host-app setup lane.
+- Record release-wide results in `doc/sample_app_results.md` under `Setup doctor checks`, including the app setup path: importmap, jsbundling, bundler-managed JavaScript, or another route.
+- For a narrow docs or setup-doctor PR, a PR comment is enough when it names the command, setup path, representative `[OK]` / `[MISSING]` / `[MANUAL]` lines, branch or commit, and result.
+- Treat `[MANUAL]` lines as host-app responsibility checks. Do not count them as failed automatic checks unless the release issue explicitly changes setup doctor behavior.
+- Keep auto-fix behavior, exit-code policy, and host-app setup policy decisions out of release evidence notes unless a separate implementation issue changes them.
+
 ## Representative Output States
 
 ```text
