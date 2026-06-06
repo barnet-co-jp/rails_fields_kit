@@ -49,6 +49,7 @@ Current progress:
 - scoped request context through `query_params:`, `selected_query_params:`, and `create_params:`
 - Tom Select pass-throughs such as `max_items:`, `load_throttle:`, and `delimiter:`
 - package-root JavaScript exports for `TomSelectController` and read-only rendered-field contract helpers documented in `doc/public_api.md`; these helpers inspect rendered Rails Fields Kit contracts without taking over request execution, locale resolution, query parsing, retry UI, or visible feedback
+- read-only setup verification through `rails rails_fields_kit:doctor`, which checks initializer and importmap pin visibility while keeping Tom Select package install, Stimulus registration, CSS import, and bundler alias confirmation as host-app manual responsibilities
 
 ## Phase 3: Search input helpers
 
@@ -185,6 +186,7 @@ This integration should be implemented as an optional layer, not as a hard depen
 The maintained docs should make the difference between current public API, review artifacts, and future proposals visible:
 
 - `README.md` is the public entrypoint and docs map.
+- `doc/setup.md` is the maintained setup walkthrough and source of truth for the read-only setup doctor boundary.
 - `doc/public_api.md` is the intended stable API inventory for the 0.1.x series, including package-root JavaScript exports, FormBuilder helpers, controller helpers, table metadata adapters, Stimulus values, and events.
 - `doc/shared_metadata_navigation.md` is the short boundary map for shared token, Ransack, and table metadata patterns; it points readers back to the current API inventory and away from treating roadmap-only registry or adapter examples as implemented contract.
 - `doc/visual_references.md` and `doc/visual_reference_index.html` are maintained review entrypoints for landed static visual reference artifacts. They help reviewers inspect representative rendered states, but they do not define production runtime behavior or make proposal-only helper names current public API.
