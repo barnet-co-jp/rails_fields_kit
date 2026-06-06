@@ -158,6 +158,24 @@ Notes:
 
 Notes:
 
+## Native constraint attribute checks
+
+Use this section when native helper constraint pass-through is release-critical evidence. Keep it separate from the wrapper / accessibility lane: this section records input attributes reaching the rendered input, not a new validation UI or masking contract.
+
+- Representative helper:
+- Representative field:
+- Evidence location:
+
+- [ ] `maxlength` or `minlength` reached the rendered input when supplied through top-level field options or `html:`
+- [ ] `pattern` reached the rendered input when supplied through top-level field options or `html:`
+- [ ] `autocomplete` reached the rendered input when supplied through top-level field options or `html:`
+- [ ] `inputmode` reached the rendered input when supplied through top-level field options or `html:`
+- [ ] any checked `required`, `disabled`, or `readonly` state stayed limited to ordinary native input state and did not imply a Rails Fields Kit-owned validation-message policy
+- [ ] the same field still kept its wrapper / hint / error / affix and accessibility wiring responsibilities aligned with the native helper docs
+- [ ] validation copy, browser validation-message behavior, masking, character counters, and server-side validation remained host-app responsibilities
+
+Notes:
+
 ## `collection_select` migration checks
 
 - [ ] documented `collection_select` to `rfk_select` swap preserved the same submitted attribute and redisplay behavior
