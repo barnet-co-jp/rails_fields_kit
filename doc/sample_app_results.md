@@ -78,11 +78,15 @@ Notes:
 rails rails_fields_kit:doctor
 ```
 
+Use `doc/setup.md` as the setup behavior source of truth. Use `doc/setup_doctor_output_review.md` when the release or PR needs evidence that setup doctor output is readable and that `[OK]`, `[MISSING]`, and `[MANUAL]` states are being interpreted correctly.
+
 Result:
 
 - [ ] setup doctor ran after generator setup without changing files
 - [ ] initializer visibility was recorded
 - [ ] importmap pin visibility was recorded when `config/importmap.rb` was present, or the non-importmap/manual status was recorded without treating bundler apps as failures
+- [ ] setup doctor output readability was checked with `doc/setup_doctor_output_review.md` when diagnostic scanability or importmap target mismatch evidence was in scope
+- [ ] evidence notes distinguish setup behavior from CLI output readability evidence, instead of treating this section as a source of new doctor behavior or output wording
 - [ ] manual checklist items for Tom Select package install, Stimulus registration, CSS import, and bundler aliases were reviewed as host-app responsibilities rather than automatic pass/fail gates
 
 Notes:
@@ -97,11 +101,18 @@ Notes:
 - [ ] importmap pins resolved `rails_fields_kit` and `rails_fields_kit/tom_select_controller` when importmap was used
 - [ ] documented controller registration still worked from the existing Stimulus boot file after adding those importmap pins
 - [ ] at least one rendered native helper field was readable through `nativeFieldAccessibilityContract(element)` without adding a new package-root helper export
+- [ ] package-root helper lanes in release scope were selected from `doc/package_root_helper_release_evidence.md` and matched the current `doc/public_api.md#javascript-exports` helper list
 - [ ] when `readRenderedSelectedPreloadConfig(element)` was in release scope, the package-root import resolved and the rendered selected preload config evidence was recorded using `doc/package_root_helper_release_evidence.md`
 - [ ] Tom Select CSS loaded
 - [ ] browser console has no import errors
 
 Notes:
+
+Package-root helper lanes checked:
+
+| Helper | Representative field or selector | Result | Evidence notes |
+| --- | --- | --- | --- |
+|  |  |  |  |
 
 ## Form helper checks
 
