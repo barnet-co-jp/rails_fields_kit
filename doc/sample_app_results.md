@@ -7,7 +7,7 @@ Use the route map below to choose the evidence lane for the release or PR under 
 | Review goal | Start with | Use when |
 | --- | --- | --- |
 | Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. |
-| JavaScript setup | JavaScript setup checks, event checks, Turbo reconnect checks | The release touches package-root exports, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. |
+| JavaScript setup | Setup doctor checks, JavaScript setup checks, event checks, Turbo reconnect checks | The release touches setup visibility, package-root exports, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. |
 | Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, native wrapper customization checks | Native helper wrapper, class, hint/error, affix, or accessibility wiring changed. |
 | Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. |
 | Remote lifecycle feedback | Selected preload representative lane checks, create-on-the-fly representative failure lane checks, visible feedback checks | Selected preload, remote search, create-on-the-fly, request-failure, or visible fallback behavior changed. |
@@ -67,6 +67,21 @@ Result:
 - [ ] `config/initializers/rails_fields_kit.rb` generated
 - [ ] `doc/rails_fields_kit_setup.md` generated
 - [ ] generated setup notes match current public API and setup walkthrough
+
+Notes:
+
+## Setup doctor checks
+
+```bash
+rails rails_fields_kit:doctor
+```
+
+Result:
+
+- [ ] setup doctor ran after generator setup without changing files
+- [ ] initializer visibility was recorded
+- [ ] importmap pin visibility was recorded when `config/importmap.rb` was present, or the non-importmap/manual status was recorded without treating bundler apps as failures
+- [ ] manual checklist items for Tom Select package install, Stimulus registration, CSS import, and bundler aliases were reviewed as host-app responsibilities rather than automatic pass/fail gates
 
 Notes:
 
