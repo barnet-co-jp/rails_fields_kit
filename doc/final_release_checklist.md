@@ -69,6 +69,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm the current package-root export matrix before release:
   - [ ] `TomSelectController` resolves from `rails_fields_kit` for Stimulus registration.
   - [ ] `tomSelectTextOverrideContract(element)` resolves from `rails_fields_kit`, reads only rendered `noResultsText`, `loadingText`, and `createText` contract values, and keeps visible copy / locale policy as host-app responsibilities.
+  - [ ] `readRenderedSelectedPreloadConfig(element)` resolves from `rails_fields_kit`, reads rendered selected preload config values such as `selectedUrl`, param names, and `selectedQueryParams`, and keeps selected preload request execution, endpoint authorization, visible fallback, and retry UI as host-app responsibilities.
   - [ ] `nativeFieldAccessibilityContract(element)` resolves from `rails_fields_kit`, reads rendered native helper accessibility contract values such as `describedByIds`, `hintElement`, `errorElement`, and `wrapperElement`, and keeps id generation, validation copy, focus management, and visible feedback as Rails / host-app responsibilities.
 - [ ] Confirm future package-root helper exports are added to `doc/public_api.md#javascript-exports` before being added to this release verification matrix.
 - [ ] Confirm token search and table integration docs still distinguish gem responsibilities from host app responsibilities.
