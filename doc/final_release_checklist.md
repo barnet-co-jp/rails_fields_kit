@@ -44,8 +44,10 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/visual_reference_index.html` as the one-screen reviewer navigation artifact.
 - [ ] Review `doc/tom_select_visual_reference.html`.
 - [ ] Review `doc/tom_select_request_failure_visual_reference.html`.
+- [ ] Review `doc/tom_select_error_surface_contract_visual_reference.html` as the focused request-failure live-region contract artifact.
 - [ ] Review `doc/tom_select_text_override_visual_reference.html`.
 - [ ] Review `doc/native_field_visual_reference.html`.
+- [ ] Review `doc/native_accessibility_contract_visual_reference.html` as the focused native helper accessibility contract artifact.
 - [ ] Review `doc/configuration_wrapper_class_visual_reference.html`.
 - [ ] Review `doc/table_metadata_visual_reference.html`.
 - [ ] Review `doc/token_search_saved_search_visual_reference.html`.
@@ -101,8 +103,10 @@ Record visual reference and sample app evidence in a compact matrix before treat
 | `doc/visual_reference_index.html` | desktop + narrow/mobile | task picker, quick links, and reference card scanability | index only guides reviewers to the right static artifact; individual helper behavior stays with the referenced visual file and topic docs | `doc/sample_app_results.md` or release PR comment |
 | `doc/tom_select_visual_reference.html` | desktop + narrow/mobile | loading, empty, create, disabled, multi, grouped, autocomplete, preload, tags, tokens, error, and any release-scoped helper lane | host app still owns endpoint behavior, visible feedback copy, retry UI, query parsing, token parsing, and create authorization | `doc/sample_app_results.md` or release PR comment |
 | `doc/tom_select_request_failure_visual_reference.html` | desktop + narrow/mobile | hidden placeholder, revealed request failure, selected preload restore failure, create failure, and custom wrapper lanes | Rails Fields Kit exposes an opt-in error surface and event payload; host app still owns retry UI, final visible copy, and request lifecycle policy | `doc/sample_app_results.md` or release PR comment |
+| `doc/tom_select_error_surface_contract_visual_reference.html` | desktop + narrow/mobile | hidden live region, host-app-visible feedback, and custom wrapper contract lanes | Rails Fields Kit renders the opt-in live-region contract; host app still owns retry UI, visible copy, and request lifecycle policy | `doc/sample_app_results.md` or release PR comment |
 | `doc/tom_select_text_override_visual_reference.html` | desktop + narrow/mobile | field-level copy override and fallback contract lanes | Rails Fields Kit exposes rendered copy contract; host app still owns locale policy and visible copy decisions | `doc/sample_app_results.md` or release PR comment |
 | `doc/native_field_visual_reference.html` | desktop + narrow/mobile | prefix, suffix, hint, disabled, readonly, validation error, wrapper customization, and accessibility opt-out lanes | Rails Fields Kit owns wrapper / aria wiring only when enabled; host app still owns validation copy and field semantics | `doc/sample_app_results.md` or release PR comment |
+| `doc/native_accessibility_contract_visual_reference.html` | desktop + narrow/mobile | wrapper, label, hint, error, and `aria-describedby` contract-reader lanes | Rails Fields Kit exposes rendered accessibility wiring; host app still owns id generation policy outside rendered helpers, validation copy, focus management, and visible feedback | `doc/sample_app_results.md` or release PR comment |
 | `doc/configuration_wrapper_class_visual_reference.html` | desktop + narrow/mobile | initializer-driven wrapper, label, hint, error, control, prefix, and suffix class pass-through lanes | Rails Fields Kit exposes class pass-through and configured wrapper pieces; host app still owns final CSS framework, spacing, and component styling policy | `doc/sample_app_results.md` or release PR comment |
 | `doc/table_metadata_visual_reference.html` | desktop + narrow/mobile | filter and editor lanes | Rails Fields Kit exposes metadata / call-spec rendering boundaries without taking over table persistence or query execution | `doc/sample_app_results.md` or release PR comment |
 | `doc/token_search_saved_search_visual_reference.html` | desktop + narrow/mobile | saved-search token states | Rails Fields Kit provides token UI and suggestion metadata only; host app still owns parsing, execution, saved-search authorization, and result filtering | `doc/sample_app_results.md` or release PR comment |
@@ -110,8 +114,10 @@ Record visual reference and sample app evidence in a compact matrix before treat
 - [ ] Confirm `doc/visual_reference_index.html` remains usable at a narrow or mobile viewport, including task picker buttons, quick links, and reference cards without treating index navigation as helper behavior evidence.
 - [ ] Confirm `doc/tom_select_visual_reference.html` remains usable at a narrow or mobile viewport, including representative loading, empty, create, disabled, multi, grouped, autocomplete, preload, tags, tokens, and error state cards without text overflow hiding the state meaning.
 - [ ] Confirm `doc/tom_select_request_failure_visual_reference.html` remains usable at a narrow or mobile viewport, including hidden placeholder, revealed request failure, selected preload restore failure, create failure, and custom wrapper state cards without implying built-in retry UI or request lifecycle handling.
+- [ ] Confirm `doc/tom_select_error_surface_contract_visual_reference.html` remains usable at a narrow or mobile viewport, including the hidden-by-default live region, host-app-visible feedback lane, and custom wrapper attributes without implying built-in retry UI or visible copy ownership.
 - [ ] Confirm `doc/tom_select_text_override_visual_reference.html` remains usable at a narrow or mobile viewport, including field-level copy override and fallback contract lanes without clipped labels or hidden state copy.
 - [ ] Confirm `doc/native_field_visual_reference.html` remains usable at a narrow or mobile viewport, including prefix, suffix, hint, disabled, readonly, and validation error states with readable labels and feedback copy.
+- [ ] Confirm `doc/native_accessibility_contract_visual_reference.html` remains usable at a narrow or mobile viewport, including wrapper, label, hint, error, and `aria-describedby` contract-reader lanes without treating validation UI or focus management as built-in package behavior.
 - [ ] Confirm `doc/configuration_wrapper_class_visual_reference.html` remains usable at a narrow or mobile viewport, including configured wrapper, label, hint, error, control, prefix, and suffix class lanes without presenting host-app CSS framework styling as built-in Rails Fields Kit behavior.
 - [ ] Confirm `doc/table_metadata_visual_reference.html` remains usable at a narrow or mobile viewport, including filter and editor lanes without clipped control labels, badges, or helper text.
 - [ ] Confirm `doc/token_search_saved_search_visual_reference.html` remains usable at a narrow or mobile viewport, including saved-search token states without implying built-in token parsing, saved-search execution, or authorization behavior.
@@ -138,7 +144,7 @@ Record visual reference and sample app evidence in a compact matrix before treat
 - [ ] Confirm visible success UI remained a host-app responsibility rather than a built-in Rails Fields Kit surface.
 - [ ] Confirm visible error or retry UI around any opt-in `error_surface:` placeholder remained a host-app responsibility.
 - [ ] Confirm token search and token suggestion endpoints are covered if they are part of the release surface.
-- [ ] Confirm table metadata helpers or call-spec rendering paths are covered if they are part of the release surface.
+- [ ] Confirm table metadata helpers or call-spec rendering paths are covered if they are in scope for the release.
 - [ ] Confirm validation and authorization failures return expected status codes.
 
 ## Publishing
