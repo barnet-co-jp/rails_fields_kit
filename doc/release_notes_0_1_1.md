@@ -16,6 +16,7 @@ Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public
 - Table metadata collection and renderer fixes that keep hash-like, object, enumerable, nil, and disabled metadata inputs predictable without changing table persistence or query execution ownership.
 - `tomSelectTextOverrideContract(element)` for reading rendered Tom Select text override values from package-root JavaScript imports.
 - `nativeFieldAccessibilityContract(element)` for reading rendered native input accessibility wiring from package-root JavaScript imports.
+- `readRenderedSelectedPreloadConfig(element)` for reading rendered selected preload config values from package-root JavaScript imports without executing preload requests.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so controller helpers can match custom routes.
 - Multiple selected preload endpoints can accept Rails array params in addition to comma-separated `ids`, including custom `ids_param:` names.
 - Remote search and selected preload collection responses can use raw arrays, `{ options: [...] }`, or `{ results: [...] }` wrappers; create-on-the-fly `{ option: ... }`, pagination metadata, and arbitrary response adapters remain separate.
@@ -74,6 +75,7 @@ JavaScript package-root exports:
 
 - `TomSelectController`
 - `tomSelectTextOverrideContract(element)` for rendered text override values: `noResultsText`, `loadingText`, and `createText`
+- `readRenderedSelectedPreloadConfig(element)` for rendered selected preload config values: `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`
 - `nativeFieldAccessibilityContract(element)` for rendered native input accessibility wiring: `describedByIds`, `describedByElements`, `hintElement`, `errorElement`, and `wrapperElement`
 
 ## Compatibility and responsibility boundary
@@ -90,6 +92,7 @@ JavaScript package-root exports:
 - `error_surface:` only renders an opt-in nearby placeholder; visible error copy and retry behavior for that surface remain host-app responsibilities.
 - Request cancellation and stale-response handling do not create request-start, retry, fallback, success, or failure UI; host applications that need those states should pair Rails Fields Kit events with host-owned interaction state.
 - Multiple selected preload still accepts comma-separated `ids`; Rails-style array params are supported when the host application's request stack has normalized repeated keys such as `ids[]` into an Array.
+- `readRenderedSelectedPreloadConfig(element)` only reads rendered selected preload config; selected preload request execution, endpoint authorization, visible fallback copy, and retry UI remain host-app responsibilities.
 - Table metadata helpers expose rendering metadata only; they do not take over table preference persistence or query execution.
 
 ## Verification expectations
@@ -107,9 +110,10 @@ Before publishing, also confirm:
 - GitHub Actions CI is green for the exact release commit.
 - `doc/sample_app_results.md` is completed for the same branch head.
 - documented JavaScript import paths resolve in the sample app.
-- package-root helper exports such as `tomSelectTextOverrideContract(element)` and `nativeFieldAccessibilityContract(element)` can be imported from `rails_fields_kit` when that release surface is in scope.
+- package-root helper exports such as `tomSelectTextOverrideContract(element)`, `readRenderedSelectedPreloadConfig(element)`, and `nativeFieldAccessibilityContract(element)` can be imported from `rails_fields_kit` when that release surface is in scope.
 - native accessibility contract checks confirm rendered `aria-describedby` ids and resolved hint / error / wrapper elements without moving validation UI or focus management into the package.
 - remote search and selected preload wrappers still match `doc/controller_helpers.md` without turning create-on-the-fly response contracts, pagination metadata, or arbitrary response adapters into gem-owned behavior.
+- selected preload config reader checks stay limited to rendered config inspection; request execution and visible fallback evidence stay with the selected preload behavior lane.
 - Tom Select option pass-throughs such as `max_items:`, `load_throttle:`, and `delimiter:` remain documented only as helper-to-controller options rather than JavaScript package ownership.
 - `rails generate rails_fields_kit:install --skip-setup-notes` still skips only `doc/rails_fields_kit_setup.md`, still creates the initializer, and still leaves Tom Select / importmap setup ownership with the host app.
 - the sample app confirms `rails-fields-kit--tom-select:create`, `event.detail.input`, and `event.detail.option` when that release surface is in scope.
@@ -134,6 +138,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 - `rfk_table_filters` and `rfk_table_cell_editors`
 - table metadata collection and renderer robustness fixes for hash-like, object, enumerable, nil, and disabled metadata inputs
 - `tomSelectTextOverrideContract(element)` for rendered Tom Select text override values
+- `readRenderedSelectedPreloadConfig(element)` for rendered selected preload config reads
 - `nativeFieldAccessibilityContract(element)` for rendered native input accessibility wiring
 - controller helper `action:` support, selected preload array params, and remote collection wrappers such as `{ options: [...] }` and `{ results: [...] }`
 - Tom Select option pass-throughs for `max_items:`, `load_throttle:`, and `delimiter:`
@@ -151,7 +156,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 
 ### Responsibility boundary
 
-Rails Fields Kit still stops at UI helpers and metadata. Host applications remain responsible for token parsing, search execution, authorization, pagination, JavaScript package manager or importmap choices, setup-note ownership when `--skip-setup-notes` is used, visible copy and locale policy for rendered text overrides, visible success UI after create-on-the-fly succeeds, visible error or retry UI around any opt-in `error_surface:` placeholder, validation feedback and focus management around native accessibility wiring, and any host-owned loading or retry state around aborted or stale requests. Remote collection wrappers do not make pagination metadata or arbitrary response adapters gem-owned behavior. Multiple selected preload supports Rails array params only after the host app request stack normalizes repeated keys such as `ids[]` into an Array.
+Rails Fields Kit still stops at UI helpers and metadata. Host applications remain responsible for token parsing, search execution, authorization, pagination, JavaScript package manager or importmap choices, setup-note ownership when `--skip-setup-notes` is used, selected preload request execution and visible fallback UI, visible copy and locale policy for rendered text overrides, visible success UI after create-on-the-fly succeeds, visible error or retry UI around any opt-in `error_surface:` placeholder, validation feedback and focus management around native accessibility wiring, and any host-owned loading or retry state around aborted or stale requests. Remote collection wrappers do not make pagination metadata or arbitrary response adapters gem-owned behavior. Multiple selected preload supports Rails array params only after the host app request stack normalizes repeated keys such as `ids[]` into an Array.
 
 ### Verification
 
