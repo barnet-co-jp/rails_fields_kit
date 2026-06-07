@@ -460,6 +460,36 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     expect(described_class.field_helpers).not_to have_key("custom")
   end
 
+  it "exposes registered field types without helper names" do
+    expect(described_class.registered_field_types).to include(
+      "combobox",
+      "token_search",
+      "enum_select"
+    )
+    expect(described_class.registered_field_types).not_to include(:rfk_combobox)
+  end
+
+  it "returns duplicated registered field types" do
+    field_types = described_class.registered_field_types
+    field_types << "custom"
+
+    expect(described_class.registered_field_types).not_to include("custom")
+  end
+
+  it "exposes custom registered field types" do
+    described_class.register_field_helper(:custom_field, :custom_table_field)
+
+    expect(described_class.registered_field_types).to include("custom_field")
+  end
+
+  it "resets registered field types to the default registry" do
+    described_class.register_field_helper(:custom_field, :custom_table_field)
+    described_class.reset_field_helpers!
+
+    expect(described_class.registered_field_types).to include("combobox", "token_search")
+    expect(described_class.registered_field_types).not_to include("custom_field")
+  end
+
   it "exposes custom registered helper mappings" do
     described_class.register_field_helper(:custom_field, :custom_table_field)
 
