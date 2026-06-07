@@ -21,14 +21,19 @@ Use this artifact as the review aid for setup doctor evidence, then record the r
 
 ## Representative Output States
 
+`RailsFieldsKit::SetupDoctor#report_lines` formats each check as `[STATUS] Label: message`. Keep examples in that shape so release evidence can be compared with actual terminal output.
+
 ```text
 rails rails_fields_kit:doctor
 
-[OK] initializer found at config/initializers/rails_fields_kit.rb
-[OK] importmap pin rails_fields_kit -> rails_fields_kit/index.js
-[MISSING] importmap pin rails_fields_kit/tom_select_controller was not found
-[MANUAL] confirm Tom Select package installation when using jsbundling or bundler-managed JavaScript
-[MANUAL] confirm Stimulus registration in the host app controller index
+Rails Fields Kit setup doctor
+
+[OK] Initializer: Found config/initializers/rails_fields_kit.rb.
+[OK] Importmap pins: Rails Fields Kit importmap pins are present in config/importmap.rb.
+[MANUAL] Tom Select package: Install Tom Select with the JavaScript package manager already used by this app.
+[MANUAL] Stimulus registration: Register rails-fields-kit--tom-select on the Stimulus application this app already boots.
+[MANUAL] CSS import: Load tom-select/dist/css/tom-select.css from the app stylesheet or bundler entrypoint.
+[MANUAL] Bundler alias: If this app uses Vite or another bundler, verify that the host toolchain resolves the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths; this doctor does not inspect or rewrite bundler config.
 ```
 
 Review notes:
@@ -43,16 +48,21 @@ Review notes:
 ```text
 rails rails_fields_kit:doctor
 
-[MISSING] importmap pin rails_fields_kit expected target rails_fields_kit/index.js but found rails_fields_kit
-[MISSING] importmap pin rails_fields_kit/tom_select_controller expected target rails_fields_kit/tom_select_controller.js but found no explicit target
-[MANUAL] confirm CSS import path in the host app stylesheet or bundler entrypoint
+Rails Fields Kit setup doctor
+
+[OK] Initializer: Found config/initializers/rails_fields_kit.rb.
+[MISSING] Importmap pins: Missing Rails Fields Kit importmap pins: rails_fields_kit/tom_select_controller. Rails Fields Kit importmap pins with unexpected targets: rails_fields_kit (expected rails_fields_kit/index.js, found rails_fields_kit), rails_fields_kit/tom_select_controller (expected rails_fields_kit/tom_select_controller.js, found no explicit target).
+[MANUAL] Tom Select package: Install Tom Select with the JavaScript package manager already used by this app.
+[MANUAL] Stimulus registration: Register rails-fields-kit--tom-select on the Stimulus application this app already boots.
+[MANUAL] CSS import: Load tom-select/dist/css/tom-select.css from the app stylesheet or bundler entrypoint.
 ```
 
 Review notes:
 
 - Target mismatch evidence should show the expected target and the observed target in the same line.
-- When evidence is recorded from a narrow terminal or wrapped Markdown view, the wrapped continuation should still keep `expected target ...` before `but found ...` so reviewers can pair the expected and observed values without re-running the command.
-- `no explicit target` should read as a concrete diagnostic, not as an empty or crashed state.
+- When evidence is recorded from a narrow terminal or wrapped Markdown view, the wrapped continuation should still keep `(expected ...` before `found ...` so reviewers can pair the expected and observed values without re-running the command.
+- `found no explicit target` should read as a concrete diagnostic, not as an empty or crashed state.
+- Missing pins and target mismatches can appear in one aggregated `Importmap pins` line.
 - CSS import and bundler alias checks remain host-app responsibilities unless a future issue explicitly changes the doctor behavior.
 
 ## Narrow Evidence Checklist
