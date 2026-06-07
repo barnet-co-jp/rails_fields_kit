@@ -30,6 +30,7 @@ RSpec.describe "FormBuilder helper inventory docs" do
       rfk_url_field
       rfk_phone_field
       rfk_search_field
+      rfk_password_field
     ])
     expect(detailed_helper_sections).to include(*public_helpers)
   end
