@@ -87,6 +87,18 @@ function nativeFieldWrapper(element) {
   return element.closest?.(NATIVE_FIELD_WRAPPER_SELECTOR) || null
 }
 
+function nativeFieldHasAttribute(element, attributeName) {
+  return element.hasAttribute?.(attributeName) === true
+}
+
+function nativeFieldRenderedState(element) {
+  return {
+    required: element.required === true || nativeFieldHasAttribute(element, "required"),
+    disabled: element.disabled === true || nativeFieldHasAttribute(element, "disabled"),
+    readonly: element.readOnly === true || nativeFieldHasAttribute(element, "readonly")
+  }
+}
+
 function cssEscape(value) {
   if (typeof CSS !== "undefined" && typeof CSS.escape === "function") return CSS.escape(String(value))
 
@@ -161,7 +173,8 @@ export function nativeFieldAccessibilityContract(element) {
     labelElement: nativeFieldLabel(element, wrapperElement),
     hintElement: firstElementWithClass(describedByElements, NATIVE_FIELD_HINT_CLASS),
     errorElement: firstElementWithClass(describedByElements, NATIVE_FIELD_ERROR_CLASS),
-    wrapperElement
+    wrapperElement,
+    ...nativeFieldRenderedState(element)
   }
 }
 
