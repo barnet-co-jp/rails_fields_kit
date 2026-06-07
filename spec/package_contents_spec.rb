@@ -252,6 +252,7 @@ RSpec.describe "package contents" do
       rfk_url_field
       rfk_phone_field
       rfk_search_field
+      rfk_password_field
     ])
     expect(documented_native_helpers).to eq(native_helpers)
     expect(quick_chooser).to include("the matching native helper such as")
