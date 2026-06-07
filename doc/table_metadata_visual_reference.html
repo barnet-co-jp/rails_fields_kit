@@ -406,6 +406,7 @@
         </p>
         <div class="hero-links">
           <a href="table_adapters.md">Table adapter reference</a>
+          <a href="shared_metadata_navigation.md">Shared metadata navigation</a>
           <a href="../README.md">README</a>
         </div>
       </section>
@@ -477,6 +478,44 @@
             <div class="stack-note">Suggestion and metadata rendering belong to Rails Fields Kit. Turning the submitted text into `params[:q]` still belongs to the host app or search object.</div>
           </div>
           <p class="card-footer">This lane stays metadata-first and does not turn table helpers into a built-in Ransack execution API.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag boundary">Shared Source</span>
+            <h2>One allowed field list, three rendered surfaces</h2>
+            <p>Represents an app-owned metadata source that feeds token suggestions, Ransack suggestions, and table filter metadata without becoming a Rails Fields Kit registry.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="strip">
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Allowed source</span>
+                  <span class="metadata-chip">ORDER_SEARCH_FIELDS</span>
+                </div>
+                <div class="control native">
+                  <span class="helper">status, assignee, created_at</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Derived table filter</span>
+                  <span class="metadata-chip">TableFilterInput.ransack_filter</span>
+                </div>
+                <div class="control search">
+                  <span class="typed">status:open assignee:ops</span>
+                  <span class="caret">▾</span>
+                </div>
+              </div>
+            </div>
+            <div class="toolbar">
+              <span class="pill">TokenSuggestions.build</span>
+              <span class="pill">RansackSuggestions.build</span>
+              <span class="pill">Table filter metadata</span>
+            </div>
+            <div class="stack-note">Use this lane to review the shared-source pattern only. Rails Fields Kit receives derived arguments; the host app still owns the field registry, current-user scoping, query execution, and submitted-token parsing.</div>
+          </div>
+          <p class="card-footer">This keeps the visual artifact connected to `shared_metadata_navigation.md` without presenting future helper-level adapter DSLs or registry APIs as current behavior.</p>
         </article>
 
         <article class="card">
@@ -611,10 +650,10 @@
             </div>
             <div class="callout">
               <strong>The host app or table integration owns behavior.</strong>
-              <span>Query execution, token parsing, persistence, authorization, and result rendering remain outside this static reference.</span>
+              <span>Query execution, token parsing, persistence, authorization, result rendering, and shared source registries remain outside this static reference.</span>
             </div>
           </div>
-          <p class="card-footer">Keep responsibility boundaries explicit so a visual docs page does not imply a broader runtime contract than `table_adapters.md` and `public_api.md` already document.</p>
+          <p class="card-footer">Keep responsibility boundaries explicit so a visual docs page does not imply a broader runtime contract than `table_adapters.md`, `shared_metadata_navigation.md`, and `public_api.md` already document.</p>
         </article>
       </section>
 
