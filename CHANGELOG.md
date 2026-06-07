@@ -148,7 +148,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 - Option-level customization:
   - disabled options
   - grouped options
-  - per-option HTML attributes.
+  - per-option HTML attributes
 - `RailsFieldsKit::Searchable` controller concern.
 - `rfk_search_with` for remote search endpoints.
 - `rfk_find_with` for selected option lookup endpoints.
