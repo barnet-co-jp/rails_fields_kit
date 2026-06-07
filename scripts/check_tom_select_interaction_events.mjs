@@ -70,15 +70,16 @@ function buildController(ControllerClass) {
 }
 
 const eventsDoc = await readFile("doc/events.md", "utf8")
-
-[
+const eventDetailSignals = [
   "Detail: `{ query, options }`",
   "Detail: `{ values, options }`",
   "Detail: `{ input, option }`",
   "Detail: `{ operation, query, error, response, payload, status, surface }`",
   "Detail: `{ operation, values, error, response, payload, status, surface }`",
   "Detail: `{ operation, input, error, response, payload, status, surface }`"
-].forEach((signal) => assert.match(eventsDoc, new RegExp(signal.replace(/[{}]/g, "\\$&"))))
+]
+
+eventDetailSignals.forEach((signal) => assert.match(eventsDoc, new RegExp(signal.replace(/[{}]/g, "\\$&"))))
 
 await withTomSelectControllerSandbox("rails-fields-kit-interaction-events-", async ({ TomSelectController }) => {
   const { controller, dispatched } = buildController(TomSelectController)
