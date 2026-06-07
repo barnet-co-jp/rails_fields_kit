@@ -60,6 +60,7 @@ Rails Fields Kit setup doctor
 Review notes:
 
 - Target mismatch evidence should show the expected target and the observed target in the same line.
+- Legacy release notes may refer to the same mismatch as `importmap pin rails_fields_kit expected target rails_fields_kit/index.js`; current examples keep that target relationship inside the `[MISSING] Importmap pins:` report line.
 - When evidence is recorded from a narrow terminal or wrapped Markdown view, the wrapped continuation should still keep `(expected ...` before `found ...` so reviewers can pair the expected and observed values without re-running the command.
 - `found no explicit target` should read as a concrete diagnostic, not as an empty or crashed state.
 - Missing pins and target mismatches can appear in one aggregated `Importmap pins` line.
