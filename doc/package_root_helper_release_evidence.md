@@ -97,6 +97,30 @@ Suggested evidence note:
 tomSelectTextOverrideContract: PASS on <field selector>. noResultsText / loadingText / createText matched rendered field values; fallback field was readable; unrelated element returned null. Visible copy and locale policy remain host-app review items.
 ```
 
+## Native accessibility contract reader
+
+Use this lane when `nativeFieldAccessibilityContract(element)` is in release scope.
+
+Representative import:
+
+```js
+import { nativeFieldAccessibilityContract } from "rails_fields_kit"
+```
+
+Check a representative Rails Fields Kit-rendered native helper field, such as `rfk_text_field` or `rfk_money_field`, with the shared wrapper and accessibility wiring enabled:
+
+- `nativeFieldAccessibilityContract(fieldElement)` returns a plain object for the rendered native input.
+- The result confirms the documented label, hint, error, wrapper, and `describedByIds` wiring for the representative field.
+- A comparable unsupported element or non-native Rails Fields Kit target returns `null` when that is the documented boundary.
+- The evidence stays read-only; the helper only inspects rendered wiring and does not mutate labels, ids, focus behavior, validation messages, wrapper classes, or visible fallback UI.
+- Host apps still own focus management, validation policy, user-facing validation copy, browser validation behavior, and any accessibility review beyond the rendered contract inspection.
+
+Suggested evidence note:
+
+```text
+nativeFieldAccessibilityContract: PASS on <field selector>. label / hint / error / wrapper / describedByIds matched the rendered native helper contract; unsupported element returned null. Focus management, validation policy, and visible copy remained host-app review items.
+```
+
 ## Evidence placement
 
 For release candidates, record the checked helper lanes in `doc/sample_app_results.md` under JavaScript setup checks and the relevant behavior lane. For narrow PRs, a PR comment is enough when it includes:
