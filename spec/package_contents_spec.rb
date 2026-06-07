@@ -162,8 +162,11 @@ RSpec.describe "package contents" do
       "doc/visual_reference_index.html",
       "doc/tom_select_visual_reference.html",
       "doc/tom_select_request_failure_visual_reference.html",
+      "doc/tom_select_error_surface_contract_visual_reference.html",
       "doc/tom_select_text_override_visual_reference.html",
       "doc/native_field_visual_reference.html",
+      "doc/native_accessibility_contract_visual_reference.html",
+      "doc/configuration_wrapper_class_visual_reference.html",
       "doc/table_metadata_visual_reference.html",
       "doc/token_search_saved_search_visual_reference.html"
     ]
