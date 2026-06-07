@@ -53,7 +53,7 @@ BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rspec
 
 ## Check JavaScript locally
 
-The JavaScript syntax check uses Node 22.x, matching `package.json` and the GitHub Actions `javascript` job.
+The package metadata boundary is Node 22.x || 24.x. The JavaScript syntax check uses Node 22.x and Node 24.x, matching `package.json` and the GitHub Actions `javascript` job matrix.
 
 ```bash
 npm run check:js
@@ -112,8 +112,8 @@ Current CI adds these repository-level confirmations on top of the local workflo
 
 - `bundle exec standardrb`
 - `bundle exec rspec`
-- Representative PR compatibility checks for Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
-- `npm run check:js` on Node 22.x for the JavaScript syntax, smoke inventory, package exports import lane, Tom Select fixed query params smoke, Tom Select forwarded interaction event smoke, Tom Select create request header and response normalization smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, Tom Select label fallback smoke, Tom Select render text fallback smoke, Tom Select plugin contract smoke, and selected preload config smoke
+- Representative Rails compatibility checks for pull requests and `main` pushes: Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
+- `npm run check:js` on Node 22.x and Node 24.x for the JavaScript syntax, smoke inventory, package exports import lane, Tom Select fixed query params smoke, Tom Select forwarded interaction event smoke, Tom Select create request header and response normalization smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, Tom Select label fallback smoke, Tom Select render text fallback smoke, Tom Select plugin contract smoke, and selected preload config smoke
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 
 ## Release-related checks
