@@ -260,6 +260,8 @@ or a wrapped result:
 { "options": [{ "id": 1, "name": "Example Customer" }] }
 ```
 
+Remote search and selected preload can also use `{ "results": [...] }` as a collection wrapper; use [`doc/controller_helpers.md#output-shape`](doc/controller_helpers.md#output-shape) as the source of truth for supported response shapes and for the boundary that keeps create-on-the-fly responses, pagination metadata, and arbitrary adapters separate.
+
 Use [`doc/controller_helpers.md`](doc/controller_helpers.md#blank-query-policy) for the endpoint-side `minimum_query_length:` boundary. FormBuilder `min_length:` is the browser-side loading hint; the controller helper option is the server policy for blank or too-short direct requests.
 
 The selected preload endpoint can return one option, a wrapped option, an array, or a wrapped array:
