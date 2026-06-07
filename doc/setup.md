@@ -141,6 +141,17 @@ application.register("rails-fields-kit--tom-select", TomSelectController)
 
 The package root also exposes read-only rendered-field contract helpers, including `nativeFieldAccessibilityContract(element)` for native wrapper accessibility wiring. Import those helpers from `rails_fields_kit` only when host-app scripts need to inspect already-rendered labels, hints, errors, and wrapper elements; controller registration, validation messages, focus management, and visible feedback remain separate host-app responsibilities. Use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the current source of truth for the helper list and return shape.
 
+### Troubleshoot unresolved imports
+
+When a build error, browser console error, or importmap resolution error says a Rails Fields Kit import cannot be resolved, first identify which documented path is failing instead of changing every setup step at once:
+
+- If `import { TomSelectController } from "rails_fields_kit"` or a package-root contract helper import fails, check the bundler alias or importmap pin for `rails_fields_kit` and confirm it points at `rails_fields_kit/index.js`.
+- If `import TomSelectController from "rails_fields_kit/tom_select_controller"` fails, check the separate alias or pin for `rails_fields_kit/tom_select_controller` and confirm it points at `rails_fields_kit/tom_select_controller.js`.
+- If both imports resolve but the field is not enhanced, check that the host app registered `rails-fields-kit--tom-select` on the Stimulus application it actually boots, and avoid starting a second Stimulus application just for Rails Fields Kit.
+- If the controller connects but Tom Select is missing or unstyled, check the host app's `tom-select` package or pin and CSS import separately. Changing the Rails Fields Kit import path does not install Tom Select, load Tom Select CSS, or choose plugin assets.
+
+The setup doctor can report importmap pin visibility, but bundler aliases, Tom Select package installation, CSS imports, and Stimulus boot-file choices remain host-app checks. Keep app-specific Vite, importmap, or package-manager notes in the generated host-app setup note rather than replacing these documented public entrypoints with private asset paths.
+
 ## 4. Load Tom Select CSS
 
 Use the stylesheet pipeline or bundler already used by the application.
