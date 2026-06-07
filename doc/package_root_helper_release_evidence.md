@@ -29,6 +29,25 @@ Use existing helper-specific sections below when they match the scoped helper. F
 - a comparable non-target or unsupported element returns `null` when that is the documented boundary
 - request execution, visible copy, locale policy, mutation, validation, and retry behavior remain outside the helper evidence lane unless another release checklist section explicitly covers them
 
+## When to add a helper-specific section
+
+Add a dedicated section to this guide only when a current public helper needs repeatable release evidence beyond the generic shape above. Good reasons include:
+
+- the helper was added to `doc/public_api.md#javascript-exports` and is part of the release or PR scope
+- the helper's documented return shape changed and reviewers need a stable sample-app evidence note
+- repeated release reviews need the same representative field, non-target boundary, or host-app responsibility wording
+- the helper needs evidence in `doc/sample_app_results.md` or a release PR comment that is easy to compare across releases
+
+Do not add helper-specific sections for open PR helpers, proposal names, or roadmap-only helpers. If a helper exists only on an open branch, leave this guide pointed at the current public API table and add the section only after the helper lands on `main` and belongs to the release or narrow PR scope.
+
+When adding a helper-specific section, keep the section narrow:
+
+- name the helper exactly as documented in `doc/public_api.md#javascript-exports`
+- describe representative import and rendered-field inspection, not every field variant
+- link or point back to `doc/public_api.md` for the full helper list and return-shape source of truth
+- keep request execution, visible feedback, locale policy, mutation, validation, authorization, and retry behavior outside this guide unless another release checklist section explicitly owns that behavior
+- avoid mirroring release notes, changelog entries, or sample app results; record final evidence in those files or comments instead
+
 ## Selected preload config reader
 
 Use this lane when `readRenderedSelectedPreloadConfig(element)` is in release scope.
