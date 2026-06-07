@@ -95,6 +95,8 @@ When replacing an existing `collection_select`, keep the same model attribute an
 
 For collection-backed `rfk_select`, Rails still uses the same field name, so existing strong params and normal save flows do not need extra changes just because the form helper changed. Edit-form redisplay and validation rerender also keep using the model value already assigned to `company_id`, so the selected option is preserved the same way as an ordinary Rails select.
 
+Option-level metadata also stays in this rendered collection lane. Use value-array `disabled:` to render specific unavailable choices and `option_html:` to pass per-option attributes such as `data` or classes onto the generated `<option>` tags before Tom Select connects. Treat those attributes as display metadata for already-rendered choices; authorization, dynamic visibility, remote option payload mapping, and rich Tom Select renderer behavior still belong to the host app endpoint or separate helper lane.
+
 Use `selected:` only when the field needs to preload a value that is not already present in the rendered collection, such as a remote combobox or a collection loaded later.
 
 - ordinary selected state and clearable selected state both stay in the same collection-backed `rfk_select` lane
@@ -457,7 +459,9 @@ Select-like helpers accept array, hash, and object collections.
   } %>
 ```
 
-Use boolean `disabled: true` to disable the whole select. Use array/value `disabled:` to disable specific options.
+Use boolean `disabled: true` to disable the whole select. Use array/value `disabled:` to disable specific options. `option_html:` accepts a hash keyed by rendered option value, or a callable that returns an attribute hash for that value, and Rails Fields Kit passes those attributes to Rails' generated `<option>` element.
+
+`option_html:` is collection metadata, not an authorization or visibility policy. Keep tenant scoping, dynamic option filtering, and remote result shaping in the host app endpoint or collection query before rendering the field.
 
 `include_blank:` and `prompt:` keep using the normal Rails `select` option behavior, so a `collection_select` to `rfk_select` migration can preserve blank-option wording without changing controller or model code.
 
