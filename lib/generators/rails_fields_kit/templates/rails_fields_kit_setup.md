@@ -62,6 +62,7 @@ Use these references before shipping remote preloads, table metadata surfaces, o
 - [ ] When host-app scripts import from `rails_fields_kit`, use `doc/public_api.md#javascript-exports` to confirm the current package-root exports and the rendered-field contract helper boundary.
 - [ ] If this app uses `selected_url:`, review `doc/selected_preload_release_gate.md` before release verification to confirm single and multiple selected preload request encoding expectations.
 - [ ] Use `doc/visual_references.md` as the maintained visual reference family index when this app needs quick comparisons of Tom Select-backed, text override, native helper, or table metadata states.
+- [ ] Use `doc/visual_references.md` as the source of truth before opening focused accessibility-contract, request-failure, native helper, or table/token visual lanes; this generated note should point back to that maintained map instead of listing every static artifact.
 - [ ] Use `doc/tom_select_visual_reference.html` when this app needs a quick visual comparison of representative Tom Select-backed states.
 
 ## Reference links
