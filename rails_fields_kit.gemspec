@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Haruhito Matsuo"]
   spec.email = ["matsuo@scrumsoftware.co.jp"]
 
-  spec.summary = "Rails form helpers for searchable selects, editable comboboxes, tags, and autocomplete."
-  spec.description = "Rails Fields Kit provides Rails-friendly field helpers for form inputs that native HTML and Rails helpers still make awkward, starting with Tom Select powered editable comboboxes."
+  spec.summary = "Rails form helpers for Tom Select fields, token search, native wrappers, and table metadata."
+  spec.description = "Rails Fields Kit provides Rails-friendly form helpers centered on Tom Select-backed selects and comboboxes, with token search inputs, native wrapper helpers, and table-oriented metadata helpers for host-app owned workflows."
   spec.homepage = "https://github.com/matsuo-haruhito/rails_fields_kit"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1"
@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir.chdir(__dir__) do
     Dir[
       "{app,lib}/**/*",
+      "config/locales/**/*.yml",
       "doc/**/*.md",
       "doc/**/*.html",
       "CHANGELOG.md",

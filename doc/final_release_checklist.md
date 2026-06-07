@@ -54,6 +54,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/token_suggestions.md`.
 - [ ] Review `doc/ransack_suggestions.md`.
 - [ ] Review `doc/table_adapters.md`.
+- [ ] Review `doc/table_group_html.md` when table metadata helpers use group-level wrappers; keep `doc/table_adapters.md` as the source of truth for table metadata behavior.
 - [ ] Review `doc/configuration.md`.
 - [ ] Review `doc/events.md`.
 - [ ] Review `doc/tom_select_turbo_lifecycle.md`.
@@ -69,6 +70,7 @@ Use this checklist immediately before publishing a gem release.
   - [ ] `TomSelectController` resolves from `rails_fields_kit` for Stimulus registration.
   - [ ] `tomSelectTextOverrideContract(element)` resolves from `rails_fields_kit`, reads only rendered `noResultsText`, `loadingText`, and `createText` contract values, and keeps visible copy / locale policy as host-app responsibilities.
   - [ ] `nativeFieldAccessibilityContract(element)` resolves from `rails_fields_kit`, reads rendered native helper accessibility contract values such as `describedByIds`, `hintElement`, `errorElement`, and `wrapperElement`, and keeps id generation, validation copy, focus management, and visible feedback as Rails / host-app responsibilities.
+  - [ ] `readRenderedSelectedPreloadConfig(element)` resolves from `rails_fields_kit`, reads rendered selected preload config values such as `selectedUrl`, param names, and `selectedQueryParams`, and keeps selected preload request execution, endpoint authorization, visible fallback, and retry UI as host-app responsibilities.
 - [ ] Confirm future package-root helper exports are added to `doc/public_api.md#javascript-exports` before being added to this release verification matrix.
 - [ ] Confirm token search and table integration docs still distinguish gem responsibilities from host app responsibilities.
 - [ ] Confirm release-prep docs, `doc/events.md`, and sample app verification all agree on whether create-on-the-fly success uses a dedicated `rails-fields-kit--tom-select:create` hook or only the generic selection events.

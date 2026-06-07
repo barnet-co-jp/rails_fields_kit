@@ -39,9 +39,8 @@ jobs:
       - name: Run RSpec
         run: bundle exec rspec
 
-  pr_rails_matrix:
-    if: github.event_name == 'pull_request'
-    name: PR compatibility (Rails ${{ matrix.rails }}, Ruby ${{ matrix.ruby-version }})
+  rails_matrix:
+    name: Rails compatibility (Rails ${{ matrix.rails }}, Ruby ${{ matrix.ruby-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -72,7 +71,12 @@ jobs:
         run: bundle exec rake build
 
   javascript:
+    name: JavaScript (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["22", "24"]
 
     steps:
       - name: Checkout
@@ -81,7 +85,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: "22"
+          node-version: ${{ matrix.node-version }}
 
       - name: Check JavaScript syntax
         run: npm run check:js

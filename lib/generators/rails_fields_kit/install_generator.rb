@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
 require "rails/generators"
+require "rails_fields_kit/setup_doctor"
 
 module RailsFieldsKit
   module Generators
     class InstallGenerator < Rails::Generators::Base
-      IMPORTMAP_PINS = {
-        "rails_fields_kit" => "rails_fields_kit/index.js",
-        "rails_fields_kit/tom_select_controller" => "rails_fields_kit/tom_select_controller.js"
-      }.freeze
+      IMPORTMAP_PINS = RailsFieldsKit::SetupDoctor::IMPORTMAP_PINS
 
       source_root File.expand_path("templates", __dir__)
 
@@ -66,6 +64,7 @@ module RailsFieldsKit
         say "  2. Register RailsFieldsKit::TomSelectController in your Stimulus application."
         say "  3. Load tom-select/dist/css/tom-select.css from your app stylesheet or bundler."
         say "  4. #{importmap_next_step}"
+        say "  5. Run rails rails_fields_kit:doctor to review detectable setup state and manual checklist items."
         say setup_notes_next_step
       end
 

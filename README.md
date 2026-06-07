@@ -26,6 +26,8 @@ By default, the install generator creates:
 
 Use the generated `doc/rails_fields_kit_setup.md` in your host app as a short checklist and place for app-specific notes. If your app keeps setup notes elsewhere, run `rails generate rails_fields_kit:install --skip-setup-notes` to skip only that generated docs artifact while still creating the initializer. The maintained setup walkthrough and source of truth for setup examples stays in this repository at [`doc/setup.md`](doc/setup.md).
 
+After generator setup, `rails rails_fields_kit:doctor` can inspect the host app's setup visibility without changing files. It reports initializer and importmap pin presence, then leaves Tom Select package install, Stimulus registration, CSS import, and bundler alias confirmation as manual host-app checks. See [`doc/setup.md`](doc/setup.md) for the maintained doctor boundary.
+
 Rails Fields Kit ships Rails helpers, a Rails engine, a Stimulus controller, and controller-side helpers. It does not install Tom Select or choose a JavaScript bundling strategy for your app.
 
 For the current direction and integration priorities, see the repository roadmap: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/ROADMAP.md>.
@@ -37,16 +39,19 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | If you want to... | Start here |
 | --- | --- |
 | Set up a host app | [`doc/setup.md`](doc/setup.md) |
+| Check setup visibility after install | [`doc/setup.md`](doc/setup.md) for `rails rails_fields_kit:doctor` and its read-only/manual-check boundary; [`doc/setup_doctor_output_review.md`](doc/setup_doctor_output_review.md) for CLI diagnostic evidence review |
 | Check supported Ruby / Rails and repository JavaScript boundaries | [`doc/support_boundary.md`](doc/support_boundary.md) |
 | Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md), [`doc/field_helpers.md#rfk_grouped_select`](doc/field_helpers.md#rfk_grouped_select) for grouped `<optgroup>` choices, [`doc/select_migration.md`](doc/select_migration.md), [`doc/enum_select.md`](doc/enum_select.md) for the focused `rfk_enum_select` source boundary |
 | See or compare rendered UI states quickly | [`doc/visual_references.md`](doc/visual_references.md) for the visual reference family, including Tom Select, text override copy, native helper, native narrow viewport stress, configuration wrapper classes, table metadata, and saved-search token states |
 | Review stable public API and package-root JavaScript exports | [`doc/public_api.md`](doc/public_api.md) |
 | Build remote search, selected preload, create, or token suggestion endpoints | [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) |
+| Understand shared token, Ransack, and table metadata boundaries | [`doc/shared_metadata_navigation.md`](doc/shared_metadata_navigation.md) for the reading order across current public APIs, host-app metadata patterns, and ROADMAP proposals |
 | Handle Stimulus events or request-failure surfaces | [`doc/events.md`](doc/events.md) |
+| Review Turbo / Stimulus reconnect lifecycle | [`doc/tom_select_turbo_lifecycle.md`](doc/tom_select_turbo_lifecycle.md) |
 | Configure initializer defaults and field-level override precedence | [`doc/configuration.md`](doc/configuration.md) |
 | Work with optional table metadata or custom renderer mappings | [`doc/table_adapters.md`](doc/table_adapters.md) for adapter metadata, renderer call specs, and custom registry mapping; [`doc/table_group_html.md`](doc/table_group_html.md) for group-level wrapper attributes |
 | Run local checks | [`doc/development.md`](doc/development.md) |
-| Prepare or verify a release | [`doc/release.md`](doc/release.md), [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/selected_preload_release_gate.md`](doc/selected_preload_release_gate.md) |
+| Prepare or verify a release | [`doc/release.md`](doc/release.md), [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/selected_preload_release_gate.md`](doc/selected_preload_release_gate.md), [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) for package-root helper evidence |
 | Review release-facing notes | [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md), [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) |
 
 ## First field quickstart
@@ -173,7 +178,17 @@ You can also import the controller file directly:
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `tomSelectTextOverrideContract(...)`; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `readRenderedSelectedPreloadConfig(...)` for selected preload config, `tomSelectTextOverrideContract(...)` for Tom Select copy values, and `nativeFieldAccessibilityContract(...)` for native wrapper accessibility wiring; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. When preparing release or sample-app evidence for the helper lane in scope, use [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) instead of expanding this README into a helper inventory. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
+
+For example, host-app scripts can inspect selected preload config that Rails Fields Kit already rendered without executing the selected preload request themselves:
+
+```js
+import { readRenderedSelectedPreloadConfig } from "rails_fields_kit"
+
+const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
+```
+
+That helper returns rendered config for host-app inspection only. Endpoint authorization, request execution, visible fallback copy, and retry UI remain host-app responsibilities.
 
 ## Usage
 
