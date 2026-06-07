@@ -9,6 +9,7 @@ Use the route map below to choose the evidence lane for the release or PR under 
 | Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. |
 | JavaScript setup | Setup doctor checks, JavaScript setup checks, event checks, Turbo reconnect checks | The release touches setup visibility, package-root exports, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. |
 | Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, native wrapper customization checks | Native helper wrapper, class, hint/error, affix, or accessibility wiring changed. |
+| README first field quickstart evidence | `rfk_select` representative collection-backed single-value lane checks, Visual reference render checks | The README first field or quickstart sample needs endpoint-free, server-rendered collection evidence without mixing in setup/import, remote search, selected preload, create-on-the-fly, or token metadata lanes. |
 | Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. |
 | Remote lifecycle feedback | Selected preload representative lane checks, create-on-the-fly representative failure lane checks, visible feedback checks | Selected preload, remote search, create-on-the-fly, request-failure, or visible fallback behavior changed. |
 | Token and table metadata | Token suggestion and Ransack suggestion metadata checks, table metadata checks | Token suggestions, saved-search metadata, Ransack metadata, table filters, or cell editor metadata changed. |
@@ -108,6 +109,8 @@ Notes:
 
 Notes:
 
+README first field quickstart evidence does not belong in this setup/import section unless the PR also changes setup visibility. Record the rendered field behavior in the `rfk_select` representative collection-backed single-value lane below, and use this section only for import, registration, CSS, or package-root helper evidence.
+
 Package-root helper lanes checked:
 
 | Helper | Representative field or selector | Result | Evidence notes |
@@ -200,8 +203,13 @@ Notes:
 
 ## `rfk_select` representative collection-backed single-value lane checks
 
+Use this section for README first field quickstart evidence when the documented first field is an endpoint-free, server-rendered collection-backed `rfk_select`. Keep setup/import confirmation in the JavaScript setup section and keep remote search, selected preload, create-on-the-fly, and token metadata evidence in their own lanes.
+
 - [ ] one representative `rfk_select` field covered the end-to-end collection-backed single-value lane
 - [ ] the field rendered the current selected value from the documented server-rendered collection lane
+- [ ] README first field quickstart evidence recorded the representative route, page, or fixture used for the endpoint-free server-rendered collection lane
+- [ ] README first field quickstart evidence linked any matching idle visual reference or screenshot without treating that static artifact as runtime behavior evidence
+- [ ] evidence notes confirmed the field stayed out of setup/import, remote-search, selected-preload, create-on-the-fly, and token-metadata lanes
 - [ ] if that representative field enabled `allow_clear: true`, clearing the selected value returned it to the documented blank or placeholder state
 - [ ] clearing the representative field still kept it in the collection-backed single-value contract rather than drifting into a remote-search, token-metadata, or create-on-the-fly lane
 - [ ] an edit form or validation rerender kept the same selected value on that representative field
