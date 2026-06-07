@@ -59,3 +59,13 @@ For uppercase visual-reference microcopy such as tags, metadata chips, and optgr
 - For token suggestion behavior, delimiter visibility, and saved-search option shape, use [`token_suggestions.md`](token_suggestions.md) as the source of truth and treat the saved-search visual reference as a static review artifact.
 - If a new visual reference is added, update this map, the HTML index, and the README docs map after the reference lands on `main`.
 - Do not use this index to document proposal-only helper names or unmerged feature lanes as current public API.
+
+## Recording browser evidence
+
+Use the evidence location that matches the scope of the visual change.
+
+- Record release-wide or release-critical checks in [`sample_app_results.md`](sample_app_results.md), using the Visual reference render checks matrix when the changed artifact is part of release readiness.
+- Record a small PR-level check in the PR comment when the change is a narrow static-docs update and the release evidence log is not being refreshed yet.
+- Keep individual artifact screenshot, browser rendering, or redesign follow-ups in their own issue or PR instead of expanding this map into an approval workflow.
+
+For each visual-reference evidence note, include at least the artifact, viewport, lane or state, responsibility boundary, result, and any blocker. If the run is connector-only and no browser screenshot is available, say what was checked instead, such as source review, CI, or a static render, and name the remaining human or browser-capable check rather than treating CI green as visual approval.
