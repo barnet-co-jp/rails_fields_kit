@@ -7,7 +7,7 @@ Use the route map below to choose the evidence lane for the release or PR under 
 | Review goal | Start with | Use when |
 | --- | --- | --- |
 | Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. |
-| JavaScript setup | JavaScript setup checks, event checks, Turbo reconnect checks | The release touches package-root exports, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. |
+| JavaScript setup | Setup doctor checks, JavaScript setup checks, event checks, Turbo reconnect checks | The release touches setup visibility, package-root exports, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. |
 | Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, native wrapper customization checks | Native helper wrapper, class, hint/error, affix, or accessibility wiring changed. |
 | Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. |
 | Remote lifecycle feedback | Selected preload representative lane checks, create-on-the-fly representative failure lane checks, visible feedback checks | Selected preload, remote search, create-on-the-fly, request-failure, or visible fallback behavior changed. |
@@ -35,6 +35,7 @@ Use the route map below to choose the evidence lane for the release or PR under 
 ```bash
 bundle exec standardrb
 bundle exec rspec
+npm run check:js
 bundle exec rake build
 ```
 
@@ -42,6 +43,7 @@ Result:
 
 - [ ] StandardRB passed
 - [ ] RSpec passed
+- [ ] JavaScript smoke check passed
 - [ ] Gem build passed
 - [ ] No RubyGems validation warnings
 
@@ -70,6 +72,25 @@ Result:
 
 Notes:
 
+## Setup doctor checks
+
+```bash
+rails rails_fields_kit:doctor
+```
+
+Use `doc/setup.md` as the setup behavior source of truth. Use `doc/setup_doctor_output_review.md` when the release or PR needs evidence that setup doctor output is readable and that `[OK]`, `[MISSING]`, and `[MANUAL]` states are being interpreted correctly.
+
+Result:
+
+- [ ] setup doctor ran after generator setup without changing files
+- [ ] initializer visibility was recorded
+- [ ] importmap pin visibility was recorded when `config/importmap.rb` was present, or the non-importmap/manual status was recorded without treating bundler apps as failures
+- [ ] setup doctor output readability was checked with `doc/setup_doctor_output_review.md` when diagnostic scanability or importmap target mismatch evidence was in scope
+- [ ] evidence notes distinguish setup behavior from CLI output readability evidence, instead of treating this section as a source of new doctor behavior or output wording
+- [ ] manual checklist items for Tom Select package install, Stimulus registration, CSS import, and bundler aliases were reviewed as host-app responsibilities rather than automatic pass/fail gates
+
+Notes:
+
 ## JavaScript setup checks
 
 - [ ] Tom Select package installed
@@ -80,10 +101,18 @@ Notes:
 - [ ] importmap pins resolved `rails_fields_kit` and `rails_fields_kit/tom_select_controller` when importmap was used
 - [ ] documented controller registration still worked from the existing Stimulus boot file after adding those importmap pins
 - [ ] at least one rendered native helper field was readable through `nativeFieldAccessibilityContract(element)` without adding a new package-root helper export
+- [ ] package-root helper lanes in release scope were selected from `doc/package_root_helper_release_evidence.md` and matched the current `doc/public_api.md#javascript-exports` helper list
+- [ ] when `readRenderedSelectedPreloadConfig(element)` was in release scope, the package-root import resolved and the rendered selected preload config evidence was recorded using `doc/package_root_helper_release_evidence.md`
 - [ ] Tom Select CSS loaded
 - [ ] browser console has no import errors
 
 Notes:
+
+Package-root helper lanes checked:
+
+| Helper | Representative field or selector | Result | Evidence notes |
+| --- | --- | --- | --- |
+|  |  |  |  |
 
 ## Form helper checks
 
@@ -140,6 +169,24 @@ Notes:
 
 Notes:
 
+## Native constraint attribute checks
+
+Use this section when native helper constraint pass-through is release-critical evidence. Keep it separate from the wrapper / accessibility lane: this section records input attributes reaching the rendered input, not a new validation UI or masking contract.
+
+- Representative helper:
+- Representative field:
+- Evidence location:
+
+- [ ] `maxlength` or `minlength` reached the rendered input when supplied through top-level field options or `html:`
+- [ ] `pattern` reached the rendered input when supplied through top-level field options or `html:`
+- [ ] `autocomplete` reached the rendered input when supplied through top-level field options or `html:`
+- [ ] `inputmode` reached the rendered input when supplied through top-level field options or `html:`
+- [ ] any checked `required`, `disabled`, or `readonly` state stayed limited to ordinary native input state and did not imply a Rails Fields Kit-owned validation-message policy
+- [ ] the same field still kept its wrapper / hint / error / affix and accessibility wiring responsibilities aligned with the native helper docs
+- [ ] validation copy, browser validation-message behavior, masking, character counters, and server-side validation remained host-app responsibilities
+
+Notes:
+
 ## `collection_select` migration checks
 
 - [ ] documented `collection_select` to `rfk_select` swap preserved the same submitted attribute and redisplay behavior
@@ -186,6 +233,7 @@ Notes:
 - [ ] one representative edit-form field with `selected_url:` covered the end-to-end selected preload lane
 - [ ] saved ID only initial state restored the selected label through `selected_url:`
 - [ ] representative fixed `selected_query_params:` still reached the selected preload request
+- [ ] when package-root helper evidence was in scope, `readRenderedSelectedPreloadConfig(element)` matched the rendered `selectedUrl`, param names, and `selectedQueryParams` without counting as selected preload request execution
 - [ ] `rails-fields-kit--tom-select:selected-load` was observed before the field settled into its normal selected state
 - [ ] a representative failure path left user-understandable host-app fallback or visible feedback after `rails-fields-kit--tom-select:selected-load-error`
 - [ ] if that field used `error_surface: true`, the selected preload failure path still exposed the expected inline placeholder through `event.detail.surface`
