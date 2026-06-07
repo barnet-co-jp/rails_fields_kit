@@ -18,6 +18,8 @@ RSpec.describe "package contents" do
   let(:visual_references) { File.read(visual_references_path) }
   let(:public_api_path) { File.expand_path("../doc/public_api.md", __dir__) }
   let(:public_api) { File.read(public_api_path) }
+  let(:textarea_autosize_path) { File.expand_path("../doc/textarea_autosize.md", __dir__) }
+  let(:textarea_autosize) { File.read(textarea_autosize_path) }
   let(:field_helpers_path) { File.expand_path("../doc/field_helpers.md", __dir__) }
   let(:field_helpers) { File.read(field_helpers_path) }
   let(:controller_helpers_path) { File.expand_path("../doc/controller_helpers.md", __dir__) }
@@ -187,6 +189,7 @@ RSpec.describe "package contents" do
       "doc/public_api.md",
       "doc/select_migration.md",
       "doc/field_helpers.md",
+      "doc/textarea_autosize.md",
       "doc/controller_helpers.md",
       "doc/configuration.md",
       "doc/events.md",
@@ -197,6 +200,17 @@ RSpec.describe "package contents" do
       "doc/tom_select_visual_reference.html",
       "doc/native_field_visual_reference.html",
       "doc/table_metadata_visual_reference.html"
+    )
+  end
+
+  it "keeps textarea autosize boundary docs packaged and linked from public API" do
+    expect(specification.files).to include("doc/textarea_autosize.md")
+    expect(public_api).to include("[`textarea_autosize.md`](textarea_autosize.md)")
+    expect(textarea_autosize).to include(
+      "Autosize remains host-app owned",
+      "does not add an `autosize:` option",
+      "Turbo reconnect behavior for any autosize controller",
+      "default `rfk_text_area` behavior remains unchanged"
     )
   end
 
