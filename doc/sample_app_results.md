@@ -302,6 +302,22 @@ Notes:
 
 Notes:
 
+## `rfk_enum_select` explicit enum source lane checks
+
+Use this section when the release or PR changes `doc/enum_select.md`, the explicit `enum:` source contract, or release evidence for `rfk_enum_select`. Keep this lane separate from the model-backed enum lane above: this section records a Rails enum-shaped explicit hash source, not a general label/value DSL.
+
+- Representative helper:
+- Representative field:
+- Evidence location:
+
+- [ ] one representative `rfk_enum_select` field used an explicit `enum:` hash source from `doc/enum_select.md`
+- [ ] the rendered options submitted the explicit hash keys, not the backing values stored in the hash
+- [ ] the rendered labels followed the documented model I18n / humanized fallback boundary for those keys
+- [ ] an edit form or validation rerender kept the same selected explicit enum key and redisplayed the matching label for that representative field
+- [ ] evidence notes distinguished the explicit Rails enum-shaped hash source from arbitrary label/value pairs, remote enum options, Ransack filters, and table metadata adapter behavior
+
+Notes:
+
 ## Token suggestion and Ransack suggestion metadata checks
 
 - [ ] `rfk_token_suggestions_with(..., wrap: "options")` returns the documented wrapped suggestion payload
