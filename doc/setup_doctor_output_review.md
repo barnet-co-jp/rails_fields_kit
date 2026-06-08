@@ -90,7 +90,7 @@ Use this checklist when recording release or PR evidence:
 
 ## Non-goals
 
-- Do not change setup doctor diagnostic scope beyond readability guidance.
+- Do not change setup doctor runtime behavior or output wording here.
 - Do not introduce a terminal UI framework.
 - Do not add a browser-based setup checker.
 - Do not define host app setup policy, auto-fix behavior, or bundler/importmap ownership.
