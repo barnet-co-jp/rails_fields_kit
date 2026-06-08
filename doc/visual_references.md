@@ -10,8 +10,6 @@ For selected preload restore or failure review, use the Tom Select core referenc
 
 For Tom Select keyboard / focus review, use the Tom Select core reference's focus review lane. It statically compares focused control chrome, active dropdown option, and selected item focus/readability while leaving actual keyboard mechanics to Tom Select and the host app runtime.
 
-For Tom Select request cancellation or stale response review, use [`tom_select_no_event_boundary_review.html`](tom_select_no_event_boundary_review.html) as a companion lane to the core reference. It compares loading, current failure, and no-event states so reviewers can see that aborted or stale requests should not be misread as visible failure UI; runtime event dispatch and request lifecycle details remain in [`events.md`](events.md).
-
 For `rfk_grouped_select` visual review, use the Tom Select core reference's `Grouped Select` lane. That lane represents a collection-backed grouped choice surface with visible optgroup headings; disabled option metadata, remote grouped search, and endpoint behavior stay outside the static visual reference.
 
 For package-root contract reader review, use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the source of truth for the current landed helper list and return-shape boundary. Then use the visual reference index to choose the closest rendered-state lane: Tom Select text override copy, native helper accessibility wiring, or request-failure feedback. The visual reference family should point reviewers to those lanes without copying the JavaScript export inventory or naming proposal-only helpers as current API.
@@ -32,7 +30,6 @@ For uppercase visual-reference microcopy such as tags, metadata chips, and optgr
 | --- | --- | --- |
 | [`visual_reference_index.html`](visual_reference_index.html) | One-screen index for choosing the right static visual reference by artifact, helper family, reviewer task, or contract-reader review route | Can release and design reviewers scan the current artifact family before opening an individual reference, while keeping `public_api.md#javascript-exports` as the package-root export source of truth? |
 | [`tom_select_visual_reference.html`](tom_select_visual_reference.html) | Tom Select-backed select, grouped select, combobox, autocomplete, tags, token search, preload restore/failure, create, error, keyboard focus, active option, and selected item focus states, including the endpoint-free `rfk_select` first field lane and `rfk_grouped_select` optgroup-preserving lane | Do the core Tom Select-backed states remain readable across normal and narrow viewports, and can reviewers distinguish server-rendered collection selects, selected preload feedback, grouped choices, focus/active states, and remote search lanes? |
-| [`tom_select_no_event_boundary_review.html`](tom_select_no_event_boundary_review.html) | Focused request cancellation and stale-response no-event boundary states for Tom Select-backed helpers | Can reviewers distinguish visible loading/current-failure feedback from aborted or stale requests that should not dispatch success/failure events or create host-app-visible failure UI? |
 | [`tom_select_request_failure_visual_reference.html`](tom_select_request_failure_visual_reference.html) | Focused `error_surface: true` request-failure states and operation/status metadata for Tom Select-backed helpers | Can reviewers inspect hidden, revealed, restore-failure, create-failure, custom-wrapper, and metadata feedback without treating retry UI or request lifecycle behavior as built in? |
 | [`tom_select_error_surface_contract_visual_reference.html`](tom_select_error_surface_contract_visual_reference.html) | Focused `error_surface: true` live-region contract states and wrapper customization boundaries | Can reviewers inspect the hidden-by-default live region, host-app-visible feedback, and custom wrapper attribute lane without treating retry UI, visible copy, or request lifecycle behavior as built in? |
 | [`tom_select_text_override_visual_reference.html`](tom_select_text_override_visual_reference.html) | Configured `no_results_text`, `loading_text`, and `create_text` copy states | Can reviewers inspect text override copy without confusing it with locale ownership or request behavior? |
@@ -51,7 +48,6 @@ For uppercase visual-reference microcopy such as tags, metadata chips, and optgr
 - For README first field quickstart review, open [`tom_select_visual_reference.html`](tom_select_visual_reference.html) and inspect the idle `rfk_select` / server-rendered collection lane before looking at remote combobox, preload, token search, or create-on-the-fly states.
 - For selected preload restore or failure review, open [`tom_select_visual_reference.html`](tom_select_visual_reference.html) and inspect the `Selected Preload` and `Selected Preload Failure` lanes. Use the focused request-failure reference only when the review needs operation/status metadata or the `error_surface: true` slot.
 - For Tom Select keyboard / focus review, open [`tom_select_visual_reference.html`](tom_select_visual_reference.html) and inspect the focus review lane in desktop and narrow viewport. It is a static readability check for focus ring, active option, selected item focus, label, hint, badge, and description density; it is not a runtime keyboard-behavior test.
-- For Tom Select cancellation / stale response review, open [`tom_select_no_event_boundary_review.html`](tom_select_no_event_boundary_review.html) and compare loading, current failure, and no-event lanes. Treat it as a static QA artifact for the events-doc boundary: aborted or stale responses should not be styled as current failure feedback, and retry UI remains host-app owned.
 - For grouped select review, open [`tom_select_visual_reference.html`](tom_select_visual_reference.html) and inspect the `Grouped Select` lane for optgroup heading readability, representative option labels, and the collection-backed boundary before looking at remote search or create-on-the-fly lanes.
 - For design review, start with [`visual_reference_index.html`](visual_reference_index.html) when you need to pick a lane. Use the helper-family picker for Tom Select-backed controls, native field wrappers, or table/token bridge questions, and use the task picker when the PR is primarily about release evidence, copy review, request-failure feedback, contract-reader review, or table/token ownership boundaries.
 - For uppercase microcopy review, inspect tags, metadata chips, optgroup labels, and similar short labels at desktop and narrow widths. Avoid widened letter spacing unless it clearly improves scanning without making dense labels harder to read.
@@ -73,3 +69,20 @@ Use the evidence location that matches the scope of the visual change.
 - Keep individual artifact screenshot, browser rendering, or redesign follow-ups in their own issue or PR instead of expanding this map into an approval workflow.
 
 For each visual-reference evidence note, include at least the artifact, viewport, lane or state, responsibility boundary, result, and any blocker. If the run is connector-only and no browser screenshot is available, say what was checked instead, such as source review, CI, or a static render, and name the remaining human or browser-capable check rather than treating CI green as visual approval.
+
+Use this short PR comment template when a visual reference change still needs browser-capable review:
+
+```markdown
+Visual reference evidence handoff
+
+- Artifact: `doc/...html`
+- Viewports: desktop ..., narrow ...
+- Lane/state: ...
+- Checked in this PR: source review / static render / CI / docs link review ...
+- Not checked here: browser screenshot / real browser desktop / real browser narrow ...
+- Remaining browser-capable check: ...
+- Responsibility boundary: runtime behavior / production CSS / host-app copy remains out of scope
+- Result or blocker: ...
+```
+
+Use the template to make the remaining review concrete. Do not paste it as a release approval when the browser pass was not actually run.
