@@ -282,6 +282,17 @@ Notes:
 
 Notes:
 
+## `rfk_tags` representative tag-entry lane checks
+
+- [ ] one representative `rfk_tags` field covered the end-to-end tag-entry lane
+- [ ] existing tags stayed visible while a new tag was typed or accepted in that same field
+- [ ] when create-on-the-fly was enabled for that field, the evidence recorded either a successful created tag or the deliberate create-failure path for that same tag-entry lane
+- [ ] the submitted value and evidence notes stayed in the tag-entry / create-on-the-fly lane rather than the ordinary collection-backed `rfk_multi_select` lane
+- [ ] an edit form or validation rerender kept existing tags visible, including selected labels restored through `selected_url:` when that field relied on saved IDs
+- [ ] endpoint authorization, created-record policy, retry UI, and final visible copy remained host-app responsibilities
+
+Notes:
+
 ## `rfk_grouped_select` representative optgroup-preserving lane checks
 
 - [ ] one representative `rfk_grouped_select` field covered the end-to-end optgroup-preserving lane
