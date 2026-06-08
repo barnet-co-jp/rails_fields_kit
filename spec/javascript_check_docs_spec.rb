@@ -46,7 +46,7 @@ RSpec.describe "JavaScript check documentation" do
       "Tom Select render text fallback smoke" => "Tom Select render text fallback rendering",
       "Tom Select plugin contract smoke" => "Tom Select plugin contract reading",
       "selected preload config contract smoke" => "selected preload config reading",
-      "Tom Select interaction config contract smoke" => "Tom Select interaction config reading"
+      "Tom Select interaction config contract smoke" => "package root and direct controller entrypoint"
     }
 
     runner_check_names = check_javascript_source.scan(/name: "([^"]+)"/).flatten
