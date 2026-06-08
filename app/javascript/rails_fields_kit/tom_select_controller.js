@@ -305,9 +305,11 @@ export default class extends Controller {
 
   applySelectedOptions(json, requestedValues = []) {
     const options = this.normalizeSelectedOptions(json).filter((option) => this.optionHasValue(option))
+    const valueField = this.optionValueField()
+
     options.forEach((option) => {
       this.tomSelect.addOption(option)
-      this.tomSelect.addItem(option[this.valueFieldValue], true)
+      this.tomSelect.addItem(option[valueField], true)
     })
     this.tomSelect.refreshOptions(false)
     this.clearErrorSurface()
@@ -458,8 +460,12 @@ export default class extends Controller {
       option &&
         typeof option === "object" &&
         !Array.isArray(option) &&
-        this.hasPresentValue(option[this.valueFieldValue])
+        this.hasPresentValue(option[this.optionValueField()])
     )
+  }
+
+  optionValueField() {
+    return this.valueFieldValue || "value"
   }
 
   hasOwnProperty(object, property) {
