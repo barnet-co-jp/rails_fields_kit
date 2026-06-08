@@ -227,6 +227,19 @@ Verify that same field can demonstrate the collection-backed multiple-value cont
 - an edit form or validation rerender keeps the same selected values on that representative field
 - the representative field does not depend on `create_url:` or token-style parsing to remain understandable in the sample app
 
+## Verify `rfk_tags` representative tag-entry lane
+
+Use one representative `rfk_tags` field for tag entry and keep that same field separate from the ordinary collection-backed `rfk_multi_select` lane.
+
+Verify that same field can demonstrate the tag-entry contract end to end:
+
+- the representative field keeps existing tags visible while a new tag is typed or accepted
+- when `create_url:` is enabled for that field, the evidence records either a successful created tag or the deliberate create-on-the-fly failure path for the same tag-entry lane
+- an edit form or validation rerender keeps the same tags visible on that representative field
+- when the field relies on saved IDs, `selected_url:` restores visible labels without leaving a raw ID-only state
+- the submitted value and evidence notes stay in the tag-entry / create-on-the-fly lane rather than drifting into the ordinary collection-backed `rfk_multi_select` lane
+- endpoint authorization, created-record policy, retry UI, and final visible copy remain host-app responsibilities rather than built-in Rails Fields Kit behavior
+
 ## Verify `rfk_grouped_select` representative optgroup-preserving lane
 
 Use one representative `rfk_grouped_select` field backed by grouped server-rendered collections and keep that same field outside remote search or create-on-the-fly lanes.
