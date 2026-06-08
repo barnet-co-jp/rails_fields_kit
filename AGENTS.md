@@ -27,8 +27,10 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/visual_reference_index.html`: static index for choosing the right visual reference artifact during design or release review
 - `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states
 - `doc/tom_select_request_failure_visual_reference.html`: static visual reference for opt-in request-failure feedback, operation/status metadata, and `error_surface: true` lanes
+- `doc/tom_select_error_surface_contract_visual_reference.html`: static visual reference for focused `error_surface: true` live-region contract states and wrapper customization boundaries
 - `doc/tom_select_text_override_visual_reference.html`: static visual reference for configured Tom Select text override copy states
 - `doc/native_field_visual_reference.html`: static visual reference for representative native helper states
+- `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
 - `doc/configuration_wrapper_class_visual_reference.html`: static visual reference for initializer-driven wrapper class pass-through and host-app CSS ownership boundaries
 - `doc/table_metadata_visual_reference.html`: static visual reference for representative table metadata filter and editor lanes
 - `doc/token_search_saved_search_visual_reference.html`: static visual reference for saved-search token suggestion states
