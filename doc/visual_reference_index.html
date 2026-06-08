@@ -461,13 +461,13 @@
             </header>
             <ul>
               <li>Open public API exports first; that table remains the source of truth for current landed helper names and return-shape boundaries.</li>
-              <li>Use text override copy for Tom Select rendered copy contracts and native helper states for wrapper, label, hint, and error wiring.</li>
+              <li>Use text override copy for Tom Select rendered copy contracts and native accessibility contract for wrapper, label, hint, and error wiring.</li>
               <li>Use request failures only when the review includes `error_surface: true` or request lifecycle feedback lanes.</li>
             </ul>
             <nav class="task-links" aria-label="Contract reader review references">
               <a href="public_api.md#javascript-exports">Primary: public API exports</a>
               <a href="tom_select_text_override_visual_reference.html">Text override lane</a>
-              <a href="native_field_visual_reference.html">Native contract lane</a>
+              <a href="native_accessibility_contract_visual_reference.html">Native accessibility lane</a>
               <a href="tom_select_request_failure_visual_reference.html">Request feedback lane</a>
             </nav>
           </article>
@@ -596,10 +596,10 @@
               <h3>Native accessibility contract</h3>
               <p>Focused native helper accessibility contract reader lanes for wrapper, label, hint, error, and aria-describedby wiring.</p>
             </header>
-            <p class="review-question"><strong>Question:</strong> can reviewers inspect the current rendered accessibility contract without treating future return-shape proposals or focus management as current behavior?</p>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect the current rendered accessibility contract, including explicit label association and wrapper fallback, without treating id generation or focus management as Rails Fields Kit-owned behavior?</p>
             <ul>
               <li>Compare wrapper, label, hint, error, and described-by wiring lanes.</li>
-              <li>Keep id generation, validation messages, focus movement, and future helper returns outside this artifact.</li>
+              <li>Keep id generation, validation messages, focus movement, and DOM mutation outside this artifact.</li>
             </ul>
             <a class="reference-link" href="native_accessibility_contract_visual_reference.html">Open reference</a>
           </article>
