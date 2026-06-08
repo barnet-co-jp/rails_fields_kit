@@ -232,6 +232,19 @@ try {
       `assert.equal(accessibilityContract.hintElement, hint)\n` +
       `assert.equal(accessibilityContract.errorElement, error)\n` +
       `assert.equal(accessibilityContract.wrapperElement, wrapper)\n\n` +
+      `const requiredInput = new FakeElement("input", { required: "" })\n` +
+      `const { wrapper: requiredWrapper } = buildDocumentWithWrapper([requiredInput])\n` +
+      `const requiredStateContract = packageRoot.nativeFieldAccessibilityContract(requiredInput)\n` +
+      `assert.equal(requiredStateContract.required, true, "native input contract should expose required state")\n` +
+      `assert.equal(requiredStateContract.disabled, false, "native input contract should expose false disabled state")\n` +
+      `assert.equal(requiredStateContract.readonly, false, "native input contract should expose false readonly state")\n` +
+      `assert.equal(requiredStateContract.wrapperElement, requiredWrapper, "native state expansion should preserve wrapperElement")\n\n` +
+      `const disabledSelect = new FakeElement("select", { disabled: "" })\n` +
+      `buildDocumentWithWrapper([disabledSelect])\n` +
+      `assert.equal(packageRoot.nativeFieldAccessibilityContract(disabledSelect).disabled, true, "native select contract should expose disabled state")\n\n` +
+      `const readonlyTextarea = new FakeElement("textarea", { readonly: "" })\n` +
+      `buildDocumentWithWrapper([readonlyTextarea])\n` +
+      `assert.equal(packageRoot.nativeFieldAccessibilityContract(readonlyTextarea).readonly, true, "native textarea contract should expose readonly state")\n\n` +
       `const fallbackLabel = new FakeElement("label")\n` +
       `const fallbackInput = new FakeElement("textarea")\n` +
       `buildDocumentWithWrapper([fallbackLabel, fallbackInput])\n` +

@@ -249,7 +249,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `tomSelectPluginContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select plugin data and returns `plugins`, `hasClearButton`, and `hasRemoveButton`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not install plugin assets, expose Tom Select plugin objects, mutate selections, style clear/remove controls, or own empty-state behavior. |
 | `tomSelectRequestParamsContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered fixed request parameter data attributes and returns `queryParams`, `selectedQueryParams`, and `createParams` objects, or `null` when the element does not look like a matching Rails Fields Kit field. It does not serialize requests, execute endpoints, authorize scopes, or mutate Tom Select. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
-| `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
+| `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and rendered state, returning `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, `wrapperElement`, `required`, `disabled`, and `readonly`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
 
 ### Import patterns
 
@@ -280,7 +280,7 @@ import TomSelectController from "rails_fields_kit/tom_select_controller"
 
 ### Contract reader boundary
 
-Rendered-field contract helpers stay read-only. They inspect data attributes and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance or duplicating wrapper traversal.
+Rendered-field contract helpers stay read-only. They inspect data attributes, rendered state attributes, and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance or duplicating wrapper traversal.
 
 For Tom Select plugin state, `tomSelectPluginContract(element)` reports the rendered effective plugin list and derived clear/remove flags. It does not confirm plugin asset loading, clear/remove affordance styling, or Tom Select plugin lifecycle behavior.
 
