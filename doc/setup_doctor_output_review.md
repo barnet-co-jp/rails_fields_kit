@@ -5,6 +5,7 @@ Use this focused docs/design artifact when a release or PR changes setup doctor 
 ## Scope
 
 - Review the readability of representative setup doctor output states.
+- Confirm that the status legend explains `[OK]`, `[MISSING]`, and `[MANUAL]` before the user reaches individual checks.
 - Confirm that `[OK]`, `[MISSING]`, and `[MANUAL]` lines are easy to scan as diagnostic evidence.
 - Confirm that importmap target mismatch output is readable after the target-drift diagnostic landed.
 - Keep command behavior, wording source, host app setup policy, and auto-fix decisions outside this artifact.
@@ -21,12 +22,15 @@ Use this artifact as the review aid for setup doctor evidence, then record the r
 
 ## Representative Output States
 
-`RailsFieldsKit::SetupDoctor#report_lines` formats each check as `[STATUS] Label: message`. Keep examples in that shape so release evidence can be compared with actual terminal output.
+`RailsFieldsKit::SetupDoctor#report_lines` formats each check as `[STATUS] Label: message`. Keep examples in that shape so release evidence can be compared with actual terminal output. The status legend is part of the human-readable output and should appear before the check list.
 
 ```text
 rails rails_fields_kit:doctor
 
 Rails Fields Kit setup doctor
+
+Status legend: [OK] detected setup; [MISSING] needs action for the detected setup route; [MANUAL] host-app check, not an automatic failure.
+Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain.
 
 [OK] Initializer: Found config/initializers/rails_fields_kit.rb.
 [OK] Importmap pins: Rails Fields Kit importmap pins are present in config/importmap.rb.
@@ -41,6 +45,7 @@ Review notes:
 - `[OK]` means the doctor could read the expected setup signal.
 - `[MISSING]` means the doctor could not find an expected setup signal for the detected route.
 - `[MANUAL]` means the doctor cannot safely verify the host app decision automatically; it is not a hard failure by itself.
+- The `Next step` line should make first-run output actionable without adding an auto-fix policy.
 - Bundler-only apps can have manual JavaScript checks without implying an importmap failure.
 
 ## Importmap Target Mismatch
@@ -49,6 +54,9 @@ Review notes:
 rails rails_fields_kit:doctor
 
 Rails Fields Kit setup doctor
+
+Status legend: [OK] detected setup; [MISSING] needs action for the detected setup route; [MANUAL] host-app check, not an automatic failure.
+Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain.
 
 [OK] Initializer: Found config/initializers/rails_fields_kit.rb.
 [MISSING] Importmap pins: Missing Rails Fields Kit importmap pins: rails_fields_kit/tom_select_controller. Rails Fields Kit importmap pins with unexpected targets: rails_fields_kit (expected rails_fields_kit/index.js, found rails_fields_kit), rails_fields_kit/tom_select_controller (expected rails_fields_kit/tom_select_controller.js, found no explicit target).
@@ -70,7 +78,9 @@ Review notes:
 
 Use this checklist when recording release or PR evidence:
 
+- [ ] The status legend appears before individual check lines.
 - [ ] `[OK]`, `[MISSING]`, and `[MANUAL]` labels are visually easy to distinguish in the recorded output.
+- [ ] The evidence note distinguishes `[MISSING]` action items from `[MANUAL]` host-app checks.
 - [ ] Missing importmap target output includes both expected and observed target values.
 - [ ] Narrow-width evidence says whether the output was reviewed in a standard terminal width, a wrapped Markdown/code-block view, or both.
 - [ ] Wrapped mismatch lines still make the expected target and observed target relationship readable without changing setup doctor wording.

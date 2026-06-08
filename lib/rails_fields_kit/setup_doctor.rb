@@ -16,6 +16,11 @@ module RailsFieldsKit
       ["Bundler alias", "If this app uses Vite or another bundler, verify that the host toolchain resolves the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths; this doctor does not inspect or rewrite bundler config."]
     ].freeze
 
+    STATUS_LEGEND_LINES = [
+      "Status legend: [OK] detected setup; [MISSING] needs action for the detected setup route; [MANUAL] host-app check, not an automatic failure.",
+      "Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain."
+    ].freeze
+
     Check = Struct.new(:key, :label, :status, :message, keyword_init: true)
 
     attr_reader :root
@@ -29,7 +34,7 @@ module RailsFieldsKit
     end
 
     def report_lines
-      ["Rails Fields Kit setup doctor", ""] + checks.map { |check| format_check(check) }
+      ["Rails Fields Kit setup doctor", ""] + STATUS_LEGEND_LINES + [""] + checks.map { |check| format_check(check) }
     end
 
     def run(io: $stdout)

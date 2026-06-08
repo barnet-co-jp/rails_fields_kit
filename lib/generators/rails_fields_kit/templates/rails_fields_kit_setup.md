@@ -9,6 +9,7 @@ Use it as a lightweight adoption checklist for wiring Rails Fields Kit into this
 Use this first pass to prove one server-rendered field before adding remote endpoints or richer Tom Select behavior.
 
 - [ ] Run `rails rails_fields_kit:doctor` after installation to review detectable setup state, importmap pin target diagnostics, and manual checklist items.
+- [ ] Read the setup doctor status legend first: fix `[MISSING]` lines before treating `[MANUAL]` lines as host-app JavaScript toolchain checks.
 - [ ] When recording setup doctor evidence, use the upstream setup doctor output review to distinguish setup behavior from CLI output readability and to avoid treating `[MANUAL]` lines as automatic failures.
 - [ ] Confirm `config/initializers/rails_fields_kit.rb` matches this app's needs.
 - [ ] Install Tom Select with the JavaScript toolchain already used by this app.
