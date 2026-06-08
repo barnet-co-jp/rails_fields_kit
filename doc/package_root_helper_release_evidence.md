@@ -73,6 +73,31 @@ Suggested evidence note:
 readRenderedSelectedPreloadConfig: PASS on <field selector>. selectedUrl / selectedParam / selectedMultipleParam / selectedQueryParams matched rendered config; comparable no-selected-url field returned null. Request execution and fallback UI were checked separately or left out of scope.
 ```
 
+## Option payload mapping reader
+
+Use this lane when `readRenderedOptionPayloadMapping(element)` is in release scope.
+
+Representative import:
+
+```js
+import { readRenderedOptionPayloadMapping } from "rails_fields_kit"
+```
+
+Check a rendered Tom Select-backed field that uses option payload mapping options:
+
+- `readRenderedOptionPayloadMapping(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes the documented `valueField`, `labelField`, and `searchFields` values for the representative field.
+- The result exposes `optionDescriptionField` and `optionBadgeField` when those rendered values are present.
+- A fallback or default field confirms the helper reads the documented `value` / `text` defaults without requiring custom mapping options.
+- A non-Rails Fields Kit element returns `null`.
+- The evidence stays read-only; endpoint payload shape, request execution, rendering copy, badge styling, mutation, validation, and retry behavior remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+readRenderedOptionPayloadMapping: PASS on <field selector>. valueField / labelField / searchFields matched rendered mapping data; description and badge fields were readable when present; default field returned value/text defaults; unrelated element returned null. Endpoint payloads, request execution, rendering copy, and styling remained host-app or separate checklist responsibilities.
+```
+
 ## Text override contract reader
 
 Use this lane when `tomSelectTextOverrideContract(element)` is in release scope.
