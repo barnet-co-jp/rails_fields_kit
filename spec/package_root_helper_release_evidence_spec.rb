@@ -33,7 +33,7 @@ RSpec.describe "package-root helper release evidence guide" do
   end
 
   it "keeps helper-specific evidence lanes aligned with current public JavaScript exports" do
-    current_package_root_helpers = javascript_exports.scan(/`([a-z][A-Za-z0-9]+\(element\))`/).flatten
+    current_package_root_helpers = javascript_exports.scan(/`([a-z][A-Za-z0-9]+\(element\))`/).flatten.uniq
 
     expect(current_package_root_helpers).to contain_exactly(
       "tomSelectTextOverrideContract(element)",
