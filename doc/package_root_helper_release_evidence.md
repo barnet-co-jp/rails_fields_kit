@@ -97,6 +97,31 @@ Suggested evidence note:
 tomSelectTextOverrideContract: PASS on <field selector>. noResultsText / loadingText / createText matched rendered field values; fallback field was readable; unrelated element returned null. Visible copy and locale policy remain host-app review items.
 ```
 
+## Tom Select plugin contract reader
+
+Use this lane when `tomSelectPluginContract(element)` is in release scope.
+
+Representative import:
+
+```js
+import { tomSelectPluginContract } from "rails_fields_kit"
+```
+
+Check one rendered Tom Select-backed field that uses `allow_clear: true` and, when the release scope includes explicit plugin overrides, one comparable field that renders `plugins:` explicitly:
+
+- `tomSelectPluginContract(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes the documented `plugins` array for the representative field.
+- A field with `allow_clear: true` reports a `clear_button` plugin signal through the documented clearable flag.
+- A field with explicit `plugins:` reports the rendered effective plugin list without treating the host app's plugin choices as Rails Fields Kit-owned behavior.
+- A comparable non-Tom Select or unrelated element returns `null`.
+- The evidence stays read-only; plugin asset installation, clear/remove affordance styling, selection mutation, empty-state copy, Tom Select plugin objects, and Tom Select instance lifecycle remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+tomSelectPluginContract: PASS on <field selector>. plugins matched the rendered effective plugin list; allow_clear field exposed the documented clear_button / clearable signal; unrelated element returned null. Plugin assets, styling, mutation, empty-state copy, and Tom Select plugin lifecycle remained host-app or Tom Select responsibilities.
+```
+
 ## Native accessibility contract reader
 
 Use this lane when `nativeFieldAccessibilityContract(element)` is in release scope.
