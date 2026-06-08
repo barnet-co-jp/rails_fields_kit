@@ -141,7 +141,7 @@ Current progress:
 - Rails Fields Kit exposes table-oriented metadata objects such as `RailsFieldsKit::TableFilterInput` and `RailsFieldsKit::TableCellInput`.
 - Table-oriented gems can read these through `to_table_filter`, `to_table_cell_editor`, `to_h`, and `to_hash` without taking a hard dependency on Rails Fields Kit.
 - `RailsFieldsKit::TableRenderer` maps table filter/editor metadata to FormBuilder call specs or dispatches them through a FormBuilder.
-- `RailsFieldsKit::TableRenderer` supports custom table field helper registration, normalized field/helper names, reset behavior, duplicated mapping introspection, ordered rendering, and mutation-safe call specs.
+- `RailsFieldsKit::TableRenderer` supports custom table field helper registration, normalized field/helper names, helper-hidden `registered_field_types` introspection, individual `unregister_field_helper` cleanup, reset behavior, ordered rendering, and mutation-safe call specs.
 - `RailsFieldsKit::TableMetadata` collects filter/editor metadata from column lists, enumerators, hash columns, hash-like columns, object columns, and table-like objects that respond to `columns`.
 - `RailsFieldsKit::TableMetadata` treats explicit `false` metadata as disabled, validates invalid hash-like metadata, prefers object metadata readers over `to_hash`, and duplicates collected metadata/options for downstream mutation safety.
 - `rfk_table_filters` and `rfk_table_cell_editors` render collected table metadata directly from a FormBuilder and return safe buffers.

@@ -4,9 +4,9 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 const CHECK_RUNNER = "check_javascript.mjs"
-const intentionalStandaloneCheckScripts = new Set([
-  // Add scripts/check_*.mjs entries here only when a smoke is intentionally not part of check:js.
-].map(normalizeScriptPath))
+const intentionalStandaloneCheckScripts = new Map([
+  // Add ["scripts/check_example.mjs", "short reason"] entries here only when a smoke is intentionally not part of check:js.
+].map(([scriptPath, reason]) => [normalizeScriptPath(scriptPath), reason]))
 
 function normalizeScriptPath(scriptPath) {
   return scriptPath.replace(/\\/g, "/").replace(/^\.\//, "")
@@ -18,17 +18,29 @@ function extractNodeSmokeScriptReferencesFromRunner(source) {
     .map(normalizeScriptPath)
 }
 
+function normalizeStandaloneExclusions(excludedScripts) {
+  const entries = excludedScripts instanceof Map
+    ? [...excludedScripts.entries()]
+    : [...excludedScripts].map((scriptPath) => [scriptPath, "self-test fixture"])
+
+  return new Map(entries.map(([scriptPath, reason]) => [normalizeScriptPath(scriptPath), reason]))
+}
+
 function evaluateInventory({ actualScripts, runnerSource, excludedScripts = intentionalStandaloneCheckScripts }) {
   const actualSet = new Set(actualScripts.map(normalizeScriptPath))
   const referencedScripts = extractNodeSmokeScriptReferencesFromRunner(runnerSource)
   const referencedSet = new Set(referencedScripts)
-  const excludedSet = new Set([...excludedScripts].map(normalizeScriptPath))
+  const excludedMap = normalizeStandaloneExclusions(excludedScripts)
+  const excludedSet = new Set(excludedMap.keys())
   const expectedScripts = [...actualSet].filter((scriptPath) => !excludedSet.has(scriptPath)).sort()
 
   const missingScripts = expectedScripts.filter((scriptPath) => !referencedSet.has(scriptPath))
   const staleReferences = referencedScripts.filter((scriptPath) => !actualSet.has(scriptPath))
   const staleExclusions = [...excludedSet].filter((scriptPath) => !actualSet.has(scriptPath))
   const referencedExclusions = [...excludedSet].filter((scriptPath) => referencedSet.has(scriptPath))
+  const exclusionsWithoutReasons = [...excludedMap]
+    .filter(([, reason]) => typeof reason !== "string" || reason.trim().length === 0)
+    .map(([scriptPath]) => scriptPath)
 
   assert.deepEqual(
     missingScripts,
@@ -49,6 +61,11 @@ function evaluateInventory({ actualScripts, runnerSource, excludedScripts = inte
     referencedExclusions,
     [],
     `intentional standalone smoke scripts should not also be referenced by check:js: ${referencedExclusions.join(", ")}`
+  )
+  assert.deepEqual(
+    exclusionsWithoutReasons,
+    [],
+    `intentional standalone smoke script exclusions must include a short reason: ${exclusionsWithoutReasons.join(", ")}`
   )
 
   return { expectedScripts, referencedScripts }
@@ -91,14 +108,14 @@ function runSelfTests() {
   evaluateInventory({
     actualScripts,
     runnerSource: 'const checks = [{ args: ["scripts/check_alpha.mjs"] }, { args: ["scripts/check_beta.mjs"] }]',
-    excludedScripts: new Set(["scripts/check_standalone.mjs"])
+    excludedScripts: new Map([["scripts/check_standalone.mjs", "intentionally exercised outside check:js"]])
   })
 
   assertThrowsWithMessage(
     () => evaluateInventory({
       actualScripts,
       runnerSource: 'const checks = [{ args: ["scripts/check_alpha.mjs"] }]',
-      excludedScripts: new Set(["scripts/check_standalone.mjs"])
+      excludedScripts: new Map([["scripts/check_standalone.mjs", "intentionally exercised outside check:js"]])
     }),
     /check_beta\.mjs/
   )
@@ -107,7 +124,7 @@ function runSelfTests() {
     () => evaluateInventory({
       actualScripts,
       runnerSource: 'const checks = [{ args: ["scripts/check_alpha.mjs"] }, { args: ["scripts/check_beta.mjs"] }, { args: ["scripts/check_missing.mjs"] }]',
-      excludedScripts: new Set(["scripts/check_standalone.mjs"])
+      excludedScripts: new Map([["scripts/check_standalone.mjs", "intentionally exercised outside check:js"]])
     }),
     /check_missing\.mjs/
   )
@@ -116,9 +133,18 @@ function runSelfTests() {
     () => evaluateInventory({
       actualScripts,
       runnerSource: 'const checks = [{ args: ["scripts/check_alpha.mjs"] }, { args: ["scripts/check_beta.mjs"] }, { args: ["scripts/check_standalone.mjs"] }]',
-      excludedScripts: new Set(["scripts/check_standalone.mjs"])
+      excludedScripts: new Map([["scripts/check_standalone.mjs", "intentionally exercised outside check:js"]])
     }),
     /check_standalone\.mjs/
+  )
+
+  assertThrowsWithMessage(
+    () => evaluateInventory({
+      actualScripts,
+      runnerSource: 'const checks = [{ args: ["scripts/check_alpha.mjs"] }, { args: ["scripts/check_beta.mjs"] }]',
+      excludedScripts: new Map([["scripts/check_standalone.mjs", ""]])
+    }),
+    /short reason.*check_standalone\.mjs/
   )
 
   console.log("rails_fields_kit JavaScript smoke inventory self-test passed")
