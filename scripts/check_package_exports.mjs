@@ -183,6 +183,11 @@ try {
       `  const wrapper = document.register(new FakeElement("div", { class: "rfk-field" }, children))\n` +
       `  return { document, wrapper }\n` +
       `}\n\n` +
+      `function tomSelectElement(value) {\n` +
+      `  const element = new FakeElement("select", { "data-controller": "rails-fields-kit--tom-select" })\n` +
+      `  element.tomselect = { getValue() { return value } }\n` +
+      `  return element\n` +
+      `}\n\n` +
       `expectedNamedExports.forEach((exportName) => {\n` +
       `  assert.ok(exportName in packageRoot, \`package root should expose documented export ${"${exportName}"}\`)\n` +
       `})\n` +
@@ -191,6 +196,19 @@ try {
       `expectedCallableHelperExports.forEach((exportName) => {\n` +
       `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)\n` +
       `})\n\n` +
+      `assert.deepEqual(packageRoot.tomSelectSelectionContract(tomSelectElement("42")), { values: ["42"] })\n` +
+      `assert.deepEqual(packageRoot.tomSelectSelectionContract(tomSelectElement(["1", "2"])), { values: ["1", "2"] })\n` +
+      `assert.deepEqual(packageRoot.tomSelectSelectionContract(tomSelectElement("")), { values: [""] })\n\n` +
+      `const sourceValues = ["a", "b"]\n` +
+      `const selectionContract = packageRoot.tomSelectSelectionContract(tomSelectElement(sourceValues))\n` +
+      `selectionContract.values.push("c")\n` +
+      `assert.deepEqual(sourceValues, ["a", "b"], "selection contract should not expose Tom Select's value array for mutation")\n\n` +
+      `assert.equal(packageRoot.tomSelectSelectionContract(null), null)\n` +
+      `assert.equal(packageRoot.tomSelectSelectionContract(new FakeElement("select", { "data-controller": "rails-fields-kit--tom-select" })), null)\n` +
+      `assert.equal(packageRoot.tomSelectSelectionContract(tomSelectElement(undefined)), null)\n` +
+      `const unrelatedTomSelect = tomSelectElement("42")\n` +
+      `unrelatedTomSelect.attributes["data-controller"] = "other-controller"\n` +
+      `assert.equal(packageRoot.tomSelectSelectionContract(unrelatedTomSelect), null)\n\n` +
       `const label = new FakeElement("label", { for: "order_customer_name" })\n` +
       `const input = new FakeElement("input", { id: "order_customer_name", "aria-describedby": "customer_hint customer_error" })\n` +
       `const hint = new FakeElement("p", { id: "customer_hint", class: "rfk-hint" })\n` +
