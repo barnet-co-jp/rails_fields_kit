@@ -8,6 +8,7 @@ Use this focused docs/design artifact when a release or PR changes setup doctor 
 - Confirm that the status legend explains `[OK]`, `[MISSING]`, and `[MANUAL]` before the user reaches individual checks.
 - Confirm that `[OK]`, `[MISSING]`, and `[MANUAL]` lines are easy to scan as diagnostic evidence.
 - Confirm that importmap target mismatch output is readable after the target-drift diagnostic landed.
+- Confirm that package.json Tom Select dependency evidence reads as advisory visibility, not as host-app package policy.
 - Keep command behavior, wording source, host app setup policy, and auto-fix decisions outside this artifact.
 
 ## Release Evidence Handoff
@@ -48,6 +49,22 @@ Review notes:
 - The `Next step` line should make first-run output actionable without adding an auto-fix policy.
 - Bundler-only apps can have manual JavaScript checks without implying an importmap failure.
 
+## Tom Select Package Advisory
+
+```text
+rails rails_fields_kit:doctor
+
+[OK] Tom Select package: Found tom-select in package.json dependencies. This is an advisory dependency visibility check only; version policy stays with the host app.
+[MANUAL] Stimulus registration: Register rails-fields-kit--tom-select on the Stimulus application this app already boots.
+[MANUAL] CSS import: Load tom-select/dist/css/tom-select.css from the app stylesheet or bundler entrypoint.
+```
+
+Review notes:
+
+- The Tom Select package line only reads `package.json` for `dependencies` or `devDependencies`; it does not choose a package manager, version range, CDN, or importmap source.
+- Missing `package.json`, missing `tom-select`, or invalid JSON should remain `[MANUAL]` advisory output, not a command failure.
+- Stimulus registration, CSS import, and bundler alias checks remain host-app responsibilities and should continue to read as manual follow-up.
+
 ## Importmap Target Mismatch
 
 ```text
@@ -82,8 +99,9 @@ Use this checklist when recording release or PR evidence:
 - [ ] `[OK]`, `[MISSING]`, and `[MANUAL]` labels are visually easy to distinguish in the recorded output.
 - [ ] The evidence note distinguishes `[MISSING]` action items from `[MANUAL]` host-app checks.
 - [ ] Missing importmap target output includes both expected and observed target values.
+- [ ] Tom Select package evidence is described as advisory dependency visibility, not package/version policy.
 - [ ] Narrow-width evidence says whether the output was reviewed in a standard terminal width, a wrapped Markdown/code-block view, or both.
-- [ ] Wrapped mismatch lines still make the expected target and observed target relationship readable without changing setup doctor wording.
+- [ ] Wrapped mismatch lines still make the expected and observed target relationship readable without changing setup doctor wording.
 - [ ] Manual checklist lines are not described as failed automatic checks.
 - [ ] Evidence notes say whether the app under review is importmap, jsbundling, bundler-managed JavaScript, or another setup path.
 - [ ] Any deferred follow-up is recorded as docs/setup policy work, not as a visual reference failure.
