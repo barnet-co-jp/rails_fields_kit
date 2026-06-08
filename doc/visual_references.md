@@ -69,3 +69,20 @@ Use the evidence location that matches the scope of the visual change.
 - Keep individual artifact screenshot, browser rendering, or redesign follow-ups in their own issue or PR instead of expanding this map into an approval workflow.
 
 For each visual-reference evidence note, include at least the artifact, viewport, lane or state, responsibility boundary, result, and any blocker. If the run is connector-only and no browser screenshot is available, say what was checked instead, such as source review, CI, or a static render, and name the remaining human or browser-capable check rather than treating CI green as visual approval.
+
+Use this short PR comment template when a visual reference change still needs browser-capable review:
+
+```markdown
+Visual reference evidence handoff
+
+- Artifact: `doc/...html`
+- Viewports: desktop ..., narrow ...
+- Lane/state: ...
+- Checked in this PR: source review / static render / CI / docs link review ...
+- Not checked here: browser screenshot / real browser desktop / real browser narrow ...
+- Remaining browser-capable check: ...
+- Responsibility boundary: runtime behavior / production CSS / host-app copy remains out of scope
+- Result or blocker: ...
+```
+
+Use the template to make the remaining review concrete. Do not paste it as a release approval when the browser pass was not actually run.
