@@ -501,7 +501,7 @@
         <h1>Native Field Visual Reference</h1>
         <p class="lede">
           Diagnostic QA surface for the native helper family: wrapper, validation, affixes, metadata,
-          focus, customization, non-editable states, narrow viewport stress, generated aria ids, multiline text areas,
+          browser semantics, focus, customization, non-editable states, narrow viewport stress, generated aria ids, multiline text areas,
           and the accessibility opt-out boundary.
         </p>
         <div class="hero-links">
@@ -514,6 +514,7 @@
         <span class="review-pill">State comparison first</span>
         <span class="review-pill">Generated aria id scan</span>
         <span class="review-pill">Rendered contract reader scan</span>
+        <span class="review-pill">Native browser semantics scan</span>
         <span class="review-pill">Multiline textarea scan</span>
         <span class="review-pill">Desktop and narrow viewport scan</span>
         <span class="review-pill">Static artifact only</span>
@@ -669,6 +670,58 @@
               <div class="metadata-row">
                 <span class="metadata-key">Boundary</span>
                 <span class="metadata-value">Static QA only. Native helper implementation, production CSS, and validation behavior stay unchanged.</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="tag metadata">Browser semantics</div>
+          <h2>Search, email, and URL stay native</h2>
+          <p>
+            Native search, email, and URL helpers use browser input semantics while staying separate from
+            Tom Select autocomplete, token parsing, remote search, and Rails Fields Kit-owned validation policy.
+          </p>
+          <div class="example metadata-surface">
+            <div class="two-up">
+              <div class="field-block">
+                <div class="label-row">
+                  <span>Find contacts</span>
+                </div>
+                <div class="control-row focus-visible-state">
+                  <div class="input">status:active team:success</div>
+                  <span class="affix trailing">native search</span>
+                </div>
+                <div class="hint">Representative `rfk_search_field`; no remote endpoint or token suggestions are implied.</div>
+              </div>
+              <div class="field-block">
+                <div class="label-row">
+                  <span>Support URL</span>
+                </div>
+                <div class="control-row">
+                  <div class="input">https://help.example.test/accounts</div>
+                </div>
+                <div class="hint">Representative `rfk_url_field`; URL shape is browser semantics, not a built-in link checker.</div>
+              </div>
+            </div>
+            <div class="field-block">
+              <div class="label-row">
+                <span>Notification email</span>
+                <span class="required">Required</span>
+              </div>
+              <div class="control-row">
+                <div class="input">ops@example.test</div>
+              </div>
+              <div class="hint">Representative `rfk_email_field`; validation policy and message copy remain host-app owned.</div>
+            </div>
+            <div class="metadata-list">
+              <div class="metadata-row">
+                <span class="metadata-key">Review boundary</span>
+                <span class="metadata-value">Compare native input type cues without adding search execution, token parsing, or autocomplete behavior.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">Viewport check</span>
+                <span class="metadata-value">Long URL and query examples wrap through the existing two-up and 460px control-row rules.</span>
               </div>
             </div>
           </div>
@@ -919,6 +972,7 @@
           <span>Hero scale stays below the state cards so reviewers scan helper states first.</span>
           <span>Shared wrapper contract: label, hint, affixes, validation redisplay.</span>
           <span>Native helper lane only: no remote search, selected preload, or create-on-the-fly semantics.</span>
+          <span>Native browser semantics distinguish `rfk_search_field`, `rfk_email_field`, and `rfk_url_field` from Tom Select-backed helpers.</span>
           <span>Multiline `rfk_text_area` keeps long content, long hints, and validation copy readable in one native wrapper lane.</span>
           <span>Input metadata defaults stay visible without adding masks, formatting, or validation policy.</span>
           <span>Narrow viewport stress keeps long label, hint, error, required marker, and money affixes readable.</span>
