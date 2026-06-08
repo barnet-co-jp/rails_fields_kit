@@ -60,10 +60,12 @@ Use these hooks when the host app wants to react to the fetched option set itsel
   - Fired after selected option preload succeeds.
   - Detail: `{ values, options }`
 - `rails-fields-kit--tom-select:selected-load-error`
-  - Fired after selected option preload fails or returns a non-2xx response.
+  - Fired after selected option preload fails, returns a non-2xx response, or returns 2xx JSON that is empty or does not contain usable option objects with the configured value field.
   - Detail: `{ operation, values, error, response, payload, status, surface }`
 
 Use these hooks when the host app needs to know whether edit-form labels were resolved successfully before the user starts searching.
+
+For selected preload endpoint payload shapes, including invalid 2xx payloads that enter the `selected-load-error` lane instead of creating incomplete options, see [`selected_preload_contract.md`](selected_preload_contract.md). Keep authorization, missing-record policy, visible fallback copy, and retry UI in the host app.
 
 For a copyable field example that wires `selected_url:`, `selected-load`, `selected-load-error`, and `error_surface: true` together on one field, see [`setup.md`](setup.md). Keep the selected-option lookup endpoint itself in [`controller_helpers.md`](controller_helpers.md), and keep the visible fallback copy or retry UI in the host app.
 

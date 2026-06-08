@@ -17,6 +17,7 @@ bundle exec rake build
 ```
 
 - Before release, rerun those local checks on the latest `main` and confirm GitHub Actions CI succeeds for the exact release candidate commit.
+- The repository-local JavaScript boundary is Node 22.x and Node 24.x. `npm run check:js` should be confirmed on both Node lines through local release prep when available and through the GitHub Actions `javascript` matrix for the exact release candidate commit.
 - The GitHub Actions Rails compatibility matrix runs for pull requests and `main` pushes using the same representative Rails 7.0 / Ruby 3.1 and Rails 8.0 / Ruby 3.3 lanes. Keep the matrix representative rather than expanding release evidence into a full Rails/Ruby cross-product.
 
 ## Pre-release checklist
@@ -51,7 +52,7 @@ bundle exec rake build
    npm run check:js
    ```
 
-   These checks mirror the repository-local JavaScript confirmation described in [`doc/development.md`](development.md), including the package exports import lane and Tom Select request lifecycle smokes.
+   These checks mirror the repository-local JavaScript confirmation described in [`doc/development.md`](development.md), including the package exports import lane and Tom Select request lifecycle smokes. For release prep, treat the command as the same smoke suite that must pass on Node 22.x and Node 24.x; the GitHub Actions `javascript` matrix is the final branch-head confirmation for both Node lines.
 
 6. Build the gem locally.
 
@@ -61,7 +62,9 @@ bundle exec rake build
 
 7. Confirm the latest GitHub Actions CI run is green for the commit you plan to release.
 
-   This is the final branch-head confirmation for lint, RSpec, JavaScript syntax, gem package/install smoke checks, and the representative Rails compatibility matrix. The gem package check also verifies that the built artifact contains `package.json` and the JavaScript files referenced by its public `exports` map.
+   This is the final branch-head confirmation for lint, RSpec, JavaScript syntax and smoke checks on Node 22.x and Node 24.x, gem package/install smoke checks, and the representative Rails compatibility matrix. The gem package check also verifies that the built artifact contains `package.json` and the JavaScript files referenced by its public `exports` map.
+
+   The Node 22.x / 24.x JavaScript matrix is the repository-local package export and smoke boundary. It does not define a host-app Tom Select runtime version policy, package manager policy, plugin asset policy, or broader browser compatibility matrix.
 
    The compatibility matrix intentionally stays small: it confirms the oldest supported representative lane and the current Rails 8 representative lane on pull requests and on `main` after merge. Do not add every Rails/Ruby combination unless release planning explicitly accepts the extra CI time and maintenance cost.
 
@@ -72,6 +75,7 @@ bundle exec rake build
    - `AGENTS.md`
    - `CHANGELOG.md`
    - `doc/setup.md`
+   - `doc/setup_doctor_output_review.md` when setup doctor output or setup evidence is part of the release surface
    - `doc/support_boundary.md`
    - `doc/public_api.md`
    - `doc/select_migration.md`
@@ -80,8 +84,10 @@ bundle exec rake build
    - `doc/visual_reference_index.html`
    - `doc/tom_select_visual_reference.html`
    - `doc/tom_select_request_failure_visual_reference.html`
+   - `doc/tom_select_error_surface_contract_visual_reference.html` when request-failure accessibility contract evidence is part of the release surface
    - `doc/tom_select_text_override_visual_reference.html`
    - `doc/native_field_visual_reference.html`
+   - `doc/native_accessibility_contract_visual_reference.html` when native helper accessibility contract evidence is part of the release surface
    - `doc/configuration_wrapper_class_visual_reference.html`
    - `doc/table_metadata_visual_reference.html`
    - `doc/token_search_saved_search_visual_reference.html`
@@ -94,6 +100,7 @@ bundle exec rake build
    - `doc/tom_select_turbo_lifecycle.md`
    - `doc/development.md`
    - `doc/sample_app_checklist.md`
+   - `doc/package_root_helper_release_evidence.md` when package-root read-only helper exports are part of the release evidence scope
    - `doc/sample_app_results.md`
    - `doc/selected_preload_release_gate.md` when selected preload behavior is part of the release surface
    - `doc/final_release_checklist.md`
@@ -123,6 +130,8 @@ bundle exec rake build
 
    Confirm the host app's Tom Select package version, pin source, plugin CSS, and plugin-specific asset loading through that app's normal JavaScript dependency review. Rails Fields Kit documents and packages its own import paths, but it does not fix, detect, or auto-correct Tom Select versions or plugin asset policy as part of the gem release gate.
 
+   When package-root read-only helper exports are in scope, use [`package_root_helper_release_evidence.md`](package_root_helper_release_evidence.md) to choose representative helper checks before recording the final sample-app or release PR evidence. Keep `doc/public_api.md#javascript-exports` as the source of truth for the exported helper list and return-shape boundary.
+
    After the install generator runs, run the read-only setup doctor in the sample app:
 
    ```bash
@@ -130,6 +139,8 @@ bundle exec rake build
    ```
 
    Record whether it reports the initializer and, when importmap is present, the Rails Fields Kit pins. Treat Tom Select package install, Stimulus registration, CSS import, and bundler alias output as manual checklist reminders rather than automatic pass/fail gates or auto-fix behavior.
+
+   When recording or reviewing setup doctor CLI output evidence, use [`setup_doctor_output_review.md`](setup_doctor_output_review.md) for the `[OK]`, `[MISSING]`, `[MANUAL]`, and target-mismatch scanability lanes. Keep that artifact as review evidence, not as the source of runtime wording or setup policy.
 
    When the release surface includes selected preload behavior, run the focused [`selected_preload_release_gate.md`](selected_preload_release_gate.md) before marking the sample app pass complete. Keep this check to the documented single-value and comma-separated multiple-ID request contract unless release planning explicitly changes that public surface.
 
