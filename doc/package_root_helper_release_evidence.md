@@ -122,6 +122,31 @@ Suggested evidence note:
 tomSelectPluginContract: PASS on <field selector>. plugins matched the rendered effective plugin list; allow_clear field exposed clear_button through plugins and hasClearButton; explicit plugin field exposed the expected derived hasClearButton / hasRemoveButton flags; unrelated element returned null. Plugin assets, styling, mutation, empty-state copy, and Tom Select plugin lifecycle remained host-app or Tom Select responsibilities.
 ```
 
+## Tom Select request contract reader
+
+Use this lane when `tomSelectRequestContract(element)` is in release scope.
+
+Representative import:
+
+```js
+import { tomSelectRequestContract } from "rails_fields_kit"
+```
+
+Check rendered Tom Select-backed fields that cover remote search, selected preload, and create-on-the-fly request configuration when those lanes are in the PR or release scope:
+
+- `tomSelectRequestContract(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes the documented remote search, selected preload, and create endpoint flags and URLs for the representative fields.
+- The result exposes the documented request param names, `minLength`, and `errorSurfaceId` values rendered for the field.
+- A comparable Tom Select-backed field without optional request lanes reports the documented default values.
+- A comparable non-Tom Select or unrelated element returns `null`.
+- The evidence stays read-only; request execution, query parsing, authorization, retry UI, visible feedback, fixed params parsing, and Tom Select controller lifecycle remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+tomSelectRequestContract: PASS on <field selector>. remote search / selected preload / create endpoint flags and URLs, param names, minLength, and errorSurfaceId matched the rendered field contract; default/no-request and unrelated elements returned the documented boundaries. Request execution, authorization, retry UI, visible feedback, fixed params parsing, and controller lifecycle remained out of scope.
+```
+
 ## Native accessibility contract reader
 
 Use this lane when `nativeFieldAccessibilityContract(element)` is in release scope.
