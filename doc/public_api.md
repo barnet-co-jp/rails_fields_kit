@@ -247,6 +247,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `TomSelectController` | Stimulus controller | Registers Rails Fields Kit's Tom Select-backed field behavior on the rendered element. Host apps still own Stimulus boot, Tom Select installation, endpoint behavior, authorization, query parsing, visible feedback copy, and retry UI. |
 | `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
 | `tomSelectPluginContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select plugin data and returns `plugins`, `hasClearButton`, and `hasRemoveButton`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not install plugin assets, expose Tom Select plugin objects, mutate selections, style clear/remove controls, or own empty-state behavior. |
+| `tomSelectRequestContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select request data attributes and returns the controller identifier, remote search / selected preload / create endpoint flags, URL values, request parameter names, `minLength`, and `errorSurfaceId`, or `null` when the element is not a Rails Fields Kit Tom Select-backed field. It does not execute requests, parse query strings, mutate Tom Select, authorize endpoints, retry requests, or own visible feedback. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
 
@@ -260,12 +261,14 @@ import {
   nativeFieldAccessibilityContract,
   readRenderedSelectedPreloadConfig,
   tomSelectPluginContract,
+  tomSelectRequestContract,
   tomSelectTextOverrideContract
 } from "rails_fields_kit"
 
 const accessibilityContract = nativeFieldAccessibilityContract(inputElement)
 const copyContract = tomSelectTextOverrideContract(fieldElement)
 const pluginContract = tomSelectPluginContract(fieldElement)
+const requestContract = tomSelectRequestContract(fieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
 ```
 
@@ -280,6 +283,17 @@ import TomSelectController from "rails_fields_kit/tom_select_controller"
 Rendered-field contract helpers stay read-only. They inspect data attributes and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance or duplicating wrapper traversal.
 
 For Tom Select plugin state, `tomSelectPluginContract(element)` reports the rendered effective plugin list and derived clear/remove flags. It does not confirm plugin asset loading, clear/remove affordance styling, or Tom Select plugin lifecycle behavior.
+
+`tomSelectRequestContract(element)` reports only the rendered request-lane contract. For a matching Rails Fields Kit Tom Select-backed field it returns:
+
+- `controller`: the Rails Fields Kit Tom Select Stimulus controller identifier.
+- `hasRemoteSearch`, `hasSelectedPreload`, and `hasCreateEndpoint`: booleans derived from the rendered URL values.
+- `url`, `selectedUrl`, and `createUrl`: rendered endpoint values, or `null` when that lane is absent.
+- `queryParam`, `selectedParam`, `selectedMultipleParam`, and `createParam`: rendered request parameter names, using the controller defaults when the attributes are absent.
+- `minLength`: the rendered numeric minimum query length, defaulting to `0` when absent or not numeric.
+- `errorSurfaceId`: the rendered request-failure placeholder id, or `null` when no error surface is rendered.
+
+The helper does not read fixed params objects, execute `fetch`, inspect endpoint responses, parse query strings, or decide authorization / retry / visible feedback policy.
 
 For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`.
 
