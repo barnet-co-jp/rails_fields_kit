@@ -16,6 +16,7 @@ Use this first pass to prove one server-rendered field before adding remote endp
 - [ ] Register `rails-fields-kit--tom-select` on the app's existing Stimulus application.
 - [ ] For Turbo-enabled apps, let the registered Stimulus controller handle normal `rfk_*` field reconnects; do not add a separate host-app `turbo:load` reinitializer unless custom markup lives outside Stimulus-managed DOM.
 - [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.
+- [ ] If `rails_fields_kit` or `rails_fields_kit/tom_select_controller` cannot be resolved, use the upstream setup guide's unresolved imports troubleshooting section before changing aliases, importmap pins, Stimulus registration, Tom Select package setup, or CSS imports.
 - [ ] Follow the README first field quickstart or the setup guide `rfk_select` lane before adding remote endpoints.
 - [ ] Record the first Rails Fields Kit field and any app-specific ownership notes below.
 
@@ -25,6 +26,7 @@ These upstream docs remain the source of truth for copyable examples, public API
 
 - README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>
 - Setup guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>
+- Setup troubleshooting for unresolved imports: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>
 - Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>
 - Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
 - Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>
@@ -43,6 +45,7 @@ Use this section after the first server-rendered field is working.
 - [ ] If this app uses `selected_url:` or `error_surface: true`, review `doc/setup.md` for the representative edit-form wiring and `doc/events.md` for `selected-load`, `selected-load-error`, and `detail.surface`.
 - [ ] If this app uses importmap, run `rails generate rails_fields_kit:install --importmap` when `config/importmap.rb` exists, or add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] If this app uses Vite or another bundler, add resolver or alias entries for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
+- [ ] When a bundler, Vite, importmap, or browser console error says a Rails Fields Kit import cannot be resolved, use the upstream unresolved imports troubleshooting section to check the package-root import path separately from the direct controller import path.
 - [ ] Use the doctor output as a read-only prompt; missing importmap pins, unexpected Rails Fields Kit pin targets, target-omitted pins, Tom Select package install, Stimulus registration, CSS import, and bundler aliases for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` remain host-app setup responsibilities. The doctor does not inspect or rewrite bundler config.
 
 ## Migration and helper selection
@@ -70,6 +73,7 @@ Use these references before shipping remote preloads, table metadata surfaces, o
 ## Reference links
 
 - Practical `rfk_select` migration guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/select_migration.md>
+- Setup troubleshooting for unresolved imports: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>
 - Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>
 - Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
 - Package-root helper release evidence: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/package_root_helper_release_evidence.md>
