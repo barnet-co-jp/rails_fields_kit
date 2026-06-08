@@ -52,6 +52,10 @@ const checks = [
   {
     name: "selected preload config contract smoke",
     args: ["scripts/check_selected_preload_config_contract.mjs"]
+  },
+  {
+    name: "rendered option payload mapping contract smoke",
+    args: ["scripts/check_rendered_option_payload_mapping_contract.mjs"]
   }
 ]
 
