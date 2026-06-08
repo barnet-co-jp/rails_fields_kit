@@ -190,7 +190,8 @@ try {
       `assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")\n` +
       `expectedCallableHelperExports.forEach((exportName) => {\n` +
       `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)\n` +
-      `})\n\n` +
+      `})\n` +
+      `assert.equal(typeof packageRoot.readRenderedErrorSurface, "function", "package root should expose readRenderedErrorSurface as a callable function")\n\n` +
       `const label = new FakeElement("label", { for: "order_customer_name" })\n` +
       `const input = new FakeElement("input", { id: "order_customer_name", "aria-describedby": "customer_hint customer_error" })\n` +
       `const hint = new FakeElement("p", { id: "customer_hint", class: "rfk-hint" })\n` +
@@ -210,7 +211,30 @@ try {
       `const missingLabelInput = new FakeElement("select")\n` +
       `buildDocumentWithWrapper([missingLabelInput])\n` +
       `assert.equal(packageRoot.nativeFieldAccessibilityContract(missingLabelInput).labelElement, null, "native accessibility contract should return null when no label exists")\n` +
-      `assert.equal(packageRoot.nativeFieldAccessibilityContract(new FakeElement("div")), null, "native accessibility contract should ignore non-native elements")\n`
+      `assert.equal(packageRoot.nativeFieldAccessibilityContract(new FakeElement("div")), null, "native accessibility contract should ignore non-native elements")\n\n` +
+      `const errorSurface = new FakeElement("div", { id: "customer_id_error_surface", class: "rfk-tom-select-error-surface", role: "status" })\n` +
+      `const tomSelectField = new FakeElement("select", {\n` +
+      `  "data-controller": "rails-fields-kit--tom-select",\n` +
+      `  "data-rails-fields-kit--tom-select-error-surface-id-value": "customer_id_error_surface"\n` +
+      `})\n` +
+      `buildDocumentWithWrapper([tomSelectField, errorSurface])\n` +
+      `assert.equal(packageRoot.readRenderedErrorSurface(tomSelectField), errorSurface, "rendered error surface reader should resolve the configured placeholder element")\n\n` +
+      `const customSurface = new FakeElement("output", { id: "custom_error_surface", class: "host-error", "aria-live": "assertive" })\n` +
+      `const customSurfaceField = new FakeElement("input", {\n` +
+      `  "data-controller": "rails-fields-kit--tom-select",\n` +
+      `  "data-rails-fields-kit--tom-select-error-surface-id-value": "custom_error_surface"\n` +
+      `})\n` +
+      `buildDocumentWithWrapper([customSurfaceField, customSurface])\n` +
+      `assert.equal(packageRoot.readRenderedErrorSurface(customSurfaceField), customSurface, "rendered error surface reader should support custom error_surface_html placeholders")\n\n` +
+      `const noSurfaceField = new FakeElement("select", { "data-controller": "rails-fields-kit--tom-select" })\n` +
+      `const missingSurfaceField = new FakeElement("select", {\n` +
+      `  "data-controller": "rails-fields-kit--tom-select",\n` +
+      `  "data-rails-fields-kit--tom-select-error-surface-id-value": "missing_surface"\n` +
+      `})\n` +
+      `buildDocumentWithWrapper([noSurfaceField, missingSurfaceField])\n` +
+      `assert.equal(packageRoot.readRenderedErrorSurface(noSurfaceField), null, "rendered error surface reader should return null when the field did not opt in")\n` +
+      `assert.equal(packageRoot.readRenderedErrorSurface(missingSurfaceField), null, "rendered error surface reader should return null when the configured placeholder is absent")\n` +
+      `assert.equal(packageRoot.readRenderedErrorSurface(null), null, "rendered error surface reader should ignore null inputs")\n`
   )
 
   await import(pathToFileURL(probePath).href)
