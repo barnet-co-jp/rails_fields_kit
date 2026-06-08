@@ -138,7 +138,31 @@ With default field names, the following values can therefore match the endpoint 
 
 The same rule applies when `value_field:`, `label_field:`, `description_field:`, or `badge_field:` use custom output names: the final rendered payload values are searched. For example, a custom `kind: "saved-search"` badge or `help: "Weekly saved queue"` description can make that option match even when the token itself does not contain the query text.
 
-This is intentional current behavior for suggestion filtering. Saved-search suggestions with `badge: "saved"`, descriptive helper text, or host-app metadata may appear because those values match the query. Keep sensitive values out of suggestion metadata, and pre-filter or omit fields in the host application when only token or label matching should be exposed.
+Use `match_fields:` when the endpoint should only match specific rendered option keys while keeping the same suggestion payload. The option is an allowlist of rendered field names, so it should use the same names that appear in the final JSON payload:
+
+```ruby
+rfk_token_suggestions_with(
+  suggestions: ->(_query) { RailsFieldsKit::TokenSuggestions.build(fields: ORDER_SEARCH_FIELDS) },
+  match_fields: %w[value text]
+)
+```
+
+For custom output keys, use those rendered keys instead:
+
+```ruby
+rfk_token_suggestions_with(
+  suggestions: TOKEN_SUGGESTIONS,
+  value_field: "token",
+  label_field: "label",
+  description_field: "help",
+  badge_field: "kind",
+  match_fields: %w[token label]
+)
+```
+
+When `match_fields:` is omitted or `nil`, Rails Fields Kit keeps the existing all-rendered-values matching behavior. Unknown or missing match fields simply do not contribute a match. Empty query strings still return all suggestions before `limit:` is applied.
+
+This is intentional current behavior for suggestion filtering. Saved-search suggestions with `badge: "saved"`, descriptive helper text, or host-app metadata may appear because those values match the query. Keep sensitive values out of suggestion metadata. Use `match_fields:` or pre-filter/omit fields in the host application when only token or label matching should be exposed.
 
 ## Shared metadata source pattern
 

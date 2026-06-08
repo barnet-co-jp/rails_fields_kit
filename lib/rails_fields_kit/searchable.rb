@@ -115,7 +115,7 @@ module RailsFieldsKit
         end
       end
 
-      def rfk_token_suggestions_with(suggestions:, action: :index, query_param: nil, value_field: nil, label_field: nil, description_field: nil, badge_field: nil, limit: 20, wrap: nil)
+      def rfk_token_suggestions_with(suggestions:, action: :index, query_param: nil, value_field: nil, label_field: nil, description_field: nil, badge_field: nil, match_fields: nil, limit: 20, wrap: nil)
         define_method(action) do
           query_key = query_param || RailsFieldsKit.configuration.default_query_param
           query = params[query_key].to_s
@@ -125,7 +125,8 @@ module RailsFieldsKit
             value_field: value_field,
             label_field: label_field,
             description_field: description_field,
-            badge_field: badge_field
+            badge_field: badge_field,
+            match_fields: match_fields
           )
           options = options.first(limit) if limit
 
@@ -260,7 +261,7 @@ module RailsFieldsKit
       base_attributes.merge(permitted)
     end
 
-    def rfk_token_suggestion_options(suggestions, query:, value_field:, label_field:, description_field:, badge_field:)
+    def rfk_token_suggestion_options(suggestions, query:, value_field:, label_field:, description_field:, badge_field:, match_fields:)
       source = case suggestions
       when Symbol, String
         public_send(suggestions, query)
@@ -277,7 +278,7 @@ module RailsFieldsKit
           badge_field: badge_field
         )
       end.select do |option|
-        rfk_token_suggestion_matches?(option, query)
+        rfk_token_suggestion_matches?(option, query, match_fields: match_fields)
       end
     end
 
@@ -318,11 +319,17 @@ module RailsFieldsKit
       nil
     end
 
-    def rfk_token_suggestion_matches?(option, query)
+    def rfk_token_suggestion_matches?(option, query, match_fields: nil)
       return true if query.to_s.empty?
 
       normalized_query = query.to_s.downcase
-      option.values.any? { |value| value.to_s.downcase.include?(normalized_query) }
+      values = if match_fields.nil?
+        option.values
+      else
+        Array(match_fields).map { |field| option[field.to_s] }
+      end
+
+      values.any? { |value| value.to_s.downcase.include?(normalized_query) }
     end
   end
 end

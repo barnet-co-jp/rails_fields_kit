@@ -114,7 +114,7 @@ Public class methods:
 - `rfk_create_with`
 - `rfk_token_suggestions_with`
 
-`rfk_search_with`, `rfk_find_with`, and `rfk_create_with` support custom `action:` names. `rfk_search_with` also supports `minimum_query_length:` when the endpoint itself should return empty options for blank or too-short queries while preserving the default blank-query behavior when the option is omitted. `rfk_token_suggestions_with` provides lightweight token suggestion endpoints for `rfk_token_search` without taking over query parsing or result filtering.
+`rfk_search_with`, `rfk_find_with`, and `rfk_create_with` support custom `action:` names. `rfk_search_with` also supports `minimum_query_length:` when the endpoint itself should return empty options for blank or too-short queries while preserving the default blank-query behavior when the option is omitted. `rfk_token_suggestions_with` provides lightweight token suggestion endpoints for `rfk_token_search` without taking over query parsing or result filtering; use `match_fields:` when a token suggestion endpoint should compare the query against only selected rendered JSON keys.
 
 See [`controller_helpers.md`](controller_helpers.md) for details.
 
