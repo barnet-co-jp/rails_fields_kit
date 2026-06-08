@@ -75,6 +75,7 @@ JavaScript package-root exports:
 
 - `TomSelectController`
 - `tomSelectTextOverrideContract(element)` for rendered text override values: `noResultsText`, `loadingText`, and `createText`
+- `readRenderedSelectedPreloadConfig(element)` for rendered selected preload config values: `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`
 - `nativeFieldAccessibilityContract(element)` for rendered native input accessibility wiring: `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, and `wrapperElement`
 
 ## Compatibility and responsibility boundary
@@ -137,6 +138,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 - `rfk_table_filters` and `rfk_table_cell_editors`
 - table metadata collection and renderer robustness fixes for hash-like, object, enumerable, nil, and disabled metadata inputs
 - `tomSelectTextOverrideContract(element)` for rendered Tom Select text override values
+- `readRenderedSelectedPreloadConfig(element)` for rendered selected preload config reads
 - `nativeFieldAccessibilityContract(element)` for rendered native input accessibility wiring and label association
 - controller helper `action:` support, selected preload array params, and remote collection wrappers such as `{ options: [...] }` and `{ results: [...] }`
 - Tom Select option pass-throughs for `max_items:`, `load_throttle:`, and `delimiter:`
