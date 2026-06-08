@@ -1,0 +1,96 @@
+# Setup Doctor Output Review
+
+Use this focused docs/design artifact when a release or PR changes setup doctor diagnostics, setup evidence, or generated setup notes. This artifact is not production UI and does not define setup doctor runtime behavior. It gives reviewers a stable way to scan representative CLI output states without mixing them into field visual references.
+
+## Scope
+
+- Review the readability of representative setup doctor output states.
+- Confirm that the status legend explains `[OK]`, `[MISSING]`, and `[MANUAL]` before the user reaches individual checks.
+- Confirm that `[OK]`, `[MISSING]`, and `[MANUAL]` lines are easy to scan as diagnostic evidence.
+- Confirm that importmap target mismatch output is readable after the target-drift diagnostic landed.
+- Keep command behavior, wording source, host app setup policy, and auto-fix decisions outside this artifact.
+
+## Release Evidence Handoff
+
+Use this artifact as the review aid for setup doctor evidence, then record the release result in the sample app evidence flow rather than duplicating the full CLI output in every PR.
+
+- Use `doc/sample_app_checklist.md` to decide whether setup doctor evidence belongs in the release baseline or the host-app setup lane.
+- Record release-wide results in `doc/sample_app_results.md` under `Setup doctor checks`, including the app setup path: importmap, jsbundling, bundler-managed JavaScript, or another route.
+- For a narrow docs or setup-doctor PR, a PR comment is enough when it names the command, setup path, representative `[OK]` / `[MISSING]` / `[MANUAL]` lines, branch or commit, and result.
+- Treat `[MANUAL]` lines as host-app responsibility checks. Do not count them as failed automatic checks unless the release issue explicitly changes setup doctor behavior.
+- Keep auto-fix behavior, exit-code policy, and host-app setup policy decisions out of release evidence notes unless a separate implementation issue changes them.
+
+## Representative Output States
+
+`RailsFieldsKit::SetupDoctor#report_lines` formats each check as `[STATUS] Label: message`. Keep examples in that shape so release evidence can be compared with actual terminal output. The status legend is part of the human-readable output and should appear before the check list.
+
+```text
+rails rails_fields_kit:doctor
+
+Rails Fields Kit setup doctor
+
+Status legend: [OK] detected setup; [MISSING] needs action for the detected setup route; [MANUAL] host-app check, not an automatic failure.
+Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain.
+
+[OK] Initializer: Found config/initializers/rails_fields_kit.rb.
+[OK] Importmap pins: Rails Fields Kit importmap pins are present in config/importmap.rb.
+[MANUAL] Tom Select package: Install Tom Select with the JavaScript package manager already used by this app.
+[MANUAL] Stimulus registration: Register rails-fields-kit--tom-select on the Stimulus application this app already boots.
+[MANUAL] CSS import: Load tom-select/dist/css/tom-select.css from the app stylesheet or bundler entrypoint.
+[MANUAL] Bundler alias: If this app uses Vite or another bundler, verify that the host toolchain resolves the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths; this doctor does not inspect or rewrite bundler config.
+```
+
+Review notes:
+
+- `[OK]` means the doctor could read the expected setup signal.
+- `[MISSING]` means the doctor could not find an expected setup signal for the detected route.
+- `[MANUAL]` means the doctor cannot safely verify the host app decision automatically; it is not a hard failure by itself.
+- The `Next step` line should make first-run output actionable without adding an auto-fix policy.
+- Bundler-only apps can have manual JavaScript checks without implying an importmap failure.
+
+## Importmap Target Mismatch
+
+```text
+rails rails_fields_kit:doctor
+
+Rails Fields Kit setup doctor
+
+Status legend: [OK] detected setup; [MISSING] needs action for the detected setup route; [MANUAL] host-app check, not an automatic failure.
+Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain.
+
+[OK] Initializer: Found config/initializers/rails_fields_kit.rb.
+[MISSING] Importmap pins: Missing Rails Fields Kit importmap pins: rails_fields_kit/tom_select_controller. Rails Fields Kit importmap pins with unexpected targets: rails_fields_kit (expected rails_fields_kit/index.js, found rails_fields_kit), rails_fields_kit/tom_select_controller (expected rails_fields_kit/tom_select_controller.js, found no explicit target).
+[MANUAL] Tom Select package: Install Tom Select with the JavaScript package manager already used by this app.
+[MANUAL] Stimulus registration: Register rails-fields-kit--tom-select on the Stimulus application this app already boots.
+[MANUAL] CSS import: Load tom-select/dist/css/tom-select.css from the app stylesheet or bundler entrypoint.
+```
+
+Review notes:
+
+- Target mismatch evidence should show the expected target and the observed target in the same line.
+- Legacy release notes may refer to the same mismatch as `importmap pin rails_fields_kit expected target rails_fields_kit/index.js`; current examples keep that target relationship inside the `[MISSING] Importmap pins:` report line.
+- When evidence is recorded from a narrow terminal or wrapped Markdown view, the wrapped continuation should still keep `(expected ...` before `found ...` so reviewers can pair the expected and observed values without re-running the command.
+- `found no explicit target` should read as a concrete diagnostic, not as an empty or crashed state.
+- Missing pins and target mismatches can appear in one aggregated `Importmap pins` line.
+- CSS import and bundler alias checks remain host-app responsibilities unless a future issue explicitly changes the doctor behavior.
+
+## Narrow Evidence Checklist
+
+Use this checklist when recording release or PR evidence:
+
+- [ ] The status legend appears before individual check lines.
+- [ ] `[OK]`, `[MISSING]`, and `[MANUAL]` labels are visually easy to distinguish in the recorded output.
+- [ ] The evidence note distinguishes `[MISSING]` action items from `[MANUAL]` host-app checks.
+- [ ] Missing importmap target output includes both expected and observed target values.
+- [ ] Narrow-width evidence says whether the output was reviewed in a standard terminal width, a wrapped Markdown/code-block view, or both.
+- [ ] Wrapped mismatch lines still make the expected target and observed target relationship readable without changing setup doctor wording.
+- [ ] Manual checklist lines are not described as failed automatic checks.
+- [ ] Evidence notes say whether the app under review is importmap, jsbundling, bundler-managed JavaScript, or another setup path.
+- [ ] Any deferred follow-up is recorded as docs/setup policy work, not as a visual reference failure.
+
+## Non-goals
+
+- Do not change setup doctor runtime behavior or output wording here.
+- Do not introduce a terminal UI framework.
+- Do not add a browser-based setup checker.
+- Do not define host app setup policy, auto-fix behavior, or bundler/importmap ownership.

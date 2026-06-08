@@ -61,6 +61,20 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include('this.dispatch("selected-load", { detail: { options, values: requestedValues } })')
   end
 
+  it "keeps selected preload success limited to usable option payloads" do
+    expect(source).to include("if (!this.selectedOptionsPayloadIsUsable(options)) {")
+    expect(source).to include('new Error("Rails Fields Kit selected preload response must include option objects with the configured value field")')
+    expect(source).to include("error.payload = json")
+    expect(source).to include('this.dispatchRequestError("selected-load-error", "selected-load", { values }, error)')
+  end
+
+  it "uses the configured value field as the selected preload validation source" do
+    expect(source).to include("selectedOptionsPayloadIsUsable(options) {")
+    expect(source).to include("return options.length > 0 && options.every((option) => this.selectedOptionIsUsable(option))")
+    expect(source).to include("selectedOptionIsUsable(option) {")
+    expect(source).to include('return option && typeof option === "object" && this.hasPresentValue(option[this.valueFieldValue])')
+  end
+
   it "appends fixed selected preload params before selected id keys" do
     expect(source).to include('this.appendParams(url, this.selectedQueryParamsValue)')
     expect(source).to include('url.searchParams.set(this.selectedParamValue, values[0])')

@@ -39,9 +39,9 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | If you want to... | Start here |
 | --- | --- |
 | Set up a host app | [`doc/setup.md`](doc/setup.md) |
-| Check setup visibility after install | [`doc/setup.md`](doc/setup.md) for `rails rails_fields_kit:doctor` and its read-only/manual-check boundary |
+| Check setup visibility after install | [`doc/setup.md`](doc/setup.md) for `rails rails_fields_kit:doctor` and its read-only/manual-check boundary; [`doc/setup_doctor_output_review.md`](doc/setup_doctor_output_review.md) for CLI diagnostic evidence review |
 | Check supported Ruby / Rails and repository JavaScript boundaries | [`doc/support_boundary.md`](doc/support_boundary.md) |
-| Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md), [`doc/field_helpers.md#rfk_grouped_select`](doc/field_helpers.md#rfk_grouped_select) for grouped `<optgroup>` choices, [`doc/select_migration.md`](doc/select_migration.md), [`doc/enum_select.md`](doc/enum_select.md) for the focused `rfk_enum_select` source boundary |
+| Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md), [`doc/field_helpers.md#rfk_grouped_select`](doc/field_helpers.md#rfk_grouped_select) for grouped `<optgroup>` choices, [`doc/select_migration.md`](doc/select_migration.md), [`doc/enum_select.md`](doc/enum_select.md) for the focused `rfk_enum_select` source boundary, [`doc/textarea_autosize.md`](doc/textarea_autosize.md) for the current `rfk_text_area` autosize boundary |
 | See or compare rendered UI states quickly | [`doc/visual_references.md`](doc/visual_references.md) for the visual reference family, including Tom Select, text override copy, native helper, native narrow viewport stress, configuration wrapper classes, table metadata, and saved-search token states |
 | Review stable public API and package-root JavaScript exports | [`doc/public_api.md`](doc/public_api.md) |
 | Build remote search, selected preload, create, or token suggestion endpoints | [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) |
@@ -51,7 +51,7 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 | Configure initializer defaults and field-level override precedence | [`doc/configuration.md`](doc/configuration.md) |
 | Work with optional table metadata or custom renderer mappings | [`doc/table_adapters.md`](doc/table_adapters.md) for adapter metadata, renderer call specs, and custom registry mapping; [`doc/table_group_html.md`](doc/table_group_html.md) for group-level wrapper attributes |
 | Run local checks | [`doc/development.md`](doc/development.md) |
-| Prepare or verify a release | [`doc/release.md`](doc/release.md), [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/selected_preload_release_gate.md`](doc/selected_preload_release_gate.md) |
+| Prepare or verify a release | [`doc/release.md`](doc/release.md), [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/selected_preload_release_gate.md`](doc/selected_preload_release_gate.md), [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) for package-root helper evidence |
 | Review release-facing notes | [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md), [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) |
 
 ## First field quickstart
@@ -78,7 +78,9 @@ This keeps the submitted params the same shape as an ordinary Rails select while
 - Use `rfk_token_search` when the input should accept structured token text such as `status:open assignee:matsuo keyword`; Rails Fields Kit can suggest tokens, but the host app still parses and executes the query.
 - Use `rfk_multi_select` for ordinary multiple selected values, and `rfk_tags` when the UI should feel like tag entry or create-on-the-fly tag creation.
 - Use `rfk_grouped_select` for `<optgroup>` collections and `rfk_enum_select` for Rails enum attributes.
-- Use the native wrapper helpers such as `rfk_text_field`, `rfk_money_field`, `rfk_phone_field`, and `rfk_search_field` when a native browser input is enough and you only want consistent labels, hints, validation errors, prefixes, suffixes, and accessibility wiring.
+- Use the native wrapper helpers such as `rfk_text_field`, `rfk_text_area`, `rfk_money_field`, `rfk_phone_field`, and `rfk_search_field` when a native browser input is enough and you only want consistent labels, hints, validation errors, prefixes, suffixes, and accessibility wiring.
+
+For `rfk_text_area` autosize, start from [`doc/textarea_autosize.md`](doc/textarea_autosize.md). Autosize measurement, Turbo reconnect sizing, production CSS, and manual resize policy remain host-app-owned enhancements for the current 0.1.x surface.
 
 For a side-by-side chooser and helper-specific examples, see [`doc/field_helpers.md`](doc/field_helpers.md). For rendered native wrapper states, see [`doc/native_field_visual_reference.html`](doc/native_field_visual_reference.html).
 
@@ -178,7 +180,17 @@ You can also import the controller file directly:
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `tomSelectTextOverrideContract(...)` for Tom Select copy values and `nativeFieldAccessibilityContract(...)` for native wrapper accessibility wiring; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `readRenderedSelectedPreloadConfig(...)` for selected preload config, `tomSelectTextOverrideContract(...)` for Tom Select copy values, and `nativeFieldAccessibilityContract(...)` for native wrapper accessibility wiring; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. When preparing release or sample-app evidence for the helper lane in scope, use [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) instead of expanding this README into a helper inventory. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
+
+For example, host-app scripts can inspect selected preload config that Rails Fields Kit already rendered without executing the selected preload request themselves:
+
+```js
+import { readRenderedSelectedPreloadConfig } from "rails_fields_kit"
+
+const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
+```
+
+That helper returns rendered config for host-app inspection only. Endpoint authorization, request execution, visible fallback copy, and retry UI remain host-app responsibilities.
 
 ## Usage
 
@@ -249,6 +261,8 @@ or a wrapped result:
 ```json
 { "options": [{ "id": 1, "name": "Example Customer" }] }
 ```
+
+Remote search and selected preload can also use `{ "results": [...] }` as a collection wrapper; use [`doc/controller_helpers.md#output-shape`](doc/controller_helpers.md#output-shape) as the source of truth for supported response shapes and for the boundary that keeps create-on-the-fly responses, pagination metadata, and arbitrary adapters separate.
 
 Use [`doc/controller_helpers.md`](doc/controller_helpers.md#blank-query-policy) for the endpoint-side `minimum_query_length:` boundary. FormBuilder `min_length:` is the browser-side loading hint; the controller helper option is the server policy for blank or too-short direct requests.
 

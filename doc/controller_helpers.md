@@ -50,6 +50,31 @@ rfk_search_with(
 - `distinct:` calls `distinct` before ordering/limiting.
 - `wrap:` wraps the JSON response, commonly `"options"`.
 
+### Trusted scope and order inputs
+
+`scope:` and `order:` are endpoint-side relation helpers, not request-parameter sanitizers. Keep them on trusted relations, named model scopes, constants, or allowlisted values that the host app has already decided are safe.
+
+For example, prefer a controller-owned allowlist when the UI lets a user choose sort order:
+
+```ruby
+SORT_ORDERS = {
+  "name" => { name: :asc },
+  "recent" => { created_at: :desc }
+}.freeze
+
+rfk_search_with(
+  model: Customer,
+  value: :id,
+  label: :name,
+  search: [:name, :email],
+  scope: -> { current_account.customers.active },
+  order: -> { SORT_ORDERS.fetch(params[:sort].to_s, SORT_ORDERS.fetch("name")) },
+  wrap: "options"
+)
+```
+
+Do not pass arbitrary request params directly into `order:` or use `scope:` to expose a relation the current user has not already been allowed to search. `assign:`, `authorize:`, and `before_save:` on create endpoints follow the same boundary: they are hooks for host-app policy and assignment logic, while authentication, authorization, tenant scoping, validation, and query execution decisions stay in the host app.
+
 ### Blank query policy
 
 By default, `rfk_search_with` allows a blank query and returns the limited initial option list from the scoped relation. This keeps existing remote selects and comboboxes compatible with preload-style option lists.

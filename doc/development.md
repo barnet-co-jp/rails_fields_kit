@@ -34,13 +34,15 @@ The visual reference documentation drift spec keeps `doc/visual_references.md`, 
 
 The configuration documentation drift spec compares `RailsFieldsKit::Configuration` public initializer keys with `doc/configuration.md` quick reference rows and detailed headings. Keep new configuration keys, field-level override notes, and stable nil / locale-aware default boundaries aligned there when the initializer surface changes.
 
-The repository documentation drift spec covers two narrow repository-maintenance boundaries: generated setup notes upstream links must point at existing repository docs, and `doc/support_boundary.md` must stay aligned with the Ruby / Rails / Node version values declared in gem metadata, package metadata, and representative CI rows. This check is intentionally not a full README Docs map mirror or an external URL validator.
+The repository documentation drift spec covers two narrow repository-maintenance boundaries: generated setup notes upstream links must point at existing repository docs, and `doc/support_boundary.md` plus this development guide must stay aligned with the Ruby / Rails / Node version values declared in gem metadata, package metadata, and representative CI rows. This check is intentionally not a full README Docs map mirror or an external URL validator.
 
 The setup example documentation drift spec keeps the JavaScript setup signals in `README.md` and `doc/setup.md` aligned for package-root imports, direct controller imports, bundler aliases, and importmap pins without freezing the full prose.
 
 The suggestion payload documentation drift spec keeps `TokenSuggestions` and `RansackSuggestions` docs aligned with representative option payload keys, custom output field names, and Ransack metadata keys without freezing full examples or prose.
 
 The FormBuilder helper inventory docs spec keeps the compact helper list in `doc/public_api.md` aligned with detailed helper sections in `doc/field_helpers.md`, while checking only representative README chooser entries so the README can stay concise instead of becoming an exhaustive API mirror.
+
+When checking the table FormBuilder helper surface, read `lib/rails_fields_kit/form_builder.rb` together with `lib/rails_fields_kit/form_builder_table_groups.rb`. The base file alone does not show the full `group_html:` surface for `rfk_table_filters` and `rfk_table_cell_editors`; `doc/table_group_html.md` is the source of truth for that split definition boundary.
 
 The remote request option documentation drift spec keeps representative request-shaping option names visible across README, `doc/field_helpers.md`, and `doc/controller_helpers.md`. It checks public option signals such as `query_params:`, `selected_query_params:`, `create_params:`, `selected_param:`, `selected_multiple_param:`, and `create_param:` without turning README into a full mirror of the endpoint helper reference.
 
@@ -53,13 +55,13 @@ BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rspec
 
 ## Check JavaScript locally
 
-The JavaScript syntax check uses Node 22.x, matching `package.json` and the GitHub Actions `javascript` job.
+The package metadata boundary is Node 22.x || 24.x. The JavaScript syntax check uses Node 22.x and Node 24.x, matching `package.json` and the GitHub Actions `javascript` job matrix.
 
 ```bash
 npm run check:js
 ```
 
-This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It first runs the JavaScript smoke inventory guard, then runs lightweight Node sandbox checks for package `exports` import wiring, Tom Select fixed query params append behavior, Tom Select forwarded interaction event payloads, Tom Select create-on-the-fly JSON request headers and success response normalization, Tom Select error-surface metadata, Tom Select Turbo lifecycle behavior, Tom Select label fallback rendering, Tom Select render text fallback rendering, Tom Select plugin contract reading, and selected preload config reading, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
+This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It first runs the JavaScript smoke inventory guard, then runs lightweight Node sandbox checks for package `exports` import wiring, Tom Select fixed query params append behavior, Tom Select forwarded interaction and request event payloads, Tom Select create-on-the-fly JSON request headers and success response normalization, Tom Select error-surface metadata, Tom Select Turbo lifecycle behavior, Tom Select label fallback rendering, Tom Select render text fallback rendering, Tom Select plugin contract reading, and selected preload config reading, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
 
 The smoke inventory guard derives CI-owned smoke candidates from `scripts/check_*.mjs` and compares them with the repository-local `scripts/check_javascript.mjs` runner. New JavaScript smoke scripts are expected to run through `npm run check:js` unless they are intentionally standalone; in that rare case, add the script path to the documented allowlist inside `scripts/check_javascript_smoke_inventory.mjs` with a short reason.
 
@@ -69,7 +71,7 @@ The Tom Select controller smokes share an internal sandbox harness for the Stimu
 
 The fixed query params smoke keeps configured request params visible: scalar values are appended, array values keep all representative entries, top-level `null` / `undefined` values are skipped, and existing query params can coexist with appended params. Array item values are passed through `URLSearchParams.append`, so array item `null` / `undefined` / blank strings remain visible as query entries rather than being filtered like top-level values.
 
-The forwarded interaction event smoke keeps the current Tom Select event detail shape visible: `change` forwards the scalar value plus the normalized `values` array, single-value `clear` wraps Tom Select's scalar cleared value as `values: [""]`, and multiple-value `clear` keeps the empty array shape.
+The Tom Select forwarded interaction event payloads boundary remains visible in the same smoke. It now also keeps the current Tom Select event detail shape visible for request lifecycle hooks: `change` forwards the scalar value plus the normalized `values` array, single-value `clear` wraps Tom Select's scalar cleared value as `values: [""]`, multiple-value `clear` keeps the empty array shape, and request success / failure hooks keep the representative `load`, `selected-load`, `create`, and error detail keys aligned with `doc/events.md`.
 
 The create request header smoke keeps the existing create-on-the-fly contract visible: JSON `Accept` / `Content-Type` headers are always sent, a Rails CSRF meta token is copied to `X-CSRF-Token` when present without requiring one in non-Rails or test-only DOMs, wrapped `{ option: ... }` and raw option response objects are accepted, and nullish success payloads remain non-options.
 
@@ -112,8 +114,8 @@ Current CI adds these repository-level confirmations on top of the local workflo
 
 - `bundle exec standardrb`
 - `bundle exec rspec`
-- Representative PR compatibility checks for Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
-- `npm run check:js` on Node 22.x for the JavaScript syntax, smoke inventory, package exports import lane, Tom Select fixed query params smoke, Tom Select forwarded interaction event smoke, Tom Select create request header and response normalization smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, Tom Select label fallback smoke, Tom Select render text fallback smoke, Tom Select plugin contract smoke, and selected preload config smoke
+- Representative Rails compatibility checks for pull requests and `main` pushes: Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
+- `npm run check:js` on Node 22.x and Node 24.x for the JavaScript syntax, smoke inventory, package exports import lane, Tom Select fixed query params smoke, Tom Select forwarded interaction and request event smoke, Tom Select create request header and response normalization smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, Tom Select label fallback smoke, Tom Select render text fallback smoke, Tom Select plugin contract smoke, and selected preload config smoke
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 
 ## Release-related checks

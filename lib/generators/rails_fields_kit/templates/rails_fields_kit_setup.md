@@ -9,6 +9,8 @@ Use it as a lightweight adoption checklist for wiring Rails Fields Kit into this
 Use this first pass to prove one server-rendered field before adding remote endpoints or richer Tom Select behavior.
 
 - [ ] Run `rails rails_fields_kit:doctor` after installation to review detectable setup state, importmap pin target diagnostics, and manual checklist items.
+- [ ] Read the setup doctor status legend first: fix `[MISSING]` lines before treating `[MANUAL]` lines as host-app JavaScript toolchain checks.
+- [ ] When recording setup doctor evidence, use the upstream setup doctor output review to distinguish setup behavior from CLI output readability and to avoid treating `[MANUAL]` lines as automatic failures.
 - [ ] Confirm `config/initializers/rails_fields_kit.rb` matches this app's needs.
 - [ ] Install Tom Select with the JavaScript toolchain already used by this app.
 - [ ] Register `rails-fields-kit--tom-select` on the app's existing Stimulus application.
@@ -23,6 +25,7 @@ These upstream docs remain the source of truth for copyable examples, public API
 
 - README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>
 - Setup guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>
+- Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>
 - Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
 - Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>
 - Configuration: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration.md>
@@ -40,7 +43,7 @@ Use this section after the first server-rendered field is working.
 - [ ] If this app uses `selected_url:` or `error_surface: true`, review `doc/setup.md` for the representative edit-form wiring and `doc/events.md` for `selected-load`, `selected-load-error`, and `detail.surface`.
 - [ ] If this app uses importmap, run `rails generate rails_fields_kit:install --importmap` when `config/importmap.rb` exists, or add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] If this app uses Vite or another bundler, add resolver or alias entries for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
-- [ ] Use the doctor output as a read-only prompt; missing importmap pins, unexpected Rails Fields Kit pin targets, target-omitted pins, Tom Select package install, Stimulus registration, CSS import, and bundler aliases remain host-app setup responsibilities.
+- [ ] Use the doctor output as a read-only prompt; missing importmap pins, unexpected Rails Fields Kit pin targets, target-omitted pins, Tom Select package install, Stimulus registration, CSS import, and bundler aliases for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` remain host-app setup responsibilities. The doctor does not inspect or rewrite bundler config.
 
 ## Migration and helper selection
 
@@ -49,28 +52,36 @@ Use these checks when replacing existing form helpers or choosing a helper famil
 - [ ] If this app is replacing a server-rendered `collection_select`, review the practical `rfk_select` migration guide before adding extra reinitializers or controller glue.
 - [ ] Use `doc/field_helpers.md` when choosing between `rfk_select`, `rfk_grouped_select`, `rfk_enum_select`, `rfk_combobox`, `rfk_autocomplete`, `rfk_token_search`, `rfk_tags`, and `rfk_multi_select`.
 - [ ] If this app uses `rfk_token_search`, review `doc/token_suggestions.md` for suggestion endpoint basics and `doc/ransack_suggestions.md` when those suggestions should map to Ransack metadata.
+- [ ] If token suggestions, Ransack-oriented suggestions, and table filters share one app-owned metadata source, use `doc/shared_metadata_navigation.md` as the boundary map before copying patterns into this app's notes.
 - [ ] If this app renders table filters or cell editors from metadata, review `doc/table_adapters.md` before wiring `rfk_table_filters` or `rfk_table_cell_editors`.
+- [ ] If those table metadata helpers need one group-level wrapper around the rendered batch, review `doc/table_group_html.md` before mixing that boundary with field-level `wrapper_html:`.
 
 ## Release verification and visual review
 
 Use these references before shipping remote preloads, table metadata surfaces, or Tom Select-backed field variants.
 
 - [ ] When host-app scripts import from `rails_fields_kit`, use `doc/public_api.md#javascript-exports` to confirm the current package-root exports and the rendered-field contract helper boundary.
+- [ ] When recording release or sample-app evidence for package-root helper imports, use `doc/package_root_helper_release_evidence.md` to choose representative checks instead of turning this generated note into a helper inventory.
 - [ ] If this app uses `selected_url:`, review `doc/selected_preload_release_gate.md` before release verification to confirm single and multiple selected preload request encoding expectations.
 - [ ] Use `doc/visual_references.md` as the maintained visual reference family index when this app needs quick comparisons of Tom Select-backed, text override, native helper, or table metadata states.
+- [ ] Use `doc/visual_references.md` as the source of truth before opening focused accessibility-contract, request-failure, native helper, or table/token visual lanes; this generated note should point back to that maintained map instead of listing every static artifact.
 - [ ] Use `doc/tom_select_visual_reference.html` when this app needs a quick visual comparison of representative Tom Select-backed states.
 
 ## Reference links
 
 - Practical `rfk_select` migration guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/select_migration.md>
+- Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>
 - Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
+- Package-root helper release evidence: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/package_root_helper_release_evidence.md>
 - Visual reference family: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/visual_references.md>
 - Tom Select visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_visual_reference.html>
 - Selected preload release gate: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/selected_preload_release_gate.md>
 - Events: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/events.md>
 - Token suggestions: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/token_suggestions.md>
 - Ransack suggestions: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/ransack_suggestions.md>
+- Shared metadata navigation: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/shared_metadata_navigation.md>
 - Table adapter metadata: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/table_adapters.md>
+- Table group wrapper attributes: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/table_group_html.md>
 
 For a representative edit-form lane that uses `selected_url:` or `error_surface: true`, start with the setup guide and then review the events reference for `selected-load`, `selected-load-error`, and `detail.surface`.
 

@@ -2,6 +2,8 @@
 
 `rfk_table_filters(columns)` and `rfk_table_cell_editors(columns)` are the direct FormBuilder rendering path for table metadata. By default they keep the existing contract: Rails Fields Kit collects the table metadata, renders the matching controls, and returns safe-buffer output from `safe_join(...)`.
 
+The `group_html:` implementation lives in `lib/rails_fields_kit/form_builder_table_groups.rb`, where it extends `RailsFieldsKit::FormBuilder` with the table group helper overrides. Check that split definition before treating the older base helper file as the complete table helper surface.
+
 When a host app needs one group-level container around those controls, pass `group_html:`:
 
 ```erb
