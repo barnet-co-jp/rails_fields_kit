@@ -42,6 +42,10 @@ const checks = [
     args: ["scripts/check_tom_select_label_fallback.mjs"]
   },
   {
+    name: "Tom Select option value guard smoke",
+    args: ["scripts/check_tom_select_option_value_guard.mjs"]
+  },
+  {
     name: "Tom Select render text fallback smoke",
     args: ["scripts/check_tom_select_render_text_fallback.mjs"]
   },
