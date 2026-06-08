@@ -248,6 +248,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
 | `tomSelectPluginContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select plugin data and returns `plugins`, `hasClearButton`, and `hasRemoveButton`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not install plugin assets, expose Tom Select plugin objects, mutate selections, style clear/remove controls, or own empty-state behavior. |
 | `tomSelectRequestParamsContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered fixed request parameter data attributes and returns `queryParams`, `selectedQueryParams`, and `createParams` objects, or `null` when the element does not look like a matching Rails Fields Kit field. It does not serialize requests, execute endpoints, authorize scopes, or mutate Tom Select. |
+| `readRenderedTomSelectInteractionConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered interaction config data attributes and returns `maxOptions`, `maxItems`, `loadThrottle`, `delimiter`, `preload`, `openOnFocus`, `closeAfterSelect`, `hideSelected`, and `persist`, or `null` for non-target elements. Unrendered optional values return `null`; `persist` follows the controller default fallback of `false`. It does not create a Tom Select instance, change option semantics, dispatch events, or own visible behavior. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and rendered state, returning `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, `wrapperElement`, `required`, `disabled`, and `readonly`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
 
@@ -260,6 +261,7 @@ import {
   TomSelectController,
   nativeFieldAccessibilityContract,
   readRenderedSelectedPreloadConfig,
+  readRenderedTomSelectInteractionConfig,
   tomSelectPluginContract,
   tomSelectRequestParamsContract,
   tomSelectTextOverrideContract
@@ -267,6 +269,7 @@ import {
 
 const accessibilityContract = nativeFieldAccessibilityContract(inputElement)
 const copyContract = tomSelectTextOverrideContract(fieldElement)
+const interactionConfig = readRenderedTomSelectInteractionConfig(fieldElement)
 const pluginContract = tomSelectPluginContract(fieldElement)
 const requestParamsContract = tomSelectRequestParamsContract(fieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
@@ -286,13 +289,15 @@ For Tom Select plugin state, `tomSelectPluginContract(element)` reports the rend
 
 `tomSelectRequestParamsContract(element)` returns empty objects for omitted fixed params and keeps invalid rendered JSON predictable by returning empty objects for that lane. Host apps should still treat endpoint authorization, request scoping, query execution, visible feedback, and retry UI as application-owned behavior.
 
+`readRenderedTomSelectInteractionConfig(element)` reads the field-level interaction values that Rails Fields Kit rendered for Tom Select-backed helpers. It returns `null` for optional values that are not rendered, while `persist` falls back to `false` to match the current controller option default. Host apps should treat the returned object as configuration evidence, not as a Tom Select instance or runtime behavior substitute.
+
 For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`.
 
 Future package-root helpers should follow the same boundary: read the rendered Rails Fields Kit contract or configuration from an element, but do not take over request lifecycles, locale resolution, visible feedback, query parsing, retry UI, validation feedback, or other application-specific behavior. Proposal or open-PR helper names are not current public API until they are merged and listed in the table above.
 
 ## Stimulus values
 
-The Tom Select controller reads data values generated by the FormBuilder helpers. Publicly documented options include remote URLs, request parameter names, JSON field names, selected preload settings, create-on-the-fly settings, rendering labels, plugin lists, `max_options`, `max_items`, `load_throttle`, and `delimiter`.
+The Tom Select controller reads data values generated by the FormBuilder helpers. Publicly documented options include remote URLs, request parameter names, JSON field names, selected preload settings, create-on-the-fly settings, rendering labels, plugin lists, `max_options`, `max_items`, `load_throttle`, `delimiter`, and interaction flags such as `preload`, `open_on_focus`, `close_after_select`, `hide_selected`, and `persist`.
 
 Remote endpoint extensions:
 
@@ -302,6 +307,8 @@ Remote endpoint extensions:
 - `error_surface:` adds a generated placeholder id so request-failure events can expose `detail.surface` for host-app feedback.
 
 `tomSelectRequestParamsContract(element)` can read the rendered fixed request params for browser-side verification or host-app integration helpers without requiring direct knowledge of the Stimulus value attribute names.
+
+`readRenderedTomSelectInteractionConfig(element)` can read the rendered interaction config for browser-side verification or thin host-app wrappers without requiring direct knowledge of the Stimulus value attribute names or the `persist` fallback.
 
 `error_surface_html:` customizes the generated placeholder element, but it does not change the event names or move visible feedback responsibility into the gem.
 
