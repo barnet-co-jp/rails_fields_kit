@@ -7,6 +7,7 @@ const TEXT_OVERRIDE_ATTRIBUTES = {
   createText: "data-rails-fields-kit--tom-select-create-text-value"
 }
 const PLUGINS_ATTRIBUTE = "data-rails-fields-kit--tom-select-plugins-value"
+const ERROR_SURFACE_ID_ATTRIBUTE = "data-rails-fields-kit--tom-select-error-surface-id-value"
 const SELECTED_PRELOAD_ATTRIBUTES = {
   selectedUrl: "data-rails-fields-kit--tom-select-selected-url-value",
   selectedParam: "data-rails-fields-kit--tom-select-selected-param-value",
@@ -130,6 +131,15 @@ export function tomSelectPluginContract(element) {
     hasClearButton: plugins.includes("clear_button"),
     hasRemoveButton: plugins.includes("remove_button")
   }
+}
+
+export function readRenderedErrorSurface(element) {
+  if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function") return null
+
+  const surfaceId = dataValue(element, ERROR_SURFACE_ID_ATTRIBUTE)
+  if (!surfaceId) return null
+
+  return element.ownerDocument?.getElementById?.(surfaceId) || null
 }
 
 export function readRenderedSelectedPreloadConfig(element) {
