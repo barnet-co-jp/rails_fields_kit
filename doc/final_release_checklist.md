@@ -42,6 +42,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/field_helpers.md`.
 - [ ] Review `doc/visual_references.md` as the visual reference family index, and confirm it still matches the README Docs map.
 - [ ] Review `doc/visual_reference_index.html` as the one-screen reviewer navigation artifact.
+- [ ] Confirm each landed visual reference listed in `doc/visual_references.md` is reachable from `doc/visual_reference_index.html`, and that `README.md` links to the maintained map instead of proposal-only artifacts.
 - [ ] Review `doc/tom_select_visual_reference.html`.
 - [ ] Review `doc/tom_select_request_failure_visual_reference.html`.
 - [ ] Review `doc/tom_select_error_surface_contract_visual_reference.html` as the focused request-failure live-region contract artifact.
