@@ -18,6 +18,18 @@ When TableMetadata collection source shapes are in scope, use [`table_metadata_c
 | Native, remote, token, table, Turbo, and event lanes | The release candidate depends on that behavior family | A focused feature PR checks one representative lane and does not claim release readiness | lane name, representative field or endpoint, observed event/result, host-app responsibility boundary |
 | Deferred or blocked evidence | A release candidate intentionally carries known caveats | A PR needs human visual/browser verification or a follow-up issue | blocker, required human check, follow-up issue or PR link |
 
+### Choose the representative lane for a narrow PR
+
+Use this chooser before copying checklist items into a PR comment. Pick the smallest row that matches the change, then jump to the named checklist section below. Do not mark release readiness unless the release baseline row is also in scope.
+
+| Change in scope | Start with this checklist lane | Evidence usually recorded in | Keep out of scope for the narrow PR |
+| --- | --- | --- | --- |
+| Setup docs, generated notes, importmap/jsbundling visibility, or package-root helper import/read-only contract | `Host-app setup and package-root exports`, then `JavaScript setup checks` or the helper-specific evidence guide | PR comment for narrow docs/spec work; `sample_app_results.md` for release candidates | visual screenshots, request execution, helper behavior not changed by the PR |
+| Static visual reference HTML, one-screen index, or visual reference map wording | `Visual references`, then `Visual reference render checks` | PR comment when browser-capable review is still pending; `sample_app_results.md` for release-critical artifact changes | runtime CSS, production helper markup, or CI success as visual approval |
+| Native wrapper, accessibility, constraint attributes, or field-level customization | `Native helper representative wrapper and accessibility lane checks` and the native customization lane | PR comment for a focused helper/docs PR; release evidence only when the release depends on the lane | Tom Select request lifecycle, masking, validation-message policy, server-side validation |
+| Remote search, selected preload, create-on-the-fly, request-failure feedback, Turbo, or events | The matching remote lifecycle, visible feedback, Turbo, or event lane | PR comment for one representative field; release results when the behavior is release-critical | endpoint authorization policy, retry UI, visible copy ownership unless the PR changes that surface |
+| Token suggestions, Ransack suggestions, table filters, cell editors, or TableMetadata collection shape | `Token suggestion and Ransack suggestion metadata` or `Verify table metadata adapters` | PR comment for scoped metadata/docs work; release evidence for release candidates | query execution, parser semantics, preference persistence, or table integration redesign |
+
 Avoid duplicating the whole checklist into a PR comment. Use the comment for scoped evidence and use `sample_app_results.md` as the primary release evidence log.
 
 ## Prepare a Rails app
