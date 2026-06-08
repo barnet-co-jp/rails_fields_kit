@@ -1,6 +1,7 @@
 import TomSelectController from "./tom_select_controller.js"
 
 const TOM_SELECT_CONTROLLER = "rails-fields-kit--tom-select"
+const TOM_SELECT_KIND_ATTRIBUTE = "data-rails-fields-kit--tom-select-kind-value"
 const TEXT_OVERRIDE_ATTRIBUTES = {
   noResultsText: "data-rails-fields-kit--tom-select-no-results-text-value",
   loadingText: "data-rails-fields-kit--tom-select-loading-text-value",
@@ -10,6 +11,17 @@ const REQUEST_PARAM_ATTRIBUTES = {
   queryParams: "data-rails-fields-kit--tom-select-query-params-value",
   selectedQueryParams: "data-rails-fields-kit--tom-select-selected-query-params-value",
   createParams: "data-rails-fields-kit--tom-select-create-params-value"
+}
+const INTERACTION_CONFIG_ATTRIBUTES = {
+  maxOptions: "data-rails-fields-kit--tom-select-max-options-value",
+  maxItems: "data-rails-fields-kit--tom-select-max-items-value",
+  loadThrottle: "data-rails-fields-kit--tom-select-load-throttle-value",
+  delimiter: "data-rails-fields-kit--tom-select-delimiter-value",
+  preload: "data-rails-fields-kit--tom-select-preload-value",
+  openOnFocus: "data-rails-fields-kit--tom-select-open-on-focus-value",
+  closeAfterSelect: "data-rails-fields-kit--tom-select-close-after-select-value",
+  hideSelected: "data-rails-fields-kit--tom-select-hide-selected-value",
+  persist: "data-rails-fields-kit--tom-select-persist-value"
 }
 const PLUGINS_ATTRIBUTE = "data-rails-fields-kit--tom-select-plugins-value"
 const SELECTED_PRELOAD_ATTRIBUTES = {
@@ -41,6 +53,26 @@ function hasAnyAttribute(element, attributes) {
 
 function dataValue(element, attributeName) {
   return element.hasAttribute(attributeName) ? element.getAttribute(attributeName) : null
+}
+
+function stringDataValue(element, attributeName) {
+  const value = dataValue(element, attributeName)
+  return value === "" ? null : value
+}
+
+function numberDataValue(element, attributeName) {
+  const value = stringDataValue(element, attributeName)
+  if (value === null) return null
+
+  const number = Number(value)
+  return Number.isFinite(number) ? number : null
+}
+
+function booleanDataValue(element, attributeName) {
+  const value = stringDataValue(element, attributeName)
+  if (value === null) return null
+
+  return value === "true"
 }
 
 function objectDataValue(element, attributeName) {
@@ -162,6 +194,23 @@ export function tomSelectPluginContract(element) {
     plugins,
     hasClearButton: plugins.includes("clear_button"),
     hasRemoveButton: plugins.includes("remove_button")
+  }
+}
+
+export function readRenderedTomSelectInteractionConfig(element) {
+  if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function") return null
+  if (!hasTomSelectController(element) && !element.hasAttribute(TOM_SELECT_KIND_ATTRIBUTE)) return null
+
+  return {
+    maxOptions: numberDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.maxOptions),
+    maxItems: numberDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.maxItems),
+    loadThrottle: numberDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.loadThrottle),
+    delimiter: stringDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.delimiter),
+    preload: booleanDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.preload),
+    openOnFocus: booleanDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.openOnFocus),
+    closeAfterSelect: booleanDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.closeAfterSelect),
+    hideSelected: booleanDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.hideSelected),
+    persist: booleanDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.persist) ?? false
   }
 }
 
