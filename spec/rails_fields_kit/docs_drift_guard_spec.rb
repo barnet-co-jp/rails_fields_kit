@@ -22,6 +22,7 @@ RSpec.describe "Rails Fields Kit docs drift guards" do
   end
 
   it "keeps the table group FormBuilder split implementation discoverable" do
+    development_doc = read_repo_file("doc/development.md")
     table_group_docs = read_repo_file("doc/table_group_html.md")
     table_group_source = read_repo_file("lib/rails_fields_kit/form_builder_table_groups.rb")
 
@@ -41,6 +42,12 @@ RSpec.describe "Rails Fields Kit docs drift guards" do
       "`lib/rails_fields_kit/form_builder_table_groups.rb`",
       "`RailsFieldsKit::FormBuilder`",
       "Check that split definition before treating the older base helper file as the complete table helper surface."
+    )
+
+    expect(development_doc).to include(
+      "When checking the table FormBuilder helper surface",
+      "read `lib/rails_fields_kit/form_builder.rb` together with `lib/rails_fields_kit/form_builder_table_groups.rb`",
+      "The base file alone does not show the full `group_html:` surface"
     )
   end
 end
