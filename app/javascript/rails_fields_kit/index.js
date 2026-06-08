@@ -30,6 +30,13 @@ function textOverrideValue(element, attributeName) {
   return element.hasAttribute(attributeName) ? element.getAttribute(attributeName) : null
 }
 
+function selectedValuesFrom(element) {
+  const value = element.tomselect?.getValue?.()
+  if (value === undefined) return null
+
+  return Array.isArray(value) ? [...value] : [value]
+}
+
 function dataValue(element, attributeName) {
   return element.hasAttribute(attributeName) ? element.getAttribute(attributeName) : null
 }
@@ -117,6 +124,15 @@ export function tomSelectTextOverrideContract(element) {
   if (!hasTomSelectController(element) && Object.values(contract).every((value) => value === null)) return null
 
   return contract
+}
+
+export function tomSelectSelectionContract(element) {
+  if (!element || typeof element.getAttribute !== "function" || !hasTomSelectController(element)) return null
+
+  const values = selectedValuesFrom(element)
+  if (!values) return null
+
+  return { values }
 }
 
 export function tomSelectPluginContract(element) {
