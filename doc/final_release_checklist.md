@@ -65,6 +65,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/sample_app_results.md`.
 - [ ] Review `doc/release.md`.
 - [ ] Review `doc/selected_preload_release_gate.md`.
+- [ ] Review `doc/package_root_helper_release_evidence.md` as the package-root helper evidence guide, and keep helper names and return-shape details sourced from `doc/public_api.md#javascript-exports` rather than duplicating them in this checklist.
 - [ ] Review `doc/release_notes_0_1_1.md` for the current next-release draft.
 - [ ] Confirm `README.md` and `doc/public_api.md` still describe both documented JavaScript import paths: `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] Confirm `doc/public_api.md#javascript-exports` is the source of truth for current package-root exports, and that release verification does not treat open-PR or proposal helper names as current public API.
