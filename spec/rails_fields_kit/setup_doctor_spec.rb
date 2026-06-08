@@ -67,6 +67,18 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
     end
   end
 
+  it "prints a status legend before individual setup checks" do
+    Dir.mktmpdir do |root|
+      output = StringIO.new
+
+      described_class.new(root: root).run(io: output)
+
+      expect(output.string).to include("Status legend: [OK] detected setup; [MISSING] needs action for the detected setup route; [MANUAL] host-app check, not an automatic failure.")
+      expect(output.string).to include("Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain.")
+      expect(output.string).to match(/Next step:.*\n\n\[MISSING\] Initializer/m)
+    end
+  end
+
   it "reports missing importmap pins without treating toolchain variance as an invocation failure" do
     Dir.mktmpdir do |root|
       write_file(root, "config/importmap.rb", <<~RUBY)
