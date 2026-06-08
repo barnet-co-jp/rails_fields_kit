@@ -122,6 +122,30 @@ Suggested evidence note:
 tomSelectPluginContract: PASS on <field selector>. plugins matched the rendered effective plugin list; allow_clear field exposed clear_button through plugins and hasClearButton; explicit plugin field exposed the expected derived hasClearButton / hasRemoveButton flags; unrelated element returned null. Plugin assets, styling, mutation, empty-state copy, and Tom Select plugin lifecycle remained host-app or Tom Select responsibilities.
 ```
 
+## Tom Select selection contract reader
+
+Use this lane when `tomSelectSelectionContract(element)` is in release scope.
+
+Representative import:
+
+```js
+import { tomSelectSelectionContract } from "rails_fields_kit"
+```
+
+Check an initialized rendered Tom Select-backed field after the controller has connected:
+
+- `tomSelectSelectionContract(fieldElement)` returns a plain object for an initialized Rails Fields Kit Tom Select field.
+- The result exposes the documented `values` array using the current selection shape shared with forwarded interaction events.
+- A single-value field, multiple-value field, or cleared field should match the representative release scope rather than exhaustively testing every Tom Select mode.
+- A comparable uninitialized, non-Tom Select, or unrelated element returns `null`.
+- The evidence stays read-only; selection mutation, hidden field generation, event dispatch, validation feedback, request execution, and Tom Select instance lifecycle remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+tomSelectSelectionContract: PASS on <field selector>. values matched the initialized field's current selection; unrelated or uninitialized element returned null. Selection mutation, hidden fields, events, validation feedback, and request execution remained out of scope.
+```
+
 ## Native accessibility contract reader
 
 Use this lane when `nativeFieldAccessibilityContract(element)` is in release scope.
