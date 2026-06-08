@@ -38,7 +38,7 @@ RSpec.describe "JavaScript check documentation" do
       "JavaScript smoke inventory guard" => "JavaScript smoke inventory guard",
       "package exports smoke" => "package `exports` import wiring",
       "Tom Select query params smoke" => "Tom Select fixed query params",
-      "Tom Select interaction events smoke" => "Tom Select forwarded interaction event payloads",
+      "Tom Select interaction events smoke" => "Tom Select forwarded interaction and request event payloads",
       "Tom Select create headers and response normalization smoke" => "Tom Select create-on-the-fly JSON request headers and success response normalization",
       "Tom Select error surface smoke" => "Tom Select error-surface metadata",
       "Tom Select Turbo lifecycle smoke" => "Tom Select Turbo lifecycle behavior",
