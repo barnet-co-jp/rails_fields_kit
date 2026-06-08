@@ -42,6 +42,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/field_helpers.md`.
 - [ ] Review `doc/visual_references.md` as the visual reference family index, and confirm it still matches the README Docs map.
 - [ ] Review `doc/visual_reference_index.html` as the one-screen reviewer navigation artifact.
+- [ ] Confirm each landed visual reference listed in `doc/visual_references.md` is reachable from `doc/visual_reference_index.html`, and that `README.md` links to the maintained map instead of proposal-only artifacts.
 - [ ] Review `doc/tom_select_visual_reference.html`.
 - [ ] Review `doc/tom_select_request_failure_visual_reference.html`.
 - [ ] Review `doc/tom_select_error_surface_contract_visual_reference.html` as the focused request-failure live-region contract artifact.
@@ -111,7 +112,7 @@ Record visual reference and sample app evidence in a compact matrix before treat
 | `doc/native_accessibility_contract_visual_reference.html` | desktop + narrow/mobile | wrapper, label, hint, error, and `aria-describedby` contract-reader lanes | Rails Fields Kit exposes rendered accessibility wiring; host app still owns id generation policy outside rendered helpers, validation copy, focus management, and visible feedback | `doc/sample_app_results.md` or release PR comment |
 | `doc/configuration_wrapper_class_visual_reference.html` | desktop + narrow/mobile | initializer-driven wrapper, label, hint, error, control, prefix, and suffix class pass-through lanes | Rails Fields Kit exposes class pass-through and configured wrapper pieces; host app still owns final CSS framework, spacing, and component styling policy | `doc/sample_app_results.md` or release PR comment |
 | `doc/table_metadata_visual_reference.html` | desktop + narrow/mobile | filter and editor lanes | Rails Fields Kit exposes metadata / call-spec rendering boundaries without taking over table persistence or query execution | `doc/sample_app_results.md` or release PR comment |
-| `doc/token_search_saved_search_visual_reference.html` | desktop + narrow/mobile | saved-search token states | Rails Fields Kit provides token UI and suggestion metadata only; host app still owns parsing, execution, saved-search authorization, and result filtering | `doc/sample_app_results.md` or release PR comment |
+| `doc/token_search_saved_search_visual_reference.html` | desktop + narrow/mobile | saved-search token states | Rails Fields Kit provides token UI and suggestion metadata only; host app still owns parsing, saved-search authorization, and result filtering | `doc/sample_app_results.md` or release PR comment |
 
 - [ ] Confirm `doc/visual_reference_index.html` remains usable at a narrow or mobile viewport, including task picker buttons, quick links, and reference cards without treating index navigation as helper behavior evidence.
 - [ ] Confirm `doc/tom_select_visual_reference.html` remains usable at a narrow or mobile viewport, including representative loading, empty, create, disabled, multi, grouped, autocomplete, preload, tags, tokens, and error state cards without text overflow hiding the state meaning.
