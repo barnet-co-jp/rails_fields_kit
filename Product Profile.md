@@ -2,7 +2,7 @@
 
 ## What this repository is
 
-Rails Fields Kit is a Ruby gem that gives Rails applications a focused set of form helpers for inputs that are awkward with native HTML alone. Its current center of gravity is Tom Select-backed searchable selects, editable comboboxes, tag inputs, token search inputs, and table-oriented metadata helpers.
+Rails Fields Kit is a Ruby gem that gives Rails applications a focused set of form helpers for inputs that are awkward with native HTML alone. Its current center of gravity is Tom Select-backed searchable selects, editable comboboxes, tag inputs, token search inputs, native wrapper helpers, and table-oriented metadata helpers.
 
 ## Who it serves
 
@@ -15,6 +15,7 @@ Rails Fields Kit is a Ruby gem that gives Rails applications a focused set of fo
 - wrap Tom Select in Rails-friendly helpers for naming, redisplay, validation, and accessibility
 - support remote search, selected preload, and create-on-the-fly workflows
 - expose stable integration points for controller helpers, token suggestion builders, JavaScript rendered-contract helpers, table metadata, and read-only setup verification
+- keep native wrappers such as `rfk_password_field` thin, Rails-friendly, and explicit about host-app-owned behavior
 - stay easy to adopt from ordinary Rails forms without taking over the whole frontend stack
 
 ## Responsibility boundary
@@ -29,10 +30,11 @@ Host applications remain responsible for:
 - building `params[:q]` or equivalent search params
 - authorization, scoping, pagination, and result execution
 - app-specific success and error UI copy
+- password-specific UX such as visibility toggles, strength meters, credential policy, authentication workflow, and credential storage
 
 ## Current public surface
 
-- FormBuilder helpers such as `rfk_select`, `rfk_combobox`, `rfk_tags`, `rfk_token_search`, `rfk_table_filters`, and `rfk_table_cell_editors`
+- FormBuilder helpers such as `rfk_select`, `rfk_combobox`, `rfk_tags`, `rfk_token_search`, `rfk_password_field`, `rfk_table_filters`, and `rfk_table_cell_editors`
 - controller helpers under `RailsFieldsKit::Searchable`
 - token suggestion builders including `RailsFieldsKit::TokenSuggestions.build` and `RailsFieldsKit::RansackSuggestions.build`
 - table metadata objects including `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
@@ -48,6 +50,7 @@ Host applications remain responsible for:
 - choosing the host app's bundler or importmap strategy
 - auto-fixing host app setup or frontend toolchain wiring
 - replacing dedicated table or search gems
+- owning password visibility toggles, strength meters, credential policy, authentication workflow, or credential storage
 
 ## Key docs
 
@@ -59,9 +62,11 @@ Host applications remain responsible for:
 - `doc/support_boundary.md`: supported Ruby / Rails / Node boundaries and representative CI evidence
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
 - `doc/field_helpers.md` and `doc/controller_helpers.md`: public helper references
+- `doc/password_field.md`: focused `rfk_password_field` native wrapper boundary and password-specific non-goals
 - `doc/visual_references.md`: maintained visual reference family map and scope notes
 - `doc/visual_reference_index.html`: one-screen reviewer entrypoint for the static visual reference family
 - `doc/tom_select_visual_reference.html` and `doc/native_field_visual_reference.html`: static visual references for representative Tom Select-backed and native helper states
+- `doc/tom_select_source_fallback_review.html`: focused companion visual reference for explicit `enum:` sources and remote option label fallback display review
 - `doc/tom_select_request_failure_visual_reference.html`: static visual reference for opt-in request-failure feedback and `error_surface: true` lanes
 - `doc/tom_select_error_surface_contract_visual_reference.html`: static visual reference for focused `error_surface: true` live-region contract review
 - `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
