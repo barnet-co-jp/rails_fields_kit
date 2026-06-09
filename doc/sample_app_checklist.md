@@ -28,7 +28,7 @@ Use this chooser before copying checklist items into a PR comment. Pick the smal
 | --- | --- | --- | --- |
 | Setup docs, generated notes, importmap/jsbundling visibility, or package-root helper import/read-only contract | `Host-app setup and package-root exports`, then `JavaScript setup checks` or the helper-specific evidence guide | PR comment for narrow docs/spec work; `sample_app_results.md` for release candidates | visual screenshots, request execution, helper behavior not changed by the PR |
 | Static visual reference HTML, one-screen index, or visual reference map wording | `Visual references`, then `Visual reference render checks` | PR comment when browser-capable review is still pending; `sample_app_results.md` for release-critical artifact changes | runtime CSS, production helper markup, or CI success as visual approval |
-| Native wrapper, accessibility, constraint attributes, or field-level customization | `Native helper representative wrapper and accessibility lane checks` and the native customization lane | PR comment for a focused helper/docs PR; release evidence only when the release depends on the lane | Tom Select request lifecycle, masking, validation-message policy, server-side validation |
+| Native wrapper, accessibility, constraint attributes, generated described-by id boundary, or field-level customization | `Native helper representative wrapper and accessibility lane checks` and the native customization lane | PR comment for a focused helper/docs PR; release evidence only when the release depends on the lane | Tom Select request lifecycle, masking, validation-message policy, server-side validation |
 | `rfk_text_area` autosize boundary or host-owned autosize enhancement notes | `Native helper representative wrapper and accessibility lane checks`, then `textarea_autosize_release_evidence.md` | PR comment for a focused docs PR; `sample_app_results.md` for release candidates | built-in `autosize:` option, JavaScript measurement, production CSS preset, Turbo reconnect sizing hook |
 | Remote search, selected preload, create-on-the-fly, request-failure feedback, Turbo, or events | The matching remote lifecycle, visible feedback, Turbo, or event lane | PR comment for one representative field; release results when the behavior is release-critical | endpoint authorization policy, retry UI, visible copy ownership unless the PR changes that surface |
 | Token suggestions, Ransack suggestions, table filters, cell editors, or TableMetadata collection shape | `Token suggestion and Ransack suggestion metadata` or `Verify table metadata adapters` | PR comment for scoped metadata/docs work; release evidence for release candidates | query execution, parser semantics, preference persistence, or table integration redesign |
@@ -90,7 +90,7 @@ import DirectTomSelectController from "rails_fields_kit/tom_select_controller"
 console.assert(TomSelectController === DirectTomSelectController)
 ```
 
-If the sample app uses a bundler alias or custom resolver, confirm it still resolves those documented import paths rather than an app-specific private path.
+If the sample app uses a bundler alias or custom resolver, confirm it still resolves those documented import paths rather than an app-specific private path or an undocumented pin name.
 
 If the sample app uses importmap, confirm the documented `config/importmap.rb` pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` resolve without switching to a private asset path or an undocumented pin name.
 
@@ -126,6 +126,7 @@ Verify:
 - `label_html:`, `hint_html:`, and `error_html:` can add representative attributes without losing generated label, hint, or validation error behavior
 - `control_html:`, `prefix_html:`, and `suffix_html:` can add representative attributes on an affix field without changing the input value or submitted param shape
 - `html:` still targets the input element itself, separate from generated wrapper pieces
+- generated hint / error ids and any custom input `id:` boundary match [`field_helpers.md#generated-described-by-ids`](field_helpers.md#generated-described-by-ids) for the representative field without turning the checklist into a full generated-id inventory
 - hint / error ids still feed the shared accessibility wiring when `accessibility:` remains enabled
 - `accessibility: false` remains an explicit opt-out from automatic aria wiring only, not from the wrapper customization lane
 - repo-wide class defaults from the initializer still provide the shared baseline; field-level `*_html` options only layer additional attributes for that field
@@ -311,7 +312,7 @@ Verify:
 
 - collected filter metadata renders through the documented helper path
 - collected cell editor metadata renders through the documented helper path
-- native metadata such as `TableFilterInput.search_field`, `money_field`, or `TableCellInput.text_area` also render through the documented helper path when the integration uses common field helpers
+- native metadata such as `TableFilterInput.search_field`, `money_field`, or `text_area` also render through the documented helper path when the integration uses common field helpers
 - any direct `TableRenderer.filter_call` or `TableRenderer.cell_editor_call` usage in your integration still matches the documented call-spec shape
 - a representative `TableRenderer.register_field_helper` mapping can be rendered through the documented call-spec path, and `TableRenderer.reset_field_helpers!` restores the default mapping after that scoped customization
 - token search or Ransack-oriented metadata, if used, is still treated as UI metadata or rendering assistance rather than query execution
