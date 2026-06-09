@@ -43,6 +43,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 #### Install generator
 
 - `rails generate rails_fields_kit:install --skip-setup-notes` lets host apps skip only the generated `doc/rails_fields_kit_setup.md` artifact while still creating `config/initializers/rails_fields_kit.rb` and leaving Tom Select / importmap setup ownership unchanged.
+- `rails rails_fields_kit:doctor` output now starts with a short status legend and next-step guidance so first-time adopters can distinguish `[MISSING]` setup gaps from `[MANUAL]` host-app JavaScript checks; the doctor remains read-only and does not auto-fix setup, choose Tom Select policy, or define host-app CI gates.
 
 #### JavaScript exports and Tom Select integration
 

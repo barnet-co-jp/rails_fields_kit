@@ -67,6 +67,96 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
     end
   end
 
+  it "prints a status legend before individual setup checks" do
+    Dir.mktmpdir do |root|
+      output = StringIO.new
+
+      described_class.new(root: root).run(io: output)
+
+      expect(output.string).to include("Status legend: [OK] detected setup; [MISSING] needs action for the detected setup route; [MANUAL] host-app check, not an automatic failure.")
+      expect(output.string).to include("Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain.")
+      expect(output.string).to match(/Next step:.*\n\n\[MISSING\] Initializer/m)
+    end
+  end
+
+  it "keeps Tom Select package visibility manual when package.json is absent" do
+    Dir.mktmpdir do |root|
+      package_check = check_for(described_class.new(root: root), :tom_select_package)
+
+      expect(package_check.status).to eq(:manual)
+      expect(package_check.message).to include("package.json was not found")
+      expect(package_check.message).to include("host app's JavaScript package policy")
+    end
+  end
+
+  it "reports Tom Select when package.json dependencies include tom-select" do
+    Dir.mktmpdir do |root|
+      write_file(root, "package.json", <<~JSON)
+        {
+          "dependencies": {
+            "tom-select": "^2.4.0"
+          }
+        }
+      JSON
+
+      package_check = check_for(described_class.new(root: root), :tom_select_package)
+
+      expect(package_check.status).to eq(:ok)
+      expect(package_check.message).to include("Found tom-select in package.json dependencies")
+      expect(package_check.message).to include("version policy stays with the host app")
+    end
+  end
+
+  it "reports Tom Select when package.json devDependencies include tom-select" do
+    Dir.mktmpdir do |root|
+      write_file(root, "package.json", <<~JSON)
+        {
+          "devDependencies": {
+            "tom-select": "^2.4.0"
+          }
+        }
+      JSON
+
+      package_check = check_for(described_class.new(root: root), :tom_select_package)
+
+      expect(package_check.status).to eq(:ok)
+      expect(package_check.message).to include("Found tom-select in package.json devDependencies")
+    end
+  end
+
+  it "keeps missing Tom Select package as a manual advisory" do
+    Dir.mktmpdir do |root|
+      write_file(root, "package.json", <<~JSON)
+        {
+          "dependencies": {
+            "@hotwired/stimulus": "^3.2.0"
+          }
+        }
+      JSON
+
+      package_check = check_for(described_class.new(root: root), :tom_select_package)
+
+      expect(package_check.status).to eq(:manual)
+      expect(package_check.message).to include("does not list tom-select")
+      expect(package_check.message).to include("host app's JavaScript package manager")
+    end
+  end
+
+  it "does not fail when package.json cannot be parsed" do
+    Dir.mktmpdir do |root|
+      write_file(root, "package.json", "{ invalid json")
+      doctor = described_class.new(root: root)
+      output = StringIO.new
+      package_check = check_for(doctor, :tom_select_package)
+
+      expect(package_check.status).to eq(:manual)
+      expect(package_check.message).to include("package.json could not be parsed")
+      expect(package_check.message).to include("does not fail or rewrite package files")
+      expect(doctor.run(io: output)).to eq(true)
+      expect(output.string).to include("[MANUAL] Tom Select package")
+    end
+  end
+
   it "reports missing importmap pins without treating toolchain variance as an invocation failure" do
     Dir.mktmpdir do |root|
       write_file(root, "config/importmap.rb", <<~RUBY)

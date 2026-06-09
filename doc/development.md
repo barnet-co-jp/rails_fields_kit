@@ -118,6 +118,19 @@ Current CI adds these repository-level confirmations on top of the local workflo
 - `npm run check:js` on Node 22.x and Node 24.x for the JavaScript syntax, smoke inventory, package exports import lane, Tom Select fixed query params smoke, Tom Select forwarded interaction and request event smoke, Tom Select create request header and response normalization smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, Tom Select label fallback smoke, Tom Select render text fallback smoke, Tom Select plugin contract smoke, and selected preload config smoke
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 
+## Open PR freshness checks
+
+Before treating an open pull request as review- or release-ready, re-check the current PR metadata instead of relying only on historical CI notes in the PR body or earlier comments. A green workflow run for an old head commit is useful evidence, but it does not prove the PR is still mergeable against the latest `main`.
+
+For review queue triage and release prep, confirm these current signals together:
+
+- the latest workflow run state for the PR head commit
+- the PR metadata `mergeable` value or equivalent GitHub mergeability signal
+- whether the PR branch is behind, diverged, or superseded by a replacement PR
+- the base branch freshness, especially after recent `main` merges that touched nearby docs, specs, package metadata, or public API wording
+
+Keep this as a manual queue hygiene guard. Do not add a GitHub API-dependent CI job, automatic branch refresh, force push, stale PR cleanup, or merge decision automation unless release planning explicitly accepts that larger devops surface.
+
 ## Release-related checks
 
 Before release, also review:

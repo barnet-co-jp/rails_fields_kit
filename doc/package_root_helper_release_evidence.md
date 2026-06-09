@@ -111,15 +111,39 @@ Check one rendered Tom Select-backed field that uses `allow_clear: true` and, wh
 
 - `tomSelectPluginContract(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
 - The result exposes the documented `plugins` array for the representative field.
-- A field with `allow_clear: true` reports a `clear_button` plugin signal through the documented clearable flag.
-- A field with explicit `plugins:` reports the rendered effective plugin list without treating the host app's plugin choices as Rails Fields Kit-owned behavior.
+- A field with `allow_clear: true` reports `clear_button` in the documented `plugins` array and sets the documented `hasClearButton` flag.
+- A field with explicit `plugins:` reports the rendered effective plugin list and derived `hasClearButton` / `hasRemoveButton` flags without treating the host app's plugin choices as Rails Fields Kit-owned behavior.
 - A comparable non-Tom Select or unrelated element returns `null`.
 - The evidence stays read-only; plugin asset installation, clear/remove affordance styling, selection mutation, empty-state copy, Tom Select plugin objects, and Tom Select instance lifecycle remain outside this helper evidence lane.
 
 Suggested evidence note:
 
 ```text
-tomSelectPluginContract: PASS on <field selector>. plugins matched the rendered effective plugin list; allow_clear field exposed the documented clear_button / clearable signal; unrelated element returned null. Plugin assets, styling, mutation, empty-state copy, and Tom Select plugin lifecycle remained host-app or Tom Select responsibilities.
+tomSelectPluginContract: PASS on <field selector>. plugins matched the rendered effective plugin list; allow_clear field exposed clear_button through plugins and hasClearButton; explicit plugin field exposed the expected derived hasClearButton / hasRemoveButton flags; unrelated element returned null. Plugin assets, styling, mutation, empty-state copy, and Tom Select plugin lifecycle remained host-app or Tom Select responsibilities.
+```
+
+## Tom Select request params contract reader
+
+Use this lane when `tomSelectRequestParamsContract(element)` is in release scope.
+
+Representative import:
+
+```js
+import { tomSelectRequestParamsContract } from "rails_fields_kit"
+```
+
+Check one rendered Tom Select-backed field that uses request params options:
+
+- `tomSelectRequestParamsContract(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes the documented request param names for the representative field, including the query param and any selected preload param names that are in scope for the check.
+- A comparable Rails Fields Kit field without request params options returns the documented empty or fallback contract, or `null` when that is the documented boundary.
+- A comparable non-Tom Select or unrelated element returns `null`.
+- The evidence stays read-only; request execution, endpoint authorization, retry UI, visible copy, validation, and host-app fallback behavior remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+tomSelectRequestParamsContract: PASS on <field selector>. request param names matched the rendered field contract; comparable no-request-params field returned the documented fallback; unrelated element returned null. Request execution, endpoint authorization, retry UI, visible copy, validation, and host-app fallback behavior remained out of scope.
 ```
 
 ## Native accessibility contract reader

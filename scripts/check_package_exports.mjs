@@ -107,7 +107,11 @@ try {
       `import directDefault from "rails_fields_kit/tom_select_controller"\n` +
       `import assert from "node:assert/strict"\n\n` +
       `const expectedNamedExports = ${JSON.stringify(expectedPackageRootNamedExports)}\n` +
-      `const expectedCallableHelperExports = ${JSON.stringify(expectedCallableHelperExports)}\n\n` +
+      `const expectedCallableHelperExports = ${JSON.stringify(expectedCallableHelperExports)}\n` +
+      `const tomSelectController = "rails-fields-kit--tom-select"\n` +
+      `const queryParamsAttribute = "data-rails-fields-kit--tom-select-query-params-value"\n` +
+      `const selectedQueryParamsAttribute = "data-rails-fields-kit--tom-select-selected-query-params-value"\n` +
+      `const createParamsAttribute = "data-rails-fields-kit--tom-select-create-params-value"\n\n` +
       `class FakeDocument {\n` +
       `  constructor() {\n` +
       `    this.all = []\n` +
@@ -191,6 +195,31 @@ try {
       `expectedCallableHelperExports.forEach((exportName) => {\n` +
       `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)\n` +
       `})\n\n` +
+      `assert.deepEqual(\n` +
+      `  packageRoot.tomSelectRequestParamsContract(new FakeElement("div", {\n` +
+      `    "data-controller": tomSelectController,\n` +
+      `    [queryParamsAttribute]: JSON.stringify({ account_id: 42, tags: ["open", "vip"] }),\n` +
+      `    [selectedQueryParamsAttribute]: JSON.stringify({ include_archived: false }),\n` +
+      `    [createParamsAttribute]: JSON.stringify({ source: "inline" })\n` +
+      `  })),\n` +
+      `  {\n` +
+      `    queryParams: { account_id: 42, tags: ["open", "vip"] },\n` +
+      `    selectedQueryParams: { include_archived: false },\n` +
+      `    createParams: { source: "inline" }\n` +
+      `  },\n` +
+      `  "request params contract should expose rendered fixed params as plain objects"\n` +
+      `)\n` +
+      `assert.deepEqual(\n` +
+      `  packageRoot.tomSelectRequestParamsContract(new FakeElement("div", { "data-controller": tomSelectController })),\n` +
+      `  { queryParams: {}, selectedQueryParams: {}, createParams: {} },\n` +
+      `  "request params contract should return empty objects for unspecified params on a Rails Fields Kit field"\n` +
+      `)\n` +
+      `assert.deepEqual(\n` +
+      `  packageRoot.tomSelectRequestParamsContract(new FakeElement("div", { [queryParamsAttribute]: "not-json" })),\n` +
+      `  { queryParams: {}, selectedQueryParams: {}, createParams: {} },\n` +
+      `  "request params contract should keep invalid rendered JSON predictable"\n` +
+      `)\n` +
+      `assert.equal(packageRoot.tomSelectRequestParamsContract(new FakeElement("div")), null, "request params contract should ignore unrelated elements")\n\n` +
       `const label = new FakeElement("label", { for: "order_customer_name" })\n` +
       `const input = new FakeElement("input", { id: "order_customer_name", "aria-describedby": "customer_hint customer_error" })\n` +
       `const hint = new FakeElement("p", { id: "customer_hint", class: "rfk-hint" })\n` +
@@ -203,6 +232,19 @@ try {
       `assert.equal(accessibilityContract.hintElement, hint)\n` +
       `assert.equal(accessibilityContract.errorElement, error)\n` +
       `assert.equal(accessibilityContract.wrapperElement, wrapper)\n\n` +
+      `const requiredInput = new FakeElement("input", { required: "" })\n` +
+      `const { wrapper: requiredWrapper } = buildDocumentWithWrapper([requiredInput])\n` +
+      `const requiredStateContract = packageRoot.nativeFieldAccessibilityContract(requiredInput)\n` +
+      `assert.equal(requiredStateContract.required, true, "native input contract should expose required state")\n` +
+      `assert.equal(requiredStateContract.disabled, false, "native input contract should expose false disabled state")\n` +
+      `assert.equal(requiredStateContract.readonly, false, "native input contract should expose false readonly state")\n` +
+      `assert.equal(requiredStateContract.wrapperElement, requiredWrapper, "native state expansion should preserve wrapperElement")\n\n` +
+      `const disabledSelect = new FakeElement("select", { disabled: "" })\n` +
+      `buildDocumentWithWrapper([disabledSelect])\n` +
+      `assert.equal(packageRoot.nativeFieldAccessibilityContract(disabledSelect).disabled, true, "native select contract should expose disabled state")\n\n` +
+      `const readonlyTextarea = new FakeElement("textarea", { readonly: "" })\n` +
+      `buildDocumentWithWrapper([readonlyTextarea])\n` +
+      `assert.equal(packageRoot.nativeFieldAccessibilityContract(readonlyTextarea).readonly, true, "native textarea contract should expose readonly state")\n\n` +
       `const fallbackLabel = new FakeElement("label")\n` +
       `const fallbackInput = new FakeElement("textarea")\n` +
       `buildDocumentWithWrapper([fallbackLabel, fallbackInput])\n` +

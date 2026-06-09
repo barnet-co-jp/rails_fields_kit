@@ -6,6 +6,11 @@ const TEXT_OVERRIDE_ATTRIBUTES = {
   loadingText: "data-rails-fields-kit--tom-select-loading-text-value",
   createText: "data-rails-fields-kit--tom-select-create-text-value"
 }
+const REQUEST_PARAM_ATTRIBUTES = {
+  queryParams: "data-rails-fields-kit--tom-select-query-params-value",
+  selectedQueryParams: "data-rails-fields-kit--tom-select-selected-query-params-value",
+  createParams: "data-rails-fields-kit--tom-select-create-params-value"
+}
 const PLUGINS_ATTRIBUTE = "data-rails-fields-kit--tom-select-plugins-value"
 const SELECTED_PRELOAD_ATTRIBUTES = {
   selectedUrl: "data-rails-fields-kit--tom-select-selected-url-value",
@@ -28,6 +33,10 @@ function hasTomSelectController(element) {
 
 function textOverrideValue(element, attributeName) {
   return element.hasAttribute(attributeName) ? element.getAttribute(attributeName) : null
+}
+
+function hasAnyAttribute(element, attributes) {
+  return Object.values(attributes).some((attributeName) => element.hasAttribute(attributeName))
 }
 
 function dataValue(element, attributeName) {
@@ -87,6 +96,18 @@ function nativeFieldWrapper(element) {
   return element.closest?.(NATIVE_FIELD_WRAPPER_SELECTOR) || null
 }
 
+function nativeFieldHasAttribute(element, attributeName) {
+  return element.hasAttribute?.(attributeName) === true
+}
+
+function nativeFieldRenderedState(element) {
+  return {
+    required: element.required === true || nativeFieldHasAttribute(element, "required"),
+    disabled: element.disabled === true || nativeFieldHasAttribute(element, "disabled"),
+    readonly: element.readOnly === true || nativeFieldHasAttribute(element, "readonly")
+  }
+}
+
 function cssEscape(value) {
   if (typeof CSS !== "undefined" && typeof CSS.escape === "function") return CSS.escape(String(value))
 
@@ -117,6 +138,18 @@ export function tomSelectTextOverrideContract(element) {
   if (!hasTomSelectController(element) && Object.values(contract).every((value) => value === null)) return null
 
   return contract
+}
+
+export function tomSelectRequestParamsContract(element) {
+  if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function") return null
+  if (!hasTomSelectController(element) && !hasAnyAttribute(element, REQUEST_PARAM_ATTRIBUTES)) return null
+
+  return Object.fromEntries(
+    Object.entries(REQUEST_PARAM_ATTRIBUTES).map(([key, attributeName]) => [
+      key,
+      objectDataValue(element, attributeName)
+    ])
+  )
 }
 
 export function tomSelectPluginContract(element) {
@@ -161,7 +194,8 @@ export function nativeFieldAccessibilityContract(element) {
     labelElement: nativeFieldLabel(element, wrapperElement),
     hintElement: firstElementWithClass(describedByElements, NATIVE_FIELD_HINT_CLASS),
     errorElement: firstElementWithClass(describedByElements, NATIVE_FIELD_ERROR_CLASS),
-    wrapperElement
+    wrapperElement,
+    ...nativeFieldRenderedState(element)
   }
 }
 
