@@ -85,11 +85,13 @@ Native input helpers:
 - `rfk_url_field`
 - `rfk_phone_field`
 - `rfk_search_field`
+- `rfk_password_field`
 
 Native wrapper helpers pass ordinary Rails/native input attributes such as `maxlength`, `minlength`, `pattern`, `required`, `autocomplete`, and `inputmode` to the rendered input through top-level field options or `html:`. Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around that input; character counters, masking, browser validation-message policy, browser validation behavior, server-side validation rules, textarea autosize measurement, Turbo reconnect sizing, production CSS, and manual-resize policy remain host-app responsibility.
 
 See [`field_helpers.md`](field_helpers.md) for details.
 See [`textarea_autosize.md`](textarea_autosize.md) for the current `rfk_text_area` autosize boundary and host-app-owned enhancement guidance.
+See [`password_field.md`](password_field.md) for the current `rfk_password_field` thin wrapper boundary and password-specific non-goals.
 See [`select_migration.md`](select_migration.md) for a practical server-rendered `collection_select` to `rfk_select` migration pattern.
 See [`enum_select.md`](enum_select.md) for the `rfk_enum_select` explicit `enum:` hash boundary, including keys-as-submitted-values behavior and the non-goal boundary around arbitrary label/value DSLs or remote enum option lookup.
 
