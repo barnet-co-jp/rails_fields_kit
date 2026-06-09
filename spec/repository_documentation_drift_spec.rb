@@ -10,6 +10,14 @@ RSpec.describe "repository documentation drift guards" do
     File.read(File.join(root, path))
   end
 
+  def markdown_section(source, heading)
+    start_index = source.index(heading)
+    raise "missing heading #{heading}" unless start_index
+
+    next_heading = source.index(/^#{Regexp.escape(heading[/^#+/])} /, start_index + heading.length)
+    source[start_index...(next_heading || source.length)]
+  end
+
   it "keeps generated setup notes upstream links pointed at existing onboarding docs" do
     template = read_repo_file("lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md")
     linked_paths = template.scan(%r{https://github\.com/matsuo-haruhito/rails_fields_kit/blob/main/([^>\s)]+)}).flatten
@@ -34,8 +42,8 @@ RSpec.describe "repository documentation drift guards" do
     public_api = read_repo_file("doc/public_api.md")
     development_doc = read_repo_file("doc/development.md")
 
-    direct_imports_section = readme.fetch_section("### Direct imports and package exports")
-    javascript_exports_section = public_api.fetch_section("## JavaScript exports")
+    direct_imports_section = markdown_section(readme, "### Direct imports and package exports")
+    javascript_exports_section = markdown_section(public_api, "## JavaScript exports")
 
     expect(direct_imports_section).to include(
       "rails_fields_kit/tom_select_controller",
