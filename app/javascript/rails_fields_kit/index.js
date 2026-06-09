@@ -25,6 +25,8 @@ const NATIVE_FIELD_WRAPPER_SELECTOR = ".rfk-field"
 const NATIVE_FIELD_LABEL_SELECTOR = "label"
 const NATIVE_FIELD_HINT_CLASS = "rfk-hint"
 const NATIVE_FIELD_ERROR_CLASS = "rfk-error"
+const NATIVE_FIELD_PREFIX_CLASS = "rfk-prefix"
+const NATIVE_FIELD_SUFFIX_CLASS = "rfk-suffix"
 
 function hasTomSelectController(element) {
   const controllers = element?.getAttribute?.("data-controller")?.split(/\s+/) || []
@@ -94,6 +96,10 @@ function firstElementWithClass(elements, className) {
 
 function nativeFieldWrapper(element) {
   return element.closest?.(NATIVE_FIELD_WRAPPER_SELECTOR) || null
+}
+
+function nativeFieldAffix(wrapperElement, className) {
+  return wrapperElement?.querySelector?.(`.${className}`) || null
 }
 
 function nativeFieldHasAttribute(element, attributeName) {
@@ -194,6 +200,8 @@ export function nativeFieldAccessibilityContract(element) {
     labelElement: nativeFieldLabel(element, wrapperElement),
     hintElement: firstElementWithClass(describedByElements, NATIVE_FIELD_HINT_CLASS),
     errorElement: firstElementWithClass(describedByElements, NATIVE_FIELD_ERROR_CLASS),
+    prefixElement: nativeFieldAffix(wrapperElement, NATIVE_FIELD_PREFIX_CLASS),
+    suffixElement: nativeFieldAffix(wrapperElement, NATIVE_FIELD_SUFFIX_CLASS),
     wrapperElement,
     ...nativeFieldRenderedState(element)
   }
