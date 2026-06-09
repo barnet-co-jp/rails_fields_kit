@@ -98,6 +98,31 @@ Suggested evidence note:
 readRenderedOptionPayloadMapping: PASS on <field selector>. valueField / labelField / searchFields matched rendered mapping data; description and badge fields were readable when present; default field returned value/text defaults; unrelated element returned null. Endpoint payloads, request execution, rendering copy, and styling remained host-app or separate checklist responsibilities.
 ```
 
+## Request params contract reader
+
+Use this lane when `tomSelectRequestParamsContract(element)` is in release scope.
+
+Representative import:
+
+```js
+import { tomSelectRequestParamsContract } from "rails_fields_kit"
+```
+
+Check a rendered Tom Select-backed field that uses request parameter options:
+
+- `tomSelectRequestParamsContract(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes the documented query, selected, and pagination parameter names for the representative field.
+- The result exposes fixed query params when the representative field renders them.
+- A fallback or default field confirms the helper reads the documented default parameter names without requiring custom request parameter options.
+- A non-Rails Fields Kit element returns `null`.
+- The evidence stays read-only; endpoint authorization, request execution, server response shape, retry behavior, visible copy, mutation, and validation remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+tomSelectRequestParamsContract: PASS on <field selector>. query / selected / pagination parameter names matched rendered config; fixed query params were readable when present; default field returned documented defaults; unrelated element returned null. Endpoint authorization, request execution, server response shape, retry behavior, visible copy, mutation, and validation remained host-app or separate checklist responsibilities.
+```
+
 ## Text override contract reader
 
 Use this lane when `tomSelectTextOverrideContract(element)` is in release scope.
