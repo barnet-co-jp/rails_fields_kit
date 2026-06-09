@@ -8,7 +8,7 @@ Use the route map below to choose the evidence lane for the release or PR under 
 | --- | --- | --- |
 | Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. |
 | JavaScript setup | Setup doctor checks, JavaScript setup checks, event checks, Turbo reconnect checks | The release touches setup visibility, package-root exports, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. |
-| Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, native wrapper customization checks | Native helper wrapper, class, hint/error, affix, or accessibility wiring changed. |
+| Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, password field native wrapper checks, native wrapper customization checks | Native helper wrapper, password helper boundary, class, hint/error, affix, or accessibility wiring changed. |
 | README first field quickstart evidence | `rfk_select` representative collection-backed single-value lane checks, Visual reference render checks | The README first field or quickstart sample needs endpoint-free, server-rendered collection evidence without mixing in setup/import, remote search, selected preload, create-on-the-fly, or token metadata lanes. |
 | Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. |
 | Remote lifecycle feedback | Selected preload representative lane checks, create-on-the-fly representative failure lane checks, visible feedback checks | Selected preload, remote search, create-on-the-fly, request-failure, or visible fallback behavior changed. |
@@ -128,6 +128,7 @@ Package-root helper lanes checked:
 - [ ] `rfk_enum_select`
 - [ ] `rfk_token_search`
 - [ ] native helpers such as `rfk_text_field` and `rfk_money_field`
+- [ ] `rfk_password_field` when password helper native-wrapper evidence is in release scope
 
 Notes:
 
@@ -157,6 +158,23 @@ Notes:
 - [ ] `nativeFieldAccessibilityContract(element)` read the representative field's rendered `describedByIds`, `hintElement`, `errorElement`, and `wrapperElement` contract from package-root import code
 - [ ] an edit form or validation rerender kept the same value and preserved the shared wrapper / accessibility wiring for that representative field
 - [ ] a comparable `accessibility: false` example clearly removed the automatic accessibility wiring that the release docs treat as opt-out behavior
+
+Notes:
+
+## Password field native wrapper checks
+
+Use this section when `rfk_password_field` is release-critical evidence. Keep it inside the native wrapper family: this section records wrapper, hint, validation, and accessibility behavior around an ordinary password input, not a credential workflow.
+
+- Representative helper: `rfk_password_field`
+- Representative field:
+- Evidence location:
+
+- [ ] the representative password field rendered a native `type="password"` input through the same wrapper lane as other native helpers
+- [ ] label, hint, validation error, prefix or suffix if present, and required marker stayed readable through an edit form or validation rerender
+- [ ] accessibility wiring still connected label, hint, and error ids when `accessibility:` remained enabled
+- [ ] ordinary native options such as `autocomplete:` reached the password input when supplied by the host app
+- [ ] evidence notes confirmed Rails Fields Kit did not add a password visibility toggle, strength meter, credential policy, authentication workflow, credential storage behavior, or final password validation copy
+- [ ] host-app-owned password policy and password manager guidance were recorded separately from Rails Fields Kit wrapper evidence when relevant
 
 Notes:
 
