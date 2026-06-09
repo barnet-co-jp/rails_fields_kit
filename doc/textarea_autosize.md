@@ -44,6 +44,8 @@ The host app owns:
 
 When a release or narrow PR needs evidence for `rfk_text_area`, record it in the native helper representative wrapper and accessibility lane, not as a new autosize behavior lane. Use this page as the source of truth for the autosize boundary.
 
+For a focused sample-app or release-gate checklist, use [`textarea_autosize_release_evidence.md`](textarea_autosize_release_evidence.md). It gives a representative `rfk_text_area` evidence table for first render, edit-form redisplay, validation rerender, and optional host-owned autosize enhancement notes.
+
 Representative evidence should confirm:
 
 - a rendered `rfk_text_area` keeps the native wrapper, label, hint, error, affix, submitted value, and automatic accessibility wiring expected from the native helper family
