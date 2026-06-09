@@ -32,6 +32,7 @@ RSpec.describe "repository documentation drift guards" do
   it "keeps support boundary docs aligned with gem metadata, package metadata, and representative CI rows" do
     support_boundary = read_repo_file("doc/support_boundary.md")
     development_doc = read_repo_file("doc/development.md")
+    release_doc = read_repo_file("doc/release.md")
     gemspec = read_repo_file("rails_fields_kit.gemspec")
     package_json = JSON.parse(read_repo_file("package.json"))
     workflow = read_repo_file(".github/workflows/ci.yml")
@@ -47,12 +48,17 @@ RSpec.describe "repository documentation drift guards" do
     expect(support_boundary).to include("Node #{node_engine}")
     expect(development_doc).to include("Node #{node_engine}")
     expect(development_doc).to include("`package.json`", "GitHub Actions `javascript` job")
+    expect(release_doc).to include("doc/support_boundary.md")
+    expect(release_doc).to include("Rails 7.0 and newer")
+    expect(release_doc).to include("Rails 7 and Rails 8")
     node_majors.each do |node_major|
       expect(workflow).to include("\"#{node_major}\"")
+      expect(release_doc).to include("Node #{node_major}.x")
     end
 
     representative_rows.each do |rails_version, ruby_version, gemfile|
       expect(support_boundary).to include("| #{rails_version} | #{ruby_version} | `#{gemfile}` |")
+      expect(release_doc).to include("Rails #{rails_version} / Ruby #{ruby_version}")
     end
   end
 
