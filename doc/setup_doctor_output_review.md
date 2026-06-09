@@ -9,6 +9,7 @@ Use this focused docs/design artifact when a release or PR changes setup doctor 
 - Confirm that `[OK]`, `[MISSING]`, and `[MANUAL]` lines are easy to scan as diagnostic evidence.
 - Confirm that importmap target mismatch output is readable after the target-drift diagnostic landed.
 - Confirm that package.json Tom Select dependency evidence reads as advisory visibility, not as host-app package policy.
+- Confirm narrow or wrapped evidence against the representative states in this artifact before recording a release-wide sample app result.
 - Keep command behavior, wording source, host app setup policy, and auto-fix decisions outside this artifact.
 
 ## Release Evidence Handoff
@@ -17,9 +18,24 @@ Use this artifact as the review aid for setup doctor evidence, then record the r
 
 - Use `doc/sample_app_checklist.md` to decide whether setup doctor evidence belongs in the release baseline or the host-app setup lane.
 - Record release-wide results in `doc/sample_app_results.md` under `Setup doctor checks`, including the app setup path: importmap, jsbundling, bundler-managed JavaScript, or another route.
-- For a narrow docs or setup-doctor PR, a PR comment is enough when it names the command, setup path, representative `[OK]` / `[MISSING]` / `[MANUAL]` lines, branch or commit, and result.
+- For a narrow docs or setup-doctor PR, a PR comment is enough when it names the command, setup path, representative `[OK]` / `[MISSING]` / `[MANUAL]` lines, branch or commit, viewport or wrapping width, and result.
+- Use the representative review states below to decide whether the PR evidence should cover the first-run legend, an advisory-only Tom Select package lane, an importmap mismatch lane, or all three.
 - Treat `[MANUAL]` lines as host-app responsibility checks. Do not count them as failed automatic checks unless the release issue explicitly changes setup doctor behavior.
 - Keep auto-fix behavior, exit-code policy, and host-app setup policy decisions out of release evidence notes unless a separate implementation issue changes them.
+
+## Representative Narrow Review States
+
+Use these states when a PR or release asks for narrow terminal, wrapped Markdown, or code-block readability evidence. They are review scenarios, not new setup doctor output variants.
+
+| State | Use it when | Narrow / wrapped evidence should show |
+| --- | --- | --- |
+| First-run mixed status | The PR changes the setup doctor overview, generated setup notes, or evidence wording | The status legend appears before checks, `[MISSING]` reads as the automatic action item, and `[MANUAL]` reads as host-app follow-up rather than failure. |
+| Advisory Tom Select package | The PR touches package dependency visibility, Stimulus registration guidance, or CSS import evidence | The Tom Select package line reads as advisory dependency visibility, and manual Stimulus / CSS checks do not look like failed automatic checks. |
+| Importmap target mismatch | The PR changes importmap pin diagnostics or generated setup notes | Each wrapped mismatch keeps its `expected ...` and `found ...` values paired closely enough to review without re-running the command. |
+
+For PR-level evidence, name the state and record the width used, such as `80-column terminal`, `390px Markdown preview`, or `GitHub PR comment code block`. For release-wide evidence, keep the detailed output in the release notes or PR comment and record the summary result in `doc/sample_app_results.md`.
+
+Do not create a new runtime output mode just to satisfy this review. If a state is unreadable after wrapping, record it as a docs/setup policy follow-up unless the issue explicitly asks to change setup doctor wording.
 
 ## Representative Output States
 
