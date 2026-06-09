@@ -251,7 +251,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `tomSelectPluginContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select plugin data and returns `plugins`, `hasClearButton`, and `hasRemoveButton`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not install plugin assets, expose Tom Select plugin objects, mutate selections, style clear/remove controls, or own empty-state behavior. |
 | `tomSelectRequestParamsContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered fixed request parameter data attributes and returns `queryParams`, `selectedQueryParams`, and `createParams` objects, or `null` when the element does not look like a matching Rails Fields Kit field. It does not serialize requests, execute endpoints, authorize scopes, or mutate Tom Select. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
-| `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and rendered state, returning `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, `wrapperElement`, `required`, `disabled`, and `readonly`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
+| `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring, affix elements, and rendered state, returning `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, `prefixElement`, `suffixElement`, `wrapperElement`, `required`, `disabled`, and `readonly`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, format affix values, move focus, or own visible feedback. |
 
 ### Import patterns
 
@@ -288,7 +288,7 @@ For Tom Select plugin state, `tomSelectPluginContract(element)` reports the rend
 
 `tomSelectRequestParamsContract(element)` returns empty objects for omitted fixed params and keeps invalid rendered JSON predictable by returning empty objects for that lane. Host apps should still treat endpoint authorization, request scoping, query execution, visible feedback, and retry UI as application-owned behavior.
 
-For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`.
+For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`. `prefixElement` and `suffixElement` read the rendered affix elements inside the nearest `.rfk-field` wrapper when present and return `null` otherwise; they do not format values, parse currency or percent content, mutate markup, or change focus behavior.
 
 Future package-root helpers should follow the same boundary: read the rendered Rails Fields Kit contract or configuration from an element, but do not take over request lifecycles, locale resolution, visible feedback, query parsing, retry UI, validation feedback, or other application-specific behavior. Proposal or open-PR helper names are not current public API until they are merged and listed in the table above.
 
@@ -328,7 +328,7 @@ Use [`events.md`](events.md) as the source of truth for exact event names, paylo
 
 These are not intended as stable public APIs:
 
-- private FormBuilder helper methods prefixed with `rfk_` but defined under `private`
+- private FormBuilder helper methods prefixed with `rfk` but defined under `private`
 - internal normalization methods in `RailsFieldsKit::Searchable`
 - exact HTML structure of rich option rendering beyond documented classes/data and event payloads
 - generated documentation wording
