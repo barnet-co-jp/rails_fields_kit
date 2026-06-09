@@ -14,7 +14,7 @@ RSpec.describe "README import troubleshooting guidance" do
     )
 
     expect(setup_doc).to include(
-      "## Troubleshoot unresolved imports",
+      "Troubleshoot unresolved imports",
       "package-root import",
       "direct controller import"
     )
