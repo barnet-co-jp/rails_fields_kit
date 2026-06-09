@@ -57,6 +57,8 @@ BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rspec
 
 The package metadata boundary is Node 22.x || 24.x. The JavaScript syntax check uses Node 22.x and Node 24.x, matching `package.json` and the GitHub Actions `javascript` job matrix.
 
+This repository intentionally does not commit a single `.nvmrc` or `.node-version` as the support boundary. When reproducing JavaScript checks locally, select either supported major explicitly with your version manager, for example Node 22.x or Node 24.x, then run the same `npm run check:js` command that CI runs on both lines.
+
 ```bash
 npm run check:js
 ```
