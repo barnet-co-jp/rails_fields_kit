@@ -85,11 +85,13 @@ Native input helpers:
 - `rfk_url_field`
 - `rfk_phone_field`
 - `rfk_search_field`
+- `rfk_password_field`
 
 Native wrapper helpers pass ordinary Rails/native input attributes such as `maxlength`, `minlength`, `pattern`, `required`, `autocomplete`, and `inputmode` to the rendered input through top-level field options or `html:`. Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around that input; character counters, masking, browser validation-message policy, browser validation behavior, server-side validation rules, textarea autosize measurement, Turbo reconnect sizing, production CSS, and manual-resize policy remain host-app responsibility.
 
 See [`field_helpers.md`](field_helpers.md) for details.
 See [`textarea_autosize.md`](textarea_autosize.md) for the current `rfk_text_area` autosize boundary and host-app-owned enhancement guidance.
+See [`password_field.md`](password_field.md) for the current `rfk_password_field` thin wrapper boundary and password-specific non-goals.
 See [`select_migration.md`](select_migration.md) for a practical server-rendered `collection_select` to `rfk_select` migration pattern.
 See [`enum_select.md`](enum_select.md) for the `rfk_enum_select` explicit `enum:` hash boundary, including keys-as-submitted-values behavior and the non-goal boundary around arbitrary label/value DSLs or remote enum option lookup.
 
@@ -230,7 +232,7 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 
 Use `TableRenderer.registered_field_types` when an integration needs a mutation-safe list of renderable field type names, including custom mappings registered with `TableRenderer.register_field_helper`, without exposing the helper method names. `TableFilterInput.known_types` and `TableCellInput.known_types` remain limited to the built-in factory family.
 
-The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `to_h` and `to_hash` return the same metadata hash as `to_table_filter` or `to_table_cell_editor`.
+The returned metadata hashes use `type: "rails_fields_kit`, a string `field_type`, an optional `method`, and an `options` hash. `to_h` and `to_hash` return the same metadata hash as `to_table_filter` or `to_table_cell_editor`.
 
 `TableFilterInput.ransack_filter` is the current public entrypoint when table-oriented code wants Ransack-compatible token-search metadata. `TableMetadata` can collect metadata from Hash columns, hash-like columns that respond to `to_hash`, object columns with public metadata readers, enumerable column lists, and table-like objects that respond to `columns`. Explicit `false` filter/editor metadata disables that slot instead of falling through to alias keys or readers. `TableRenderer` can turn collected metadata into FormBuilder call specs or dispatch it to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol, custom registry examples, and Rails Table Preferences integration notes.
 
