@@ -18,6 +18,10 @@ const checks = [
     args: ["scripts/check_package_exports.mjs"]
   },
   {
+    name: "TypeScript declaration metadata smoke",
+    args: ["scripts/check_types_metadata.mjs"]
+  },
+  {
     name: "Tom Select query params smoke",
     args: ["scripts/check_tom_select_query_params.mjs"]
   },
