@@ -29,6 +29,19 @@ Use existing helper-specific sections below when they match the scoped helper. F
 - a comparable non-target or unsupported element returns `null` when that is the documented boundary
 - request execution, visible copy, locale policy, mutation, validation, and retry behavior remain outside the helper evidence lane unless another release checklist section explicitly covers them
 
+## Placement checklist for new or changed helpers
+
+Use this checklist before adding or changing package-root helper docs. It keeps the helper list centralized while making the review and release evidence easy to find.
+
+- Start from `doc/public_api.md#javascript-exports` when the helper name, kind, import pattern, or return-shape boundary changes. That table remains the reader-facing source of truth for current exports.
+- Keep `scripts/check_package_exports.mjs` and the `npm run check:js` package export smoke aligned when the public API table gains, renames, or removes a package-root export. Add helper-specific smoke only when the generic import and callable checks are not enough to protect the documented boundary.
+- Keep README examples representative. The README should link to `doc/public_api.md#javascript-exports` for the full helper list and should not become an exhaustive helper inventory.
+- Use this guide only for release or sample-app evidence lanes. Add a helper-specific section when repeatable evidence is useful; otherwise a scoped PR comment or `doc/sample_app_results.md` note is enough.
+- Use `doc/visual_references.md` and `doc/visual_reference_index.html` as task or family routes, not as another copy of the current helper inventory. Link to the relevant rendered-state artifact when visual review is in scope.
+- Keep individual topic docs responsible for the domain boundary, such as selected preload, request params, text overrides, plugin state, native accessibility, or password-field non-goals. This guide should point to those boundaries rather than restating full examples.
+- Do not document open-PR helper names, proposal names, or roadmap-only helpers as current release evidence. Wait until the helper lands on `main` and appears in the public API table.
+- If the change needs runtime behavior, a new helper export, a return-shape decision, or a package metadata guard, split that work into the appropriate feature or quality track. This page should stay docs-only.
+
 ## When to add a helper-specific section
 
 Add a dedicated section to this guide only when a current public helper needs repeatable release evidence beyond the generic shape above. Good reasons include:
