@@ -58,7 +58,7 @@ RSpec.describe "repository documentation drift guards" do
     public_helper_names = javascript_exports_section.scan(/`([a-z][A-Za-z0-9]+\([^`]*\))`/).flatten
     readme_helper_names = direct_imports_section.scan(/`([a-z][A-Za-z0-9]+\([^`]*\))`/).flatten
 
-    expect(readme_helper_names).to include("readRenderedSelectedPreloadConfig(element)")
+    expect(readme_helper_names).to include("readRenderedSelectedPreloadConfig(...)")
     expect(readme_helper_names).not_to match_array(public_helper_names)
     expect(development_doc).to include(
       "The package export smoke derives package-root named-export expectations from the JavaScript exports table in `doc/public_api.md`"
