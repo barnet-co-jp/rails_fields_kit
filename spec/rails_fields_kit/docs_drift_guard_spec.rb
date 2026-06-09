@@ -2,6 +2,7 @@
 
 require "rubygems"
 require "spec_helper"
+require "pathname"
 require "uri"
 
 RSpec.describe "Rails Fields Kit docs drift guards" do
@@ -99,9 +100,9 @@ RSpec.describe "Rails Fields Kit docs drift guards" do
     counts = Hash.new(0)
 
     source.each_line.filter_map do |line|
-      next unless line.match?(/\A#{1,6}\s+/)
+      next unless line.match?(/\A\#{1,6}\s+/)
 
-      heading = line.sub(/\A#{1,6}\s+/, "").sub(/\s+#+\s*\z/, "").strip
+      heading = line.sub(/\A\#{1,6}\s+/, "").sub(/\s+#+\s*\z/, "").strip
       anchor = normalize_markdown_anchor(heading)
       count = counts[anchor]
       counts[anchor] += 1
