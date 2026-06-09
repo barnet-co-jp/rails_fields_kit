@@ -248,6 +248,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | --- | --- | --- |
 | `TomSelectController` | Stimulus controller | Registers Rails Fields Kit's Tom Select-backed field behavior on the rendered element. Host apps still own Stimulus boot, Tom Select installation, endpoint behavior, authorization, query parsing, visible feedback copy, and retry UI. |
 | `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
+| `tomSelectRequestParamsContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered request parameter data attributes and returns `queryParams`, `selectedQueryParams`, and `createParams`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, parse query strings, authorize endpoints, mutate Tom Select, or own visible feedback. |
 | `tomSelectPluginContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select plugin data and returns `plugins`, `hasClearButton`, and `hasRemoveButton`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not install plugin assets, expose Tom Select plugin objects, mutate selections, style clear/remove controls, or own empty-state behavior. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
 | `readRenderedOptionPayloadMapping(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered option payload mapping data and returns `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, parse endpoint responses, choose option rendering HTML, or own visible feedback. |
@@ -264,6 +265,7 @@ import {
   readRenderedOptionPayloadMapping,
   readRenderedSelectedPreloadConfig,
   tomSelectPluginContract,
+  tomSelectRequestParamsContract,
   tomSelectTextOverrideContract
 } from "rails_fields_kit"
 
@@ -271,6 +273,7 @@ const accessibilityContract = nativeFieldAccessibilityContract(inputElement)
 const copyContract = tomSelectTextOverrideContract(fieldElement)
 const optionPayloadMapping = readRenderedOptionPayloadMapping(fieldElement)
 const pluginContract = tomSelectPluginContract(fieldElement)
+const requestParamsContract = tomSelectRequestParamsContract(fieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
 ```
 
@@ -283,6 +286,8 @@ import TomSelectController from "rails_fields_kit/tom_select_controller"
 ### Contract reader boundary
 
 Rendered-field contract helpers stay read-only. They inspect data attributes and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance or duplicating wrapper traversal.
+
+For Tom Select request parameters, `tomSelectRequestParamsContract(element)` reports the rendered fixed query/body parameter hashes for search, selected preload, and create requests. It does not merge runtime request data, execute endpoints, or replace host-app authorization and query parsing.
 
 For Tom Select option payload mapping, `readRenderedOptionPayloadMapping(element)` reports the rendered `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField`. It applies the documented defaults and returns `searchFields` as the already-split array so host apps do not need to duplicate raw data attribute names or comma-splitting rules.
 
