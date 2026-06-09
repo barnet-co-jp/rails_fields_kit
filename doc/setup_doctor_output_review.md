@@ -54,7 +54,7 @@ Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's 
 
 [OK] Initializer: Found config/initializers/rails_fields_kit.rb.
 [OK] Importmap pins: Rails Fields Kit importmap pins are present in config/importmap.rb.
-[MANUAL] Tom Select package: package.json was not found. Skip this item for importmap-only apps, or confirm Tom Select through the host app's JavaScript package policy.
+[MANUAL] Tom Select package: Install Tom Select with the JavaScript package manager already used by this app.
 [OK] CSS import: Found Tom Select CSS import signal in app/javascript/application.js. This is an advisory stylesheet visibility check only; stylesheet pipeline and theme policy stay with the host app.
 [MANUAL] Stimulus registration: Register rails-fields-kit--tom-select on the Stimulus application this app already boots.
 [MANUAL] Bundler alias: If this app uses Vite or another bundler, verify that the host toolchain resolves the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths; this doctor does not inspect or rewrite bundler config.
@@ -76,7 +76,7 @@ rails rails_fields_kit:doctor
 
 [OK] Tom Select package: Found tom-select in package.json dependencies. This is an advisory dependency visibility check only; version policy stays with the host app.
 [MANUAL] Stimulus registration: Register rails-fields-kit--tom-select on the Stimulus application this app already boots.
-[MANUAL] CSS import: Tom Select CSS import was not found in representative stylesheet or JavaScript entrypoints. Confirm the host app loads tom-select/dist/css/tom-select.css or a deliberate Tom Select theme through its own stylesheet or bundler pipeline; setup doctor does not inspect every asset path or rewrite style config.
+[MANUAL] CSS import: Load tom-select/dist/css/tom-select.css from the app stylesheet or bundler entrypoint.
 ```
 
 Review notes:
@@ -132,8 +132,8 @@ Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's 
 
 [OK] Initializer: Found config/initializers/rails_fields_kit.rb.
 [MISSING] Importmap pins: Missing Rails Fields Kit importmap pins: rails_fields_kit/tom_select_controller. Rails Fields Kit importmap pins with unexpected targets: rails_fields_kit (expected rails_fields_kit/index.js, found rails_fields_kit), rails_fields_kit/tom_select_controller (expected rails_fields_kit/tom_select_controller.js, found no explicit target).
-[MANUAL] Tom Select package: package.json was not found. Skip this item for importmap-only apps, or confirm Tom Select through the host app's JavaScript package policy.
-[MANUAL] CSS import: Tom Select CSS import was not found in representative stylesheet or JavaScript entrypoints. Confirm the host app loads tom-select/dist/css/tom-select.css or a deliberate Tom Select theme through its own stylesheet or bundler pipeline; setup doctor does not inspect every asset path or rewrite style config.
+[MANUAL] Tom Select package: Install Tom Select with the JavaScript package manager already used by this app.
+[MANUAL] CSS import: Load tom-select/dist/css/tom-select.css from the app stylesheet or bundler entrypoint.
 [MANUAL] Stimulus registration: Register rails-fields-kit--tom-select on the Stimulus application this app already boots.
 ```
 
