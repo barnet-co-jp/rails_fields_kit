@@ -6,6 +6,11 @@ const TEXT_OVERRIDE_ATTRIBUTES = {
   loadingText: "data-rails-fields-kit--tom-select-loading-text-value",
   createText: "data-rails-fields-kit--tom-select-create-text-value"
 }
+const REQUEST_PARAM_ATTRIBUTES = {
+  queryParams: "data-rails-fields-kit--tom-select-query-params-value",
+  selectedQueryParams: "data-rails-fields-kit--tom-select-selected-query-params-value",
+  createParams: "data-rails-fields-kit--tom-select-create-params-value"
+}
 const PLUGINS_ATTRIBUTE = "data-rails-fields-kit--tom-select-plugins-value"
 const ERROR_SURFACE_ID_ATTRIBUTE = "data-rails-fields-kit--tom-select-error-surface-id-value"
 const SELECTED_PRELOAD_ATTRIBUTES = {
@@ -29,6 +34,10 @@ function hasTomSelectController(element) {
 
 function textOverrideValue(element, attributeName) {
   return element.hasAttribute(attributeName) ? element.getAttribute(attributeName) : null
+}
+
+function hasAnyAttribute(element, attributes) {
+  return Object.values(attributes).some((attributeName) => element.hasAttribute(attributeName))
 }
 
 function dataValue(element, attributeName) {
@@ -118,6 +127,18 @@ export function tomSelectTextOverrideContract(element) {
   if (!hasTomSelectController(element) && Object.values(contract).every((value) => value === null)) return null
 
   return contract
+}
+
+export function tomSelectRequestParamsContract(element) {
+  if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function") return null
+  if (!hasTomSelectController(element) && !hasAnyAttribute(element, REQUEST_PARAM_ATTRIBUTES)) return null
+
+  return Object.fromEntries(
+    Object.entries(REQUEST_PARAM_ATTRIBUTES).map(([key, attributeName]) => [
+      key,
+      objectDataValue(element, attributeName)
+    ])
+  )
 }
 
 export function tomSelectPluginContract(element) {
