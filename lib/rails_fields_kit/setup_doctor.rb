@@ -10,9 +10,23 @@ module RailsFieldsKit
       "rails_fields_kit/tom_select_controller" => "rails_fields_kit/tom_select_controller.js"
     }.freeze
 
+    CSS_IMPORT_CANDIDATE_PATHS = [
+      "app/assets/stylesheets/application.css",
+      "app/assets/stylesheets/application.scss",
+      "app/assets/stylesheets/application.sass",
+      "app/javascript/application.js",
+      "app/javascript/application.ts",
+      "app/javascript/entrypoints/application.js",
+      "app/javascript/entrypoints/application.ts",
+      "app/frontend/entrypoints/application.js",
+      "app/frontend/entrypoints/application.ts",
+      "app/frontend/entrypoints/application.tsx"
+    ].freeze
+
+    TOM_SELECT_CSS_IMPORT_PATTERN = %r{tom-select/dist/css/tom-select(?:[.\w-]*)\.css}
+
     MANUAL_CHECKS = [
       ["Stimulus registration", "Register rails-fields-kit--tom-select on the Stimulus application this app already boots."],
-      ["CSS import", "Load tom-select/dist/css/tom-select.css from the app stylesheet or bundler entrypoint."],
       ["Bundler alias", "If this app uses Vite or another bundler, verify that the host toolchain resolves the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths; this doctor does not inspect or rewrite bundler config."]
     ].freeze
 
@@ -30,7 +44,7 @@ module RailsFieldsKit
     end
 
     def checks
-      [initializer_check, importmap_check, tom_select_package_check] + manual_checks
+      [initializer_check, importmap_check, tom_select_package_check, css_import_check] + manual_checks
     end
 
     def report_lines
@@ -159,6 +173,26 @@ module RailsFieldsKit
       )
     end
 
+    def css_import_check
+      path = css_import_signal_path
+
+      if path
+        Check.new(
+          key: :css_import,
+          label: "CSS import",
+          status: :ok,
+          message: "Found Tom Select CSS import signal in #{path}. This is an advisory stylesheet visibility check only; stylesheet pipeline and theme policy stay with the host app."
+        )
+      else
+        Check.new(
+          key: :css_import,
+          label: "CSS import",
+          status: :manual,
+          message: "Tom Select CSS import was not found in representative stylesheet or JavaScript entrypoints. Confirm the host app loads tom-select/dist/css/tom-select.css or a deliberate Tom Select theme through its own stylesheet or bundler pipeline; setup doctor does not inspect every asset path or rewrite style config."
+        )
+      end
+    end
+
     def manual_checks
       MANUAL_CHECKS.map do |label, message|
         Check.new(
@@ -167,6 +201,13 @@ module RailsFieldsKit
           status: :manual,
           message: message
         )
+      end
+    end
+
+    def css_import_signal_path
+      CSS_IMPORT_CANDIDATE_PATHS.find do |candidate_path|
+        path = root.join(candidate_path)
+        path.file? && path.read.match?(TOM_SELECT_CSS_IMPORT_PATTERN)
       end
     end
 
