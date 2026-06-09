@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "json"
 require "pathname"
 
 module RailsFieldsKit
@@ -10,10 +11,14 @@ module RailsFieldsKit
     }.freeze
 
     MANUAL_CHECKS = [
-      ["Tom Select package", "Install Tom Select with the JavaScript package manager already used by this app."],
       ["Stimulus registration", "Register rails-fields-kit--tom-select on the Stimulus application this app already boots."],
       ["CSS import", "Load tom-select/dist/css/tom-select.css from the app stylesheet or bundler entrypoint."],
       ["Bundler alias", "If this app uses Vite or another bundler, verify that the host toolchain resolves the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths; this doctor does not inspect or rewrite bundler config."]
+    ].freeze
+
+    STATUS_LEGEND_LINES = [
+      "Status legend: [OK] detected setup; [MISSING] needs action for the detected setup route; [MANUAL] host-app check, not an automatic failure.",
+      "Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain."
     ].freeze
 
     Check = Struct.new(:key, :label, :status, :message, keyword_init: true)
@@ -25,11 +30,11 @@ module RailsFieldsKit
     end
 
     def checks
-      [initializer_check, importmap_check] + manual_checks
+      [initializer_check, importmap_check, tom_select_package_check] + manual_checks
     end
 
     def report_lines
-      ["Rails Fields Kit setup doctor", ""] + checks.map { |check| format_check(check) }
+      ["Rails Fields Kit setup doctor", ""] + STATUS_LEGEND_LINES + [""] + checks.map { |check| format_check(check) }
     end
 
     def run(io: $stdout)
@@ -115,6 +120,45 @@ module RailsFieldsKit
       end
     end
 
+    def tom_select_package_check
+      path = root.join("package.json")
+
+      unless path.file?
+        return Check.new(
+          key: :tom_select_package,
+          label: "Tom Select package",
+          status: :manual,
+          message: "package.json was not found. Skip this item for importmap-only apps, or confirm Tom Select through the host app's JavaScript package policy."
+        )
+      end
+
+      package_json = JSON.parse(path.read)
+      dependency_section = tom_select_dependency_section(package_json)
+
+      if dependency_section
+        Check.new(
+          key: :tom_select_package,
+          label: "Tom Select package",
+          status: :ok,
+          message: "Found tom-select in package.json #{dependency_section}. This is an advisory dependency visibility check only; version policy stays with the host app."
+        )
+      else
+        Check.new(
+          key: :tom_select_package,
+          label: "Tom Select package",
+          status: :manual,
+          message: "package.json does not list tom-select in dependencies or devDependencies. Install it with the host app's JavaScript package manager when using Tom Select-backed helpers."
+        )
+      end
+    rescue JSON::ParserError => error
+      Check.new(
+        key: :tom_select_package,
+        label: "Tom Select package",
+        status: :manual,
+        message: "package.json could not be parsed (#{error.class}). Confirm the Tom Select package manually; setup doctor does not fail or rewrite package files."
+      )
+    end
+
     def manual_checks
       MANUAL_CHECKS.map do |label, message|
         Check.new(
@@ -123,6 +167,13 @@ module RailsFieldsKit
           status: :manual,
           message: message
         )
+      end
+    end
+
+    def tom_select_dependency_section(package_json)
+      %w[dependencies devDependencies].find do |section|
+        dependencies = package_json[section]
+        dependencies.is_a?(Hash) && dependencies.key?("tom-select")
       end
     end
 

@@ -55,4 +55,14 @@ RSpec.describe "repository documentation drift guards" do
       expect(support_boundary).to include("| #{rails_version} | #{ruby_version} | `#{gemfile}` |")
     end
   end
+
+  it "keeps open PR freshness review guidance visible without GitHub API automation" do
+    development_doc = read_repo_file("doc/development.md")
+
+    expect(development_doc).to include("## Open PR freshness checks")
+    expect(development_doc).to include("latest workflow run state")
+    expect(development_doc).to include("PR metadata `mergeable` value")
+    expect(development_doc).to include("behind, diverged, or superseded")
+    expect(development_doc).to include("Do not add a GitHub API-dependent CI job")
+  end
 end

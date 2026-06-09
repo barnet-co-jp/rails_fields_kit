@@ -51,7 +51,7 @@
         color: var(--accent);
         font-size: 0.76rem;
         font-weight: 700;
-        letter-spacing: 0.08em;
+        letter-spacing: 0;
         text-transform: uppercase;
       }
 
@@ -62,6 +62,11 @@
         font-size: 2.2rem;
         font-weight: 650;
         line-height: 1.08;
+      }
+
+      h3 {
+        font-size: 1.02rem;
+        line-height: 1.25;
       }
 
       .lede {
@@ -88,11 +93,15 @@
         align-items: center;
         justify-content: center;
         min-height: 38px;
-        padding: 0 12px;
+        max-width: 100%;
+        padding: 8px 12px;
         border: 1px solid var(--line-strong);
         background: var(--surface);
         color: var(--ink);
+        line-height: 1.25;
+        text-align: center;
         text-decoration: none;
+        overflow-wrap: anywhere;
       }
 
       .hero-links a:hover,
@@ -116,6 +125,7 @@
       .task-card,
       .reference-card,
       .workflow {
+        min-width: 0;
         display: grid;
         gap: 12px;
         align-content: start;
@@ -128,6 +138,7 @@
       .summary-item strong {
         font-size: 1.35rem;
         line-height: 1;
+        overflow-wrap: anywhere;
       }
 
       .summary-item span,
@@ -142,6 +153,7 @@
       .scope-note {
         color: var(--muted);
         font-size: 0.92rem;
+        overflow-wrap: anywhere;
       }
 
       .section-heading {
@@ -161,7 +173,7 @@
       .task-grid,
       .reference-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 14px;
       }
 
@@ -174,15 +186,18 @@
       .tag {
         display: inline-flex;
         align-items: center;
+        max-width: 100%;
         min-height: 24px;
-        padding: 2px 7px;
+        padding: 3px 7px;
         border: 1px solid var(--line-strong);
         background: var(--surface-muted);
         color: var(--ink);
         font-size: 0.72rem;
         font-weight: 700;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
+        letter-spacing: 0;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+        text-transform: none;
       }
 
       .tag.primary {
@@ -219,6 +234,7 @@
         background: var(--accent-soft);
         color: #244d47;
         font-size: 0.92rem;
+        overflow-wrap: anywhere;
       }
 
       ul, ol {
@@ -226,7 +242,10 @@
         padding-left: 20px;
       }
 
-      .reference-link { justify-self: start; }
+      .reference-link {
+        justify-self: start;
+        text-align: left;
+      }
 
       .workflow ol {
         display: grid;
@@ -245,12 +264,30 @@
           padding: 28px 0 44px;
         }
 
+        h1 { font-size: 1.78rem; }
+        .section-heading h2 { font-size: 1.18rem; }
+
         .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+        .family-grid,
+        .task-grid,
+        .reference-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-links a,
+        .quick-list a,
+        .task-links a,
+        .family-links a,
+        .reference-link {
+          flex: 1 1 220px;
+        }
       }
 
       @media (max-width: 480px) {
-        h1 { font-size: 1.8rem; }
+        main { width: min(100% - 20px, 1120px); }
         .summary { grid-template-columns: 1fr; }
+        .summary-item, .family-card, .task-card, .reference-card, .workflow { padding: 14px; }
 
         .hero-links a,
         .quick-list a,
@@ -284,8 +321,8 @@
           <span>Choose by helper family before opening a focused lane.</span>
         </div>
         <div class="summary-item">
-          <strong>Runtime</strong>
-          <span>No helper, JavaScript, request, or persistence behavior changes.</span>
+          <strong>Narrow</strong>
+          <span>Links, tags, and task cards wrap without hiding the review route.</span>
         </div>
         <div class="summary-item">
           <strong>Main</strong>
