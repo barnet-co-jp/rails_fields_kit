@@ -47,6 +47,10 @@ module RailsFieldsKit
       rfk_native_field(method, :search_field, **options)
     end
 
+    def rfk_password_field(method, **options)
+      rfk_native_field(method, :password_field, **options)
+    end
+
     def rfk_select(method, collection: nil, **options)
       rfk_tom_select_field(method, :select, collection: collection, **options)
     end

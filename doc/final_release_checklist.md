@@ -42,6 +42,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/field_helpers.md`.
 - [ ] Review `doc/visual_references.md` as the visual reference family index, and confirm it still matches the README Docs map.
 - [ ] Review `doc/visual_reference_index.html` as the one-screen reviewer navigation artifact.
+- [ ] Confirm each landed visual reference listed in `doc/visual_references.md` is reachable from `doc/visual_reference_index.html`, and that `README.md` links to the maintained map instead of proposal-only artifacts.
 - [ ] Review `doc/tom_select_visual_reference.html`.
 - [ ] Review `doc/tom_select_request_failure_visual_reference.html`.
 - [ ] Review `doc/tom_select_error_surface_contract_visual_reference.html` as the focused request-failure live-region contract artifact.
@@ -128,6 +129,7 @@ Record visual reference and sample app evidence in a compact matrix before treat
 - [ ] Confirm one representative clearable `rfk_select` lane can return from a selected value to the documented blank or placeholder state with `allow_clear: true` while staying in the collection-backed single-value contract.
 - [ ] Confirm one representative `rfk_autocomplete` lane keeps remote suggestions in the typing-assist role while the submitted value stays free text, without depending on `selected_url:` or create-on-the-fly hooks.
 - [ ] Confirm one representative `rfk_multi_select` lane keeps a known collection-backed multiple-value flow, with the submitted value staying an ordinary array of selected IDs or values rather than a tag-entry or free-text creation lane.
+- [ ] Confirm one representative `rfk_tags` lane keeps existing tags visible while accepting a new tag or exercising create-on-the-fly evidence, and stays distinct from the ordinary collection-backed `rfk_multi_select` lane.
 - [ ] Confirm one representative `rfk_grouped_select` lane preserves the documented optgroup structure while the submitted value stays an ordinary selected ID or value and does not depend on remote search or create-on-the-fly hooks.
 - [ ] Confirm one representative `rfk_enum_select` lane preserves the current enum label and value mapping through edit-form redisplay or validation rerender without drifting into a hand-maintained arbitrary collection lane.
 - [ ] Confirm one representative native helper lane keeps `wrapper: true` label / hint / prefix / suffix rendering stable through validation rerender, and that a comparable `accessibility: false` example clearly drops the shared automatic wiring.

@@ -40,6 +40,19 @@ The host app owns:
 - browser validation-message policy, character counters, input masks, and server-side validation rules
 - the final UX decision for minimum rows, maximum height, scrollbars, and resize handles
 
+## Release evidence guidance
+
+When a release or narrow PR needs evidence for `rfk_text_area`, record it in the native helper representative wrapper and accessibility lane, not as a new autosize behavior lane. Use this page as the source of truth for the autosize boundary.
+
+Representative evidence should confirm:
+
+- a rendered `rfk_text_area` keeps the native wrapper, label, hint, error, affix, submitted value, and automatic accessibility wiring expected from the native helper family
+- edit-form redisplay or validation rerender keeps the textarea value and accessibility wiring stable
+- any host-owned autosize controller, CSS, or manual-resize policy is described as sample-app or host-app evidence, not as Rails Fields Kit behavior
+- the evidence notes explicitly say that Rails Fields Kit still has no built-in `autosize:` option, bundled measurement script, production CSS preset, or Turbo reconnect sizing hook
+
+Do not use release evidence to imply that Rails Fields Kit owns textarea height calculation, autosize timing, scrollbar policy, resize handles, validation-message copy, input masks, character counters, or server-side validation. If the release needs those behaviors, split them into a separate feature issue before recording them as package behavior.
+
 ## Future opt-in path
 
 A future feature can still introduce an opt-in autosize surface, but it should be planned separately and keep these constraints:
