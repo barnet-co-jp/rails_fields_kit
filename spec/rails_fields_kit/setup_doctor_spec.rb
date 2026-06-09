@@ -157,6 +157,44 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
     end
   end
 
+  it "keeps missing Tom Select CSS import as a manual advisory" do
+    Dir.mktmpdir do |root|
+      css_check = check_for(described_class.new(root: root), :css_import)
+
+      expect(css_check.status).to eq(:manual)
+      expect(css_check.label).to eq("CSS import")
+      expect(css_check.message).to include("Tom Select CSS import was not found")
+      expect(css_check.message).to include("does not inspect every asset path or rewrite style config")
+    end
+  end
+
+  it "reports Tom Select CSS import from a representative JavaScript entrypoint" do
+    Dir.mktmpdir do |root|
+      write_file(root, "app/javascript/application.js", <<~JS)
+        import "tom-select/dist/css/tom-select.css"
+      JS
+
+      css_check = check_for(described_class.new(root: root), :css_import)
+
+      expect(css_check.status).to eq(:ok)
+      expect(css_check.message).to include("Found Tom Select CSS import signal in app/javascript/application.js")
+      expect(css_check.message).to include("stylesheet pipeline and theme policy stay with the host app")
+    end
+  end
+
+  it "reports Tom Select theme CSS import from a representative stylesheet" do
+    Dir.mktmpdir do |root|
+      write_file(root, "app/assets/stylesheets/application.css", <<~CSS)
+        @import "tom-select/dist/css/tom-select.bootstrap5.css";
+      CSS
+
+      css_check = check_for(described_class.new(root: root), :css_import)
+
+      expect(css_check.status).to eq(:ok)
+      expect(css_check.message).to include("Found Tom Select CSS import signal in app/assets/stylesheets/application.css")
+    end
+  end
+
   it "reports missing importmap pins without treating toolchain variance as an invocation failure" do
     Dir.mktmpdir do |root|
       write_file(root, "config/importmap.rb", <<~RUBY)
@@ -172,8 +210,8 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       expect(doctor.run(io: output)).to eq(true)
       expect(output.string).to include("[MISSING] Importmap pins")
       expect(output.string).to include("[MANUAL] Tom Select package")
-      expect(output.string).to include("[MANUAL] Stimulus registration")
       expect(output.string).to include("[MANUAL] CSS import")
+      expect(output.string).to include("[MANUAL] Stimulus registration")
       expect(output.string).to include("[MANUAL] Bundler alias")
       expect(output.string).to include("rails_fields_kit and rails_fields_kit/tom_select_controller")
       expect(output.string).to include("does not inspect or rewrite bundler config")
