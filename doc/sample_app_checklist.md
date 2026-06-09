@@ -10,6 +10,8 @@ When package-root read-only helper exports are in scope, use [`package_root_help
 
 When TableMetadata collection source shapes are in scope, use [`table_metadata_collection_evidence.md`](table_metadata_collection_evidence.md) to choose representative hash-like, table-like, and explicit false checks before recording the result.
 
+When the `rfk_text_area` autosize boundary is in scope, use [`textarea_autosize_release_evidence.md`](textarea_autosize_release_evidence.md) with the native helper lane so release notes do not treat host-owned autosize enhancement as Rails Fields Kit behavior.
+
 | Lane | Record in `sample_app_results.md` when... | PR comment is enough when... | Evidence to capture |
 | --- | --- | --- | --- |
 | Release baseline | Preparing a release candidate or release PR | Never; keep release baseline evidence in the results file | version, tester, gem source, branch head CI, local checks, generator result |
@@ -27,6 +29,7 @@ Use this chooser before copying checklist items into a PR comment. Pick the smal
 | Setup docs, generated notes, importmap/jsbundling visibility, or package-root helper import/read-only contract | `Host-app setup and package-root exports`, then `JavaScript setup checks` or the helper-specific evidence guide | PR comment for narrow docs/spec work; `sample_app_results.md` for release candidates | visual screenshots, request execution, helper behavior not changed by the PR |
 | Static visual reference HTML, one-screen index, or visual reference map wording | `Visual references`, then `Visual reference render checks` | PR comment when browser-capable review is still pending; `sample_app_results.md` for release-critical artifact changes | runtime CSS, production helper markup, or CI success as visual approval |
 | Native wrapper, accessibility, constraint attributes, or field-level customization | `Native helper representative wrapper and accessibility lane checks` and the native customization lane | PR comment for a focused helper/docs PR; release evidence only when the release depends on the lane | Tom Select request lifecycle, masking, validation-message policy, server-side validation |
+| `rfk_text_area` autosize boundary or host-owned autosize enhancement notes | `Native helper representative wrapper and accessibility lane checks`, then `textarea_autosize_release_evidence.md` | PR comment for a focused docs PR; `sample_app_results.md` for release candidates | built-in `autosize:` option, JavaScript measurement, production CSS preset, Turbo reconnect sizing hook |
 | Remote search, selected preload, create-on-the-fly, request-failure feedback, Turbo, or events | The matching remote lifecycle, visible feedback, Turbo, or event lane | PR comment for one representative field; release results when the behavior is release-critical | endpoint authorization policy, retry UI, visible copy ownership unless the PR changes that surface |
 | Token suggestions, Ransack suggestions, table filters, cell editors, or TableMetadata collection shape | `Token suggestion and Ransack suggestion metadata` or `Verify table metadata adapters` | PR comment for scoped metadata/docs work; release evidence for release candidates | query execution, parser semantics, preference persistence, or table integration redesign |
 
