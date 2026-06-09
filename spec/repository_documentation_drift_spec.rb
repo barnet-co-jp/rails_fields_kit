@@ -29,6 +29,34 @@ RSpec.describe "repository documentation drift guards" do
     expect(missing_paths).to eq([])
   end
 
+  it "keeps README direct import helper guidance lightweight and tied to the public API source of truth" do
+    readme = read_repo_file("README.md")
+    public_api = read_repo_file("doc/public_api.md")
+    development_doc = read_repo_file("doc/development.md")
+
+    direct_imports_section = readme.fetch_section("### Direct imports and package exports")
+    javascript_exports_section = public_api.fetch_section("## JavaScript exports")
+
+    expect(direct_imports_section).to include(
+      "rails_fields_kit/tom_select_controller",
+      "rails_fields_kit/index.js",
+      "doc/public_api.md",
+      "#javascript-exports",
+      "doc/package_root_helper_release_evidence.md"
+    )
+    expect(direct_imports_section).to include("readRenderedSelectedPreloadConfig")
+    expect(javascript_exports_section).to include("readRenderedSelectedPreloadConfig")
+
+    public_helper_names = javascript_exports_section.scan(/`([a-z][A-Za-z0-9]+\([^`]*\))`/).flatten
+    readme_helper_names = direct_imports_section.scan(/`([a-z][A-Za-z0-9]+\([^`]*\))`/).flatten
+
+    expect(readme_helper_names).to include("readRenderedSelectedPreloadConfig(element)")
+    expect(readme_helper_names).not_to match_array(public_helper_names)
+    expect(development_doc).to include(
+      "The package export smoke derives package-root named-export expectations from the JavaScript exports table in `doc/public_api.md`"
+    )
+  end
+
   it "keeps support boundary docs aligned with gem metadata, package metadata, and representative CI rows" do
     support_boundary = read_repo_file("doc/support_boundary.md")
     development_doc = read_repo_file("doc/development.md")
