@@ -15,8 +15,8 @@ RSpec.describe "README import troubleshooting guidance" do
 
     expect(setup_doc).to include(
       "Troubleshoot unresolved imports",
-      "package-root import",
-      "direct controller import"
+      "rails_fields_kit/index.js",
+      "rails_fields_kit/tom_select_controller.js"
     )
   end
 end
