@@ -8,6 +8,8 @@ Use this focused docs/design artifact when a release or PR changes setup doctor 
 - Confirm that the status legend explains `[OK]`, `[MISSING]`, and `[MANUAL]` before the user reaches individual checks.
 - Confirm that `[OK]`, `[MISSING]`, and `[MANUAL]` lines are easy to scan as diagnostic evidence.
 - Confirm that importmap target mismatch output is readable after the target-drift diagnostic landed.
+- Confirm that package.json Tom Select dependency evidence reads as advisory visibility, not as host-app package policy.
+- Confirm narrow or wrapped evidence against the representative states in this artifact before recording a release-wide sample app result.
 - Keep command behavior, wording source, host app setup policy, and auto-fix decisions outside this artifact.
 
 ## Release Evidence Handoff
@@ -16,9 +18,24 @@ Use this artifact as the review aid for setup doctor evidence, then record the r
 
 - Use `doc/sample_app_checklist.md` to decide whether setup doctor evidence belongs in the release baseline or the host-app setup lane.
 - Record release-wide results in `doc/sample_app_results.md` under `Setup doctor checks`, including the app setup path: importmap, jsbundling, bundler-managed JavaScript, or another route.
-- For a narrow docs or setup-doctor PR, a PR comment is enough when it names the command, setup path, representative `[OK]` / `[MISSING]` / `[MANUAL]` lines, branch or commit, and result.
+- For a narrow docs or setup-doctor PR, a PR comment is enough when it names the command, setup path, representative `[OK]` / `[MISSING]` / `[MANUAL]` lines, branch or commit, viewport or wrapping width, and result.
+- Use the representative review states below to decide whether the PR evidence should cover the first-run legend, an advisory-only Tom Select package lane, an importmap mismatch lane, or all three.
 - Treat `[MANUAL]` lines as host-app responsibility checks. Do not count them as failed automatic checks unless the release issue explicitly changes setup doctor behavior.
 - Keep auto-fix behavior, exit-code policy, and host-app setup policy decisions out of release evidence notes unless a separate implementation issue changes them.
+
+## Representative Narrow Review States
+
+Use these states when a PR or release asks for narrow terminal, wrapped Markdown, or code-block readability evidence. They are review scenarios, not new setup doctor output variants.
+
+| State | Use it when | Narrow / wrapped evidence should show |
+| --- | --- | --- |
+| First-run mixed status | The PR changes the setup doctor overview, generated setup notes, or evidence wording | The status legend appears before checks, `[MISSING]` reads as the automatic action item, and `[MANUAL]` reads as host-app follow-up rather than failure. |
+| Advisory Tom Select package | The PR touches package dependency visibility, Stimulus registration guidance, or CSS import evidence | The Tom Select package line reads as advisory dependency visibility, and manual Stimulus / CSS checks do not look like failed automatic checks. |
+| Importmap target mismatch | The PR changes importmap pin diagnostics or generated setup notes | Each wrapped mismatch keeps its `expected ...` and `found ...` values paired closely enough to review without re-running the command. |
+
+For PR-level evidence, name the state and record the width used, such as `80-column terminal`, `390px Markdown preview`, or `GitHub PR comment code block`. For release-wide evidence, keep the detailed output in the release notes or PR comment and record the summary result in `doc/sample_app_results.md`.
+
+Do not create a new runtime output mode just to satisfy this review. If a state is unreadable after wrapping, record it as a docs/setup policy follow-up unless the issue explicitly asks to change setup doctor wording.
 
 ## Representative Output States
 
@@ -47,6 +64,22 @@ Review notes:
 - `[MANUAL]` means the doctor cannot safely verify the host app decision automatically; it is not a hard failure by itself.
 - The `Next step` line should make first-run output actionable without adding an auto-fix policy.
 - Bundler-only apps can have manual JavaScript checks without implying an importmap failure.
+
+## Tom Select Package Advisory
+
+```text
+rails rails_fields_kit:doctor
+
+[OK] Tom Select package: Found tom-select in package.json dependencies. This is an advisory dependency visibility check only; version policy stays with the host app.
+[MANUAL] Stimulus registration: Register rails-fields-kit--tom-select on the Stimulus application this app already boots.
+[MANUAL] CSS import: Load tom-select/dist/css/tom-select.css from the app stylesheet or bundler entrypoint.
+```
+
+Review notes:
+
+- The Tom Select package line only reads `package.json` for `dependencies` or `devDependencies`; it does not choose a package manager, version range, CDN, or importmap source.
+- Missing `package.json`, missing `tom-select`, or invalid JSON should remain `[MANUAL]` advisory output, not a command failure.
+- Stimulus registration, CSS import, and bundler alias checks remain host-app responsibilities and should continue to read as manual follow-up.
 
 ## Importmap Target Mismatch
 
@@ -82,8 +115,9 @@ Use this checklist when recording release or PR evidence:
 - [ ] `[OK]`, `[MISSING]`, and `[MANUAL]` labels are visually easy to distinguish in the recorded output.
 - [ ] The evidence note distinguishes `[MISSING]` action items from `[MANUAL]` host-app checks.
 - [ ] Missing importmap target output includes both expected and observed target values.
+- [ ] Tom Select package evidence is described as advisory dependency visibility, not package/version policy.
 - [ ] Narrow-width evidence says whether the output was reviewed in a standard terminal width, a wrapped Markdown/code-block view, or both.
-- [ ] Wrapped mismatch lines still make the expected target and observed target relationship readable without changing setup doctor wording.
+- [ ] Wrapped mismatch lines still make the expected and observed target relationship readable without changing setup doctor wording.
 - [ ] Manual checklist lines are not described as failed automatic checks.
 - [ ] Evidence notes say whether the app under review is importmap, jsbundling, bundler-managed JavaScript, or another setup path.
 - [ ] Any deferred follow-up is recorded as docs/setup policy work, not as a visual reference failure.

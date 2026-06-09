@@ -523,6 +523,53 @@
 
         <article class="card">
           <div class="card-header">
+            <span class="tag boundary">Group Wrapper</span>
+            <h2>Group-level wrapper beside field wrappers</h2>
+            <p>Represents `group_html:` wrapping the joined filter or editor group while individual fields keep their own `wrapper_html:` responsibilities.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="strip">
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Filter group wrapper</span>
+                  <span class="metadata-chip">group_html: { class: ... }</span>
+                </div>
+                <div class="control native">
+                  <span class="helper">Outer group label, layout class, and data hooks surround the joined controls.</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Customer field wrapper</span>
+                  <span class="metadata-chip">wrapper_html:</span>
+                </div>
+                <div class="control search">
+                  <span class="selected">Northwind Supplies</span>
+                  <span class="caret">▾</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Status field wrapper</span>
+                  <span class="metadata-chip">wrapper_html:</span>
+                </div>
+                <div class="control">
+                  <span class="selected">Open</span>
+                  <span class="caret">▾</span>
+                </div>
+              </div>
+            </div>
+            <div class="toolbar">
+              <span class="pill">Group attributes wrap the set</span>
+              <span class="pill">Field attributes stay per control</span>
+            </div>
+            <div class="stack-note">Use this lane to check that group label, helper label, and hint text remain readable at narrow widths. Layout framework classes, query behavior, table persistence, and authorization stay with the host app.</div>
+          </div>
+          <p class="card-footer">This lane follows `table_group_html.md`: Rails Fields Kit passes through a group wrapper, but it does not create a table layout component or change field-level wrapper behavior.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
             <span class="tag native">Custom Helper</span>
             <h2>Registered helper mapping</h2>
             <p>Represents a table integration that registers a project-specific field type while keeping the renderer protocol the same.</p>
@@ -580,7 +627,7 @@
 
       <section class="legend">
         <strong>Scope note.</strong>
-        This page is a static visual aid for representative table metadata lanes. The maintained protocol for `TableFilterInput`, `TableCellInput`, `TableMetadata`, `TableRenderer`, and helper responsibility boundaries remains in the README and table adapter docs.
+        This page is a static visual aid for representative table metadata lanes. The maintained protocol for `TableFilterInput`, `TableCellInput`, `TableMetadata`, `TableRenderer`, `group_html:`, and helper responsibility boundaries remains in the README and table adapter docs.
       </section>
     </main>
   </body>

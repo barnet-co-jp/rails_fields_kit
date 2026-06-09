@@ -42,6 +42,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/field_helpers.md`.
 - [ ] Review `doc/visual_references.md` as the visual reference family index, and confirm it still matches the README Docs map.
 - [ ] Review `doc/visual_reference_index.html` as the one-screen reviewer navigation artifact.
+- [ ] Confirm each landed visual reference listed in `doc/visual_references.md` is reachable from `doc/visual_reference_index.html`, and that `README.md` links to the maintained map instead of proposal-only artifacts.
 - [ ] Review `doc/tom_select_visual_reference.html`.
 - [ ] Review `doc/tom_select_request_failure_visual_reference.html`.
 - [ ] Review `doc/tom_select_error_surface_contract_visual_reference.html` as the focused request-failure live-region contract artifact.
@@ -65,6 +66,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/sample_app_results.md`.
 - [ ] Review `doc/release.md`.
 - [ ] Review `doc/selected_preload_release_gate.md`.
+- [ ] Review `doc/package_root_helper_release_evidence.md` as the package-root helper evidence guide, and keep helper names and return-shape details sourced from `doc/public_api.md#javascript-exports` rather than duplicating them in this checklist.
 - [ ] Review `doc/release_notes_0_1_1.md` for the current next-release draft.
 - [ ] Confirm `README.md` and `doc/public_api.md` still describe both documented JavaScript import paths: `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] Confirm `doc/public_api.md#javascript-exports` is the source of truth for current package-root exports, and that release verification does not treat open-PR or proposal helper names as current public API.
@@ -127,6 +129,7 @@ Record visual reference and sample app evidence in a compact matrix before treat
 - [ ] Confirm one representative clearable `rfk_select` lane can return from a selected value to the documented blank or placeholder state with `allow_clear: true` while staying in the collection-backed single-value contract.
 - [ ] Confirm one representative `rfk_autocomplete` lane keeps remote suggestions in the typing-assist role while the submitted value stays free text, without depending on `selected_url:` or create-on-the-fly hooks.
 - [ ] Confirm one representative `rfk_multi_select` lane keeps a known collection-backed multiple-value flow, with the submitted value staying an ordinary array of selected IDs or values rather than a tag-entry or free-text creation lane.
+- [ ] Confirm one representative `rfk_tags` lane keeps existing tags visible while accepting a new tag or exercising create-on-the-fly evidence, and stays distinct from the ordinary collection-backed `rfk_multi_select` lane.
 - [ ] Confirm one representative `rfk_grouped_select` lane preserves the documented optgroup structure while the submitted value stays an ordinary selected ID or value and does not depend on remote search or create-on-the-fly hooks.
 - [ ] Confirm one representative `rfk_enum_select` lane preserves the current enum label and value mapping through edit-form redisplay or validation rerender without drifting into a hand-maintained arbitrary collection lane.
 - [ ] Confirm one representative native helper lane keeps `wrapper: true` label / hint / prefix / suffix rendering stable through validation rerender, and that a comparable `accessibility: false` example clearly drops the shared automatic wiring.
