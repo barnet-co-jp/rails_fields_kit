@@ -23,7 +23,7 @@ module RailsFieldsKit
       "app/frontend/entrypoints/application.tsx"
     ].freeze
 
-    TOM_SELECT_CSS_IMPORT_PATTERN = %r{tom-select/dist/css/tom-select(?:[.\w-]+)?\.css}.freeze
+    TOM_SELECT_CSS_IMPORT_PATTERN = %r{tom-select/dist/css/tom-select(?:[.\w-]*)\.css}
 
     MANUAL_CHECKS = [
       ["Stimulus registration", "Register rails-fields-kit--tom-select on the Stimulus application this app already boots."],
