@@ -50,6 +50,10 @@ const checks = [
     args: ["scripts/check_tom_select_render_text_fallback.mjs"]
   },
   {
+    name: "Tom Select render text accessibility smoke",
+    args: ["scripts/check_tom_select_render_text_accessibility.mjs"]
+  },
+  {
     name: "Tom Select plugin contract smoke",
     args: ["scripts/check_tom_select_plugin_contract.mjs"]
   },
