@@ -98,9 +98,18 @@ RSpec.describe "package metadata" do
 
     expect(package.fetch("name")).to eq("rails_fields_kit")
     expect(package.fetch("type")).to eq("module")
+    expect(package.fetch("types")).to eq("./app/javascript/rails_fields_kit/index.d.ts")
     expect(package.fetch("exports")).to eq(
-      "." => "./app/javascript/rails_fields_kit/index.js",
-      "./tom_select_controller" => "./app/javascript/rails_fields_kit/tom_select_controller.js"
+      "." => {
+        "types" => "./app/javascript/rails_fields_kit/index.d.ts",
+        "import" => "./app/javascript/rails_fields_kit/index.js",
+        "default" => "./app/javascript/rails_fields_kit/index.js"
+      },
+      "./tom_select_controller" => {
+        "types" => "./app/javascript/rails_fields_kit/tom_select_controller.d.ts",
+        "import" => "./app/javascript/rails_fields_kit/tom_select_controller.js",
+        "default" => "./app/javascript/rails_fields_kit/tom_select_controller.js"
+      }
     )
   end
 
@@ -185,16 +194,16 @@ RSpec.describe "package metadata" do
         })
 
         const contract = tomSelectTextOverrideContract(field)
-        if (contract.noResultsText !== "No customers found") throw new Error("missing noResultsText")
-        if (contract.loadingText !== "Searching...") throw new Error("missing loadingText")
-        if (contract.createText !== "Create") throw new Error("missing createText")
+        if (contract.noResultsText != "No customers found") throw new Error("missing noResultsText")
+        if (contract.loadingText != "Searching...") throw new Error("missing loadingText")
+        if (contract.createText != "Create") throw new Error("missing createText")
 
         const fallbackContract = tomSelectTextOverrideContract(renderedTomSelectField())
-        if (fallbackContract.noResultsText !== null) throw new Error("unexpected noResultsText fallback value")
-        if (fallbackContract.loadingText !== null) throw new Error("unexpected loadingText fallback value")
-        if (fallbackContract.createText !== null) throw new Error("unexpected createText fallback value")
+        if (fallbackContract.noResultsText != null) throw new Error("unexpected noResultsText fallback value")
+        if (fallbackContract.loadingText != null) throw new Error("unexpected loadingText fallback value")
+        if (fallbackContract.createText != null) throw new Error("unexpected createText fallback value")
 
-        if (tomSelectTextOverrideContract(plainField()) !== null) {
+        if (tomSelectTextOverrideContract(plainField()) != null) {
           throw new Error("non Rails Fields Kit field should not return a text contract")
         }
       JS
