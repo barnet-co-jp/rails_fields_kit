@@ -227,7 +227,7 @@ module RailsFieldsKit
       readable_contents = paths.filter_map do |relative_path|
         path = root.join(relative_path)
         [relative_path, path.read]
-      rescue StandardError
+      rescue
         nil
       end
 
