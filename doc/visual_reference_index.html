@@ -337,6 +337,8 @@
         </div>
         <div class="quick-list" aria-label="Direct visual reference links">
           <a href="tom_select_visual_reference.html">Tom Select states</a>
+          <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
+          <a href="tom_select_disabled_option_visual_reference.html">Disabled options</a>
           <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
           <a href="tom_select_error_surface_contract_visual_reference.html">Error surface contract</a>
           <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
@@ -366,10 +368,13 @@
             </header>
             <ul>
               <li>Use the core states for layout and viewport checks.</li>
+              <li>Use disabled option and Turbo reconnect lanes only when collection metadata or reconnect appearance is the review topic.</li>
               <li>Use focused lanes only when error feedback or copy overrides are the review topic.</li>
             </ul>
             <nav class="family-links" aria-label="Tom Select helper family references">
               <a href="tom_select_visual_reference.html">Core states</a>
+              <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
+              <a href="tom_select_disabled_option_visual_reference.html">Disabled options</a>
               <a href="tom_select_request_failure_visual_reference.html">Request feedback</a>
               <a href="tom_select_error_surface_contract_visual_reference.html">Error surface contract</a>
               <a href="tom_select_text_override_visual_reference.html">Copy overrides</a>
@@ -554,6 +559,40 @@
               <li>Keep host-app search, authorization, pagination, and result execution out of scope.</li>
             </ul>
             <a class="reference-link" href="tom_select_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">Turbo reconnect</span>
+                <span class="tag info">static lane</span>
+              </div>
+              <h3>Tom Select Turbo reconnect</h3>
+              <p>Focused static Turbo reconnect states for restored wrapper appearance and duplicate-wrapper caution.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers discuss Turbo restoration appearance without treating reconnect cleanup or request cancellation as a visual artifact contract?</p>
+            <ul>
+              <li>Compare one-wrapper restored field appearance, ordinary settled state, and duplicate-wrapper caution.</li>
+              <li>Keep runtime reconnect cleanup, stale response guards, and lifecycle smoke coverage in the lifecycle docs and JavaScript checks.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_turbo_reconnect_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">disabled option</span>
+                <span class="tag info">collection metadata</span>
+              </div>
+              <h3>Tom Select disabled options</h3>
+              <p>Focused collection-backed disabled option readability and `option_html` metadata pass-through boundaries.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect disabled option visibility and metadata cues without treating authorization or visibility policy as Rails Fields Kit responsibilities?</p>
+            <ul>
+              <li>Compare disabled option readability and option metadata cues in the collection-backed lane.</li>
+              <li>Keep authorization, grouped choices, enum behavior, remote rich option rendering, and production CSS outside the visual artifact.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_disabled_option_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">

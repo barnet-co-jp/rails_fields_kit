@@ -71,6 +71,7 @@ Host applications remain responsible for:
 - `doc/tom_select_error_surface_contract_visual_reference.html`: static visual reference for focused `error_surface: true` live-region contract review
 - `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
 - `doc/tom_select_text_override_visual_reference.html`: static visual reference for configured Tom Select text override copy states
+- `doc/tom_select_disabled_option_visual_reference.html`: static visual reference for collection-backed disabled option readability and option metadata boundaries
 - `doc/configuration_wrapper_class_visual_reference.html`: static visual reference for initializer-driven wrapper class pass-through, narrow viewport review, and host-app CSS ownership boundaries
 - `doc/table_metadata_visual_reference.html`: static visual reference for representative table metadata filter and editor lanes
 - `doc/token_search_saved_search_visual_reference.html`: static visual reference for saved-search token suggestion states
