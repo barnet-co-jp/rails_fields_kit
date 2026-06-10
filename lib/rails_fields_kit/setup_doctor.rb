@@ -90,8 +90,31 @@ module RailsFieldsKit
       ["Rails Fields Kit setup doctor", ""] + STATUS_LEGEND_LINES + [""] + checks.map { |check| format_check(check) }
     end
 
-    def run(io: $stdout)
-      report_lines.each { |line| io.puts(line) }
+    def report_payload
+      report_checks = checks
+
+      {
+        "schema_version" => 1,
+        "tool" => "rails_fields_kit:doctor",
+        "summary" => {
+          "ok" => report_checks.count { |check| check.status == :ok },
+          "missing" => report_checks.count { |check| check.status == :missing },
+          "manual" => report_checks.count { |check| check.status == :manual }
+        },
+        "checks" => report_checks.map { |check| format_check_payload(check) }
+      }
+    end
+
+    def run(io: $stdout, format: :text)
+      case format.to_s
+      when "text", ""
+        report_lines.each { |line| io.puts(line) }
+      when "json"
+        io.puts(JSON.pretty_generate(report_payload))
+      else
+        raise ArgumentError, "Unsupported setup doctor format: #{format.inspect}"
+      end
+
       true
     end
 
@@ -360,6 +383,16 @@ module RailsFieldsKit
 
     def format_check(check)
       "[#{check.status.to_s.upcase}] #{check.label}: #{check.message}"
+    end
+
+    def format_check_payload(check)
+      {
+        "key" => check.key.to_s,
+        "label" => check.label,
+        "status" => check.status.to_s,
+        "manual" => check.status == :manual,
+        "message" => check.message
+      }
     end
   end
 end
