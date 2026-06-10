@@ -260,7 +260,7 @@
         <h1>Native Accessibility Contract Reference</h1>
         <p class="lede">
           Focused visual review lane for the current <code>nativeFieldAccessibilityContract(element)</code>
-          reader. It maps rendered wrapper, hint, error, and <code>aria-describedby</code> pieces without
+          reader. It maps rendered wrapper, label, hint, error, and <code>aria-describedby</code> pieces without
           changing native helper markup or JavaScript behavior.
         </p>
         <nav class="links" aria-label="Related references">
@@ -272,18 +272,19 @@
 
       <div class="pills" aria-label="Review scope summary">
         <span class="pill">Current return shape only</span>
-        <span class="pill">No labelElement claim</span>
+        <span class="pill">labelElement contract included</span>
+        <span class="pill">Label association scan</span>
         <span class="pill">Desktop and narrow scan</span>
         <span class="pill">Static artifact only</span>
       </div>
 
       <section class="grid" aria-label="Native accessibility contract review lanes">
         <article class="card">
-          <span class="tag">Wrapper and ids</span>
-          <h2>Rendered field with hint and error wiring</h2>
+          <span class="tag">Wrapper, label, and ids</span>
+          <h2>Rendered field with label, hint, and error wiring</h2>
           <p>
-            This lane shows the elements the reader can find today: wrapper, hint, error, and
-            described-by ids. It does not infer missing label metadata.
+            This lane shows the elements the reader can find today: wrapper, label, hint, error, and
+            described-by ids. It reads the rendered DOM without generating ids or changing helper markup.
           </p>
           <div class="field error-state">
             <div class="label-row">
@@ -302,6 +303,10 @@
           </div>
           <div class="metadata">
             <div class="row">
+              <span class="key"><code>labelElement</code></span>
+              <span class="value">Rendered label associated with the field; explicit <code>label[for]</code> wins when present.</span>
+            </div>
+            <div class="row">
               <span class="key"><code>describedByIds</code></span>
               <span class="value"><code>support_escalation_email_hint</code>, <code>support_escalation_email_error</code></span>
             </div>
@@ -317,11 +322,11 @@
         </article>
 
         <article class="card">
-          <span class="tag boundary">Missing pieces</span>
-          <h2>Partial wiring remains explicit</h2>
+          <span class="tag boundary">Label fallback</span>
+          <h2>Wrapper label fallback remains explicit</h2>
           <p>
-            When a field has a hint but no error, the reader reports only the rendered pieces. This keeps
-            current behavior separate from future label-association proposals.
+            When an explicit <code>label[for]</code> association is not present, the current reader falls back to
+            the nearest <code>.rfk-field</code> wrapper label. Missing hints or errors still stay <code>null</code>.
           </p>
           <div class="field">
             <div class="label-row">
@@ -336,16 +341,16 @@
           </div>
           <div class="metadata">
             <div class="row">
+              <span class="key"><code>labelElement</code></span>
+              <span class="value">Nearest wrapper label fallback; no DOM mutation or generated association is implied.</span>
+            </div>
+            <div class="row">
               <span class="key"><code>describedByIds</code></span>
               <span class="value"><code>internal_reference_hint</code> only.</span>
             </div>
             <div class="row">
               <span class="key"><code>errorElement</code></span>
               <span class="value"><code>null</code>; the reader does not create a placeholder.</span>
-            </div>
-            <div class="row">
-              <span class="key"><code>labelElement</code></span>
-              <span class="value">Not shown as current contract. #866 remains a future lane.</span>
             </div>
           </div>
         </article>
@@ -382,9 +387,9 @@
       <section class="checklist" aria-labelledby="checklist-title">
         <h2 id="checklist-title">Review checklist</h2>
         <ul>
-          <li>Confirm the wrapper, hint, error, and described-by ids are visible without relying on color alone.</li>
+          <li>Confirm the wrapper, label, hint, error, and described-by ids are visible without relying on color alone.</li>
+          <li>Confirm <code>labelElement</code> resolves an explicit <code>label[for]</code> first, then the nearest wrapper label fallback.</li>
           <li>Confirm long hint and error copy wrap cleanly in a narrow viewport.</li>
-          <li>Do not document <code>labelElement</code> or other future return fields as current behavior.</li>
           <li>Do not change native helper markup, JavaScript helper behavior, or the reader return shape from this artifact.</li>
         </ul>
       </section>

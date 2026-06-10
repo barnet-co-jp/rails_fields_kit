@@ -135,28 +135,29 @@ Suggested evidence note:
 tomSelectPluginContract: PASS on <field selector>. plugins matched the rendered effective plugin list; allow_clear field exposed clear_button through plugins and hasClearButton; explicit plugin field exposed the expected derived hasClearButton / hasRemoveButton flags; unrelated element returned null. Plugin assets, styling, mutation, empty-state copy, and Tom Select plugin lifecycle remained host-app or Tom Select responsibilities.
 ```
 
-## Tom Select request params contract reader
+## Tom Select request contract reader
 
-Use this lane when `tomSelectRequestParamsContract(element)` is in release scope.
+Use this lane when `tomSelectRequestContract(element)` is in release scope.
 
 Representative import:
 
 ```js
-import { tomSelectRequestParamsContract } from "rails_fields_kit"
+import { tomSelectRequestContract } from "rails_fields_kit"
 ```
 
-Check one rendered Tom Select-backed field that uses request params options:
+Check rendered Tom Select-backed fields that cover remote search, selected preload, and create-on-the-fly request configuration when those lanes are in the PR or release scope:
 
-- `tomSelectRequestParamsContract(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
-- The result exposes the documented request param names for the representative field, including the query param and any selected preload param names that are in scope for the check.
-- A comparable Rails Fields Kit field without request params options returns the documented empty or fallback contract, or `null` when that is the documented boundary.
+- `tomSelectRequestContract(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes the documented remote search, selected preload, and create endpoint flags and URLs for the representative fields.
+- The result exposes the documented request param names, `minLength`, and `errorSurfaceId` values rendered for the field.
+- A comparable Tom Select-backed field without optional request lanes reports the documented default values.
 - A comparable non-Tom Select or unrelated element returns `null`.
-- The evidence stays read-only; request execution, endpoint authorization, retry UI, visible copy, validation, and host-app fallback behavior remain outside this helper evidence lane.
+- The evidence stays read-only; request execution, query parsing, authorization, retry UI, visible feedback, fixed params parsing, and Tom Select controller lifecycle remain outside this helper evidence lane.
 
 Suggested evidence note:
 
 ```text
-tomSelectRequestParamsContract: PASS on <field selector>. request param names matched the rendered field contract; comparable no-request-params field returned the documented fallback; unrelated element returned null. Request execution, endpoint authorization, retry UI, visible copy, validation, and host-app fallback behavior remained out of scope.
+tomSelectRequestContract: PASS on <field selector>. remote search / selected preload / create endpoint flags and URLs, param names, minLength, and errorSurfaceId matched the rendered field contract; default/no-request and unrelated elements returned the documented boundaries. Request execution, authorization, retry UI, visible feedback, fixed params parsing, and controller lifecycle remained out of scope.
 ```
 
 ## Native accessibility contract reader
