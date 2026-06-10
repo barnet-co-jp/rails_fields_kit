@@ -125,7 +125,7 @@ Detected representative entrypoint:
 ```text
 rails rails_fields_kit:doctor
 
-[OK] CSS import: Found Tom Select CSS import signal in app/javascript/application.js. This is an advisory stylesheet visibility check only; stylesheet pipeline and theme policy stays with the host app.
+[OK] CSS import: Found Tom Select CSS import signal in app/javascript/application.js. This is an advisory stylesheet visibility check only; stylesheet pipeline and theme policy stay with the host app.
 ```
 
 Detected representative stylesheet or theme file:
@@ -133,7 +133,7 @@ Detected representative stylesheet or theme file:
 ```text
 rails rails_fields_kit:doctor
 
-[OK] CSS import: Found Tom Select CSS import signal in app/assets/stylesheets/application.css. This is an advisory stylesheet visibility check only; stylesheet pipeline and theme policy stays with the host app.
+[OK] CSS import: Found Tom Select CSS import signal in app/assets/stylesheets/application.css. This is an advisory stylesheet visibility check only; stylesheet pipeline and theme policy stay with the host app.
 ```
 
 No representative signal found:
