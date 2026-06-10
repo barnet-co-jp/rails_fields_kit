@@ -50,7 +50,7 @@ Use this section after the first server-rendered field is working.
 - [ ] If this app uses importmap, run `rails generate rails_fields_kit:install --importmap` when `config/importmap.rb` exists, or add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] If this app uses Vite or another bundler, add resolver or alias entries for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] When a bundler, Vite, importmap, or browser console error says a Rails Fields Kit import cannot be resolved, use the upstream unresolved imports troubleshooting section to check the package-root import path separately from the direct controller import path.
-- [ ] Use the doctor output as a read-only prompt; missing importmap pins, unexpected Rails Fields Kit pin targets, target-omitted pins, Tom Select package install, any Stimulus registration follow-up, CSS import, and bundler aliases for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` remain host-app setup responsibilities. The doctor can report a representative Stimulus registration signal, but it does not inspect every boot file or rewrite bundler config.
+- [ ] Use the doctor output as a read-only prompt; missing importmap pins, unexpected Rails Fields Kit pin targets, target-omitted pins, Tom Select package install, any Stimulus registration follow-up, CSS import, and bundler aliases for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` remain host-app setup responsibilities. The doctor can report a representative Stimulus registration signal, but it does not inspect every boot file. The doctor does not inspect or rewrite bundler config.
 
 ## Migration and helper selection
 
