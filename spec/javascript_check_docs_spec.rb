@@ -43,6 +43,7 @@ RSpec.describe "JavaScript check documentation" do
       "Tom Select error surface smoke" => "Tom Select error-surface metadata",
       "Tom Select Turbo lifecycle smoke" => "Tom Select Turbo lifecycle behavior",
       "Tom Select label fallback smoke" => "Tom Select label fallback rendering",
+      "Tom Select option value guard smoke" => "Tom Select option value guard behavior",
       "Tom Select render text fallback smoke" => "Tom Select render text fallback rendering",
       "Tom Select plugin contract smoke" => "Tom Select plugin contract reading",
       "selected preload config contract smoke" => "selected preload config reading"
