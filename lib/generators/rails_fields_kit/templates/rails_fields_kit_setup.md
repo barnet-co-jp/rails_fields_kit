@@ -8,13 +8,15 @@ Use it as a lightweight adoption checklist for wiring Rails Fields Kit into this
 
 Use this first pass to prove one server-rendered field before adding remote endpoints or richer Tom Select behavior.
 
-- [ ] Run `rails rails_fields_kit:doctor` after installation to review detectable setup state, importmap pin target diagnostics, and manual checklist items.
+- [ ] Run `rails rails_fields_kit:doctor` after installation to review detectable setup state, importmap pin target diagnostics, representative Stimulus registration advisory state, and manual checklist items.
 - [ ] Read the setup doctor status legend first: fix `[MISSING]` lines before treating `[MANUAL]` lines as host-app JavaScript toolchain checks.
+- [ ] Treat `[OK] Stimulus registration` as a representative source signal only; final Stimulus boot policy and any `[MANUAL]` follow-up stay with this host app.
 - [ ] When recording setup doctor evidence, use the upstream setup doctor output review to distinguish setup behavior from CLI output readability and to avoid treating `[MANUAL]` lines as automatic failures.
 - [ ] Confirm `config/initializers/rails_fields_kit.rb` matches this app's needs.
 - [ ] Review the upstream support boundary before assuming Ruby, Rails, Node, or repository JavaScript check coverage for this host app.
 - [ ] Install Tom Select with the JavaScript toolchain already used by this app.
 - [ ] Register `rails-fields-kit--tom-select` on the app's existing Stimulus application.
+- [ ] If setup doctor reports `[MANUAL] Stimulus registration`, confirm the existing boot file or controller index; this is host-app follow-up, not an automatic failure.
 - [ ] For Turbo-enabled apps, let the registered Stimulus controller handle normal `rfk_*` field reconnects; do not add a separate host-app `turbo:load` reinitializer unless custom markup lives outside Stimulus-managed DOM.
 - [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.
 - [ ] If `rails_fields_kit` or `rails_fields_kit/tom_select_controller` cannot be resolved, use the upstream setup guide's unresolved imports troubleshooting section before changing aliases, importmap pins, Stimulus registration, Tom Select package setup, or CSS imports.
@@ -48,7 +50,7 @@ Use this section after the first server-rendered field is working.
 - [ ] If this app uses importmap, run `rails generate rails_fields_kit:install --importmap` when `config/importmap.rb` exists, or add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] If this app uses Vite or another bundler, add resolver or alias entries for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.
 - [ ] When a bundler, Vite, importmap, or browser console error says a Rails Fields Kit import cannot be resolved, use the upstream unresolved imports troubleshooting section to check the package-root import path separately from the direct controller import path.
-- [ ] Use the doctor output as a read-only prompt; missing importmap pins, unexpected Rails Fields Kit pin targets, target-omitted pins, Tom Select package install, Stimulus registration, CSS import, and bundler aliases for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` remain host-app setup responsibilities. The doctor does not inspect or rewrite bundler config.
+- [ ] Use the doctor output as a read-only prompt; missing importmap pins, unexpected Rails Fields Kit pin targets, target-omitted pins, Tom Select package install, any Stimulus registration follow-up, CSS import, and bundler aliases for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` remain host-app setup responsibilities. The doctor can report a representative Stimulus registration signal, but it does not inspect every boot file or rewrite bundler config.
 
 ## Migration and helper selection
 
