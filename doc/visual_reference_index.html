@@ -364,11 +364,12 @@
                 <span class="tag info">remote states</span>
               </div>
               <h3>Search-backed controls</h3>
-              <p>Start here for selects, comboboxes, autocomplete, tags, token search, request feedback, configured helper copy, reconnect review, and disabled-option readability.</p>
+              <p>Start here for selects, comboboxes, autocomplete, tags, token search, request feedback, and configured helper copy.</p>
             </header>
             <ul>
               <li>Use the core states for layout and viewport checks.</li>
-              <li>Use focused lanes only when error feedback, copy overrides, reconnect appearance, or disabled options are the review topic.</li>
+              <li>Use disabled option and Turbo reconnect lanes only when collection metadata or reconnect appearance is the review topic.</li>
+              <li>Use focused lanes only when error feedback or copy overrides are the review topic.</li>
             </ul>
             <nav class="family-links" aria-label="Tom Select helper family references">
               <a href="tom_select_visual_reference.html">Core states</a>
@@ -461,13 +462,11 @@
             <ul>
               <li>Start with native narrow stress for field copy, affixes, validation, and long labels.</li>
               <li>Use wrapper classes for host-app class pass-through, then text overrides only for configured Tom Select copy.</li>
-              <li>Use focused Tom Select lanes for disabled-option readability or Turbo reconnect appearance when those are the review topic.</li>
+              <li>Check configured wrapper classes at narrow width when host-app class names, affixes, hints, or error copy are under review.</li>
               <li>Keep native search fields separate from Tom Select-backed search or token suggestions.</li>
             </ul>
             <nav class="task-links" aria-label="Design and copy review references">
               <a href="native_field_visual_reference.html">Primary: native stress</a>
-              <a href="tom_select_disabled_option_visual_reference.html">Disabled options</a>
-              <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
               <a href="configuration_wrapper_class_visual_reference.html">Wrapper class narrow lane</a>
               <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
             </nav>
@@ -569,12 +568,12 @@
                 <span class="tag info">static lane</span>
               </div>
               <h3>Tom Select Turbo reconnect</h3>
-              <p>Focused static Turbo reconnect review states for one restored wrapper, ordinary settled field appearance, and duplicate-wrapper caution.</p>
+              <p>Focused static Turbo reconnect states for restored wrapper appearance and duplicate-wrapper caution.</p>
             </header>
-            <p class="review-question"><strong>Question:</strong> can reviewers discuss Turbo restoration appearance without treating reconnect cleanup, request cancellation, stale response guards, or duplicate wrappers as a visual artifact contract?</p>
+            <p class="review-question"><strong>Question:</strong> can reviewers discuss Turbo restoration appearance without treating reconnect cleanup or request cancellation as a visual artifact contract?</p>
             <ul>
-              <li>Compare expected one-wrapper restored field, ordinary settled state, and duplicate-wrapper caution lanes.</li>
-              <li>Keep runtime reconnect behavior and lifecycle smoke coverage with tom_select_turbo_lifecycle.md and JavaScript checks.</li>
+              <li>Compare one-wrapper restored field appearance, ordinary settled state, and duplicate-wrapper caution.</li>
+              <li>Keep runtime reconnect cleanup, stale response guards, and lifecycle smoke coverage in the lifecycle docs and JavaScript checks.</li>
             </ul>
             <a class="reference-link" href="tom_select_turbo_reconnect_visual_reference.html">Open reference</a>
           </article>
@@ -582,16 +581,16 @@
           <article class="reference-card">
             <header>
               <div class="tag-row">
-                <span class="tag primary">disabled options</span>
-                <span class="tag info">metadata</span>
+                <span class="tag primary">disabled option</span>
+                <span class="tag info">collection metadata</span>
               </div>
               <h3>Tom Select disabled options</h3>
               <p>Focused collection-backed disabled option readability and `option_html` metadata pass-through boundaries.</p>
             </header>
-            <p class="review-question"><strong>Question:</strong> can reviewers inspect disabled option visibility and option metadata cues without treating authorization, option visibility policy, production CSS, or rich remote rendering as Rails Fields Kit responsibilities?</p>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect disabled option visibility and metadata cues without treating authorization or visibility policy as Rails Fields Kit responsibilities?</p>
             <ul>
-              <li>Compare disabled option readability, native metadata cues, and ordinary collection-backed choices.</li>
-              <li>Keep authorization, visibility policy, grouped choices, enum behavior, and remote rich rendering outside this artifact.</li>
+              <li>Compare disabled option readability and option metadata cues in the collection-backed lane.</li>
+              <li>Keep authorization, grouped choices, enum behavior, remote rich option rendering, and production CSS outside the visual artifact.</li>
             </ul>
             <a class="reference-link" href="tom_select_disabled_option_visual_reference.html">Open reference</a>
           </article>
