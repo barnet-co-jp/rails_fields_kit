@@ -23,6 +23,23 @@ module RailsFieldsKit
       "app/frontend/entrypoints/application.tsx"
     ].freeze
 
+    STIMULUS_REGISTRATION_CANDIDATE_PATHS = [
+      "app/javascript/application.js",
+      "app/javascript/application.ts",
+      "app/javascript/controllers/index.js",
+      "app/javascript/controllers/index.ts",
+      "app/javascript/entrypoints/application.js",
+      "app/javascript/entrypoints/application.ts",
+      "app/frontend/entrypoints/application.js",
+      "app/frontend/entrypoints/application.ts",
+      "app/frontend/entrypoints/application.tsx"
+    ].freeze
+
+    STIMULUS_REGISTRATION_SIGNALS = [
+      "rails-fields-kit--tom-select",
+      "TomSelectController"
+    ].freeze
+
     BUNDLER_ALIAS_CANDIDATE_PATHS = [
       "vite.config.js",
       "vite.config.mjs",
@@ -45,10 +62,6 @@ module RailsFieldsKit
 
     TOM_SELECT_CSS_IMPORT_PATTERN = %r{tom-select/dist/css/tom-select(?:[.\w-]*)\.css}
 
-    MANUAL_CHECKS = [
-      ["Stimulus registration", "Register rails-fields-kit--tom-select on the Stimulus application this app already boots."]
-    ].freeze
-
     STATUS_LEGEND_LINES = [
       "Status legend: [OK] detected setup; [MISSING] needs action for the detected setup route; [MANUAL] host-app check, not an automatic failure.",
       "Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain."
@@ -63,7 +76,14 @@ module RailsFieldsKit
     end
 
     def checks
-      [initializer_check, importmap_check, tom_select_package_check, css_import_check, bundler_alias_check] + manual_checks
+      [
+        initializer_check,
+        importmap_check,
+        tom_select_package_check,
+        stimulus_registration_check,
+        css_import_check,
+        bundler_alias_check
+      ]
     end
 
     def report_lines
@@ -192,6 +212,26 @@ module RailsFieldsKit
       )
     end
 
+    def stimulus_registration_check
+      path = stimulus_registration_signal_path
+
+      if path
+        Check.new(
+          key: :stimulus_registration,
+          label: "Stimulus registration",
+          status: :ok,
+          message: "Found Rails Fields Kit Stimulus registration signal in #{path}. This is an advisory controller visibility check only; Stimulus boot policy stays with the host app."
+        )
+      else
+        Check.new(
+          key: :stimulus_registration,
+          label: "Stimulus registration",
+          status: :manual,
+          message: "Rails Fields Kit Stimulus registration signal was not found in representative JavaScript entrypoints. Confirm the host app registers rails-fields-kit--tom-select with TomSelectController on the Stimulus application it already boots; setup doctor does not inspect every boot file or decide Application.start policy."
+        )
+      end
+    end
+
     def css_import_check
       path = css_import_signal_path
 
@@ -263,15 +303,15 @@ module RailsFieldsKit
       end
     end
 
-    def manual_checks
-      MANUAL_CHECKS.map do |label, message|
-        Check.new(
-          key: label.downcase.tr(" ", "_").to_sym,
-          label: label,
-          status: :manual,
-          message: message
-        )
+    def stimulus_registration_signal_path
+      STIMULUS_REGISTRATION_CANDIDATE_PATHS.find do |candidate_path|
+        path = root.join(candidate_path)
+        path.file? && stimulus_registration_signal?(path.read)
       end
+    end
+
+    def stimulus_registration_signal?(content)
+      STIMULUS_REGISTRATION_SIGNALS.any? { |signal| content.include?(signal) }
     end
 
     def css_import_signal_path
