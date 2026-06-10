@@ -63,7 +63,7 @@ This repository intentionally does not commit a single `.nvmrc` or `.node-versio
 npm run check:js
 ```
 
-This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It first runs the JavaScript smoke inventory guard, then runs lightweight Node sandbox checks for package `exports` import wiring, Tom Select fixed query params append behavior, Tom Select forwarded interaction and request event payloads, Tom Select create-on-the-fly JSON request headers and success response normalization, Tom Select error-surface metadata, Tom Select Turbo lifecycle behavior, Tom Select label fallback rendering, Tom Select option value guard behavior, Tom Select render text fallback rendering, Tom Select render text accessibility boundaries, Tom Select plugin contract reading, and selected preload config reading, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
+This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It first runs the JavaScript smoke inventory guard, then runs lightweight Node sandbox checks for package `exports` import wiring, Tom Select fixed query params append behavior, Tom Select forwarded interaction and request event payloads, Tom Select create-on-the-fly JSON request headers and success response normalization, Tom Select error-surface metadata, Tom Select Turbo lifecycle behavior, Tom Select label fallback rendering, Tom Select option value guard behavior, Tom Select render text fallback rendering, Tom Select render text accessibility boundaries, Tom Select plugin contract reading, selected preload config reading, and rendered option payload mapping contract reading, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
 
 The smoke inventory guard derives CI-owned smoke candidates from `scripts/check_*.mjs` and compares them with the repository-local `scripts/check_javascript.mjs` runner. New JavaScript smoke scripts are expected to run through `npm run check:js` unless they are intentionally standalone; in that rare case, add the script path to the documented allowlist inside `scripts/check_javascript_smoke_inventory.mjs` with a short reason.
 
@@ -90,6 +90,8 @@ The render text accessibility smoke keeps the empty-state and loading-state live
 The Tom Select plugin contract smoke keeps rendered plugin data readable from the package root: `clear_button` and `remove_button` produce derived flags, plain plugin arrays stay readable, and unrelated elements return `null`.
 
 The selected preload config smoke keeps rendered selected preload data readable from the package root: explicit and default param names are visible, query params are object-shaped, and fields without selected preload return `null`.
+
+The rendered option payload mapping contract smoke keeps rendered option mapping data readable from the package root: explicit value / label / search / rich option fields are visible, documented defaults are returned when mapping attributes are omitted, blank rich option fields become `null`, and unrelated elements return `null`.
 
 ## Build locally
 
@@ -121,7 +123,7 @@ Current CI adds these repository-level confirmations on top of the local workflo
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - Representative Rails compatibility checks for pull requests and `main` pushes: Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
-- `npm run check:js` on Node 22.x and Node 24.x for the JavaScript syntax, smoke inventory, package exports import lane, Tom Select fixed query params smoke, Tom Select forwarded interaction and request event smoke, Tom Select create request header and response normalization smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, Tom Select label fallback smoke, Tom Select option value guard smoke, Tom Select render text fallback smoke, Tom Select render text accessibility smoke, Tom Select plugin contract smoke, and selected preload config smoke
+- `npm run check:js` on Node 22.x and Node 24.x for the JavaScript syntax, smoke inventory, package exports import lane, Tom Select fixed query params smoke, Tom Select forwarded interaction and request event smoke, Tom Select create request header and response normalization smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, Tom Select label fallback smoke, Tom Select option value guard smoke, Tom Select render text fallback smoke, Tom Select render text accessibility smoke, Tom Select plugin contract smoke, selected preload config smoke, and rendered option payload mapping contract smoke
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 
 ## Open PR freshness checks
