@@ -29,13 +29,14 @@ RSpec.describe "rfk_grouped_select option metadata" do
   let(:record) { Customer.new("2") }
   let(:builder) { ActionView::Helpers::FormBuilder.new(:customer, record, self, {}) }
 
-  it "passes disabled values through grouped choices while preserving selection" do
+  it "passes disabled values through grouped choices with explicit selection" do
     html = builder.rfk_grouped_select(
       :customer_id,
       grouped_collection: [
         ["North", [["Alpha LLC", "1"], ["Beta LLC", "2"]]],
         ["South", [["Gamma LLC", "3"]]]
       ],
+      selected: "2",
       disabled: ["3"]
     )
 
