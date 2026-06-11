@@ -263,6 +263,7 @@ RSpec.describe "package contents" do
       rfk_text_field
       rfk_text_area
       rfk_number_field
+      rfk_range_field
       rfk_money_field
       rfk_percent_field
       rfk_email_field
