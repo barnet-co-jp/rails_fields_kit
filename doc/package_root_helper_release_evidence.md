@@ -173,6 +173,30 @@ Suggested evidence note:
 tomSelectRequestContract: PASS on <field selector>. remote search / selected preload / create endpoint flags and URLs, param names, minLength, and errorSurfaceId matched the rendered field contract; default/no-request and unrelated elements returned the documented boundaries. Request execution, authorization, retry UI, visible feedback, fixed params parsing, and controller lifecycle remained out of scope.
 ```
 
+## Error surface reader
+
+Use this lane when `readRenderedErrorSurface(element)` is in release scope.
+
+Representative import:
+
+```js
+import { readRenderedErrorSurface } from "rails_fields_kit"
+```
+
+Check a rendered Tom Select-backed field that opts into `error_surface:`:
+
+- `readRenderedErrorSurface(fieldElement)` returns the rendered placeholder element for a Rails Fields Kit field with an `errorSurfaceId` value.
+- The returned element id matches the documented `errorSurfaceId` surfaced through `tomSelectRequestContract(element)` for the same field.
+- A comparable Rails Fields Kit field without `error_surface:` returns `null`.
+- A field whose rendered placeholder is missing returns `null` rather than creating or mutating visible feedback.
+- The evidence stays read-only; request execution, retry UI, visible copy, validation policy, authorization, mutation, and fallback rendering remain host-app responsibilities.
+
+Suggested evidence note:
+
+```text
+readRenderedErrorSurface: PASS on <field selector>. The helper returned the rendered opt-in placeholder matching the field errorSurfaceId; no-surface and missing-placeholder cases returned null. Request execution, retry UI, visible copy, validation policy, authorization, mutation, and fallback rendering remained out of scope.
+```
+
 ## Native accessibility contract reader
 
 Use this lane when `nativeFieldAccessibilityContract(element)` is in release scope.
