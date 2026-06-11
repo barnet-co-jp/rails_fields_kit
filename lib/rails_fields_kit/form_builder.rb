@@ -235,143 +235,267 @@ module RailsFieldsKit
 
     def rfk_render_text_option(options, key, configured_default, i18n_key, fallback)
       value = options.key?(key) ? options.delete(key) : configured_default
-      text = value.respond_to?(:call) ? value.call : value
-      text = I18n.t(i18n_key, default: fallback) if text.nil?
-      text
+      return I18n.t(i18n_key, default: fallback) if rfk_bundled_render_text_default?(value)
+
+      value
     end
 
-    def rfk_assign_data_value(data, name, value)
-      return if value.nil?
-
-      key = "rails_fields_kit__tom_select_#{name}_value"
-      data[key] = case value
-      when Array, Hash
-        JSON.generate(value)
-      else
-        value
-      end
-    end
-
-    def rfk_choices_with_selected(collection, selected_choices:, value_method:, label_method:, disabled:, option_html: {})
-      choices = collection || selected_choices
-      normalized_disabled = Array(disabled).map(&:to_s)
-      choices.map do |choice|
-        value = rfk_option_value(choice, value_method)
-        label = rfk_option_label(choice, label_method)
-        html_options = option_html[value.to_s] || option_html[value] || {}
-        html_options = html_options.merge(disabled: true) if normalized_disabled.include?(value.to_s)
-        [label, value, html_options]
-      end
-    end
-
-    def rfk_normalize_grouped_collection(grouped_collection, value_method:, label_method:)
-      grouped_collection.map do |group_label, items|
-        [group_label, rfk_choices_with_selected(items, selected_choices: [], value_method: value_method, label_method: label_method, disabled: nil)]
-      end
-    end
-
-    def rfk_option_value(choice, value_method)
-      if choice.respond_to?(value_method)
-        choice.public_send(value_method)
-      elsif choice.is_a?(Array)
-        choice[1] || choice[0]
-      else
-        choice
-      end
-    end
-
-    def rfk_option_label(choice, label_method)
-      if choice.respond_to?(label_method) && !choice.is_a?(Array)
-        choice.public_send(label_method)
-      elsif choice.is_a?(Array)
-        choice[0]
-      else
-        choice.to_s
-      end
-    end
-
-    def rfk_normalize_selected(selected, value_method:, label_method:)
-      Array(selected).compact.map do |choice|
-        if choice.is_a?(Array)
-          [choice[0], choice[1] || choice[0]]
-        elsif choice.respond_to?(value_method)
-          [rfk_option_label(choice, label_method), choice.public_send(value_method)]
-        else
-          [choice.to_s, choice]
-        end
-      end
-    end
-
-    def rfk_selected_values(selected_choices)
-      selected_choices.map { |_label, value| value }
-    end
-
-    def rfk_extract_wrapper_options(options)
-      wrapper_options = {}
-      wrapper_options[:wrapper_class] = options.delete(:wrapper_class)
-      wrapper_options[:label] = options.delete(:label)
-      wrapper_options[:hint] = options.delete(:hint)
-      wrapper_options[:error] = options.delete(:error)
-      wrapper_options[:required] = options.delete(:required)
-      wrapper_options
-    end
-
-    def rfk_apply_accessibility!(method, field_options, wrapper_options)
-      describedby = []
-      describedby << rfk_hint_id(method) if wrapper_options[:hint]
-      describedby << rfk_error_id(method) if wrapper_options[:error]
-      field_options[:aria] ||= {}
-      field_options[:aria][:describedby] = describedby.join(" ") if describedby.any?
-    end
-
-    def rfk_apply_error_surface_accessibility!(html_options, error_surface_id)
-      html_options[:aria] ||= {}
-      html_options[:aria][:describedby] = [html_options[:aria][:describedby], error_surface_id].compact.join(" ")
+    def rfk_bundled_render_text_default?(value)
+      value == RailsFieldsKit::Configuration::DEFAULT_NO_RESULTS_TEXT ||
+        value == RailsFieldsKit::Configuration::DEFAULT_LOADING_TEXT ||
+        value == RailsFieldsKit::Configuration::DEFAULT_CREATE_TEXT
     end
 
     def rfk_promote_html_options!(options, html_options)
-      %i[class id data aria disabled required autofocus autocomplete inputmode min max step pattern placeholder multiple].each do |key|
+      %i[required readonly autocomplete].each do |key|
         html_options[key] = options.delete(key) if options.key?(key)
       end
-    end
 
-    def rfk_error_surface_id(method, error_surface_html)
-      error_surface_html[:id] || "#{@object_name}_#{method}_error_surface"
-    end
-
-    def rfk_wrap_field(method, field_html, options)
-      classes = ["rfk-field", options[:wrapper_class]].compact.join(" ")
-      label_html = options[:label] == false ? "" : label(method, options[:label])
-      hint_html = if options[:hint]
-        @template.content_tag(:p, options[:hint], id: rfk_hint_id(method), class: "rfk-hint")
-      else
-        ""
-      end
-      error_html = if options[:error]
-        @template.content_tag(:p, options[:error], id: rfk_error_id(method), class: "rfk-error")
-      else
-        ""
-      end
-
-      @template.content_tag(:div, label_html.concat(field_html).concat(hint_html).concat(error_html), class: classes)
-    end
-
-    def rfk_wrap_control(field_html, options)
-      @template.content_tag(:div, field_html, class: "rfk-control")
-    end
-
-    def rfk_hint_id(method)
-      "#{@object_name}_#{method}_hint"
-    end
-
-    def rfk_error_id(method)
-      "#{@object_name}_#{method}_error"
+      html_options[:disabled] = options.delete(:disabled) if [true, false].include?(options[:disabled])
     end
 
     def rfk_strip_table_adapter_metadata!(options)
       TABLE_ADAPTER_METADATA_KEYS.each do |key|
         options.delete(key)
+        options.delete(key.to_s)
       end
+    end
+
+    def rfk_extract_wrapper_options(options)
+      {
+        label: options.delete(:label),
+        hint: options.delete(:hint),
+        prefix: options.delete(:prefix),
+        suffix: options.delete(:suffix),
+        wrapper: options.key?(:wrapper) ? options.delete(:wrapper) : false,
+        wrapper_html: options.delete(:wrapper_html) || {},
+        label_html: options.delete(:label_html) || {},
+        hint_html: options.delete(:hint_html) || {},
+        error_html: options.delete(:error_html) || {},
+        control_html: options.delete(:control_html) || {},
+        prefix_html: options.delete(:prefix_html) || {},
+        suffix_html: options.delete(:suffix_html) || {},
+        accessibility: options.key?(:accessibility) ? options.delete(:accessibility) : true
+      }
+    end
+
+    def rfk_apply_accessibility!(method, html_options, wrapper_options)
+      return unless wrapper_options[:wrapper] && wrapper_options[:accessibility]
+
+      described_by = []
+      described_by << rfk_hint_id(method) if wrapper_options[:hint]
+      errors = rfk_errors_for(method)
+      described_by << rfk_error_id(method) if errors.any?
+      html_options[:aria] ||= {}
+      existing_described_by = html_options[:aria][:describedby] || html_options[:aria]["describedby"]
+      described_by.unshift(existing_described_by) if existing_described_by
+      html_options[:aria].delete("describedby")
+      html_options[:aria][:describedby] = described_by.join(" ") if described_by.any?
+      html_options[:aria][:invalid] = true if errors.any?
+      html_options[:aria][:required] = true if html_options[:required]
+    end
+
+    def rfk_apply_error_surface_accessibility!(html_options, error_surface_id)
+      html_options[:aria] ||= {}
+      existing_described_by = html_options[:aria][:describedby] || html_options[:aria]["describedby"]
+      described_by = Array(existing_described_by.to_s.split(/\s+/)).reject(&:empty?)
+      described_by << error_surface_id unless described_by.include?(error_surface_id)
+      html_options[:aria].delete("describedby")
+      html_options[:aria][:describedby] = described_by.join(" ")
+    end
+
+    def rfk_hint_id(method)
+      "#{object_name}_#{method}_hint"
+    end
+
+    def rfk_error_id(method)
+      "#{object_name}_#{method}_error"
+    end
+
+    def rfk_error_surface_id(method, error_surface_html = {})
+      explicit_id = error_surface_html[:id] || error_surface_html["id"]
+      return explicit_id unless explicit_id.nil? || explicit_id.to_s.empty?
+
+      "#{object_name}_#{method}_error_surface"
+    end
+
+    def rfk_wrap_control(field_html, wrapper_options)
+      return field_html unless wrapper_options[:prefix] || wrapper_options[:suffix]
+
+      config = RailsFieldsKit.configuration
+      control_html = wrapper_options[:control_html].dup
+      control_html[:class] = [control_html[:class], config.control_class].compact.join(" ")
+
+      @template.content_tag(:div, control_html) do
+        parts = []
+        parts << rfk_affix(wrapper_options[:prefix], wrapper_options[:prefix_html], config.prefix_class) if wrapper_options[:prefix]
+        parts << field_html
+        parts << rfk_affix(wrapper_options[:suffix], wrapper_options[:suffix_html], config.suffix_class) if wrapper_options[:suffix]
+        parts.join.html_safe
+      end
+    end
+
+    def rfk_append_error_surface(field_html, error_surface_id, error_surface_html)
+      surface_options = error_surface_html.dup
+      surface_options[:id] = error_surface_id
+      surface_options.delete("id")
+      surface_options[:hidden] = true unless surface_options.key?(:hidden)
+      surface_options[:role] ||= "status"
+      surface_options[:"aria-live"] ||= "polite"
+      surface_options[:"aria-atomic"] = true unless surface_options.key?(:"aria-atomic")
+      surface_options[:class] = [surface_options[:class], "rfk-tom-select-error-surface"].compact.join(" ")
+
+      @template.safe_join([field_html, @template.content_tag(:div, "", surface_options)])
+    end
+
+    def rfk_affix(content, html_options, default_class)
+      options = html_options.dup
+      options[:class] = [options[:class], default_class].compact.join(" ")
+      @template.content_tag(:span, content, options)
+    end
+
+    def rfk_wrap_field(method, field_html, wrapper_options)
+      return field_html unless wrapper_options[:wrapper]
+
+      config = RailsFieldsKit.configuration
+      errors = rfk_errors_for(method)
+      wrapper_html = wrapper_options[:wrapper_html].dup
+      wrapper_html[:class] = [wrapper_html[:class], config.wrapper_class, (config.field_error_class if errors.any?)].compact.join(" ")
+
+      @template.content_tag(:div, wrapper_html) do
+        parts = []
+        parts << rfk_label(method, wrapper_options[:label], wrapper_options[:label_html]) unless wrapper_options[:label] == false
+        parts << field_html
+        parts << rfk_hint(method, wrapper_options[:hint], wrapper_options[:hint_html]) if wrapper_options[:hint]
+        parts << rfk_error(method, errors, wrapper_options[:error_html]) if errors.any?
+        parts.join.html_safe
+      end
+    end
+
+    def rfk_label(method, label_text, label_html)
+      label_options = label_html.dup
+      label_options[:class] = [label_options[:class], RailsFieldsKit.configuration.label_class].compact.join(" ")
+      label(method, label_text, label_options)
+    end
+
+    def rfk_hint(method, hint, hint_html)
+      hint_options = hint_html.dup
+      hint_options[:id] ||= rfk_hint_id(method)
+      hint_options[:class] = [hint_options[:class], RailsFieldsKit.configuration.hint_class].compact.join(" ")
+      @template.content_tag(:div, hint, hint_options)
+    end
+
+    def rfk_error(method, errors, error_html)
+      error_options = error_html.dup
+      error_options[:id] ||= rfk_error_id(method)
+      error_options[:class] = [error_options[:class], RailsFieldsKit.configuration.error_class].compact.join(" ")
+      @template.content_tag(:div, errors.join(", "), error_options)
+    end
+
+    def rfk_errors_for(method)
+      return [] unless object.respond_to?(:errors) && object.errors.respond_to?(:[])
+
+      Array(object.errors[method]).map(&:to_s).reject(&:empty?)
+    end
+
+    def rfk_assign_data_value(data, key, value)
+      return if value.nil?
+      return if value.respond_to?(:empty?) && value.empty?
+
+      data_key = "rails_fields_kit__tom_select_#{key}_value"
+      data[data_key] = (value.is_a?(Array) || value.is_a?(Hash)) ? JSON.generate(value) : value
+    end
+
+    def rfk_choices_with_selected(collection, selected_choices:, value_method:, label_method:, disabled: nil, option_html: {})
+      choices = rfk_normalize_collection(collection, value_method: value_method, label_method: label_method, disabled: disabled, option_html: option_html)
+      existing_values = choices.map { |choice| Array(choice).second.to_s }
+      missing_selected_choices = selected_choices.reject { |choice| existing_values.include?(choice.second.to_s) }
+
+      missing_selected_choices + choices
+    end
+
+    def rfk_selected_values(selected_choices)
+      selected_choices.map(&:second)
+    end
+
+    def rfk_normalize_collection(collection, value_method:, label_method:, disabled: nil, option_html: {})
+      disabled_values = Array(disabled).map(&:to_s)
+
+      case collection
+      when nil
+        []
+      when Hash
+        collection.map { |label, value| rfk_choice_with_html(label, value, disabled_values: disabled_values, option_html: option_html) }
+      else
+        collection.map do |item|
+          if item.is_a?(Array) && item.size == 2
+            rfk_choice_with_html(item.first, item.second, disabled_values: disabled_values, option_html: option_html)
+          else
+            value = rfk_read_selected_value(item, value_method)
+            label = rfk_read_selected_label(item, label_method)
+            rfk_choice_with_html(label, value, disabled_values: disabled_values, option_html: option_html)
+          end
+        end
+      end
+    end
+
+    def rfk_choice_with_html(label, value, disabled_values:, option_html:)
+      html = rfk_option_html_for(value, option_html)
+      html[:disabled] = true if disabled_values.include?(value.to_s)
+      html.empty? ? [label, value] : [label, value, html]
+    end
+
+    def rfk_option_html_for(value, option_html)
+      case option_html
+      when Proc
+        option_html.call(value) || {}
+      when Hash
+        option_html[value] || option_html[value.to_s] || {}
+      else
+        {}
+      end
+    end
+
+    def rfk_normalize_grouped_collection(grouped_collection, value_method:, label_method:)
+      grouped_collection.map do |group_label, items|
+        [group_label, rfk_normalize_collection(items, value_method: value_method, label_method: label_method)]
+      end
+    end
+
+    def rfk_normalize_selected(selected, value_method:, label_method:)
+      case selected
+      when nil
+        []
+      when Hash
+        [rfk_choice_from_hash(selected)]
+      when Array
+        selected.flat_map do |item|
+          (item.is_a?(Array) && item.size == 2) ? [item] : rfk_normalize_selected(item, value_method: value_method, label_method: label_method)
+        end
+      else
+        [[rfk_read_selected_label(selected, label_method), rfk_read_selected_value(selected, value_method)]]
+      end
+    end
+
+    def rfk_choice_from_hash(selected)
+      value = selected[:value] || selected["value"] || selected[:id] || selected["id"]
+      label = selected[:text] || selected["text"] || selected[:label] || selected["label"] || selected[:name] || selected["name"] || value
+
+      [label, value]
+    end
+
+    def rfk_enum_label(method, value, explicit: false)
+      return value.to_s.humanize if explicit && !object.class.respond_to?(:human_attribute_name)
+
+      object.class.human_attribute_name("#{method}.#{value}", default: value.to_s.humanize)
+    end
+
+    def rfk_read_selected_value(record, value_method)
+      record.respond_to?(value_method) ? record.public_send(value_method) : record
+    end
+
+    def rfk_read_selected_label(record, label_method)
+      record.respond_to?(label_method) ? record.public_send(label_method) : record.to_s
     end
   end
 end
