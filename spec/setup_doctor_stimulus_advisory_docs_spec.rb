@@ -15,8 +15,9 @@ RSpec.describe "setup doctor Stimulus advisory docs" do
   it "keeps the read-only doctor boundary visible from the public setup docs" do
     expect(readme).to include(
       "rails rails_fields_kit:doctor",
-      "representative Stimulus registration advisory signal",
-      "manual host-app checks"
+      "Stimulus registration",
+      "manual host-app checks",
+      "doc/setup.md"
     )
 
     expect(product_profile).to include(
