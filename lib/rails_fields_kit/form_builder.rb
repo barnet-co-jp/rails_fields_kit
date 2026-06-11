@@ -405,7 +405,7 @@ module RailsFieldsKit
       selected_choices.map(&:second)
     end
 
-    def rfk_normalize_collection(collection, value_method:, label_method:)
+    def rfk_normalize_collection(collection, value_method:, label_method:, disabled: nil, option_html: {})
       disabled_values = Array(disabled).map(&:to_s)
 
       case collection
