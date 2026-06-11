@@ -92,11 +92,11 @@ module RailsFieldsKit
       end
 
       def render_filter(form_builder, filter)
-        render_call(form_builder, filter_call(filter))
+        render_call(form_builder, filter_call(filter), table_filter: true)
       end
 
       def render_filters(form_builder, filters)
-        filter_calls(filters).map { |call| render_call(form_builder, call) }
+        filter_calls(filters).map { |call| render_call(form_builder, call, table_filter: true) }
       end
 
       def render_cell_editor(form_builder, editor)
@@ -190,11 +190,17 @@ module RailsFieldsKit
         normalized_hash
       end
 
-      def render_call(form_builder, call)
+      def render_call(form_builder, call, table_filter: false)
         method = call.fetch(:method)
         raise ArgumentError, "table metadata method is required" unless method
 
-        form_builder.public_send(call.fetch(:helper), method, **call.fetch(:options))
+        options = call.fetch(:options).dup
+        has_adapter_metadata = options.key?(:adapter) || options.key?("adapter")
+        if table_filter && call.fetch(:helper) == :rfk_token_search && has_adapter_metadata
+          options[:_rfk_table_filter_metadata] = true
+        end
+
+        form_builder.public_send(call.fetch(:helper), method, **options)
       end
 
       def normalize_field_type(field_type)
