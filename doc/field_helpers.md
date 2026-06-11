@@ -333,6 +333,14 @@ When the host app needs to own that accessibility wiring itself, keep the same w
 
 `accessibility: false` only removes the shared automatic `aria-describedby`, `aria-invalid`, and `aria-required` output. The wrapped native field, label, hint, prefix, suffix, and validation redisplay behavior still stay in the same helper family.
 
+#### Generated described-by ids
+
+For the ordinary single-field case, Rails Fields Kit generates hint and validation error ids from the form object name and method, such as `customer_code_hint` / `customer_code_error`, and wires those ids into `aria-describedby`. Passing a custom input `id:` through `html:` changes the input id, but it does not rename the generated hint or error ids.
+
+If the same object name and method are rendered more than once in the same document, the generated hint and error ids are also repeated. Prefer a distinct form object name or indexed nested form name when the repeated fields represent separate records. When the host app intentionally renders the same field more than once and needs fully custom ids, set `accessibility: false` and own the matching `aria-describedby`, `hint_html:`, and `error_html:` ids together.
+
+For Tom Select-backed request failure placeholders, `error_surface_html: { id: "..." }` is the supported way to choose a unique placeholder id; Rails Fields Kit uses that explicit id for the generated surface, field data value, and `aria-describedby` wiring.
+
 ### Field-level wrapper customization
 
 Use the initializer defaults in [`configuration.md`](configuration.md) when the whole host app should share the same wrapper, label, hint, error, control, prefix, or suffix classes. Use the per-field `*_html` options when one field needs additional classes, `data`, or aria attributes for a Bootstrap, Tailwind, or design-system hook.

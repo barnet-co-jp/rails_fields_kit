@@ -349,6 +349,47 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(plain_html).not_to include("dummy_model_customer_id_error_surface")
   end
 
+  it "keeps generated native hint ids tied to object name and method" do
+    first_html = form_builder.rfk_text_field(:keyword, wrapper: true, hint: "First hint")
+    second_html = form_builder.rfk_text_field(:keyword, wrapper: true, hint: "Second hint")
+    combined_html = "#{first_html}#{second_html}"
+
+    expect(first_html).to include("aria-describedby=\"dummy_model_keyword_hint\"")
+    expect(first_html).to include("id=\"dummy_model_keyword_hint\"")
+    expect(combined_html.scan("id=\"dummy_model_keyword_hint\"").size).to eq(2)
+    expect(combined_html.scan("aria-describedby=\"dummy_model_keyword_hint\"").size).to eq(2)
+  end
+
+  it "keeps custom input ids separate from generated hint ids" do
+    html = form_builder.rfk_text_field(
+      :keyword,
+      wrapper: true,
+      hint: "Host app hint",
+      html: {
+        id: "custom_keyword_input",
+        aria: { describedby: "host_hint" }
+      }
+    )
+
+    expect(html).to include("id=\"custom_keyword_input\"")
+    expect(html).to include("aria-describedby=\"host_hint dummy_model_keyword_hint\"")
+    expect(html).to include("id=\"dummy_model_keyword_hint\"")
+  end
+
+  it "uses explicit error surface ids for Tom Select describedby wiring" do
+    html = form_builder.rfk_combobox(
+      :customer_id,
+      url: "/customers.json",
+      error_surface: true,
+      error_surface_html: { id: "customer_lookup_error_surface" },
+      html: { aria: { describedby: "host_help" } }
+    )
+
+    expect(html).to include("data-rails-fields-kit--tom-select-error-surface-id-value=\"customer_lookup_error_surface\"")
+    expect(html).to include("aria-describedby=\"host_help customer_lookup_error_surface\"")
+    expect(html).to include("id=\"customer_lookup_error_surface\"")
+  end
+
   it "renders a token search text input" do
     html = form_builder.rfk_token_search(
       :keyword,

@@ -25,7 +25,8 @@ Rails Fields Kit is not a query engine, authorization layer, or table preference
 Host applications remain responsible for:
 
 - installing Tom Select in their chosen JavaScript toolchain
-- registering Stimulus controllers and loading CSS through their chosen frontend setup
+- registering Stimulus controllers, choosing the boot file, and deciding the final frontend setup policy
+- loading CSS through their chosen frontend setup
 - parsing submitted token search text
 - building `params[:q]` or equivalent search params
 - authorization, scoping, pagination, and result execution
@@ -40,7 +41,7 @@ Host applications remain responsible for:
 - table metadata objects including `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
 - package-root JavaScript exports including `TomSelectController` and rendered-field contract helpers documented in `doc/public_api.md`
 - Stimulus events dispatched by `rails-fields-kit--tom-select`
-- read-only setup verification through `rails rails_fields_kit:doctor`, which reports initializer and importmap pin visibility while leaving Tom Select package install, Stimulus registration, CSS import, and bundler aliases as host-app responsibilities
+- read-only setup verification through `rails rails_fields_kit:doctor`, which reports initializer and importmap pin visibility plus a representative Stimulus registration advisory signal while leaving Tom Select package install, final Stimulus boot policy, CSS import, and bundler aliases as host-app responsibilities
 
 ## Current non-goals
 
@@ -58,19 +59,23 @@ Host applications remain responsible for:
 - `CHANGELOG.md`: released and unreleased user-visible changes, plus the current release-prep baseline
 - `AGENTS.md`: repo-specific source-of-truth order, docs-sync expectations, and release-facing review inventory
 - `doc/setup.md`: maintained setup walkthrough, including the read-only setup doctor boundary
-- `doc/setup_doctor_output_review.md`: focused CLI diagnostic evidence review for setup doctor output, target mismatch readability, and manual-check boundaries
+- `doc/setup_doctor_output_review.md`: focused CLI diagnostic evidence review for setup doctor output, Stimulus registration advisory states, target mismatch readability, and manual-check boundaries
 - `doc/support_boundary.md`: supported Ruby / Rails / Node boundaries and representative CI evidence
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
 - `doc/field_helpers.md` and `doc/controller_helpers.md`: public helper references
 - `doc/password_field.md`: focused `rfk_password_field` native wrapper boundary and password-specific non-goals
+- `doc/textarea_autosize.md`: focused `rfk_text_area` autosize boundary; autosize remains host-app owned in the current 0.1.x surface
+- `doc/textarea_autosize_release_evidence.md`: release and sample-app evidence guide for the current `rfk_text_area` autosize boundary without treating autosize as built-in behavior
 - `doc/visual_references.md`: maintained visual reference family map and scope notes
 - `doc/visual_reference_index.html`: one-screen reviewer entrypoint for the static visual reference family
 - `doc/tom_select_visual_reference.html` and `doc/native_field_visual_reference.html`: static visual references for representative Tom Select-backed and native helper states
 - `doc/tom_select_source_fallback_review.html`: focused companion visual reference for explicit `enum:` sources and remote option label fallback display review
+- `doc/tom_select_turbo_reconnect_visual_reference.html`: focused companion visual reference for Turbo reconnect behavior review
 - `doc/tom_select_request_failure_visual_reference.html`: static visual reference for opt-in request-failure feedback and `error_surface: true` lanes
 - `doc/tom_select_error_surface_contract_visual_reference.html`: static visual reference for focused `error_surface: true` live-region contract review
 - `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
 - `doc/tom_select_text_override_visual_reference.html`: static visual reference for configured Tom Select text override copy states
+- `doc/tom_select_disabled_option_visual_reference.html`: static visual reference for collection-backed disabled option readability and option metadata boundaries
 - `doc/configuration_wrapper_class_visual_reference.html`: static visual reference for initializer-driven wrapper class pass-through, narrow viewport review, and host-app CSS ownership boundaries
 - `doc/table_metadata_visual_reference.html`: static visual reference for representative table metadata filter and editor lanes
 - `doc/token_search_saved_search_visual_reference.html`: static visual reference for saved-search token suggestion states

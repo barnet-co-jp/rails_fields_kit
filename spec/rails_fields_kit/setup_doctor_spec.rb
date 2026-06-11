@@ -157,6 +157,37 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
     end
   end
 
+  it "reports Stimulus registration from a representative JavaScript entrypoint" do
+    Dir.mktmpdir do |root|
+      write_file(root, "app/javascript/controllers/index.js", <<~JS)
+        import { application } from "controllers/application"
+        import { TomSelectController } from "rails_fields_kit"
+
+        application.register("rails-fields-kit--tom-select", TomSelectController)
+      JS
+
+      stimulus_check = check_for(described_class.new(root: root), :stimulus_registration)
+
+      expect(stimulus_check.status).to eq(:ok)
+      expect(stimulus_check.message).to include("Found Rails Fields Kit Stimulus registration signal in app/javascript/controllers/index.js")
+      expect(stimulus_check.message).to include("Stimulus boot policy stays with the host app")
+    end
+  end
+
+  it "keeps missing Stimulus registration signal as a manual advisory" do
+    Dir.mktmpdir do |root|
+      doctor = described_class.new(root: root)
+      output = StringIO.new
+      stimulus_check = check_for(doctor, :stimulus_registration)
+
+      expect(stimulus_check.status).to eq(:manual)
+      expect(stimulus_check.message).to include("representative JavaScript entrypoints")
+      expect(stimulus_check.message).to include("does not inspect every boot file")
+      expect(doctor.run(io: output)).to eq(true)
+      expect(output.string).to include("[MANUAL] Stimulus registration")
+    end
+  end
+
   it "keeps missing Tom Select CSS import as a manual advisory" do
     Dir.mktmpdir do |root|
       css_check = check_for(described_class.new(root: root), :css_import)
@@ -195,6 +226,59 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
     end
   end
 
+  it "keeps bundler alias manual when representative config is absent" do
+    Dir.mktmpdir do |root|
+      bundler_check = check_for(described_class.new(root: root), :bundler_alias)
+
+      expect(bundler_check.status).to eq(:manual)
+      expect(bundler_check.message).to include("Representative bundler config was not found")
+      expect(bundler_check.message).to include("host app's Vite, jsbundling, or custom resolver policy")
+    end
+  end
+
+  it "reports bundler alias signals from representative Vite config" do
+    Dir.mktmpdir do |root|
+      write_file(root, "vite.config.ts", <<~TS)
+        import { defineConfig } from "vite"
+
+        export default defineConfig({
+          resolve: {
+            alias: [
+              { find: /^rails_fields_kit$/, replacement: "/bundle/rails_fields_kit/index.js" },
+              { find: /^rails_fields_kit\/tom_select_controller$/, replacement: "/bundle/rails_fields_kit/tom_select_controller.js" },
+            ],
+          },
+        })
+      TS
+
+      bundler_check = check_for(described_class.new(root: root), :bundler_alias)
+
+      expect(bundler_check.status).to eq(:ok)
+      expect(bundler_check.message).to include("Found Rails Fields Kit bundler alias signals in vite.config.ts")
+      expect(bundler_check.message).to include("bundler choice and config policy stay with the host app")
+    end
+  end
+
+  it "keeps incomplete bundler alias config as manual advisory" do
+    Dir.mktmpdir do |root|
+      write_file(root, "vite.config.ts", <<~TS)
+        export default {
+          resolve: {
+            alias: [
+              { find: /^rails_fields_kit\/tom_select_controller$/, replacement: "/bundle/rails_fields_kit/tom_select_controller.js" },
+            ],
+          },
+        }
+      TS
+
+      bundler_check = check_for(described_class.new(root: root), :bundler_alias)
+
+      expect(bundler_check.status).to eq(:manual)
+      expect(bundler_check.message).to include("did not show alias signals for rails_fields_kit")
+      expect(bundler_check.message).to include("does not inspect every resolver shape or rewrite bundler config")
+    end
+  end
+
   it "reports missing importmap pins without treating toolchain variance as an invocation failure" do
     Dir.mktmpdir do |root|
       write_file(root, "config/importmap.rb", <<~RUBY)
@@ -210,11 +294,12 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       expect(doctor.run(io: output)).to eq(true)
       expect(output.string).to include("[MISSING] Importmap pins")
       expect(output.string).to include("[MANUAL] Tom Select package")
-      expect(output.string).to include("[MANUAL] CSS import")
       expect(output.string).to include("[MANUAL] Stimulus registration")
+      expect(output.string).to include("[MANUAL] CSS import")
       expect(output.string).to include("[MANUAL] Bundler alias")
       expect(output.string).to include("rails_fields_kit and rails_fields_kit/tom_select_controller")
-      expect(output.string).to include("does not inspect or rewrite bundler config")
+      expect(output.string).to include("host app's Vite, jsbundling, or custom resolver policy")
+      expect(output.string).to include("does not inspect every boot file")
     end
   end
 end
