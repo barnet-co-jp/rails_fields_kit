@@ -86,9 +86,11 @@ Result:
 - [ ] setup doctor ran after generator setup without changing files
 - [ ] initializer visibility was recorded
 - [ ] importmap pin visibility was recorded when `config/importmap.rb` was present, or the non-importmap/manual status was recorded without treating bundler apps as failures
+- [ ] representative Stimulus registration evidence was recorded as either `[OK]` advisory source visibility or `[MANUAL]` host-app follow-up when registration evidence was in scope
+- [ ] `[OK] Stimulus registration` was not treated as proof of the host app's final Stimulus boot policy or every possible controller registry
 - [ ] setup doctor output readability was checked with `doc/setup_doctor_output_review.md` when diagnostic scanability or importmap target mismatch evidence was in scope
 - [ ] evidence notes distinguish setup behavior from CLI output readability evidence, instead of treating this section as a source of new doctor behavior or output wording
-- [ ] manual checklist items for Tom Select package install, Stimulus registration, CSS import, and bundler aliases were reviewed as host-app responsibilities rather than automatic pass/fail gates
+- [ ] manual checklist items for Tom Select package install, CSS import, bundler aliases, and any `[MANUAL] Stimulus registration` follow-up were reviewed as host-app responsibilities rather than automatic pass/fail gates
 
 Notes:
 
