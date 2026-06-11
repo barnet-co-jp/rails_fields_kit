@@ -32,6 +32,11 @@ const SELECTED_PRELOAD_ATTRIBUTES = {
   selectedMultipleParam: "data-rails-fields-kit--tom-select-selected-multiple-param-value",
   selectedQueryParams: "data-rails-fields-kit--tom-select-selected-query-params-value"
 }
+const TABLE_FILTER_METADATA_ATTRIBUTES = {
+  adapter: "data-rails-fields-kit-table-filter-adapter",
+  paramName: "data-rails-fields-kit-table-filter-param-name",
+  fields: "data-rails-fields-kit-table-filter-fields"
+}
 const DEFAULT_SELECTED_PARAM = "id"
 const DEFAULT_SELECTED_MULTIPLE_PARAM = "ids"
 const NATIVE_FIELD_TAGS = new Set(["input", "select", "textarea"])
@@ -195,6 +200,19 @@ export function readRenderedSelectedPreloadConfig(element) {
     selectedParam: dataValue(element, SELECTED_PRELOAD_ATTRIBUTES.selectedParam) || DEFAULT_SELECTED_PARAM,
     selectedMultipleParam: dataValue(element, SELECTED_PRELOAD_ATTRIBUTES.selectedMultipleParam) || DEFAULT_SELECTED_MULTIPLE_PARAM,
     selectedQueryParams: objectDataValue(element, SELECTED_PRELOAD_ATTRIBUTES.selectedQueryParams)
+  }
+}
+
+export function readRenderedTableFilterMetadata(element) {
+  if (!element || typeof element.getAttribute !== "function") return null
+
+  const adapter = dataValue(element, TABLE_FILTER_METADATA_ATTRIBUTES.adapter)
+  if (!adapter) return null
+
+  return {
+    adapter,
+    paramName: dataValue(element, TABLE_FILTER_METADATA_ATTRIBUTES.paramName),
+    fields: objectDataValue(element, TABLE_FILTER_METADATA_ATTRIBUTES.fields)
   }
 }
 
