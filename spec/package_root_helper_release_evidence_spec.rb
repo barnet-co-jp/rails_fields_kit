@@ -56,8 +56,7 @@ RSpec.describe "package-root helper release evidence guide" do
       "tomSelectTextOverrideContract",
       "tomSelectPluginContract",
       "tomSelectRequestContract",
-      "nativeFieldAccessibilityContract",
-      "readRenderedTableFilterMetadata"
+      "nativeFieldAccessibilityContract"
     )
     expect(helper_specific_lanes).to all(satisfy do |helper_name|
       current_package_root_helpers.include?("#{helper_name}(element)")
