@@ -58,6 +58,10 @@ const checks = [
     args: ["scripts/check_tom_select_plugin_contract.mjs"]
   },
   {
+    name: "Tom Select field kind contract smoke",
+    args: ["scripts/check_tom_select_field_kind_contract.mjs"]
+  },
+  {
     name: "selected preload config contract smoke",
     args: ["scripts/check_selected_preload_config_contract.mjs"]
   }
