@@ -102,7 +102,7 @@ Tom Select-backed `rfk_*` helpers also support opt-in `error_surface:` and `erro
 
 Tom Select-backed helpers also support field-level `allow_clear: true` for fields that should expose Tom Select's `clear_button` affordance. Rails Fields Kit adds `clear_button` to that field's effective plugin list, while Tom Select installation, plugin-specific assets, clear affordance styling, and empty-state wording remain host-app or Rails select-option responsibility. Explicit `plugins:` values still replace initializer defaults for the field; use [`field_helpers.md`](field_helpers.md) for the helper-level examples and override notes.
 
-`rfk_table_filters` and `rfk_table_cell_editors` are the direct FormBuilder rendering path. They collect table metadata and return safe-buffer helper output for ordinary Rails views. `TableMetadata.filter_calls` / `cell_editor_calls` and `TableRenderer.filter_call` / `cell_editor_call` are the call-spec path for table integrations that want to inspect or rearrange helper, method, and options before rendering. The batch convenience APIs `TableMetadata.render_filters` / `render_cell_editors` and `TableRenderer.render_filters` / `render_cell_editors` stay in that renderer lane and return ordered render result arrays rather than redefining the helper-level safe-buffer contract.
+`rfk_table_filters` and `rfk_table_cell_editors` are the direct FormBuilder rendering path. They collect table metadata and return safe-buffer helper output for ordinary Rails views. `TableMetadata.filter_calls` / `cell_editor_calls` and `TableRenderer.filter_call` / `cell_editor_call` are the call-spec path for table integrations that want to inspect or rearrange helper, method, and options before rendering. The batch convenience APIs `TableMetadata.render_filters` / `render_cell_editors` and `TableRenderer.render_filters` / `render_cell_editers` stay in that renderer lane and return ordered render result arrays rather than redefining the helper-level safe-buffer contract.
 
 `rfk_table_filters(columns, group_html: ...)` and `rfk_table_cell_editors(columns, group_html: ...)` can add attributes to one outer group wrapper around the joined helper output. `group_html:` is separate from field-level `wrapper_html:` and does not make Rails Fields Kit own table layout, query execution, persistence, or semantic `fieldset` / `legend` generation; use [`table_group_html.md`](table_group_html.md) for examples and the detailed boundary.
 
@@ -251,6 +251,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
 | `tomSelectPluginContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select plugin data and returns `plugins`, `hasClearButton`, and `hasRemoveButton`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not install plugin assets, expose Tom Select plugin objects, mutate selections, style clear/remove controls, or own empty-state behavior. |
 | `tomSelectRequestContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select request data attributes and returns the controller identifier, remote search / selected preload / create endpoint flags, URL values, request parameter names, `minLength`, and `errorSurfaceId`, or `null` when the element is not a Rails Fields Kit Tom Select-backed field. It does not execute requests, parse query strings, mutate Tom Select, authorize endpoints, retry requests, or own visible feedback. |
+| `tomSelectFieldKindContract(element)` | rendered-field contract reader | Reads the Rails Fields Kit-rendered Tom Select helper kind and returns the controller identifier and `kind`, or `null` when the element is not a Rails Fields Kit Tom Select-backed field or has no rendered kind. It does not expose controller or Tom Select instances, normalize helper lanes, mutate selections, or execute requests. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
 
@@ -263,6 +264,7 @@ import {
   TomSelectController,
   nativeFieldAccessibilityContract,
   readRenderedSelectedPreloadConfig,
+  tomSelectFieldKindContract,
   tomSelectPluginContract,
   tomSelectRequestContract,
   tomSelectTextOverrideContract
@@ -270,6 +272,7 @@ import {
 
 const accessibilityContract = nativeFieldAccessibilityContract(inputElement)
 const copyContract = tomSelectTextOverrideContract(fieldElement)
+const fieldKindContract = tomSelectFieldKindContract(fieldElement)
 const pluginContract = tomSelectPluginContract(fieldElement)
 const requestContract = tomSelectRequestContract(fieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
@@ -284,6 +287,8 @@ import TomSelectController from "rails_fields_kit/tom_select_controller"
 ### Contract reader boundary
 
 Rendered-field contract helpers stay read-only. They inspect data attributes and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance or duplicating wrapper traversal.
+
+`tomSelectFieldKindContract(element)` reports only the rendered helper lane value as `{ controller, kind }`. It returns `null` for unsupported elements, non-Rails Fields Kit Tom Select elements, and Tom Select-backed fields without a rendered kind. It does not normalize close helper lanes such as `rfk_select` and `rfk_grouped_select`; callers receive the rendered `kind` value as the source of truth.
 
 For Tom Select plugin state, `tomSelectPluginContract(element)` reports the rendered effective plugin list and derived clear/remove flags. It does not confirm plugin asset loading, clear/remove affordance styling, or Tom Select plugin lifecycle behavior.
 
