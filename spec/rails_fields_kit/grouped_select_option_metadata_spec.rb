@@ -3,17 +3,31 @@
 require "spec_helper"
 
 RSpec.describe "rfk_grouped_select option metadata" do
-  let(:template) { ActionView::Base.empty }
-  let(:record) { Customer.new("2") }
-  let(:builder) { RailsFieldsKit::FormBuilder.new(:customer, record, template, {}) }
+  include ActionView::Helpers::FormHelper
+  include ActionView::Helpers::FormOptionsHelper
+  include ActionView::Helpers::TagHelper
+  include ActionView::Context
 
-  class Customer
-    attr_accessor :customer_id
+  Customer = Struct.new(:customer_id) do
+    def self.model_name
+      ActiveModel::Name.new(self, nil, "Customer")
+    end
 
-    def initialize(customer_id)
-      @customer_id = customer_id
+    def persisted?
+      false
+    end
+
+    def to_key
+      nil
     end
   end
+
+  def protect_against_forgery?
+    false
+  end
+
+  let(:record) { Customer.new("2") }
+  let(:builder) { ActionView::Helpers::FormBuilder.new(:customer, record, self, {}) }
 
   it "passes disabled values through grouped choices while preserving selection" do
     html = builder.rfk_grouped_select(
