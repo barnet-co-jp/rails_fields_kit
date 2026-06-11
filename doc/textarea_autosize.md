@@ -8,6 +8,12 @@ Autosize remains host-app owned for the current 0.1.x surface.
 
 That means Rails Fields Kit does not add an `autosize:` option, bundled JavaScript measurement, production CSS preset, Turbo reconnect sizing hook, or manual-resize policy for `rfk_text_area` in this slice. The default textarea markup, submitted value, validation redisplay, hint/error wiring, and `aria-describedby` behavior remain the same as the existing native wrapper contract.
 
+## Visual review route
+
+Use `doc/native_field_visual_reference.html`'s multiline textarea lane for visual review of the current Rails Fields Kit-owned surface. That lane is the right place to check long textarea content, long hint copy, validation copy, affix density, generated accessibility wiring, and desktop/narrow viewport readability.
+
+Do not create a separate autosize visual lane unless a future issue accepts an opt-in autosize feature or a host-app sample needs evidence for its own enhancement. When host-owned autosize is present in a sample app, record it as host-app evidence beside the native wrapper check, not as Rails Fields Kit behavior.
+
 ## Host-app guidance
 
 Host apps that need autosize can layer it around the rendered textarea with their own CSS or JavaScript:
@@ -43,6 +49,8 @@ The host app owns:
 ## Release evidence guidance
 
 When a release or narrow PR needs evidence for `rfk_text_area`, record it in the native helper representative wrapper and accessibility lane, not as a new autosize behavior lane. Use this page as the source of truth for the autosize boundary.
+
+For a focused sample-app or release-gate checklist, use [`textarea_autosize_release_evidence.md`](textarea_autosize_release_evidence.md). It gives a representative `rfk_text_area` evidence table for first render, edit-form redisplay, validation rerender, and optional host-owned autosize enhancement notes.
 
 Representative evidence should confirm:
 

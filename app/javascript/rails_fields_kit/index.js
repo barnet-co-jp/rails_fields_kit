@@ -1,18 +1,31 @@
 import TomSelectController from "./tom_select_controller.js"
 
 const TOM_SELECT_CONTROLLER = "rails-fields-kit--tom-select"
+const TOM_SELECT_VALUE_PREFIX = "data-rails-fields-kit--tom-select"
 const TEXT_OVERRIDE_ATTRIBUTES = {
   noResultsText: "data-rails-fields-kit--tom-select-no-results-text-value",
   loadingText: "data-rails-fields-kit--tom-select-loading-text-value",
   createText: "data-rails-fields-kit--tom-select-create-text-value"
 }
-const REQUEST_PARAM_ATTRIBUTES = {
-  queryParams: "data-rails-fields-kit--tom-select-query-params-value",
-  selectedQueryParams: "data-rails-fields-kit--tom-select-selected-query-params-value",
-  createParams: "data-rails-fields-kit--tom-select-create-params-value"
+const REQUEST_CONTRACT_ATTRIBUTES = {
+  url: `${TOM_SELECT_VALUE_PREFIX}-url-value`,
+  selectedUrl: `${TOM_SELECT_VALUE_PREFIX}-selected-url-value`,
+  createUrl: `${TOM_SELECT_VALUE_PREFIX}-create-url-value`,
+  queryParam: `${TOM_SELECT_VALUE_PREFIX}-query-param-value`,
+  selectedParam: `${TOM_SELECT_VALUE_PREFIX}-selected-param-value`,
+  selectedMultipleParam: `${TOM_SELECT_VALUE_PREFIX}-selected-multiple-param-value`,
+  createParam: `${TOM_SELECT_VALUE_PREFIX}-create-param-value`,
+  minLength: `${TOM_SELECT_VALUE_PREFIX}-min-length-value`,
+  errorSurfaceId: `${TOM_SELECT_VALUE_PREFIX}-error-surface-id-value`
+}
+const REQUEST_CONTRACT_DEFAULTS = {
+  queryParam: "q",
+  selectedParam: "id",
+  selectedMultipleParam: "ids",
+  createParam: "text",
+  minLength: 0
 }
 const PLUGINS_ATTRIBUTE = "data-rails-fields-kit--tom-select-plugins-value"
-const ERROR_SURFACE_ID_ATTRIBUTE = "data-rails-fields-kit--tom-select-error-surface-id-value"
 const SELECTED_PRELOAD_ATTRIBUTES = {
   selectedUrl: "data-rails-fields-kit--tom-select-selected-url-value",
   selectedParam: "data-rails-fields-kit--tom-select-selected-param-value",
@@ -36,12 +49,17 @@ function textOverrideValue(element, attributeName) {
   return element.hasAttribute(attributeName) ? element.getAttribute(attributeName) : null
 }
 
-function hasAnyAttribute(element, attributes) {
-  return Object.values(attributes).some((attributeName) => element.hasAttribute(attributeName))
-}
-
 function dataValue(element, attributeName) {
   return element.hasAttribute(attributeName) ? element.getAttribute(attributeName) : null
+}
+
+function requestContractValue(element, key) {
+  const value = dataValue(element, REQUEST_CONTRACT_ATTRIBUTES[key])
+  if (value === null) return REQUEST_CONTRACT_DEFAULTS[key] ?? null
+  if (key !== "minLength") return value
+
+  const parsedValue = Number(value)
+  return Number.isFinite(parsedValue) ? parsedValue : REQUEST_CONTRACT_DEFAULTS.minLength
 }
 
 function objectDataValue(element, attributeName) {
@@ -129,16 +147,28 @@ export function tomSelectTextOverrideContract(element) {
   return contract
 }
 
-export function tomSelectRequestParamsContract(element) {
-  if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function") return null
-  if (!hasTomSelectController(element) && !hasAnyAttribute(element, REQUEST_PARAM_ATTRIBUTES)) return null
+export function tomSelectRequestContract(element) {
+  if (!element || typeof element.getAttribute !== "function" || !hasTomSelectController(element)) return null
 
-  return Object.fromEntries(
-    Object.entries(REQUEST_PARAM_ATTRIBUTES).map(([key, attributeName]) => [
-      key,
-      objectDataValue(element, attributeName)
-    ])
-  )
+  const url = requestContractValue(element, "url")
+  const selectedUrl = requestContractValue(element, "selectedUrl")
+  const createUrl = requestContractValue(element, "createUrl")
+
+  return {
+    controller: TOM_SELECT_CONTROLLER,
+    hasRemoteSearch: Boolean(url),
+    hasSelectedPreload: Boolean(selectedUrl),
+    hasCreateEndpoint: Boolean(createUrl),
+    url,
+    selectedUrl,
+    createUrl,
+    queryParam: requestContractValue(element, "queryParam"),
+    selectedParam: requestContractValue(element, "selectedParam"),
+    selectedMultipleParam: requestContractValue(element, "selectedMultipleParam"),
+    createParam: requestContractValue(element, "createParam"),
+    minLength: requestContractValue(element, "minLength"),
+    errorSurfaceId: requestContractValue(element, "errorSurfaceId")
+  }
 }
 
 export function tomSelectPluginContract(element) {
@@ -157,7 +187,7 @@ export function tomSelectPluginContract(element) {
 export function readRenderedErrorSurface(element) {
   if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function") return null
 
-  const surfaceId = dataValue(element, ERROR_SURFACE_ID_ATTRIBUTE)
+  const surfaceId = dataValue(element, REQUEST_CONTRACT_ATTRIBUTES.errorSurfaceId)
   if (!surfaceId) return null
 
   return element.ownerDocument?.getElementById?.(surfaceId) || null

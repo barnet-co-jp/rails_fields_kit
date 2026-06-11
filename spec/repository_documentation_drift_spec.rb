@@ -10,6 +10,14 @@ RSpec.describe "repository documentation drift guards" do
     File.read(File.join(root, path))
   end
 
+  def markdown_section(source, heading)
+    start_index = source.index(heading)
+    raise "missing heading #{heading}" unless start_index
+
+    next_heading = source.index(/^#{Regexp.escape(heading[/^#+/])} /, start_index + heading.length)
+    source[start_index...(next_heading || source.length)]
+  end
+
   it "keeps generated setup notes upstream links pointed at existing onboarding docs" do
     template = read_repo_file("lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md")
     linked_paths = template.scan(%r{https://github\.com/matsuo-haruhito/rails_fields_kit/blob/main/([^>\s)]+)}).flatten
@@ -29,9 +37,38 @@ RSpec.describe "repository documentation drift guards" do
     expect(missing_paths).to eq([])
   end
 
+  it "keeps README direct import helper guidance lightweight and tied to the public API source of truth" do
+    readme = read_repo_file("README.md")
+    public_api = read_repo_file("doc/public_api.md")
+    development_doc = read_repo_file("doc/development.md")
+
+    direct_imports_section = markdown_section(readme, "### Direct imports and package exports")
+    javascript_exports_section = markdown_section(public_api, "## JavaScript exports")
+
+    expect(direct_imports_section).to include(
+      "rails_fields_kit/tom_select_controller",
+      "rails_fields_kit/index.js",
+      "doc/public_api.md",
+      "#javascript-exports",
+      "doc/package_root_helper_release_evidence.md"
+    )
+    expect(direct_imports_section).to include("readRenderedSelectedPreloadConfig")
+    expect(javascript_exports_section).to include("readRenderedSelectedPreloadConfig")
+
+    public_helper_names = javascript_exports_section.scan(/`([a-z][A-Za-z0-9]+\([^`]*\))`/).flatten
+    readme_helper_names = direct_imports_section.scan(/`([a-z][A-Za-z0-9]+\([^`]*\))`/).flatten
+
+    expect(readme_helper_names).to include("readRenderedSelectedPreloadConfig(...)")
+    expect(readme_helper_names).not_to match_array(public_helper_names)
+    expect(development_doc).to include(
+      "The package export smoke derives package-root named-export expectations from the JavaScript exports table in `doc/public_api.md`"
+    )
+  end
+
   it "keeps support boundary docs aligned with gem metadata, package metadata, and representative CI rows" do
     support_boundary = read_repo_file("doc/support_boundary.md")
     development_doc = read_repo_file("doc/development.md")
+    release_doc = read_repo_file("doc/release.md")
     gemspec = read_repo_file("rails_fields_kit.gemspec")
     package_json = JSON.parse(read_repo_file("package.json"))
     workflow = read_repo_file(".github/workflows/ci.yml")
@@ -47,12 +84,17 @@ RSpec.describe "repository documentation drift guards" do
     expect(support_boundary).to include("Node #{node_engine}")
     expect(development_doc).to include("Node #{node_engine}")
     expect(development_doc).to include("`package.json`", "GitHub Actions `javascript` job")
+    expect(release_doc).to include("doc/support_boundary.md")
+    expect(release_doc).to include("Rails 7.0 and newer")
+    expect(release_doc).to include("Rails 7 and Rails 8")
     node_majors.each do |node_major|
       expect(workflow).to include("\"#{node_major}\"")
+      expect(release_doc).to include("Node #{node_major}.x")
     end
 
     representative_rows.each do |rails_version, ruby_version, gemfile|
       expect(support_boundary).to include("| #{rails_version} | #{ruby_version} | `#{gemfile}` |")
+      expect(release_doc).to include("Rails #{rails_version} / Ruby #{ruby_version}")
     end
   end
 

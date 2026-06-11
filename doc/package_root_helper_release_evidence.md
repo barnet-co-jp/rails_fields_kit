@@ -29,6 +29,19 @@ Use existing helper-specific sections below when they match the scoped helper. F
 - a comparable non-target or unsupported element returns `null` when that is the documented boundary
 - request execution, visible copy, locale policy, mutation, validation, and retry behavior remain outside the helper evidence lane unless another release checklist section explicitly covers them
 
+## Placement checklist for new or changed helpers
+
+Use this checklist before adding or changing package-root helper docs. It keeps the helper list centralized while making the review and release evidence easy to find.
+
+- Start from `doc/public_api.md#javascript-exports` when the helper name, kind, import pattern, or return-shape boundary changes. That table remains the reader-facing source of truth for current exports.
+- Keep `scripts/check_package_exports.mjs` and the `npm run check:js` package export smoke aligned when the public API table gains, renames, or removes a package-root export. Add helper-specific smoke only when the generic import and callable checks are not enough to protect the documented boundary.
+- Keep README examples representative. The README should link to `doc/public_api.md#javascript-exports` for the full helper list and should not become an exhaustive helper inventory.
+- Use this guide only for release or sample-app evidence lanes. Add a helper-specific section when repeatable evidence is useful; otherwise a scoped PR comment or `doc/sample_app_results.md` note is enough.
+- Use `doc/visual_references.md` and `doc/visual_reference_index.html` as task or family routes, not as another copy of the current helper inventory. Link to the relevant rendered-state artifact when visual review is in scope.
+- Keep individual topic docs responsible for the domain boundary, such as selected preload, request params, text overrides, plugin state, native accessibility, or password-field non-goals. This guide should point to those boundaries rather than restating full examples.
+- Do not document open-PR helper names, proposal names, or roadmap-only helpers as current release evidence. Wait until the helper lands on `main` and appears in the public API table.
+- If the change needs runtime behavior, a new helper export, a return-shape decision, or a package metadata guard, split that work into the appropriate feature or quality track. This page should stay docs-only.
+
 ## When to add a helper-specific section
 
 Add a dedicated section to this guide only when a current public helper needs repeatable release evidence beyond the generic shape above. Good reasons include:
@@ -122,28 +135,29 @@ Suggested evidence note:
 tomSelectPluginContract: PASS on <field selector>. plugins matched the rendered effective plugin list; allow_clear field exposed clear_button through plugins and hasClearButton; explicit plugin field exposed the expected derived hasClearButton / hasRemoveButton flags; unrelated element returned null. Plugin assets, styling, mutation, empty-state copy, and Tom Select plugin lifecycle remained host-app or Tom Select responsibilities.
 ```
 
-## Tom Select request params contract reader
+## Tom Select request contract reader
 
-Use this lane when `tomSelectRequestParamsContract(element)` is in release scope.
+Use this lane when `tomSelectRequestContract(element)` is in release scope.
 
 Representative import:
 
 ```js
-import { tomSelectRequestParamsContract } from "rails_fields_kit"
+import { tomSelectRequestContract } from "rails_fields_kit"
 ```
 
-Check one rendered Tom Select-backed field that uses request params options:
+Check rendered Tom Select-backed fields that cover remote search, selected preload, and create-on-the-fly request configuration when those lanes are in the PR or release scope:
 
-- `tomSelectRequestParamsContract(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
-- The result exposes the documented request param names for the representative field, including the query param and any selected preload param names that are in scope for the check.
-- A comparable Rails Fields Kit field without request params options returns the documented empty or fallback contract, or `null` when that is the documented boundary.
+- `tomSelectRequestContract(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes the documented remote search, selected preload, and create endpoint flags and URLs for the representative fields.
+- The result exposes the documented request param names, `minLength`, and `errorSurfaceId` values rendered for the field.
+- A comparable Tom Select-backed field without optional request lanes reports the documented default values.
 - A comparable non-Tom Select or unrelated element returns `null`.
-- The evidence stays read-only; request execution, endpoint authorization, retry UI, visible copy, validation, and host-app fallback behavior remain outside this helper evidence lane.
+- The evidence stays read-only; request execution, query parsing, authorization, retry UI, visible feedback, fixed params parsing, and Tom Select controller lifecycle remain outside this helper evidence lane.
 
 Suggested evidence note:
 
 ```text
-tomSelectRequestParamsContract: PASS on <field selector>. request param names matched the rendered field contract; comparable no-request-params field returned the documented fallback; unrelated element returned null. Request execution, endpoint authorization, retry UI, visible copy, validation, and host-app fallback behavior remained out of scope.
+tomSelectRequestContract: PASS on <field selector>. remote search / selected preload / create endpoint flags and URLs, param names, minLength, and errorSurfaceId matched the rendered field contract; default/no-request and unrelated elements returned the documented boundaries. Request execution, authorization, retry UI, visible feedback, fixed params parsing, and controller lifecycle remained out of scope.
 ```
 
 ## Native accessibility contract reader

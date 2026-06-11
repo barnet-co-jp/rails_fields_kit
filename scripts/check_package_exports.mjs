@@ -190,8 +190,58 @@ try {
       `assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")\n` +
       `expectedCallableHelperExports.forEach((exportName) => {\n` +
       `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)\n` +
-      `})\n` +
-      `assert.equal(typeof packageRoot.readRenderedErrorSurface, "function", "package root should expose readRenderedErrorSurface as a callable function")\n\n` +
+      `})\n\n` +
+      `assert.equal(packageRoot.tomSelectRequestContract(null), null, "request contract reader should ignore missing elements")\n` +
+      `assert.equal(packageRoot.tomSelectRequestContract(new FakeElement("input", { "data-controller": "other" })), null, "request contract reader should ignore non-Rails Fields Kit Tom Select elements")\n` +
+      `assert.deepEqual(\n` +
+      `  packageRoot.tomSelectRequestContract(new FakeElement("select", {\n` +
+      `    "data-controller": "other rails-fields-kit--tom-select",\n` +
+      `    "data-rails-fields-kit--tom-select-url-value": "/people",\n` +
+      `    "data-rails-fields-kit--tom-select-selected-url-value": "/people/selected",\n` +
+      `    "data-rails-fields-kit--tom-select-create-url-value": "/people",\n` +
+      `    "data-rails-fields-kit--tom-select-query-param-value": "term",\n` +
+      `    "data-rails-fields-kit--tom-select-selected-param-value": "person_id",\n` +
+      `    "data-rails-fields-kit--tom-select-selected-multiple-param-value": "person_ids",\n` +
+      `    "data-rails-fields-kit--tom-select-create-param-value": "name",\n` +
+      `    "data-rails-fields-kit--tom-select-min-length-value": "2",\n` +
+      `    "data-rails-fields-kit--tom-select-error-surface-id-value": "person-error"\n` +
+      `  })),\n` +
+      `  {\n` +
+      `    controller: "rails-fields-kit--tom-select",\n` +
+      `    hasRemoteSearch: true,\n` +
+      `    hasSelectedPreload: true,\n` +
+      `    hasCreateEndpoint: true,\n` +
+      `    url: "/people",\n` +
+      `    selectedUrl: "/people/selected",\n` +
+      `    createUrl: "/people",\n` +
+      `    queryParam: "term",\n` +
+      `    selectedParam: "person_id",\n` +
+      `    selectedMultipleParam: "person_ids",\n` +
+      `    createParam: "name",\n` +
+      `    minLength: 2,\n` +
+      `    errorSurfaceId: "person-error"\n` +
+      `  },\n` +
+      `  "request contract reader should expose rendered request lanes without executing requests"\n` +
+      `)\n` +
+      `assert.deepEqual(\n` +
+      `  packageRoot.tomSelectRequestContract(new FakeElement("select", { "data-controller": "rails-fields-kit--tom-select" })),\n` +
+      `  {\n` +
+      `    controller: "rails-fields-kit--tom-select",\n` +
+      `    hasRemoteSearch: false,\n` +
+      `    hasSelectedPreload: false,\n` +
+      `    hasCreateEndpoint: false,\n` +
+      `    url: null,\n` +
+      `    selectedUrl: null,\n` +
+      `    createUrl: null,\n` +
+      `    queryParam: "q",\n` +
+      `    selectedParam: "id",\n` +
+      `    selectedMultipleParam: "ids",\n` +
+      `    createParam: "text",\n` +
+      `    minLength: 0,\n` +
+      `    errorSurfaceId: null\n` +
+      `  },\n` +
+      `  "request contract reader should expose safe defaults for local Tom Select-backed fields"\n` +
+      `)\n\n` +
       `const label = new FakeElement("label", { for: "order_customer_name" })\n` +
       `const input = new FakeElement("input", { id: "order_customer_name", "aria-describedby": "customer_hint customer_error" })\n` +
       `const hint = new FakeElement("p", { id: "customer_hint", class: "rfk-hint" })\n` +
@@ -211,30 +261,7 @@ try {
       `const missingLabelInput = new FakeElement("select")\n` +
       `buildDocumentWithWrapper([missingLabelInput])\n` +
       `assert.equal(packageRoot.nativeFieldAccessibilityContract(missingLabelInput).labelElement, null, "native accessibility contract should return null when no label exists")\n` +
-      `assert.equal(packageRoot.nativeFieldAccessibilityContract(new FakeElement("div")), null, "native accessibility contract should ignore non-native elements")\n\n` +
-      `const errorSurface = new FakeElement("div", { id: "customer_id_error_surface", class: "rfk-tom-select-error-surface", role: "status" })\n` +
-      `const tomSelectField = new FakeElement("select", {\n` +
-      `  "data-controller": "rails-fields-kit--tom-select",\n` +
-      `  "data-rails-fields-kit--tom-select-error-surface-id-value": "customer_id_error_surface"\n` +
-      `})\n` +
-      `buildDocumentWithWrapper([tomSelectField, errorSurface])\n` +
-      `assert.equal(packageRoot.readRenderedErrorSurface(tomSelectField), errorSurface, "rendered error surface reader should resolve the configured placeholder element")\n\n` +
-      `const customSurface = new FakeElement("output", { id: "custom_error_surface", class: "host-error", "aria-live": "assertive" })\n` +
-      `const customSurfaceField = new FakeElement("input", {\n` +
-      `  "data-controller": "rails-fields-kit--tom-select",\n` +
-      `  "data-rails-fields-kit--tom-select-error-surface-id-value": "custom_error_surface"\n` +
-      `})\n` +
-      `buildDocumentWithWrapper([customSurfaceField, customSurface])\n` +
-      `assert.equal(packageRoot.readRenderedErrorSurface(customSurfaceField), customSurface, "rendered error surface reader should support custom error_surface_html placeholders")\n\n` +
-      `const noSurfaceField = new FakeElement("select", { "data-controller": "rails-fields-kit--tom-select" })\n` +
-      `const missingSurfaceField = new FakeElement("select", {\n` +
-      `  "data-controller": "rails-fields-kit--tom-select",\n` +
-      `  "data-rails-fields-kit--tom-select-error-surface-id-value": "missing_surface"\n` +
-      `})\n` +
-      `buildDocumentWithWrapper([noSurfaceField, missingSurfaceField])\n` +
-      `assert.equal(packageRoot.readRenderedErrorSurface(noSurfaceField), null, "rendered error surface reader should return null when the field did not opt in")\n` +
-      `assert.equal(packageRoot.readRenderedErrorSurface(missingSurfaceField), null, "rendered error surface reader should return null when the configured placeholder is absent")\n` +
-      `assert.equal(packageRoot.readRenderedErrorSurface(null), null, "rendered error surface reader should ignore null inputs")\n`
+      `assert.equal(packageRoot.nativeFieldAccessibilityContract(new FakeElement("div")), null, "native accessibility contract should ignore non-native elements")\n`
   )
 
   await import(pathToFileURL(probePath).href)
