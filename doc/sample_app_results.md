@@ -7,8 +7,8 @@ Use the route map below to choose the evidence lane for the release or PR under 
 | Review goal | Start with | Use when |
 | --- | --- | --- |
 | Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. |
-| JavaScript setup | Setup doctor checks, JavaScript setup checks, event checks, Turbo reconnect checks | The release touches setup visibility, package-root exports, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. |
-| Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, password field native wrapper checks, native wrapper customization checks | Native helper wrapper, password helper boundary, class, hint/error, affix, or accessibility wiring changed. |
+| JavaScript setup and package-root helper evidence | Setup doctor checks, JavaScript setup checks, package-root helper lanes checked, event checks, Turbo reconnect checks | The release touches setup visibility, package-root exports, read-only rendered-field helper evidence, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. |
+| Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, password field native wrapper checks, native wrapper customization checks | Native helper wrapper, password helper boundary, class, hint/error, affix, accessibility wiring, or browser semantics evidence changed. |
 | README first field quickstart evidence | `rfk_select` representative collection-backed single-value lane checks, Visual reference render checks | The README first field or quickstart sample needs endpoint-free, server-rendered collection evidence without mixing in setup/import, remote search, selected preload, create-on-the-fly, or token metadata lanes. |
 | Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. |
 | Remote lifecycle feedback | Selected preload representative lane checks, create-on-the-fly representative failure lane checks, visible feedback checks | Selected preload, remote search, create-on-the-fly, request-failure, or visible fallback behavior changed. |
@@ -86,9 +86,11 @@ Result:
 - [ ] setup doctor ran after generator setup without changing files
 - [ ] initializer visibility was recorded
 - [ ] importmap pin visibility was recorded when `config/importmap.rb` was present, or the non-importmap/manual status was recorded without treating bundler apps as failures
+- [ ] representative Stimulus registration evidence was recorded as either `[OK]` advisory source visibility or `[MANUAL]` host-app follow-up when registration evidence was in scope
+- [ ] `[OK] Stimulus registration` was not treated as proof of the host app's final Stimulus boot policy or every possible controller registry
 - [ ] setup doctor output readability was checked with `doc/setup_doctor_output_review.md` when diagnostic scanability or importmap target mismatch evidence was in scope
 - [ ] evidence notes distinguish setup behavior from CLI output readability evidence, instead of treating this section as a source of new doctor behavior or output wording
-- [ ] manual checklist items for Tom Select package install, Stimulus registration, CSS import, and bundler aliases were reviewed as host-app responsibilities rather than automatic pass/fail gates
+- [ ] manual checklist items for Tom Select package install, Stimulus registration, CSS import, and bundler aliases were reviewed as host-app responsibilities rather than automatic pass/fail gates, with Stimulus registration evidence recorded above as either an `[OK]` advisory signal or a `[MANUAL]` follow-up rather than proof of final boot policy
 
 Notes:
 
@@ -205,6 +207,22 @@ Use this section when native helper constraint pass-through is release-critical 
 - [ ] any checked `required`, `disabled`, or `readonly` state stayed limited to ordinary native input state and did not imply a Rails Fields Kit-owned validation-message policy
 - [ ] the same field still kept its wrapper / hint / error / affix and accessibility wiring responsibilities aligned with the native helper docs
 - [ ] validation copy, browser validation-message behavior, masking, character counters, and server-side validation remained host-app responsibilities
+
+Notes:
+
+## Native browser semantics visual lane checks
+
+Use this section when the native helper Browser semantics lane is release-critical evidence. Keep it tied to `doc/native_field_visual_reference.html`: this records static visual-reference evidence for browser-provided semantics, not a runtime sample-app behavior contract.
+
+- Visual reference artifact: `doc/native_field_visual_reference.html`
+- Lane: `Browser semantics`
+- Evidence location:
+
+- [ ] search, email, URL, telephone, money, and percent examples were checked in the Browser semantics lane when those helpers were in release scope
+- [ ] the evidence note distinguished browser-provided semantics from Rails Fields Kit-owned wrapper, hint, error, affix, and accessibility wiring
+- [ ] formatting, masking, browser validation-message policy, autocomplete policy, locale policy, and custom picker behavior remained host-app responsibilities
+- [ ] the Browser semantics lane evidence stayed separate from runtime sample-app field behavior unless a release candidate explicitly required both
+- [ ] any remaining browser-capable visual review was recorded as a blocker or follow-up instead of treating CI green as visual approval
 
 Notes:
 
