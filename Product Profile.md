@@ -80,6 +80,7 @@ Host applications remain responsible for:
 - `doc/table_metadata_visual_reference.html`: static visual reference for representative table metadata filter and editor lanes
 - `doc/token_search_saved_search_visual_reference.html`: static visual reference for saved-search token suggestion states
 - `doc/configuration.md`: initializer defaults and override precedence
+- `doc/styling_boundary.md`: reader-facing source of truth for wrapper classes, styling hooks, and host-app CSS ownership
 - `doc/select_migration.md`: practical `collection_select` to `rfk_select` migration pattern
 - `doc/token_suggestions.md` and `doc/ransack_suggestions.md`: token-search suggestion surfaces and host-app responsibility boundary
 - `doc/table_adapters.md`: table metadata bridge
