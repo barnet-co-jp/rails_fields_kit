@@ -1,126 +1,126 @@
 # frozen_string_literal: true
 
+SearchableMatchSpecRecord = Struct.new(:id, :name, keyword_init: true)
+
+class SearchableMatchSpecRelation
+  attr_reader :where_args, :limit_value
+
+  def initialize
+    @where_args = []
+  end
+
+  def where(*args)
+    @where_args << args
+    self
+  end
+
+  def limit(value)
+    @limit_value = value
+    []
+  end
+end
+
+class SearchableMatchSpecPredicate
+  attr_reader :parts
+
+  def initialize(*parts)
+    @parts = parts
+  end
+
+  def or(other)
+    self.class.new(:or, self, other)
+  end
+end
+
+class SearchableMatchSpecColumn
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def matches(value)
+    SearchableMatchSpecPredicate.new(:matches, name, value)
+  end
+end
+
+class SearchableMatchSpecArelTable
+  def [](name)
+    SearchableMatchSpecColumn.new(name)
+  end
+end
+
+class SearchableMatchSpecModel
+  class << self
+    attr_accessor :last_relation
+  end
+
+  def self.all
+    self.last_relation = SearchableMatchSpecRelation.new
+  end
+
+  def self.arel_table
+    SearchableMatchSpecArelTable.new
+  end
+
+  def self.sanitize_sql_like(value)
+    value.to_s.gsub("%", "\\%")
+  end
+end
+
+class SearchableMatchSpecContainsController
+  include RailsFieldsKit::Searchable
+
+  attr_accessor :params
+  attr_reader :rendered_json
+
+  rfk_search_with(
+    model: SearchableMatchSpecModel,
+    value: :id,
+    label: :name,
+    search: [:name, :email]
+  )
+
+  def render(json:, status: :ok)
+    @rendered_json = json
+  end
+end
+
+class SearchableMatchSpecPrefixController
+  include RailsFieldsKit::Searchable
+
+  attr_accessor :params
+
+  rfk_search_with(
+    model: SearchableMatchSpecModel,
+    value: :id,
+    label: :name,
+    search: [:name, :email],
+    match: :prefix
+  )
+
+  def render(json:, status: :ok)
+  end
+end
+
+class SearchableMatchSpecExactController
+  include RailsFieldsKit::Searchable
+
+  attr_accessor :params
+
+  rfk_search_with(
+    model: SearchableMatchSpecModel,
+    value: :id,
+    label: :name,
+    search: [:name, :email],
+    match: :exact
+  )
+
+  def render(json:, status: :ok)
+  end
+end
+
 RSpec.describe "RailsFieldsKit::Searchable match strategies" do
-  SearchableMatchSpecRecord = Struct.new(:id, :name, keyword_init: true)
-
-  class SearchableMatchSpecRelation
-    attr_reader :where_args, :limit_value
-
-    def initialize
-      @where_args = []
-    end
-
-    def where(*args)
-      @where_args << args
-      self
-    end
-
-    def limit(value)
-      @limit_value = value
-      []
-    end
-  end
-
-  class SearchableMatchSpecPredicate
-    attr_reader :parts
-
-    def initialize(*parts)
-      @parts = parts
-    end
-
-    def or(other)
-      self.class.new(:or, self, other)
-    end
-  end
-
-  class SearchableMatchSpecColumn
-    attr_reader :name
-
-    def initialize(name)
-      @name = name
-    end
-
-    def matches(value)
-      SearchableMatchSpecPredicate.new(:matches, name, value)
-    end
-  end
-
-  class SearchableMatchSpecArelTable
-    def [](name)
-      SearchableMatchSpecColumn.new(name)
-    end
-  end
-
-  class SearchableMatchSpecModel
-    class << self
-      attr_accessor :last_relation
-    end
-
-    def self.all
-      self.last_relation = SearchableMatchSpecRelation.new
-    end
-
-    def self.arel_table
-      SearchableMatchSpecArelTable.new
-    end
-
-    def self.sanitize_sql_like(value)
-      value.to_s.gsub("%", "\\%")
-    end
-  end
-
-  class SearchableMatchSpecContainsController
-    include RailsFieldsKit::Searchable
-
-    attr_accessor :params
-    attr_reader :rendered_json
-
-    rfk_search_with(
-      model: SearchableMatchSpecModel,
-      value: :id,
-      label: :name,
-      search: [:name, :email]
-    )
-
-    def render(json:, status: :ok)
-      @rendered_json = json
-    end
-  end
-
-  class SearchableMatchSpecPrefixController
-    include RailsFieldsKit::Searchable
-
-    attr_accessor :params
-
-    rfk_search_with(
-      model: SearchableMatchSpecModel,
-      value: :id,
-      label: :name,
-      search: [:name, :email],
-      match: :prefix
-    )
-
-    def render(json:, status: :ok)
-    end
-  end
-
-  class SearchableMatchSpecExactController
-    include RailsFieldsKit::Searchable
-
-    attr_accessor :params
-
-    rfk_search_with(
-      model: SearchableMatchSpecModel,
-      value: :id,
-      label: :name,
-      search: [:name, :email],
-      match: :exact
-    )
-
-    def render(json:, status: :ok)
-    end
-  end
-
   def predicate_patterns(predicate)
     return [] unless predicate
 
@@ -152,7 +152,7 @@ RSpec.describe "RailsFieldsKit::Searchable match strategies" do
   end
 
   it "keeps SQL LIKE escaping before applying the match strategy" do
-    expect(search_patterns_for(SearchableMatchSpecPrefixController, "A%" )).to eq(["A\\%%", "A\\%%"])
+    expect(search_patterns_for(SearchableMatchSpecPrefixController, "A%")).to eq(["A\\%%", "A\\%%"])
   end
 
   it "rejects unsupported match strategies at definition time" do
