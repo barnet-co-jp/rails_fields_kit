@@ -67,7 +67,7 @@ module RailsFieldsKit
       "Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain."
     ].freeze
 
-    Check = Struct.new(:key, :label, :status, :message, keyword_init: true)
+    Check = Struct.new(:key, :label, :status, :message, keyword_init: true) # rubocop:disable Style/RedundantStructKeywordInit
 
     attr_reader :root
 
