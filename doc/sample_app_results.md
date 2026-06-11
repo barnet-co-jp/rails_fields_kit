@@ -90,7 +90,7 @@ Result:
 - [ ] `[OK] Stimulus registration` was not treated as proof of the host app's final Stimulus boot policy or every possible controller registry
 - [ ] setup doctor output readability was checked with `doc/setup_doctor_output_review.md` when diagnostic scanability or importmap target mismatch evidence was in scope
 - [ ] evidence notes distinguish setup behavior from CLI output readability evidence, instead of treating this section as a source of new doctor behavior or output wording
-- [ ] manual checklist items for Tom Select package install, CSS import, bundler aliases, and any `[MANUAL] Stimulus registration` follow-up were reviewed as host-app responsibilities rather than automatic pass/fail gates
+- [ ] manual checklist items for Tom Select package install, Stimulus registration, CSS import, and bundler aliases were reviewed as host-app responsibilities rather than automatic pass/fail gates, with Stimulus registration evidence recorded above as either an `[OK]` advisory signal or a `[MANUAL]` follow-up rather than proof of final boot policy
 
 Notes:
 
