@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-SearchableMatchSpecRecord = Struct.new(:id, :name, keyword_init: true)
-
 class SearchableMatchSpecRelation
   attr_reader :where_args, :limit_value
 
