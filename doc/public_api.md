@@ -88,7 +88,7 @@ Native input helpers:
 - `rfk_search_field`
 - `rfk_password_field`
 
-Native wrapper helpers pass ordinary Rails/native input attributes such as `maxlength`, `minlength`, `pattern`, `min`, `max`, `step`, `required`, `autocomplete`, and `inputmode` to the rendered input through top-level field options or `html:`. Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around that input; character counters, masking, browser validation-message policy, browser validation behavior, server-side validation rules, textarea autosize measurement, range live preview behavior, Turbo reconnect sizing, production CSS, and manual-resize policy remain host-app responsibility.
+Native wrapper helpers pass ordinary Rails/native input attributes such as `maxlength`, `minlength`, `pattern`, `required`, `autocomplete`, and `inputmode` to the rendered input through top-level field options or `html:`. Range fields also pass ordinary range attributes such as `min`, `max`, and `step` through the same Rails/native input path. Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around that input; character counters, masking, browser validation-message policy, browser validation behavior, server-side validation rules, textarea autosize measurement, range live preview behavior, Turbo reconnect sizing, production CSS, and manual-resize policy remain host-app responsibility.
 
 See [`field_helpers.md`](field_helpers.md) for details.
 See [`grouped_select.md`](grouped_select.md) for the current collection-backed `<optgroup>` boundary and the separation from remote workflows or future optgroup metadata work.
