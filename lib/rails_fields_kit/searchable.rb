@@ -12,7 +12,7 @@ module RailsFieldsKit
       def rfk_search_with(model:, label:, search:, action: :index, value: :id, limit: 20, query_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, distinct: false, minimum_query_length: 0, match: :contains, wrap: nil)
         match_strategy = match.to_sym
         unless SEARCH_MATCH_STRATEGIES.include?(match_strategy)
-          raise ArgumentError, "Unsupported rfk_search_with match strategy: #{match.inspect}. Expected one of: #{SEARCH_MATCH_STRATEGIES.join(', ')}"
+          raise ArgumentError, "Unsupported rfk_search_with match strategy: #{match.inspect}. Expected one of: #{SEARCH_MATCH_STRATEGIES.join(", ")}"
         end
 
         define_method(action) do
