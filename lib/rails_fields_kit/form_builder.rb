@@ -173,7 +173,7 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :persist, rfk_option_or_default(options, :persist, config.default_persist))
       rfk_assign_data_value(data, :no_results_text, rfk_render_text_option(options, :no_results_text, config.default_no_results_text, "rails_fields_kit.tom_select.no_results_text", "No results found"))
       rfk_assign_data_value(data, :loading_text, rfk_render_text_option(options, :loading_text, config.default_loading_text, "rails_fields_kit.tom_select.loading_text", "Loading..."))
-      rfk_assign_data_value(data, :create_text, rfk_render_text_option(options, :create_text, config.default_create_text, "Add"))
+      rfk_assign_data_value(data, :create_text, rfk_render_text_option(options, :create_text, config.default_create_text, "rails_fields_kit.tom_select.create_text", "Add"))
       rfk_assign_data_value(data, :option_description_field, rfk_option_or_default(options, :option_description_field, config.default_option_description_field))
       rfk_assign_data_value(data, :option_badge_field, rfk_option_or_default(options, :option_badge_field, config.default_option_badge_field))
       rfk_assign_data_value(data, :plugins, plugins)
@@ -342,8 +342,16 @@ module RailsFieldsKit
     def rfk_wrap_field(method, field_html, options)
       classes = ["rfk-field", options[:wrapper_class]].compact.join(" ")
       label_html = options[:label] == false ? "" : label(method, options[:label])
-      hint_html = options[:hint] ? @template.content_tag(:p, options[:hint], id: rfk_hint_id(method), class: "rfk-hint") : ""
-      error_html = options[:error] ? @template.content_tag(:p, options[:error], id: rfk_error_id(method), class: "rfk-error") : ""
+      hint_html = if options[:hint]
+        @template.content_tag(:p, options[:hint], id: rfk_hint_id(method), class: "rfk-hint")
+      else
+        ""
+      end
+      error_html = if options[:error]
+        @template.content_tag(:p, options[:error], id: rfk_error_id(method), class: "rfk-error")
+      else
+        ""
+      end
 
       @template.content_tag(:div, label_html.concat(field_html).concat(hint_html).concat(error_html), class: classes)
     end
