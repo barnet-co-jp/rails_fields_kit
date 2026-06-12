@@ -105,17 +105,18 @@ JavaScript package-root exports:
 
 ## Verification expectations
 
-The release candidate should pass:
+The release candidate should pass the same primary local checks described in `doc/development.md`:
 
 ```bash
 bundle exec standardrb
 bundle exec rspec
+npm run check:js
 bundle exec rake build
 ```
 
 Before publishing, also confirm:
 
-- GitHub Actions CI is green for the exact release commit.
+- GitHub Actions CI is green for the exact release commit, including the Node JavaScript job matrix tracked in `doc/development.md` rather than duplicated here.
 - `doc/sample_app_results.md` is completed for the same branch head.
 - documented JavaScript import paths resolve in the sample app.
 - native password field checks stay limited to wrapper, label, hint, error, affix, pass-through option, and accessibility wiring; password visibility toggles, strength meters, credential policy, autocomplete policy, authentication workflow, and credential storage remain host-app-owned.
@@ -178,6 +179,7 @@ Rails Fields Kit still stops at UI helpers and metadata. Host applications remai
 
 - `bundle exec standardrb`
 - `bundle exec rspec`
+- `npm run check:js`
 - `bundle exec rake build`
 - sample app checklist and CI confirmation for the exact release commit
 ```
