@@ -118,6 +118,16 @@ Notes:
 
 README first field quickstart evidence does not belong in this setup/import section unless the PR also changes setup visibility. Record the rendered field behavior in the `rfk_select` representative collection-backed single-value lane below, and use this section only for import, registration, CSS, or package-root helper evidence.
 
+Tom Select environment reproducibility memo:
+
+| Item | Recorded value | Notes |
+| --- | --- | --- |
+| Package manager / install route |  | Record the sample app route used for this check, such as yarn, npm, pnpm, importmap, or an existing app bundle. This is an observed setup note, not a Rails Fields Kit package-manager policy. |
+| Tom Select package version or pin |  | Record the version, pin, or source visible to the sample app when it was checked. This is not a Rails Fields Kit-owned Tom Select version requirement. |
+| CSS import or asset route |  | Record the CSS route that made Tom Select styles visible, such as `tom-select/dist/css/tom-select.css`, a bundled stylesheet, or an app-owned asset. This is not a Rails Fields Kit CSS bundle or plugin asset policy. |
+
+Use this memo only to make release evidence reproducible. Tom Select package version, package manager, lockfile, CDN or pin source, plugin assets, and final CSS bundle choices remain host-app responsibilities as described in `doc/support_boundary.md`.
+
 Package-root helper lanes checked:
 
 | Helper | Representative field or selector | Result | Evidence notes |
