@@ -37,6 +37,7 @@ RSpec.describe "JavaScript check documentation" do
       "syntax: Tom Select controller" => "Tom Select controller source",
       "JavaScript smoke inventory guard" => "JavaScript smoke inventory guard",
       "package exports smoke" => "package `exports` import wiring",
+      "direct contract helper exports smoke" => "direct contract helper import wiring",
       "Tom Select query params smoke" => "Tom Select fixed query params",
       "Tom Select interaction events smoke" => "Tom Select forwarded interaction and request event payloads",
       "Tom Select create headers and response normalization smoke" => "Tom Select create-on-the-fly JSON request headers and success response normalization",
