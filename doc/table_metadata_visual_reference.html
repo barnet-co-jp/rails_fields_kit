@@ -52,7 +52,7 @@
       .eyebrow {
         font-size: 0.78rem;
         font-weight: 700;
-        letter-spacing: 0.08em;
+        letter-spacing: 0;
         text-transform: uppercase;
         color: var(--accent);
       }
@@ -93,6 +93,21 @@
         border-color: var(--accent);
       }
 
+      .review-note {
+        display: grid;
+        gap: 6px;
+        margin-bottom: 18px;
+        padding: 14px 16px;
+        border: 1px solid #b9d5cc;
+        background: var(--accent-soft);
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .review-note strong {
+        color: var(--ink);
+      }
+
       .grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -118,7 +133,7 @@
         padding: 4px 8px;
         font-size: 0.74rem;
         font-weight: 700;
-        letter-spacing: 0.06em;
+        letter-spacing: 0;
         text-transform: uppercase;
         border: 1px solid var(--line);
         background: var(--surface-strong);
@@ -184,31 +199,42 @@
 
       .label-line {
         display: flex;
-        align-items: center;
+        flex-wrap: wrap;
+        align-items: flex-start;
         justify-content: space-between;
-        gap: 8px;
+        gap: 6px 8px;
+        min-width: 0;
         font-size: 0.82rem;
         font-weight: 700;
-        letter-spacing: 0.04em;
+        letter-spacing: 0;
         text-transform: uppercase;
         color: #4f5f6c;
       }
 
+      .label-line > span:first-child {
+        min-width: 0;
+      }
+
       .metadata-chip {
+        display: inline-flex;
+        max-width: 100%;
         padding: 3px 8px;
         border: 1px solid var(--line);
         background: #eef2f6;
         color: #526170;
         font-size: 0.72rem;
         font-weight: 700;
-        letter-spacing: 0.04em;
+        letter-spacing: 0;
+        line-height: 1.35;
         text-transform: uppercase;
+        overflow-wrap: anywhere;
       }
 
       .control {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
-        gap: 10px;
+        gap: 8px 10px;
         min-height: 46px;
         padding: 10px 12px;
         border: 1px solid var(--line);
@@ -234,6 +260,7 @@
       .typed,
       .helper {
         min-width: 0;
+        overflow-wrap: anywhere;
       }
 
       .placeholder {
@@ -251,6 +278,7 @@
       }
 
       .caret {
+        flex: 0 0 auto;
         margin-left: auto;
         color: var(--muted);
       }
@@ -264,12 +292,15 @@
       .pill {
         display: inline-flex;
         align-items: center;
+        max-width: 100%;
         padding: 5px 9px;
         border: 1px solid #b9cce5;
         background: var(--filter-soft);
         color: var(--filter);
         font-size: 0.82rem;
         font-weight: 700;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
       }
 
       .pill.editor {
@@ -284,6 +315,7 @@
         background: #eef2f6;
         color: var(--muted);
         font-size: 0.9rem;
+        overflow-wrap: anywhere;
       }
 
       .callout {
@@ -315,8 +347,50 @@
           padding-bottom: 52px;
         }
 
+        .grid {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 14px;
+        }
+
         .card {
-          padding: 16px;
+          gap: 10px;
+          padding: 14px;
+        }
+
+        .panel {
+          padding: 12px;
+        }
+
+        .label-line {
+          display: grid;
+          justify-content: stretch;
+          gap: 5px;
+          font-size: 0.78rem;
+        }
+
+        .metadata-chip {
+          justify-self: start;
+          font-size: 0.7rem;
+        }
+
+        .control {
+          min-height: 42px;
+          padding: 9px 10px;
+        }
+
+        .toolbar {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .pill {
+          width: 100%;
+        }
+
+        .stack-note,
+        .review-note,
+        .legend {
+          font-size: 0.88rem;
         }
       }
     </style>
@@ -335,6 +409,11 @@
           <a href="shared_metadata_navigation.md">Shared metadata navigation</a>
           <a href="../README.md">README</a>
         </div>
+      </section>
+
+      <section class="review-note" aria-label="Narrow viewport review cue">
+        <strong>Narrow viewport review cue.</strong>
+        <span>At 390px and similar widths, metadata chips, token text, custom helper names, and host-app responsibility notes should wrap inside each card without hiding the control state they describe.</span>
       </section>
 
       <section class="grid" aria-label="Representative table metadata states">

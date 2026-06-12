@@ -30,7 +30,7 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include("const label = data[this.labelFieldValue]")
     expect(source).to include("if (this.hasPresentValue(label)) return this.displayValue(label)")
     expect(source).to include("return this.displayValue(data[this.valueFieldValue])")
-    expect(source).to include('this.tomSelect.addItem(option[this.valueFieldValue], true)')
+    expect(source).to include('this.tomSelect.addItem(option[valueField], true)')
   end
 
   it "dispatches remote search success with query and options" do
@@ -62,17 +62,19 @@ RSpec.describe "Tom Select controller source" do
   end
 
   it "keeps selected preload success limited to usable option payloads" do
-    expect(source).to include("if (!this.selectedOptionsPayloadIsUsable(options)) {")
-    expect(source).to include('new Error("Rails Fields Kit selected preload response must include option objects with the configured value field")')
-    expect(source).to include("error.payload = json")
+    expect(source).to include("const options = this.normalizeSelectedOptions(json).filter((option) => this.optionHasValue(option))")
+    expect(source).to include("const valueField = this.optionValueField()")
+    expect(source).to include('this.dispatch("selected-load", { detail: { options, values: requestedValues } })')
     expect(source).to include('this.dispatchRequestError("selected-load-error", "selected-load", { values }, error)')
   end
 
-  it "uses the configured value field as the selected preload validation source" do
-    expect(source).to include("selectedOptionsPayloadIsUsable(options) {")
-    expect(source).to include("return options.length > 0 && options.every((option) => this.selectedOptionIsUsable(option))")
-    expect(source).to include("selectedOptionIsUsable(option) {")
-    expect(source).to include('return option && typeof option === "object" && this.hasPresentValue(option[this.valueFieldValue])')
+  it "uses the configured value field as the option value guard source" do
+    expect(source).to include("optionHasValue(option) {")
+    expect(source).to include("!Array.isArray(option)")
+    expect(source).to include("this.hasPresentValue(option[this.optionValueField()])")
+    expect(source).to include("optionValueField() {")
+    expect(source).to include('return this.valueFieldValue || "value"')
+    expect(source).to include("this.tomSelect.addItem(option[valueField], true)")
   end
 
   it "appends fixed selected preload params before selected id keys" do

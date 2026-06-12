@@ -18,6 +18,7 @@ bundle exec rake build
 
 - Before release, rerun those local checks on the latest `main` and confirm GitHub Actions CI succeeds for the exact release candidate commit.
 - The repository-local JavaScript boundary is Node 22.x and Node 24.x. `npm run check:js` should be confirmed on both Node lines through local release prep when available and through the GitHub Actions `javascript` matrix for the exact release candidate commit.
+- The repository-local `package.json` is gem-packaged JavaScript entrypoint and `exports` metadata, not an npm release contract. Keep its `private: true` and `version: "0.0.0"` values out of gem release version decisions; `lib/rails_fields_kit/version.rb` remains the gem version source of truth.
 - The GitHub Actions Rails compatibility matrix runs for pull requests and `main` pushes using the same representative Rails 7.0 / Ruby 3.1 and Rails 8.0 / Ruby 3.3 lanes. Keep the matrix representative rather than expanding release evidence into a full Rails/Ruby cross-product.
 
 ## Pre-release checklist
@@ -63,6 +64,8 @@ bundle exec rake build
 7. Confirm the latest GitHub Actions CI run is green for the commit you plan to release.
 
    This is the final branch-head confirmation for lint, RSpec, JavaScript syntax and smoke checks on Node 22.x and Node 24.x, gem package/install smoke checks, and the representative Rails compatibility matrix. The gem package check also verifies that the built artifact contains `package.json` and the JavaScript files referenced by its public `exports` map.
+
+   Treat that packaged `package.json` as JavaScript entrypoint metadata only. It is intentionally `private` and uses the repository-local package metadata version, while the Ruby gem release version remains `RailsFieldsKit::VERSION`.
 
    The Node 22.x / 24.x JavaScript matrix is the repository-local package export and smoke boundary. It does not define a host-app Tom Select runtime version policy, package manager policy, plugin asset policy, or broader browser compatibility matrix.
 
@@ -125,6 +128,8 @@ bundle exec rake build
    # lib/rails_fields_kit/version.rb
    RailsFieldsKit::VERSION = "x.y.z"
    ```
+
+   Do not use `package.json`'s `version` field as the gem release version. The package file is included so host apps and package checks can resolve the documented JavaScript entrypoints and `exports` metadata; it is not an npm publish target.
 
 10. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
 

@@ -23,19 +23,54 @@ module RailsFieldsKit
       "app/frontend/entrypoints/application.tsx"
     ].freeze
 
-    TOM_SELECT_CSS_IMPORT_PATTERN = %r{tom-select/dist/css/tom-select(?:[.\w-]*)\.css}
-
-    MANUAL_CHECKS = [
-      ["Stimulus registration", "Register rails-fields-kit--tom-select on the Stimulus application this app already boots."],
-      ["Bundler alias", "If this app uses Vite or another bundler, verify that the host toolchain resolves the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths; this doctor does not inspect or rewrite bundler config."]
+    STIMULUS_REGISTRATION_CANDIDATE_PATHS = [
+      "app/javascript/application.js",
+      "app/javascript/application.ts",
+      "app/javascript/controllers/index.js",
+      "app/javascript/controllers/index.ts",
+      "app/javascript/entrypoints/application.js",
+      "app/javascript/entrypoints/application.ts",
+      "app/frontend/entrypoints/application.js",
+      "app/frontend/entrypoints/application.ts",
+      "app/frontend/entrypoints/application.tsx"
     ].freeze
+
+    STIMULUS_REGISTRATION_SIGNALS = [
+      "rails-fields-kit--tom-select",
+      "TomSelectController"
+    ].freeze
+
+    BUNDLER_ALIAS_CANDIDATE_PATHS = [
+      "vite.config.js",
+      "vite.config.mjs",
+      "vite.config.ts",
+      "vite.config.mts",
+      "config/vite.config.js",
+      "config/vite.config.ts",
+      "webpack.config.js",
+      "webpack.config.mjs",
+      "webpack.config.ts",
+      "config/webpack/environment.js",
+      "config/webpack/development.js",
+      "config/webpack/production.js"
+    ].freeze
+
+    BUNDLER_ALIASES = [
+      "rails_fields_kit",
+      "rails_fields_kit/tom_select_controller"
+    ].freeze
+
+    TOM_SELECT_CSS_IMPORT_PATTERN = %r{tom-select/dist/css/tom-select(?:[.\w-]*)\.css}
 
     STATUS_LEGEND_LINES = [
       "Status legend: [OK] detected setup; [MISSING] needs action for the detected setup route; [MANUAL] host-app check, not an automatic failure.",
       "Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain."
     ].freeze
 
+    # Keep keyword initialization explicit because checks are constructed from named fields.
+    # rubocop:disable Style/RedundantStructKeywordInit
     Check = Struct.new(:key, :label, :status, :message, keyword_init: true)
+    # rubocop:enable Style/RedundantStructKeywordInit
 
     attr_reader :root
 
@@ -44,7 +79,14 @@ module RailsFieldsKit
     end
 
     def checks
-      [initializer_check, importmap_check, tom_select_package_check, css_import_check] + manual_checks
+      [
+        initializer_check,
+        importmap_check,
+        tom_select_package_check,
+        stimulus_registration_check,
+        css_import_check,
+        bundler_alias_check
+      ]
     end
 
     def report_lines
@@ -173,6 +215,26 @@ module RailsFieldsKit
       )
     end
 
+    def stimulus_registration_check
+      path = stimulus_registration_signal_path
+
+      if path
+        Check.new(
+          key: :stimulus_registration,
+          label: "Stimulus registration",
+          status: :ok,
+          message: "Found Rails Fields Kit Stimulus registration signal in #{path}. This is an advisory controller visibility check only; Stimulus boot policy stays with the host app."
+        )
+      else
+        Check.new(
+          key: :stimulus_registration,
+          label: "Stimulus registration",
+          status: :manual,
+          message: "Rails Fields Kit Stimulus registration signal was not found in representative JavaScript entrypoints. Confirm the host app registers rails-fields-kit--tom-select with TomSelectController on the Stimulus application it already boots; setup doctor does not inspect every boot file or decide Application.start policy."
+        )
+      end
+    end
+
     def css_import_check
       path = css_import_signal_path
 
@@ -193,21 +255,86 @@ module RailsFieldsKit
       end
     end
 
-    def manual_checks
-      MANUAL_CHECKS.map do |label, message|
-        Check.new(
-          key: label.downcase.tr(" ", "_").to_sym,
-          label: label,
+    def bundler_alias_check
+      paths = existing_bundler_alias_candidate_paths
+
+      if paths.empty?
+        return Check.new(
+          key: :bundler_alias,
+          label: "Bundler alias",
           status: :manual,
-          message: message
+          message: "Representative bundler config was not found. Skip this item for importmap-only apps, or confirm the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths through the host app's Vite, jsbundling, or custom resolver policy."
         )
       end
+
+      readable_contents = paths.filter_map do |relative_path|
+        path = root.join(relative_path)
+        [relative_path, path.read]
+      rescue
+        nil
+      end
+
+      if readable_contents.empty?
+        return Check.new(
+          key: :bundler_alias,
+          label: "Bundler alias",
+          status: :manual,
+          message: "Representative bundler config exists but could not be read. Confirm the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths manually; setup doctor does not fail or rewrite bundler config."
+        )
+      end
+
+      found_aliases = BUNDLER_ALIASES.select do |name|
+        readable_contents.any? { |_relative_path, content| bundler_alias_signal?(content, name) }
+      end
+      missing_aliases = BUNDLER_ALIASES - found_aliases
+
+      if missing_aliases.empty?
+        signal_paths = readable_contents.map(&:first).join(", ")
+        Check.new(
+          key: :bundler_alias,
+          label: "Bundler alias",
+          status: :ok,
+          message: "Found Rails Fields Kit bundler alias signals in #{signal_paths}. This is an advisory resolver visibility check only; bundler choice and config policy stay with the host app."
+        )
+      else
+        Check.new(
+          key: :bundler_alias,
+          label: "Bundler alias",
+          status: :manual,
+          message: "Representative bundler config did not show alias signals for #{missing_aliases.join(", ")}. Confirm the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths manually; setup doctor does not inspect every resolver shape or rewrite bundler config."
+        )
+      end
+    end
+
+    def stimulus_registration_signal_path
+      STIMULUS_REGISTRATION_CANDIDATE_PATHS.find do |candidate_path|
+        path = root.join(candidate_path)
+        path.file? && stimulus_registration_signal?(path.read)
+      end
+    end
+
+    def stimulus_registration_signal?(content)
+      STIMULUS_REGISTRATION_SIGNALS.any? { |signal| content.include?(signal) }
     end
 
     def css_import_signal_path
       CSS_IMPORT_CANDIDATE_PATHS.find do |candidate_path|
         path = root.join(candidate_path)
         path.file? && path.read.match?(TOM_SELECT_CSS_IMPORT_PATTERN)
+      end
+    end
+
+    def existing_bundler_alias_candidate_paths
+      BUNDLER_ALIAS_CANDIDATE_PATHS.select do |candidate_path|
+        root.join(candidate_path).file?
+      end
+    end
+
+    def bundler_alias_signal?(content, name)
+      if name == "rails_fields_kit"
+        content.match?(/(?<![\w\/-])rails_fields_kit(?![\w\/-])/)
+      else
+        content.match?(/(?<![\w-])#{Regexp.escape(name)}(?![\w-])/)
       end
     end
 
