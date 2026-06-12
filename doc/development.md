@@ -26,6 +26,8 @@ bundle exec rspec
 
 The RSpec suite includes Node-sandbox checks for the documented `rails_fields_kit` and `rails_fields_kit/tom_select_controller` entrypoints, plus Tom Select request-lifecycle behavior, so public import-path wiring drift and stale-request regressions are caught alongside the Ruby-side contract specs.
 
+It also includes a source-level Tom Select data value drift guard that checks FormBuilder-generated data value names remain represented in `TomSelectController.static values` without turning this guide into a full spec inventory.
+
 It also guards bundled locale packaging for the Tom Select render text defaults. Keep `config/locales/en.yml`, `config/locales/ja.yml`, the gemspec file list, and the `RailsFieldsKit::FormBuilder` I18n keys aligned when adding or renaming bundled copy.
 
 It also includes a lightweight repository-local documentation link check for `README.md` and `doc/**/*.{md,html}`. The check verifies relative file targets, repository-local Markdown heading anchors, and same-file HTML fragment links that resolve to element ids; external URLs and cross-file HTML element anchors remain intentionally outside its scope.
