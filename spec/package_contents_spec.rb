@@ -322,6 +322,39 @@ RSpec.describe "package contents" do
     )
   end
 
+  it "keeps sample app package-root evidence placement docs aligned" do
+    checklist_chooser = markdown_section(sample_app_checklist, "## Choose where to record evidence")
+    narrow_pr_chooser = markdown_section(sample_app_checklist, "### Choose the representative lane for a narrow PR")
+    results_route_map = sample_app_results.split("\n## Target release\n", 2).first
+    javascript_setup_results = markdown_section(sample_app_results, "## JavaScript setup checks")
+
+    expect(checklist_chooser).to include(
+      "sample_app_results.md",
+      "For a narrow PR that is not a release candidate, a PR comment is enough",
+      "package_root_helper_release_evidence.md",
+      "choose representative helper checks before recording the result"
+    )
+
+    expect(narrow_pr_chooser).to include(
+      "package-root helper import/read-only contract",
+      "the helper-specific evidence guide",
+      "PR comment for narrow docs/spec work",
+      "sample_app_results.md` for release candidates"
+    )
+
+    expect(results_route_map).to include(
+      "JavaScript setup and package-root helper evidence",
+      "read-only rendered-field helper evidence",
+      "not a new release gate or runtime contract"
+    )
+
+    expect(javascript_setup_results).to include(
+      "package-root helper lanes in release scope were selected from `doc/package_root_helper_release_evidence.md`",
+      "matched the current `doc/public_api.md#javascript-exports` helper list",
+      "Package-root helper lanes checked:"
+    )
+  end
+
   it "keeps grouped select sample app evidence lanes aligned" do
     checklist_lane = markdown_section(
       sample_app_checklist,
