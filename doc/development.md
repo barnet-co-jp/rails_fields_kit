@@ -24,7 +24,7 @@ bundle exec standardrb
 bundle exec rspec
 ```
 
-The RSpec suite includes Node-sandbox checks for the documented `rails_fields_kit` and `rails_fields_kit/tom_select_controller` entrypoints, plus Tom Select request-lifecycle behavior, so public import-path wiring drift and stale-request regressions are caught alongside the Ruby-side contract specs.
+The RSpec suite includes Node-sandbox checks for the documented `rails_fields_kit`, `rails_fields_kit/tom_select_controller`, and direct contract helper entrypoints, plus Tom Select request-lifecycle behavior, so public import-path wiring drift and stale-request regressions are caught alongside the Ruby-side contract specs.
 
 It also guards bundled locale packaging for the Tom Select render text defaults. Keep `config/locales/en.yml`, `config/locales/ja.yml`, the gemspec file list, and the `RailsFieldsKit::FormBuilder` I18n keys aligned when adding or renaming bundled copy.
 
@@ -65,11 +65,13 @@ This repository intentionally does not commit a single `.nvmrc` or `.node-versio
 npm run check:js
 ```
 
-This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It first runs the JavaScript smoke inventory guard, then runs lightweight Node sandbox checks for package `exports` import wiring, Tom Select fixed query params append behavior, Tom Select forwarded interaction and request event payloads, Tom Select create-on-the-fly JSON request headers and success response normalization, Tom Select error-surface metadata, Tom Select Turbo lifecycle behavior, Tom Select label fallback rendering, Tom Select option value guard behavior, Tom Select render text fallback rendering, Tom Select render text accessibility boundaries, Tom Select plugin contract reading, and selected preload config reading, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
+This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It first runs the JavaScript smoke inventory guard, then runs lightweight Node sandbox checks for package `exports` import wiring, direct contract helper import wiring, Tom Select fixed query params append behavior, Tom Select forwarded interaction and request event payloads, Tom Select create-on-the-fly JSON request headers and success response normalization, Tom Select error-surface metadata, Tom Select Turbo lifecycle behavior, Tom Select label fallback rendering, Tom Select option value guard behavior, Tom Select render text fallback rendering, Tom Select render text accessibility boundaries, Tom Select plugin contract reading, and selected preload config reading, stubbing external browser dependencies so the package root, direct controller entrypoint, and direct contract helper entrypoints are resolved through the same public import paths CI uses.
 
 The smoke inventory guard derives CI-owned smoke candidates from `scripts/check_*.mjs` and compares them with the repository-local `scripts/check_javascript.mjs` runner. New JavaScript smoke scripts are expected to run through `npm run check:js` unless they are intentionally standalone; in that rare case, add the script path to the documented allowlist inside `scripts/check_javascript_smoke_inventory.mjs` with a short reason.
 
 The package export smoke derives package-root named-export expectations from the JavaScript exports table in `doc/public_api.md` and stops reading at the next level-2 heading, so later public API tables are not treated as package-root export rows. It also derives callable helper assertions from rows whose `Kind` marks them as contract readers, while keeping the `TomSelectController` class export, package-root default export, and direct controller entrypoint checks separate.
+
+The direct contract helper export smoke keeps the package-root helper exports and direct helper subpath exports aligned. It confirms the named and default exports for `rails_fields_kit/native_field_accessibility_contract` and `rails_fields_kit/tom_select_text_override_contract` resolve to the same callable helpers exposed from the package root.
 
 The Tom Select controller smokes share an internal sandbox harness for the Stimulus and Tom Select stubs, controller import, and cleanup. That harness is repository-local test setup only; it does not add a new JavaScript test framework or change the public package entrypoints.
 
@@ -123,7 +125,7 @@ Current CI adds these repository-level confirmations on top of the local workflo
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - Representative Rails compatibility checks for pull requests and `main` pushes: Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
-- `npm run check:js` on Node 22.x and Node 24.x for the JavaScript syntax, smoke inventory, package exports import lane, Tom Select fixed query params smoke, Tom Select forwarded interaction and request event smoke, Tom Select create request header and response normalization smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, Tom Select label fallback smoke, Tom Select option value guard smoke, Tom Select render text fallback smoke, Tom Select render text accessibility smoke, Tom Select plugin contract smoke, and selected preload config smoke
+- `npm run check:js` on Node 22.x and Node 24.x for the JavaScript syntax, smoke inventory, package exports import lane, direct contract helper import lane, Tom Select fixed query params smoke, Tom Select forwarded interaction and request event smoke, Tom Select create request header and response normalization smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, Tom Select label fallback smoke, Tom Select option value guard smoke, Tom Select render text fallback smoke, Tom Select render text accessibility smoke, Tom Select plugin contract smoke, and selected preload config smoke
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 
 ## Open PR freshness checks
