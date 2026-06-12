@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rails Fields Kit Tom Select Plugin Clearable Review</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page: #f7f8fa;
+        --surface: #ffffff;
+        --surface-muted: #f2f5f7;
+        --ink: #17212b;
+        --muted: #5d6975;
+        --line: #d6dbe1;
+        --line-strong: #9da8b3;
+        --accent: #176b5f;
+        --accent-soft: #e6f4f1;
+        --info: #285f9f;
+        --info-soft: #eaf2fb;
+        --warning: #8a5a12;
+        --warning-soft: #fff3d8;
+        --shadow: 0 1px 2px rgba(23, 33, 43, 0.06);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+
+      main {
+        width: min(1080px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0 52px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 18px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .eyebrow {
+        color: var(--accent);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      h1, h2, h3, p { margin: 0; }
+
+      h1 {
+        font-size: 1.8rem;
+        line-height: 1.12;
+        font-weight: 650;
+      }
+
+      .lede,
+      .scope-note,
+      .card p,
+      .boundary li,
+      .review-list li {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .lede { max-width: 760px; }
+
+      .hero-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .hero-links a {
+        display: inline-flex;
+        min-height: 34px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 11px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+        color: var(--ink);
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+
+      .hero-links a:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 12px;
+      }
+
+      .card,
+      .boundary,
+      .review-list {
+        display: grid;
+        gap: 12px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .card header { display: grid; gap: 6px; }
+
+      .tag {
+        justify-self: start;
+        padding: 3px 7px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface-muted);
+        color: var(--ink);
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .tag.clearable {
+        border-color: #9bcdbc;
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .tag.multi {
+        border-color: #adc6e4;
+        background: var(--info-soft);
+        color: var(--info);
+      }
+
+      .tag.boundary {
+        border-color: #d6b663;
+        background: var(--warning-soft);
+        color: #8a5a12;
+      }
+
+      .control {
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+        overflow: hidden;
+      }
+
+      .control-top {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .selection {
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .placeholder { color: var(--muted); }
+
+      .clear-button,
+      .remove-button,
+      .dropdown-indicator {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        min-width: 24px;
+        min-height: 24px;
+        border: 1px solid var(--line);
+        background: var(--surface-muted);
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .clear-button {
+        border-color: #9bcdbc;
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        min-height: 26px;
+        max-width: 100%;
+        padding: 3px 7px;
+        border: 1px solid var(--line);
+        background: var(--surface-muted);
+      }
+
+      .chip span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .dropdown {
+        display: grid;
+        gap: 0;
+      }
+
+      .option {
+        display: grid;
+        gap: 2px;
+        padding: 8px 10px;
+        border-top: 1px solid var(--line);
+      }
+
+      .option:first-child { border-top: 0; }
+
+      .option.active {
+        background: var(--info-soft);
+        outline: 2px solid rgba(40, 95, 159, 0.25);
+        outline-offset: -2px;
+      }
+
+      .option small { color: var(--muted); }
+
+      .boundary,
+      .review-list { margin-top: 12px; }
+
+      ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      @media (max-width: 640px) {
+        main { width: min(100% - 24px, 1080px); padding-top: 24px; }
+        .grid { grid-template-columns: 1fr; }
+        .control-top { align-items: flex-start; }
+        .dropdown-indicator { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="eyebrow">Tom Select companion artifact</div>
+        <h1 id="page-title">Plugin and Clearable State Review</h1>
+        <p class="lede">Static review lane for distinguishing a whole-field clear affordance from per-item remove buttons. It is a documentation artifact only; Rails Fields Kit does not own Tom Select plugin assets, plugin behavior, or production styling policy.</p>
+        <nav class="hero-links" aria-label="Related references">
+          <a href="visual_references.md">Visual reference map</a>
+          <a href="tom_select_visual_reference.html">Tom Select core reference</a>
+          <a href="public_api.md#javascript-exports">Current JavaScript exports</a>
+        </nav>
+      </section>
+
+      <section class="grid" aria-label="Representative states">
+        <article class="card">
+          <header>
+            <span class="tag clearable">allow_clear: true</span>
+            <h2>Single select with whole-field clear</h2>
+            <p>The clear affordance applies to the entire selected value. It should not imply that Rails Fields Kit owns clear-event payloads or plugin styling.</p>
+          </header>
+          <div class="control" role="img" aria-label="Single select with selected account and a whole-field clear button">
+            <div class="control-top">
+              <div class="selection">Operations workspace</div>
+              <span class="clear-button" aria-hidden="true">x</span>
+              <span class="dropdown-indicator" aria-hidden="true">v</span>
+            </div>
+            <div class="dropdown">
+              <div class="option active"><strong>Operations workspace</strong><small>Current value, clearable as one field</small></div>
+              <div class="option"><strong>Support workspace</strong><small>Another server-rendered option</small></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <header>
+            <span class="tag multi">remove_button</span>
+            <h2>Multi item removal is a different affordance</h2>
+            <p>Tags and token-style fields may show item-level remove buttons. This state is not the same as clearing a single select's whole value.</p>
+          </header>
+          <div class="control" role="img" aria-label="Multiple selected tags with per-item remove buttons">
+            <div class="control-top">
+              <div class="chips">
+                <span class="chip"><span>Priority review</span><span class="remove-button" aria-hidden="true">x</span></span>
+                <span class="chip"><span>Long-running onboarding checklist</span><span class="remove-button" aria-hidden="true">x</span></span>
+              </div>
+              <span class="dropdown-indicator" aria-hidden="true">v</span>
+            </div>
+            <div class="dropdown">
+              <div class="option"><strong>Compliance evidence</strong><small>Item removal stays per selected item</small></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <header>
+            <span class="tag boundary">host-owned plugins</span>
+            <h2>Explicit plugin choices stay host-owned</h2>
+            <p>When a host app passes plugin options, the static review should confirm scanability without treating assets, theme, or plugin lifecycle as Rails Fields Kit behavior.</p>
+          </header>
+          <div class="control" role="img" aria-label="Plugin boundary note for a rendered field">
+            <div class="control-top">
+              <div class="selection placeholder">Choose a customer segment</div>
+              <span class="dropdown-indicator" aria-hidden="true">v</span>
+            </div>
+            <div class="dropdown">
+              <div class="option active"><strong>Configured by host app</strong><small>plugins: ["clear_button"] or project-specific plugins</small></div>
+              <div class="option"><strong>Reviewed here as static chrome</strong><small>No runtime plugin contract or event shape is added</small></div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="boundary" aria-labelledby="boundary-title">
+        <span class="tag boundary">Scope boundary</span>
+        <h2 id="boundary-title">What this artifact checks</h2>
+        <ul>
+          <li>Whole-field clear and per-item remove affordances are visually distinct at desktop and narrow widths.</li>
+          <li>Long selected labels and long tags wrap inside the control instead of forcing horizontal overflow.</li>
+          <li>Plugin assets, styling, event payloads, and Tom Select lifecycle behavior remain host-app or Tom Select responsibilities.</li>
+          <li>Current package-root helper names are not copied here; use <code>public_api.md#javascript-exports</code> as the source of truth.</li>
+        </ul>
+      </section>
+
+      <section class="review-list" aria-labelledby="review-title">
+        <span class="tag clearable">Review prompts</span>
+        <h2 id="review-title">Desktop and narrow viewport checks</h2>
+        <ul>
+          <li>At desktop width, compare the single-select clear button against the multi-item remove buttons without reading them as the same action.</li>
+          <li>At 390px-equivalent width, confirm long tag text wraps and the clear/remove controls remain reachable without overlapping labels.</li>
+          <li>Confirm the artifact reads as a static design review lane, not a proposal for Rails Fields Kit to ship plugin styles or clear-event behavior.</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
