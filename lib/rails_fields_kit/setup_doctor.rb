@@ -7,7 +7,9 @@ module RailsFieldsKit
   class SetupDoctor
     IMPORTMAP_PINS = {
       "rails_fields_kit" => "rails_fields_kit/index.js",
-      "rails_fields_kit/tom_select_controller" => "rails_fields_kit/tom_select_controller.js"
+      "rails_fields_kit/native_field_accessibility_contract" => "rails_fields_kit/native_field_accessibility_contract.js",
+      "rails_fields_kit/tom_select_controller" => "rails_fields_kit/tom_select_controller.js",
+      "rails_fields_kit/tom_select_text_override_contract" => "rails_fields_kit/tom_select_text_override_contract.js"
     }.freeze
 
     CSS_IMPORT_CANDIDATE_PATHS = [
