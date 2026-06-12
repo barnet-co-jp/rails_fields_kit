@@ -99,6 +99,31 @@ Suggested evidence note:
 readRenderedSelectedPreloadConfig: PASS on <field selector>. selectedUrl / selectedParam / selectedMultipleParam / selectedQueryParams matched rendered config; comparable no-selected-url field returned null. Request execution and fallback UI were checked separately or left out of scope.
 ```
 
+## Tom Select interaction config reader
+
+Use this lane when `readRenderedTomSelectInteractionConfig(element)` is in release scope.
+
+Representative import:
+
+```js
+import { readRenderedTomSelectInteractionConfig } from "rails_fields_kit"
+```
+
+Check one rendered Tom Select-backed field with explicit interaction options and one comparable default or multiple-value field when those paths are in scope:
+
+- `readRenderedTomSelectInteractionConfig(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes the documented interaction values, including representative `maxOptions`, `maxItems`, `loadThrottle`, `delimiter`, `preload`, `openOnFocus`, `closeAfterSelect`, `hideSelected`, and `persist` keys.
+- A multiple-value field confirms `maxItems` and `delimiter` when those options are rendered.
+- A default field confirms unrendered optional values stay `null` and `persist` follows the documented controller fallback of `false`.
+- A comparable non-Tom Select or unrelated element returns `null`.
+- The evidence stays read-only; Tom Select instance creation, runtime behavior, event dispatch, visible copy, validation, mutation, and retry UI remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+readRenderedTomSelectInteractionConfig: PASS on <field selector>. interaction config matched rendered maxOptions / maxItems / loadThrottle / delimiter / preload / openOnFocus / closeAfterSelect / hideSelected / persist values; default field kept unrendered optional values null and persist false; unrelated element returned null. Runtime behavior, event dispatch, visible copy, validation, mutation, and retry UI remained out of scope.
+```
+
 ## Text override contract reader
 
 Use this lane when `tomSelectTextOverrideContract(element)` is in release scope.
