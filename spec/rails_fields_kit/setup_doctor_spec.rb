@@ -41,7 +41,9 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
     Dir.mktmpdir do |root|
       write_file(root, "config/importmap.rb", <<~RUBY)
         pin "rails_fields_kit", to: "rails_fields_kit/index.js"
+        pin "rails_fields_kit/native_field_accessibility_contract", to: "rails_fields_kit/native_field_accessibility_contract.js"
         pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
+        pin "rails_fields_kit/tom_select_text_override_contract", to: "rails_fields_kit/tom_select_text_override_contract.js"
       RUBY
 
       importmap_check = check_for(described_class.new(root: root), :importmap)
