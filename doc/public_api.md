@@ -250,6 +250,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `TomSelectController` | Stimulus controller | Registers Rails Fields Kit's Tom Select-backed field behavior on the rendered element. Host apps still own Stimulus boot, Tom Select installation, endpoint behavior, authorization, query parsing, visible feedback copy, and retry UI. |
 | `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
 | `tomSelectPluginContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select plugin data and returns `plugins`, `hasClearButton`, and `hasRemoveButton`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not install plugin assets, expose Tom Select plugin objects, mutate selections, style clear/remove controls, or own empty-state behavior. |
+| `tomSelectSelectionContract(element)` | rendered-field contract reader | Reads an initialized Rails Fields Kit Tom Select-backed field and returns `{ values }` using the same current-value shape as forwarded interaction events, or `null` when the element is not a matching initialized field. It does not mutate Tom Select, expose the controller instance, execute requests, change hidden fields, or own validation feedback. |
 | `tomSelectRequestContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select request data attributes and returns the controller identifier, remote search / selected preload / create endpoint flags, URL values, request parameter names, `minLength`, and `errorSurfaceId`, or `null` when the element is not a Rails Fields Kit Tom Select-backed field. It does not execute requests, parse query strings, mutate Tom Select, authorize endpoints, retry requests, or own visible feedback. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
 | `readRenderedTableFilterMetadata(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered table filter metadata attributes and returns `adapter`, `paramName`, and `fields`, or `null` when the element is not rendered from a table filter metadata lane. It does not execute Ransack, parse token queries, mutate Tom Select, or own table search behavior. |
@@ -267,6 +268,7 @@ import {
   readRenderedTableFilterMetadata,
   tomSelectPluginContract,
   tomSelectRequestContract,
+  tomSelectSelectionContract,
   tomSelectTextOverrideContract
 } from "rails_fields_kit"
 
@@ -275,6 +277,7 @@ const copyContract = tomSelectTextOverrideContract(fieldElement)
 const pluginContract = tomSelectPluginContract(fieldElement)
 const requestContract = tomSelectRequestContract(fieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
+const selectionContract = tomSelectSelectionContract(fieldElement)
 const tableFilterMetadata = readRenderedTableFilterMetadata(fieldElement)
 ```
 
@@ -286,9 +289,11 @@ import TomSelectController from "rails_fields_kit/tom_select_controller"
 
 ### Contract reader boundary
 
-Rendered-field contract helpers stay read-only. They inspect data attributes and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration without reaching into the Stimulus controller instance or duplicating wrapper traversal.
+Rendered-field contract helpers stay read-only. They inspect data attributes, current Tom Select value state, and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration or selection state without reaching into the Stimulus controller instance, mutating Tom Select, or duplicating wrapper traversal.
 
 For Tom Select plugin state, `tomSelectPluginContract(element)` reports the rendered effective plugin list and derived clear/remove flags. It does not confirm plugin asset loading, clear/remove affordance styling, or Tom Select plugin lifecycle behavior.
+
+`tomSelectSelectionContract(element)` complements the forwarded interaction events in [`events.md`](events.md). Use events when the host app needs to react as selection changes; use the contract reader when a lightweight QA check or integration script needs to inspect the current rendered state on demand.
 
 `tomSelectRequestContract(element)` reports only the rendered request-lane contract. For a matching Rails Fields Kit Tom Select-backed field it returns:
 

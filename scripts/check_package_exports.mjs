@@ -1,79 +1,108 @@
-import { mkdtemp, mkdir, cp, writeFile, rm, readFile } from "node:fs/promises"
-import { tmpdir } from "node:os"
+import { writeFile } from "node:fs/promises"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
+import {
+  cleanupPackageExportSandbox,
+  fakeDomProbeSource,
+  packageRootNamedExportsFromDocs,
+  preparePackageExportSandbox,
+  sandboxRoot
+} from "./package_export_smoke_harness.mjs"
+
+function packageExportProbeSource({ expectedPackageRootNamedExports, expectedCallableHelperExports }) {
+  return `import rootDefault, * as packageRoot from "rails_fields_kit"
+import directDefault from "rails_fields_kit/tom_select_controller"
 import assert from "node:assert/strict"
 
-const repoRoot = process.cwd()
-const sandboxRoot = await mkdtemp(path.join(tmpdir(), "rails-fields-kit-package-exports-"))
+const expectedNamedExports = ${JSON.stringify(expectedPackageRootNamedExports)}
+const expectedCallableHelperExports = ${JSON.stringify(expectedCallableHelperExports)}
 
-function markdownSection(markdown, heading) {
-  const headingLine = `${heading}\n`
-  const headingIndex = markdown.indexOf(headingLine)
-  if (headingIndex === -1) return ""
+${fakeDomProbeSource()}
+expectedNamedExports.forEach((exportName) => {
+  assert.ok(exportName in packageRoot, \`package root should expose documented export ${"${exportName}"}\`)
+})
+assert.equal(rootDefault, packageRoot.TomSelectController, "package root default export should match TomSelectController")
+assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")
+expectedCallableHelperExports.forEach((exportName) => {
+  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)
+})
 
-  const sectionRemainder = markdown.slice(headingIndex + headingLine.length)
-  const nextHeadingIndex = sectionRemainder.search(/\n##\s+/)
+assert.equal(packageRoot.tomSelectRequestContract(null), null, "request contract reader should ignore missing elements")
+assert.equal(packageRoot.tomSelectRequestContract(new FakeElement("input", { "data-controller": "other" })), null, "request contract reader should ignore non-Rails Fields Kit Tom Select elements")
+assert.deepEqual(
+  packageRoot.tomSelectRequestContract(new FakeElement("select", {
+    "data-controller": "other rails-fields-kit--tom-select",
+    "data-rails-fields-kit--tom-select-url-value": "/people",
+    "data-rails-fields-kit--tom-select-selected-url-value": "/people/selected",
+    "data-rails-fields-kit--tom-select-create-url-value": "/people",
+    "data-rails-fields-kit--tom-select-query-param-value": "term",
+    "data-rails-fields-kit--tom-select-selected-param-value": "person_id",
+    "data-rails-fields-kit--tom-select-selected-multiple-param-value": "person_ids",
+    "data-rails-fields-kit--tom-select-create-param-value": "name",
+    "data-rails-fields-kit--tom-select-min-length-value": "2",
+    "data-rails-fields-kit--tom-select-error-surface-id-value": "person-error"
+  })),
+  {
+    controller: "rails-fields-kit--tom-select",
+    hasRemoteSearch: true,
+    hasSelectedPreload: true,
+    hasCreateEndpoint: true,
+    url: "/people",
+    selectedUrl: "/people/selected",
+    createUrl: "/people",
+    queryParam: "term",
+    selectedParam: "person_id",
+    selectedMultipleParam: "person_ids",
+    createParam: "name",
+    minLength: 2,
+    errorSurfaceId: "person-error"
+  },
+  "request contract reader should expose rendered request lanes without executing requests"
+)
+assert.deepEqual(
+  packageRoot.tomSelectRequestContract(new FakeElement("select", { "data-controller": "rails-fields-kit--tom-select" })),
+  {
+    controller: "rails-fields-kit--tom-select",
+    hasRemoteSearch: false,
+    hasSelectedPreload: false,
+    hasCreateEndpoint: false,
+    url: null,
+    selectedUrl: null,
+    createUrl: null,
+    queryParam: "q",
+    selectedParam: "id",
+    selectedMultipleParam: "ids",
+    createParam: "text",
+    minLength: 0,
+    errorSurfaceId: null
+  },
+  "request contract reader should expose safe defaults for local Tom Select-backed fields"
+)
 
-  return nextHeadingIndex === -1 ? sectionRemainder : sectionRemainder.slice(0, nextHeadingIndex)
-}
+const label = new FakeElement("label", { for: "order_customer_name" })
+const input = new FakeElement("input", { id: "order_customer_name", "aria-describedby": "customer_hint customer_error" })
+const hint = new FakeElement("p", { id: "customer_hint", class: "rfk-hint" })
+const error = new FakeElement("p", { id: "customer_error", class: "rfk-error" })
+const { wrapper } = buildDocumentWithWrapper([label, input, hint, error])
+const accessibilityContract = packageRoot.nativeFieldAccessibilityContract(input)
 
-function documentedPackageRootExportRows(markdown) {
-  const javascriptExportsSection = markdownSection(markdown, "## JavaScript exports")
+assert.deepEqual(accessibilityContract.describedByIds, ["customer_hint", "customer_error"])
+assert.deepEqual(accessibilityContract.describedByElements, [hint, error])
+assert.equal(accessibilityContract.labelElement, label, "native accessibility contract should expose the associated label element")
+assert.equal(accessibilityContract.hintElement, hint)
+assert.equal(accessibilityContract.errorElement, error)
+assert.equal(accessibilityContract.wrapperElement, wrapper)
 
-  return javascriptExportsSection
-    .split("\n")
-    .map((line) => {
-      const match = line.match(/^\| `(?<exportName>[^`]+)` \| (?<kind>[^|]+) \|/)
-      if (!match?.groups) return null
+const fallbackLabel = new FakeElement("label")
+const fallbackInput = new FakeElement("textarea")
+buildDocumentWithWrapper([fallbackLabel, fallbackInput])
+assert.equal(packageRoot.nativeFieldAccessibilityContract(fallbackInput).labelElement, fallbackLabel, "native accessibility contract should fall back to a wrapper label")
 
-      return {
-        exportName: match.groups.exportName.replace(/\(.*\)$/, ""),
-        kind: match.groups.kind.trim()
-      }
-    })
-    .filter(Boolean)
-}
-
-function documentedCallableHelperExports(exportRows) {
-  return exportRows
-    .filter(({ kind }) => /\bcontract reader\b/i.test(kind))
-    .map(({ exportName }) => exportName)
-}
-
-async function packageRootNamedExportsFromDocs() {
-  const publicApiDocs = await readFile(path.join(repoRoot, "doc", "public_api.md"), "utf8")
-  const documentedExportRows = documentedPackageRootExportRows(publicApiDocs)
-  const documentedExports = documentedExportRows.map(({ exportName }) => exportName)
-
-  assert.ok(
-    documentedExports.length > 0,
-    "doc/public_api.md JavaScript exports table must document at least one package-root export"
-  )
-  assert.equal(
-    new Set(documentedExports).size,
-    documentedExports.length,
-    "doc/public_api.md JavaScript exports table must not document duplicate package-root exports"
-  )
-
-  const callableHelperExports = documentedCallableHelperExports(documentedExportRows)
-  assert.ok(
-    callableHelperExports.length > 0,
-    "doc/public_api.md JavaScript exports table must document at least one callable contract reader"
-  )
-
-  return {
-    documentedExports,
-    callableHelperExports
-  }
-}
-
-async function writeStubPackage(packageName, source) {
-  const packageRoot = path.join(sandboxRoot, "node_modules", ...packageName.split("/"))
-
-  await mkdir(packageRoot, { recursive: true })
-  await writeFile(path.join(packageRoot, "package.json"), "{\n  \"type\": \"module\"\n}\n")
-  await writeFile(path.join(packageRoot, "index.js"), source)
+const missingLabelInput = new FakeElement("select")
+buildDocumentWithWrapper([missingLabelInput])
+assert.equal(packageRoot.nativeFieldAccessibilityContract(missingLabelInput).labelElement, null, "native accessibility contract should return null when no label exists")
+assert.equal(packageRoot.nativeFieldAccessibilityContract(new FakeElement("div")), null, "native accessibility contract should ignore non-native elements")
+`
 }
 
 try {
@@ -81,191 +110,17 @@ try {
     documentedExports: expectedPackageRootNamedExports,
     callableHelperExports: expectedCallableHelperExports
   } = await packageRootNamedExportsFromDocs()
-  const packageRoot = path.join(sandboxRoot, "node_modules", "rails_fields_kit")
 
-  await mkdir(packageRoot, { recursive: true })
-  await cp(path.join(repoRoot, "package.json"), path.join(packageRoot, "package.json"))
-  await cp(
-    path.join(repoRoot, "app", "javascript", "rails_fields_kit"),
-    path.join(packageRoot, "app", "javascript", "rails_fields_kit"),
-    { recursive: true }
-  )
-
-  await writeStubPackage(
-    "@hotwired/stimulus",
-    "export class Controller {\n  static values = {}\n}\n"
-  )
-  await writeStubPackage(
-    "tom-select",
-    "export default class TomSelect {\n  constructor(element, options = {}) {\n    this.element = element\n    this.options = options\n  }\n\n  destroy() {}\n}\n"
-  )
+  await preparePackageExportSandbox()
 
   const probePath = path.join(sandboxRoot, "probe.mjs")
   await writeFile(
     probePath,
-    `import rootDefault, * as packageRoot from "rails_fields_kit"\n` +
-      `import directDefault from "rails_fields_kit/tom_select_controller"\n` +
-      `import assert from "node:assert/strict"\n\n` +
-      `const expectedNamedExports = ${JSON.stringify(expectedPackageRootNamedExports)}\n` +
-      `const expectedCallableHelperExports = ${JSON.stringify(expectedCallableHelperExports)}\n\n` +
-      `class FakeDocument {\n` +
-      `  constructor() {\n` +
-      `    this.all = []\n` +
-      `    this.elementsById = new Map()\n` +
-      `  }\n\n` +
-      `  register(element) {\n` +
-      `    element.ownerDocument = this\n` +
-      `    this.all.push(element)\n\n` +
-      `    const id = element.getAttribute("id")\n` +
-      `    if (id) this.elementsById.set(id, element)\n\n` +
-      `    element.children.forEach((child) => this.register(child))\n` +
-      `    return element\n` +
-      `  }\n\n` +
-      `  getElementById(id) {\n` +
-      `    return this.elementsById.get(id) || null\n` +
-      `  }\n\n` +
-      `  querySelector(selector) {\n` +
-      `    const match = selector.match(/^label\\[for="(.+)"\\]$/)\n` +
-      `    if (!match) return null\n\n` +
-      `    const forValue = match[1].replace(/\\\\"/g, "\\\"").replace(/\\\\\\\\/g, "\\\\")\n` +
-      `    return this.all.find((element) => element.tagName === "LABEL" && element.getAttribute("for") === forValue) || null\n` +
-      `  }\n` +
-      `}\n\n` +
-      `class FakeElement {\n` +
-      `  constructor(tagName, attributes = {}, children = []) {\n` +
-      `    this.tagName = tagName.toUpperCase()\n` +
-      `    this.attributes = attributes\n` +
-      `    this.children = []\n` +
-      `    this.parentElement = null\n` +
-      `    this.ownerDocument = null\n\n` +
-      `    children.forEach((child) => this.appendChild(child))\n` +
-      `  }\n\n` +
-      `  get classList() {\n` +
-      `    return {\n` +
-      `      contains: (className) => (this.getAttribute("class") || "").split(/\\s+/).includes(className)\n` +
-      `    }\n` +
-      `  }\n\n` +
-      `  appendChild(child) {\n` +
-      `    child.parentElement = this\n` +
-      `    this.children.push(child)\n` +
-      `    return child\n` +
-      `  }\n\n` +
-      `  getAttribute(name) {\n` +
-      `    return Object.hasOwn(this.attributes, name) ? this.attributes[name] : null\n` +
-      `  }\n\n` +
-      `  hasAttribute(name) {\n` +
-      `    return Object.hasOwn(this.attributes, name)\n` +
-      `  }\n\n` +
-      `  closest(selector) {\n` +
-      `    if (selector !== ".rfk-field") return null\n\n` +
-      `    let current = this\n` +
-      `    while (current) {\n` +
-      `      if (current.classList.contains("rfk-field")) return current\n` +
-      `      current = current.parentElement\n` +
-      `    }\n\n` +
-      `    return null\n` +
-      `  }\n\n` +
-      `  querySelector(selector) {\n` +
-      `    const matches = (element) => selector === "label" && element.tagName === "LABEL"\n` +
-      `    const visit = (element) => {\n` +
-      `      if (matches(element)) return element\n\n` +
-      `      for (const child of element.children) {\n` +
-      `        const match = visit(child)\n` +
-      `        if (match) return match\n` +
-      `      }\n\n` +
-      `      return null\n` +
-      `    }\n\n` +
-      `    return visit(this)\n` +
-      `  }\n` +
-      `}\n\n` +
-      `function buildDocumentWithWrapper(children) {\n` +
-      `  const document = new FakeDocument()\n` +
-      `  const wrapper = document.register(new FakeElement("div", { class: "rfk-field" }, children))\n` +
-      `  return { document, wrapper }\n` +
-      `}\n\n` +
-      `expectedNamedExports.forEach((exportName) => {\n` +
-      `  assert.ok(exportName in packageRoot, \`package root should expose documented export ${"${exportName}"}\`)\n` +
-      `})\n` +
-      `assert.equal(rootDefault, packageRoot.TomSelectController, "package root default export should match TomSelectController")\n` +
-      `assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")\n` +
-      `expectedCallableHelperExports.forEach((exportName) => {\n` +
-      `  assert.equal(typeof packageRoot[exportName], "function", \`package root should expose documented contract reader ${"${exportName}"} as a callable function\`)\n` +
-      `})\n\n` +
-      `assert.equal(packageRoot.tomSelectRequestContract(null), null, "request contract reader should ignore missing elements")\n` +
-      `assert.equal(packageRoot.tomSelectRequestContract(new FakeElement("input", { "data-controller": "other" })), null, "request contract reader should ignore non-Rails Fields Kit Tom Select elements")\n` +
-      `assert.deepEqual(\n` +
-      `  packageRoot.tomSelectRequestContract(new FakeElement("select", {\n` +
-      `    "data-controller": "other rails-fields-kit--tom-select",\n` +
-      `    "data-rails-fields-kit--tom-select-url-value": "/people",\n` +
-      `    "data-rails-fields-kit--tom-select-selected-url-value": "/people/selected",\n` +
-      `    "data-rails-fields-kit--tom-select-create-url-value": "/people",\n` +
-      `    "data-rails-fields-kit--tom-select-query-param-value": "term",\n` +
-      `    "data-rails-fields-kit--tom-select-selected-param-value": "person_id",\n` +
-      `    "data-rails-fields-kit--tom-select-selected-multiple-param-value": "person_ids",\n` +
-      `    "data-rails-fields-kit--tom-select-create-param-value": "name",\n` +
-      `    "data-rails-fields-kit--tom-select-min-length-value": "2",\n` +
-      `    "data-rails-fields-kit--tom-select-error-surface-id-value": "person-error"\n` +
-      `  })),\n` +
-      `  {\n` +
-      `    controller: "rails-fields-kit--tom-select",\n` +
-      `    hasRemoteSearch: true,\n` +
-      `    hasSelectedPreload: true,\n` +
-      `    hasCreateEndpoint: true,\n` +
-      `    url: "/people",\n` +
-      `    selectedUrl: "/people/selected",\n` +
-      `    createUrl: "/people",\n` +
-      `    queryParam: "term",\n` +
-      `    selectedParam: "person_id",\n` +
-      `    selectedMultipleParam: "person_ids",\n` +
-      `    createParam: "name",\n` +
-      `    minLength: 2,\n` +
-      `    errorSurfaceId: "person-error"\n` +
-      `  },\n` +
-      `  "request contract reader should expose rendered request lanes without executing requests"\n` +
-      `)\n` +
-      `assert.deepEqual(\n` +
-      `  packageRoot.tomSelectRequestContract(new FakeElement("select", { "data-controller": "rails-fields-kit--tom-select" })),\n` +
-      `  {\n` +
-      `    controller: "rails-fields-kit--tom-select",\n` +
-      `    hasRemoteSearch: false,\n` +
-      `    hasSelectedPreload: false,\n` +
-      `    hasCreateEndpoint: false,\n` +
-      `    url: null,\n` +
-      `    selectedUrl: null,\n` +
-      `    createUrl: null,\n` +
-      `    queryParam: "q",\n` +
-      `    selectedParam: "id",\n` +
-      `    selectedMultipleParam: "ids",\n` +
-      `    createParam: "text",\n` +
-      `    minLength: 0,\n` +
-      `    errorSurfaceId: null\n` +
-      `  },\n` +
-      `  "request contract reader should expose safe defaults for local Tom Select-backed fields"\n` +
-      `)\n\n` +
-      `const label = new FakeElement("label", { for: "order_customer_name" })\n` +
-      `const input = new FakeElement("input", { id: "order_customer_name", "aria-describedby": "customer_hint customer_error" })\n` +
-      `const hint = new FakeElement("p", { id: "customer_hint", class: "rfk-hint" })\n` +
-      `const error = new FakeElement("p", { id: "customer_error", class: "rfk-error" })\n` +
-      `const { wrapper } = buildDocumentWithWrapper([label, input, hint, error])\n` +
-      `const accessibilityContract = packageRoot.nativeFieldAccessibilityContract(input)\n\n` +
-      `assert.deepEqual(accessibilityContract.describedByIds, ["customer_hint", "customer_error"])\n` +
-      `assert.deepEqual(accessibilityContract.describedByElements, [hint, error])\n` +
-      `assert.equal(accessibilityContract.labelElement, label, "native accessibility contract should expose the associated label element")\n` +
-      `assert.equal(accessibilityContract.hintElement, hint)\n` +
-      `assert.equal(accessibilityContract.errorElement, error)\n` +
-      `assert.equal(accessibilityContract.wrapperElement, wrapper)\n\n` +
-      `const fallbackLabel = new FakeElement("label")\n` +
-      `const fallbackInput = new FakeElement("textarea")\n` +
-      `buildDocumentWithWrapper([fallbackLabel, fallbackInput])\n` +
-      `assert.equal(packageRoot.nativeFieldAccessibilityContract(fallbackInput).labelElement, fallbackLabel, "native accessibility contract should fall back to a wrapper label")\n\n` +
-      `const missingLabelInput = new FakeElement("select")\n` +
-      `buildDocumentWithWrapper([missingLabelInput])\n` +
-      `assert.equal(packageRoot.nativeFieldAccessibilityContract(missingLabelInput).labelElement, null, "native accessibility contract should return null when no label exists")\n` +
-      `assert.equal(packageRoot.nativeFieldAccessibilityContract(new FakeElement("div")), null, "native accessibility contract should ignore non-native elements")\n`
+    packageExportProbeSource({ expectedPackageRootNamedExports, expectedCallableHelperExports })
   )
 
   await import(pathToFileURL(probePath).href)
   console.log("rails_fields_kit package exports import smoke passed")
 } finally {
-  await rm(sandboxRoot, { recursive: true, force: true })
+  await cleanupPackageExportSandbox()
 }
