@@ -235,7 +235,7 @@ Use this section when the native helper Browser semantics lane is release-critic
 
 - [ ] search, email, URL, telephone, money, and percent examples were checked in the Browser semantics lane when those helpers were in release scope
 - [ ] the evidence note distinguished browser-provided semantics from Rails Fields Kit-owned wrapper, hint, error, affix, and accessibility wiring
-- [ ] formatting, masking, browser validation-message policy, autocomplete policy, locale policy, and custom picker behavior remained host-app responsibilities
+- [ ] formatting, masking, browser validation-message policy, autocomplete policy, and custom picker behavior remained host-app responsibilities
 - [ ] the Browser semantics lane evidence stayed separate from runtime sample-app field behavior unless a release candidate explicitly required both
 - [ ] any remaining browser-capable visual review was recorded as a blocker or follow-up instead of treating CI green as visual approval
 
