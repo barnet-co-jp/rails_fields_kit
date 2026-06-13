@@ -4,6 +4,8 @@ Rails Fields Kit renders a small set of wrapper and affordance classes so host a
 
 Use this document when you need the reader-facing source of truth for wrapper classes and host-app CSS ownership. Use [`configuration.md`](configuration.md#wrapper-and-affix-classes) for initializer defaults and [`visual_references.md`](visual_references.md) for static review routes.
 
+For release or PR evidence, record what was checked in [`sample_app_results.md`](sample_app_results.md)'s native wrapper customization checks or visual reference render matrix. Link the evidence back here for the styling boundary, and to [`configuration_wrapper_class_visual_reference.html`](configuration_wrapper_class_visual_reference.html) when reviewers need a rendered class pass-through lane.
+
 ## Current styling hooks
 
 These class names come from `RailsFieldsKit::Configuration` defaults and are appended when the matching wrapper element is rendered.
@@ -43,4 +45,4 @@ Tom Select-backed helpers such as `rfk_select`, `rfk_combobox`, and `rfk_token_s
 
 ## What this document is not
 
-This is not a full helper markup inventory, design system catalog, CSS preset, or visual approval checklist. The exact private helper methods and non-documented internal markup can change within the compatibility policy. When a review needs rendered-state readability, use the static visual reference family and record browser evidence separately instead of treating this file as screenshot approval.
+This is not a full helper markup inventory, design system catalog, CSS preset, visual approval checklist, or release evidence log. The exact private helper methods and non-documented internal markup can change within the compatibility policy. When a review needs rendered-state readability, use the static visual reference family and record browser evidence separately instead of treating this file as screenshot approval.

@@ -36,23 +36,23 @@ For repo-specific working guidance, see the repository [AGENTS](https://github.c
 
 ## Docs map
 
-| If you want to... | Start here |
-| --- | --- |
-| Set up a host app | [`doc/setup.md`](doc/setup.md) |
-| Check setup visibility after install | [`doc/setup.md`](doc/setup.md) for `rails rails_fields_kit:doctor` and its read-only/manual-check boundary; [`doc/setup_doctor_output_review.md`](doc/setup_doctor_output_review.md) for CLI diagnostic evidence review |
-| Check supported Ruby / Rails and repository JavaScript boundaries | [`doc/support_boundary.md`](doc/support_boundary.md) |
-| Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md), [`doc/grouped_select.md`](doc/grouped_select.md) for the focused grouped `<optgroup>` boundary, [`doc/select_migration.md`](doc/select_migration.md), [`doc/enum_select.md`](doc/enum_select.md) for the focused `rfk_enum_select` source boundary, [`doc/textarea_autosize.md`](doc/textarea_autosize.md) for the current `rfk_text_area` autosize boundary |
-| See or compare rendered UI states quickly | [`doc/visual_references.md`](doc/visual_references.md) for the visual reference family, including Tom Select, text override copy, native helper, native narrow viewport stress, configuration wrapper classes, table metadata, and saved-search token states |
-| Review stable public API and package-root JavaScript exports | [`doc/public_api.md`](doc/public_api.md) |
-| Build remote search, selected preload, create, or token suggestion endpoints | [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) |
-| Understand shared token, Ransack, and table metadata boundaries | [`doc/shared_metadata_navigation.md`](doc/shared_metadata_navigation.md) for the reading order across current public APIs, host-app metadata patterns, and ROADMAP proposals |
-| Handle Stimulus events or request-failure surfaces | [`doc/events.md`](doc/events.md) |
-| Review Turbo / Stimulus reconnect lifecycle | [`doc/tom_select_turbo_lifecycle.md`](doc/tom_select_turbo_lifecycle.md) |
-| Configure initializer defaults, styling hooks, and field-level override precedence | [`doc/configuration.md`](doc/configuration.md) for defaults and overrides; [`doc/styling_boundary.md`](doc/styling_boundary.md) for wrapper classes and host-app CSS ownership |
-| Work with optional table metadata or custom renderer mappings | [`doc/table_adapters.md`](doc/table_adapters.md) for adapter metadata, renderer call specs, and custom registry mapping; [`doc/table_group_html.md`](doc/table_group_html.md) for group-level wrapper attributes |
-| Run local checks | [`doc/development.md`](doc/development.md) |
-| Prepare or verify a release | [`doc/release.md`](doc/release.md), [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/selected_preload_release_gate.md`](doc/selected_preload_release_gate.md), [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) for package-root helper evidence, and [`doc/textarea_autosize_release_evidence.md`](doc/textarea_autosize_release_evidence.md) for `rfk_text_area` autosize-boundary evidence |
-| Review release-facing notes | [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md), [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) |
+Use this map as a first reader route, not a full documentation inventory. Start with the first column when you are introducing Rails Fields Kit to a host app, then follow the second column only when that topic needs the deeper source-of-truth docs.
+
+| If you want to... | Start here | Then use |
+| --- | --- | --- |
+| Set up a host app | [`doc/setup.md`](doc/setup.md) | [`doc/support_boundary.md`](doc/support_boundary.md) for supported Ruby / Rails and repository JavaScript boundaries |
+| Check setup visibility after install | [`doc/setup.md`](doc/setup.md) for `rails rails_fields_kit:doctor` and its read-only/manual-check boundary | [`doc/setup_doctor_output_review.md`](doc/setup_doctor_output_review.md) for CLI diagnostic evidence review |
+| Render the first field | [First field quickstart](#first-field-quickstart) | [`doc/field_helpers.md`](doc/field_helpers.md) when choosing the next helper |
+| Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md) | [`doc/select_migration.md`](doc/select_migration.md), [`doc/grouped_select.md`](doc/grouped_select.md), [`doc/enum_select.md`](doc/enum_select.md), and [`doc/textarea_autosize.md`](doc/textarea_autosize.md) for focused helper boundaries |
+| See or compare rendered UI states quickly | [`doc/visual_references.md`](doc/visual_references.md) for the visual reference family, including Tom Select, request-failure and host-feedback lifecycle, text override, native helper, table metadata, and saved-search token states | [`doc/visual_reference_index.html`](doc/visual_reference_index.html) when choosing a visual lane by artifact, family, or reviewer task |
+| Review stable public API and package-root JavaScript exports | [`doc/public_api.md`](doc/public_api.md) | [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) when the review is about release or sample-app evidence for a helper lane |
+| Build remote search, selected preload, create, or token suggestion endpoints | [`doc/controller_helpers.md`](doc/controller_helpers.md) | [`doc/token_suggestions.md`](doc/token_suggestions.md) and [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) for token suggestion payloads |
+| Understand shared token, Ransack, and table metadata boundaries | [`doc/shared_metadata_navigation.md`](doc/shared_metadata_navigation.md) | [`doc/table_adapters.md`](doc/table_adapters.md) and [`doc/table_group_html.md`](doc/table_group_html.md) when table metadata rendering is in scope |
+| Handle Stimulus events, request-failure surfaces, or Turbo reconnect | [`doc/events.md`](doc/events.md) | [`doc/tom_select_turbo_lifecycle.md`](doc/tom_select_turbo_lifecycle.md) for reconnect lifecycle details |
+| Configure initializer defaults, styling hooks, and field-level override precedence | [`doc/configuration.md`](doc/configuration.md) | [`doc/styling_boundary.md`](doc/styling_boundary.md) for wrapper classes and host-app CSS ownership |
+| Run local checks | [`doc/development.md`](doc/development.md) | GitHub Actions confirmation in the same guide before treating an open PR as review- or release-ready |
+| Prepare or verify a release | [`doc/release.md`](doc/release.md) | [`doc/sample_app_checklist.md`](doc/sample_app_checklist.md), [`doc/sample_app_results.md`](doc/sample_app_results.md), [`doc/final_release_checklist.md`](doc/final_release_checklist.md), [`doc/selected_preload_release_gate.md`](doc/selected_preload_release_gate.md), [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md), and [`doc/textarea_autosize_release_evidence.md`](doc/textarea_autosize_release_evidence.md) for focused evidence lanes |
+| Review release-facing notes | [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md) | [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) for the previous release summary |
 
 ## First field quickstart
 
@@ -78,6 +78,7 @@ This keeps the submitted params the same shape as an ordinary Rails select while
 - Use `rfk_token_search` when the input should accept structured token text such as `status:open assignee:matsuo keyword`; Rails Fields Kit can suggest tokens, but the host app still parses and executes the query.
 - Use `rfk_multi_select` for ordinary multiple selected values, and `rfk_tags` when the UI should feel like tag entry or create-on-the-fly tag creation.
 - Use `rfk_grouped_select` for `<optgroup>` collections and `rfk_enum_select` for Rails enum attributes.
+- Use `rfk_table_filters` / `rfk_table_cell_editors` when a table integration already owns column metadata and only needs Rails Fields Kit to render documented filter or editor helpers; keep query execution, persistence, authorization, and renderer policy in the host app or table integration, and use [`doc/table_adapters.md`](doc/table_adapters.md) for the protocol.
 - Use the native wrapper helpers such as `rfk_text_field`, `rfk_text_area`, `rfk_password_field`, `rfk_money_field`, `rfk_phone_field`, and `rfk_search_field` when a native browser input is enough and you only want consistent labels, hints, validation errors, prefixes, suffixes, and accessibility wiring.
 
 For `rfk_text_area` autosize, start from [`doc/textarea_autosize.md`](doc/textarea_autosize.md). Autosize measurement, Turbo reconnect sizing, production CSS, and manual resize policy remain host-app-owned enhancements for the current 0.1.x surface.
