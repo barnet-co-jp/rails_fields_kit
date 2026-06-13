@@ -21,6 +21,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 #### FormBuilder helpers
 
 - `rfk_enum_select` now has a focused explicit `enum:` hash guide for Rails enum-shaped sources. Hash keys remain the submitted values, labels stay on the model I18n / humanized-key path, and arbitrary label/value DSLs, remote enum option lookup, and PORO enum adapters remain outside the current public surface.
+- `rfk_password_field` now provides a thin native password input wrapper with the same label, hint, error, affix, pass-through option, and accessibility wiring boundaries as the other native helpers. Password visibility toggles, strength meters, credential policy, autocomplete policy, authentication workflow, and credential storage remain host-app responsibilities.
 
 #### Token search and suggestion metadata
 

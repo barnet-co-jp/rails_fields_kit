@@ -6,6 +6,19 @@ Use `doc/public_api.md#javascript-exports` as the source of truth for the curren
 
 These checks cover helper import and rendered-field inspection. They do not make Rails Fields Kit responsible for request execution, endpoint authorization, retry UI, locale policy, visible copy, or host-app fallback behavior.
 
+## Guard family map
+
+Package-root helper evidence is intentionally split across a small docs and smoke family instead of a machine-readable public API manifest. For the current RFK surface, this keeps the helper contract readable without adopting TreeView's manifest model or a cross-gem schema before the package-root helper family needs it.
+
+| Guard | Owns | Does not own |
+| --- | --- | --- |
+| `doc/public_api.md#javascript-exports` | Current package-root export names, helper kind, import examples, and documented return-shape / responsibility boundaries. | Release pass/fail notes, sample-app screenshots, downstream host-app smoke, or proposal/open-PR helper names. |
+| `scripts/check_package_exports.mjs` via `npm run check:js` | Importability and callable smoke for the current exports derived from the public API table, plus targeted helper smokes when a generic callable check is not enough to protect the documented boundary. | Runtime request execution, endpoint authorization, visible feedback, or sample-app release evidence. |
+| This guide and `doc/sample_app_results.md` | Which current helpers need representative release or PR evidence, where that evidence was checked, and which host-app responsibilities were intentionally left out of scope. | The canonical helper list or a full mirror of every helper return shape. |
+| `spec/package_contents_spec.rb` and package inventory docs | Packaged docs, generated setup notes, visual references, and entrypoint visibility staying reachable from the maintained docs family. | Package-root helper return-shape decisions or helper-specific runtime behavior. |
+
+When adding or changing a package-root helper, update the public API table first, keep the package export smoke aligned with that table, then choose whether this guide or a scoped PR comment needs representative sample-app evidence. If a helper is still only proposed or present on an open branch, do not list it here as current release evidence.
+
 ## Shared setup
 
 Use a sample Rails app that already passes the JavaScript setup lane from `doc/sample_app_checklist.md`:
@@ -133,6 +146,30 @@ Suggested evidence note:
 
 ```text
 tomSelectPluginContract: PASS on <field selector>. plugins matched the rendered effective plugin list; allow_clear field exposed clear_button through plugins and hasClearButton; explicit plugin field exposed the expected derived hasClearButton / hasRemoveButton flags; unrelated element returned null. Plugin assets, styling, mutation, empty-state copy, and Tom Select plugin lifecycle remained host-app or Tom Select responsibilities.
+```
+
+## Tom Select selection contract reader
+
+Use this lane when `tomSelectSelectionContract(element)` is in release scope.
+
+Representative import:
+
+```js
+import { tomSelectSelectionContract } from "rails_fields_kit"
+```
+
+Check an initialized rendered Tom Select-backed field after the controller has connected:
+
+- `tomSelectSelectionContract(fieldElement)` returns a plain object for an initialized Rails Fields Kit Tom Select field.
+- The result exposes the documented `values` array using the current selection shape shared with forwarded interaction events.
+- A single-value field, multiple-value field, or cleared field should match the representative release scope rather than exhaustively testing every Tom Select mode.
+- A comparable uninitialized, non-Tom Select, or unrelated element returns `null`.
+- The evidence stays read-only; selection mutation, hidden field generation, event dispatch, validation feedback, request execution, and Tom Select instance lifecycle remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+tomSelectSelectionContract: PASS on <field selector>. values matched the initialized field's current selection; unrelated or uninitialized element returned null. Selection mutation, hidden fields, events, validation feedback, and request execution remained out of scope.
 ```
 
 ## Tom Select request contract reader
