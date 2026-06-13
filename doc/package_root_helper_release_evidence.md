@@ -99,6 +99,31 @@ Suggested evidence note:
 readRenderedSelectedPreloadConfig: PASS on <field selector>. selectedUrl / selectedParam / selectedMultipleParam / selectedQueryParams matched rendered config; comparable no-selected-url field returned null. Request execution and fallback UI were checked separately or left out of scope.
 ```
 
+## Rendered option payload mapping reader
+
+Use this lane when `readRenderedOptionPayloadMapping(element)` is in release scope.
+
+Representative import:
+
+```js
+import { readRenderedOptionPayloadMapping } from "rails_fields_kit"
+```
+
+Check a rendered Tom Select-backed field that uses explicit option payload mapping, such as `value_field:`, `label_field:`, `search_field:`, `option_description_field:`, or `option_badge_field:`:
+
+- `readRenderedOptionPayloadMapping(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes the documented `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField` values for the representative field.
+- `searchFields` is already split and trimmed so host apps do not need to duplicate raw data attribute names or comma-splitting rules.
+- A default field returns the documented `value`, `text`, and `['text']` mapping values when mapping attributes are omitted.
+- A comparable non-Tom Select or unrelated element returns `null`.
+- The evidence stays read-only; endpoint response shape, option rendering HTML, request execution, authorization, visible feedback, and retry behavior remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+readRenderedOptionPayloadMapping: PASS on <field selector>. valueField / labelField / searchFields / rich option field names matched rendered config; default mapping returned value/text defaults; unrelated element returned null. Endpoint response shape, rendering HTML, request execution, authorization, visible feedback, and retry behavior remained out of scope.
+```
+
 ## Text override contract reader
 
 Use this lane when `tomSelectTextOverrideContract(element)` is in release scope.

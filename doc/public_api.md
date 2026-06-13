@@ -233,7 +233,7 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 
 Use `TableRenderer.registered_field_types` when an integration needs a mutation-safe list of renderable field type names, including custom mappings registered with `TableRenderer.register_field_helper`, without exposing the helper method names. `TableFilterInput.known_types` and `TableCellInput.known_types` remain limited to the built-in factory family.
 
-The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `to_h` and `to_hash` return the same metadata hash as `to_table_filter` or `to_table_cell_editor`.
+The returned metadata hashes use `type: "rails_fields_kit`, a string `field_type`, an optional `method`, and an `options` hash. `to_h` and `to_hash` return the same metadata hash as `to_table_filter` or `to_table_cell_editor`.
 
 `TableFilterInput.ransack_filter` is the current public entrypoint when table-oriented code wants Ransack-compatible token-search metadata. `TableMetadata` can collect metadata from Hash columns, hash-like columns that respond to `to_hash`, object columns with public metadata readers, enumerable column lists, and table-like objects that respond to `columns`. Explicit `false` filter/editor metadata disables that slot instead of falling through to alias keys or readers. `TableRenderer` can turn collected metadata into FormBuilder call specs or dispatch it to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol, custom registry examples, and Rails Table Preferences integration notes.
 
@@ -253,6 +253,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `tomSelectSelectionContract(element)` | rendered-field contract reader | Reads an initialized Rails Fields Kit Tom Select-backed field and returns `{ values }` using the same current-value shape as forwarded interaction events, or `null` when the element is not a matching initialized field. It does not mutate Tom Select, expose the controller instance, execute requests, change hidden fields, or own validation feedback. |
 | `tomSelectRequestContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select request data attributes and returns the controller identifier, remote search / selected preload / create endpoint flags, URL values, request parameter names, `minLength`, and `errorSurfaceId`, or `null` when the element is not a Rails Fields Kit Tom Select-backed field. It does not execute requests, parse query strings, mutate Tom Select, authorize endpoints, retry requests, or own visible feedback. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
+| `readRenderedOptionPayloadMapping(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered option payload mapping data and returns `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, parse endpoint responses, choose option rendering HTML, or own visible feedback. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
 
 ### Import patterns
@@ -263,6 +264,7 @@ Package-root imports use the documented entrypoint:
 import {
   TomSelectController,
   nativeFieldAccessibilityContract,
+  readRenderedOptionPayloadMapping,
   readRenderedSelectedPreloadConfig,
   tomSelectPluginContract,
   tomSelectRequestContract,
@@ -272,6 +274,7 @@ import {
 
 const accessibilityContract = nativeFieldAccessibilityContract(inputElement)
 const copyContract = tomSelectTextOverrideContract(fieldElement)
+const optionPayloadMapping = readRenderedOptionPayloadMapping(fieldElement)
 const pluginContract = tomSelectPluginContract(fieldElement)
 const requestContract = tomSelectRequestContract(fieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
@@ -292,6 +295,8 @@ For Tom Select plugin state, `tomSelectPluginContract(element)` reports the rend
 
 `tomSelectSelectionContract(element)` complements the forwarded interaction events in [`events.md`](events.md). Use events when the host app needs to react as selection changes; use the contract reader when a lightweight QA check or integration script needs to inspect the current rendered state on demand.
 
+For Tom Select option payload mapping, `readRenderedOptionPayloadMapping(element)` reports the rendered `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField`. It applies the documented defaults and returns `searchFields` as the already-split array so host apps do not need to duplicate raw data attribute names or comma-splitting rules.
+
 `tomSelectRequestContract(element)` reports only the rendered request-lane contract. For a matching Rails Fields Kit Tom Select-backed field it returns:
 
 - `controller`: the Rails Fields Kit Tom Select Stimulus controller identifier.
@@ -309,7 +314,7 @@ Future package-root helpers should follow the same boundary: read the rendered R
 
 ## Stimulus values
 
-The Tom Select controller reads data values generated by the FormBuilder helpers. Publicly documented options include remote URLs, request parameter names, JSON field names, selected preload settings, create-on-the-fly settings, rendering labels, plugin lists, `max_options`, `max_items`, `load_throttle`, and `delimiter`.
+The Tom Select controller reads data values generated by the FormBuilder helpers. Publicly documented options include remote URLs, request parameter names, JSON field names, selected preload settings, create-on-the-fly settings, rendering labels, rich option description and badge fields, plugin lists, `max_options`, `max_items`, `load_throttle`, and `delimiter`.
 
 Rails Fields Kit also renders `data-rails-fields-kit--tom-select-kind-value` as a helper-lane signal for Tom Select-backed fields. Treat it as rendered configuration for Rails Fields Kit diagnostics and controller behavior rather than the preferred host-app integration surface: host apps should use documented helper options, events, and package-root contract readers when those surfaces exist. `rfk_grouped_select` currently renders through the collection-backed select lane, so its `kind` value matches that underlying lane instead of declaring a separate grouped-select taxonomy.
 
@@ -319,6 +324,8 @@ Remote endpoint extensions:
 - `selected_query_params:` adds fixed query parameters to selected preload requests.
 - `create_params:` adds fixed JSON fields to create requests.
 - `error_surface:` adds a generated placeholder id so request-failure events can expose `detail.surface` for host-app feedback.
+
+`readRenderedOptionPayloadMapping(element)` is available when host-app code needs to inspect a rendered field's documented option payload mapping without re-encoding raw data attribute names or the `search_field:` split rule.
 
 `error_surface_html:` customizes the generated placeholder element, but it does not change the event names or move visible feedback responsibility into the gem.
 

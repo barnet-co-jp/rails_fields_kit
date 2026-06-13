@@ -41,6 +41,7 @@ RSpec.describe "package-root helper release evidence guide" do
       "tomSelectSelectionContract(element)",
       "tomSelectRequestContract(element)",
       "readRenderedSelectedPreloadConfig(element)",
+      "readRenderedOptionPayloadMapping(element)",
       "nativeFieldAccessibilityContract(element)"
     )
 
@@ -53,6 +54,7 @@ RSpec.describe "package-root helper release evidence guide" do
 
     expect(helper_specific_lanes).to contain_exactly(
       "readRenderedSelectedPreloadConfig",
+      "readRenderedOptionPayloadMapping",
       "tomSelectTextOverrideContract",
       "tomSelectPluginContract",
       "tomSelectSelectionContract",
