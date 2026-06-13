@@ -196,7 +196,11 @@ module RailsFieldsKit
           label_method: collection_label_method
         )
         options[:selected] ||= rfk_selected_values(selected_choices) if selected_choices.any?
-        grouped_options = @template.grouped_options_for_select(grouped_choices, options[:selected])
+        html_options[:disabled] = true if disabled == true
+        grouped_options = @template.grouped_options_for_select(
+          grouped_choices,
+          rfk_grouped_option_selection(options[:selected], disabled)
+        )
         select(method, grouped_options, options.except(:selected), html_options)
       else
         choices = rfk_choices_with_selected(
@@ -214,6 +218,19 @@ module RailsFieldsKit
       field_html = rfk_append_error_surface(field_html, error_surface_id, error_surface_html) if error_surface
 
       rfk_wrap_field(method, field_html, wrapper_options)
+    end
+
+    def rfk_grouped_option_selection(selected, disabled)
+      return selected if [nil, true, false].include?(disabled)
+
+      disabled_values = Array(disabled).map(&:to_s)
+      if selected.is_a?(Hash)
+        selected.merge(disabled: Array(selected[:disabled] || selected["disabled"]).map(&:to_s) | disabled_values)
+      elsif selected.nil?
+        {disabled: disabled_values}
+      else
+        {selected: selected, disabled: disabled_values}
+      end
     end
 
     def rfk_option_or_default(options, key, default)
