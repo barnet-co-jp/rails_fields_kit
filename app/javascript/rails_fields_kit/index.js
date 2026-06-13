@@ -2,6 +2,7 @@ import TomSelectController from "./tom_select_controller.js"
 
 const TOM_SELECT_CONTROLLER = "rails-fields-kit--tom-select"
 const TOM_SELECT_VALUE_PREFIX = "data-rails-fields-kit--tom-select"
+const FIELD_KIND_ATTRIBUTE = `${TOM_SELECT_VALUE_PREFIX}-kind-value`
 const TEXT_OVERRIDE_ATTRIBUTES = {
   noResultsText: "data-rails-fields-kit--tom-select-no-results-text-value",
   loadingText: "data-rails-fields-kit--tom-select-loading-text-value",
@@ -175,6 +176,18 @@ export function tomSelectRequestContract(element) {
     createParam: requestContractValue(element, "createParam"),
     minLength: requestContractValue(element, "minLength"),
     errorSurfaceId: requestContractValue(element, "errorSurfaceId")
+  }
+}
+
+export function tomSelectFieldKindContract(element) {
+  if (!element || typeof element.getAttribute !== "function" || !hasTomSelectController(element)) return null
+
+  const kind = dataValue(element, FIELD_KIND_ATTRIBUTE)
+  if (!kind) return null
+
+  return {
+    controller: TOM_SELECT_CONTROLLER,
+    kind
   }
 }
 
