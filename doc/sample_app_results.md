@@ -109,8 +109,8 @@ Notes:
 - [ ] documented controller registration still worked from the existing Stimulus boot file after adding those importmap pins
 - [ ] at least one rendered native helper field was readable through `nativeFieldAccessibilityContract(element)` without adding a new package-root helper export
 - [ ] package-root helper lanes in release scope were selected from `doc/package_root_helper_release_evidence.md` and matched the current `doc/public_api.md#javascript-exports` helper list
-- [ ] when `tomSelectPluginContract(element)` was in release scope, the package-root import resolved and read-only plugin contract evidence was recorded with `doc/package_root_helper_release_evidence.md`, including `allow_clear` and explicit `plugins` boundaries without treating the helper as plugin execution
-- [ ] when `readRenderedSelectedPreloadConfig(element)` was in release scope, the package-root import resolved and the rendered selected preload config evidence was recorded using `doc/package_root_helper_release_evidence.md`
+- [ ] helper-specific package-root import and read-only evidence was recorded in the table below with the representative field, result, and source-of-truth reference instead of becoming a release-wide setup checkbox
+- [ ] helper-specific examples such as native accessibility, Tom Select plugin contract, or selected preload config stayed tied to the selected evidence lane rather than implying every package-root helper must be checked for every release
 - [ ] Tom Select CSS loaded
 - [ ] browser console has no import errors
 
@@ -130,9 +130,11 @@ Use this memo only to make release evidence reproducible. Tom Select package ver
 
 Package-root helper lanes checked:
 
-| Helper | Representative field or selector | Result | Evidence notes |
-| --- | --- | --- | --- |
-|  |  |  |  |
+Use this table as the helper-specific evidence log. Choose helper names from `doc/public_api.md#javascript-exports`, use `doc/package_root_helper_release_evidence.md` for the representative lane guidance, and record only helpers that are in release or PR scope. Do not mirror the full helper family here when a helper is unrelated to the change under review.
+
+| Helper | Source-of-truth reference | Representative field or selector | Result | Evidence notes |
+| --- | --- | --- | --- | --- |
+|  |  |  |  |  |
 
 ## Form helper checks
 
