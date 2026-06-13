@@ -19,6 +19,7 @@ module RailsFieldsKit
       url_field
       phone_field
       search_field
+      password_field
       token_search
     ].freeze
 
