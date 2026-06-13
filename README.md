@@ -51,7 +51,7 @@ Use this map as a first reader route, not a full documentation inventory. Start 
 | Handle Stimulus events, request-failure surfaces, or Turbo reconnect | [`doc/events.md`](doc/events.md) | [`doc/tom_select_turbo_lifecycle.md`](doc/tom_select_turbo_lifecycle.md) for reconnect lifecycle details |
 | Configure initializer defaults, styling hooks, and field-level override precedence | [`doc/configuration.md`](doc/configuration.md) | [`doc/styling_boundary.md`](doc/styling_boundary.md) for wrapper classes and host-app CSS ownership |
 | Run local checks | [`doc/development.md`](doc/development.md) | GitHub Actions confirmation in the same guide before treating an open PR as review- or release-ready |
-| Prepare or verify a release | [`doc/release.md`](doc/release.md) | Use its pre-release checklist to reach sample-app, final release, selected preload, package-root helper, textarea autosize, and other focused evidence lanes |
+| Prepare or verify a release | [`doc/release.md`](doc/release.md) | Use its pre-release checklist for sample-app, final release, selected preload, package-root helper, and other evidence lanes; keep [`doc/textarea_autosize_release_evidence.md`](doc/textarea_autosize_release_evidence.md) as the focused autosize release evidence route |
 | Review release-facing notes | [`doc/release_notes_0_1_1.md`](doc/release_notes_0_1_1.md) | [`doc/release_notes_0_1_0.md`](doc/release_notes_0_1_0.md) for the previous release summary |
 
 ## First field quickstart
