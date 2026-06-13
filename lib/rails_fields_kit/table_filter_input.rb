@@ -19,6 +19,7 @@ module RailsFieldsKit
       url_field
       phone_field
       search_field
+      password_field
     ].freeze
 
     KNOWN_FIELD_TYPES = (COMMON_FIELD_TYPES + %i[token_search]).freeze
