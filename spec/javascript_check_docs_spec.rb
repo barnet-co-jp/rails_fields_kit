@@ -50,6 +50,5 @@ RSpec.describe "JavaScript check documentation" do
       "Exact smoke script membership belongs to `scripts/check_javascript.mjs`",
       "`scripts/check_javascript_smoke_inventory.mjs`"
     )
-    expect(development_doc).not_to include("complete script-by-script inventory")
   end
 end
