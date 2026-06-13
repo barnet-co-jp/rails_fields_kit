@@ -74,12 +74,28 @@ For event-driven host feedback lifecycle review, open [`tom_select_host_feedback
 
 ## How to use this family
 
+Use this section as a task guide, not an exhaustive API inventory. Pick the group that matches the review job, then open only the source-of-truth doc and visual lane named there.
+
+### Release evidence and entrypoints
+
 - For release verification, start from [`final_release_checklist.md`](final_release_checklist.md) and record manual evidence in [`sample_app_results.md`](sample_app_results.md) or the release PR comment when a release or PR changes the one-screen index or a visual reference artifact.
 - For visual reference index readability, open [`visual_reference_index.html`](visual_reference_index.html) at desktop and narrow widths and confirm the task picker, family cards, tag labels, artifact links, and contract-reader routes remain readable before using it as the release or design-review entrypoint.
+- For design review, start with [`visual_reference_index.html`](visual_reference_index.html) when you need to pick a lane. Use the helper-family picker for Tom Select-backed controls, native field wrappers, or table/token bridge questions, and use the task picker when the PR is primarily about release evidence, copy review, request-failure feedback, contract-reader review, or table/token ownership boundaries.
+- For uppercase microcopy review, inspect tags, metadata chips, optgroup labels, and similar short labels at desktop and narrow widths. Avoid widened letter spacing unless it clearly improves scanning without making dense labels harder to read.
+
+### Diagnostics and evidence lanes
+
 - For setup doctor output review, use [`setup_doctor_output_review.md`](setup_doctor_output_review.md) when the release or PR changes setup diagnostics or setup evidence. Treat it as a CLI diagnostic evidence lane, not a field UI visual reference or a source of runtime wording changes.
+- For initializer-driven class review, use [`configuration_wrapper_class_visual_reference.html`](configuration_wrapper_class_visual_reference.html) during release or design review when the change touches configured wrapper, label, hint, error, control, prefix, or suffix classes. Check the default, host-app, validation, and narrow viewport lanes; record the lane and viewport in [`sample_app_results.md`](sample_app_results.md)'s visual reference render matrix or in the release PR comment, and keep the evidence focused on class pass-through rather than helper behavior or bundled CSS framework support. Use [`styling_boundary.md`](styling_boundary.md) for the ownership boundary and source-of-truth wording when the evidence asks what Rails Fields Kit owns versus what the host app styles.
+
+### Contract-reader and ownership checks
+
 - For package-root contract reader review, first open [`public_api.md#javascript-exports`](public_api.md#javascript-exports) to confirm the current landed export and boundary. Then use [`visual_reference_index.html`](visual_reference_index.html)'s contract-reader task to choose the nearest landed lane by reviewer task: Tom Select rendered state, native wrapper/accessibility contract, or request-failure feedback. Do not copy the helper inventory into the index or treat proposal-only helpers as current API.
 - For shared metadata source pattern review, open [`shared_metadata_navigation.md`](shared_metadata_navigation.md) for the source-of-truth pattern, then inspect [`table_metadata_visual_reference.html`](table_metadata_visual_reference.html)'s shared source lane to confirm the visual boundary stays focused on derived current APIs rather than future registries or query execution.
 - For table group wrapper review, open [`table_group_html.md`](table_group_html.md) for the helper boundary, then inspect [`table_metadata_visual_reference.html`](table_metadata_visual_reference.html)'s group wrapper lane to confirm group label, helper label, hint copy, group-level attributes, and field-level `wrapper_html:` stay readable and separate at desktop and narrow widths.
+
+### Tom Select visual lanes
+
 - For README first field quickstart review, open [`tom_select_visual_reference.html`](tom_select_visual_reference.html) and inspect the idle `rfk_select` / server-rendered collection lane before looking at remote combobox, preload, token search, or create-on-the-fly states.
 - For selected preload restore or failure review, open [`tom_select_visual_reference.html`](tom_select_visual_reference.html) and inspect the `Selected Preload` and `Selected Preload Failure` lanes. Use the focused request-failure reference only when the review needs operation/status metadata or the `error_surface: true` slot.
 - For Turbo reconnect design review, open [`tom_select_turbo_reconnect_visual_reference.html`](tom_select_turbo_reconnect_visual_reference.html) and inspect the expected one-wrapper, ordinary settled, and duplicate-wrapper caution lanes. Use [`tom_select_turbo_lifecycle.md`](tom_select_turbo_lifecycle.md) and JavaScript checks for actual lifecycle behavior.
@@ -90,17 +106,26 @@ For event-driven host feedback lifecycle review, open [`tom_select_host_feedback
 - For explicit enum source and label fallback review, open [`tom_select_source_fallback_review.html`](tom_select_source_fallback_review.html) after checking [`enum_select.md`](enum_select.md) and [`controller_helpers.md#remote-option-label-fallback`](controller_helpers.md#remote-option-label-fallback). The artifact is a static visibility check for submitted-key source and display-only fallback, not a new API or endpoint behavior spec.
 - For normal collection-backed disabled option review, open [`tom_select_disabled_option_visual_reference.html`](tom_select_disabled_option_visual_reference.html) and inspect disabled option readability plus `option_html` metadata cues. Keep authorization, visibility policy, grouped choices, enum behavior, remote rich option rendering, and production CSS in their source docs or host-app review.
 - For `allow_clear` review, open [`tom_select_plugin_clearable_review.html`](tom_select_plugin_clearable_review.html) after the core Tom Select reference. Compare the single-select whole-field clear affordance against multi-item remove buttons at desktop and 390px-equivalent narrow width, and keep plugin styling, assets, events, selection mutation, and lifecycle behavior outside the static artifact.
-- For design review, start with [`visual_reference_index.html`](visual_reference_index.html) when you need to pick a lane. Use the helper-family picker for Tom Select-backed controls, native field wrappers, or table/token bridge questions, and use the task picker when the PR is primarily about release evidence, copy review, request-failure feedback, contract-reader review, or table/token ownership boundaries.
-- For uppercase microcopy review, inspect tags, metadata chips, optgroup labels, and similar short labels at desktop and narrow widths. Avoid widened letter spacing unless it clearly improves scanning without making dense labels harder to read.
+
+### Native helper visual lanes
+
 - For native helper accessibility-contract review, open [`native_field_visual_reference.html`](native_field_visual_reference.html), check the relevant wrapper / label / hint / error / generated-id lane in desktop and narrow viewport, then record the same lane name and viewport in [`sample_app_results.md`](sample_app_results.md) or the release PR comment.
 - For native helper browser-semantics review, open [`native_field_visual_reference.html`](native_field_visual_reference.html) and inspect the Browser semantics lane for search, email, URL, telephone, money, and percent metadata boundaries before treating any formatting, validation, masking, or autocomplete behavior as helper-owned.
 - For native helper wrapper review, use [`native_field_visual_reference.html`](native_field_visual_reference.html) to check label, hint, affix, required marker, validation, multiline textarea, noneditable, accessibility, browser semantics, generated-id, metadata and constraint attributes, and narrow viewport stress lanes without treating the static artifact as production CSS or runtime behavior.
 - For native constraint attribute review, use [`native_field_visual_reference.html`](native_field_visual_reference.html) to verify that `maxlength`, `pattern`, `inputmode`, and `autocomplete` remain ordinary native attributes. Browser validation copy, masking, formatting, normalization, and autocomplete policy stay host-app responsibilities.
-- For initializer-driven class review, use [`configuration_wrapper_class_visual_reference.html`](configuration_wrapper_class_visual_reference.html) during release or design review when the change touches configured wrapper, label, hint, error, control, prefix, or suffix classes. Check the default, host-app, validation, and narrow viewport lanes; record the lane and viewport in [`sample_app_results.md`](sample_app_results.md)'s visual reference render matrix or in the release PR comment, and keep the evidence focused on class pass-through rather than helper behavior or bundled CSS framework support. Use [`styling_boundary.md`](styling_boundary.md) for the ownership boundary and source-of-truth wording when the evidence asks what Rails Fields Kit owns versus what the host app styles.
+
+### Request-failure and host-feedback lanes
+
 - For request-failure feedback, use the index task picker or [`tom_select_request_failure_visual_reference.html`](tom_select_request_failure_visual_reference.html) to review the `error_surface: true` slot, duplicate object/method explicit id boundary, and operation/status metadata while keeping retry copy, reveal timing, and request lifecycle behavior with the host app.
 - For event-driven host feedback lifecycle, open [`tom_select_host_feedback_lifecycle_visual_reference.html`](tom_select_host_feedback_lifecycle_visual_reference.html) to review host-owned inline feedback, `detail.surface` placement, and follow-up clearing cues after checking the request-failure states.
+
+### Table, token, and saved-search boundaries
+
 - For table integration boundary checks, use the index family picker or task picker to choose between metadata-driven filters/editors, group wrapper boundaries, shared metadata source pattern, and saved-search token suggestion states.
 - For token suggestion behavior, delimiter visibility, and saved-search option shape, use [`token_suggestions.md`](token_suggestions.md) as the source of truth and treat the saved-search visual reference as a static review artifact.
+
+### Map maintenance
+
 - If a new visual reference is added, update this map, the HTML index, and the README docs map after the reference lands on `main`.
 - Keep map-only companion artifacts in this Markdown map and the package guard until they are promoted into the one-screen index or root inventory.
 - Do not use this index to document proposal-only helper names or unmerged feature lanes as current public API.
