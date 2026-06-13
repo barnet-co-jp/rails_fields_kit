@@ -14,7 +14,7 @@ This document lists the FormBuilder helpers provided by Rails Fields Kit.
 | Tag-style multiple selection or create-on-the-fly tags | `rfk_tags` | Optimized for tag entry and optional remote tag creation. |
 | Grouped `<optgroup>` choices | `rfk_grouped_select` | Keeps grouped collection structure explicit. |
 | A Rails enum attribute | `rfk_enum_select` | Uses the enum-backed attribute directly. |
-| A native browser input with shared wrapper, hint, error, affix, and accessibility behavior | `rfk_text_field`, `rfk_text_area`, `rfk_search_field`, or the matching native helper such as `rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, `rfk_money_field`, or `rfk_percent_field` | Stays in the ordinary HTML input flow while reusing Rails Fields Kit wrapper conventions. |
+| A native browser input with shared wrapper, hint, error, affix, and accessibility behavior | `rfk_text_field`, `rfk_text_area`, `rfk_search_field`, `rfk_password_field`, or the matching native helper such as `rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, `rfk_money_field`, or `rfk_percent_field` | Stays in the ordinary HTML input flow while reusing Rails Fields Kit wrapper conventions; use [`password_field.md`](password_field.md) for password-specific non-goals. |
 
 If the choice is mostly about who owns search semantics, use this rule of thumb: `rfk_select`, `rfk_multi_select`, `rfk_grouped_select`, and `rfk_enum_select` stay collection-first; `rfk_combobox` and `rfk_autocomplete` call remote endpoints for suggestions; `rfk_token_search` goes one step further by letting the host app parse submitted token text or build `params[:q]` later. When a native browser search input is enough, `rfk_search_field` stays in the native wrapper lane and does not call remote endpoints or take over token parsing.
 
@@ -280,7 +280,7 @@ These helpers use native HTML inputs while sharing the same wrapper, hint, error
 
 Rails Fields Kit does not currently provide dedicated `rfk_date_field`, `rfk_time_field`, or `rfk_color_field` helpers. When those browser-native controls already fit the host app, keep them on ordinary Rails helpers or host-app markup and reserve Rails Fields Kit native wrappers for fields that need the shared wrapper, affix, validation, or accessibility conventions listed below. A future helper proposal should justify the extra wrapper contract instead of assuming every native input type belongs in this gem.
 
-For a product-neutral visual comparison of representative native helper states, see [`native_field_visual_reference.html`](native_field_visual_reference.html).
+For a product-neutral visual comparison of representative native helper states, see [`native_field_visual_reference.html`](native_field_visual_reference.html). For password inputs, use [`password_field.md`](password_field.md) as the dedicated boundary note: Rails Fields Kit provides the native wrapper lane, while visibility toggles, strength meters, credential policy, authentication flow, and password-specific validation copy stay with the host app.
 
 If you want one representative lane before the per-helper snippets below, start with a wrapped text field and treat the rest of the native helper family as variations on that same shared contract.
 
