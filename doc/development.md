@@ -69,13 +69,15 @@ npm run check:js
 
 This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It starts with the smoke inventory guard, then runs lightweight Node sandbox checks through the same public import paths that CI uses.
 
-Read the `check:js` coverage as guard families rather than a complete script-by-script inventory:
+Read the `check:js` coverage as guard families. Do not treat this guide as the script membership source of truth:
 
 - package/import metadata: package `exports`, package-root named exports, callable contract-reader rows, the package-root default export, and the direct controller entrypoint
-- request lifecycle and event payloads: fixed query params, forwarded interaction events, request success / failure details, create request headers and response normalization, error-surface metadata, and Turbo lifecycle cleanup
+- request lifecycle and event payloads: fixed query params, Tom Select forwarded interaction event payloads, request success / failure details, create request headers and response normalization, error-surface metadata, Tom Select Turbo lifecycle behavior, and Turbo lifecycle cleanup
 - rendered text, option, and fallback semantics: label fallback, option value guards, render text fallback, render text accessibility boundaries, and escaping or live-region cues that should stay package-owned
 - package-root contract readers: selection state, plugin state, selected preload config, and similar read-only rendered-field helpers that inspect existing data without exposing Tom Select internals or adding mutation APIs
 - docs and smoke-inventory drift: runner membership, docs wording, and public JavaScript export documentation that should stay aligned without turning this guide, README, or `doc/public_api.md` into an exhaustive smoke inventory
+
+Within the request lifecycle family, keep the Tom Select forwarded interaction event payloads boundaries visible: `change` forwards the scalar value plus the normalized `values` array, single-value `clear` wraps Tom Select's scalar cleared value as `values: [""]`, and multiple-value `clear` keeps the empty array shape. This family also includes the Tom Select Turbo lifecycle smoke so the Tom Select Turbo lifecycle behavior remains covered alongside request abort, stale-response, and cleanup checks.
 
 Exact smoke script membership belongs to `scripts/check_javascript.mjs`, and `scripts/check_javascript_smoke_inventory.mjs` verifies that CI-owned `scripts/check_*.mjs` files are either run by `npm run check:js` or explicitly documented as standalone with a short reason. Update those sources first when adding, removing, or intentionally exempting a smoke; keep this section focused on the guard families and responsibility boundaries.
 
