@@ -18,6 +18,10 @@ module RailsFieldsKit
       rfk_native_field(method, :number_field, **options)
     end
 
+    def rfk_range_field(method, **options)
+      rfk_native_field(method, :range_field, **options)
+    end
+
     def rfk_money_field(method, currency: nil, **options)
       options[:inputmode] ||= "decimal"
       options[:prefix] = currency if currency
