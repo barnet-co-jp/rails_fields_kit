@@ -102,15 +102,13 @@ Notes:
 
 - [ ] Tom Select package installed
 - [ ] `import { TomSelectController } from "rails_fields_kit"` resolved
-- [ ] `import { nativeFieldAccessibilityContract } from "rails_fields_kit"` resolved
+- [ ] package-root helper imports needed by this release or narrow PR resolved from `rails_fields_kit`; choose current helper names from `doc/public_api.md#javascript-exports` instead of copying the full helper list here
 - [ ] `import TomSelectController from "rails_fields_kit/tom_select_controller"` resolved
 - [ ] documented controller registration succeeded
 - [ ] importmap pins resolved `rails_fields_kit` and `rails_fields_kit/tom_select_controller` when importmap was used
 - [ ] documented controller registration still worked from the existing Stimulus boot file after adding those importmap pins
-- [ ] at least one rendered native helper field was readable through `nativeFieldAccessibilityContract(element)` without adding a new package-root helper export
-- [ ] package-root helper lanes in release scope were selected from `doc/package_root_helper_release_evidence.md` and matched the current `doc/public_api.md#javascript-exports` helper list
-- [ ] when `tomSelectPluginContract(element)` was in release scope, the package-root import resolved and read-only plugin contract evidence was recorded with `doc/package_root_helper_release_evidence.md`, including `allow_clear` and explicit `plugins` boundaries without treating the helper as plugin execution
-- [ ] when `readRenderedSelectedPreloadConfig(element)` was in release scope, the package-root import resolved and the rendered selected preload config evidence was recorded using `doc/package_root_helper_release_evidence.md`
+- [ ] package-root helper lanes in release scope were selected from `doc/package_root_helper_release_evidence.md`, matched the current `doc/public_api.md#javascript-exports` helper list, and were recorded in the table below or a scoped PR / release comment
+- [ ] helper-specific evidence stayed in the package-root helper lane table or scoped evidence note instead of becoming new release-wide JavaScript setup requirements
 - [ ] Tom Select CSS loaded
 - [ ] browser console has no import errors
 
@@ -129,6 +127,8 @@ Tom Select environment reproducibility memo:
 Use this memo only to make release evidence reproducible. Tom Select package version, package manager, lockfile, CDN or pin source, plugin assets, and final CSS bundle choices remain host-app responsibilities as described in `doc/support_boundary.md`.
 
 Package-root helper lanes checked:
+
+Use this table only for helpers that are in the release or PR scope. Keep the current helper names and documented return-shape boundaries in `doc/public_api.md#javascript-exports`, and use `doc/package_root_helper_release_evidence.md` for the representative check shape. Do not turn this table into a full mirror of every current helper.
 
 | Helper | Representative field or selector | Result | Evidence notes |
 | --- | --- | --- | --- |
