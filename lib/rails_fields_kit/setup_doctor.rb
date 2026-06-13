@@ -67,7 +67,10 @@ module RailsFieldsKit
       "Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain."
     ].freeze
 
+    # Keep keyword initialization explicit because checks are constructed from named fields.
+    # rubocop:disable Style/RedundantStructKeywordInit
     Check = Struct.new(:key, :label, :status, :message, keyword_init: true)
+    # rubocop:enable Style/RedundantStructKeywordInit
 
     attr_reader :root
 

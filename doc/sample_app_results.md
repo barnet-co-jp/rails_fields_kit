@@ -4,15 +4,19 @@ Use this file to record manual verification results before publishing a release.
 
 Use the route map below to choose the evidence lane for the release or PR under review. Keep release-wide checks separate from feature-specific evidence; this file records what was manually verified, not a new release gate or runtime contract.
 
-| Review goal | Start with | Use when |
-| --- | --- | --- |
-| Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. |
-| JavaScript setup | Setup doctor checks, JavaScript setup checks, event checks, Turbo reconnect checks | The release touches setup visibility, package-root exports, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. |
-| Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, password field native wrapper checks, native wrapper customization checks | Native helper wrapper, password helper boundary, class, hint/error, affix, accessibility wiring, or browser semantics evidence changed. |
-| README first field quickstart evidence | `rfk_select` representative collection-backed single-value lane checks, Visual reference render checks | The README first field or quickstart sample needs endpoint-free, server-rendered collection evidence without mixing in setup/import, remote search, selected preload, create-on-the-fly, or token metadata lanes. |
-| Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. |
-| Remote lifecycle feedback | Selected preload representative lane checks, create-on-the-fly representative failure lane checks, visible feedback checks | Selected preload, remote search, create-on-the-fly, request-failure, or visible fallback behavior changed. |
-| Token and table metadata | Token suggestion and Ransack suggestion metadata checks, table metadata checks | Token suggestions, saved-search metadata, Ransack metadata, table filters, or cell editor metadata changed. |
+The route map is a triage aid. Start with release-wide confidence for release candidates, then add only the feature-specific lane that changed. A narrow PR can cite the relevant lane in a PR comment instead of filling every section here.
+
+| Review goal | Start with | Use when | Keep separate from |
+| --- | --- | --- | --- |
+| Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. | Feature-specific helper, visual, remote, token, or table lanes unless the release candidate explicitly includes them. |
+| JavaScript setup and package-root helper evidence | Setup doctor checks, JavaScript setup checks, package-root helper lanes checked, event checks, Turbo reconnect checks | The release touches setup visibility, package-root exports, read-only rendered-field helper evidence, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. | Native wrapper behavior, visual reference rendering, endpoint execution, or table metadata unless those lanes also changed. |
+| Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, password field native wrapper checks, native wrapper customization checks | Native helper wrapper, password helper boundary, class, hint/error, affix, accessibility wiring, or browser semantics evidence changed. | Tom Select remote lifecycle, package-root helper import checks, credential policy, or table persistence. |
+| README first field quickstart evidence | `rfk_select` representative collection-backed single-value lane checks, Visual reference render checks | The README first field or quickstart sample needs endpoint-free, server-rendered collection evidence without mixing in setup/import, remote search, selected preload, create-on-the-fly, or token metadata lanes. | Setup/import verification, remote search, selected preload, create-on-the-fly, token metadata, or release-wide readiness. |
+| Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. | Runtime helper behavior, production CSS approval, sample-app field behavior, or CI success as visual approval. |
+| Remote lifecycle feedback | Selected preload representative lane checks, create-on-the-fly representative failure lane checks, visible feedback checks | Selected preload, remote search, create-on-the-fly, request-failure, or visible fallback behavior changed. | Setup/import checks, static visual reference approval, endpoint authorization policy, or retry UI ownership unless those surfaces changed. |
+| Token and table metadata | Token suggestion and Ransack suggestion metadata checks, table metadata checks | Token suggestions, saved-search metadata, Ransack metadata, table filters, or cell editor metadata changed. | Query execution, parser semantics, table preference persistence, visual reference rendering, or native wrapper evidence unless those lanes also changed. |
+
+When adding a new evidence lane, place it near the closest feature-specific section and update this route map only when reviewers need a new starting point. Do not turn a feature-specific lane into a release-wide requirement without a separate release policy decision.
 
 ## Target release
 
@@ -86,9 +90,11 @@ Result:
 - [ ] setup doctor ran after generator setup without changing files
 - [ ] initializer visibility was recorded
 - [ ] importmap pin visibility was recorded when `config/importmap.rb` was present, or the non-importmap/manual status was recorded without treating bundler apps as failures
+- [ ] representative Stimulus registration evidence was recorded as either `[OK]` advisory source visibility or `[MANUAL]` host-app follow-up when registration evidence was in scope
+- [ ] `[OK] Stimulus registration` was not treated as proof of the host app's final Stimulus boot policy or every possible controller registry
 - [ ] setup doctor output readability was checked with `doc/setup_doctor_output_review.md` when diagnostic scanability or importmap target mismatch evidence was in scope
 - [ ] evidence notes distinguish setup behavior from CLI output readability evidence, instead of treating this section as a source of new doctor behavior or output wording
-- [ ] manual checklist items for Tom Select package install, Stimulus registration, CSS import, and bundler aliases were reviewed as host-app responsibilities rather than automatic pass/fail gates
+- [ ] manual checklist items for Tom Select package install, Stimulus registration, CSS import, and bundler aliases were reviewed as host-app responsibilities rather than automatic pass/fail gates, with Stimulus registration evidence recorded above as either an `[OK]` advisory signal or a `[MANUAL]` follow-up rather than proof of final boot policy
 
 Notes:
 
@@ -103,6 +109,7 @@ Notes:
 - [ ] documented controller registration still worked from the existing Stimulus boot file after adding those importmap pins
 - [ ] at least one rendered native helper field was readable through `nativeFieldAccessibilityContract(element)` without adding a new package-root helper export
 - [ ] package-root helper lanes in release scope were selected from `doc/package_root_helper_release_evidence.md` and matched the current `doc/public_api.md#javascript-exports` helper list
+- [ ] when `tomSelectPluginContract(element)` was in release scope, the package-root import resolved and read-only plugin contract evidence was recorded with `doc/package_root_helper_release_evidence.md`, including `allow_clear` and explicit `plugins` boundaries without treating the helper as plugin execution
 - [ ] when `readRenderedSelectedPreloadConfig(element)` was in release scope, the package-root import resolved and the rendered selected preload config evidence was recorded using `doc/package_root_helper_release_evidence.md`
 - [ ] Tom Select CSS loaded
 - [ ] browser console has no import errors
@@ -110,6 +117,16 @@ Notes:
 Notes:
 
 README first field quickstart evidence does not belong in this setup/import section unless the PR also changes setup visibility. Record the rendered field behavior in the `rfk_select` representative collection-backed single-value lane below, and use this section only for import, registration, CSS, or package-root helper evidence.
+
+Tom Select environment reproducibility memo:
+
+| Item | Recorded value | Notes |
+| --- | --- | --- |
+| Package manager / install route |  | Record the sample app route used for this check, such as yarn, npm, pnpm, importmap, or an existing app bundle. This is an observed setup note, not a Rails Fields Kit package-manager policy. |
+| Tom Select package version or pin |  | Record the version, pin, or source visible to the sample app when it was checked. This is not a Rails Fields Kit-owned Tom Select version requirement. |
+| CSS import or asset route |  | Record the CSS route that made Tom Select styles visible, such as `tom-select/dist/css/tom-select.css`, a bundled stylesheet, or an app-owned asset. This is not a Rails Fields Kit CSS bundle or plugin asset policy. |
+
+Use this memo only to make release evidence reproducible. Tom Select package version, package manager, lockfile, CDN or pin source, plugin assets, and final CSS bundle choices remain host-app responsibilities as described in `doc/support_boundary.md`.
 
 Package-root helper lanes checked:
 

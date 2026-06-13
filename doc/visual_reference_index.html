@@ -64,6 +64,11 @@
         line-height: 1.08;
       }
 
+      h2 {
+        font-size: 1.35rem;
+        line-height: 1.2;
+      }
+
       h3 {
         font-size: 1.02rem;
         line-height: 1.25;
@@ -82,6 +87,10 @@
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
+      }
+
+      a {
+        color: inherit;
       }
 
       .hero-links a,
@@ -162,11 +171,6 @@
         margin: 28px 0 14px;
       }
 
-      .section-heading h2 {
-        font-size: 1.35rem;
-        line-height: 1.2;
-      }
-
       .section-heading p { max-width: 760px; }
 
       .family-grid,
@@ -218,12 +222,15 @@
         color: var(--warning);
       }
 
-      .task-card header {
+      .task-card header,
+      .family-card header,
+      .reference-card header {
         display: grid;
         gap: 8px;
       }
 
-      .task-card .task-links a {
+      .task-card .task-links a,
+      .family-card .family-links a {
         flex: 1 1 190px;
         text-align: center;
       }
@@ -265,7 +272,7 @@
         }
 
         h1 { font-size: 1.78rem; }
-        .section-heading h2 { font-size: 1.18rem; }
+        h2 { font-size: 1.18rem; }
 
         .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
@@ -340,6 +347,7 @@
           <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
           <a href="tom_select_disabled_option_visual_reference.html">Disabled options</a>
           <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
+          <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a>
           <a href="tom_select_error_surface_contract_visual_reference.html">Error surface contract</a>
           <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
           <a href="native_field_visual_reference.html">Native helper narrow stress</a>
@@ -364,18 +372,19 @@
                 <span class="tag info">remote states</span>
               </div>
               <h3>Search-backed controls</h3>
-              <p>Start here for selects, comboboxes, autocomplete, tags, token search, request feedback, and configured helper copy.</p>
+              <p>Start here for selects, comboboxes, autocomplete, tags, token search, request feedback, host-owned feedback lifecycle, and configured helper copy.</p>
             </header>
             <ul>
               <li>Use the core states for layout and viewport checks.</li>
               <li>Use disabled option and Turbo reconnect lanes only when collection metadata or reconnect appearance is the review topic.</li>
-              <li>Use focused lanes only when error feedback or copy overrides are the review topic.</li>
+              <li>Use focused lanes only when error feedback, host-owned clearing cues, or copy overrides are the review topic.</li>
             </ul>
             <nav class="family-links" aria-label="Tom Select helper family references">
               <a href="tom_select_visual_reference.html">Core states</a>
               <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
               <a href="tom_select_disabled_option_visual_reference.html">Disabled options</a>
               <a href="tom_select_request_failure_visual_reference.html">Request feedback</a>
+              <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a>
               <a href="tom_select_error_surface_contract_visual_reference.html">Error surface contract</a>
               <a href="tom_select_text_override_visual_reference.html">Copy overrides</a>
             </nav>
@@ -479,15 +488,17 @@
                 <span class="tag info">feedback</span>
               </div>
               <h3>Request-failure feedback</h3>
-              <p>Use when a PR touches `error_surface: true`, load failure copy, selected-load failure, or operation metadata.</p>
+              <p>Use when a PR touches `error_surface: true`, load failure copy, selected-load failure, operation metadata, or host-owned feedback clearing cues.</p>
             </header>
             <ul>
               <li>Start with request failures for the focused error-surface lane.</li>
+              <li>Open host feedback lifecycle when the review includes visible host feedback or follow-up clearing states.</li>
               <li>Open text overrides only when configured no-results, loading, or create copy is part of the review.</li>
               <li>Keep retry actions, reveal timing, and request lifecycle behavior with the host app.</li>
             </ul>
             <nav class="task-links" aria-label="Request-failure feedback references">
               <a href="tom_select_request_failure_visual_reference.html">Primary: request failures</a>
+              <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a>
               <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
             </nav>
           </article>
@@ -512,6 +523,7 @@
               <a href="tom_select_visual_reference.html">Tom Select rendered lane</a>
               <a href="native_accessibility_contract_visual_reference.html">Native wrapper lane</a>
               <a href="tom_select_request_failure_visual_reference.html">Request feedback lane</a>
+              <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lane</a>
             </nav>
           </article>
 
@@ -610,6 +622,23 @@
               <li>Keep default visible messages, retry actions, reveal timing, and request behavior with the host app.</li>
             </ul>
             <a class="reference-link" href="tom_select_request_failure_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">host feedback</span>
+                <span class="tag info">clearing cues</span>
+              </div>
+              <h3>Tom Select host feedback lifecycle</h3>
+              <p>Host-owned inline feedback, `detail.surface` placement, and follow-up clearing cues after request-failure events.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect visible host feedback and clearing states without treating default copy, retry UI, or request lifecycle behavior as Rails Fields Kit responsibilities?</p>
+            <ul>
+              <li>Compare current failure feedback, follow-up clearing state, and boundary notes after request-failure events.</li>
+              <li>Keep visible copy, retry UI, persistence, and request lifecycle behavior with the host app.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_host_feedback_lifecycle_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
