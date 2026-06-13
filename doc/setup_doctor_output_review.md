@@ -179,12 +179,17 @@ Review notes:
 
 ## Narrow Evidence Checklist
 
-Use this checklist when recording release or PR evidence:
+Use this checklist when recording release or PR evidence. Work from the status meaning first, then check advisory ownership, wrapping readability, and the evidence recording context.
+
+### Status Interpretation
 
 - [ ] The status legend appears before individual check lines.
 - [ ] `[OK]`, `[MISSING]`, and `[MANUAL]` labels are visually easy to distinguish in the recorded output.
 - [ ] The evidence note distinguishes `[MISSING]` action items from `[MANUAL]` host-app checks.
-- [ ] Missing importmap target output includes both expected and observed target values.
+- [ ] Manual checklist lines are not described as failed automatic checks.
+
+### Advisory Ownership
+
 - [ ] Tom Select package evidence is described as advisory dependency visibility, not package/version policy.
 - [ ] Stimulus registration evidence distinguishes detected advisory signals from manual host-app boot checks.
 - [ ] `[OK] Stimulus registration` is not described as Rails Fields Kit owning the app boot file, controller registry shape, or `Application.start()` policy.
@@ -192,9 +197,15 @@ Use this checklist when recording release or PR evidence:
 - [ ] CSS import evidence distinguishes detected advisory signals from manual host-app stylesheet checks.
 - [ ] `[OK] CSS import` is not described as Rails Fields Kit owning stylesheet bundling, theme policy, or production CSS.
 - [ ] `[MANUAL] CSS import` is not described as a failed automatic check unless a separate issue changes setup doctor behavior.
+
+### Wrapping Evidence
+
+- [ ] Missing importmap target output includes both expected and observed target values.
 - [ ] Narrow-width evidence says whether the output was reviewed in a standard terminal width, a wrapped Markdown/code-block view, or both.
 - [ ] Wrapped mismatch lines still make the expected and observed target relationship readable without changing setup doctor wording.
-- [ ] Manual checklist lines are not described as failed automatic checks.
+
+### Recording Context
+
 - [ ] Evidence notes say whether the app under review is importmap, jsbundling, bundler-managed JavaScript, or another setup path.
 - [ ] Any deferred follow-up is recorded as docs/setup policy work, not as a visual reference failure.
 
