@@ -145,6 +145,8 @@ rfk_find_with(
   id_param: :id,
   ids_param: :ids,
   scope: -> { current_account.customers },
+  order: { name: :asc },
+  preserve_order: true,
   wrap: "option"
 )
 ```
@@ -183,6 +185,10 @@ rfk_find_with(
 ```
 
 For multiple selected values, `selected_multiple_param:` changes the request key only; the value can still be comma-separated, such as `customer_ids=1,2,3`, and `rfk_find_with ids_param:` reads that key.
+
+By default, multiple selected preload responses keep the relation's natural order or the endpoint's `order:` option. Use `preserve_order: true` only when the response array should follow the incoming selected IDs, such as `ids=3,1,2` or parsed Rails array params. In that mode, Rails Fields Kit fetches the scoped records normally, skips missing IDs, and then sorts the returned records in Ruby by the normalized request values. This avoids database-specific ordering SQL and does not change authorization, scoping, query execution, or Tom Select runtime behavior.
+
+If `order:` and `preserve_order: true` are both present, `order:` still shapes the relation before loading, but the final selected preload payload is ordered by the incoming IDs. Use one of those policies per endpoint when possible: `order:` for relation-owned ordering, or `preserve_order: true` for saved-value display order.
 
 The response can be a single option, a wrapped option, an array of options, or a wrapped collection depending on the request. See [Output shape](#output-shape) for the supported collection wrappers.
 
