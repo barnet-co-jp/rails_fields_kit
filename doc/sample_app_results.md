@@ -107,7 +107,7 @@ Notes:
 - [ ] documented controller registration succeeded
 - [ ] importmap pins resolved `rails_fields_kit` and `rails_fields_kit/tom_select_controller` when importmap was used
 - [ ] documented controller registration still worked from the existing Stimulus boot file after adding those importmap pins
-- [ ] package-root helper lanes in release scope were selected from `doc/package_root_helper_release_evidence.md`, matched the current `doc/public_api.md#javascript-exports` helper list, and were recorded in the table below or a scoped PR / release comment
+- [ ] package-root helper lanes in release scope were selected from `doc/package_root_helper_release_evidence.md` and matched the current `doc/public_api.md#javascript-exports` helper list; record scoped evidence in the table below or a PR / release comment
 - [ ] helper-specific evidence stayed in the package-root helper lane table or scoped evidence note instead of becoming new release-wide JavaScript setup requirements
 - [ ] Tom Select CSS loaded
 - [ ] browser console has no import errors
