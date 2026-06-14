@@ -23,7 +23,7 @@ This document summarizes the public API intended to be stable for the 0.1.x seri
 | Area | Current public surface | Detailed docs |
 | --- | --- | --- |
 | Ruby setup | `require "rails_fields_kit"`, `RailsFieldsKit.configure`, configuration accessors | [`configuration.md`](configuration.md) |
-| FormBuilder helpers | Tom Select-backed helpers, table metadata helpers, and native wrapper helpers | [`field_helpers.md`](field_helpers.md), [`select_migration.md`](select_migration.md), [`enum_select.md`](enum_select.md), [`textarea_autosize.md`](textarea_autosize.md), [`range_field.md`](range_field.md) |
+| FormBuilder helpers | Tom Select-backed helpers, table metadata helpers, and native wrapper helpers | [`field_helpers.md`](field_helpers.md), [`select_migration.md`](select_migration.md), [`enum_select.md`](enum_select.md), [`textarea_autosize.md`](textarea_autosize.md), [`range_field.md`](range_field.md), [`native_date_time_color_fields.md`](native_date_time_color_fields.md) |
 | Controller helpers | Remote option JSON, selected preload, create-on-the-fly, and token suggestion endpoint helpers | [`controller_helpers.md`](controller_helpers.md) |
 | Token suggestions | Builder objects for token suggestion metadata and Ransack-compatible suggestion metadata | [`token_suggestions.md`](token_suggestions.md), [`ransack_suggestions.md`](ransack_suggestions.md) |
 | Table metadata | Metadata objects, collector methods, call-spec helpers, renderer helpers, and custom renderer registry mapping for optional table integrations | [`table_adapters.md`](table_adapters.md) |
@@ -80,6 +80,10 @@ Native input helpers:
 - `rfk_text_area`
 - `rfk_number_field`
 - `rfk_range_field`
+- `rfk_date_field`
+- `rfk_time_field`
+- `rfk_datetime_local_field`
+- `rfk_color_field`
 - `rfk_money_field`
 - `rfk_percent_field`
 - `rfk_email_field`
@@ -88,12 +92,13 @@ Native input helpers:
 - `rfk_search_field`
 - `rfk_password_field`
 
-Native wrapper helpers pass ordinary Rails/native input attributes such as `maxlength`, `minlength`, `pattern`, `required`, `autocomplete`, and `inputmode` to the rendered input through top-level field options or `html:`. Range fields also pass ordinary range attributes such as `min`, `max`, and `step` through the same Rails/native input path. Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around that input; character counters, masking, browser validation-message policy, browser validation behavior, server-side validation rules, textarea autosize measurement, range live preview behavior, Turbo reconnect sizing, production CSS, and manual-resize policy remain host-app responsibility.
+Native wrapper helpers pass ordinary Rails/native input attributes such as `maxlength`, `minlength`, `pattern`, `required`, `autocomplete`, and `inputmode` to the rendered input through top-level field options or `html:`. Date, time, datetime-local, color, and range fields also pass ordinary native attributes such as `min`, `max`, and `step` through the same Rails/native input path. Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around that input; character counters, masking, browser picker behavior, browser validation-message policy, browser validation behavior, server-side validation rules, textarea autosize measurement, range live preview behavior, Turbo reconnect sizing, production CSS, timezone conversion, and manual-resize policy remain host-app responsibility.
 
 See [`field_helpers.md`](field_helpers.md) for details.
 See [`grouped_select.md`](grouped_select.md) for the current collection-backed `<optgroup>` boundary and the separation from remote workflows or future optgroup metadata work.
 See [`textarea_autosize.md`](textarea_autosize.md) for the current `rfk_text_area` autosize boundary and host-app-owned enhancement guidance.
 See [`range_field.md`](range_field.md) for the current `rfk_range_field` thin wrapper boundary and range-specific non-goals.
+See [`native_date_time_color_fields.md`](native_date_time_color_fields.md) for the current `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, and `rfk_color_field` thin wrapper boundary.
 See [`password_field.md`](password_field.md) for the current `rfk_password_field` thin wrapper boundary and password-specific non-goals.
 See [`select_migration.md`](select_migration.md) for a practical server-rendered `collection_select` to `rfk_select` migration pattern.
 See [`enum_select.md`](enum_select.md) for the `rfk_enum_select` explicit `enum:` hash boundary, including keys-as-submitted-values behavior and the non-goal boundary around arbitrary label/value DSLs or remote enum option lookup.
