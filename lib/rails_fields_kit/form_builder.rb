@@ -22,6 +22,22 @@ module RailsFieldsKit
       rfk_native_field(method, :range_field, **options)
     end
 
+    def rfk_date_field(method, **options)
+      rfk_native_field(method, :date_field, **options)
+    end
+
+    def rfk_time_field(method, **options)
+      rfk_native_field(method, :time_field, **options)
+    end
+
+    def rfk_datetime_local_field(method, **options)
+      rfk_native_field(method, :datetime_local_field, **options)
+    end
+
+    def rfk_color_field(method, **options)
+      rfk_native_field(method, :color_field, **options)
+    end
+
     def rfk_money_field(method, currency: nil, **options)
       options[:inputmode] ||= "decimal"
       options[:prefix] = currency if currency
@@ -422,7 +438,7 @@ module RailsFieldsKit
       selected_choices.map(&:second)
     end
 
-    def rfk_normalize_collection(collection, value_method:, label_method:, disabled: nil, option_html: {})
+    def rfk_normalize_collection(collection, value_method:, label_method:)
       disabled_values = Array(disabled).map(&:to_s)
 
       case collection
