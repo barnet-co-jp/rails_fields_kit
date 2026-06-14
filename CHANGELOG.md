@@ -21,7 +21,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 #### FormBuilder helpers
 
 - `rfk_enum_select` now has a focused explicit `enum:` hash guide for Rails enum-shaped sources. Hash keys remain the submitted values, labels stay on the model I18n / humanized-key path, and arbitrary label/value DSLs, remote enum option lookup, and PORO enum adapters remain outside the current public surface.
-- `rfk_password_field` now provides a thin native password input wrapper with the same label, hint, error, affix, pass-through option, and accessibility wiring boundaries as the other native helpers. Password visibility toggles, strength meters, credential policy, autocomplete policy, authentication workflow, and credential storage remain host-app responsibilities.
+- `rfk_password_field` now provides a thin native password input wrapper with the same label, hint, error, affix, pass-through option, and accessibility wiring boundaries as the other native helpers. Password visibility toggles, strength meters, credential policy, authentication workflow, and credential storage remain host-app responsibilities.
 
 #### Token search and suggestion metadata
 
@@ -50,7 +50,9 @@ The detailed entries remain the exhaustive source of truth for release review. K
 
 - `tomSelectTextOverrideContract(element)` from the package root for host-app scripts that need to read rendered Tom Select text override values without reaching into the Stimulus controller instance.
 - `tomSelectPluginContract(element)` from the package root for host-app scripts that need to read rendered Tom Select plugin data, including the effective plugin list and derived clear/remove flags, without owning plugin assets, control styling, selection mutation, or Tom Select lifecycle behavior.
+- `tomSelectSelectionContract(element)` from the package root for host-app scripts that need to read initialized Tom Select-backed field selection values on demand, without mutating selections, exposing Tom Select internals, or owning validation feedback.
 - `tomSelectRequestContract(element)` from the package root for host-app scripts that need to read rendered request endpoint and parameter config, including `url`, `selectedUrl`, `createUrl`, `queryParam`, `selectedParam`, `selectedMultipleParam`, `createParam`, `minLength`, and `errorSurfaceId`, without executing requests, authorizing endpoints, or owning visible feedback.
+- `readRenderedErrorSurface(element)` from the package root for host-app scripts that need to resolve the rendered opt-in request-failure placeholder for a Tom Select-backed field, without creating feedback, executing requests, retrying failures, or owning visible copy.
 - `nativeFieldAccessibilityContract(element)` from the package root for host-app scripts that need to read rendered native input accessibility wiring, including the resolved label association, without taking over id generation, label text, validation messages, focus management, or visible feedback.
 - `readRenderedSelectedPreloadConfig(element)` from the package root for host-app scripts that need to read rendered `selected_url:` config values without executing selected preload requests, owning visible fallback copy, or adding retry UI to the gem.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so generated endpoint actions can match custom routes.
