@@ -19,6 +19,7 @@ Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public
 - `tomSelectPluginContract(element)` for reading rendered Tom Select plugin data, including the effective plugin list and derived clear/remove flags, from package-root JavaScript imports.
 - `tomSelectSelectionContract(element)` for reading initialized Tom Select-backed field selection values on demand from package-root JavaScript imports without exposing Tom Select internals or mutating selections.
 - `tomSelectRequestContract(element)` for reading rendered request endpoint and parameter config from package-root JavaScript imports without executing remote requests.
+- `readRenderedErrorSurface(element)` for resolving a rendered opt-in request-failure placeholder from package-root JavaScript imports without creating feedback or retry UI.
 - `nativeFieldAccessibilityContract(element)` for reading rendered native input accessibility wiring and label association from package-root JavaScript imports.
 - `readRenderedSelectedPreloadConfig(element)` for reading rendered selected preload config values from package-root JavaScript imports without executing preload requests.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so controller helpers can match custom routes.
@@ -83,6 +84,7 @@ JavaScript package-root exports:
 - `tomSelectPluginContract(element)` for rendered Tom Select plugin data: `plugins`, `hasClearButton`, and `hasRemoveButton`
 - `tomSelectSelectionContract(element)` for initialized Tom Select selection state: `values`
 - `tomSelectRequestContract(element)` for rendered request endpoint and parameter config: `url`, `selectedUrl`, `createUrl`, `queryParam`, `selectedParam`, `selectedMultipleParam`, `createParam`, `minLength`, and `errorSurfaceId`
+- `readRenderedErrorSurface(element)` for resolving the rendered opt-in request-failure placeholder element referenced by `errorSurfaceId`
 - `readRenderedSelectedPreloadConfig(element)` for rendered selected preload config values: `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`
 - `nativeFieldAccessibilityContract(element)` for rendered native input accessibility wiring: `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, and `wrapperElement`
 
@@ -122,10 +124,11 @@ Before publishing, also confirm:
 - `doc/sample_app_results.md` is completed for the same branch head.
 - documented JavaScript import paths resolve in the sample app.
 - native password field checks stay limited to wrapper, label, hint, error, affix, pass-through option, and accessibility wiring; password visibility toggles, strength meters, credential policy, autocomplete policy, authentication workflow, and credential storage remain host-app-owned.
-- package-root helper exports such as `tomSelectTextOverrideContract(element)`, `tomSelectPluginContract(element)`, `tomSelectSelectionContract(element)`, `tomSelectRequestContract(element)`, `readRenderedSelectedPreloadConfig(element)`, and `nativeFieldAccessibilityContract(element)` can be imported from `rails_fields_kit` when that release surface is in scope.
+- package-root helper exports such as `tomSelectTextOverrideContract(element)`, `tomSelectPluginContract(element)`, `tomSelectSelectionContract(element)`, `tomSelectRequestContract(element)`, `readRenderedErrorSurface(element)`, `readRenderedSelectedPreloadConfig(element)`, and `nativeFieldAccessibilityContract(element)` can be imported from `rails_fields_kit` when that release surface is in scope.
 - Tom Select plugin contract checks confirm the rendered effective plugin list and derived clear/remove flags without moving plugin asset loading, control styling, selection mutation, empty-state copy, Tom Select plugin objects, or Tom Select lifecycle into the package.
 - Tom Select selection contract checks confirm initialized field values through the read-only `values` array without moving selection mutation, hidden fields, event dispatch, validation feedback, request execution, or Tom Select instance lifecycle into the package.
 - Tom Select request contract checks confirm rendered request endpoint and parameter config without moving request execution, endpoint authorization, query parsing, visible feedback, retry UI, or pagination policy into the package.
+- error surface reader checks confirm a rendered opt-in placeholder can be resolved through `readRenderedErrorSurface(element)` without moving visible copy, validation policy, retry UI, request execution, authorization, or fallback rendering into the package.
 - native accessibility contract checks confirm rendered `aria-describedby` ids and resolved label / hint / error / wrapper elements without moving id generation, label text, validation UI, or focus management into the package.
 - remote search and selected preload wrappers still match `doc/controller_helpers.md` without turning create-on-the-fly response contracts, pagination metadata, or arbitrary response adapters into gem-owned behavior.
 - selected preload config reader checks stay limited to rendered config inspection; request execution and visible fallback evidence stay with the selected preload behavior lane.
@@ -158,6 +161,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 - `tomSelectPluginContract(element)` for rendered Tom Select plugin data and derived clear/remove flags
 - `tomSelectSelectionContract(element)` for initialized Tom Select selection state reads
 - `tomSelectRequestContract(element)` for rendered request endpoint and parameter config without executing remote requests
+- `readRenderedErrorSurface(element)` for resolving rendered opt-in request-failure placeholders
 - `readRenderedSelectedPreloadConfig(element)` for rendered selected preload config reads
 - `nativeFieldAccessibilityContract(element)` for rendered native input accessibility wiring and label association
 - controller helper `action:` support, selected preload array params, and remote collection wrappers such as `{ options: [...] }` and `{ results: [...] }`
