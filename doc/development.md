@@ -129,6 +129,10 @@ For review queue triage and release prep, confirm these current signals together
 - whether the PR branch is behind, diverged, or superseded by a replacement PR
 - the base branch freshness, especially after recent `main` merges that touched nearby docs, specs, package metadata, or public API wording
 
+When a replacement PR supersedes an older PR, leave the older PR with enough reviewer-facing context to avoid duplicate review effort: link the replacement, summarize whether the old branch should be closed, and call out any human decision that still belongs on the old PR. If the older PR cannot be closed safely because the replacement changes scope, risk, or public API surface, leave both open and record the reason in the newer PR's Notes.
+
+When multiple open PRs close the same issue, do not treat that as an automatic merge or close signal. Pick a single active candidate only when the scope, target issue, and review status make the choice clear; otherwise keep the duplicate closing PRs visible for human review and note the overlap in each affected PR's Notes.
+
 Keep this as a manual queue hygiene guard. Do not add a GitHub API-dependent CI job, automatic branch refresh, force push, stale PR cleanup, or merge decision automation unless release planning explicitly accepts that larger devops surface.
 
 ## Release-related checks
