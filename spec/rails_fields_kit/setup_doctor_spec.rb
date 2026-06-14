@@ -79,6 +79,77 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
     end
   end
 
+  it "keeps checks, report_lines, and run as a read-only diagnostic surface" do
+    Dir.mktmpdir do |root|
+      doctor = described_class.new(root: root)
+      output = StringIO.new
+
+      checks = doctor.checks
+      expect(checks).to all(be_a(described_class::Check))
+      expect(checks.map(&:key)).to include(:initializer, :importmap, :tom_select_package, :css_import)
+      expect(checks.map(&:status)).to include(:missing, :manual)
+      checks.each do |check|
+        expect(check.key).to be_a(Symbol)
+        expect(check.label).to be_a(String)
+        expect(check.status).to be_a(Symbol)
+        expect(check.message).to be_a(String)
+      end
+
+      report_lines = doctor.report_lines
+      expect(report_lines).to all(be_a(String))
+      expect(report_lines).to include("Rails Fields Kit setup doctor")
+      expect(report_lines).to include(a_string_matching(/\[MISSING\] Initializer:/))
+      expect(report_lines).to include(a_string_matching(/\[MANUAL\] Importmap pins:/))
+
+      expect(doctor.run(io: output)).to eq(true)
+      expect(output.string).to eq(report_lines.join("\n") + "\n")
+    end
+  end
+
+  it "prints machine-readable JSON without turning manual checks into failures" do
+    Dir.mktmpdir do |root|
+      write_file(root, "config/initializers/rails_fields_kit.rb")
+      output = StringIO.new
+
+      expect(described_class.new(root: root).run(io: output, format: :json)).to eq(true)
+      payload = JSON.parse(output.string)
+
+      expect(payload).to include(
+        "schema_version" => 1,
+        "tool" => "rails_fields_kit:doctor"
+      )
+      expect(payload.fetch("summary")).to eq(
+        "ok" => 1,
+        "missing" => 0,
+        "manual" => 5
+      )
+
+      initializer = payload.fetch("checks").find { |check| check.fetch("key") == "initializer" }
+      importmap = payload.fetch("checks").find { |check| check.fetch("key") == "importmap" }
+
+      expect(initializer).to include(
+        "label" => "Initializer",
+        "status" => "ok",
+        "manual" => false,
+        "message" => "Found config/initializers/rails_fields_kit.rb."
+      )
+      expect(importmap).to include(
+        "label" => "Importmap pins",
+        "status" => "manual",
+        "manual" => true
+      )
+      expect(output.string).not_to include("[OK] Initializer")
+    end
+  end
+
+  it "rejects unsupported setup doctor output formats" do
+    Dir.mktmpdir do |root|
+      expect {
+        described_class.new(root: root).run(io: StringIO.new, format: :xml)
+      }.to raise_error(ArgumentError, /Unsupported setup doctor format/)
+    end
+  end
+
   it "keeps Tom Select package visibility manual when package.json is absent" do
     Dir.mktmpdir do |root|
       package_check = check_for(described_class.new(root: root), :tom_select_package)
