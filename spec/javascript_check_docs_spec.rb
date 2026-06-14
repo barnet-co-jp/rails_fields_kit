@@ -40,6 +40,7 @@ RSpec.describe "JavaScript check documentation" do
       "direct contract helper exports smoke" => "direct contract helper import wiring",
       "Tom Select query params smoke" => "Tom Select fixed query params",
       "Tom Select interaction events smoke" => "Tom Select forwarded interaction and request event payloads",
+      "Tom Select selection contract smoke" => "Tom Select selected-value contract behavior",
       "Tom Select create headers and response normalization smoke" => "Tom Select create-on-the-fly JSON request headers and success response normalization",
       "Tom Select error surface smoke" => "Tom Select error-surface metadata",
       "Tom Select Turbo lifecycle smoke" => "Tom Select Turbo lifecycle behavior",
@@ -48,7 +49,6 @@ RSpec.describe "JavaScript check documentation" do
       "Tom Select render text fallback smoke" => "Tom Select render text fallback rendering",
       "Tom Select render text accessibility smoke" => "Tom Select render text accessibility boundaries",
       "Tom Select plugin contract smoke" => "Tom Select plugin contract reading",
-      "native affix contract smoke" => "native affix contract smoke",
       "selected preload config contract smoke" => "selected preload config reading"
     }
 
