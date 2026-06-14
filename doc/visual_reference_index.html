@@ -64,6 +64,11 @@
         line-height: 1.08;
       }
 
+      h2 {
+        font-size: 1.35rem;
+        line-height: 1.2;
+      }
+
       h3 {
         font-size: 1.02rem;
         line-height: 1.25;
@@ -83,6 +88,8 @@
         flex-wrap: wrap;
         gap: 10px;
       }
+
+      a { color: inherit; }
 
       .hero-links a,
       .quick-list a,
@@ -162,11 +169,6 @@
         margin: 28px 0 14px;
       }
 
-      .section-heading h2 {
-        font-size: 1.35rem;
-        line-height: 1.2;
-      }
-
       .section-heading p { max-width: 760px; }
 
       .family-grid,
@@ -218,12 +220,15 @@
         color: var(--warning);
       }
 
-      .task-card header {
+      .task-card header,
+      .family-card header,
+      .reference-card header {
         display: grid;
         gap: 8px;
       }
 
-      .task-card .task-links a {
+      .task-card .task-links a,
+      .family-card .family-links a {
         flex: 1 1 190px;
         text-align: center;
       }
@@ -265,8 +270,7 @@
         }
 
         h1 { font-size: 1.78rem; }
-        .section-heading h2 { font-size: 1.18rem; }
-
+        h2 { font-size: 1.18rem; }
         .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
         .family-grid,
@@ -342,6 +346,7 @@
           <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
           <a href="tom_select_disabled_option_visual_reference.html">Disabled options</a>
           <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
+          <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a>
           <a href="tom_select_error_surface_contract_visual_reference.html">Error surface contract</a>
           <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
           <a href="native_field_visual_reference.html">Native helper narrow stress</a>
@@ -366,18 +371,19 @@
                 <span class="tag info">remote states</span>
               </div>
               <h3>Search-backed controls</h3>
-              <p>Start here for selects, comboboxes, autocomplete, tags, token search, request feedback, and configured helper copy.</p>
+              <p>Start here for selects, comboboxes, autocomplete, tags, token search, request feedback, host-owned feedback lifecycle, and configured helper copy.</p>
             </header>
             <ul>
               <li>Use the core states for layout and viewport checks.</li>
               <li>Use disabled option and Turbo reconnect lanes only when collection metadata or reconnect appearance is the review topic.</li>
-              <li>Use focused lanes only when error feedback or copy overrides are the review topic.</li>
+              <li>Use focused lanes only when error feedback, host-owned clearing cues, or copy overrides are the review topic.</li>
             </ul>
             <nav class="family-links" aria-label="Tom Select helper family references">
               <a href="tom_select_visual_reference.html">Core states</a>
               <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
               <a href="tom_select_disabled_option_visual_reference.html">Disabled options</a>
               <a href="tom_select_request_failure_visual_reference.html">Request feedback</a>
+              <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a>
               <a href="tom_select_error_surface_contract_visual_reference.html">Error surface contract</a>
               <a href="tom_select_text_override_visual_reference.html">Copy overrides</a>
             </nav>
@@ -485,15 +491,17 @@
                 <span class="tag info">feedback</span>
               </div>
               <h3>Request-failure feedback</h3>
-              <p>Use when a PR touches `error_surface: true`, load failure copy, selected-load failure, or operation metadata.</p>
+              <p>Use when a PR touches `error_surface: true`, load failure copy, selected-load failure, operation metadata, or host-owned feedback clearing cues.</p>
             </header>
             <ul>
               <li>Start with request failures for the focused error-surface lane.</li>
+              <li>Open host feedback lifecycle when the review includes visible host feedback or follow-up clearing states.</li>
               <li>Open text overrides only when configured no-results, loading, or create copy is part of the review.</li>
               <li>Keep retry actions, reveal timing, and request lifecycle behavior with the host app.</li>
             </ul>
             <nav class="task-links" aria-label="Request-failure feedback references">
               <a href="tom_select_request_failure_visual_reference.html">Primary: request failures</a>
+              <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a>
               <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
             </nav>
           </article>
@@ -520,6 +528,7 @@
               <a href="tom_select_visual_reference.html">Tom Select rendered lane</a>
               <a href="native_accessibility_contract_visual_reference.html">Native wrapper lane</a>
               <a href="tom_select_request_failure_visual_reference.html">Request feedback lane</a>
+              <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lane</a>
             </nav>
           </article>
 
@@ -554,190 +563,133 @@
         <div class="reference-grid">
           <article class="reference-card">
             <header>
-              <div class="tag-row">
-                <span class="tag primary">core helpers</span>
-                <span class="tag info">viewport scan</span>
-              </div>
+              <div class="tag-row"><span class="tag primary">core helpers</span><span class="tag info">viewport scan</span></div>
               <h3>Tom Select-backed states</h3>
               <p>Searchable select, combobox, autocomplete, tags, token search, preload, create, and error states.</p>
             </header>
             <p class="review-question"><strong>Question:</strong> do the core Tom Select-backed states remain readable across normal and narrow viewports?</p>
-            <ul>
-              <li>Compare normal, loading, empty, create, disabled, and error states.</li>
-              <li>Keep host-app search, authorization, pagination, and result execution out of scope.</li>
-            </ul>
+            <ul><li>Compare normal, loading, empty, create, disabled, and error states.</li><li>Keep host-app search, authorization, pagination, and result execution out of scope.</li></ul>
             <a class="reference-link" href="tom_select_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
             <header>
-              <div class="tag-row">
-                <span class="tag primary">Turbo reconnect</span>
-                <span class="tag info">static lane</span>
-              </div>
+              <div class="tag-row"><span class="tag primary">Turbo reconnect</span><span class="tag info">static lane</span></div>
               <h3>Tom Select Turbo reconnect</h3>
               <p>Focused static Turbo reconnect states for restored wrapper appearance and duplicate-wrapper caution.</p>
             </header>
             <p class="review-question"><strong>Question:</strong> can reviewers discuss Turbo restoration appearance without treating reconnect cleanup or request cancellation as a visual artifact contract?</p>
-            <ul>
-              <li>Compare one-wrapper restored field appearance, ordinary settled state, and duplicate-wrapper caution.</li>
-              <li>Keep runtime reconnect cleanup, stale response guards, and lifecycle smoke coverage in the lifecycle docs and JavaScript checks.</li>
-            </ul>
+            <ul><li>Compare one-wrapper restored field appearance, ordinary settled state, and duplicate-wrapper caution.</li><li>Keep runtime reconnect cleanup, stale response guards, and lifecycle smoke coverage in the lifecycle docs and JavaScript checks.</li></ul>
             <a class="reference-link" href="tom_select_turbo_reconnect_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
             <header>
-              <div class="tag-row">
-                <span class="tag primary">disabled option</span>
-                <span class="tag info">collection metadata</span>
-              </div>
+              <div class="tag-row"><span class="tag primary">disabled option</span><span class="tag info">collection metadata</span></div>
               <h3>Tom Select disabled options</h3>
               <p>Focused collection-backed disabled option readability and `option_html` metadata pass-through boundaries.</p>
             </header>
             <p class="review-question"><strong>Question:</strong> can reviewers inspect disabled option visibility and metadata cues without treating authorization or visibility policy as Rails Fields Kit responsibilities?</p>
-            <ul>
-              <li>Compare disabled option readability and option metadata cues in the collection-backed lane.</li>
-              <li>Keep authorization, grouped choices, enum behavior, remote rich option rendering, and production CSS outside the visual artifact.</li>
-            </ul>
+            <ul><li>Compare disabled option readability and option metadata cues in the collection-backed lane.</li><li>Keep authorization, grouped choices, enum behavior, remote rich option rendering, and production CSS outside the visual artifact.</li></ul>
             <a class="reference-link" href="tom_select_disabled_option_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
             <header>
-              <div class="tag-row">
-                <span class="tag primary">request failure</span>
-                <span class="tag info">error surface</span>
-              </div>
+              <div class="tag-row"><span class="tag primary">request failure</span><span class="tag info">error surface</span></div>
               <h3>Tom Select request failures</h3>
               <p>Focused `error_surface: true` states for hidden, revealed, restore-failure, create-failure, and custom-wrapper feedback.</p>
             </header>
             <p class="review-question"><strong>Question:</strong> can reviewers inspect request-failure feedback without treating retry UI or request lifecycle behavior as built in?</p>
-            <ul>
-              <li>Compare hidden slot, load error, selected-load error, create error, and custom wrapper states.</li>
-              <li>Keep default visible messages, retry actions, reveal timing, and request behavior with the host app.</li>
-            </ul>
+            <ul><li>Compare hidden slot, load error, selected-load error, create error, and custom wrapper states.</li><li>Keep default visible messages, retry actions, reveal timing, and request behavior with the host app.</li></ul>
             <a class="reference-link" href="tom_select_request_failure_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
             <header>
-              <div class="tag-row">
-                <span class="tag primary">request contract</span>
-                <span class="tag info">live region</span>
-              </div>
+              <div class="tag-row"><span class="tag primary">host feedback</span><span class="tag info">clearing cues</span></div>
+              <h3>Tom Select host feedback lifecycle</h3>
+              <p>Host-owned inline feedback, `detail.surface` placement, and follow-up clearing cues after request-failure events.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect visible host feedback and clearing states without treating default copy, retry UI, or request lifecycle behavior as Rails Fields Kit responsibilities?</p>
+            <ul><li>Compare current failure feedback, follow-up clearing state, and boundary notes after request-failure events.</li><li>Keep visible copy, retry UI, persistence, and request lifecycle behavior with the host app.</li></ul>
+            <a class="reference-link" href="tom_select_host_feedback_lifecycle_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row"><span class="tag primary">request contract</span><span class="tag info">live region</span></div>
               <h3>Tom Select error surface contract</h3>
               <p>Focused `error_surface: true` live-region contract states and wrapper customization boundaries.</p>
             </header>
             <p class="review-question"><strong>Question:</strong> can reviewers inspect the hidden-by-default live region, host-app-visible feedback, and custom wrapper lane without treating retry UI or visible copy as built in?</p>
-            <ul>
-              <li>Compare hidden contract, host-app visible feedback, and customized wrapper attributes.</li>
-              <li>Keep retry UI, visible default copy, and request lifecycle behavior with the host app.</li>
-            </ul>
+            <ul><li>Compare hidden contract, host-app visible feedback, and customized wrapper attributes.</li><li>Keep retry UI, visible default copy, and request lifecycle behavior with the host app.</li></ul>
             <a class="reference-link" href="tom_select_error_surface_contract_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
             <header>
-              <div class="tag-row">
-                <span class="tag warning">copy</span>
-                <span class="tag info">configuration</span>
-              </div>
+              <div class="tag-row"><span class="tag warning">copy</span><span class="tag info">configuration</span></div>
               <h3>Tom Select text overrides</h3>
               <p>Configured no-results, loading, and create copy states for Tom Select-backed helpers.</p>
             </header>
             <p class="review-question"><strong>Question:</strong> can reviewers inspect text override copy without confusing it with locale ownership or request behavior?</p>
-            <ul>
-              <li>Check fallback and configured copy separately.</li>
-              <li>Keep app-specific localization and request lifecycle behavior outside this static artifact.</li>
-            </ul>
+            <ul><li>Check fallback and configured copy separately.</li><li>Keep app-specific localization and request lifecycle behavior outside this static artifact.</li></ul>
             <a class="reference-link" href="tom_select_text_override_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
             <header>
-              <div class="tag-row">
-                <span class="tag primary">native helpers</span>
-                <span class="tag info">accessibility</span>
-                <span class="tag warning">narrow stress</span>
-              </div>
+              <div class="tag-row"><span class="tag primary">native helpers</span><span class="tag info">accessibility</span><span class="tag warning">narrow stress</span></div>
               <h3>Native helper states</h3>
               <p>Wrapper, label, hint, prefix, suffix, readonly, disabled, validation, customization, accessibility wiring, and narrow-width stress examples.</p>
             </header>
             <p class="review-question"><strong>Question:</strong> do native helper states remain legible under long label, hint, error, and affix stress while staying separate from Tom Select-backed behavior?</p>
-            <ul>
-              <li>Inspect field chrome, text wrapping, required marker, prefix/suffix, and visible state differences.</li>
-              <li>Do not use this lane to change FormBuilder behavior, generated markup, or Tom Select-backed search behavior.</li>
-            </ul>
+            <ul><li>Inspect field chrome, text wrapping, required marker, prefix/suffix, and visible state differences.</li><li>Do not use this lane to change FormBuilder behavior, generated markup, or Tom Select-backed search behavior.</li></ul>
             <a class="reference-link" href="native_field_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
             <header>
-              <div class="tag-row">
-                <span class="tag primary">native contract</span>
-                <span class="tag info">accessibility</span>
-              </div>
+              <div class="tag-row"><span class="tag primary">native contract</span><span class="tag info">accessibility</span></div>
               <h3>Native accessibility contract</h3>
               <p>Focused native helper accessibility contract reader lanes for wrapper, label, hint, error, and aria-describedby wiring.</p>
             </header>
             <p class="review-question"><strong>Question:</strong> can reviewers inspect the current rendered accessibility contract without treating future return-shape proposals or focus management as current behavior?</p>
-            <ul>
-              <li>Compare wrapper, label, hint, error, and described-by wiring lanes.</li>
-              <li>Keep id generation, validation messages, focus movement, and future helper returns outside this artifact.</li>
-            </ul>
+            <ul><li>Compare wrapper, label, hint, error, and described-by wiring lanes.</li><li>Keep id generation, validation messages, focus movement, and future helper returns outside this artifact.</li></ul>
             <a class="reference-link" href="native_accessibility_contract_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
             <header>
-              <div class="tag-row">
-                <span class="tag primary">native helpers</span>
-                <span class="tag info">configuration</span>
-                <span class="tag warning">narrow lane</span>
-              </div>
+              <div class="tag-row"><span class="tag primary">native helpers</span><span class="tag info">configuration</span><span class="tag warning">narrow lane</span></div>
               <h3>Configuration wrapper classes</h3>
               <p>Initializer-driven wrapper, label, hint, error, control, prefix, and suffix class examples.</p>
             </header>
             <p class="review-question"><strong>Question:</strong> can reviewers see configured classes as host-app pass-through instead of bundled CSS framework support, even under narrow label / affix / hint stress?</p>
-            <ul>
-              <li>Compare default `rfk-*` classes with host-app classes, validation class examples, and the narrow viewport review lane.</li>
-              <li>Keep framework CSS, spacing, colors, validation copy, and layout integration with the host app.</li>
-            </ul>
+            <ul><li>Compare default `rfk-*` classes with host-app classes, validation class examples, and the narrow viewport review lane.</li><li>Keep framework CSS, spacing, colors, validation copy, and layout integration with the host app.</li></ul>
             <a class="reference-link" href="configuration_wrapper_class_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
             <header>
-              <div class="tag-row">
-                <span class="tag primary">table metadata</span>
-                <span class="tag info">adapter boundary</span>
-              </div>
+              <div class="tag-row"><span class="tag primary">table metadata</span><span class="tag info">adapter boundary</span></div>
               <h3>Table metadata filters and editors</h3>
               <p>Representative filter and cell editor lanes built from table metadata helper contracts.</p>
             </header>
             <p class="review-question"><strong>Question:</strong> can reviewers scan metadata-driven filter and editor examples without treating table persistence or query execution as Rails Fields Kit responsibilities?</p>
-            <ul>
-              <li>Compare native field metadata, token search, and custom helper examples.</li>
-              <li>Keep table preference storage and query semantics with the host app or table gem.</li>
-            </ul>
+            <ul><li>Compare native field metadata, token search, and custom helper examples.</li><li>Keep table preference storage and query semantics with the host app or table gem.</li></ul>
             <a class="reference-link" href="table_metadata_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
             <header>
-              <div class="tag-row">
-                <span class="tag primary">token search</span>
-                <span class="tag warning">saved search</span>
-              </div>
+              <div class="tag-row"><span class="tag primary">token search</span><span class="tag warning">saved search</span></div>
               <h3>Saved-search token suggestions</h3>
               <p>Saved-search suggestions shown beside field and value completions for token search inputs.</p>
             </header>
             <p class="review-question"><strong>Question:</strong> can reviewers distinguish saved search suggestions without treating token parsing, search execution, or authorization as Rails Fields Kit responsibilities?</p>
-            <ul>
-              <li>Check kind labels, badges, wrapping, and edge accent readability.</li>
-              <li>Use token_suggestions.md as the behavior source of truth.</li>
-            </ul>
+            <ul><li>Check kind labels, badges, wrapping, and edge accent readability.</li><li>Use token_suggestions.md as the behavior source of truth.</li></ul>
             <a class="reference-link" href="token_search_saved_search_visual_reference.html">Open reference</a>
           </article>
         </div>
