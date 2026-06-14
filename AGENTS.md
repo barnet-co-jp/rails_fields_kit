@@ -26,8 +26,14 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/visual_references.md`: maintained map for the static visual reference family and each artifact's scope
 - `doc/visual_reference_index.html`: static index for choosing the right visual reference artifact during design or release review
 - `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states
+- `doc/tom_select_rich_option_review.html`: companion visual reference for Tom Select rich option label, description, and badge density review
 - `doc/tom_select_source_fallback_review.html`: focused companion visual reference for explicit `enum:` sources and remote option label fallback display review
+- `doc/tom_select_turbo_reconnect_visual_reference.html`: focused companion visual reference for Turbo reconnect appearance and duplicate-wrapper caution review
+- `doc/tom_select_no_event_boundary_review.html`: map-only companion visual reference for stale / aborted Tom Select request no-event boundary review
+- `doc/tom_select_disabled_option_visual_reference.html`: focused visual reference for collection-backed disabled option readability and option metadata boundaries
+- `doc/tom_select_plugin_clearable_review.html`: map-only companion visual reference for `allow_clear: true`, whole-field clear affordance, and host-owned plugin boundaries
 - `doc/tom_select_request_failure_visual_reference.html`: static visual reference for opt-in request-failure feedback, operation/status metadata, and `error_surface: true` lanes
+- `doc/tom_select_host_feedback_lifecycle_visual_reference.html`: companion visual reference for host-owned inline feedback and follow-up clearing cues after request-failure events
 - `doc/tom_select_error_surface_contract_visual_reference.html`: static visual reference for focused `error_surface: true` live-region contract states and wrapper customization boundaries
 - `doc/tom_select_text_override_visual_reference.html`: static visual reference for configured Tom Select text override copy states
 - `doc/native_field_visual_reference.html`: static visual reference for representative native helper states
