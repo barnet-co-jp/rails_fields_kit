@@ -16,6 +16,10 @@ RSpec.describe "package contents" do
   let(:setup_doc) { File.read(setup_doc_path) }
   let(:visual_references_path) { File.expand_path("../doc/visual_references.md", __dir__) }
   let(:visual_references) { File.read(visual_references_path) }
+  let(:styling_boundary_path) { File.expand_path("../doc/styling_boundary.md", __dir__) }
+  let(:styling_boundary) { File.read(styling_boundary_path) }
+  let(:development_path) { File.expand_path("../doc/development.md", __dir__) }
+  let(:development) { File.read(development_path) }
   let(:public_api_path) { File.expand_path("../doc/public_api.md", __dir__) }
   let(:public_api) { File.read(public_api_path) }
   let(:textarea_autosize_path) { File.expand_path("../doc/textarea_autosize.md", __dir__) }
@@ -62,6 +66,7 @@ RSpec.describe "package contents" do
       "These upstream docs remain the source of truth for copyable examples, public API details, and release checks.",
       "README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>",
       "Setup guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>",
+      "Setup troubleshooting for unresolved imports: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>",
       "Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>",
       "Configuration: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration.md>",
       "Field helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/field_helpers.md>",
@@ -88,6 +93,7 @@ RSpec.describe "package contents" do
       "- [ ] Register `rails-fields-kit--tom-select` on the app's existing Stimulus application.",
       "- [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.",
       "- [ ] Follow the README first field quickstart or the setup guide `rfk_select` lane before adding remote endpoints.",
+      "- [ ] If `rails_fields_kit` or `rails_fields_kit/tom_select_controller` cannot be resolved, use the upstream setup guide's unresolved imports troubleshooting section before changing aliases, importmap pins, Stimulus registration, Tom Select package setup, or CSS imports.",
       "- [ ] Record the first Rails Fields Kit field and any app-specific ownership notes below.",
       "## Remote endpoints and richer selects",
       "- [ ] Add the first `rfk_combobox` field and matching `rfk_search_with` / `rfk_find_with` / `rfk_create_with` endpoints.",
@@ -97,6 +103,7 @@ RSpec.describe "package contents" do
       "- [ ] If this app uses `selected_url:` or `error_surface: true`, review `doc/setup.md` for the representative edit-form wiring and `doc/events.md` for `selected-load`, `selected-load-error`, and `detail.surface`.",
       "- [ ] If this app uses importmap, run `rails generate rails_fields_kit:install --importmap` when `config/importmap.rb` exists, or add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.",
       "- [ ] If this app uses Vite or another bundler, add resolver or alias entries for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.",
+      "- [ ] When a bundler, Vite, importmap, or browser console error says a Rails Fields Kit import cannot be resolved, use the upstream unresolved imports troubleshooting section to check the package-root import path separately from the direct controller import path.",
       "## Migration and helper selection",
       "- [ ] If this app is replacing a server-rendered `collection_select`, review the practical `rfk_select` migration guide before adding extra reinitializers or controller glue.",
       "- [ ] Use `doc/field_helpers.md` when choosing between `rfk_select`, `rfk_grouped_select`, `rfk_enum_select`, `rfk_combobox`, `rfk_autocomplete`, `rfk_token_search`, `rfk_tags`, and `rfk_multi_select`.",
@@ -187,6 +194,47 @@ RSpec.describe "package contents" do
     end
   end
 
+  it "keeps the no-event boundary companion artifact map-only and packaged" do
+    expect(specification.files).to include("doc/tom_select_no_event_boundary_review.html")
+    expect(visual_references).to include(
+      "[`tom_select_no_event_boundary_review.html`](tom_select_no_event_boundary_review.html)",
+      "map-only companion artifact",
+      "stale / aborted no-event states",
+      "without promoting request-start / finish events, retry UI, production CSS, or request lifecycle behavior into Rails Fields Kit"
+    )
+  end
+
+  it "keeps styling boundary docs aligned with public and visual reference roles" do
+    expect(specification.files).to include("doc/styling_boundary.md")
+
+    expect(public_api).to include(
+      "Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around that input",
+      "production CSS",
+      "remain host-app responsibility"
+    )
+
+    expect(visual_references).to include(
+      "[`styling_boundary.md`](styling_boundary.md) as the reader-facing source of truth for host-app CSS ownership and wrapper hook responsibilities",
+      "[`configuration_wrapper_class_visual_reference.html`](configuration_wrapper_class_visual_reference.html) only as the rendered-state review lane",
+      "rather than treating the visual artifact as production CSS approval"
+    )
+
+    expect(styling_boundary).to include(
+      "reader-facing source of truth for wrapper classes and host-app CSS ownership",
+      "## Current styling hooks",
+      "`rfk-field`",
+      "`rfk-control`",
+      "Rails Fields Kit owns these pieces",
+      "Host apps own these pieces",
+      "Production CSS, CSS framework integration, theme tokens, dark mode, density, spacing, and responsive layout policy",
+      "not a full helper markup inventory, design system catalog, CSS preset, visual approval checklist, or release evidence log"
+    )
+
+    expect(development).to include(
+      "The styling boundary documentation drift spec keeps `doc/styling_boundary.md`, `doc/visual_references.md`, and `doc/public_api.md` aligned"
+    )
+  end
+
   it "ships the maintained public reference docs linked from README and setup" do
     expect(specification.files).to include(
       "doc/public_api.md",
@@ -263,6 +311,7 @@ RSpec.describe "package contents" do
       rfk_text_field
       rfk_text_area
       rfk_number_field
+      rfk_range_field
       rfk_money_field
       rfk_percent_field
       rfk_email_field
@@ -284,6 +333,39 @@ RSpec.describe "package contents" do
       "doc/release.md",
       "doc/release_notes_0_1_1.md",
       "doc/release_notes_0_1_0.md"
+    )
+  end
+
+  it "keeps sample app package-root evidence placement docs aligned" do
+    checklist_chooser = markdown_section(sample_app_checklist, "## Choose where to record evidence")
+    narrow_pr_chooser = markdown_section(sample_app_checklist, "### Choose the representative lane for a narrow PR")
+    results_route_map = sample_app_results.split("\n## Target release\n", 2).first
+    javascript_setup_results = markdown_section(sample_app_results, "## JavaScript setup checks")
+
+    expect(checklist_chooser).to include(
+      "sample_app_results.md",
+      "For a narrow PR that is not a release candidate, a PR comment is enough",
+      "package_root_helper_release_evidence.md",
+      "choose representative helper checks before recording the result"
+    )
+
+    expect(narrow_pr_chooser).to include(
+      "package-root helper import/read-only contract",
+      "the helper-specific evidence guide",
+      "PR comment for narrow docs/spec work",
+      "sample_app_results.md` for release candidates"
+    )
+
+    expect(results_route_map).to include(
+      "JavaScript setup and package-root helper evidence",
+      "read-only rendered-field helper evidence",
+      "not a new release gate or runtime contract"
+    )
+
+    expect(javascript_setup_results).to include(
+      "package-root helper lanes in release scope were selected from `doc/package_root_helper_release_evidence.md`",
+      "matched the current `doc/public_api.md#javascript-exports` helper list",
+      "Package-root helper lanes checked:"
     )
   end
 
