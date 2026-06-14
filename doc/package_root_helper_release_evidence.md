@@ -123,6 +123,30 @@ Suggested evidence note:
 tomSelectTextOverrideContract: PASS on <field selector>. noResultsText / loadingText / createText matched rendered field values; fallback field was readable; unrelated element returned null. Visible copy and locale policy remain host-app review items.
 ```
 
+## Tom Select field kind contract reader
+
+Use this lane when `tomSelectFieldKindContract(element)` is in release scope.
+
+Representative import:
+
+```js
+import { tomSelectFieldKindContract } from "rails_fields_kit"
+```
+
+Check a rendered Tom Select-backed field with a helper kind value:
+
+- `tomSelectFieldKindContract(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes the documented `controller` and rendered `kind` value for the representative field.
+- A comparable Rails Fields Kit Tom Select field without a rendered kind returns `null`.
+- A comparable non-Tom Select or unrelated element returns `null`.
+- The evidence stays read-only; helper lane normalization, controller/Tom Select instance access, selection mutation, and request execution remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+tomSelectFieldKindContract: PASS on <field selector>. controller and rendered kind matched the Rails Fields Kit field contract; no-kind and unrelated elements returned null. Helper lane normalization, instance access, mutation, and request execution remained out of scope.
+```
+
 ## Tom Select plugin contract reader
 
 Use this lane when `tomSelectPluginContract(element)` is in release scope.
