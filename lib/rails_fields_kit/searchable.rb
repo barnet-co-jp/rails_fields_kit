@@ -6,8 +6,15 @@ module RailsFieldsKit
   module Searchable
     extend ActiveSupport::Concern
 
+    SEARCH_MATCH_STRATEGIES = %i[contains prefix exact].freeze
+
     class_methods do
-      def rfk_search_with(model:, label:, search:, action: :index, value: :id, limit: 20, query_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, distinct: false, minimum_query_length: 0, wrap: nil)
+      def rfk_search_with(model:, label:, search:, action: :index, value: :id, limit: 20, query_param: nil, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, distinct: false, minimum_query_length: 0, match: :contains, wrap: nil)
+        match_strategy = match.to_sym
+        unless SEARCH_MATCH_STRATEGIES.include?(match_strategy)
+          raise ArgumentError, "Unsupported rfk_search_with match strategy: #{match.inspect}. Expected one of: #{SEARCH_MATCH_STRATEGIES.join(", ")}"
+        end
+
         define_method(action) do
           query_key = query_param || RailsFieldsKit.configuration.default_query_param
           query = params[query_key].to_s
@@ -22,8 +29,9 @@ module RailsFieldsKit
           if query.present?
             columns = Array(search)
             escaped_query = model.sanitize_sql_like(query)
+            search_pattern = rfk_search_pattern(escaped_query, match_strategy)
             predicates = columns.map do |column|
-              model.arel_table[column].matches("%#{escaped_query}%")
+              model.arel_table[column].matches(search_pattern)
             end
             relation = relation.where(predicates.reduce { |left, right| left.or(right) })
           end
@@ -145,6 +153,17 @@ module RailsFieldsKit
         model.public_send(scope)
       else
         scope.respond_to?(:call) ? instance_exec(&scope) : scope
+      end
+    end
+
+    def rfk_search_pattern(escaped_query, match)
+      case match
+      when :contains
+        "%#{escaped_query}%"
+      when :prefix
+        "#{escaped_query}%"
+      when :exact
+        escaped_query.to_s
       end
     end
 
