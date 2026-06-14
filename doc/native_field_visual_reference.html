@@ -501,7 +501,7 @@
         <h1>Native Field Visual Reference</h1>
         <p class="lede">
           Diagnostic QA surface for the native helper family: wrapper, validation, affixes, metadata,
-          browser semantics, focus, customization, non-editable states, narrow viewport stress, generated aria ids, multiline text areas,
+          browser semantics, ordinary constraint attributes, focus, customization, non-editable states, narrow viewport stress, generated aria ids, multiline text areas,
           and the accessibility opt-out boundary.
         </p>
         <div class="hero-links">
@@ -515,6 +515,7 @@
         <span class="review-pill">Generated aria id scan</span>
         <span class="review-pill">Rendered contract reader scan</span>
         <span class="review-pill">Native browser semantics scan</span>
+        <span class="review-pill">Constraint attribute boundary scan</span>
         <span class="review-pill">Multiline textarea scan</span>
         <span class="review-pill">Desktop and narrow viewport scan</span>
         <span class="review-pill">Static artifact only</span>
@@ -728,11 +729,11 @@
         </article>
 
         <article class="card">
-          <div class="tag metadata">Input metadata defaults</div>
-          <h2>Money, percent, and phone stay native</h2>
+          <div class="tag metadata">Input metadata and constraints</div>
+          <h2>Metadata and constraint attributes stay native</h2>
           <p>
-            Current helper defaults add browser hints such as `inputmode` and `autocomplete` without adding
-            masks, formatting, or validation behavior.
+            Native helper lanes can expose ordinary browser attributes such as `inputmode`, `autocomplete`,
+            `maxlength`, and `pattern` without adding masks or owning browser validation message policy.
           </p>
           <div class="example metadata-surface">
             <div class="metadata-list">
@@ -748,8 +749,16 @@
                 <span class="metadata-key">`rfk_phone_field`</span>
                 <span class="metadata-value">`autocomplete="tel"` for the browser's native telephone autofill lane.</span>
               </div>
+              <div class="metadata-row">
+                <span class="metadata-key">`maxlength`</span>
+                <span class="metadata-value">Host apps may pass length constraints through; helper copy should explain limits instead of implying bundled counters.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">`pattern`</span>
+                <span class="metadata-value">Pattern shape is native input metadata. Browser validation wording, masking, and normalization stay host-app owned.</span>
+              </div>
             </div>
-            <div class="hint">Reference-only lane: documents helper defaults without changing production markup.</div>
+            <div class="hint">Reference-only lane: documents native attribute pass-through without changing production markup or validation behavior.</div>
           </div>
         </article>
 
@@ -974,7 +983,7 @@
           <span>Native helper lane only: no remote search, selected preload, or create-on-the-fly semantics.</span>
           <span>Native browser semantics distinguish `rfk_search_field`, `rfk_email_field`, and `rfk_url_field` from Tom Select-backed helpers.</span>
           <span>Multiline `rfk_text_area` keeps long content, long hints, and validation copy readable in one native wrapper lane.</span>
-          <span>Input metadata defaults stay visible without adding masks, formatting, or validation policy.</span>
+          <span>Input metadata and constraint attributes stay visible without adding masks, formatting, or validation policy.</span>
           <span>Narrow viewport stress keeps long label, hint, error, required marker, and money affixes readable.</span>
           <span>Keyboard focus remains visible around affix-heavy fields and text areas.</span>
           <span>Field-level wrapper customization layers extra attributes onto the same generated pieces.</span>

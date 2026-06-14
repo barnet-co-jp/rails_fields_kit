@@ -14,7 +14,7 @@
 - [ ] Latest workflow run checked for this head SHA:
 - [ ] PR mergeability checked:
 - [ ] Branch freshness checked against latest `main`:
-- [ ] Superseded / replacement PRs noted, if applicable:
+- [ ] Superseded / replacement PRs and duplicate closing PRs noted, if applicable:
 
 ## Browser / Visual Evidence
 
@@ -32,4 +32,4 @@
 
 ## Notes
 
-<!-- Add reviewer-facing context, follow-up items, or known baseline failures. -->
+<!-- For replacement PRs, note which older PR is superseded and whether the older PR should be commented and closed or left for human review. If multiple open PRs close the same issue, note which one should remain active and why. -->
