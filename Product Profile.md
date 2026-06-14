@@ -59,6 +59,7 @@ Host applications remain responsible for:
 - `CHANGELOG.md`: released and unreleased user-visible changes, plus the current release-prep baseline
 - `AGENTS.md`: repo-specific source-of-truth order, docs-sync expectations, and release-facing review inventory
 - `doc/setup.md`: maintained setup walkthrough, including the read-only setup doctor boundary
+- `doc/setup_doctor.md`: read-only SetupDoctor report surface for programmatic checks, text evidence, and command behavior boundaries
 - `doc/setup_doctor_output_review.md`: focused CLI diagnostic evidence review for setup doctor output, Stimulus registration advisory states, target mismatch readability, and manual-check boundaries
 - `doc/support_boundary.md`: supported Ruby / Rails / Node boundaries and representative CI evidence
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
