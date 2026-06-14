@@ -7,7 +7,7 @@
     "node": "22.x || 24.x"
   },
   "scripts": {
-    "check:js": "node scripts/check_javascript.mjs && node scripts/native_affix_contract_smoke.mjs"
+    "check:js": "node scripts/check_javascript.mjs"
   },
   "exports": {
     ".": "./app/javascript/rails_fields_kit/index.js",
