@@ -162,9 +162,11 @@ Use this section when the release or PR changes one of the static visual referen
 
 Use the matrix below for changed or release-critical visual references before treating the checkbox pass as complete. Keep static visual artifact evidence separate from runtime sample-app lanes; the matrix records what was rendered, not new helper behavior.
 
-| Artifact | Viewport checked | State or lane checked | Responsibility boundary confirmed | Evidence location |
-| --- | --- | --- | --- | --- |
-|  |  |  |  |  |
+In the `Browser review result` column, use `PASS` only when the named viewport was actually reviewed in a browser, `FAIL` when the browser review found an issue, `SOURCE REVIEW ONLY` when connector-only or source-level review checked the changed HTML/CSS without rendering it, and `DEFERRED` when browser-capable review is intentionally handed off. For `SOURCE REVIEW ONLY` and `DEFERRED`, use `Evidence location` to name the source diff, PR comment, reviewer handoff, or follow-up. Do not treat CI success or source review alone as visual approval.
+
+| Artifact | Viewport checked | State or lane checked | Browser review result | Responsibility boundary confirmed | Evidence location |
+| --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |
 
 - [ ] desktop viewport checked for state visibility, readable labels, and expected spacing
 - [ ] narrow/mobile viewport checked for wrapping, overflow, state visibility, and readable feedback copy

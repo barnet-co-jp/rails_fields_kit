@@ -193,11 +193,13 @@ import {
   readRenderedSelectedPreloadConfig,
   tomSelectPluginContract,
   tomSelectRequestContract,
-  tomSelectSelectionContract
+  tomSelectSelectionContract,
+  tomSelectTextOverrideContract
 } from "rails_fields_kit"
 
 const requestContract = tomSelectRequestContract(tomSelectFieldElement)
 const selectionContract = tomSelectSelectionContract(tomSelectFieldElement)
+const copyContract = tomSelectTextOverrideContract(tomSelectFieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(tomSelectFieldElement)
 const pluginContract = tomSelectPluginContract(tomSelectFieldElement)
 const nativeAccessibility = nativeFieldAccessibilityContract(nativeFieldElement)
