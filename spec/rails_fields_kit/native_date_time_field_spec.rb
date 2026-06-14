@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "date"
+
 RSpec.describe "native date/time/color FormBuilder helpers" do
   include ActionView::Helpers::FormHelper
   include ActionView::Helpers::TagHelper
@@ -41,7 +43,7 @@ RSpec.describe "native date/time/color FormBuilder helpers" do
     false
   end
 
-  def native_form_builder(model = NativeFieldModel.new("2026-06-15", "2026-06-15T09:30", "#336699"), object_name = :native_field_model)
+  def native_form_builder(model = NativeFieldModel.new(Date.new(2026, 6, 15), Time.new(2026, 6, 15, 9, 30, 0), "#336699"), object_name = :native_field_model)
     ActionView::Helpers::FormBuilder.new(object_name, model, self, {})
   end
 
@@ -54,9 +56,9 @@ RSpec.describe "native date/time/color FormBuilder helpers" do
   it "renders date, time, datetime-local, and color inputs through the native wrapper lane" do
     builder = native_form_builder
 
-    date_html = builder.rfk_date_field(:starts_on, min: "2026-01-01", max: "2026-12-31")
+    date_html = builder.rfk_date_field(:starts_on, min: Date.new(2026, 1, 1), max: Date.new(2026, 12, 31))
     time_html = builder.rfk_time_field(:starts_at, step: 900)
-    datetime_html = builder.rfk_datetime_local_field(:starts_at, min: "2026-06-01T00:00")
+    datetime_html = builder.rfk_datetime_local_field(:starts_at, min: Time.new(2026, 6, 1, 0, 0, 0))
     color_html = builder.rfk_color_field(:accent_color)
 
     expect(date_html).to include("type=\"date\"")
@@ -66,13 +68,13 @@ RSpec.describe "native date/time/color FormBuilder helpers" do
     expect(time_html).to include("type=\"time\"")
     expect(time_html).to include("step=\"900\"")
     expect(datetime_html).to include("type=\"datetime-local\"")
-    expect(datetime_html).to include("min=\"2026-06-01T00:00\"")
+    expect(datetime_html).to include("min=\"2026-06-01T00:00:00\"")
     expect(color_html).to include("type=\"color\"")
     expect(color_html).to include("value=\"#336699\"")
   end
 
   it "shares wrapper, hint, error, and accessibility wiring with other native helpers" do
-    html = native_form_builder(ErrorNativeFieldModel.new(""), :error_native_field_model).rfk_date_field(
+    html = native_form_builder(ErrorNativeFieldModel.new(nil), :error_native_field_model).rfk_date_field(
       :starts_on,
       wrapper: true,
       label: "Start date",
