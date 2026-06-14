@@ -79,6 +79,33 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
     end
   end
 
+  it "keeps checks, report_lines, and run as a read-only diagnostic surface" do
+    Dir.mktmpdir do |root|
+      doctor = described_class.new(root: root)
+      output = StringIO.new
+
+      checks = doctor.checks
+      expect(checks).to all(be_a(described_class::Check))
+      expect(checks.map(&:key)).to include(:initializer, :importmap, :tom_select_package, :css_import)
+      expect(checks.map(&:status)).to include(:missing, :manual)
+      checks.each do |check|
+        expect(check.key).to be_a(Symbol)
+        expect(check.label).to be_a(String)
+        expect(check.status).to be_a(Symbol)
+        expect(check.message).to be_a(String)
+      end
+
+      report_lines = doctor.report_lines
+      expect(report_lines).to all(be_a(String))
+      expect(report_lines).to include("Rails Fields Kit setup doctor")
+      expect(report_lines).to include(a_string_matching(/\[MISSING\] Initializer:/))
+      expect(report_lines).to include(a_string_matching(/\[MANUAL\] Importmap pins:/))
+
+      expect(doctor.run(io: output)).to eq(true)
+      expect(output.string).to eq(report_lines.join("\n") + "\n")
+    end
+  end
+
   it "prints machine-readable JSON without turning manual checks into failures" do
     Dir.mktmpdir do |root|
       write_file(root, "config/initializers/rails_fields_kit.rb")

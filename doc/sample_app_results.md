@@ -132,6 +132,8 @@ Package-root helper lanes checked:
 
 Use this table as the helper-specific evidence log. Choose helper names from `doc/public_api.md#javascript-exports`, use `doc/package_root_helper_release_evidence.md` for the representative lane guidance, and record only helpers that are in release or PR scope. Do not mirror the full helper family here when a helper is unrelated to the change under review.
 
+In the `Result` column, use `PASS` when the scoped helper lane was checked successfully, `FAIL` when it was checked and did not satisfy the lane, `SKIPPED` when an in-scope lane was intentionally deferred, and `OUT OF SCOPE` when a package-root helper boundary was reviewed and deliberately left outside this release or PR. For `SKIPPED` and `OUT OF SCOPE`, use `Evidence notes` to name the reason, follow-up, or boundary instead of leaving the row blank. Do not add rows for unrelated helpers solely to prove they were not checked.
+
 | Helper | Source-of-truth reference | Representative field or selector | Result | Evidence notes |
 | --- | --- | --- | --- | --- |
 |  |  |  |  |  |
@@ -160,9 +162,11 @@ Use this section when the release or PR changes one of the static visual referen
 
 Use the matrix below for changed or release-critical visual references before treating the checkbox pass as complete. Keep static visual artifact evidence separate from runtime sample-app lanes; the matrix records what was rendered, not new helper behavior.
 
-| Artifact | Viewport checked | State or lane checked | Responsibility boundary confirmed | Evidence location |
-| --- | --- | --- | --- | --- |
-|  |  |  |  |  |
+In the `Browser review result` column, use `PASS` only when the named viewport was actually reviewed in a browser, `FAIL` when the browser review found an issue, `SOURCE REVIEW ONLY` when connector-only or source-level review checked the changed HTML/CSS without rendering it, and `DEFERRED` when browser-capable review is intentionally handed off. For `SOURCE REVIEW ONLY` and `DEFERRED`, use `Evidence location` to name the source diff, PR comment, reviewer handoff, or follow-up. Do not treat CI success or source review alone as visual approval.
+
+| Artifact | Viewport checked | State or lane checked | Browser review result | Responsibility boundary confirmed | Evidence location |
+| --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |
 
 - [ ] desktop viewport checked for state visibility, readable labels, and expected spacing
 - [ ] narrow/mobile viewport checked for wrapping, overflow, state visibility, and readable feedback copy
