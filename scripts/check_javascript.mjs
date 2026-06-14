@@ -62,6 +62,10 @@ const checks = [
     args: ["scripts/check_tom_select_plugin_contract.mjs"]
   },
   {
+    name: "native affix contract smoke",
+    args: ["scripts/check_native_affix_contract_smoke.mjs"]
+  },
+  {
     name: "selected preload config contract smoke",
     args: ["scripts/check_selected_preload_config_contract.mjs"]
   }
