@@ -68,6 +68,12 @@ The detailed entries remain the exhaustive source of truth for release review. K
 
 ### Fixed
 
+#### Documentation and release evidence
+
+- Visual reference release evidence docs now distinguish browser-verified `PASS` / `FAIL` results from `SOURCE REVIEW ONLY` and `DEFERRED` handoffs, so CI or source review alone is not treated as visual approval.
+- Documentation drift guards now cover visual reference HTML artifact structure, same-file HTML fragment link-check scope, and companion visual reference package/map inventory without turning external URLs, cross-file HTML anchors, or browser screenshots into required checks.
+- Native affix contract smoke now runs through the maintained JavaScript check runner, keeping package-root helper evidence on the same `npm run check:js` path without changing native wrapper behavior.
+
 #### Packaging and bundled locales
 
 - Bundled Tom Select locale YAML files are now included in the gem package so the existing I18n-backed default `no_results_text`, `loading_text`, and `create_text` copy remains available to host apps without changing locale wording or JavaScript localization ownership.
