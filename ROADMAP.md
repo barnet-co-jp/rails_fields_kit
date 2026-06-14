@@ -32,8 +32,8 @@ These fields form the center of the gem.
 - `rfk_enum_select`
   - Rails enum-friendly select helper.
 - Native wrappers
-  - Text, text area, number, money, percent, email, URL, phone, search, and password fields with consistent labels, hints, errors, prefixes, suffixes, and accessibility behavior.
-  - These helpers are current public API; the package-root `nativeFieldAccessibilityContract(element)` helper can read their rendered accessibility wiring, but Rails Fields Kit still leaves validation copy, focus management, password-specific UX, credential policy, and app-specific feedback behavior to the host app.
+  - Text, text area, number, money, percent, email, URL, phone, search, range, and password fields with consistent labels, hints, errors, prefixes, suffixes, and accessibility behavior.
+  - These helpers are current public API; the package-root `nativeFieldAccessibilityContract(element)` helper can read their rendered accessibility wiring, but Rails Fields Kit still leaves validation copy, focus management, range live previews, custom slider styling, multi-thumb range controls, password-specific UX, credential policy, and app-specific feedback behavior to the host app.
 
 ## Phase 2: Better remote option workflows
 
