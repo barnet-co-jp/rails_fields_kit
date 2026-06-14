@@ -8,19 +8,6 @@ class CustomersController < ApplicationController
 end
 ```
 
-## Remote workflow chooser
-
-Use this overview to choose the endpoint helper before reading the detailed option reference below. Rails Fields Kit formats option JSON and wires the rendered field to the endpoint, while the host app still owns authentication, authorization, tenant scoping, query parsing, result execution, and persistence policy.
-
-| Workflow | Use | FormBuilder route | Endpoint helper |
-| --- | --- | --- | --- |
-| Remote search | Fetch option suggestions while the user types. | `rfk_combobox`, `rfk_autocomplete`, or another Tom Select-backed helper with `url:` | `rfk_search_with` |
-| Selected preload | Restore labels for saved values that are not present in the initial collection. | `selected_url:` with `selected:` or persisted model values | `rfk_find_with` |
-| Create-on-the-fly | Accept new option text and return the created option JSON. | `create_url:` with `create_param:` and optional `create_params:` | `rfk_create_with` |
-| Token suggestions | Suggest structured token text while leaving submitted query parsing to the host app. | `rfk_token_search` with `url:` | `rfk_token_suggestions_with` |
-
-Keep the FormBuilder request option and controller helper option aligned. For example, a field using `selected_param: "customer_id"` should pair with `rfk_find_with id_param: :customer_id`, and a field using `create_param: "name"` should pair with `rfk_create_with create_param: "name"`. If the workflow question is mostly about which field helper to render, start from [`field_helpers.md`](field_helpers.md); this page focuses on endpoint responsibilities.
-
 ## `rfk_search_with`
 
 Defines a search action, defaulting to `index`.
@@ -44,6 +31,7 @@ rfk_search_with(
   distinct: true,
   limit: 20,
   minimum_query_length: 1,
+  match: :contains,
   wrap: "options"
 )
 ```
@@ -58,6 +46,7 @@ rfk_search_with(
 - `query_param:` request parameter name for the query. Defaults to `q`.
 - `limit:` maximum number of records. Defaults to `20`.
 - `minimum_query_length:` endpoint-side minimum query length. Defaults to `0`, preserving blank-query initial options.
+- `match:` SQL LIKE pattern strategy for the query. Supports `:contains` (default), `:prefix`, and `:exact`.
 - `scope:` base relation. Supports relation object, symbol scope, or callable evaluated in the controller instance.
 - `order:` order passed to the relation.
 - `distinct:` calls `distinct` before ordering/limiting.
@@ -108,6 +97,31 @@ rfk_search_with(
 When the query is shorter than the endpoint minimum, the helper returns an empty options payload and preserves the configured `wrap:` shape, such as `{ "options": [] }`. It does not change authorization, tenant scoping, query parsing, Ransack integration, or Tom Select request lifecycle behavior.
 
 FormBuilder's field-level `min_length:` is a browser-side loading hint for the bundled Tom Select controller. `minimum_query_length:` is the server endpoint policy for direct requests, custom Tom Select configs, or host apps that do not want blank queries to expose initial options. Use both when the UI and endpoint should enforce the same minimum.
+
+### Search match policy
+
+`rfk_search_with` escapes the incoming query with `model.sanitize_sql_like` and applies the configured `match:` strategy to each `search:` column with Arel `matches`. The default remains `:contains`, so existing endpoints keep the `%query%` behavior.
+
+Supported strategies:
+
+| `match:` | LIKE pattern | Use when |
+| --- | --- | --- |
+| `:contains` | `%query%` | Existing partial match behavior should remain. |
+| `:prefix` | `query%` | Users type from the beginning of names, codes, or emails. |
+| `:exact` | `query` | The endpoint should only match the full searched value. |
+
+```ruby
+rfk_search_with(
+  model: Customer,
+  value: :id,
+  label: :name,
+  search: [:name, :email],
+  match: :prefix,
+  wrap: "options"
+)
+```
+
+Rails Fields Kit intentionally does not add a `case_sensitive:` or `case_insensitive:` option here. Case behavior depends on database adapter, collation, column type, and SQL function choices. For PostgreSQL `ILIKE`, normalized search columns, accent folding, Ransack, or authorization-aware custom query semantics, keep that ownership in the host app through `scope:` or a custom controller action.
 
 ### Rich option fields
 
@@ -303,6 +317,7 @@ Example with controller context:
 ```ruby
 rfk_token_suggestions_with(
   action: :search_tokens,
+  query_param: "term",
   suggestions: ->(query) {
     [
       { token: "status:#{query}", label: "Status #{query}", badge: "operator" },
