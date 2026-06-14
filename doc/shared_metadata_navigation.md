@@ -67,6 +67,20 @@ This pattern only centralizes suggestion and metadata inputs. The host applicati
 
 Do not treat this example as a registry API. There is no Rails Fields Kit-owned field/operator registry, helper-level Ransack adapter DSL, or query execution path in the current 0.1.x public API.
 
+## Sample app and release evidence lane
+
+Use this lane when a sample app or release PR needs representative evidence that one host-app-owned metadata source can feed all three current surfaces without turning Rails Fields Kit into the owner of search behavior.
+
+Record evidence for the following checks in `doc/sample_app_results.md`, a release PR comment, or the sample app verification notes that accompany the release candidate:
+
+- The same allowed field/operator source is visible in the host app and is not defined inside Rails Fields Kit.
+- `TokenSuggestions.build` receives a derived token-oriented view such as labels, token values, and token operators.
+- `RansackSuggestions.build` receives a derived Ransack-oriented view such as labels, predicates, and optional values from the same source.
+- `TableFilterInput.ransack_filter` receives the same Ransack-oriented fields as table filter metadata.
+- The evidence keeps query parsing, `params[:q]` construction, Ransack execution, authorization, relation construction, pagination, and user-visible feedback in the host app boundary.
+
+A compact release note is enough when the sample app already shows token suggestions, Ransack suggestions, and table filter metadata separately. Add a dedicated sample-app row only when the release claim depends on the shared-source adoption pattern itself.
+
 ## Non-goals
 
 This navigation page does not add a registry API, token parser, Ransack execution path, authorization policy, table preference persistence contract, or visual reference artifact. It only keeps the current docs easier to scan without changing runtime behavior.
