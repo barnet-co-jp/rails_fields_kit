@@ -132,6 +132,8 @@ Package-root helper lanes checked:
 
 Use this table as the helper-specific evidence log. Choose helper names from `doc/public_api.md#javascript-exports`, use `doc/package_root_helper_release_evidence.md` for the representative lane guidance, and record only helpers that are in release or PR scope. Do not mirror the full helper family here when a helper is unrelated to the change under review.
 
+In the `Result` column, use `PASS` when the scoped helper lane was checked successfully, `FAIL` when it was checked and did not satisfy the lane, `SKIPPED` when an in-scope lane was intentionally deferred, and `OUT OF SCOPE` when a package-root helper boundary was reviewed and deliberately left outside this release or PR. For `SKIPPED` and `OUT OF SCOPE`, use `Evidence notes` to name the reason, follow-up, or boundary instead of leaving the row blank. Do not add rows for unrelated helpers solely to prove they were not checked.
+
 | Helper | Source-of-truth reference | Representative field or selector | Result | Evidence notes |
 | --- | --- | --- | --- | --- |
 |  |  |  |  |  |
