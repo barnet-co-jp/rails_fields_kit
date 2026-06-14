@@ -30,6 +30,10 @@ const checks = [
     args: ["scripts/check_tom_select_interaction_events.mjs"]
   },
   {
+    name: "Tom Select selection contract smoke",
+    args: ["scripts/check_tom_select_selection_contract.mjs"]
+  },
+  {
     name: "Tom Select create headers and response normalization smoke",
     args: ["scripts/check_tom_select_create_headers.mjs"]
   },
