@@ -41,6 +41,16 @@ Use these states when a PR or release asks for narrow terminal, wrapped Markdown
 
 For PR-level evidence, name the state and record the width used, such as `80-column terminal`, `390px Markdown preview`, or `GitHub PR comment code block`. For release-wide evidence, keep the detailed output in the release notes or PR comment and record the summary result in `doc/sample_app_results.md`.
 
+Use this matrix when deciding which evidence note to write after a narrow or wrapped review. It keeps the representative state, checklist focus, and recording context together so reviewers do not have to infer which checklist section applies.
+
+| Evidence note names | Pair with checklist section | Include in the note |
+| --- | --- | --- |
+| `First-run mixed status` | Status Interpretation | Legend position, `[MISSING]` action item, `[MANUAL]` host-app follow-up wording, and the width or preview surface used. |
+| `Advisory Tom Select package` | Advisory Ownership | Package evidence boundary, manual Stimulus / CSS follow-up wording, setup path, and whether the line came from package.json visibility only. |
+| `Stimulus registration advisory` | Advisory Ownership | Whether the captured state is `[OK]` or `[MANUAL]`, the representative entrypoint or absence of one, and the host-app boot-policy boundary. |
+| `CSS import advisory` | Advisory Ownership | Whether the captured state is `[OK]` or `[MANUAL]`, the representative stylesheet or entrypoint, and the host-app stylesheet / bundler boundary. |
+| `Importmap target mismatch` | Wrapping Evidence | The wrapped width, each expected target, each found target, and whether the pair remains readable without changing setup doctor wording. |
+
 Do not create a new runtime output mode just to satisfy this review. If a state is unreadable after wrapping, record it as a docs/setup policy follow-up unless the issue explicitly asks to change setup doctor wording.
 
 ## Representative Output States
