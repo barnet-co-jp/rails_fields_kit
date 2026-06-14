@@ -66,6 +66,7 @@ RSpec.describe "package contents" do
       "These upstream docs remain the source of truth for copyable examples, public API details, and release checks.",
       "README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>",
       "Setup guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>",
+      "Setup troubleshooting for unresolved imports: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>",
       "Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>",
       "Configuration: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration.md>",
       "Field helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/field_helpers.md>",
@@ -92,6 +93,7 @@ RSpec.describe "package contents" do
       "- [ ] Register `rails-fields-kit--tom-select` on the app's existing Stimulus application.",
       "- [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.",
       "- [ ] Follow the README first field quickstart or the setup guide `rfk_select` lane before adding remote endpoints.",
+      "- [ ] If `rails_fields_kit` or `rails_fields_kit/tom_select_controller` cannot be resolved, use the upstream setup guide's unresolved imports troubleshooting section before changing aliases, importmap pins, Stimulus registration, Tom Select package setup, or CSS imports.",
       "- [ ] Record the first Rails Fields Kit field and any app-specific ownership notes below.",
       "## Remote endpoints and richer selects",
       "- [ ] Add the first `rfk_combobox` field and matching `rfk_search_with` / `rfk_find_with` / `rfk_create_with` endpoints.",
@@ -101,6 +103,7 @@ RSpec.describe "package contents" do
       "- [ ] If this app uses `selected_url:` or `error_surface: true`, review `doc/setup.md` for the representative edit-form wiring and `doc/events.md` for `selected-load`, `selected-load-error`, and `detail.surface`.",
       "- [ ] If this app uses importmap, run `rails generate rails_fields_kit:install --importmap` when `config/importmap.rb` exists, or add manual pins for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.",
       "- [ ] If this app uses Vite or another bundler, add resolver or alias entries for `rails_fields_kit` and `rails_fields_kit/tom_select_controller`.",
+      "- [ ] When a bundler, Vite, importmap, or browser console error says a Rails Fields Kit import cannot be resolved, use the upstream unresolved imports troubleshooting section to check the package-root import path separately from the direct controller import path.",
       "## Migration and helper selection",
       "- [ ] If this app is replacing a server-rendered `collection_select`, review the practical `rfk_select` migration guide before adding extra reinitializers or controller glue.",
       "- [ ] Use `doc/field_helpers.md` when choosing between `rfk_select`, `rfk_grouped_select`, `rfk_enum_select`, `rfk_combobox`, `rfk_autocomplete`, `rfk_token_search`, `rfk_tags`, and `rfk_multi_select`.",
@@ -189,6 +192,16 @@ RSpec.describe "package contents" do
       expect(product_profile).to include("`#{path}`")
       expect(visual_references).to include("[`#{link}`](#{link})")
     end
+  end
+
+  it "keeps the no-event boundary companion artifact map-only and packaged" do
+    expect(specification.files).to include("doc/tom_select_no_event_boundary_review.html")
+    expect(visual_references).to include(
+      "[`tom_select_no_event_boundary_review.html`](tom_select_no_event_boundary_review.html)",
+      "map-only companion artifact",
+      "stale / aborted no-event states",
+      "without promoting request-start / finish events, retry UI, production CSS, or request lifecycle behavior into Rails Fields Kit"
+    )
   end
 
   it "keeps styling boundary docs aligned with public and visual reference roles" do
@@ -298,6 +311,7 @@ RSpec.describe "package contents" do
       rfk_text_field
       rfk_text_area
       rfk_number_field
+      rfk_range_field
       rfk_money_field
       rfk_percent_field
       rfk_email_field

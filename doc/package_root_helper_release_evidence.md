@@ -148,6 +148,30 @@ Suggested evidence note:
 tomSelectPluginContract: PASS on <field selector>. plugins matched the rendered effective plugin list; allow_clear field exposed clear_button through plugins and hasClearButton; explicit plugin field exposed the expected derived hasClearButton / hasRemoveButton flags; unrelated element returned null. Plugin assets, styling, mutation, empty-state copy, and Tom Select plugin lifecycle remained host-app or Tom Select responsibilities.
 ```
 
+## Tom Select selection contract reader
+
+Use this lane when `tomSelectSelectionContract(element)` is in release scope.
+
+Representative import:
+
+```js
+import { tomSelectSelectionContract } from "rails_fields_kit"
+```
+
+Check an initialized rendered Tom Select-backed field after the controller has connected:
+
+- `tomSelectSelectionContract(fieldElement)` returns a plain object for an initialized Rails Fields Kit Tom Select field.
+- The result exposes the documented `values` array using the current selection shape shared with forwarded interaction events.
+- A single-value field, multiple-value field, or cleared field should match the representative release scope rather than exhaustively testing every Tom Select mode.
+- A comparable uninitialized, non-Tom Select, or unrelated element returns `null`.
+- The evidence stays read-only; selection mutation, hidden field generation, event dispatch, validation feedback, request execution, and Tom Select instance lifecycle remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+tomSelectSelectionContract: PASS on <field selector>. values matched the initialized field's current selection; unrelated or uninitialized element returned null. Selection mutation, hidden fields, events, validation feedback, and request execution remained out of scope.
+```
+
 ## Tom Select request contract reader
 
 Use this lane when `tomSelectRequestContract(element)` is in release scope.
@@ -171,6 +195,30 @@ Suggested evidence note:
 
 ```text
 tomSelectRequestContract: PASS on <field selector>. remote search / selected preload / create endpoint flags and URLs, param names, minLength, and errorSurfaceId matched the rendered field contract; default/no-request and unrelated elements returned the documented boundaries. Request execution, authorization, retry UI, visible feedback, fixed params parsing, and controller lifecycle remained out of scope.
+```
+
+## Error surface reader
+
+Use this lane when `readRenderedErrorSurface(element)` is in release scope.
+
+Representative import:
+
+```js
+import { readRenderedErrorSurface } from "rails_fields_kit"
+```
+
+Check a rendered Tom Select-backed field that opts into `error_surface:`:
+
+- `readRenderedErrorSurface(fieldElement)` returns the rendered placeholder element for a Rails Fields Kit field with an `errorSurfaceId` value.
+- The returned element id matches the documented `errorSurfaceId` surfaced through `tomSelectRequestContract(element)` for the same field.
+- A comparable Rails Fields Kit field without `error_surface:` returns `null`.
+- A field whose rendered placeholder is missing returns `null` rather than creating or mutating visible feedback.
+- The evidence stays read-only; request execution, retry UI, visible copy, validation policy, authorization, mutation, and fallback rendering remain host-app responsibilities.
+
+Suggested evidence note:
+
+```text
+readRenderedErrorSurface: PASS on <field selector>. The helper returned the rendered opt-in placeholder matching the field errorSurfaceId; no-surface and missing-placeholder cases returned null. Request execution, retry UI, visible copy, validation policy, authorization, mutation, and fallback rendering remained out of scope.
 ```
 
 ## Native accessibility contract reader

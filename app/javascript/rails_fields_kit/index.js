@@ -39,6 +39,8 @@ const NATIVE_FIELD_WRAPPER_SELECTOR = ".rfk-field"
 const NATIVE_FIELD_LABEL_SELECTOR = "label"
 const NATIVE_FIELD_HINT_CLASS = "rfk-hint"
 const NATIVE_FIELD_ERROR_CLASS = "rfk-error"
+const NATIVE_FIELD_PREFIX_CLASS = "rfk-prefix"
+const NATIVE_FIELD_SUFFIX_CLASS = "rfk-suffix"
 
 function hasTomSelectController(element) {
   const controllers = element?.getAttribute?.("data-controller")?.split(/\s+/) || []
@@ -47,6 +49,13 @@ function hasTomSelectController(element) {
 
 function textOverrideValue(element, attributeName) {
   return element.hasAttribute(attributeName) ? element.getAttribute(attributeName) : null
+}
+
+function selectedValuesFrom(element) {
+  const value = element.tomselect?.getValue?.()
+  if (value === undefined) return null
+
+  return Array.isArray(value) ? [...value] : [value]
 }
 
 function dataValue(element, attributeName) {
@@ -113,6 +122,10 @@ function firstElementWithClass(elements, className) {
 
 function nativeFieldWrapper(element) {
   return element.closest?.(NATIVE_FIELD_WRAPPER_SELECTOR) || null
+}
+
+function nativeFieldAffix(wrapperElement, className) {
+  return wrapperElement?.querySelector?.(`.${className}`) || null
 }
 
 function cssEscape(value) {
@@ -184,6 +197,24 @@ export function tomSelectPluginContract(element) {
   }
 }
 
+export function tomSelectSelectionContract(element) {
+  if (!element || typeof element.getAttribute !== "function" || !hasTomSelectController(element)) return null
+
+  const values = selectedValuesFrom(element)
+  if (!values) return null
+
+  return { values }
+}
+
+export function readRenderedErrorSurface(element) {
+  if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function") return null
+
+  const surfaceId = dataValue(element, REQUEST_CONTRACT_ATTRIBUTES.errorSurfaceId)
+  if (!surfaceId) return null
+
+  return element.ownerDocument?.getElementById?.(surfaceId) || null
+}
+
 export function readRenderedSelectedPreloadConfig(element) {
   if (!element || typeof element.getAttribute !== "function") return null
 
@@ -213,6 +244,8 @@ export function nativeFieldAccessibilityContract(element) {
     labelElement: nativeFieldLabel(element, wrapperElement),
     hintElement: firstElementWithClass(describedByElements, NATIVE_FIELD_HINT_CLASS),
     errorElement: firstElementWithClass(describedByElements, NATIVE_FIELD_ERROR_CLASS),
+    prefixElement: nativeFieldAffix(wrapperElement, NATIVE_FIELD_PREFIX_CLASS),
+    suffixElement: nativeFieldAffix(wrapperElement, NATIVE_FIELD_SUFFIX_CLASS),
     wrapperElement
   }
 }
