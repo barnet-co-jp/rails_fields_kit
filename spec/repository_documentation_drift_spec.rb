@@ -37,6 +37,28 @@ RSpec.describe "repository documentation drift guards" do
     expect(missing_paths).to eq([])
   end
 
+  it "keeps repository-local docs link check scope explicit for HTML fragment links" do
+    development_doc = read_repo_file("doc/development.md")
+    readme = read_repo_file("README.md")
+    visual_references = read_repo_file("doc/visual_references.md")
+
+    expect(development_doc).to include(
+      "lightweight repository-local documentation link check",
+      "relative file targets",
+      "repository-local Markdown heading anchors",
+      "same-file HTML fragment links",
+      "external URLs and cross-file HTML element anchors remain intentionally outside its scope"
+    )
+    expect(readme).to include(
+      "[`doc/visual_references.md`](doc/visual_references.md)",
+      "[`doc/visual_reference_index.html`](doc/visual_reference_index.html)"
+    )
+    expect(visual_references).to include(
+      "[`visual_reference_index.html`](visual_reference_index.html)",
+      "[`public_api.md#javascript-exports`](public_api.md#javascript-exports)"
+    )
+  end
+
   it "keeps README direct import helper guidance lightweight and tied to the public API source of truth" do
     readme = read_repo_file("README.md")
     public_api = read_repo_file("doc/public_api.md")

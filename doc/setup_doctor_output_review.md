@@ -41,6 +41,16 @@ Use these states when a PR or release asks for narrow terminal, wrapped Markdown
 
 For PR-level evidence, name the state and record the width used, such as `80-column terminal`, `390px Markdown preview`, or `GitHub PR comment code block`. For release-wide evidence, keep the detailed output in the release notes or PR comment and record the summary result in `doc/sample_app_results.md`.
 
+Use this matrix when deciding which evidence note to write after a narrow or wrapped review. It keeps the representative state, checklist focus, and recording context together so reviewers do not have to infer which checklist section applies.
+
+| Evidence note names | Pair with checklist section | Include in the note |
+| --- | --- | --- |
+| `First-run mixed status` | Status Interpretation | Legend position, `[MISSING]` action item, `[MANUAL]` host-app follow-up wording, and the width or preview surface used. |
+| `Advisory Tom Select package` | Advisory Ownership | Package evidence boundary, manual Stimulus / CSS follow-up wording, setup path, and whether the line came from package.json visibility only. |
+| `Stimulus registration advisory` | Advisory Ownership | Whether the captured state is `[OK]` or `[MANUAL]`, the representative entrypoint or absence of one, and the host-app boot-policy boundary. |
+| `CSS import advisory` | Advisory Ownership | Whether the captured state is `[OK]` or `[MANUAL]`, the representative stylesheet or entrypoint, and the host-app stylesheet / bundler boundary. |
+| `Importmap target mismatch` | Wrapping Evidence | The wrapped width, each expected target, each found target, and whether the pair remains readable without changing setup doctor wording. |
+
 Do not create a new runtime output mode just to satisfy this review. If a state is unreadable after wrapping, record it as a docs/setup policy follow-up unless the issue explicitly asks to change setup doctor wording.
 
 ## Representative Output States
@@ -179,12 +189,17 @@ Review notes:
 
 ## Narrow Evidence Checklist
 
-Use this checklist when recording release or PR evidence:
+Use this checklist when recording release or PR evidence. Work from the status meaning first, then check advisory ownership, wrapping readability, and the evidence recording context.
+
+### Status Interpretation
 
 - [ ] The status legend appears before individual check lines.
 - [ ] `[OK]`, `[MISSING]`, and `[MANUAL]` labels are visually easy to distinguish in the recorded output.
 - [ ] The evidence note distinguishes `[MISSING]` action items from `[MANUAL]` host-app checks.
-- [ ] Missing importmap target output includes both expected and observed target values.
+- [ ] Manual checklist lines are not described as failed automatic checks.
+
+### Advisory Ownership
+
 - [ ] Tom Select package evidence is described as advisory dependency visibility, not package/version policy.
 - [ ] Stimulus registration evidence distinguishes detected advisory signals from manual host-app boot checks.
 - [ ] `[OK] Stimulus registration` is not described as Rails Fields Kit owning the app boot file, controller registry shape, or `Application.start()` policy.
@@ -192,9 +207,15 @@ Use this checklist when recording release or PR evidence:
 - [ ] CSS import evidence distinguishes detected advisory signals from manual host-app stylesheet checks.
 - [ ] `[OK] CSS import` is not described as Rails Fields Kit owning stylesheet bundling, theme policy, or production CSS.
 - [ ] `[MANUAL] CSS import` is not described as a failed automatic check unless a separate issue changes setup doctor behavior.
+
+### Wrapping Evidence
+
+- [ ] Missing importmap target output includes both expected and observed target values.
 - [ ] Narrow-width evidence says whether the output was reviewed in a standard terminal width, a wrapped Markdown/code-block view, or both.
 - [ ] Wrapped mismatch lines still make the expected and observed target relationship readable without changing setup doctor wording.
-- [ ] Manual checklist lines are not described as failed automatic checks.
+
+### Recording Context
+
 - [ ] Evidence notes say whether the app under review is importmap, jsbundling, bundler-managed JavaScript, or another setup path.
 - [ ] Any deferred follow-up is recorded as docs/setup policy work, not as a visual reference failure.
 

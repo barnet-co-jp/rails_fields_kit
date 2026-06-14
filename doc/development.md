@@ -67,35 +67,23 @@ This repository intentionally does not commit a single `.nvmrc` or `.node-versio
 npm run check:js
 ```
 
-This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It first runs the JavaScript smoke inventory guard, then runs lightweight Node sandbox checks for package `exports` import wiring, Tom Select fixed query params append behavior, Tom Select forwarded interaction and request event payloads, Tom Select selection contract helper values, Tom Select create-on-the-fly JSON request headers and success response normalization, Tom Select error-surface metadata, Tom Select Turbo lifecycle behavior, Tom Select label fallback rendering, Tom Select option value guard behavior, Tom Select render text fallback rendering, Tom Select render text accessibility boundaries, Tom Select plugin contract reading, and selected preload config reading, stubbing external browser dependencies so the package root and direct controller entrypoint are resolved through the same public import paths CI uses.
+This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It starts with the smoke inventory guard, then runs lightweight Node sandbox checks through the same public import paths that CI uses.
 
-The smoke inventory guard derives CI-owned smoke candidates from `scripts/check_*.mjs` and compares them with the repository-local `scripts/check_javascript.mjs` runner. New JavaScript smoke scripts are expected to run through `npm run check:js` unless they are intentionally standalone; in that rare case, add the script path to the documented allowlist inside `scripts/check_javascript_smoke_inventory.mjs` with a short reason.
+Read the `check:js` coverage as guard families. Do not treat this guide as the script membership source of truth:
+
+- package/import metadata: package `exports`, package-root named exports, callable contract-reader rows, the package-root default export, and the direct controller entrypoint
+- request lifecycle and event payloads: fixed query params, Tom Select forwarded interaction event payloads, request success / failure details, create request headers and response normalization, error-surface metadata, Tom Select Turbo lifecycle behavior, and Turbo lifecycle cleanup
+- rendered text, option, and fallback semantics: label fallback, option value guards, render text fallback, render text accessibility boundaries, and escaping or live-region cues that should stay package-owned
+- package-root contract readers: selection state, plugin state, selected preload config, and similar read-only rendered-field helpers that inspect existing data without exposing Tom Select internals or adding mutation APIs
+- docs and smoke-inventory drift: runner membership, docs wording, and public JavaScript export documentation that should stay aligned without turning this guide, README, or `doc/public_api.md` into an exhaustive smoke inventory
+
+Within the request lifecycle family, keep the Tom Select forwarded interaction event payloads boundaries visible: `change` forwards the scalar value plus the normalized `values` array, single-value `clear` wraps Tom Select's scalar cleared value as `values: [""]`, and multiple-value `clear` keeps the empty array shape. This family also includes the Tom Select Turbo lifecycle smoke so the Tom Select Turbo lifecycle behavior remains covered alongside request abort, stale-response, and cleanup checks.
+
+Exact smoke script membership belongs to `scripts/check_javascript.mjs`, and `scripts/check_javascript_smoke_inventory.mjs` verifies that CI-owned `scripts/check_*.mjs` files are either run by `npm run check:js` or explicitly documented as standalone with a short reason. Update those sources first when adding, removing, or intentionally exempting a smoke; keep this section focused on the guard families and responsibility boundaries.
 
 The package export smoke derives package-root named-export expectations from the JavaScript exports table in `doc/public_api.md` and stops reading at the next level-2 heading, so later public API tables are not treated as package-root export rows. It also derives callable helper assertions from rows whose `Kind` marks them as contract readers, while keeping the `TomSelectController` class export, package-root default export, and direct controller entrypoint checks separate.
 
 The Tom Select controller smokes share an internal sandbox harness for the Stimulus and Tom Select stubs, controller import, and cleanup. That harness is repository-local test setup only; it does not add a new JavaScript test framework or change the public package entrypoints.
-
-The fixed query params smoke keeps configured request params visible: scalar values are appended, array values keep all representative entries, top-level `null` / `undefined` values are skipped, and existing query params can coexist with appended params. Array item values are passed through `URLSearchParams.append`, so array item `null` / `undefined` / blank strings remain visible as query entries rather than being filtered like top-level values.
-
-The Tom Select forwarded interaction event payloads boundary remains visible in the same smoke. It now also keeps the current Tom Select event detail shape visible for request lifecycle hooks: `change` forwards the scalar value plus the normalized `values` array, single-value `clear` wraps Tom Select's scalar cleared value as `values: [""]`, multiple-value `clear` keeps the empty array shape, and request success / failure hooks keep the representative `load`, `selected-load`, `create`, and error detail keys aligned with `doc/events.md`.
-
-The Tom Select selection contract smoke keeps the package-root on-demand helper separate from forwarded event payloads: non-RFK or uninitialized elements return `null`, initialized single and multiple selections expose `{ values: [...] }`, and clear states keep the current scalar and array shapes visible without adding mutation APIs or exposing Tom Select internals.
-
-The create request header smoke keeps the existing create-on-the-fly contract visible: JSON `Accept` / `Content-Type` headers are always sent, a Rails CSRF meta token is copied to `X-CSRF-Token` when present without requiring one in non-Rails or test-only DOMs, wrapped `{ option: ... }` and raw option response objects are accepted, and nullish success payloads remain non-options.
-
-The error surface smoke keeps request-failure feedback metadata visible: when `error_surface: true` is enabled, create failures mark the configured surface with `data-rfk-error-state`, operation, and status metadata, and clearing the error surface removes those attributes without moving visible message ownership into the package.
-
-The label fallback smoke keeps the remote option display contract visible: explicit label fields still win, missing / blank / null labels fall back to the value field for display only, and `0` / `false` labels remain present values.
-
-The option value guard smoke keeps the Tom Select option value guard behavior visible: blank, missing, or null option values are skipped before rendering remote results, while present falsey values such as `0` remain selectable.
-
-The render text fallback smoke keeps the selected-option text contract visible: renderer output uses the configured render text field when present, falls back to label/value text when render text is missing, and stays separate from the label fallback smoke so value display and custom render text regressions are easier to diagnose.
-
-The render text accessibility smoke keeps the empty-state and loading-state live-region attributes visible while keeping create-option copy escaping separate from retry UI ownership.
-
-The Tom Select plugin contract smoke keeps rendered plugin data readable from the package root: `clear_button` and `remove_button` produce derived flags, plain plugin arrays stay readable, and unrelated elements return `null`.
-
-The selected preload config smoke keeps rendered selected preload data readable from the package root: explicit and default param names are visible, query params are object-shaped, and fields without selected preload return `null`.
 
 ## Build locally
 
@@ -127,7 +115,7 @@ Current CI adds these repository-level confirmations on top of the local workflo
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - Representative Rails compatibility checks for pull requests and `main` pushes: Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
-- `npm run check:js` on Node 22.x and Node 24.x for the JavaScript syntax, smoke inventory, package exports import lane, Tom Select fixed query params smoke, Tom Select forwarded interaction and request event smoke, Tom Select selection contract smoke, Tom Select create request header and response normalization smoke, Tom Select error surface smoke, Tom Select Turbo lifecycle smoke, Tom Select label fallback smoke, Tom Select option value guard smoke, Tom Select render text fallback smoke, Tom Select render text accessibility smoke, Tom Select plugin contract smoke, and selected preload config smoke
+- `npm run check:js` on Node 22.x and Node 24.x for JavaScript syntax plus the smoke inventory guard, package/import metadata checks, Tom Select request lifecycle and event payload checks, rendered text and option semantics checks, package-root contract reader checks, and docs or smoke-inventory drift checks
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 
 ## Open PR freshness checks
@@ -140,6 +128,10 @@ For review queue triage and release prep, confirm these current signals together
 - the PR metadata `mergeable` value or equivalent GitHub mergeability signal
 - whether the PR branch is behind, diverged, or superseded by a replacement PR
 - the base branch freshness, especially after recent `main` merges that touched nearby docs, specs, package metadata, or public API wording
+
+When a replacement PR supersedes an older PR, leave the older PR with enough reviewer-facing context to avoid duplicate review effort: link the replacement, summarize whether the old branch should be closed, and call out any human decision that still belongs on the old PR. If the older PR cannot be closed safely because the replacement changes scope, risk, or public API surface, leave both open and record the reason in the newer PR's Notes.
+
+When multiple open PRs close the same issue, do not treat that as an automatic merge or close signal. Pick a single active candidate only when the scope, target issue, and review status make the choice clear; otherwise keep the duplicate closing PRs visible for human review and note the overlap in each affected PR's Notes.
 
 Keep this as a manual queue hygiene guard. Do not add a GitHub API-dependent CI job, automatic branch refresh, force push, stale PR cleanup, or merge decision automation unless release planning explicitly accepts that larger devops surface.
 
