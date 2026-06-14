@@ -200,6 +200,15 @@ export function tomSelectSelectionContract(element) {
   return { values }
 }
 
+export function readRenderedErrorSurface(element) {
+  if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function") return null
+
+  const surfaceId = dataValue(element, REQUEST_CONTRACT_ATTRIBUTES.errorSurfaceId)
+  if (!surfaceId) return null
+
+  return element.ownerDocument?.getElementById?.(surfaceId) || null
+}
+
 export function readRenderedSelectedPreloadConfig(element) {
   if (!element || typeof element.getAttribute !== "function") return null
 
