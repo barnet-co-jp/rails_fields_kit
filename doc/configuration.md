@@ -2,6 +2,8 @@
 
 Rails Fields Kit can be configured from `config/initializers/rails_fields_kit.rb`.
 
+Use [`configuration_profiles.md`](configuration_profiles.md) when you want copyable initializer-default examples for common host-app contexts. Those examples are docs-only patterns, not named profiles, preset APIs, generator options, or design system policy owned by the gem.
+
 ```ruby
 RailsFieldsKit.configure do |config|
   config.controller_name = "rails-fields-kit--tom-select"
