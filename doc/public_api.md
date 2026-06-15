@@ -97,8 +97,11 @@ See [`range_field.md`](range_field.md) for the current `rfk_range_field` thin wr
 See [`password_field.md`](password_field.md) for the current `rfk_password_field` thin wrapper boundary and password-specific non-goals.
 See [`select_migration.md`](select_migration.md) for a practical server-rendered `collection_select` to `rfk_select` migration pattern.
 See [`enum_select.md`](enum_select.md) for the `rfk_enum_select` explicit `enum:` hash boundary, including keys-as-submitted-values behavior and the non-goal boundary around arbitrary label/value DSLs or remote enum option lookup.
+See [`collection_group_helpers.md`](collection_group_helpers.md) for the current non-API boundary around collection checkbox / radio groups, semantic `fieldset` / `legend`, group-level hint / error wiring, and host-app ownership of collection semantics.
 
 Current Ransack-oriented public surface stays metadata-first. `rfk_token_search` is a general token-search UI helper, while `rfk_table_filters(columns)` renders metadata that was already prepared elsewhere. Helper-level DSL examples such as `rfk_token_search ..., adapter: :ransack` or `rfk_table_filters @table_preferences, adapter: :ransack` are not current public APIs in the 0.1.x contract.
+
+Collection checkbox / radio group helpers are also not current public APIs. Host apps should keep using ordinary Rails collection helpers or host-app markup for group semantics until a future helper is merged and listed here.
 
 Tom Select-backed `rfk_*` helpers also support opt-in `error_surface:` and `error_surface_html:` options for fields that should expose a stable nearby placeholder on request failures. When enabled, request-failure events described in [`events.md`](events.md) can include that placeholder as `detail.surface`, while visible error copy and retry UI remain host-app responsibility.
 
