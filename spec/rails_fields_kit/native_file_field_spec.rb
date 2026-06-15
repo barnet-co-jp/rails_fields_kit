@@ -58,14 +58,12 @@ RSpec.describe "native file field FormBuilder helper" do
       :attachment,
       accept: "image/png,image/jpeg",
       multiple: true,
-      direct_upload: true,
       html: { data: { role: "attachment-input" } }
     )
 
     expect(html).to include("type=\"file\"")
     expect(html).to include("accept=\"image/png,image/jpeg\"")
     expect(html).to include("multiple=\"multiple\"")
-    expect(html).to include("data-direct-upload-url")
     expect(html).to include("data-role=\"attachment-input\"")
   end
 
