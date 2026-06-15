@@ -72,6 +72,8 @@ The detailed entries remain the exhaustive source of truth for release review. K
 
 - Visual reference release evidence docs now distinguish browser-verified `PASS` / `FAIL` results from `SOURCE REVIEW ONLY` and `DEFERRED` handoffs, so CI or source review alone is not treated as visual approval.
 - Documentation drift guards now cover visual reference HTML artifact structure, same-file HTML fragment link-check scope, and companion visual reference package/map inventory without turning external URLs, cross-file HTML anchors, or browser screenshots into required checks.
+- Configuration docs now distinguish concrete initializer defaults, nil Tom Select data-value omissions, and bundled locale-aware render-text fallbacks before the Quick reference tables.
+- Shared metadata navigation docs now have a focused drift guard for README/public API entry links, current public API / host-app-owned source boundaries, and future registry proposals.
 - Native affix contract smoke now runs through the maintained JavaScript check runner, keeping package-root helper evidence on the same `npm run check:js` path without changing native wrapper behavior.
 
 #### Packaging and bundled locales

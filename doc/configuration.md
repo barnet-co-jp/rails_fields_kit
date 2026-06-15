@@ -12,6 +12,18 @@ end
 
 Use these grouped tables to find the initializer key, field-level override, and default behavior before jumping into the detailed sections below. Field-level options win over initializer defaults for the one rendered helper.
 
+Read the quick reference in this order:
+
+1. Pick the group that matches the thing you are changing: request params, JSON mapping, Tom Select behavior, rendered text, or wrapper classes.
+2. Use `Field-level override` when only one helper render should differ from the app-wide initializer default.
+3. Check `Default or fallback` before adding an initializer. Some defaults render a concrete value, some `nil` Tom Select settings omit the data value, and render text uses bundled locale-aware copy when unset.
+
+Default behavior uses three different patterns:
+
+- Concrete values such as `"q"` or `"value"` are rendered unless the field-level option overrides them.
+- `nil` Tom Select interaction defaults leave the matching data value unset so the host app's Tom Select setup or Tom Select itself can decide.
+- Render text defaults use bundled locale-aware copy with English fallback when the initializer is unset; this is different from omitting a Tom Select data value.
+
 ### Controller and remote request params
 
 | Initializer key | Default or fallback | Field-level override | Applies to | Notes |
