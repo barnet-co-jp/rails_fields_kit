@@ -190,6 +190,7 @@ The package root also exposes read-only helpers for inspecting rendered field co
 | --- | --- | --- |
 | Request endpoint and parameter config | `tomSelectRequestContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Current selection state | `tomSelectSelectionContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Selected preload config | `readRenderedSelectedPreloadConfig(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Rendered plugin state | `tomSelectPluginContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Tom Select copy values | `tomSelectTextOverrideContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Native wrapper accessibility wiring | `nativeFieldAccessibilityContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
