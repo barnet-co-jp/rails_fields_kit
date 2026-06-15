@@ -175,17 +175,33 @@ application.register("rails-fields-kit--tom-select", TomSelectController)
 
 ### Direct imports and package exports
 
-You can also import the controller file directly:
+You can import the Stimulus controller from either documented path:
 
 ```js
+import { TomSelectController } from "rails_fields_kit"
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `tomSelectRequestContract(...)` for request endpoint and parameter config, `tomSelectSelectionContract(...)` for current selection state, `tomSelectPluginContract(...)` for rendered plugin state, `tomSelectTextOverrideContract(...)` for Tom Select copy values, `readRenderedSelectedPreloadConfig(...)` for selected preload config, and `nativeFieldAccessibilityContract(...)` for native wrapper accessibility wiring; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. When preparing release or sample-app evidence for the helper lane in scope, use [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) instead of expanding this README into a helper inventory. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
+Use the package-root import for normal Stimulus registration. Use the direct controller entrypoint when a host app wants to pin or alias only that file.
+
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, and the package root also exposes read-only rendered-field contract helpers. use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary.
+
+Keep this README as a representative route rather than a full helper inventory:
+
+| Need | Representative helper | Source of truth |
+| --- | --- | --- |
+| Request endpoint and parameter config | `tomSelectRequestContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Current selection state | `tomSelectSelectionContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Selected preload config | `readRenderedSelectedPreloadConfig(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Rendered plugin state | `tomSelectPluginContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Tom Select copy values | `tomSelectTextOverrideContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Native wrapper accessibility wiring | `nativeFieldAccessibilityContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+
+For release or sample-app evidence about a package-root helper lane, use [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) instead of expanding this README into a helper inventory. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
 
 If either documented import path cannot be resolved, use [`doc/setup.md#troubleshoot-unresolved-imports`](doc/setup.md#troubleshoot-unresolved-imports) to check whether the package-root import or direct controller import is failing before changing bundler aliases, importmap pins, or Stimulus boot files.
 
-For example, host-app scripts can inspect representative rendered contracts that Rails Fields Kit already placed on the field without executing requests or mutating UI state:
+Host-app scripts can inspect representative rendered contracts without executing requests or mutating UI state:
 
 ```js
 import {
