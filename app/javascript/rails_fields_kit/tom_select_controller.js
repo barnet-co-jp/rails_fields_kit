@@ -20,6 +20,7 @@ export default class extends Controller {
     createParam: { type: String, default: "text" },
     valueField: { type: String, default: "value" },
     labelField: { type: String, default: "text" },
+    labelFallback: { type: Boolean, default: true },
     searchField: { type: String, default: "text" },
     minLength: { type: Number, default: 0 },
     maxOptions: Number,
@@ -142,6 +143,7 @@ export default class extends Controller {
   optionLabel(data) {
     const label = data[this.labelFieldValue]
     if (this.hasPresentValue(label)) return this.displayValue(label)
+    if (this.labelFallbackValue === false) return ""
 
     return this.displayValue(data[this.valueFieldValue])
   }
