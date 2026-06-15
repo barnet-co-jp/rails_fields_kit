@@ -212,6 +212,7 @@ rfk_create_with(
   label: :name,
   create_attribute: :name,
   create_param: "name",
+  permitted_attributes: [:external_id, :segment],
   assign: ->(_customer) { { account_id: current_account.id } },
   authorize: ->(customer) { policy(customer).create? },
   before_save: :normalize_customer,
@@ -230,6 +231,7 @@ rfk_create_with(
 - `action:` action method to define. Defaults to `:create`.
 - `create_attribute:` model attribute to set from the incoming text.
 - `create_param:` request parameter name. Defaults to `text`.
+- `permitted_attributes:` additional request body keys that `params.permit(...)` may merge into the new record's base attributes.
 - `assign:` extra attributes assigned before validation. Supports hash, method name, or callable.
 - `authorize:` returns whether the create is allowed. Supports method name or callable. Returns `403` when false.
 - `before_save:` hook called before `save`. Supports method name or callable. Returns `422` when false.
@@ -249,16 +251,16 @@ The JSON body merges fixed `create_params:` values first, then writes the user's
 <%= f.rfk_combobox :customer_id,
   create_url: customers_path,
   create_param: "name",
-  create_params: { account_id: current_account.id } %>
+  create_params: { account_id: current_account.id, external_id: "lead-123" } %>
 ```
 
 Rails Fields Kit posts a body shaped like this:
 
 ```json
-{ "account_id": 123, "name": "New Customer" }
+{ "account_id": 123, "external_id": "lead-123", "name": "New Customer" }
 ```
 
-The endpoint-side `rfk_create_with create_param:` option must read the same key that the field sends:
+The endpoint-side `rfk_create_with create_param:` option must read the same key that the field sends. Use `permitted_attributes:` only for additional request keys that the create endpoint may persist from the parsed Rails params:
 
 ```ruby
 rfk_create_with(
@@ -268,11 +270,12 @@ rfk_create_with(
   label: :name,
   create_attribute: :name,
   create_param: "name",
+  permitted_attributes: [:external_id],
   assign: ->(_customer) { { account_id: current_account.id } }
 )
 ```
 
-`create_params:` is only request shaping. Treat incoming fixed values as hints or context from the rendered page; keep tenant scoping, authentication, authorization, CSRF policy, model validation, and persisted assignment decisions in the host app controller/model layer. Prefer `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy for server-side enforcement.
+`create_params:` is only request shaping. Treat incoming fixed values as hints or context from the rendered page; keep tenant scoping, authentication, authorization, CSRF policy, model validation, and persisted assignment decisions in the host app controller/model layer. `permitted_attributes:` only controls which extra incoming keys Rails Fields Kit may copy into the new record's base attributes. Prefer `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy for server-derived values and server-side enforcement.
 
 Use the standard RESTful `POST /customers` action when create-on-the-fly should share the host app's ordinary resource create path. Use a dedicated collection `POST` action when the option creation flow needs a narrower authorization policy, assignment rule, or response shape than the normal resource create action.
 
@@ -282,7 +285,7 @@ FormBuilder options such as `query_params:`, `selected_query_params:`, and `crea
 
 Use fixed params for contextual values that the endpoint still verifies with server-side state. For example, an app may render `query_params: { account_id: current_account.id }` so the request carries an account hint, while the controller still scopes through a trusted relation such as `scope: -> { current_account.customers }` instead of trusting the incoming `params[:account_id]` by itself.
 
-The same boundary applies to create-on-the-fly fields: `create_params:` adds fixed JSON fields to the request body, but `rfk_create_with` should still use `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy to decide what can be persisted.
+The same boundary applies to create-on-the-fly fields: `create_params:` adds fixed JSON fields to the request body, and `permitted_attributes:` can allow selected incoming keys to become base attributes, but `rfk_create_with` should still use `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy to decide what can be persisted.
 
 ## `rfk_token_suggestions_with`
 
