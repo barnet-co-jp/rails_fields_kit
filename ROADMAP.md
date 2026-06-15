@@ -65,6 +65,7 @@ Current progress:
   - A lightweight controller helper for token suggestion JSON endpoints.
 - `RailsFieldsKit::TokenSuggestions.build`
   - A builder for operator, field, predicate, value, and saved-search suggestion option JSON.
+  - Saved-search support is current only as suggestion metadata for the submitted token search text. Rails Fields Kit does not currently expose a separate saved search selector helper, submitted saved-search ID contract, persistence workflow, execution policy, authorization rule, or sharing model.
 
 Non-goals for the core gem:
 
@@ -199,7 +200,7 @@ When a future feature lands, update the current public API docs and any affected
 These are useful proposals, not current public API, and should not distract from the core Tom Select-backed field kit. Feature gate issues should decide the smallest useful slice and responsibility boundary before any candidate is documented as implemented behavior.
 
 - mention fields for `@user` or `#tag` style textarea interactions; see #367
-- saved search selectors; see #377
+- saved search selectors; see #377. Current support stays in `TokenSuggestions.build(saved_searches:)` as suggestion option JSON for `rfk_token_search`; an independent selector helper would need a follow-up decision for helper naming, submitted value shape, and host-app-owned persistence, execution, authorization, and sharing policy.
 - field/operator suggestion registries; see #405. The first accepted gate is docs/proposal only; do not add a public Ruby registry before a follow-up feature issue accepts that API.
 - slug helpers for title-to-slug workflows; see #373
 - masked inputs only if a clear Rails integration gap remains; see #378
