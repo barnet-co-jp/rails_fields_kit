@@ -127,6 +127,7 @@ RSpec.describe "package contents" do
 
   it "keeps README and setup JavaScript helper summaries pointed at the public API source of truth" do
     javascript_exports = markdown_section(public_api, "## JavaScript exports")
+    readme_js_setup = markdown_section(readme, "### Direct imports and package exports")
 
     expect(javascript_exports).to include(
       "### Current package-root exports",
@@ -135,10 +136,13 @@ RSpec.describe "package contents" do
       "Future package-root helpers should follow the same boundary"
     )
 
-    expect(readme).to include(
+    expect(readme_js_setup).to include(
       "`rails_fields_kit/index.js` re-exports the same controller",
+      "direct `rails_fields_kit/tom_select_controller` entrypoint",
       "read-only rendered-field contract helpers",
-      "use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary"
+      "[`doc/public_api.md`](doc/public_api.md#javascript-exports)",
+      "source of truth",
+      "current helper list and responsibility boundary"
     )
 
     expect(setup_doc).to include(
