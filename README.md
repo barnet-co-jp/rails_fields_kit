@@ -300,7 +300,7 @@ Use [`doc/controller_helpers.md`](doc/controller_helpers.md#blank-query-policy) 
 The selected preload endpoint can return one option, a wrapped option, an array, or a wrapped array:
 
 ```json
-{ "option": { "id": 1, "name": "Example Customer" }
+{ "option": { "id": 1, "name": "Example Customer" } }
 ```
 
 The create endpoint should return the created option object:
