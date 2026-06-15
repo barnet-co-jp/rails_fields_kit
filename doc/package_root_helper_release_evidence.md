@@ -222,6 +222,30 @@ Suggested evidence note:
 tomSelectRequestContract: PASS on <field selector>. remote search / selected preload / create endpoint flags and URLs, param names, minLength, and errorSurfaceId matched the rendered field contract; default/no-request and unrelated elements returned the documented boundaries. Request execution, authorization, retry UI, visible feedback, fixed params parsing, and controller lifecycle remained out of scope.
 ```
 
+## Error surface reader
+
+Use this lane when `readRenderedErrorSurface(element)` is in release scope.
+
+Representative import:
+
+```js
+import { readRenderedErrorSurface } from "rails_fields_kit"
+```
+
+Check a rendered Tom Select-backed field that opts into `error_surface:`:
+
+- `readRenderedErrorSurface(fieldElement)` returns the rendered placeholder element for a Rails Fields Kit field with an `errorSurfaceId` value.
+- The returned element id matches the documented `errorSurfaceId` surfaced through `tomSelectRequestContract(element)` for the same field.
+- A comparable Rails Fields Kit field without `error_surface:` returns `null`.
+- A field whose rendered placeholder is missing returns `null` rather than creating or mutating visible feedback.
+- The evidence stays read-only; request execution, retry UI, visible copy, validation policy, authorization, mutation, and fallback rendering remain host-app responsibilities.
+
+Suggested evidence note:
+
+```text
+readRenderedErrorSurface: PASS on <field selector>. The helper returned the rendered opt-in placeholder matching the field errorSurfaceId; no-surface and missing-placeholder cases returned null. Request execution, retry UI, visible copy, validation policy, authorization, mutation, and fallback rendering remained out of scope.
+```
+
 ## Native accessibility contract reader
 
 Use this lane when `nativeFieldAccessibilityContract(element)` is in release scope.
@@ -235,15 +259,15 @@ import { nativeFieldAccessibilityContract } from "rails_fields_kit"
 Check a representative Rails Fields Kit-rendered native helper field, such as `rfk_text_field` or `rfk_money_field`, with the shared wrapper and accessibility wiring enabled:
 
 - `nativeFieldAccessibilityContract(fieldElement)` returns a plain object for the rendered native input.
-- The result confirms the documented label, hint, error, wrapper, and `describedByIds` wiring for the representative field.
+- The result confirms the documented label, hint, error, prefix, suffix, wrapper, and `describedByIds` wiring for the representative field.
 - A comparable unsupported element or non-native Rails Fields Kit target returns `null` when that is the documented boundary.
-- The evidence stays read-only; the helper only inspects rendered wiring and does not mutate labels, ids, focus behavior, validation messages, wrapper classes, or visible fallback UI.
+- The evidence stays read-only; the helper only inspects rendered wiring and does not mutate labels, ids, focus behavior, validation messages, wrapper classes, affix content, or visible fallback UI.
 - Host apps still own focus management, validation policy, user-facing validation copy, browser validation behavior, and any accessibility review beyond the rendered contract inspection.
 
 Suggested evidence note:
 
 ```text
-nativeFieldAccessibilityContract: PASS on <field selector>. label / hint / error / wrapper / describedByIds matched the rendered native helper contract; unsupported element returned null. Focus management, validation policy, and visible copy remained host-app review items.
+nativeFieldAccessibilityContract: PASS on <field selector>. label / hint / error / prefix / suffix / wrapper / describedByIds matched the rendered native helper contract; unsupported element returned null. Focus management, validation policy, and visible copy remained host-app review items.
 ```
 
 ## Evidence placement
