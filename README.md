@@ -182,9 +182,11 @@ import { TomSelectController } from "rails_fields_kit"
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
-Use the package-root import for normal Stimulus registration. Use the direct controller entrypoint when a host app wants to pin or alias only that file. The package root is implemented by `rails_fields_kit/index.js`, which re-exports the same controller as the direct controller entrypoint.
+Use the package-root import for normal Stimulus registration. Use the direct controller entrypoint when a host app wants to pin or alias only that file.
 
-The package root also exposes read-only helpers for inspecting rendered field contracts. Keep this README as a representative route rather than a full helper inventory:
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, and the package root also exposes read-only rendered-field contract helpers. Use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary.
+
+Keep this README as a representative route rather than a full helper inventory:
 
 | Need | Representative helper | Source of truth |
 | --- | --- | --- |
