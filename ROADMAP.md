@@ -190,6 +190,7 @@ The maintained docs should make the difference between current public API, revie
 - `doc/setup.md` is the maintained setup walkthrough and source of truth for the read-only setup doctor boundary.
 - `doc/public_api.md` is the intended stable API inventory for the 0.1.x series, including package-root JavaScript exports, FormBuilder helpers, controller helpers, table metadata adapters, Stimulus values, and events.
 - `doc/shared_metadata_navigation.md` is the short boundary map for shared token, Ransack, and table metadata patterns; it points readers back to the current API inventory and away from treating roadmap-only registry or adapter examples as implemented contract.
+- `doc/masked_input_boundary.md` is the current proposal boundary for masked inputs. It points host apps to native wrappers plus host-owned masking libraries today and keeps `rfk_masked_field` out of the current public API.
 - `doc/visual_references.md` and `doc/visual_reference_index.html` are maintained review entrypoints for landed static visual reference artifacts. They help reviewers inspect representative rendered states, but they do not define production runtime behavior or make proposal-only helper names current public API.
 - `Product Profile.md` and `AGENTS.md` summarize maintainer-facing source-of-truth order and responsibility boundaries.
 
@@ -203,7 +204,7 @@ These are useful proposals, not current public API, and should not distract from
 - saved search selectors; see #377. Current support stays in `TokenSuggestions.build(saved_searches:)` as suggestion option JSON for `rfk_token_search`; an independent selector helper would need a follow-up decision for helper naming, submitted value shape, and host-app-owned persistence, execution, authorization, and sharing policy.
 - field/operator suggestion registries; see #405. The first accepted gate is docs/proposal only; do not add a public Ruby registry before a follow-up feature issue accepts that API.
 - slug helpers for title-to-slug workflows; see #373
-- masked inputs only if a clear Rails integration gap remains; see #378
+- masked inputs only if a clear Rails integration gap remains; see #378 and [`doc/masked_input_boundary.md`](doc/masked_input_boundary.md) for the current non-API boundary.
 
 ## Design guardrails
 
