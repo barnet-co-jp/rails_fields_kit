@@ -4,6 +4,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 const CHECK_RUNNER = "check_javascript.mjs"
+const STANDALONE_REASON_MAX_LENGTH = 120
 const intentionalStandaloneCheckScripts = new Map([
   // Add ["scripts/check_example.mjs", "short reason"] entries here only when a smoke is intentionally not part of check:js.
 ].map(([scriptPath, reason]) => [normalizeScriptPath(scriptPath), reason]))
@@ -41,6 +42,12 @@ function evaluateInventory({ actualScripts, runnerSource, excludedScripts = inte
   const exclusionsWithoutReasons = [...excludedMap]
     .filter(([, reason]) => typeof reason !== "string" || reason.trim().length === 0)
     .map(([scriptPath]) => scriptPath)
+  const exclusionsWithMultilineReasons = [...excludedMap]
+    .filter(([, reason]) => typeof reason === "string" && /\r|\n/.test(reason))
+    .map(([scriptPath]) => scriptPath)
+  const exclusionsWithLongReasons = [...excludedMap]
+    .filter(([, reason]) => typeof reason === "string" && reason.trim().length > STANDALONE_REASON_MAX_LENGTH)
+    .map(([scriptPath]) => scriptPath)
 
   assert.deepEqual(
     missingScripts,
@@ -66,6 +73,16 @@ function evaluateInventory({ actualScripts, runnerSource, excludedScripts = inte
     exclusionsWithoutReasons,
     [],
     `intentional standalone smoke script exclusions must include a short reason: ${exclusionsWithoutReasons.join(", ")}`
+  )
+  assert.deepEqual(
+    exclusionsWithMultilineReasons,
+    [],
+    `intentional standalone smoke script exclusion reasons must stay on one line: ${exclusionsWithMultilineReasons.join(", ")}`
+  )
+  assert.deepEqual(
+    exclusionsWithLongReasons,
+    [],
+    `intentional standalone smoke script exclusion reasons must stay within ${STANDALONE_REASON_MAX_LENGTH} characters: ${exclusionsWithLongReasons.join(", ")}`
   )
 
   return { expectedScripts, referencedScripts }
@@ -145,6 +162,24 @@ function runSelfTests() {
       excludedScripts: new Map([["scripts/check_standalone.mjs", ""]])
     }),
     /short reason.*check_standalone\.mjs/
+  )
+
+  assertThrowsWithMessage(
+    () => evaluateInventory({
+      actualScripts,
+      runnerSource: 'const checks = [{ args: ["scripts/check_alpha.mjs"] }, { args: ["scripts/check_beta.mjs"] }]',
+      excludedScripts: new Map([["scripts/check_standalone.mjs", "exercised outside check:js\nwith a second line"]])
+    }),
+    /one line.*check_standalone\.mjs/
+  )
+
+  assertThrowsWithMessage(
+    () => evaluateInventory({
+      actualScripts,
+      runnerSource: 'const checks = [{ args: ["scripts/check_alpha.mjs"] }, { args: ["scripts/check_beta.mjs"] }]',
+      excludedScripts: new Map([["scripts/check_standalone.mjs", "x".repeat(STANDALONE_REASON_MAX_LENGTH + 1)]])
+    }),
+    /120 characters.*check_standalone\.mjs/
   )
 
   console.log("rails_fields_kit JavaScript smoke inventory self-test passed")
