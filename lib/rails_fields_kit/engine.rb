@@ -3,6 +3,7 @@
 require "active_support/core_ext/module/delegation"
 require "rails/engine"
 require "rails_fields_kit/form_builder"
+require "rails_fields_kit/form_builder_label_fallback"
 require "rails_fields_kit/form_builder_table_groups"
 require "rails_fields_kit/option_html_context"
 
