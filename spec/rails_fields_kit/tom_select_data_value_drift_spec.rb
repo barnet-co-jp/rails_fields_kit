@@ -4,12 +4,13 @@ require "spec_helper"
 
 RSpec.describe "Tom Select data value drift" do
   REPO_ROOT = File.expand_path("../..", __dir__)
-  FORM_BUILDER_SOURCE = File.read(File.join(REPO_ROOT, "lib/rails_fields_kit/form_builder.rb"))
+  FORM_BUILDER_DATA_VALUE_SOURCES = [
+    File.read(File.join(REPO_ROOT, "lib/rails_fields_kit/form_builder.rb")),
+    File.read(File.join(REPO_ROOT, "lib/rails_fields_kit/form_builder_label_fallback.rb"))
+  ].freeze
   TOM_SELECT_CONTROLLER_SOURCE = File.read(File.join(REPO_ROOT, "app/javascript/rails_fields_kit/tom_select_controller.js"))
 
-  JS_ONLY_STATIC_VALUES = {
-    "kind" => "FormBuilder writes rails_fields_kit__tom_select_kind_value directly before rfk_assign_data_value."
-  }.freeze
+  JS_ONLY_STATIC_VALUES = {}.freeze
 
   def camelize_data_value(value_name)
     value_name.to_s.split("_").then do |parts|
@@ -18,9 +19,11 @@ RSpec.describe "Tom Select data value drift" do
   end
 
   def generated_data_value_names
-    FORM_BUILDER_SOURCE
-      .scan(/rfk_assign_data_value\(data,\s*:(\w+)/)
-      .flatten
+    FORM_BUILDER_DATA_VALUE_SOURCES
+      .flat_map do |source|
+        source.scan(/rfk_assign_data_value\(data,\s*:(\w+)/).flatten +
+          source.scan(/data\[:rails_fields_kit__tom_select_(\w+)_value\]/).flatten
+      end
       .uniq
       .map { |value_name| camelize_data_value(value_name) }
       .sort
@@ -47,7 +50,7 @@ RSpec.describe "Tom Select data value drift" do
       "Add matching TomSelectController.static values for FormBuilder-generated data values: #{missing_static_values.join(', ')}"
   end
 
-  it "documents Tom Select static values that are not generated through rfk_assign_data_value" do
+  it "documents Tom Select static values that are not generated through FormBuilder data values" do
     undocumented_static_values = tom_select_static_value_names - generated_data_value_names - JS_ONLY_STATIC_VALUES.keys
 
     expect(undocumented_static_values).to be_empty,
