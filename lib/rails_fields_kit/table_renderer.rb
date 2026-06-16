@@ -195,13 +195,24 @@ module RailsFieldsKit
         method = call.fetch(:method)
         raise ArgumentError, "table metadata method is required" unless method
 
+        helper = call.fetch(:helper)
         options = call.fetch(:options)
-        if table_filter && call.fetch(:helper) == :rfk_token_search && !options[:adapter].nil?
-          options = options.dup
-          options[:_rfk_table_filter_metadata] = true
+
+        if table_filter && helper == :rfk_token_search && table_adapter_metadata?(options)
+          previous = Thread.current[:rails_fields_kit_render_table_filter_metadata]
+          Thread.current[:rails_fields_kit_render_table_filter_metadata] = true
+          begin
+            return form_builder.public_send(helper, method, **options)
+          ensure
+            Thread.current[:rails_fields_kit_render_table_filter_metadata] = previous
+          end
         end
 
-        form_builder.public_send(call.fetch(:helper), method, **options)
+        form_builder.public_send(helper, method, **options)
+      end
+
+      def table_adapter_metadata?(options)
+        options.key?(:adapter) || options.key?("adapter")
       end
 
       def normalize_field_type(field_type)
