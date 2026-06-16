@@ -65,6 +65,7 @@ Current progress:
   - A lightweight controller helper for token suggestion JSON endpoints.
 - `RailsFieldsKit::TokenSuggestions.build`
   - A builder for operator, field, predicate, value, and saved-search suggestion option JSON.
+  - Saved-search support is current only as suggestion metadata for the submitted token search text. Rails Fields Kit does not currently expose a separate saved search selector helper, submitted saved-search ID contract, persistence workflow, execution policy, authorization rule, or sharing model.
 
 Non-goals for the core gem:
 
@@ -189,6 +190,9 @@ The maintained docs should make the difference between current public API, revie
 - `doc/setup.md` is the maintained setup walkthrough and source of truth for the read-only setup doctor boundary.
 - `doc/public_api.md` is the intended stable API inventory for the 0.1.x series, including package-root JavaScript exports, FormBuilder helpers, controller helpers, table metadata adapters, Stimulus values, and events.
 - `doc/shared_metadata_navigation.md` is the short boundary map for shared token, Ransack, and table metadata patterns; it points readers back to the current API inventory and away from treating roadmap-only registry or adapter examples as implemented contract.
+- `doc/masked_input_boundary.md` is the current proposal boundary for masked inputs. It points host apps to native wrappers plus host-owned masking libraries today and keeps `rfk_masked_field` out of the current public API.
+- `doc/slug_helper_boundary.md` is the current proposal boundary for title-to-slug workflows. It points host apps to current native text wrappers today and keeps slug generation, uniqueness, transliteration, reserved words, validation, and persistence as host-app responsibilities.
+- `doc/mention_field_boundary.md` is the current proposal boundary for textarea mention workflows. It points host apps to `rfk_autocomplete`, `rfk_token_search`, `rfk_tags`, or `rfk_text_area` where those existing lanes fit today and keeps mention parsing, overlay behavior, hidden metadata, authorization, and persistence as host-app responsibilities.
 - `doc/visual_references.md` and `doc/visual_reference_index.html` are maintained review entrypoints for landed static visual reference artifacts. They help reviewers inspect representative rendered states, but they do not define production runtime behavior or make proposal-only helper names current public API.
 - `Product Profile.md` and `AGENTS.md` summarize maintainer-facing source-of-truth order and responsibility boundaries.
 
@@ -198,11 +202,11 @@ When a future feature lands, update the current public API docs and any affected
 
 These are useful proposals, not current public API, and should not distract from the core Tom Select-backed field kit. Feature gate issues should decide the smallest useful slice and responsibility boundary before any candidate is documented as implemented behavior.
 
-- mention fields for `@user` or `#tag` style textarea interactions; see #367
-- saved search selectors; see #377
+- mention fields for `@user` or `#tag` style textarea interactions; see #367 and [`doc/mention_field_boundary.md`](doc/mention_field_boundary.md). Current support stays in `rfk_autocomplete` for plain text suggestions, `rfk_token_search` for structured search text, `rfk_tags` for tag-entry fields, or `rfk_text_area` for ordinary textarea content; a dedicated mention helper would need a follow-up decision for representative mention type, submitted value shape, suggestion endpoint contract, overlay strategy, and host-app-owned parsing, authorization, and persistence.
+- saved search selectors; see #377. Current support stays in `TokenSuggestions.build(saved_searches:)` as suggestion option JSON for `rfk_token_search`; an independent selector helper would need a follow-up decision for helper naming, submitted value shape, and host-app-owned persistence, execution, authorization, and sharing policy.
 - field/operator suggestion registries; see #405. The first accepted gate is docs/proposal only; do not add a public Ruby registry before a follow-up feature issue accepts that API.
-- slug helpers for title-to-slug workflows; see #373
-- masked inputs only if a clear Rails integration gap remains; see #378
+- slug helpers for title-to-slug workflows; see #373 and [`doc/slug_helper_boundary.md`](doc/slug_helper_boundary.md). Current support stays in existing native text wrappers; a dedicated slug helper would need a follow-up decision for data hooks, event shape, slug generation ownership, uniqueness, transliteration, reserved words, validation, and persistence policy.
+- masked inputs only if a clear Rails integration gap remains; see #378 and [`doc/masked_input_boundary.md`](doc/masked_input_boundary.md) for the current non-API boundary.
 
 ## Design guardrails
 

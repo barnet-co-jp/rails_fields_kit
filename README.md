@@ -41,7 +41,7 @@ Use this map as a first reader route, not a full documentation inventory. Start 
 | If you want to... | Start here | Then use |
 | --- | --- | --- |
 | Set up a host app | [`doc/setup.md`](doc/setup.md) | [`doc/support_boundary.md`](doc/support_boundary.md) for supported Ruby / Rails and repository JavaScript boundaries |
-| Check setup visibility after install | [`doc/setup.md`](doc/setup.md) for `rails rails_fields_kit:doctor` and its read-only/manual-check boundary | [`doc/setup_doctor_output_review.md`](doc/setup_doctor_output_review.md) for CLI diagnostic evidence review |
+| Check setup visibility after install | [`doc/setup.md`](doc/setup.md) for `rails rails_fields_kit:doctor` and its read-only/manual-check boundary | [`doc/setup_doctor.md`](doc/setup_doctor.md) for the read-only report surface, and [`doc/setup_doctor_output_review.md`](doc/setup_doctor_output_review.md) for CLI diagnostic evidence review |
 | Render the first field | [First field quickstart](#first-field-quickstart) | [`doc/field_helpers.md`](doc/field_helpers.md) when choosing the next helper |
 | Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md) | [`doc/select_migration.md`](doc/select_migration.md), [`doc/grouped_select.md`](doc/grouped_select.md), [`doc/enum_select.md`](doc/enum_select.md), [`doc/textarea_autosize.md`](doc/textarea_autosize.md), and [`doc/range_field.md`](doc/range_field.md) for focused helper boundaries |
 | See or compare rendered UI states quickly | [`doc/visual_references.md`](doc/visual_references.md) for the visual reference family, including Tom Select, request-failure and host-feedback lifecycle, text override, native helper, table metadata, and saved-search token states | [`doc/visual_reference_index.html`](doc/visual_reference_index.html) when choosing a visual lane by artifact, family, or reviewer task |
@@ -175,21 +175,39 @@ application.register("rails-fields-kit--tom-select", TomSelectController)
 
 ### Direct imports and package exports
 
-You can also import the controller file directly:
+You can import the Stimulus controller from either documented path:
 
 ```js
+import { TomSelectController } from "rails_fields_kit"
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
-`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, so both documented import paths stay available after pinning. It also exposes documented read-only rendered-field contract helpers such as `tomSelectRequestContract(...)` for request endpoint and parameter config, `tomSelectSelectionContract(...)` for current selection state, `tomSelectPluginContract(...)` for rendered plugin state, `tomSelectTextOverrideContract(...)` for Tom Select copy values, `readRenderedSelectedPreloadConfig(...)` for selected preload config, and `nativeFieldAccessibilityContract(...)` for native wrapper accessibility wiring; use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary. When preparing release or sample-app evidence for the helper lane in scope, use [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) instead of expanding this README into a helper inventory. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
+Use the package-root import for normal Stimulus registration. Use the direct controller entrypoint when a host app wants to pin or alias only that file.
+
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, and the package root also exposes read-only rendered-field contract helpers. Use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary.
+
+Keep this README as a representative route rather than a full helper inventory:
+
+| Need | Representative helper | Source of truth |
+| --- | --- | --- |
+| Request endpoint and parameter config | `tomSelectRequestContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Request-failure placeholder surface | `readRenderedErrorSurface(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Current selection state | `tomSelectSelectionContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Selected preload config | `readRenderedSelectedPreloadConfig(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Rendered plugin state | `tomSelectPluginContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Tom Select copy values | `tomSelectTextOverrideContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Native wrapper accessibility wiring | `nativeFieldAccessibilityContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+
+For release or sample-app evidence about a package-root helper lane, use [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) instead of expanding this README into a helper inventory. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
 
 If either documented import path cannot be resolved, use [`doc/setup.md#troubleshoot-unresolved-imports`](doc/setup.md#troubleshoot-unresolved-imports) to check whether the package-root import or direct controller import is failing before changing bundler aliases, importmap pins, or Stimulus boot files.
 
-For example, host-app scripts can inspect representative rendered contracts that Rails Fields Kit already placed on the field without executing requests or mutating UI state:
+Host-app scripts can inspect representative rendered contracts without executing requests or mutating UI state:
 
 ```js
 import {
   nativeFieldAccessibilityContract,
+  readRenderedErrorSurface,
   readRenderedSelectedPreloadConfig,
   tomSelectPluginContract,
   tomSelectRequestContract,
@@ -198,6 +216,7 @@ import {
 } from "rails_fields_kit"
 
 const requestContract = tomSelectRequestContract(tomSelectFieldElement)
+const errorSurface = readRenderedErrorSurface(tomSelectFieldElement)
 const selectionContract = tomSelectSelectionContract(tomSelectFieldElement)
 const copyContract = tomSelectTextOverrideContract(tomSelectFieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(tomSelectFieldElement)

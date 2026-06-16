@@ -59,6 +59,7 @@ Host applications remain responsible for:
 - `CHANGELOG.md`: released and unreleased user-visible changes, plus the current release-prep baseline
 - `AGENTS.md`: repo-specific source-of-truth order, docs-sync expectations, and release-facing review inventory
 - `doc/setup.md`: maintained setup walkthrough, including the read-only setup doctor boundary
+- `doc/setup_doctor.md`: read-only SetupDoctor report surface for programmatic checks, text evidence, and command behavior boundaries
 - `doc/setup_doctor_output_review.md`: focused CLI diagnostic evidence review for setup doctor output, Stimulus registration advisory states, target mismatch readability, and manual-check boundaries
 - `doc/support_boundary.md`: supported Ruby / Rails / Node boundaries and representative CI evidence
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
@@ -85,6 +86,7 @@ Host applications remain responsible for:
 - `doc/select_migration.md`: practical `collection_select` to `rfk_select` migration pattern
 - `doc/token_suggestions.md` and `doc/ransack_suggestions.md`: token-search suggestion surfaces and host-app responsibility boundary
 - `doc/table_adapters.md`: table metadata bridge
+- `doc/table_direct_helper_boundary.md`: direct table FormBuilder helper `columns`-only boundary and lower-level render/call-spec lane guidance
 - `doc/table_group_html.md`: direct table FormBuilder helper group-level wrapper attributes
 - `doc/public_api.md`: intended stable API for 0.1.x
 - `doc/package_root_helper_release_evidence.md`: focused release and sample-app evidence guide for package-root rendered-field contract helpers; `doc/public_api.md` remains the source of truth for helper names and return shapes
