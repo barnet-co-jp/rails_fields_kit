@@ -17,6 +17,21 @@ Use the existing helpers when they match the submitted value shape:
 
 These lanes let applications ship many nearby workflows without introducing a dedicated mention overlay surface.
 
+## Visual and evidence lane decision
+
+Keep mention-field review in this boundary document until a helper contract is accepted. Do not add `rfk_mention_field`, mention overlay screenshots, or mention-specific cards to the visual reference family as current Rails Fields Kit evidence.
+
+A standalone visual lane would be easy to misread as an implemented textarea mention helper because it would need to show overlay positioning, suggestion rows, highlighted tokens, hidden metadata, or authorization-aware results. Those are exactly the decisions that remain future feature work and host-app responsibility today.
+
+For current review, compare nearby helper lanes instead:
+
+- use `rfk_autocomplete` when the field stores plain text selected from suggestions
+- use `rfk_token_search` when the field stores structured search text
+- use `rfk_tags` when the field stores a tag list or selected IDs/values
+- use `rfk_text_area` when the field stores ordinary prose and the host app owns any mention parsing
+
+If a future PR needs visual evidence before the helper is accepted, mark the artifact as proposal-only in its title, body copy, and PR description; keep it out of `visual_references.md`, `visual_reference_index.html`, release evidence, and `public_api.md` until the helper lands.
+
 ## Future mention field decisions
 
 A future mention helper should be split into a separate feature issue before implementation. That issue should decide at least:
