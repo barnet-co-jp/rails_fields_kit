@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import { withTomSelectControllerSandbox } from "./tom_select_smoke_harness.mjs"
 
-function withCsrfMeta(content, assertion) {
+async function withCsrfMeta(content, assertion) {
   const previousDocument = globalThis.document
   globalThis.document = {
     querySelector(selector) {
@@ -11,7 +11,7 @@ function withCsrfMeta(content, assertion) {
   }
 
   try {
-    assertion()
+    await assertion()
   } finally {
     if (previousDocument === undefined) {
       delete globalThis.document
@@ -21,10 +21,45 @@ function withCsrfMeta(content, assertion) {
   }
 }
 
-await withTomSelectControllerSandbox("rails-fields-kit-create-headers-", ({ TomSelectController }) => {
+async function withFetchStub(handler, assertion) {
+  const previousFetch = globalThis.fetch
+  const requests = []
+
+  globalThis.fetch = async (url, options) => {
+    requests.push({ url, options })
+    return handler(url, options)
+  }
+
+  try {
+    await assertion(requests)
+  } finally {
+    if (previousFetch === undefined) {
+      delete globalThis.fetch
+    } else {
+      globalThis.fetch = previousFetch
+    }
+  }
+}
+
+function buildCreateController(TomSelectController) {
+  const events = []
   const controller = new TomSelectController()
 
-  withCsrfMeta("secure-token", () => {
+  controller.connected = true
+  controller.requestControllers = {}
+  controller.requestTokens = {}
+  controller.createUrlValue = "/customers"
+  controller.createParamValue = "name"
+  controller.createParamsValue = { account_id: 123, external_id: "lead-123" }
+  controller.dispatch = (eventName, payload) => events.push({ eventName, payload })
+
+  return { controller, events }
+}
+
+await withTomSelectControllerSandbox("rails-fields-kit-create-headers-", async ({ TomSelectController }) => {
+  const controller = new TomSelectController()
+
+  await withCsrfMeta("secure-token", async () => {
     assert.deepEqual(controller.createRequestHeaders(), {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -32,18 +67,79 @@ await withTomSelectControllerSandbox("rails-fields-kit-create-headers-", ({ TomS
     })
   })
 
-  withCsrfMeta(undefined, () => {
+  await withCsrfMeta(undefined, async () => {
     assert.deepEqual(controller.createRequestHeaders(), {
       Accept: "application/json",
       "Content-Type": "application/json"
     })
   })
 
-  withCsrfMeta("", () => {
+  await withCsrfMeta("", async () => {
     assert.deepEqual(controller.createRequestHeaders(), {
       Accept: "application/json",
       "Content-Type": "application/json"
     })
+  })
+
+  await withCsrfMeta("secure-token", async () => {
+    await withFetchStub(
+      async () => ({
+        ok: true,
+        json: async () => ({ option: { value: "new-customer", text: "New Customer" } })
+      }),
+      async (requests) => {
+        const { controller: createController, events } = buildCreateController(TomSelectController)
+        const createdOption = await new Promise((resolve) => createController.createOption("New Customer", resolve))
+
+        assert.equal(requests.length, 1)
+        assert.equal(requests[0].url, "/customers")
+        assert.equal(requests[0].options.method, "POST")
+        assert.deepEqual(requests[0].options.headers, {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "X-CSRF-Token": "secure-token"
+        })
+        assert.deepEqual(JSON.parse(requests[0].options.body), {
+          account_id: 123,
+          external_id: "lead-123",
+          name: "New Customer"
+        })
+        assert.deepEqual(createdOption, { value: "new-customer", text: "New Customer" })
+        assert.deepEqual(events.map((event) => event.eventName), ["create"])
+        assert.deepEqual(events[0].payload.detail, {
+          input: "New Customer",
+          option: { value: "new-customer", text: "New Customer" }
+        })
+      }
+    )
+  })
+
+  await withCsrfMeta(undefined, async () => {
+    await withFetchStub(
+      async () => ({
+        ok: false,
+        status: 422,
+        json: async () => ({ errors: ["name is invalid"] })
+      }),
+      async (requests) => {
+        const { controller: createController, events } = buildCreateController(TomSelectController)
+        const createdOption = await new Promise((resolve) => createController.createOption("Invalid Customer", resolve))
+
+        assert.equal(createdOption, false)
+        assert.equal(requests.length, 1)
+        assert.equal(requests[0].options.method, "POST")
+        assert.deepEqual(JSON.parse(requests[0].options.body), {
+          account_id: 123,
+          external_id: "lead-123",
+          name: "Invalid Customer"
+        })
+        assert.deepEqual(events.map((event) => event.eventName), ["create-error"])
+        assert.equal(events[0].payload.detail.operation, "create")
+        assert.equal(events[0].payload.detail.input, "Invalid Customer")
+        assert.equal(events[0].payload.detail.status, 422)
+        assert.deepEqual(events[0].payload.detail.payload, { errors: ["name is invalid"] })
+      }
+    )
   })
 
   const wrappedOption = { value: "tokyo", text: "Tokyo" }
@@ -59,4 +155,4 @@ await withTomSelectControllerSandbox("rails-fields-kit-create-headers-", ({ TomS
   assert.equal(controller.normalizeCreatedOption(undefined), false)
 })
 
-console.log("rails_fields_kit Tom Select create request header and response normalization smoke passed")
+console.log("rails_fields_kit Tom Select create request contract smoke passed")
