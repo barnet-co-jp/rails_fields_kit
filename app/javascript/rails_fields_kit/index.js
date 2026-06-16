@@ -2,6 +2,7 @@ import TomSelectController from "./tom_select_controller.js"
 
 const TOM_SELECT_CONTROLLER = "rails-fields-kit--tom-select"
 const TOM_SELECT_VALUE_PREFIX = "data-rails-fields-kit--tom-select"
+const TOM_SELECT_KIND_ATTRIBUTE = `${TOM_SELECT_VALUE_PREFIX}-kind-value`
 const TEXT_OVERRIDE_ATTRIBUTES = {
   noResultsText: "data-rails-fields-kit--tom-select-no-results-text-value",
   loadingText: "data-rails-fields-kit--tom-select-loading-text-value",
@@ -24,6 +25,17 @@ const REQUEST_CONTRACT_DEFAULTS = {
   selectedMultipleParam: "ids",
   createParam: "text",
   minLength: 0
+}
+const INTERACTION_CONFIG_ATTRIBUTES = {
+  maxOptions: `${TOM_SELECT_VALUE_PREFIX}-max-options-value`,
+  maxItems: `${TOM_SELECT_VALUE_PREFIX}-max-items-value`,
+  loadThrottle: `${TOM_SELECT_VALUE_PREFIX}-load-throttle-value`,
+  delimiter: `${TOM_SELECT_VALUE_PREFIX}-delimiter-value`,
+  preload: `${TOM_SELECT_VALUE_PREFIX}-preload-value`,
+  openOnFocus: `${TOM_SELECT_VALUE_PREFIX}-open-on-focus-value`,
+  closeAfterSelect: `${TOM_SELECT_VALUE_PREFIX}-close-after-select-value`,
+  hideSelected: `${TOM_SELECT_VALUE_PREFIX}-hide-selected-value`,
+  persist: `${TOM_SELECT_VALUE_PREFIX}-persist-value`
 }
 const PLUGINS_ATTRIBUTE = "data-rails-fields-kit--tom-select-plugins-value"
 const SELECTED_PRELOAD_ATTRIBUTES = {
@@ -60,6 +72,26 @@ function selectedValuesFrom(element) {
 
 function dataValue(element, attributeName) {
   return element.hasAttribute(attributeName) ? element.getAttribute(attributeName) : null
+}
+
+function stringDataValue(element, attributeName) {
+  const value = dataValue(element, attributeName)
+  return value === "" ? null : value
+}
+
+function numberDataValue(element, attributeName) {
+  const value = stringDataValue(element, attributeName)
+  if (value === null) return null
+
+  const number = Number(value)
+  return Number.isFinite(number) ? number : null
+}
+
+function booleanDataValue(element, attributeName) {
+  const value = stringDataValue(element, attributeName)
+  if (value === null) return null
+
+  return value === "true"
 }
 
 function requestContractValue(element, key) {
@@ -213,6 +245,23 @@ export function readRenderedErrorSurface(element) {
   if (!surfaceId) return null
 
   return element.ownerDocument?.getElementById?.(surfaceId) || null
+}
+
+export function readRenderedTomSelectInteractionConfig(element) {
+  if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function") return null
+  if (!hasTomSelectController(element) && !element.hasAttribute(TOM_SELECT_KIND_ATTRIBUTE)) return null
+
+  return {
+    maxOptions: numberDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.maxOptions),
+    maxItems: numberDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.maxItems),
+    loadThrottle: numberDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.loadThrottle),
+    delimiter: stringDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.delimiter),
+    preload: booleanDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.preload),
+    openOnFocus: booleanDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.openOnFocus),
+    closeAfterSelect: booleanDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.closeAfterSelect),
+    hideSelected: booleanDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.hideSelected),
+    persist: booleanDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.persist) ?? false
+  }
 }
 
 export function readRenderedSelectedPreloadConfig(element) {
