@@ -30,16 +30,32 @@ RSpec.describe "package metadata" do
         File.join(package_dir, "index.js")
       )
       FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/native_field_accessibility_contract.js"),
+        File.join(package_dir, "native_field_accessibility_contract.js")
+      )
+      FileUtils.cp(
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
         File.join(package_dir, "tom_select_controller.js")
+      )
+      FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_text_override_contract.js"),
+        File.join(package_dir, "tom_select_text_override_contract.js")
       )
       FileUtils.cp(
         File.join(package_dir, "index.js"),
         File.join(node_package_entrypoint_dir, "index.js")
       )
       FileUtils.cp(
+        File.join(package_dir, "native_field_accessibility_contract.js"),
+        File.join(node_package_entrypoint_dir, "native_field_accessibility_contract.js")
+      )
+      FileUtils.cp(
         File.join(package_dir, "tom_select_controller.js"),
         File.join(node_package_entrypoint_dir, "tom_select_controller.js")
+      )
+      FileUtils.cp(
+        File.join(package_dir, "tom_select_text_override_contract.js"),
+        File.join(node_package_entrypoint_dir, "tom_select_text_override_contract.js")
       )
       File.write(
         File.join(stimulus_dir, "package.json"),
@@ -100,7 +116,9 @@ RSpec.describe "package metadata" do
     expect(package.fetch("type")).to eq("module")
     expect(package.fetch("exports")).to eq(
       "." => "./app/javascript/rails_fields_kit/index.js",
-      "./tom_select_controller" => "./app/javascript/rails_fields_kit/tom_select_controller.js"
+      "./native_field_accessibility_contract" => "./app/javascript/rails_fields_kit/native_field_accessibility_contract.js",
+      "./tom_select_controller" => "./app/javascript/rails_fields_kit/tom_select_controller.js",
+      "./tom_select_text_override_contract" => "./app/javascript/rails_fields_kit/tom_select_text_override_contract.js"
     )
   end
 
@@ -140,6 +158,8 @@ RSpec.describe "package metadata" do
       script = <<~JS
         const rootModule = await import("rails_fields_kit")
         const controllerModule = await import("rails_fields_kit/tom_select_controller")
+        const nativeContractModule = await import("rails_fields_kit/native_field_accessibility_contract")
+        const textContractModule = await import("rails_fields_kit/tom_select_text_override_contract")
 
         if (typeof controllerModule.default !== "function") {
           throw new Error("direct controller package import did not export a default controller class")
@@ -155,6 +175,14 @@ RSpec.describe "package metadata" do
 
         if (typeof rootModule.tomSelectTextOverrideContract !== "function") {
           throw new Error("package root import did not expose tomSelectTextOverrideContract")
+        }
+
+        if (rootModule.nativeFieldAccessibilityContract !== nativeContractModule.default) {
+          throw new Error("package root named export no longer matches the direct native field accessibility contract import")
+        }
+
+        if (rootModule.tomSelectTextOverrideContract !== textContractModule.default) {
+          throw new Error("package root named export no longer matches the direct Tom Select text override contract import")
         }
       JS
 
