@@ -41,6 +41,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
 - `doc/configuration_wrapper_class_visual_reference.html`: static visual reference for initializer-driven wrapper class pass-through and host-app CSS ownership boundaries
 - `doc/table_metadata_visual_reference.html`: static visual reference for representative table metadata filter and editor lanes
+- `doc/table_direct_helper_boundary.md`: direct `rfk_table_filters(columns)` / `rfk_table_cell_editors(columns)` boundary for columns-only safe-join output versus lower-level render/call-spec lanes
 - `doc/token_search_saved_search_visual_reference.html`: static visual reference for saved-search token suggestion states
 - `doc/tom_select_turbo_lifecycle.md`: maintained Turbo and Stimulus lifecycle boundary for Tom Select-backed helpers
 - `doc/*.md`: maintained public and maintainer-facing docs
@@ -74,3 +75,4 @@ Before release-oriented docs updates, review:
 - `doc/sample_app_results.md`
 - `doc/release_notes_0_1_1.md`: current version-specific release note draft; update this bullet when the maintained current release note moves to a new version file
 - `doc/release_notes_0_1_0.md`: historical release note reference kept in the packaged docs map
+- `doc/table_direct_helper_boundary.md` when table metadata direct helper layout or lower-level render/call-spec boundaries are part of the release surface
