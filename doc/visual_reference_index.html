@@ -86,7 +86,7 @@
       .family-links {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
       }
 
       a {
@@ -103,7 +103,7 @@
         justify-content: center;
         min-height: 38px;
         max-width: 100%;
-        padding: 8px 12px;
+        padding: 8px 11px;
         border: 1px solid var(--line-strong);
         background: var(--surface);
         color: var(--ink);
@@ -229,9 +229,14 @@
         gap: 8px;
       }
 
+      .task-card .task-links,
+      .family-card .family-links {
+        gap: 8px;
+      }
+
       .task-card .task-links a,
       .family-card .family-links a {
-        flex: 1 1 190px;
+        flex: 1 1 168px;
         text-align: center;
       }
 
@@ -287,7 +292,7 @@
         .task-links a,
         .family-links a,
         .reference-link {
-          flex: 1 1 220px;
+          flex: 1 1 176px;
         }
       }
 
@@ -301,6 +306,9 @@
         .task-links a,
         .family-links a,
         .reference-link { width: 100%; }
+
+        .task-card .task-links a,
+        .family-card .family-links a { min-height: 36px; }
       }
     </style>
   </head>
