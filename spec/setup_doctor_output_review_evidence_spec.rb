@@ -59,7 +59,7 @@ RSpec.describe "setup doctor output review evidence" do
   it "keeps CLI output readability separate from runtime setup doctor behavior" do
     expect(output_review).to include(
       "This artifact is not production UI and does not define setup doctor runtime behavior",
-      "These states are review scenarios, not new setup doctor output variants",
+      "They are review scenarios, not new setup doctor output variants",
       "Do not create a new runtime output mode just to satisfy this review",
       "Do not change setup doctor runtime behavior or output wording here",
       "Do not introduce a terminal UI framework"
