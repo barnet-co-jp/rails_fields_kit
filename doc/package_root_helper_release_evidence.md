@@ -221,6 +221,30 @@ Suggested evidence note:
 readRenderedErrorSurface: PASS on <field selector>. The helper returned the rendered opt-in placeholder matching the field errorSurfaceId; no-surface and missing-placeholder cases returned null. Request execution, retry UI, visible copy, validation policy, authorization, mutation, and fallback rendering remained out of scope.
 ```
 
+## Tom Select interaction config reader
+
+Use this lane when `readRenderedTomSelectInteractionConfig(element)` is in release scope.
+
+Representative import:
+
+```js
+import { readRenderedTomSelectInteractionConfig } from "rails_fields_kit"
+```
+
+Check a rendered Tom Select-backed field with explicit interaction configuration such as `max_options:`, `max_items:`, `load_throttle:`, `delimiter:`, `preload:`, `open_on_focus:`, `close_after_select:`, `hide_selected:`, or `persist:`:
+
+- `readRenderedTomSelectInteractionConfig(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes the documented numeric limits, boolean interaction toggles, delimiter, preload, and persist values rendered for the representative field.
+- Missing optional numeric/string values return `null`, while missing `persist` follows the controller fallback and returns `false`.
+- A comparable non-Tom Select or unrelated element returns `null`.
+- The evidence stays read-only; initialization, mutation, request execution, inferred initializer defaults, and host-app interaction policy remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+readRenderedTomSelectInteractionConfig: PASS on <field selector>. maxOptions / maxItems / loadThrottle / delimiter / preload / openOnFocus / closeAfterSelect / hideSelected / persist matched rendered configuration; missing optional values followed documented null/false boundaries; unrelated element returned null. Initialization, mutation, requests, inferred defaults, and host-app interaction policy remained out of scope.
+```
+
 ## Native accessibility contract reader
 
 Use this lane when `nativeFieldAccessibilityContract(element)` is in release scope.
