@@ -125,6 +125,7 @@ Before treating an open pull request as review- or release-ready, re-check the c
 For review queue triage and release prep, confirm these current signals together:
 
 - the latest workflow run state for the PR head commit
+- when the combined status or status list is empty, do not treat that alone as missing CI; check the head commit's GitHub Actions workflow runs before classifying CI as absent, pending, passed, or failed
 - the PR metadata `mergeable` value or equivalent GitHub mergeability signal
 - whether the PR branch is behind, diverged, or superseded by a replacement PR
 - the base branch freshness, especially after recent `main` merges that touched nearby docs, specs, package metadata, or public API wording
