@@ -30,6 +30,10 @@ const checks = [
     args: ["scripts/check_tom_select_interaction_events.mjs"]
   },
   {
+    name: "Tom Select request cancellation smoke",
+    args: ["scripts/check_tom_select_request_cancellation.mjs"]
+  },
+  {
     name: "Tom Select selection contract smoke",
     args: ["scripts/check_tom_select_selection_contract.mjs"]
   },
