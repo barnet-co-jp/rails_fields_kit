@@ -8,6 +8,19 @@ class CustomersController < ApplicationController
 end
 ```
 
+## Choose the endpoint helper
+
+Use this short route before jumping into the detailed examples below. The helpers define endpoint roles; the host app still owns authentication, authorization, tenant scoping, query execution, validation policy, and any final response policy beyond the documented option shape.
+
+| Use when | Helper | Pair with | Host app owns |
+| --- | --- | --- | --- |
+| A field needs remote search results for the typed query. | `rfk_search_with` | `url:` on `rfk_select`, `rfk_combobox`, `rfk_multi_select`, `rfk_tags`, or similar Tom Select-backed fields | Safe scopes, allowlisted ordering, query semantics, and result visibility. |
+| An edit form has saved values but not the option labels needed for display. | `rfk_find_with` | `selected_url:` plus matching `selected_param:` / `selected_multiple_param:` when customized | Which saved IDs are visible to the current user and how missing IDs are handled. |
+| A combobox can create a new option from user-entered text. | `rfk_create_with` | `create_url:`, `create_param:`, and optional fixed `create_params:` | Assignment, authorization, validation, persistence, and whether to share the ordinary REST create action. |
+| A token search field needs static or context-built token suggestions. | `rfk_token_suggestions_with` | `rfk_token_search` suggestion URL | Parsing submitted token text and applying it to Ransack, a search object, or app-specific filtering. |
+
+The sections below remain the source of truth for signatures, options, request/response shapes, and boundary details.
+
 ## `rfk_search_with`
 
 Defines a search action, defaulting to `index`.
