@@ -208,6 +208,32 @@ RSpec.describe "package contents" do
     )
   end
 
+  it "keeps landed Tom Select companion artifacts map-only and packaged" do
+    companion_artifacts = {
+      "doc/tom_select_rich_option_review.html" => [
+        "companion to the core Tom Select reference",
+        "label, description, and badge readability",
+        "endpoint payload shape, option mapping behavior, search execution, production CSS, and authorization outside"
+      ],
+      "doc/tom_select_host_feedback_lifecycle_visual_reference.html" => [
+        "after the focused request-failure reference",
+        "host-owned visible feedback",
+        "retry UI, default copy, or request lifecycle behavior"
+      ]
+    }
+
+    expect(specification.files).to include(*companion_artifacts.keys)
+
+    companion_artifacts.each do |path, signals|
+      link = path.delete_prefix("doc/")
+
+      expect(visual_references).to include("[`#{link}`](#{link})")
+      signals.each do |signal|
+        expect(visual_references).to include(signal)
+      end
+    end
+  end
+
   it "keeps styling boundary docs aligned with public and visual reference roles" do
     expect(specification.files).to include("doc/styling_boundary.md")
 
