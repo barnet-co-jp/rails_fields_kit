@@ -19,7 +19,8 @@ module RailsFieldsKit
       "email_field" => :rfk_email_field,
       "url_field" => :rfk_url_field,
       "phone_field" => :rfk_phone_field,
-      "search_field" => :rfk_search_field
+      "search_field" => :rfk_search_field,
+      "password_field" => :rfk_password_field
     }.freeze
 
     class UnknownFieldType < StandardError; end
@@ -194,9 +195,9 @@ module RailsFieldsKit
         method = call.fetch(:method)
         raise ArgumentError, "table metadata method is required" unless method
 
-        options = call.fetch(:options).dup
-        has_adapter_metadata = options.key?(:adapter) || options.key?("adapter")
-        if table_filter && call.fetch(:helper) == :rfk_token_search && has_adapter_metadata
+        options = call.fetch(:options)
+        if table_filter && call.fetch(:helper) == :rfk_token_search && !options[:adapter].nil?
+          options = options.dup
           options[:_rfk_table_filter_metadata] = true
         end
 
