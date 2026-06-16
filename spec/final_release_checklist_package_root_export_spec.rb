@@ -11,13 +11,16 @@ RSpec.describe "final release checklist package-root export matrix" do
   it "keeps the release matrix aligned with the public API export table" do
     public_exports = current_package_root_exports_from(public_api)
     checklist_exports = release_matrix_exports_from(checklist)
+    source_of_truth_signals = [
+      "doc/public_api.md#javascript-exports",
+      "source of truth for current package-root exports",
+      "future package-root helper exports",
+      "before being added to this release verification matrix"
+    ]
 
     expect(public_exports).not_to be_empty
     expect(checklist_exports).to match_array(public_exports)
-    expect(checklist).to include(
-      "Confirm `doc/public_api.md#javascript-exports` is the source of truth for current package-root exports",
-      "Confirm future package-root helper exports are added to `doc/public_api.md#javascript-exports` before being added to this release verification matrix"
-    )
+    source_of_truth_signals.each { |signal| expect(checklist).to include(signal) }
   end
 
   def current_package_root_exports_from(document)
