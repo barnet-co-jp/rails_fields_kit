@@ -36,14 +36,14 @@
       main {
         width: min(1080px, calc(100% - 32px));
         margin: 0 auto;
-        padding: 32px 0 52px;
+        padding: 30px 0 48px;
       }
 
       .hero {
         display: grid;
-        gap: 10px;
-        margin-bottom: 18px;
-        padding-bottom: 16px;
+        gap: 9px;
+        margin-bottom: 16px;
+        padding-bottom: 15px;
         border-bottom: 1px solid var(--line);
       }
 
@@ -58,7 +58,7 @@
       h1, h2, h3, p { margin: 0; }
 
       h1 {
-        font-size: 1.8rem;
+        font-size: 1.72rem;
         line-height: 1.12;
         font-weight: 650;
       }
@@ -69,7 +69,7 @@
       .boundary li,
       .review-list li {
         color: var(--muted);
-        font-size: 0.92rem;
+        font-size: 0.9rem;
       }
 
       .lede { max-width: 760px; }
@@ -77,20 +77,20 @@
       .hero-links {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 7px;
       }
 
       .hero-links a {
         display: inline-flex;
-        min-height: 34px;
+        min-height: 32px;
         align-items: center;
         justify-content: center;
-        padding: 0 11px;
+        padding: 0 10px;
         border: 1px solid var(--line-strong);
         background: var(--surface);
         color: var(--ink);
         text-decoration: none;
-        font-size: 0.9rem;
+        font-size: 0.88rem;
       }
 
       .hero-links a:hover {
@@ -100,26 +100,26 @@
 
       .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+        gap: 10px;
       }
 
       .card,
       .boundary,
       .review-list {
         display: grid;
-        gap: 12px;
-        padding: 14px;
+        gap: 11px;
+        padding: 12px;
         border: 1px solid var(--line);
         background: var(--surface);
         box-shadow: var(--shadow);
       }
 
-      .card header { display: grid; gap: 6px; }
+      .card header { display: grid; gap: 5px; }
 
       .tag {
         justify-self: start;
-        padding: 3px 7px;
+        padding: 3px 6px;
         border: 1px solid var(--line-strong);
         background: var(--surface-muted);
         color: var(--ink);
@@ -156,8 +156,8 @@
       .control-top {
         display: flex;
         align-items: center;
-        gap: 8px;
-        min-height: 44px;
+        gap: 7px;
+        min-height: 42px;
         padding: 8px 10px;
         border-bottom: 1px solid var(--line);
       }
@@ -177,18 +177,32 @@
         align-items: center;
         justify-content: center;
         flex: 0 0 auto;
-        min-width: 24px;
         min-height: 24px;
         border: 1px solid var(--line);
         background: var(--surface-muted);
         color: var(--muted);
         font-weight: 700;
+        line-height: 1;
       }
 
       .clear-button {
-        border-color: #9bcdbc;
+        min-width: 50px;
+        padding: 0 8px;
+        border-color: #7dbca8;
         background: var(--accent-soft);
         color: var(--accent);
+        font-size: 0.78rem;
+      }
+
+      .remove-button,
+      .dropdown-indicator {
+        min-width: 24px;
+      }
+
+      .remove-button {
+        border-color: #adc6e4;
+        background: var(--info-soft);
+        color: var(--info);
       }
 
       .chips {
@@ -213,6 +227,19 @@
         overflow-wrap: anywhere;
       }
 
+      .control-note {
+        padding: 7px 10px;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+        background: #fbfcfd;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+
+      .control-note strong {
+        color: var(--ink);
+      }
+
       .dropdown {
         display: grid;
         gap: 0;
@@ -221,7 +248,7 @@
       .option {
         display: grid;
         gap: 2px;
-        padding: 8px 10px;
+        padding: 7px 10px;
         border-top: 1px solid var(--line);
       }
 
@@ -236,7 +263,7 @@
       .option small { color: var(--muted); }
 
       .boundary,
-      .review-list { margin-top: 12px; }
+      .review-list { margin-top: 10px; }
 
       ul {
         margin: 0;
@@ -245,9 +272,11 @@
 
       @media (max-width: 640px) {
         main { width: min(100% - 24px, 1080px); padding-top: 24px; }
+        h1 { font-size: 1.5rem; }
         .grid { grid-template-columns: 1fr; }
         .control-top { align-items: flex-start; }
         .dropdown-indicator { display: none; }
+        .clear-button { min-width: 46px; }
       }
     </style>
   </head>
@@ -274,9 +303,10 @@
           <div class="control" role="img" aria-label="Single select with selected account and a whole-field clear button">
             <div class="control-top">
               <div class="selection">Operations workspace</div>
-              <span class="clear-button" aria-hidden="true">x</span>
+              <span class="clear-button" aria-hidden="true">Clear</span>
               <span class="dropdown-indicator" aria-hidden="true">v</span>
             </div>
+            <div class="control-note"><strong>Whole-field clear:</strong> one control resets the selected value.</div>
             <div class="dropdown">
               <div class="option active"><strong>Operations workspace</strong><small>Current value, clearable as one field</small></div>
               <div class="option"><strong>Support workspace</strong><small>Another server-rendered option</small></div>
@@ -298,6 +328,7 @@
               </div>
               <span class="dropdown-indicator" aria-hidden="true">v</span>
             </div>
+            <div class="control-note"><strong>Per-item remove:</strong> each x belongs to one selected tag.</div>
             <div class="dropdown">
               <div class="option"><strong>Compliance evidence</strong><small>Item removal stays per selected item</small></div>
             </div>
@@ -315,6 +346,7 @@
               <div class="selection placeholder">Choose a customer segment</div>
               <span class="dropdown-indicator" aria-hidden="true">v</span>
             </div>
+            <div class="control-note"><strong>Plugin boundary:</strong> this artifact reviews chrome, not runtime plugin ownership.</div>
             <div class="dropdown">
               <div class="option active"><strong>Configured by host app</strong><small>plugins: ["clear_button"] or project-specific plugins</small></div>
               <div class="option"><strong>Reviewed here as static chrome</strong><small>No runtime plugin contract or event shape is added</small></div>
