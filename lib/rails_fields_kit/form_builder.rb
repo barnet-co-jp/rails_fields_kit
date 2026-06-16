@@ -18,6 +18,10 @@ module RailsFieldsKit
       rfk_native_field(method, :number_field, **options)
     end
 
+    def rfk_range_field(method, **options)
+      rfk_native_field(method, :range_field, **options)
+    end
+
     def rfk_money_field(method, currency: nil, **options)
       options[:inputmode] ||= "decimal"
       options[:prefix] = currency if currency
@@ -183,11 +187,8 @@ module RailsFieldsKit
 
       html_options[:multiple] = options.delete(:multiple) if options.key?(:multiple)
       html_options[:placeholder] = options.delete(:placeholder) if options.key?(:placeholder)
-      render_text_field = field_kind == :autocomplete ||
-        (html_options[:multiple] == false && options[:as] == :text) ||
-        field_kind == :token_search
 
-      field_html = if render_text_field
+      field_html = if field_kind == :autocomplete || html_options[:multiple] == false && options[:as] == :text || field_kind == :token_search
         text_field(method, options.merge(html_options).except(:as))
       elsif grouped_collection
         grouped_choices = rfk_normalize_grouped_collection(
@@ -196,7 +197,11 @@ module RailsFieldsKit
           label_method: collection_label_method
         )
         options[:selected] ||= rfk_selected_values(selected_choices) if selected_choices.any?
-        grouped_options = @template.grouped_options_for_select(grouped_choices, options[:selected])
+        html_options[:disabled] = true if disabled == true
+        grouped_options = @template.grouped_options_for_select(
+          grouped_choices,
+          rfk_grouped_option_selection(options[:selected], disabled)
+        )
         select(method, grouped_options, options.except(:selected), html_options)
       else
         choices = rfk_choices_with_selected(
@@ -214,6 +219,19 @@ module RailsFieldsKit
       field_html = rfk_append_error_surface(field_html, error_surface_id, error_surface_html) if error_surface
 
       rfk_wrap_field(method, field_html, wrapper_options)
+    end
+
+    def rfk_grouped_option_selection(selected, disabled)
+      return selected if [nil, true, false].include?(disabled)
+
+      disabled_values = Array(disabled).map(&:to_s)
+      if selected.is_a?(Hash)
+        selected.merge(disabled: Array(selected[:disabled] || selected["disabled"]).map(&:to_s) | disabled_values)
+      elsif selected.nil?
+        {disabled: disabled_values}
+      else
+        {selected: selected, disabled: disabled_values}
+      end
     end
 
     def rfk_option_or_default(options, key, default)
@@ -242,29 +260,22 @@ module RailsFieldsKit
     end
 
     def rfk_extract_table_adapter_metadata!(options)
-      expose_metadata = options.delete(:_rfk_table_filter_metadata)
-      metadata = {}
-
-      TABLE_ADAPTER_METADATA_KEYS.each do |key|
-        value = options.delete(key)
-        value = options.delete(key.to_s) if value.nil?
-        metadata[key] = value unless value.nil?
+      TABLE_ADAPTER_METADATA_KEYS.each_with_object({}) do |key, metadata|
+        metadata[key] = options.delete(key) if options.key?(key)
+        metadata[key] = options.delete(key.to_s) if options.key?(key.to_s)
       end
-
-      return nil unless expose_metadata && metadata[:adapter]
-
-      metadata
     end
 
     def rfk_assign_table_adapter_metadata!(data, metadata)
-      rfk_assign_raw_data_value(data, :rails_fields_kit_table_filter_adapter, metadata[:adapter])
-      rfk_assign_raw_data_value(data, :rails_fields_kit_table_filter_param_name, metadata[:param_name])
-      rfk_assign_raw_data_value(data, :rails_fields_kit_table_filter_fields, metadata[:fields])
+      adapter = metadata[:adapter]
+      return if adapter.nil? || adapter.to_s.empty?
+
+      rfk_assign_raw_data_value(data, :table_filter_adapter, adapter)
+      rfk_assign_raw_data_value(data, :table_filter_param_name, metadata[:param_name])
+      rfk_assign_raw_data_value(data, :table_filter_fields, metadata[:fields])
     end
 
     def rfk_extract_wrapper_options(options)
-      accessibility = options.key?(:accessibility) ? options.delete(:accessibility) : true
-
       {
         label: options.delete(:label),
         hint: options.delete(:hint),
@@ -278,7 +289,7 @@ module RailsFieldsKit
         control_html: options.delete(:control_html) || {},
         prefix_html: options.delete(:prefix_html) || {},
         suffix_html: options.delete(:suffix_html) || {},
-        accessibility: accessibility
+        accessibility: options.key?(:accessibility) ? options.delete(:accessibility) : true
       }
     end
 
@@ -413,7 +424,8 @@ module RailsFieldsKit
       return if value.nil?
       return if value.respond_to?(:empty?) && value.empty?
 
-      data[key] = (value.is_a?(Array) || value.is_a?(Hash)) ? JSON.generate(value) : value
+      data_key = "rails_fields_kit_#{key}"
+      data[data_key] = (value.is_a?(Array) || value.is_a?(Hash)) ? JSON.generate(value) : value
     end
 
     def rfk_choices_with_selected(collection, selected_choices:, value_method:, label_method:, disabled: nil, option_html: {})
