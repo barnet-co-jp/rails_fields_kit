@@ -34,7 +34,7 @@ RSpec.describe "table filter token search rendering" do
     }
   end
 
-  it "keeps adapter metadata in the call spec and renders table-filter metadata attributes" do
+  it "keeps adapter metadata in the call spec and exposes a rendered table filter contract" do
     call = RailsFieldsKit::TableRenderer.filter_call(filter_metadata)
 
     expect(call.fetch(:options)).to include(
@@ -51,8 +51,7 @@ RSpec.describe "table filter token search rendering" do
     expect(html).to include('data-rails-fields-kit--tom-select-url-value="/search_tokens.json"')
     expect(html).to include('data-rails-fields-kit-table-filter-adapter="ransack"')
     expect(html).to include('data-rails-fields-kit-table-filter-param-name="q"')
-    expect(html).to include('&quot;name&quot;:&quot;name_cont&quot;')
-    expect(html).to include('&quot;status&quot;:&quot;status_eq&quot;')
+    expect(html).to include('data-rails-fields-kit-table-filter-fields=&quot;{\&quot;name\&quot;:\&quot;name_cont\&quot;,\&quot;status\&quot;:\&quot;status_eq\&quot;}&quot;')
     expect(html).not_to match(/\sadapter=/)
     expect(html).not_to match(/\sparam_name=/)
     expect(html).not_to match(/\sfields=/)
