@@ -35,9 +35,9 @@ RSpec.describe "visual reference evidence handoff docs" do
     )
 
     expect(render_checks).to include(
-      "PASS only when the named viewport was actually reviewed in a browser",
-      "SOURCE REVIEW ONLY when connector-only or source-level review checked the changed HTML/CSS without rendering it",
-      "DEFERRED when browser-capable review is intentionally handed off",
+      "`PASS` only when the named viewport was actually reviewed in a browser",
+      "`SOURCE REVIEW ONLY` when connector-only or source-level review checked the changed HTML/CSS without rendering it",
+      "`DEFERRED` when browser-capable review is intentionally handed off",
       "Do not treat CI success or source review alone as visual approval."
     )
   end
