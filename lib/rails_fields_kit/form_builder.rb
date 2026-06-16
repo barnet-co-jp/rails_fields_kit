@@ -127,7 +127,7 @@ module RailsFieldsKit
       wrapper_options = rfk_extract_wrapper_options(options)
       html_options = options.delete(:html) || {}
       rfk_promote_html_options!(options, html_options)
-      table_filter_metadata = options.delete(:_rfk_table_filter_metadata)
+      table_filter_metadata = Thread.current[:rails_fields_kit_render_table_filter_metadata]
       table_adapter_metadata = rfk_extract_table_adapter_metadata!(options) if field_kind == :token_search
       rfk_apply_accessibility!(method, html_options, wrapper_options)
       data = html_options[:data] ||= {}
