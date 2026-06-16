@@ -98,9 +98,18 @@ RSpec.describe "package metadata" do
 
     expect(package.fetch("name")).to eq("rails_fields_kit")
     expect(package.fetch("type")).to eq("module")
+    expect(package.fetch("types")).to eq("./app/javascript/rails_fields_kit/index.d.ts")
     expect(package.fetch("exports")).to eq(
-      "." => "./app/javascript/rails_fields_kit/index.js",
-      "./tom_select_controller" => "./app/javascript/rails_fields_kit/tom_select_controller.js"
+      "." => {
+        "types" => "./app/javascript/rails_fields_kit/index.d.ts",
+        "import" => "./app/javascript/rails_fields_kit/index.js",
+        "default" => "./app/javascript/rails_fields_kit/index.js"
+      },
+      "./tom_select_controller" => {
+        "types" => "./app/javascript/rails_fields_kit/tom_select_controller.d.ts",
+        "import" => "./app/javascript/rails_fields_kit/tom_select_controller.js",
+        "default" => "./app/javascript/rails_fields_kit/tom_select_controller.js"
+      }
     )
   end
 
