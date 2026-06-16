@@ -11,7 +11,7 @@ The next release is primarily about making the 0.1.x public surface easier to ad
 - Token-oriented search helpers and suggestion builders make structured search inputs easier to wire while keeping query parsing and execution in the host application.
 - Table metadata adapters and FormBuilder rendering helpers let table integrations describe Rails Fields Kit fields without taking over table persistence or query ownership.
 - Package-root JavaScript exports, Tom Select request options, create-success events, install generator setup-note opt-out, and opt-in request-failure surfaces improve integration hooks around rendered fields and host-app setup.
-- Controller helper and FormBuilder documentation now call out landed endpoint-side query minimums, supported remote collection wrappers, and enum source boundaries without turning search execution, pagination metadata, or arbitrary enum adapters into gem-owned behavior.
+- Controller helper and FormBuilder documentation now call out landed endpoint-side query minimums, endpoint-side search match strategies, supported remote collection wrappers, and enum source boundaries without turning search execution, pagination metadata, adapter-specific SQL behavior, or arbitrary enum adapters into gem-owned behavior.
 - The fixed entries below mostly harden request lifecycle docs, suggestion metadata immutability, and table metadata normalization so release reviewers can distinguish user-facing additions from quality fixes.
 
 The detailed entries remain the exhaustive source of truth for release review. Keep proposal or open-PR behavior out of this section until it has landed in the release branch.
@@ -58,6 +58,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 - `readRenderedSelectedPreloadConfig(element)` from the package root for host-app scripts that need to read rendered `selected_url:` config values without executing selected preload requests, owning visible fallback copy, or adding retry UI to the gem.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so generated endpoint actions can match custom routes.
 - `rfk_search_with minimum_query_length:` for endpoints that should return empty options for blank or too-short queries while keeping the default blank-query initial options behavior when omitted. FormBuilder `min_length:` remains a browser-side loading hint, and authorization, scoping, query parsing, Ransack integration, and Tom Select lifecycle remain host-app responsibilities.
+- `rfk_search_with match:` for endpoint-side SQL LIKE pattern strategies. The default stays `:contains`, while `:prefix` and `:exact` let host apps choose narrower matching without moving case sensitivity, adapter-specific SQL, authorization, or custom query semantics into Rails Fields Kit.
 - `rfk_find_with` supports Rails array params for multiple selected option preload in addition to comma-separated `ids`, including custom `ids_param:` names.
 - Remote search and selected preload docs now list `{ results: [...] }` alongside raw arrays and `{ options: [...] }` as supported collection response wrappers; create-on-the-fly `{ option: ... }`, pagination metadata, and arbitrary response adapters remain separate from that collection wrapper contract.
 - Remote request extension options for Tom Select-backed helpers:

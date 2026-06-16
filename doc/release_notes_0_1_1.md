@@ -4,7 +4,7 @@ This draft assumes the next release after `0.1.0` will be `0.1.1`.
 
 If release planning chooses a different version number, rename this file and keep the contents aligned with `CHANGELOG.md` instead of editing the `0.1.0` historical notes in place.
 
-Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public surface around token-oriented search, Ransack-compatible suggestion metadata, table metadata adapters, thin native range and password field wrappers, controller/helper integration details, a dedicated create-success event for create-on-the-fly flows, package-root rendered-field contract helpers, Tom Select integration options, install generator setup-note opt-out, setup doctor status guidance, and opt-in inline request-failure placeholders while keeping query execution, visible copy ownership, validation feedback, focus management, range-specific live previews and custom slider styling, password-specific UX and credential policy, JavaScript package ownership, and host-app setup note ownership in the host application.
+Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public surface around token-oriented search, Ransack-compatible suggestion metadata, table metadata adapters, thin native range and password field wrappers, controller/helper integration details, endpoint-side search match strategies, a dedicated create-success event for create-on-the-fly flows, package-root rendered-field contract helpers, Tom Select integration options, install generator setup-note opt-out, setup doctor status guidance, and opt-in inline request-failure placeholders while keeping query execution, visible copy ownership, adapter-specific SQL behavior, validation feedback, focus management, range-specific live previews and custom slider styling, password-specific UX and credential policy, JavaScript package ownership, and host-app setup note ownership in the host application.
 
 ## Highlights
 
@@ -24,6 +24,7 @@ Rails Fields Kit 0.1.1 is a follow-up release that expands the documented public
 - `nativeFieldAccessibilityContract(element)` for reading rendered native input accessibility wiring and label association from package-root JavaScript imports.
 - `readRenderedSelectedPreloadConfig(element)` for reading rendered selected preload config values from package-root JavaScript imports without executing preload requests.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so controller helpers can match custom routes.
+- `rfk_search_with match:` for endpoint-side SQL LIKE pattern strategies, with `:contains` as the default and `:prefix` / `:exact` as opt-in narrower matches while adapter-specific case behavior stays host-app-owned.
 - Multiple selected preload endpoints can accept Rails array params in addition to comma-separated `ids`, including custom `ids_param:` names.
 - Remote search and selected preload collection responses can use raw arrays, `{ options: [...] }`, or `{ results: [...] }` wrappers; create-on-the-fly `{ option: ... }`, pagination metadata, and arbitrary response adapters remain separate.
 - Fixed remote request params with `query_params:`, `selected_query_params:`, and `create_params:`.
@@ -41,7 +42,7 @@ Use `CHANGELOG.md` as the exhaustive release-history source of truth. This draft
 
 Before cutting the release, compare this draft with the current `Unreleased` entries and confirm it still covers these categories:
 
-- Added: token search and suggestion metadata, table metadata and rendering, native range and password field wrappers, JavaScript exports, controller action routing, selected preload array params, remote collection response wrappers, fixed remote request params, Tom Select option pass-throughs, install generator setup-note opt-out, setup doctor status guidance, create-success events, and opt-in request-failure placeholders.
+- Added: token search and suggestion metadata, table metadata and rendering, native range and password field wrappers, JavaScript exports, controller action routing, search match strategies, selected preload array params, remote collection response wrappers, fixed remote request params, Tom Select option pass-throughs, install generator setup-note opt-out, setup doctor status guidance, create-success events, and opt-in request-failure placeholders.
 - Fixed: remote request lifecycle and event details, token and Ransack suggestion metadata immutability, table metadata collection edge cases, table input and renderer immutability, and TableRenderer input normalization and error messages.
 
 Do not add open-PR or proposal helper names here until they have landed in the release branch and `CHANGELOG.md` has the corresponding current entry.
@@ -64,7 +65,7 @@ FormBuilder helpers:
 
 Controller helpers:
 
-- `rfk_search_with`
+- `rfk_search_with`, including endpoint-side `match:` strategies for `:contains`, `:prefix`, and `:exact`
 - `rfk_find_with` for selected option lookup endpoints, including comma-separated `ids` and Rails array params for multiple selected preload
 - `rfk_create_with`
 - `rfk_token_suggestions_with`
@@ -101,6 +102,7 @@ JavaScript package-root exports:
 - `rfk_password_field` is a thin native wrapper around Rails password input rendering; password visibility toggles, strength meters, credential policy, autocomplete policy, authentication workflow, and credential storage remain host-app responsibilities.
 - Package-root rendered-field contract helpers only read data attributes, aria wiring, plugin lists, derived plugin flags, selection values, and element references, including labels, already rendered by Rails Fields Kit; visible copy ownership, locale resolution, request execution, query parsing, retry UI, validation feedback, plugin asset loading, clear/remove affordance styling, selection mutation, Tom Select lifecycle, and focus management remain host-app responsibilities.
 - Submitted token text parsing, `params[:q]` construction, authorization, scoping, pagination, and result execution remain host-app responsibilities.
+- `rfk_search_with match:` selects endpoint-side SQL LIKE pattern shape only. Database collation, case sensitivity, accent handling, PostgreSQL-specific `ILIKE`, normalized search columns, Ransack execution, and authorization-aware custom query semantics remain host-app responsibilities.
 - Remote search and selected preload collection wrappers describe only the option list envelope; host apps still own pagination policy and any extra response metadata.
 - Visible success UI, toast copy, and follow-up app behavior after `rails-fields-kit--tom-select:create` remain host-app responsibilities.
 - `error_surface:` only renders an opt-in nearby placeholder; visible error copy and retry behavior for that surface remain host-app responsibilities.
@@ -136,6 +138,7 @@ Before publishing, also confirm:
 - remote search and selected preload wrappers still match `doc/controller_helpers.md` without turning create-on-the-fly response contracts, pagination metadata, or arbitrary response adapters into gem-owned behavior.
 - selected preload config reader checks stay limited to rendered config inspection; request execution and visible fallback evidence stay with the selected preload behavior lane.
 - Tom Select option pass-throughs such as `max_items:`, `load_throttle:`, and `delimiter:` remain documented only as helper-to-controller options rather than JavaScript package ownership.
+- `rfk_search_with match:` checks stay limited to SQL LIKE pattern shape and do not imply Rails Fields Kit owns database collation, PostgreSQL-specific `ILIKE`, normalized search columns, Ransack execution, or authorization-aware custom query semantics.
 - `rails generate rails_fields_kit:install --skip-setup-notes` still skips only `doc/rails_fields_kit_setup.md`, still creates the initializer, and still leaves Tom Select / importmap setup ownership with the host app.
 - `rails rails_fields_kit:doctor` output includes the status legend and next-step guidance, keeps `[MISSING]` fixes separate from `[MANUAL]` host-app checks, and remains a read-only diagnostic rather than an auto-fix, machine-readable report, or host-app CI policy.
 - the sample app confirms `rails-fields-kit--tom-select:create`, `event.detail.input`, and `event.detail.option` when that release surface is in scope.
@@ -149,7 +152,7 @@ Before publishing, also confirm:
 ## Suggested GitHub release body
 
 ```markdown
-Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token-oriented search helpers, metadata-only Ransack suggestion builders, table adapter metadata for rendering documented field helpers through existing host-app table definitions, thin native range and password field wrappers, package-root rendered-field contract helpers, Tom Select option pass-throughs, install generator setup-note opt-out, setup doctor status guidance, a dedicated create-success event for create-on-the-fly flows, and opt-in inline request-failure placeholder hooks.
+Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token-oriented search helpers, metadata-only Ransack suggestion builders, table adapter metadata for rendering documented field helpers through existing host-app table definitions, thin native range and password field wrappers, package-root rendered-field contract helpers, Tom Select option pass-throughs, endpoint-side search match strategies, install generator setup-note opt-out, setup doctor status guidance, a dedicated create-success event for create-on-the-fly flows, and opt-in inline request-failure placeholder hooks.
 
 ### Highlights
 
@@ -168,7 +171,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 - `readRenderedErrorSurface(element)` for resolving rendered opt-in request-failure placeholders
 - `readRenderedSelectedPreloadConfig(element)` for rendered selected preload config reads
 - `nativeFieldAccessibilityContract(element)` for rendered native input accessibility wiring and label association
-- controller helper `action:` support, selected preload array params, and remote collection wrappers such as `{ options: [...] }` and `{ results: [...] }`
+- controller helper `action:` support, `rfk_search_with match:` strategies, selected preload array params, and remote collection wrappers such as `{ options: [...] }` and `{ results: [...] }`
 - Tom Select option pass-throughs for `max_items:`, `load_throttle:`, and `delimiter:`
 - `rails generate rails_fields_kit:install --skip-setup-notes` to skip only the generated setup-note docs artifact while still creating the initializer
 - setup doctor status guidance that separates `[MISSING]` setup fixes from `[MANUAL]` host-app checks while staying read-only
@@ -185,7 +188,7 @@ Rails Fields Kit 0.1.1 expands the gem beyond the first 0.1.0 release with token
 
 ### Responsibility boundary
 
-Rails Fields Kit still stops at UI helpers and metadata. Host applications remain responsible for token parsing, search execution, authorization, pagination, JavaScript package manager or importmap choices, setup-note ownership when `--skip-setup-notes` is used, Tom Select package and CSS checks surfaced as `[MANUAL]` setup doctor reminders, range live value previews, custom slider styling, multi-thumb controls, range validation policy, password visibility toggles, strength meters, credential policy, authentication workflow, credential storage, selected preload request execution and visible fallback UI, visible copy and locale policy for rendered text overrides, visible success UI after create-on-the-fly succeeds, visible error or retry UI around any opt-in `error_surface:` placeholder, plugin asset loading and clear/remove affordance styling around rendered Tom Select plugin data, selection mutation and hidden field policy around current selection reads, request execution and endpoint authorization around rendered request contract config, id generation and label text policy around native accessibility wiring, validation feedback and focus management, and any host-owned loading or retry state around aborted or stale requests. Remote collection wrappers do not make pagination metadata or arbitrary response adapters gem-owned behavior. Multiple selected preload supports Rails array params only after the host app request stack normalizes repeated keys such as `ids[]` into an Array.
+Rails Fields Kit still stops at UI helpers and metadata. Host applications remain responsible for token parsing, search execution, authorization, pagination, JavaScript package manager or importmap choices, setup-note ownership when `--skip-setup-notes` is used, Tom Select package and CSS checks surfaced as `[MANUAL]` setup doctor reminders, range live value previews, custom slider styling, multi-thumb controls, range validation policy, password visibility toggles, strength meters, credential policy, authentication workflow, credential storage, selected preload request execution and visible fallback UI, visible copy and locale policy for rendered text overrides, visible success UI after create-on-the-fly succeeds, visible error or retry UI around any opt-in `error_surface:` placeholder, plugin asset loading and clear/remove affordance styling around rendered Tom Select plugin data, selection mutation and hidden field policy around current selection reads, request execution and endpoint authorization around rendered request contract config, database collation and adapter-specific SQL behavior around endpoint-side search matching, id generation and label text policy around native accessibility wiring, validation feedback and focus management, and any host-owned loading or retry state around aborted or stale requests. Remote collection wrappers do not make pagination metadata or arbitrary response adapters gem-owned behavior. Multiple selected preload supports Rails array params only after the host app request stack normalizes repeated keys such as `ids[]` into an Array.
 
 ### Verification
 
