@@ -261,6 +261,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `tomSelectRequestContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select request data attributes and returns the controller identifier, remote search / selected preload / create endpoint flags, URL values, request parameter names, `minLength`, and `errorSurfaceId`, or `null` when the element is not a Rails Fields Kit Tom Select-backed field. It does not execute requests, parse query strings, mutate Tom Select, authorize endpoints, retry requests, or own visible feedback. |
 | `readRenderedErrorSurface(element)` | rendered-field contract reader | Resolves the opt-in request-failure placeholder element referenced by a rendered Tom Select-backed field's `errorSurfaceId`, or `null` when no placeholder is rendered or found. It does not create placeholders, reveal feedback, dispatch events, retry requests, or own visible copy. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
+| `readRenderedOptionPayloadMapping(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select option payload mapping data and returns `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField`, or `null` when the element is not a rendered Tom Select-backed field. It does not execute requests, parse endpoint responses, mutate Tom Select, validate payloads, or own option rendering HTML. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring, affix elements, and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, `prefixElement`, `suffixElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, format affix values, move focus, or own visible feedback. |
 
 ### Import patterns
@@ -273,6 +274,7 @@ import {
   nativeFieldAccessibilityContract,
   readRenderedErrorSurface,
   readRenderedSelectedPreloadConfig,
+  readRenderedOptionPayloadMapping,
   tomSelectPluginContract,
   tomSelectRequestContract,
   tomSelectSelectionContract,
@@ -282,6 +284,7 @@ import {
 const accessibilityContract = nativeFieldAccessibilityContract(inputElement)
 const copyContract = tomSelectTextOverrideContract(fieldElement)
 const errorSurface = readRenderedErrorSurface(fieldElement)
+const optionPayloadMapping = readRenderedOptionPayloadMapping(fieldElement)
 const pluginContract = tomSelectPluginContract(fieldElement)
 const requestContract = tomSelectRequestContract(fieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
@@ -314,6 +317,8 @@ For Tom Select plugin state, `tomSelectPluginContract(element)` reports the rend
 The helper does not read fixed params objects, execute `fetch`, inspect endpoint responses, parse query strings, or decide authorization / retry / visible feedback policy.
 
 `readRenderedErrorSurface(element)` uses the same rendered `errorSurfaceId` lane to find the opt-in placeholder element in the same document. It is useful before or outside a request-failure event, but it does not mutate feedback visibility or replace request-failure events' `detail.surface` contract.
+
+`readRenderedOptionPayloadMapping(element)` reports only the rendered option payload mapping config. It returns `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField`, applying controller defaults when attributes are absent. It does not execute endpoints, inspect response payloads, render options, mutate Tom Select, or decide endpoint validation / authorization policy.
 
 For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`. `prefixElement` and `suffixElement` read the rendered affix elements inside the nearest `.rfk-field` wrapper when present and return `null` otherwise; they do not format values, parse currency or percent content, mutate markup, or change focus behavior.
 
