@@ -99,31 +99,6 @@ Suggested evidence note:
 readRenderedSelectedPreloadConfig: PASS on <field selector>. selectedUrl / selectedParam / selectedMultipleParam / selectedQueryParams matched rendered config; comparable no-selected-url field returned null. Request execution and fallback UI were checked separately or left out of scope.
 ```
 
-## Rendered option payload mapping reader
-
-Use this lane when `readRenderedOptionPayloadMapping(element)` is in release scope.
-
-Representative import:
-
-```js
-import { readRenderedOptionPayloadMapping } from "rails_fields_kit"
-```
-
-Check a rendered Tom Select-backed field that uses explicit option payload mapping, such as `value_field:`, `label_field:`, `search_field:`, `option_description_field:`, or `option_badge_field:`:
-
-- `readRenderedOptionPayloadMapping(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
-- The result exposes the documented `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField` values for the representative field.
-- `searchFields` is already split and trimmed so host apps do not need to duplicate raw data attribute names or comma-splitting rules.
-- A default field returns the documented `value`, `text`, and `['text']` mapping values when mapping attributes are omitted.
-- A comparable non-Tom Select or unrelated element returns `null`.
-- The evidence stays read-only; endpoint response shape, option rendering HTML, request execution, authorization, visible feedback, and retry behavior remain outside this helper evidence lane.
-
-Suggested evidence note:
-
-```text
-readRenderedOptionPayloadMapping: PASS on <field selector>. valueField / labelField / searchFields / rich option field names matched rendered config; default mapping returned value/text defaults; unrelated element returned null. Endpoint response shape, rendering HTML, request execution, authorization, visible feedback, and retry behavior remained out of scope.
-```
-
 ## Text override contract reader
 
 Use this lane when `tomSelectTextOverrideContract(element)` is in release scope.
@@ -259,15 +234,15 @@ import { nativeFieldAccessibilityContract } from "rails_fields_kit"
 Check a representative Rails Fields Kit-rendered native helper field, such as `rfk_text_field` or `rfk_money_field`, with the shared wrapper and accessibility wiring enabled:
 
 - `nativeFieldAccessibilityContract(fieldElement)` returns a plain object for the rendered native input.
-- The result confirms the documented label, hint, error, prefix, suffix, wrapper, and `describedByIds` wiring for the representative field.
+- The result confirms the documented label, hint, error, wrapper, and `describedByIds` wiring for the representative field.
 - A comparable unsupported element or non-native Rails Fields Kit target returns `null` when that is the documented boundary.
-- The evidence stays read-only; the helper only inspects rendered wiring and does not mutate labels, ids, focus behavior, validation messages, wrapper classes, affix content, or visible fallback UI.
+- The evidence stays read-only; the helper only inspects rendered wiring and does not mutate labels, ids, focus behavior, validation messages, wrapper classes, or visible fallback UI.
 - Host apps still own focus management, validation policy, user-facing validation copy, browser validation behavior, and any accessibility review beyond the rendered contract inspection.
 
 Suggested evidence note:
 
 ```text
-nativeFieldAccessibilityContract: PASS on <field selector>. label / hint / error / prefix / suffix / wrapper / describedByIds matched the rendered native helper contract; unsupported element returned null. Focus management, validation policy, and visible copy remained host-app review items.
+nativeFieldAccessibilityContract: PASS on <field selector>. label / hint / error / wrapper / describedByIds matched the rendered native helper contract; unsupported element returned null. Focus management, validation policy, and visible copy remained host-app review items.
 ```
 
 ## Evidence placement

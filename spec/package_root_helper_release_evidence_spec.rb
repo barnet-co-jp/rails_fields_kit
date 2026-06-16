@@ -42,7 +42,6 @@ RSpec.describe "package-root helper release evidence guide" do
       "tomSelectRequestContract(element)",
       "readRenderedErrorSurface(element)",
       "readRenderedSelectedPreloadConfig(element)",
-      "readRenderedOptionPayloadMapping(element)",
       "nativeFieldAccessibilityContract(element)"
     )
 
@@ -54,13 +53,12 @@ RSpec.describe "package-root helper release evidence guide" do
     helper_specific_lanes = evidence_guide.scan(/import \{ ([a-z][A-Za-z0-9]+) \} from "rails_fields_kit"/).flatten
 
     expect(helper_specific_lanes).to contain_exactly(
-      "readRenderedErrorSurface",
       "readRenderedSelectedPreloadConfig",
-      "readRenderedOptionPayloadMapping",
       "tomSelectTextOverrideContract",
       "tomSelectPluginContract",
       "tomSelectSelectionContract",
       "tomSelectRequestContract",
+      "readRenderedErrorSurface",
       "nativeFieldAccessibilityContract"
     )
     expect(helper_specific_lanes).to all(satisfy do |helper_name|
