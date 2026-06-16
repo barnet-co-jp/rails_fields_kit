@@ -6,6 +6,8 @@ The adapter objects in this document expose small metadata protocols that other 
 
 For a product-neutral visual comparison of representative `rfk_table_filters(columns)` and `rfk_table_cell_editors(columns)` lanes, including the token-search editor lane, see [`table_metadata_visual_reference.html`](table_metadata_visual_reference.html).
 
+For the focused boundary between the direct FormBuilder helpers and lower-level render/call-spec lanes, see [`table_direct_helper_boundary.md`](table_direct_helper_boundary.md).
+
 ## Filter input metadata
 
 Use `RailsFieldsKit::TableFilterInput` when a table column wants to describe a filter UI that should be rendered with Rails Fields Kit.
