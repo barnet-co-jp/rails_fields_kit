@@ -191,6 +191,7 @@ Keep this README as a representative route rather than a full helper inventory:
 | Need | Representative helper | Source of truth |
 | --- | --- | --- |
 | Request endpoint and parameter config | `tomSelectRequestContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Request-failure placeholder surface | `readRenderedErrorSurface(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Current selection state | `tomSelectSelectionContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Selected preload config | `readRenderedSelectedPreloadConfig(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Rendered plugin state | `tomSelectPluginContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
@@ -206,6 +207,7 @@ Host-app scripts can inspect representative rendered contracts without executing
 ```js
 import {
   nativeFieldAccessibilityContract,
+  readRenderedErrorSurface,
   readRenderedSelectedPreloadConfig,
   tomSelectPluginContract,
   tomSelectRequestContract,
@@ -214,6 +216,7 @@ import {
 } from "rails_fields_kit"
 
 const requestContract = tomSelectRequestContract(tomSelectFieldElement)
+const errorSurface = readRenderedErrorSurface(tomSelectFieldElement)
 const selectionContract = tomSelectSelectionContract(tomSelectFieldElement)
 const copyContract = tomSelectTextOverrideContract(tomSelectFieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(tomSelectFieldElement)
