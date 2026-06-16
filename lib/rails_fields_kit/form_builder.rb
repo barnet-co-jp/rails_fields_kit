@@ -127,12 +127,13 @@ module RailsFieldsKit
       wrapper_options = rfk_extract_wrapper_options(options)
       html_options = options.delete(:html) || {}
       rfk_promote_html_options!(options, html_options)
+      table_filter_metadata = options.delete(:_rfk_table_filter_metadata)
       table_adapter_metadata = rfk_extract_table_adapter_metadata!(options) if field_kind == :token_search
       rfk_apply_accessibility!(method, html_options, wrapper_options)
       data = html_options[:data] ||= {}
       data[:controller] = [data[:controller], config.controller_name].compact.join(" ")
       data[:rails_fields_kit__tom_select_kind_value] = field_kind
-      rfk_assign_table_adapter_metadata!(data, table_adapter_metadata) if table_adapter_metadata
+      rfk_assign_table_adapter_metadata!(data, table_adapter_metadata) if table_filter_metadata && table_adapter_metadata
 
       grouped_collection = options.delete(:grouped_collection)
       disabled = options.delete(:disabled)
