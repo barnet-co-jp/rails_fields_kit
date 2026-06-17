@@ -38,6 +38,8 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/tom_select_error_surface_contract_visual_reference.html`: static visual reference for focused `error_surface: true` live-region contract states and wrapper customization boundaries
 - `doc/tom_select_text_override_visual_reference.html`: static visual reference for configured Tom Select text override copy states
 - `doc/native_field_visual_reference.html`: static visual reference for representative native helper states
+- `doc/native_numeric_fields.md`: focused `rfk_number_field`, `rfk_money_field`, and `rfk_percent_field` native wrapper boundary; formatting, rounding, currency, and masking stay host-app owned
+- `doc/native_contact_fields.md`: focused `rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field` native wrapper boundary; validation wording, normalization, phone policy, and search execution stay host-app owned
 - `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
 - `doc/configuration_wrapper_class_visual_reference.html`: static visual reference for initializer-driven wrapper class pass-through and host-app CSS ownership boundaries
 - `doc/table_metadata_visual_reference.html`: static visual reference for representative table metadata filter and editor lanes
