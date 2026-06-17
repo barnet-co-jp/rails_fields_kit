@@ -2,6 +2,8 @@
 
 Use this focused docs/design artifact when a release or PR changes setup doctor diagnostics, setup evidence, or generated setup notes. This artifact is not production UI and does not define setup doctor runtime behavior. It gives reviewers a stable way to scan representative CLI output states without mixing them into field visual references.
 
+Use `doc/setup_doctor_output_narrow_wrap_review.md` with this route when the evidence needs an 80-column terminal, GitHub PR comment code block, or 390px Markdown preview readability check. The companion artifact is review evidence only; keep setup doctor runtime wording, exit-code behavior, auto-fix policy, and host-app setup policy here as non-goals unless a separate implementation issue changes them.
+
 ## Scope
 
 - Review the readability of representative setup doctor output states.
@@ -12,6 +14,7 @@ Use this focused docs/design artifact when a release or PR changes setup doctor 
 - Confirm that CSS import evidence distinguishes `[OK] CSS import` as a detected advisory signal from `[MANUAL] CSS import` as a host-app responsibility check.
 - Confirm that Stimulus registration evidence distinguishes `[OK] Stimulus registration` as a representative source signal from `[MANUAL] Stimulus registration` as host-app follow-up.
 - Confirm narrow or wrapped evidence against the representative states in this artifact before recording a release-wide sample app result.
+- Use `doc/setup_doctor_output_narrow_wrap_review.md` when the review note needs surface-specific narrow-width checklist prompts or an evidence note template.
 - Keep command behavior, wording source, host app setup policy, and auto-fix decisions outside this artifact.
 
 ## Release Evidence Handoff
@@ -21,6 +24,7 @@ Use this artifact as the review aid for setup doctor evidence, then record the r
 - Use `doc/sample_app_checklist.md` to decide whether setup doctor evidence belongs in the release baseline or the host-app setup lane.
 - Record release-wide results in `doc/sample_app_results.md` under `Setup doctor checks`, including the app setup path: importmap, jsbundling, bundler-managed JavaScript, or another route.
 - For a narrow docs or setup-doctor PR, a PR comment is enough when it names the command, setup path, representative `[OK]` / `[MISSING]` / `[MANUAL]` lines, branch or commit, viewport or wrapping width, and result.
+- When the PR comment needs a reusable narrow evidence template, start from `doc/setup_doctor_output_narrow_wrap_review.md` and link the note back to this review route instead of copying the companion artifact wholesale.
 - Use the representative review states below to decide whether the PR evidence should cover the first-run legend, an advisory-only Tom Select package lane, a Stimulus registration advisory lane, a CSS import advisory lane, an importmap mismatch lane, or all of those states.
 - Treat `[MANUAL]` lines as host-app responsibility checks. Do not count them as failed automatic checks unless the release issue explicitly changes setup doctor behavior.
 - Treat `[OK] CSS import` as evidence that setup doctor found a representative import signal; it does not mean Rails Fields Kit owns the app stylesheet pipeline, theme choice, or every possible asset path.
@@ -206,7 +210,7 @@ Use this checklist when recording release or PR evidence. Work from the status m
 - [ ] `[MANUAL] Stimulus registration` is not described as a failed automatic check unless a separate issue changes setup doctor behavior.
 - [ ] CSS import evidence distinguishes detected advisory signals from manual host-app stylesheet checks.
 - [ ] `[OK] CSS import` is not described as Rails Fields Kit owning stylesheet bundling, theme policy, or production CSS.
-- [ ] `[MANUAL] CSS import` is not described as a failed automatic check unless a separate issue changes setup doctor behavior.
+- [ ] `[MANUAL] CSS import` is not described as a failed automatic check unless a separate release or setup policy issue explicitly changes setup doctor behavior.
 
 ### Wrapping Evidence
 
