@@ -65,6 +65,8 @@ Host applications remain responsible for:
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
 - `doc/field_helpers.md` and `doc/controller_helpers.md`: public helper references
 - `doc/password_field.md`: focused `rfk_password_field` native wrapper boundary and password-specific non-goals
+- `doc/native_numeric_fields.md`: focused `rfk_number_field`, `rfk_money_field`, and `rfk_percent_field` native wrapper boundary and numeric formatting non-goals
+- `doc/native_contact_fields.md`: focused `rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field` native wrapper boundary and contact/search ownership non-goals
 - `doc/textarea_autosize.md`: focused `rfk_text_area` autosize boundary; autosize remains host-app owned in the current 0.1.x surface
 - `doc/textarea_autosize_release_evidence.md`: release and sample-app evidence guide for the current `rfk_text_area` autosize boundary without treating autosize as built-in behavior
 - `doc/visual_references.md`: maintained visual reference family map and scope notes
@@ -86,6 +88,7 @@ Host applications remain responsible for:
 - `doc/select_migration.md`: practical `collection_select` to `rfk_select` migration pattern
 - `doc/token_suggestions.md` and `doc/ransack_suggestions.md`: token-search suggestion surfaces and host-app responsibility boundary
 - `doc/table_adapters.md`: table metadata bridge
+- `doc/table_direct_helper_boundary.md`: direct table FormBuilder helper `columns`-only boundary and lower-level render/call-spec lane guidance
 - `doc/table_group_html.md`: direct table FormBuilder helper group-level wrapper attributes
 - `doc/public_api.md`: intended stable API for 0.1.x
 - `doc/package_root_helper_release_evidence.md`: focused release and sample-app evidence guide for package-root rendered-field contract helpers; `doc/public_api.md` remains the source of truth for helper names and return shapes
