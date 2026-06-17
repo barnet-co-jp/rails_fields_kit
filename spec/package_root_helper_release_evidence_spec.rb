@@ -42,6 +42,7 @@ RSpec.describe "package-root helper release evidence guide" do
       "tomSelectRequestContract(element)",
       "readRenderedErrorSurface(element)",
       "readRenderedSelectedPreloadConfig(element)",
+      "readRenderedTableFilterMetadata(element)",
       "nativeFieldAccessibilityContract(element)"
     )
 
