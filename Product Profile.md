@@ -72,10 +72,13 @@ Host applications remain responsible for:
 - `doc/visual_references.md`: maintained visual reference family map and scope notes
 - `doc/visual_reference_index.html`: one-screen reviewer entrypoint for the static visual reference family
 - `doc/tom_select_visual_reference.html` and `doc/native_field_visual_reference.html`: static visual references for representative Tom Select-backed and native helper states
+- `doc/tom_select_rich_option_review.html`: companion visual reference for Tom Select rich option label, description, and badge density review
 - `doc/tom_select_source_fallback_review.html`: focused companion visual reference for explicit `enum:` sources and remote option label fallback display review
 - `doc/tom_select_turbo_reconnect_visual_reference.html`: focused companion visual reference for Turbo reconnect behavior review
 - `doc/tom_select_no_event_boundary_review.html`: map-only companion visual reference for stale / aborted Tom Select request no-event boundary review
+- `doc/tom_select_plugin_clearable_review.html`: map-only companion visual reference for `allow_clear: true`, whole-field clear affordance, and host-owned plugin boundaries
 - `doc/tom_select_request_failure_visual_reference.html`: static visual reference for opt-in request-failure feedback and `error_surface: true` lanes
+- `doc/tom_select_host_feedback_lifecycle_visual_reference.html`: companion visual reference for host-owned inline feedback and follow-up clearing cues after request-failure events
 - `doc/tom_select_error_surface_contract_visual_reference.html`: static visual reference for focused `error_surface: true` live-region contract review
 - `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
 - `doc/tom_select_text_override_visual_reference.html`: static visual reference for configured Tom Select text override copy states
