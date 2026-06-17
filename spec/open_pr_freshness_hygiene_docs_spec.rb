@@ -3,6 +3,15 @@
 require "spec_helper"
 
 RSpec.describe "open PR freshness hygiene docs" do
+  def markdown_section(markdown, heading)
+    start_index = markdown.index(heading)
+    raise "Missing heading: #{heading}" unless start_index
+
+    rest = markdown[start_index..]
+    next_heading_index = rest.index(/^## (?!#)/, heading.length)
+    next_heading_index ? rest[0...next_heading_index] : rest
+  end
+
   let(:development_path) { File.expand_path("../doc/development.md", __dir__) }
   let(:development) { File.read(development_path) }
   let(:freshness_section) { markdown_section(development, "## Open PR freshness checks") }
