@@ -38,7 +38,17 @@ end
 
 exports = JSON.parse(package_json).fetch("exports")
 required_exports = [".", "./tom_select_controller"]
-expected_package_root_named_exports = ["TomSelectController", "tomSelectTextOverrideContract"]
+expected_package_root_named_exports = [
+  "TomSelectController",
+  "tomSelectTextOverrideContract",
+  "tomSelectPluginContract",
+  "tomSelectSelectionContract",
+  "tomSelectRequestContract",
+  "readRenderedErrorSurface",
+  "readRenderedSelectedPreloadConfig",
+  "nativeFieldAccessibilityContract"
+]
+expected_callable_helper_exports = expected_package_root_named_exports - ["TomSelectController"]
 missing_exports = required_exports.reject { |export_name| exports.key?(export_name) }
 
 abort "package.json is missing exports: #{missing_exports.join(", ")}" unless missing_exports.empty?
@@ -107,13 +117,16 @@ Dir.mktmpdir("rails-fields-kit-built-gem-import-") do |dir|
       import assert from "node:assert/strict"
 
       const expectedNamedExports = #{JSON.generate(expected_package_root_named_exports)}
+      const expectedCallableHelperExports = #{JSON.generate(expected_callable_helper_exports)}
 
       expectedNamedExports.forEach((exportName) => {
         assert.ok(exportName in packageRoot, `package root should expose documented export ${exportName}`)
       })
       assert.equal(rootDefault, packageRoot.TomSelectController, "package root default export should match TomSelectController")
       assert.equal(packageRoot.TomSelectController, directDefault, "package root controller export should match direct entrypoint")
-      assert.equal(typeof packageRoot.tomSelectTextOverrideContract, "function", "package root should expose documented text override helper")
+      expectedCallableHelperExports.forEach((exportName) => {
+        assert.equal(typeof packageRoot[exportName], "function", `package root should expose documented contract reader ${exportName} as a callable function`)
+      })
     JS
   )
 
