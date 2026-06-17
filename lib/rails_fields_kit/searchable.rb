@@ -63,6 +63,7 @@ module RailsFieldsKit
           relation = relation.where(value => ids)
           relation = relation.order(order) if order
           records = relation.limit(ids.size)
+          records = rfk_order_find_records_by_requested_ids(records, ids, value) unless order
           options = records.map do |record|
             rfk_option_json(
               record,
@@ -176,6 +177,16 @@ module RailsFieldsKit
       end
 
       ids.map(&:to_s).map(&:strip).reject(&:empty?)
+    end
+
+    def rfk_order_find_records_by_requested_ids(records, ids, value)
+      records_by_id = records.group_by do |record|
+        rfk_read_option_value(record, value).to_s
+      end
+
+      ids.filter_map do |id|
+        records_by_id[id.to_s]&.shift
+      end
     end
 
     def rfk_apply_assignments(record, assign)
