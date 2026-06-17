@@ -13,8 +13,8 @@ RSpec.describe "sample app evidence boundary docs" do
   it "keeps native numeric and contact evidence inside wrapper and native attribute responsibilities" do
     expect(sample_app_results).to include(
       "Native wrapper and accessibility",
-      "Native wrapper and accessibility lane checks",
       "native helpers such as `rfk_text_field` and `rfk_money_field`",
+      "Native helper representative wrapper and accessibility lane checks",
       "Native browser semantics visual lane checks",
       "search, email, URL, telephone, money, and percent examples",
       "formatting, masking, browser validation-message policy, autocomplete policy, locale policy, and custom picker behavior remained host-app responsibilities"
