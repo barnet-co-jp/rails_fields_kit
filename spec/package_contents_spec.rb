@@ -127,6 +127,7 @@ RSpec.describe "package contents" do
 
   it "keeps README and setup JavaScript helper summaries pointed at the public API source of truth" do
     javascript_exports = markdown_section(public_api, "## JavaScript exports")
+    readme_js_setup = markdown_section(readme, "### Direct imports and package exports")
 
     expect(javascript_exports).to include(
       "### Current package-root exports",
@@ -135,10 +136,13 @@ RSpec.describe "package contents" do
       "Future package-root helpers should follow the same boundary"
     )
 
-    expect(readme).to include(
+    expect(readme_js_setup).to include(
       "`rails_fields_kit/index.js` re-exports the same controller",
+      "direct `rails_fields_kit/tom_select_controller` entrypoint",
       "read-only rendered-field contract helpers",
-      "use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary"
+      "[`doc/public_api.md`](doc/public_api.md#javascript-exports)",
+      "source of truth",
+      "current helper list and responsibility boundary"
     )
 
     expect(setup_doc).to include(
@@ -202,6 +206,32 @@ RSpec.describe "package contents" do
       "stale / aborted no-event states",
       "without promoting request-start / finish events, retry UI, production CSS, or request lifecycle behavior into Rails Fields Kit"
     )
+  end
+
+  it "keeps landed Tom Select companion artifacts map-only and packaged" do
+    companion_artifacts = {
+      "doc/tom_select_rich_option_review.html" => [
+        "companion to the core Tom Select reference",
+        "label, description, and badge readability",
+        "endpoint payload shape, option mapping behavior, search execution, production CSS, and authorization outside"
+      ],
+      "doc/tom_select_host_feedback_lifecycle_visual_reference.html" => [
+        "after the focused request-failure reference",
+        "host-owned visible feedback",
+        "retry UI, default copy, or request lifecycle behavior"
+      ]
+    }
+
+    expect(specification.files).to include(*companion_artifacts.keys)
+
+    companion_artifacts.each do |path, signals|
+      link = path.delete_prefix("doc/")
+
+      expect(visual_references).to include("[`#{link}`](#{link})")
+      signals.each do |signal|
+        expect(visual_references).to include(signal)
+      end
+    end
   end
 
   it "keeps styling boundary docs aligned with public and visual reference roles" do

@@ -83,6 +83,8 @@ bundle exec rake build
    - `doc/public_api.md`
    - `doc/select_migration.md`
    - `doc/field_helpers.md`
+   - `doc/native_numeric_fields.md` when native numeric wrapper helpers are part of the release surface
+   - `doc/native_contact_fields.md` when native contact or native search wrapper helpers are part of the release surface
    - `doc/visual_references.md`
    - `doc/visual_reference_index.html`
    - `doc/tom_select_visual_reference.html`
@@ -134,6 +136,8 @@ bundle exec rake build
 10. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
 
    Confirm the host app's Tom Select package version, pin source, plugin CSS, and plugin-specific asset loading through that app's normal JavaScript dependency review. Rails Fields Kit documents and packages its own import paths, but it does not fix, detect, or auto-correct Tom Select versions or plugin asset policy as part of the gem release gate.
+
+   When setup or import evidence is part of the release or PR scope, record the host app's package manager, Tom Select version or pin, and CSS route in the Tom Select environment reproducibility memo in [`sample_app_results.md`](sample_app_results.md). Keep that memo separate from setup doctor `[OK]` / `[MANUAL]` visibility results: the memo records observed host-app package and asset choices, not Rails Fields Kit package-manager policy or a fixed Tom Select version requirement.
 
    When package-root read-only helper exports are in scope, use [`package_root_helper_release_evidence.md`](package_root_helper_release_evidence.md) to choose representative helper checks before recording the final sample-app or release PR evidence. Keep `doc/public_api.md#javascript-exports` as the source of truth for the exported helper list and return-shape boundary.
 

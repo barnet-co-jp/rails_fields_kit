@@ -26,6 +26,10 @@ const checks = [
     args: ["scripts/check_tom_select_interaction_events.mjs"]
   },
   {
+    name: "Tom Select request cancellation smoke",
+    args: ["scripts/check_tom_select_request_cancellation.mjs"]
+  },
+  {
     name: "Tom Select selection contract smoke",
     args: ["scripts/check_tom_select_selection_contract.mjs"]
   },
@@ -60,6 +64,10 @@ const checks = [
   {
     name: "Tom Select plugin contract smoke",
     args: ["scripts/check_tom_select_plugin_contract.mjs"]
+  },
+  {
+    name: "native affix contract smoke",
+    args: ["scripts/check_native_affix_contract_smoke.mjs"]
   },
   {
     name: "selected preload config contract smoke",

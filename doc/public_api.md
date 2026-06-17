@@ -23,7 +23,7 @@ This document summarizes the public API intended to be stable for the 0.1.x seri
 | Area | Current public surface | Detailed docs |
 | --- | --- | --- |
 | Ruby setup | `require "rails_fields_kit"`, `RailsFieldsKit.configure`, configuration accessors | [`configuration.md`](configuration.md) |
-| FormBuilder helpers | Tom Select-backed helpers, table metadata helpers, and native wrapper helpers | [`field_helpers.md`](field_helpers.md), [`select_migration.md`](select_migration.md), [`enum_select.md`](enum_select.md), [`textarea_autosize.md`](textarea_autosize.md), [`range_field.md`](range_field.md) |
+| FormBuilder helpers | Tom Select-backed helpers, table metadata helpers, and native wrapper helpers | [`field_helpers.md`](field_helpers.md), [`select_migration.md`](select_migration.md), [`enum_select.md`](enum_select.md), [`textarea_autosize.md`](textarea_autosize.md), [`range_field.md`](range_field.md), [`password_field.md`](password_field.md) |
 | Controller helpers | Remote option JSON, selected preload, create-on-the-fly, and token suggestion endpoint helpers | [`controller_helpers.md`](controller_helpers.md) |
 | Token suggestions | Builder objects for token suggestion metadata and Ransack-compatible suggestion metadata | [`token_suggestions.md`](token_suggestions.md), [`ransack_suggestions.md`](ransack_suggestions.md) |
 | Table metadata | Metadata objects, collector methods, call-spec helpers, renderer helpers, and custom renderer registry mapping for optional table integrations | [`table_adapters.md`](table_adapters.md) |
@@ -97,8 +97,11 @@ See [`range_field.md`](range_field.md) for the current `rfk_range_field` thin wr
 See [`password_field.md`](password_field.md) for the current `rfk_password_field` thin wrapper boundary and password-specific non-goals.
 See [`select_migration.md`](select_migration.md) for a practical server-rendered `collection_select` to `rfk_select` migration pattern.
 See [`enum_select.md`](enum_select.md) for the `rfk_enum_select` explicit `enum:` hash boundary, including keys-as-submitted-values behavior and the non-goal boundary around arbitrary label/value DSLs or remote enum option lookup.
+See [`collection_group_helpers.md`](collection_group_helpers.md) for the current non-API boundary around collection checkbox / radio groups, semantic `fieldset` / `legend`, group-level hint / error wiring, and host-app ownership of collection semantics.
 
 Current Ransack-oriented public surface stays metadata-first. `rfk_token_search` is a general token-search UI helper, while `rfk_table_filters(columns)` renders metadata that was already prepared elsewhere. Helper-level DSL examples such as `rfk_token_search ..., adapter: :ransack` or `rfk_table_filters @table_preferences, adapter: :ransack` are not current public APIs in the 0.1.x contract.
+
+Collection checkbox / radio group helpers are also not current public APIs. Host apps should keep using ordinary Rails collection helpers or host-app markup for group semantics until a future helper is merged and listed here. Future proposal names, open PR helper names, and single-control wrapper helpers must not be read as current collection group API.
 
 Tom Select-backed `rfk_*` helpers also support opt-in `error_surface:` and `error_surface_html:` options for fields that should expose a stable nearby placeholder on request failures. When enabled, request-failure events described in [`events.md`](events.md) can include that placeholder as `detail.surface`, while visible error copy and retry UI remain host-app responsibility.
 
@@ -258,7 +261,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `tomSelectRequestContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select request data attributes and returns the controller identifier, remote search / selected preload / create endpoint flags, URL values, request parameter names, `minLength`, and `errorSurfaceId`, or `null` when the element is not a Rails Fields Kit Tom Select-backed field. It does not execute requests, parse query strings, mutate Tom Select, authorize endpoints, retry requests, or own visible feedback. |
 | `readRenderedErrorSurface(element)` | rendered-field contract reader | Resolves the opt-in request-failure placeholder element referenced by a rendered Tom Select-backed field's `errorSurfaceId`, or `null` when no placeholder is rendered or found. It does not create placeholders, reveal feedback, dispatch events, retry requests, or own visible copy. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
-| `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, move focus, or own visible feedback. |
+| `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring, affix elements, and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, `prefixElement`, `suffixElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, format affix values, move focus, or own visible feedback. |
 
 ### Import patterns
 
@@ -312,7 +315,7 @@ The helper does not read fixed params objects, execute `fetch`, inspect endpoint
 
 `readRenderedErrorSurface(element)` uses the same rendered `errorSurfaceId` lane to find the opt-in placeholder element in the same document. It is useful before or outside a request-failure event, but it does not mutate feedback visibility or replace request-failure events' `detail.surface` contract.
 
-For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`.
+For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`. `prefixElement` and `suffixElement` read the rendered affix elements inside the nearest `.rfk-field` wrapper when present and return `null` otherwise; they do not format values, parse currency or percent content, mutate markup, or change focus behavior.
 
 Future package-root helpers should follow the same boundary: read the rendered Rails Fields Kit contract or configuration from an element, but do not take over request lifecycles, locale resolution, visible feedback, query parsing, retry UI, validation feedback, or other application-specific behavior. Proposal or open-PR helper names are not current public API until they are merged and listed in the table above.
 
