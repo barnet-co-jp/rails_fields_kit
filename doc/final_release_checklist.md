@@ -40,6 +40,8 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/public_api.md`.
 - [ ] Review `doc/select_migration.md`.
 - [ ] Review `doc/field_helpers.md`.
+- [ ] Review `doc/native_numeric_fields.md` when native numeric wrapper helpers are part of the release surface.
+- [ ] Review `doc/native_contact_fields.md` when native contact or native search wrapper helpers are part of the release surface.
 - [ ] Review `doc/visual_references.md` as the visual reference family index, and confirm it still matches the README Docs map.
 - [ ] Review `doc/visual_reference_index.html` as the one-screen reviewer navigation artifact.
 - [ ] Confirm each landed visual reference listed in `doc/visual_references.md` is reachable from `doc/visual_reference_index.html`, and that `README.md` links to the maintained map instead of proposal-only artifacts.
