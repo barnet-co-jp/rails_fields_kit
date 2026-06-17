@@ -42,6 +42,21 @@ A future mention helper should be split into a separate feature issue before imp
 - whether Tom Select is appropriate for the interaction, or a textarea overlay controller is required
 - how keyboard navigation, caret positioning, and screen-reader announcement are verified
 
+The safest first slice is a text-only textarea mention proposal, not a runtime helper. Treat the representative mention as a host-app-defined entity token. Documentation may use `@user` and `#tag` as examples, but Rails Fields Kit should not imply that it owns a user model, tag taxonomy, mention authorization, or notification workflow.
+
+For that first slice, keep submitted data as textarea text only. Hidden mention metadata, selected entity IDs, persisted mention links, and mention-specific serialization should be follow-up feature gates because they define storage and application semantics that the gem cannot safely guess.
+
+Suggestion endpoints should also stay comparative in the first slice. Document whether an application can adapt existing `rfk_search_with` or `rfk_token_suggestions_with` endpoints for suggestion rows, but do not introduce a mention-specific response shape until a later issue proves that the existing endpoint lanes are insufficient.
+
+Tom Select should not be assumed to fit textarea mentions. It works well for select, tag, and token-search controls, but inline textarea mentions need caret-relative overlay positioning, text-range replacement, keyboard focus coordination, and screen-reader announcement. Those interaction details should be split into future design and implementation issues before any `rfk_mention_field` helper is accepted.
+
+Before runtime implementation, split follow-up work along these boundaries:
+
+- overlay design and browser evidence for caret positioning, keyboard navigation, and screen-reader announcement
+- submitted metadata contract, if the text-only textarea value is not enough
+- suggestion endpoint shape, only if existing remote suggestion helpers cannot express the needed rows
+- visual proposal evidence, kept out of current public API and release evidence until the helper lands
+
 ## Host app responsibilities
 
 Until such a helper is accepted, host apps own:
