@@ -43,7 +43,7 @@ Use this map as a first reader route, not a full documentation inventory. Start 
 | Set up a host app | [`doc/setup.md`](doc/setup.md) | [`doc/support_boundary.md`](doc/support_boundary.md) for supported Ruby / Rails and repository JavaScript boundaries |
 | Check setup visibility after install | [`doc/setup.md`](doc/setup.md) for `rails rails_fields_kit:doctor` and its read-only/manual-check boundary | [`doc/setup_doctor.md`](doc/setup_doctor.md) for the read-only report surface, and [`doc/setup_doctor_output_review.md`](doc/setup_doctor_output_review.md) for CLI diagnostic evidence review |
 | Render the first field | [First field quickstart](#first-field-quickstart) | [`doc/field_helpers.md`](doc/field_helpers.md) when choosing the next helper |
-| Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md) | [`doc/select_migration.md`](doc/select_migration.md), [`doc/grouped_select.md`](doc/grouped_select.md), [`doc/enum_select.md`](doc/enum_select.md), [`doc/textarea_autosize.md`](doc/textarea_autosize.md), and [`doc/range_field.md`](doc/range_field.md) for focused helper boundaries |
+| Choose a helper or migrate from `collection_select` | [`doc/field_helpers.md`](doc/field_helpers.md) | [`doc/select_migration.md`](doc/select_migration.md), [`doc/grouped_select.md`](doc/grouped_select.md), [`doc/enum_select.md`](doc/enum_select.md), [`doc/textarea_autosize.md`](doc/textarea_autosize.md), [`doc/range_field.md`](doc/range_field.md), and [`doc/password_field.md`](doc/password_field.md) for focused helper boundaries |
 | See or compare rendered UI states quickly | [`doc/visual_references.md`](doc/visual_references.md) for the visual reference family, including Tom Select, request-failure and host-feedback lifecycle, text override, native helper, table metadata, and saved-search token states | [`doc/visual_reference_index.html`](doc/visual_reference_index.html) when choosing a visual lane by artifact, family, or reviewer task |
 | Review stable public API and package-root JavaScript exports | [`doc/public_api.md`](doc/public_api.md) | [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) when the review is about release or sample-app evidence for a helper lane |
 | Build remote search, selected preload, create, or token suggestion endpoints | [`doc/controller_helpers.md`](doc/controller_helpers.md) | [`doc/token_suggestions.md`](doc/token_suggestions.md) and [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) for token suggestion payloads |
@@ -191,6 +191,7 @@ Keep this README as a representative route rather than a full helper inventory:
 | Need | Representative helper | Source of truth |
 | --- | --- | --- |
 | Request endpoint and parameter config | `tomSelectRequestContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Request-failure placeholder surface | `readRenderedErrorSurface(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Current selection state | `tomSelectSelectionContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Selected preload config | `readRenderedSelectedPreloadConfig(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Rendered plugin state | `tomSelectPluginContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
@@ -206,6 +207,7 @@ Host-app scripts can inspect representative rendered contracts without executing
 ```js
 import {
   nativeFieldAccessibilityContract,
+  readRenderedErrorSurface,
   readRenderedSelectedPreloadConfig,
   tomSelectPluginContract,
   tomSelectRequestContract,
@@ -214,6 +216,7 @@ import {
 } from "rails_fields_kit"
 
 const requestContract = tomSelectRequestContract(tomSelectFieldElement)
+const errorSurface = readRenderedErrorSurface(tomSelectFieldElement)
 const selectionContract = tomSelectSelectionContract(tomSelectFieldElement)
 const copyContract = tomSelectTextOverrideContract(tomSelectFieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(tomSelectFieldElement)
