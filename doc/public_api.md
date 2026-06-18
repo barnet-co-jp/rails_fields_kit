@@ -173,6 +173,7 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 - `RailsFieldsKit::TableFilterInput.text_field`
 - `RailsFieldsKit::TableFilterInput.text_area`
 - `RailsFieldsKit::TableFilterInput.number_field`
+- `RailsFieldsKit::TableFilterInput.range_field`
 - `RailsFieldsKit::TableFilterInput.money_field`
 - `RailsFieldsKit::TableFilterInput.percent_field`
 - `RailsFieldsKit::TableFilterInput.email_field`
@@ -201,6 +202,7 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 - `RailsFieldsKit::TableCellInput.text_field`
 - `RailsFieldsKit::TableCellInput.text_area`
 - `RailsFieldsKit::TableCellInput.number_field`
+- `RailsFieldsKit::TableCellInput.range_field`
 - `RailsFieldsKit::TableCellInput.money_field`
 - `RailsFieldsKit::TableCellInput.percent_field`
 - `RailsFieldsKit::TableCellInput.email_field`
