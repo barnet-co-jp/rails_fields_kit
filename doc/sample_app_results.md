@@ -10,6 +10,7 @@ The route map is a triage aid. Start with release-wide confidence for release ca
 | --- | --- | --- | --- |
 | Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. | Feature-specific helper, visual, remote, token, or table lanes unless the release candidate explicitly includes them. |
 | JavaScript setup and package-root helper evidence | Setup doctor checks, JavaScript setup checks, package-root helper lanes checked, event checks, Turbo reconnect checks | The release touches setup visibility, package-root exports, read-only rendered-field helper evidence, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. | Native wrapper behavior, visual reference rendering, endpoint execution, or table metadata unless those lanes also changed. |
+| Tom Select plugin override boundary | Tom Select plugin override checks | The release or PR touches `config.default_plugins`, field-level `plugins:`, or the `remove_button` helper default for `rfk_tags` / `rfk_token_search`. | Tom Select package install, plugin-specific UI behavior, production CSS approval, `allow_clear` visual review, or package-root helper evidence unless those lanes also changed. |
 | Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, password field native wrapper checks, native wrapper customization checks | Native helper wrapper, password helper boundary, class, hint/error, affix, accessibility wiring, or browser semantics evidence changed. | Tom Select remote lifecycle, package-root helper import checks, credential policy, or table persistence. |
 | README first field quickstart evidence | `rfk_select` representative collection-backed single-value lane checks, Visual reference render checks | The README first field or quickstart sample needs endpoint-free, server-rendered collection evidence without mixing in setup/import, remote search, selected preload, create-on-the-fly, or token metadata lanes. | Setup/import verification, remote search, selected preload, create-on-the-fly, token metadata, or release-wide readiness. |
 | Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. | Runtime helper behavior, production CSS approval, sample-app field behavior, or CI success as visual approval. |
@@ -137,6 +138,23 @@ In the `Result` column, use `PASS` when the scoped helper lane was checked succe
 | Helper | Source-of-truth reference | Representative field or selector | Result | Evidence notes |
 | --- | --- | --- | --- | --- |
 |  |  |  |  |  |
+
+## Tom Select plugin override checks
+
+Use this section only when the release or PR changes plugin defaults, field-level `plugins:`, or the documented `remove_button` default for `rfk_tags` / `rfk_token_search`. Keep it as feature-specific evidence; it is not a release-wide requirement.
+
+- Representative helper:
+- Representative field:
+- Evidence location:
+
+- [ ] initializer `config.default_plugins` was recorded as the fallback only when the representative field omitted `plugins:`
+- [ ] field-level `plugins:` was checked as a replacement for the initializer default, not a merge with it
+- [ ] `rfk_tags` or `rfk_token_search` kept the documented `remove_button` default when `plugins:` was omitted
+- [ ] an explicit `plugins:` override for `rfk_tags` or `rfk_token_search` included `"remove_button"` when the representative field still expected remove controls
+- [ ] `allow_clear: true` was kept separate from this lane unless the release or PR also touched the clearable visual or event surface
+- [ ] evidence notes confirmed Rails Fields Kit passes plugin names through and does not own Tom Select plugin asset installation, plugin-specific behavior, or production CSS approval
+
+Notes:
 
 ## Form helper checks
 
