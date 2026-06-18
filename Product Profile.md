@@ -41,7 +41,7 @@ Host applications remain responsible for:
 - table metadata objects including `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
 - package-root JavaScript exports including `TomSelectController` and rendered-field contract helpers documented in `doc/public_api.md`
 - Stimulus events dispatched by `rails-fields-kit--tom-select`
-- read-only setup verification through `rails rails_fields_kit:doctor` and `RailsFieldsKit::SetupDoctor`, including text evidence, Ruby-facing `checks`, and a structured JSON representation, while leaving Tom Select package install, final Stimulus boot policy, CSS import, bundler aliases, CI pass/fail policy, and auto-fix behavior as host-app responsibilities
+- read-only setup verification through `rails rails_fields_kit:doctor` and `RailsFieldsKit::SetupDoctor`, including text evidence, Ruby-facing `checks`, structured JSON representation, and representative Stimulus registration advisory signal, while leaving Tom Select package install, final Stimulus boot policy, CSS import, bundler aliases as host-app responsibilities, and CI pass/fail policy or auto-fix behavior with the host app
 
 ## Current non-goals
 
@@ -99,7 +99,7 @@ Host applications remain responsible for:
 - `doc/events.md`: Stimulus event contract
 - `doc/tom_select_turbo_lifecycle.md`: Turbo and Stimulus connect/disconnect lifecycle boundary for Tom Select-backed helpers
 - `doc/development.md`: local checks
-- `doc/release.md`, `doc/final_release_checklist.md`, `doc/selected_preload_release_gate.md`, `doc/sample_app_checklist.md`, `doc/sample_app_results.md`, and `doc/release_notes_0_1_1.md`: release-facing maintainer docs and current next-release draft
+- `doc/release.md`, `doc/final_release_checklist.md`, `doc/selected_preload_release_gate.md`, `doc/sample_app_checklist.md`, and `doc/release_notes_0_1_1.md`: release-facing maintainer docs and current next-release draft
 
 ## Source-of-truth reminder
 
