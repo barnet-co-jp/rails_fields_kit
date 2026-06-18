@@ -41,7 +41,7 @@ Host applications remain responsible for:
 - table metadata objects including `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
 - package-root JavaScript exports including `TomSelectController` and rendered-field contract helpers documented in `doc/public_api.md`
 - Stimulus events dispatched by `rails-fields-kit--tom-select`
-- read-only setup verification through `rails rails_fields_kit:doctor`, which reports initializer and importmap pin visibility plus a representative Stimulus registration advisory signal while leaving Tom Select package install, final Stimulus boot policy, CSS import, and bundler aliases as host-app responsibilities
+- read-only setup verification through `rails rails_fields_kit:doctor` and `RailsFieldsKit::SetupDoctor`, including text evidence, Ruby-facing `checks`, and a structured JSON representation, while leaving Tom Select package install, final Stimulus boot policy, CSS import, bundler aliases, CI pass/fail policy, and auto-fix behavior as host-app responsibilities
 
 ## Current non-goals
 
@@ -60,6 +60,7 @@ Host applications remain responsible for:
 - `AGENTS.md`: repo-specific source-of-truth order, docs-sync expectations, and release-facing review inventory
 - `doc/setup.md`: maintained setup walkthrough, including the read-only setup doctor boundary
 - `doc/setup_doctor.md`: read-only SetupDoctor report surface for programmatic checks, text evidence, and command behavior boundaries
+- `doc/setup_doctor_machine_readable.md`: structured JSON output guide for SetupDoctor `schema_version`, `summary`, and `checks` payloads, without turning advisory checks into host-app CI policy
 - `doc/setup_doctor_output_review.md`: focused CLI diagnostic evidence review for setup doctor output, Stimulus registration advisory states, target mismatch readability, and manual-check boundaries
 - `doc/support_boundary.md`: supported Ruby / Rails / Node boundaries and representative CI evidence
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
