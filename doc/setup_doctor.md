@@ -15,14 +15,16 @@ Host-app scripts and release evidence scripts may inspect `SetupDoctor#checks` w
 
 Treat these objects as inspection output. Host apps should not mutate returned checks or depend on the exact ordering as a workflow policy. A `:missing` status means Rails Fields Kit detected an actionable setup gap for the inspected route. A `:manual` status means the item remains a host-app responsibility because the gem cannot safely infer every JavaScript toolchain, package policy, or bundler configuration.
 
+When a script needs the same read-only checks as a structured JSON payload, use [`setup_doctor_machine_readable.md`](setup_doctor_machine_readable.md). That guide documents the `schema_version`, `tool`, `summary`, and `checks` representation without making the doctor an auto-fix tool, SARIF/JUnit emitter, or host-app CI pass/fail policy.
+
 ## Text evidence
 
 `SetupDoctor#report_lines` returns the same human-readable lines printed by the doctor command. It is useful for logs, release notes, or support evidence where a text snapshot is easier to review than custom formatting.
 
-`report_lines` is not a JSON schema, SARIF/JUnit contract, or stable machine-readable report format. Scripts that need structured inspection should read `checks` and keep any CI failure policy in the host app.
+`report_lines` is not a JSON schema, SARIF/JUnit contract, or stable machine-readable report format. Scripts that need structured inspection should read `checks` directly or use the JSON representation documented in [`setup_doctor_machine_readable.md`](setup_doctor_machine_readable.md), while keeping any CI failure policy in the host app.
 
 ## Command behavior
 
-`SetupDoctor#run(io:)` writes `report_lines` to the provided IO object and returns `true`. The command path stays read-only: it reports detected setup visibility, then leaves fixes, package installation, importmap policy, bundler aliases, Stimulus registration, CSS loading, and CI pass/fail decisions to the host app.
+`SetupDoctor#run(io:)` writes `report_lines` to the provided IO object and returns `true`. When called with `format: :json`, it writes the same diagnostic state as the structured JSON representation. Both output paths stay read-only: they report detected setup visibility, then leave fixes, package installation, importmap policy, bundler aliases, Stimulus registration, CSS loading, and CI pass/fail decisions to the host app.
 
 The Rails task `rails rails_fields_kit:doctor` follows the same boundary. It is a visibility check, not an auto-fix command or a host-app setup policy engine.
