@@ -181,6 +181,33 @@ columns = [
 ]
 ```
 
+Contact and search wrappers travel through the same native metadata path. Use them when the table column wants ordinary browser-native contact or search inputs with Rails Fields Kit wrapper wiring, not remote suggestions or token parsing:
+
+```ruby
+contact_columns = [
+  {
+    key: :contact_email,
+    filter_input: RailsFieldsKit::TableFilterInput.email_field(
+      :contact_email,
+      autocomplete: "email"
+    )
+  },
+  {
+    key: :website_url,
+    cell_editor: RailsFieldsKit::TableCellInput.url_field(:website_url)
+  },
+  {
+    key: :phone,
+    cell_editor: RailsFieldsKit::TableCellInput.phone_field(
+      :phone,
+      autocomplete: "tel"
+    )
+  }
+]
+```
+
+`search_field` in this metadata family maps to the browser-native `rfk_search_field` wrapper. It does not call remote suggestion endpoints, parse token text, execute table queries, or own search result behavior. Use Tom Select-backed `autocomplete` / `combobox` metadata for remote suggestions, and `token_search` / `ransack_filter` metadata when structured token text or Ransack-oriented metadata is in scope. For the detailed contact/search ownership boundary, see [`native_contact_fields.md`](native_contact_fields.md).
+
 Those metadata objects normalize to the same hash protocol:
 
 ```ruby
