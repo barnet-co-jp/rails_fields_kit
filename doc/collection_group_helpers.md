@@ -14,6 +14,21 @@ Use Rails and host-app markup for collection groups today:
 
 Do not treat proposal branches, open PR helper names, or local wrapper experiments as public API until they are merged and listed in `public_api.md`.
 
+## Visual and evidence lane decision
+
+Keep collection group review in this boundary document until a collection helper becomes public API.
+
+The visual reference family should not add a standalone collection group lane yet. A static artifact that shows collection checkbox or collection radio groups too prominently can make proposal-only helpers look like current Rails Fields Kit behavior. For now, reviewers should use this page as the source of truth and treat any collection group screenshot, sample app note, or PR comment as host-app-owned evidence rather than Rails Fields Kit rendered-state evidence.
+
+Use the following distinction when reviewing nearby native fields:
+
+- Single checkbox or radio wrappers can be reviewed as individual field helpers after they are merged and listed in `public_api.md`.
+- Collection groups remain Rails / host-app markup, including `fieldset`, `legend`, group hint, group error, and per-option label structure.
+- Group-level feedback belongs to the host app unless a future collection group helper explicitly defines that contract.
+- Per-option labels and checked-state semantics should continue to follow ordinary Rails collection helper behavior.
+
+A future visual lane is appropriate only after the helper contract is accepted, or if a PR explicitly marks the artifact as proposal-only and keeps it out of release evidence and current API inventory.
+
 ## Current boundary decision
 
 This slice keeps collection checkbox and radio groups outside the current FormBuilder helper API. That is intentional, not an omission in the helper list.
