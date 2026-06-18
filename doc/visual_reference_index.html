@@ -321,6 +321,8 @@
         <nav class="hero-links" aria-label="Related documentation">
           <a href="visual_references.md">Reference map</a>
           <a href="public_api.md#javascript-exports">Public API exports</a>
+          <a href="package_root_helper_release_evidence.md">Package helper evidence</a>
+          <a href="setup_doctor_output_review.md">Setup Doctor output</a>
           <a href="final_release_checklist.md">Release checklist</a>
           <a href="sample_app_results.md">Manual evidence log</a>
         </nav>
@@ -459,11 +461,15 @@
             <ul>
               <li>Start with the core Tom Select artifact for the broadest helper coverage.</li>
               <li>Use native helper states when the release touches native wrapper, label, hint, validation, or affix surfaces.</li>
+              <li>Use package helper evidence when the release question is package-root helper export coverage rather than visual artifact appearance.</li>
+              <li>Use Setup Doctor output when the release question is CLI diagnostic readability rather than field UI rendering.</li>
               <li>Record changed artifact evidence in sample_app_results.md or the release PR comment.</li>
             </ul>
             <nav class="task-links" aria-label="Release verification references">
               <a href="tom_select_visual_reference.html">Primary: Tom Select states</a>
               <a href="native_field_visual_reference.html">Native helper states</a>
+              <a href="package_root_helper_release_evidence.md">Package helper evidence</a>
+              <a href="setup_doctor_output_review.md">Setup Doctor output</a>
             </nav>
           </article>
 
@@ -522,12 +528,14 @@
             </header>
             <ul>
               <li>Open public API exports first; that table remains the source of truth for current landed helper names and return-shape boundaries.</li>
+              <li>Open package helper release evidence when the review needs representative package-root export checks instead of a visual lane.</li>
               <li>Route Tom Select rendered contracts through the core states or text override lane when the review is about rendered copy or configuration surfaces.</li>
               <li>Route native wrapper contracts through native helper states or accessibility contract lanes; route error-surface and request reader questions through request-failure feedback.</li>
               <li>Keep current helper names and return shapes out of this card so public_api.md stays the source of truth.</li>
             </ul>
             <nav class="task-links" aria-label="Contract reader review references">
               <a href="public_api.md#javascript-exports">Primary: public API exports</a>
+              <a href="package_root_helper_release_evidence.md">Package helper evidence</a>
               <a href="tom_select_visual_reference.html">Tom Select rendered lane</a>
               <a href="native_accessibility_contract_visual_reference.html">Native wrapper lane</a>
               <a href="tom_select_request_failure_visual_reference.html">Request feedback lane</a>
@@ -781,6 +789,8 @@
           <ol>
             <li>Choose the reviewer task, helper family, lane, or release gate that matches the current PR or design question.</li>
             <li>For package-root contract readers, confirm the current public export and boundary in public_api.md before opening a visual lane.</li>
+            <li>Use package_root_helper_release_evidence.md when the review is about representative package-root helper evidence, not field appearance.</li>
+            <li>Use setup_doctor_output_review.md when the review is about CLI diagnostic evidence, not field UI visual references.</li>
             <li>Open the individual static HTML reference and compare desktop and narrow viewport readability.</li>
             <li>Record release or PR evidence in sample_app_results.md when the artifact changes or gates a release.</li>
             <li>Update visual_references.md and this index when a new visual reference lands on main.</li>
@@ -788,7 +798,7 @@
         </div>
       </section>
 
-      <p class="scope-note"><strong>Scope note.</strong> This page is a static index for documentation artifacts. It does not define public helper behavior, JavaScript exports, request lifecycle events, or runtime rendering contracts. Use public_api.md#javascript-exports as the source of truth before treating a contract reader as current public API.</p>
+      <p class="scope-note"><strong>Scope note.</strong> This page is a static index for documentation artifacts. It does not define public helper behavior, JavaScript exports, request lifecycle events, setup diagnostics, or runtime rendering contracts. Use public_api.md#javascript-exports as the source of truth before treating a contract reader as current public API.</p>
     </main>
   </body>
 </html>
