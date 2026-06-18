@@ -22,6 +22,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app setup note
 - `doc/support_boundary.md`: supported Ruby / Rails / Node boundaries and representative CI evidence
 - `doc/setup_doctor.md`: read-only SetupDoctor report surface for `checks`, `report_lines`, `run(io:)`, and host-app-owned setup policy boundaries
+- `doc/setup_doctor_machine_readable.md`: structured JSON output guide for SetupDoctor `schema_version`, `summary`, and `checks` payloads; keep host-app CI pass/fail policy and auto-fix behavior out of this doc
 - `doc/setup_doctor_output_review.md`: focused setup doctor CLI diagnostic evidence review for `[OK]`, `[MISSING]`, `[MANUAL]`, and importmap target mismatch scanability
 - `doc/package_root_helper_release_evidence.md`: release and sample-app evidence guide for package-root rendered-field contract helpers; keep `doc/public_api.md#javascript-exports` as the helper list and return-shape source of truth
 - `doc/table_metadata_release_evidence.md`: release and sample-app evidence guide for table metadata rendering, group-level wrappers, and TableRenderer registry lanes
