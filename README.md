@@ -188,15 +188,15 @@ Use the package-root import for normal Stimulus registration. Use the direct con
 
 Keep this README as a representative route rather than a full helper inventory:
 
-| Need | Representative helper | Source of truth |
-| --- | --- | --- |
-| Request endpoint and parameter config | `tomSelectRequestContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
-| Request-failure placeholder surface | `readRenderedErrorSurface(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
-| Current selection state | `tomSelectSelectionContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
-| Selected preload config | `readRenderedSelectedPreloadConfig(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
-| Rendered plugin state | `tomSelectPluginContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
-| Tom Select copy values | `tomSelectTextOverrideContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
-| Native wrapper accessibility wiring | `nativeFieldAccessibilityContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Helper family | Representative task | Representative helper | Source of truth |
+| --- | --- | --- | --- |
+| Request configuration | Check rendered endpoints, request param names, `minLength`, and error-surface id without executing requests | `tomSelectRequestContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Request-failure surface | Resolve the opt-in placeholder that request-failure events can pass back to host-app feedback UI | `readRenderedErrorSurface(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Selection state | Inspect initialized current values without mutating Tom Select, hidden fields, or events | `tomSelectSelectionContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Selected preload configuration | Check rendered selected-preload URL, param names, and fixed query params | `readRenderedSelectedPreloadConfig(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Plugin configuration | Read the effective plugin list and derived clear/remove flags without owning plugin assets or styling | `tomSelectPluginContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Tom Select copy values | Confirm rendered no-results, loading, and create copy values without taking over locale or visible copy policy | `tomSelectTextOverrideContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Native wrapper wiring | Inspect label, described-by, affix, and wrapper elements for native helpers without changing accessibility markup | `nativeFieldAccessibilityContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 
 For release or sample-app evidence about a package-root helper lane, use [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) instead of expanding this README into a helper inventory. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
 
