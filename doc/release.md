@@ -83,6 +83,8 @@ bundle exec rake build
    - `doc/public_api.md`
    - `doc/select_migration.md`
    - `doc/field_helpers.md`
+   - `doc/native_numeric_fields.md` when native numeric wrapper helpers are part of the release surface
+   - `doc/native_contact_fields.md` when native contact or native search wrapper helpers are part of the release surface
    - `doc/visual_references.md`
    - `doc/visual_reference_index.html`
    - `doc/tom_select_visual_reference.html`
@@ -104,6 +106,7 @@ bundle exec rake build
    - `doc/development.md`
    - `doc/sample_app_checklist.md`
    - `doc/package_root_helper_release_evidence.md` when package-root read-only helper exports are part of the release evidence scope
+   - `doc/table_metadata_release_evidence.md` when table metadata rendering, group-level wrappers, or TableRenderer registry checks are part of the release evidence scope
    - `doc/sample_app_results.md`
    - `doc/selected_preload_release_gate.md` when selected preload behavior is part of the release surface
    - `doc/final_release_checklist.md`
@@ -138,6 +141,8 @@ bundle exec rake build
    When setup or import evidence is part of the release or PR scope, record the host app's package manager, Tom Select version or pin, and CSS route in the Tom Select environment reproducibility memo in [`sample_app_results.md`](sample_app_results.md). Keep that memo separate from setup doctor `[OK]` / `[MANUAL]` visibility results: the memo records observed host-app package and asset choices, not Rails Fields Kit package-manager policy or a fixed Tom Select version requirement.
 
    When package-root read-only helper exports are in scope, use [`package_root_helper_release_evidence.md`](package_root_helper_release_evidence.md) to choose representative helper checks before recording the final sample-app or release PR evidence. Keep `doc/public_api.md#javascript-exports` as the source of truth for the exported helper list and return-shape boundary.
+
+   When table metadata rendering, group-level wrappers, or TableRenderer registry checks are in scope, use [`table_metadata_release_evidence.md`](table_metadata_release_evidence.md) to choose representative checks before recording the final sample-app or release PR evidence. Keep `doc/table_adapters.md` and `doc/table_group_html.md` as the source of truth for behavior and responsibility boundaries.
 
    After the install generator runs, run the read-only setup doctor in the sample app:
 
