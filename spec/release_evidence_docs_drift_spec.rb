@@ -26,7 +26,7 @@ RSpec.describe "release evidence documentation drift guards" do
     )
     expect(ransack_suggestions).to include(
       "does not require the `ransack` gem and does not call `Model.ransack`",
-      "the host application remains responsible for parsing the submitted token text",
+      "The host application remains responsible for parsing the submitted token text",
       "`ransack_predicate`",
       "`ransack_field`",
       "`ransack_value`"
@@ -67,10 +67,10 @@ RSpec.describe "release evidence documentation drift guards" do
 
     expect(events).to include(
       "error_surface_html: { id:",
-      "same object and method multiple times",
+      "the same object and method are rendered more than once",
       "aria-describedby",
       "placeholder",
-      "detail.surface"
+      "event.detail.surface"
     )
     expect(sample_app_checklist).to include("error_surface_html:", "event.detail.surface")
     expect(sample_app_results).to include("error_surface_html:", "event.detail.surface")
