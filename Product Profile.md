@@ -41,7 +41,7 @@ Host applications remain responsible for:
 - table metadata objects including `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
 - package-root JavaScript exports including `TomSelectController` and rendered-field contract helpers documented in `doc/public_api.md`
 - Stimulus events dispatched by `rails-fields-kit--tom-select`
-- read-only setup verification through `rails rails_fields_kit:doctor`, which reports initializer and importmap pin visibility plus a representative Stimulus registration advisory signal while leaving Tom Select package install, final Stimulus boot policy, CSS import, and bundler aliases as host-app responsibilities
+- read-only setup verification through `rails rails_fields_kit:doctor` and `RailsFieldsKit::SetupDoctor`, including text evidence, Ruby-facing `checks`, structured JSON representation, and representative Stimulus registration advisory signal, while leaving Tom Select package install, final Stimulus boot policy, CSS import, bundler aliases as host-app responsibilities, and CI pass/fail policy or auto-fix behavior with the host app
 
 ## Current non-goals
 
@@ -60,6 +60,7 @@ Host applications remain responsible for:
 - `AGENTS.md`: repo-specific source-of-truth order, docs-sync expectations, and release-facing review inventory
 - `doc/setup.md`: maintained setup walkthrough, including the read-only setup doctor boundary
 - `doc/setup_doctor.md`: read-only SetupDoctor report surface for programmatic checks, text evidence, and command behavior boundaries
+- `doc/setup_doctor_machine_readable.md`: structured JSON output guide for SetupDoctor `schema_version`, `summary`, and `checks` payloads, without turning advisory checks into host-app CI policy
 - `doc/setup_doctor_output_review.md`: focused CLI diagnostic evidence review for setup doctor output, Stimulus registration advisory states, target mismatch readability, and manual-check boundaries
 - `doc/support_boundary.md`: supported Ruby / Rails / Node boundaries and representative CI evidence
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
@@ -72,10 +73,13 @@ Host applications remain responsible for:
 - `doc/visual_references.md`: maintained visual reference family map and scope notes
 - `doc/visual_reference_index.html`: one-screen reviewer entrypoint for the static visual reference family
 - `doc/tom_select_visual_reference.html` and `doc/native_field_visual_reference.html`: static visual references for representative Tom Select-backed and native helper states
+- `doc/tom_select_rich_option_review.html`: companion visual reference for Tom Select rich option label, description, and badge density review
 - `doc/tom_select_source_fallback_review.html`: focused companion visual reference for explicit `enum:` sources and remote option label fallback display review
 - `doc/tom_select_turbo_reconnect_visual_reference.html`: focused companion visual reference for Turbo reconnect behavior review
 - `doc/tom_select_no_event_boundary_review.html`: map-only companion visual reference for stale / aborted Tom Select request no-event boundary review
+- `doc/tom_select_plugin_clearable_review.html`: map-only companion visual reference for `allow_clear: true`, whole-field clear affordance, and host-owned plugin boundaries
 - `doc/tom_select_request_failure_visual_reference.html`: static visual reference for opt-in request-failure feedback and `error_surface: true` lanes
+- `doc/tom_select_host_feedback_lifecycle_visual_reference.html`: companion visual reference for host-owned inline feedback and follow-up clearing cues after request-failure events
 - `doc/tom_select_error_surface_contract_visual_reference.html`: static visual reference for focused `error_surface: true` live-region contract review
 - `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
 - `doc/tom_select_text_override_visual_reference.html`: static visual reference for configured Tom Select text override copy states
@@ -92,10 +96,11 @@ Host applications remain responsible for:
 - `doc/table_group_html.md`: direct table FormBuilder helper group-level wrapper attributes
 - `doc/public_api.md`: intended stable API for 0.1.x
 - `doc/package_root_helper_release_evidence.md`: focused release and sample-app evidence guide for package-root rendered-field contract helpers; `doc/public_api.md` remains the source of truth for helper names and return shapes
+- `doc/table_metadata_release_evidence.md`: focused release and sample-app evidence guide for table metadata rendering, group-level wrappers, and TableRenderer registry lanes
 - `doc/events.md`: Stimulus event contract
 - `doc/tom_select_turbo_lifecycle.md`: Turbo and Stimulus connect/disconnect lifecycle boundary for Tom Select-backed helpers
 - `doc/development.md`: local checks
-- `doc/release.md`, `doc/final_release_checklist.md`, `doc/selected_preload_release_gate.md`, `doc/sample_app_checklist.md`, `doc/sample_app_results.md`, and `doc/release_notes_0_1_1.md`: release-facing maintainer docs and current next-release draft
+- `doc/release.md`, `doc/final_release_checklist.md`, `doc/selected_preload_release_gate.md`, `doc/table_metadata_release_evidence.md`, `doc/sample_app_checklist.md`, `doc/sample_app_results.md`, and `doc/release_notes_0_1_1.md`: release-facing maintainer docs and current next-release draft
 
 ## Source-of-truth reminder
 
