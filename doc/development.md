@@ -131,6 +131,8 @@ For review queue triage and release prep, confirm these current signals together
 - the PR metadata `mergeable` value or equivalent GitHub mergeability signal
 - whether the PR branch is behind, diverged, or superseded by a replacement PR
 - the base branch freshness, especially after recent `main` merges that touched nearby docs, specs, package metadata, or public API wording
+- whether a static visual reference PR is still waiting for browser-capable desktop or narrow viewport evidence that CI and source review cannot replace
+- whether a public helper, package-root export, or additive API PR still needs human adoption review for the final helper name, return shape, or public surface boundary
 
 When a replacement PR supersedes an older PR, leave the older PR with enough reviewer-facing context to avoid duplicate review effort: link the replacement, summarize whether the old branch should be closed, and call out any human decision that still belongs on the old PR. If the older PR cannot be closed safely because the replacement changes scope, risk, or public API surface, leave both open and record the reason in the newer PR's Notes.
 
