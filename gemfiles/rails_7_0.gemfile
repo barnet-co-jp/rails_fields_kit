@@ -3,3 +3,5 @@ source "https://rubygems.org"
 gemspec path: ".."
 
 gem "rails", "~> 7.0.8"
+# i18n 1.15 uses Fiber storage that is unavailable on the Ruby 3.1 compatibility lane.
+gem "i18n", "< 1.15"

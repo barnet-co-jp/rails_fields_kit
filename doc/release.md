@@ -83,6 +83,8 @@ bundle exec rake build
    - `doc/public_api.md`
    - `doc/select_migration.md`
    - `doc/field_helpers.md`
+   - `doc/native_numeric_fields.md` when native numeric wrapper helpers are part of the release surface
+   - `doc/native_contact_fields.md` when native contact or native search wrapper helpers are part of the release surface
    - `doc/visual_references.md`
    - `doc/visual_reference_index.html`
    - `doc/tom_select_visual_reference.html`
