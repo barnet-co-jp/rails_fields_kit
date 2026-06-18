@@ -11,7 +11,7 @@ The next release is primarily about making the 0.1.x public surface easier to ad
 - Token-oriented search helpers and suggestion builders make structured search inputs easier to wire while keeping query parsing and execution in the host application.
 - Table metadata adapters and FormBuilder rendering helpers let table integrations describe Rails Fields Kit fields without taking over table persistence or query ownership.
 - Package-root JavaScript exports, Tom Select request options, create-success events, install generator setup-note opt-out, and opt-in request-failure surfaces improve integration hooks around rendered fields and host-app setup.
-- Controller helper and FormBuilder documentation now call out landed endpoint-side query minimums, supported remote collection wrappers, and enum source boundaries without turning search execution, pagination metadata, or arbitrary enum adapters into gem-owned behavior.
+- Controller helper and FormBuilder documentation now call out landed endpoint-side query minimums, endpoint-side search match strategies, supported remote collection wrappers, and enum source boundaries without turning search execution, pagination metadata, adapter-specific SQL behavior, or arbitrary enum adapters into gem-owned behavior.
 - The fixed entries below mostly harden request lifecycle docs, suggestion metadata immutability, and table metadata normalization so release reviewers can distinguish user-facing additions from quality fixes.
 
 The detailed entries remain the exhaustive source of truth for release review. Keep proposal or open-PR behavior out of this section until it has landed in the release branch.
@@ -21,6 +21,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 #### FormBuilder helpers
 
 - `rfk_enum_select` now has a focused explicit `enum:` hash guide for Rails enum-shaped sources. Hash keys remain the submitted values, labels stay on the model I18n / humanized-key path, and arbitrary label/value DSLs, remote enum option lookup, and PORO enum adapters remain outside the current public surface.
+- `rfk_range_field` now provides a thin native range input wrapper with the same label, hint, error, affix, pass-through option, and accessibility wiring boundaries as the other native helpers. Browser slider behavior, live value previews, custom slider styling, multi-thumb controls, validation policy, and production CSS remain host-app responsibilities.
 - `rfk_password_field` now provides a thin native password input wrapper with the same label, hint, error, affix, pass-through option, and accessibility wiring boundaries as the other native helpers. Password visibility toggles, strength meters, credential policy, authentication workflow, and credential storage remain host-app responsibilities.
 
 #### Token search and suggestion metadata
@@ -52,10 +53,12 @@ The detailed entries remain the exhaustive source of truth for release review. K
 - `tomSelectPluginContract(element)` from the package root for host-app scripts that need to read rendered Tom Select plugin data, including the effective plugin list and derived clear/remove flags, without owning plugin assets, control styling, selection mutation, or Tom Select lifecycle behavior.
 - `tomSelectSelectionContract(element)` from the package root for host-app scripts that need to read initialized Tom Select-backed field selection values on demand, without mutating selections, exposing Tom Select internals, or owning validation feedback.
 - `tomSelectRequestContract(element)` from the package root for host-app scripts that need to read rendered request endpoint and parameter config, including `url`, `selectedUrl`, `createUrl`, `queryParam`, `selectedParam`, `selectedMultipleParam`, `createParam`, `minLength`, and `errorSurfaceId`, without executing requests, authorizing endpoints, or owning visible feedback.
+- `readRenderedErrorSurface(element)` from the package root for host-app scripts that need to resolve the rendered opt-in request-failure placeholder for a Tom Select-backed field, without creating feedback, executing requests, retrying failures, or owning visible copy.
 - `nativeFieldAccessibilityContract(element)` from the package root for host-app scripts that need to read rendered native input accessibility wiring, including the resolved label association, without taking over id generation, label text, validation messages, focus management, or visible feedback.
 - `readRenderedSelectedPreloadConfig(element)` from the package root for host-app scripts that need to read rendered `selected_url:` config values without executing selected preload requests, owning visible fallback copy, or adding retry UI to the gem.
 - `action:` support for `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` so generated endpoint actions can match custom routes.
 - `rfk_search_with minimum_query_length:` for endpoints that should return empty options for blank or too-short queries while keeping the default blank-query initial options behavior when omitted. FormBuilder `min_length:` remains a browser-side loading hint, and authorization, scoping, query parsing, Ransack integration, and Tom Select lifecycle remain host-app responsibilities.
+- `rfk_search_with match:` for endpoint-side SQL LIKE pattern strategies. The default stays `:contains`, while `:prefix` and `:exact` let host apps choose narrower matching without moving case sensitivity, adapter-specific SQL, authorization, or custom query semantics into Rails Fields Kit.
 - `rfk_find_with` supports Rails array params for multiple selected option preload in addition to comma-separated `ids`, including custom `ids_param:` names.
 - Remote search and selected preload docs now list `{ results: [...] }` alongside raw arrays and `{ options: [...] }` as supported collection response wrappers; create-on-the-fly `{ option: ... }`, pagination metadata, and arbitrary response adapters remain separate from that collection wrapper contract.
 - Remote request extension options for Tom Select-backed helpers:
@@ -66,6 +69,14 @@ The detailed entries remain the exhaustive source of truth for release review. K
 - Opt-in `error_surface:` and `error_surface_html:` support for Tom Select-backed helpers so request-failure events can expose a stable nearby placeholder as `detail.surface` without moving visible error copy or retry UI into the gem.
 
 ### Fixed
+
+#### Documentation and release evidence
+
+- Visual reference release evidence docs now distinguish browser-verified `PASS` / `FAIL` results from `SOURCE REVIEW ONLY` and `DEFERRED` handoffs, so CI or source review alone is not treated as visual approval.
+- Documentation drift guards now cover visual reference HTML artifact structure, same-file HTML fragment link-check scope, and companion visual reference package/map inventory without turning external URLs, cross-file HTML anchors, or browser screenshots into required checks.
+- Configuration docs now distinguish concrete initializer defaults, nil Tom Select data-value omissions, and bundled locale-aware render-text fallbacks before the Quick reference tables.
+- Shared metadata navigation docs now have a focused drift guard for README/public API entry links, current public API / host-app-owned source boundaries, and future registry proposals.
+- Native affix contract smoke now runs through the maintained JavaScript check runner, keeping package-root helper evidence on the same `npm run check:js` path without changing native wrapper behavior.
 
 #### Packaging and bundled locales
 

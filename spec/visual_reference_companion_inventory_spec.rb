@@ -30,4 +30,27 @@ RSpec.describe "visual reference companion inventory" do
       "plugin assets, styling, event payloads, selection mutation, and Tom Select lifecycle behavior outside Rails Fields Kit"
     )
   end
+
+  it "keeps host feedback lifecycle companion review packaged and mapped" do
+    expect(specification.files).to include("doc/tom_select_host_feedback_lifecycle_visual_reference.html")
+
+    expect(visual_references).to include(
+      "[`tom_select_host_feedback_lifecycle_visual_reference.html`](tom_select_host_feedback_lifecycle_visual_reference.html)",
+      "event-driven host feedback lifecycle review",
+      "host-owned visible feedback",
+      "follow-up clearing cues",
+      "retry UI, default copy, or request lifecycle behavior"
+    )
+  end
+
+  it "keeps no-event boundary companion review map-only and packaged" do
+    expect(specification.files).to include("doc/tom_select_no_event_boundary_review.html")
+
+    expect(visual_references).to include(
+      "[`tom_select_no_event_boundary_review.html`](tom_select_no_event_boundary_review.html)",
+      "map-only companion artifact",
+      "stale / aborted no-event states",
+      "without promoting request-start / finish events, retry UI, production CSS, or request lifecycle behavior into Rails Fields Kit"
+    )
+  end
 end

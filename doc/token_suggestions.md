@@ -104,6 +104,8 @@ RailsFieldsKit::TokenSuggestions.build(
 
 Saved searches receive a default `badge` of `"saved"` when not specified. The visual reference keeps saved searches close to the same token suggestion option shape, while making the `saved` badge easy to distinguish from field and value completions.
 
+Saved-search suggestions are the current public surface for this workflow. Rails Fields Kit renders them as token suggestion options for `rfk_token_search`; it does not currently provide an independent saved search selector helper, a submitted saved-search ID contract, persistence, query execution, authorization, or sharing policy. Keep those concerns in the host application, and split a follow-up feature issue before introducing a dedicated selector helper or changing the submitted value shape.
+
 ## Output fields
 
 The builder uses Rails Fields Kit configuration defaults for option fields:

@@ -59,20 +59,26 @@ Host applications remain responsible for:
 - `CHANGELOG.md`: released and unreleased user-visible changes, plus the current release-prep baseline
 - `AGENTS.md`: repo-specific source-of-truth order, docs-sync expectations, and release-facing review inventory
 - `doc/setup.md`: maintained setup walkthrough, including the read-only setup doctor boundary
+- `doc/setup_doctor.md`: read-only SetupDoctor report surface for programmatic checks, text evidence, and command behavior boundaries
 - `doc/setup_doctor_output_review.md`: focused CLI diagnostic evidence review for setup doctor output, Stimulus registration advisory states, target mismatch readability, and manual-check boundaries
 - `doc/support_boundary.md`: supported Ruby / Rails / Node boundaries and representative CI evidence
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
 - `doc/field_helpers.md` and `doc/controller_helpers.md`: public helper references
 - `doc/password_field.md`: focused `rfk_password_field` native wrapper boundary and password-specific non-goals
+- `doc/native_numeric_fields.md`: focused `rfk_number_field`, `rfk_money_field`, and `rfk_percent_field` native wrapper boundary and numeric formatting non-goals
+- `doc/native_contact_fields.md`: focused `rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field` native wrapper boundary and contact/search ownership non-goals
 - `doc/textarea_autosize.md`: focused `rfk_text_area` autosize boundary; autosize remains host-app owned in the current 0.1.x surface
 - `doc/textarea_autosize_release_evidence.md`: release and sample-app evidence guide for the current `rfk_text_area` autosize boundary without treating autosize as built-in behavior
 - `doc/visual_references.md`: maintained visual reference family map and scope notes
 - `doc/visual_reference_index.html`: one-screen reviewer entrypoint for the static visual reference family
 - `doc/tom_select_visual_reference.html` and `doc/native_field_visual_reference.html`: static visual references for representative Tom Select-backed and native helper states
+- `doc/tom_select_rich_option_review.html`: companion visual reference for Tom Select rich option label, description, and badge density review
 - `doc/tom_select_source_fallback_review.html`: focused companion visual reference for explicit `enum:` sources and remote option label fallback display review
 - `doc/tom_select_turbo_reconnect_visual_reference.html`: focused companion visual reference for Turbo reconnect behavior review
 - `doc/tom_select_no_event_boundary_review.html`: map-only companion visual reference for stale / aborted Tom Select request no-event boundary review
+- `doc/tom_select_plugin_clearable_review.html`: map-only companion visual reference for `allow_clear: true`, whole-field clear affordance, and host-owned plugin boundaries
 - `doc/tom_select_request_failure_visual_reference.html`: static visual reference for opt-in request-failure feedback and `error_surface: true` lanes
+- `doc/tom_select_host_feedback_lifecycle_visual_reference.html`: companion visual reference for host-owned inline feedback and follow-up clearing cues after request-failure events
 - `doc/tom_select_error_surface_contract_visual_reference.html`: static visual reference for focused `error_surface: true` live-region contract review
 - `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
 - `doc/tom_select_text_override_visual_reference.html`: static visual reference for configured Tom Select text override copy states
@@ -85,6 +91,7 @@ Host applications remain responsible for:
 - `doc/select_migration.md`: practical `collection_select` to `rfk_select` migration pattern
 - `doc/token_suggestions.md` and `doc/ransack_suggestions.md`: token-search suggestion surfaces and host-app responsibility boundary
 - `doc/table_adapters.md`: table metadata bridge
+- `doc/table_direct_helper_boundary.md`: direct table FormBuilder helper `columns`-only boundary and lower-level render/call-spec lane guidance
 - `doc/table_group_html.md`: direct table FormBuilder helper group-level wrapper attributes
 - `doc/public_api.md`: intended stable API for 0.1.x
 - `doc/package_root_helper_release_evidence.md`: focused release and sample-app evidence guide for package-root rendered-field contract helpers; `doc/public_api.md` remains the source of truth for helper names and return shapes

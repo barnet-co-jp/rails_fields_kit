@@ -208,7 +208,13 @@ RailsFieldsKit::RansackSuggestions.build(fields: ransack_fields)
 
 The same `ransack_fields` map can also be passed to `RailsFieldsKit::TableFilterInput.ransack_filter` when table metadata should advertise the same allowed predicates. The host app still decides whether submitted tokens become `params[:q]`, which predicates are allowed for the current user, and how Ransack is executed.
 
-For the general token suggestion view of the same metadata source, see [`token_suggestions.md`](token_suggestions.md#shared-metadata-source-pattern). For the table filter metadata view, see [`table_adapters.md`](table_adapters.md#shared-metadata-source-pattern).
+## Table filter metadata boundary
+
+`RailsFieldsKit::TableFilterInput.ransack_filter` is the current table-oriented Ransack path. It produces token-search table metadata with `adapter: :ransack`, `param_name`, and `fields` in the options hash, then `RailsFieldsKit::TableRenderer` passes those options to the existing `rfk_token_search` helper.
+
+That means the adapter metadata is descriptive. Rails Fields Kit does not add a direct `rfk_table_filters(..., adapter: :ransack)` helper option today, does not parse the submitted query string, and does not call Ransack. If a table integration needs to build `params[:q]`, it should read the metadata or use its own host-app parser and keep authorization, scoping, pagination, and relation execution outside Rails Fields Kit.
+
+For the table filter metadata view, see [`table_adapters.md`](table_adapters.md#token-search-filter-metadata). For the general token suggestion view of the same metadata source, see [`token_suggestions.md`](token_suggestions.md#shared-metadata-source-pattern).
 
 ## Responsibility boundary
 

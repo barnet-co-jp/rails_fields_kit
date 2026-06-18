@@ -10,6 +10,7 @@ The route map is a triage aid. Start with release-wide confidence for release ca
 | --- | --- | --- | --- |
 | Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. | Feature-specific helper, visual, remote, token, or table lanes unless the release candidate explicitly includes them. |
 | JavaScript setup and package-root helper evidence | Setup doctor checks, JavaScript setup checks, package-root helper lanes checked, event checks, Turbo reconnect checks | The release touches setup visibility, package-root exports, read-only rendered-field helper evidence, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. | Native wrapper behavior, visual reference rendering, endpoint execution, or table metadata unless those lanes also changed. |
+| Tom Select plugin override boundary | Tom Select plugin override checks | The release or PR touches `config.default_plugins`, field-level `plugins:`, or the `remove_button` helper default for `rfk_tags` / `rfk_token_search`. | Tom Select package install, plugin-specific UI behavior, production CSS approval, `allow_clear` visual review, or package-root helper evidence unless those lanes also changed. |
 | Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, password field native wrapper checks, native wrapper customization checks | Native helper wrapper, password helper boundary, class, hint/error, affix, accessibility wiring, or browser semantics evidence changed. | Tom Select remote lifecycle, package-root helper import checks, credential policy, or table persistence. |
 | README first field quickstart evidence | `rfk_select` representative collection-backed single-value lane checks, Visual reference render checks | The README first field or quickstart sample needs endpoint-free, server-rendered collection evidence without mixing in setup/import, remote search, selected preload, create-on-the-fly, or token metadata lanes. | Setup/import verification, remote search, selected preload, create-on-the-fly, token metadata, or release-wide readiness. |
 | Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. | Runtime helper behavior, production CSS approval, sample-app field behavior, or CI success as visual approval. |
@@ -132,9 +133,28 @@ Package-root helper lanes checked:
 
 Use this table as the helper-specific evidence log. Choose helper names from `doc/public_api.md#javascript-exports`, use `doc/package_root_helper_release_evidence.md` for the representative lane guidance, and record only helpers that are in release or PR scope. Do not mirror the full helper family here when a helper is unrelated to the change under review.
 
+In the `Result` column, use `PASS` when the scoped helper lane was checked successfully, `FAIL` when it was checked and did not satisfy the lane, `SKIPPED` when an in-scope lane was intentionally deferred, and `OUT OF SCOPE` when a package-root helper boundary was reviewed and deliberately left outside this release or PR. For `SKIPPED` and `OUT OF SCOPE`, use `Evidence notes` to name the reason, follow-up, or boundary instead of leaving the row blank. Do not add rows for unrelated helpers solely to prove they were not checked.
+
 | Helper | Source-of-truth reference | Representative field or selector | Result | Evidence notes |
 | --- | --- | --- | --- | --- |
 |  |  |  |  |  |
+
+## Tom Select plugin override checks
+
+Use this section only when the release or PR changes plugin defaults, field-level `plugins:`, or the documented `remove_button` default for `rfk_tags` / `rfk_token_search`. Keep it as feature-specific evidence; it is not a release-wide requirement.
+
+- Representative helper:
+- Representative field:
+- Evidence location:
+
+- [ ] initializer `config.default_plugins` was recorded as the fallback only when the representative field omitted `plugins:`
+- [ ] field-level `plugins:` was checked as a replacement for the initializer default, not a merge with it
+- [ ] `rfk_tags` or `rfk_token_search` kept the documented `remove_button` default when `plugins:` was omitted
+- [ ] an explicit `plugins:` override for `rfk_tags` or `rfk_token_search` included `"remove_button"` when the representative field still expected remove controls
+- [ ] `allow_clear: true` was kept separate from this lane unless the release or PR also touched the clearable visual or event surface
+- [ ] evidence notes confirmed Rails Fields Kit passes plugin names through and does not own Tom Select plugin asset installation, plugin-specific behavior, or production CSS approval
+
+Notes:
 
 ## Form helper checks
 
@@ -160,9 +180,11 @@ Use this section when the release or PR changes one of the static visual referen
 
 Use the matrix below for changed or release-critical visual references before treating the checkbox pass as complete. Keep static visual artifact evidence separate from runtime sample-app lanes; the matrix records what was rendered, not new helper behavior.
 
-| Artifact | Viewport checked | State or lane checked | Responsibility boundary confirmed | Evidence location |
-| --- | --- | --- | --- | --- |
-|  |  |  |  |  |
+In the `Browser review result` column, use `PASS` only when the named viewport was actually reviewed in a browser, `FAIL` when the browser review found an issue, `SOURCE REVIEW ONLY` when connector-only or source-level review checked the changed HTML/CSS without rendering it, and `DEFERRED` when browser-capable review is intentionally handed off. For `SOURCE REVIEW ONLY` and `DEFERRED`, use `Evidence location` to name the source diff, PR comment, reviewer handoff, or follow-up. Do not treat CI success or source review alone as visual approval.
+
+| Artifact | Viewport checked | State or lane checked | Browser review result | Responsibility boundary confirmed | Evidence location |
+| --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |
 
 - [ ] desktop viewport checked for state visibility, readable labels, and expected spacing
 - [ ] narrow/mobile viewport checked for wrapping, overflow, state visibility, and readable feedback copy
