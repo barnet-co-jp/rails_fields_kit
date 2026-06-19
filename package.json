@@ -11,6 +11,8 @@
   },
   "exports": {
     ".": "./app/javascript/rails_fields_kit/index.js",
-    "./tom_select_controller": "./app/javascript/rails_fields_kit/tom_select_controller.js"
+    "./tom_select_controller": "./app/javascript/rails_fields_kit/tom_select_controller.js",
+    "./tom_select_text_override_contract": "./app/javascript/rails_fields_kit/tom_select_text_override_contract.js",
+    "./native_field_accessibility_contract": "./app/javascript/rails_fields_kit/native_field_accessibility_contract.js"
   }
 }

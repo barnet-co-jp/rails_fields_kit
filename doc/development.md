@@ -134,6 +134,15 @@ For review queue triage and release prep, confirm these current signals together
 - whether a static visual reference PR is still waiting for browser-capable desktop or narrow viewport evidence that CI and source review cannot replace
 - whether a public helper, package-root export, or additive API PR still needs human adoption review for the final helper name, return shape, or public surface boundary
 
+When those signals disagree, leave a short reviewer-facing queue note instead of relying on an old summary. Include the PR head SHA, workflow run number and conclusion, compare result (`ahead_by`, `behind_by`, and `status`), effective changed files, mergeability, duplicate closing PRs if any, and the remaining decision owner.
+
+Use these queue classifications consistently:
+
+- `review-ready`: the head workflow is green, `behind_by:0`, the PR is mergeable, changed files match the intended scope, and no unresolved browser-capable or public API adoption review remains
+- `needs-refresh`: the workflow may be green, but it ran before the latest `main`, the compare shows `behind_by > 0` or `status:diverged`, or the PR is not mergeable
+- `needs-browser-evidence`: the docs or static visual artifact scope is otherwise current, but desktop or narrow viewport proof is missing
+- `needs-human`: duplicate closing PR choice, helper naming, return shape, public adoption boundary, or any other review decision cannot be resolved from CI and docs alone
+
 When a replacement PR supersedes an older PR, leave the older PR with enough reviewer-facing context to avoid duplicate review effort: link the replacement, summarize whether the old branch should be closed, and call out any human decision that still belongs on the old PR. If the older PR cannot be closed safely because the replacement changes scope, risk, or public API surface, leave both open and record the reason in the newer PR's Notes.
 
 When multiple open PRs close the same issue, do not treat that as an automatic merge or close signal. Pick a single active candidate only when the scope, target issue, and review status make the choice clear; otherwise keep the duplicate closing PRs visible for human review and note the overlap in each affected PR's Notes.

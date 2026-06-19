@@ -14,6 +14,7 @@ module RailsFieldsKit
       "text_field" => :rfk_text_field,
       "text_area" => :rfk_text_area,
       "number_field" => :rfk_number_field,
+      "range_field" => :rfk_range_field,
       "money_field" => :rfk_money_field,
       "percent_field" => :rfk_percent_field,
       "email_field" => :rfk_email_field,
