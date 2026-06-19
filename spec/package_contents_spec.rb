@@ -170,6 +170,25 @@ RSpec.describe "package contents" do
     )
   end
 
+  it "keeps gemspec metadata URLs pointed at repository-local package docs" do
+    repository_root_uri = "#{specification.homepage}/blob/main/"
+
+    expect(specification.metadata.fetch("source_code_uri")).to eq(specification.homepage)
+
+    {
+      "changelog_uri" => "CHANGELOG.md",
+      "documentation_uri" => "doc/setup.md"
+    }.each do |metadata_key, expected_path|
+      metadata_uri = specification.metadata.fetch(metadata_key)
+      local_path = repository_local_path_from_metadata(metadata_uri, repository_root_uri)
+
+      expect(metadata_uri).to eq("#{repository_root_uri}#{expected_path}")
+      expect(local_path).to eq(expected_path)
+      expect(specification.files).to include(expected_path)
+      expect(File.file?(File.expand_path("../#{local_path}", __dir__))).to be(true)
+    end
+  end
+
   it "keeps sample app package-root evidence placement docs aligned" do
     checklist_chooser = markdown_section(sample_app_checklist, "## Choose where to record evidence")
     narrow_pr_chooser = markdown_section(sample_app_checklist, "### Choose the representative lane for a narrow PR")
@@ -229,6 +248,10 @@ RSpec.describe "package contents" do
     source.scan(/^    def (rfk_[a-z_]+).*?\n(.*?)^    end/m).filter_map do |helper_name, body|
       helper_name if body.include?("rfk_native_field(")
     end
+  end
+
+  def repository_local_path_from_metadata(uri, repository_root_uri)
+    uri.delete_prefix(repository_root_uri)
   end
 
   def markdown_section(document, heading)
