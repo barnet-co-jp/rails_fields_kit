@@ -55,4 +55,40 @@ RSpec.describe "docs drift guards" do
       "renderer registry can render it, including custom registrations"
     ])
   end
+
+  it "keeps configuration profile examples representative without turning them into named profiles" do
+    configuration = read_doc("doc/configuration.md")
+    profiles = read_doc("doc/configuration_profiles.md")
+    development = read_doc("doc/development.md")
+
+    expect_all_tokens(configuration, [
+      "[`configuration_profiles.md`](configuration_profiles.md)",
+      "copyable initializer-default examples",
+      "not named profiles",
+      "field-level override precedence"
+    ])
+
+    expect_all_tokens(profiles, [
+      "does not ship named initializer profiles",
+      "copy only the lines that match the host app context",
+      "Admin-heavy internal tools",
+      "default_search_field = \"name,email,code\"",
+      "default_max_options = 75",
+      "Public forms",
+      "default_preload = false",
+      "default_open_on_focus = false",
+      "Compact Table Filters",
+      "default_value_field = \"value\"",
+      "default_label_field = \"text\"",
+      "default_close_after_select = true",
+      "avoid a Ruby profile API, generator option, or preset registry"
+    ])
+
+    expect(development).to include(
+      "The configuration documentation drift spec compares `RailsFieldsKit::Configuration` public initializer keys with `doc/configuration.md` quick reference rows and detailed headings"
+    )
+    expect(development).to include(
+      "The docs drift guards keep `doc/configuration_profiles.md` on representative profile-example signals without making those examples a full initializer-key inventory or named profile contract."
+    )
+  end
 end
