@@ -135,6 +135,23 @@ RSpec.describe "package contents" do
     )
   end
 
+  it "keeps allow_clear public option docs aligned with the Tom Select clear plugin boundary" do
+    tom_select_helpers = markdown_section(field_helpers, "## Tom Select-backed helpers")
+    public_api_form_builder = markdown_section(public_api, "## FormBuilder helpers")
+
+    expect(tom_select_helpers).to include(
+      "allow_clear: true",
+      "adds `clear_button` to the effective plugin list",
+      "ordinary Rails select options such as `include_blank:` or `prompt:` still own the empty-state wording"
+    )
+    expect(public_api_form_builder).to include(
+      "field-level `allow_clear: true`",
+      "Tom Select's `clear_button` affordance",
+      "empty-state wording remain host-app or Rails select-option responsibility",
+      "Explicit `plugins:` values still replace initializer defaults"
+    )
+  end
+
   it "keeps native FormBuilder helpers aligned with public docs without making the quick chooser exhaustive" do
     native_helpers = native_helper_names_from(form_builder_source)
     native_section = public_api.match(/Native input helpers:\n\n(?<list>(?:- `rfk_[a-z_]+`\n)+)/)[:list]
@@ -168,6 +185,25 @@ RSpec.describe "package contents" do
       "doc/release_notes_0_1_1.md",
       "doc/release_notes_0_1_0.md"
     )
+  end
+
+  it "keeps gemspec metadata URLs pointed at repository-local package docs" do
+    repository_root_uri = "#{specification.homepage}/blob/main/"
+
+    expect(specification.metadata.fetch("source_code_uri")).to eq(specification.homepage)
+
+    {
+      "changelog_uri" => "CHANGELOG.md",
+      "documentation_uri" => "doc/setup.md"
+    }.each do |metadata_key, expected_path|
+      metadata_uri = specification.metadata.fetch(metadata_key)
+      local_path = repository_local_path_from_metadata(metadata_uri, repository_root_uri)
+
+      expect(metadata_uri).to eq("#{repository_root_uri}#{expected_path}")
+      expect(local_path).to eq(expected_path)
+      expect(specification.files).to include(expected_path)
+      expect(File.file?(File.expand_path("../#{local_path}", __dir__))).to be(true)
+    end
   end
 
   it "keeps sample app package-root evidence placement docs aligned" do
@@ -229,6 +265,10 @@ RSpec.describe "package contents" do
     source.scan(/^    def (rfk_[a-z_]+).*?\n(.*?)^    end/m).filter_map do |helper_name, body|
       helper_name if body.include?("rfk_native_field(")
     end
+  end
+
+  def repository_local_path_from_metadata(uri, repository_root_uri)
+    uri.delete_prefix(repository_root_uri)
   end
 
   def markdown_section(document, heading)
