@@ -64,7 +64,7 @@ RSpec.describe "docs drift guards" do
       "[`configuration_profiles.md`](configuration_profiles.md)",
       "copyable initializer-default examples",
       "not named profiles",
-      "field-level override precedence"
+      "Field-level override precedence"
     ])
 
     expect_all_tokens(profiles, [
