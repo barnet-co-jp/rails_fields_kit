@@ -56,14 +56,14 @@ module RailsFieldsKit
         end
       end
 
-      def rfk_find_with(model:, label:, action: :show, value: :id, id_param: :id, ids_param: :ids, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, wrap: nil)
+      def rfk_find_with(model:, label:, action: :show, value: :id, id_param: :id, ids_param: :ids, value_field: nil, label_field: nil, description: nil, badge: nil, description_field: nil, badge_field: nil, scope: nil, order: nil, preserve_order: false, wrap: nil)
         define_method(action) do
           ids = rfk_find_ids(id_param: id_param, ids_param: ids_param)
           relation = rfk_search_scope(model, scope)
           relation = relation.where(value => ids)
           relation = relation.order(order) if order
           records = relation.limit(ids.size)
-          records = rfk_order_find_records_by_requested_ids(records, ids, value) unless order
+          records = rfk_preserve_find_order(records, ids, value) if preserve_order || order.nil?
           options = records.map do |record|
             rfk_option_json(
               record,
@@ -179,13 +179,11 @@ module RailsFieldsKit
       ids.map(&:to_s).map(&:strip).reject(&:empty?)
     end
 
-    def rfk_order_find_records_by_requested_ids(records, ids, value)
-      records_by_id = records.group_by do |record|
-        rfk_read_option_value(record, value).to_s
-      end
+    def rfk_preserve_find_order(records, ids, value)
+      order_by_id = ids.each_with_index.to_h
 
-      ids.filter_map do |id|
-        records_by_id[id.to_s]&.shift
+      records.sort_by do |record|
+        order_by_id.fetch(rfk_read_option_value(record, value).to_s, ids.length)
       end
     end
 
