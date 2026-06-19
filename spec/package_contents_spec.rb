@@ -135,6 +135,23 @@ RSpec.describe "package contents" do
     )
   end
 
+  it "keeps allow_clear public option docs aligned with the Tom Select clear plugin boundary" do
+    tom_select_helpers = markdown_section(field_helpers, "## Tom Select-backed helpers")
+    public_api_form_builder = markdown_section(public_api, "## FormBuilder helpers")
+
+    expect(tom_select_helpers).to include(
+      "allow_clear: true",
+      "adds `clear_button` to the effective plugin list",
+      "ordinary Rails select options such as `include_blank:` or `prompt:` still own the empty-state wording"
+    )
+    expect(public_api_form_builder).to include(
+      "field-level `allow_clear: true`",
+      "Tom Select's `clear_button` affordance",
+      "empty-state wording remain host-app or Rails select-option responsibility",
+      "Explicit `plugins:` values still replace initializer defaults"
+    )
+  end
+
   it "keeps native FormBuilder helpers aligned with public docs without making the quick chooser exhaustive" do
     native_helpers = native_helper_names_from(form_builder_source)
     native_section = public_api.match(/Native input helpers:\n\n(?<list>(?:- `rfk_[a-z_]+`\n)+)/)[:list]
