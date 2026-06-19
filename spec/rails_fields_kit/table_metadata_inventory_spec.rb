@@ -11,9 +11,7 @@ RSpec.describe "table metadata native helper inventory" do
 
   it "keeps table metadata native factories aligned with the FormBuilder native helper inventory" do
     native_field_types = native_helper_field_types_from(form_builder_source)
-    intentional_table_metadata_exceptions = {
-      range_field: "#1572 decides whether range_field belongs in the built-in table metadata factory family"
-    }
+    intentional_table_metadata_exceptions = {}
     expected_table_metadata_types = native_field_types - intentional_table_metadata_exceptions.keys
 
     filter_factory_types = common_field_types_from(table_filter_input_source)
