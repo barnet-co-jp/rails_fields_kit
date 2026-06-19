@@ -34,7 +34,9 @@ These upstream docs remain the source of truth for copyable examples, public API
 - Support boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/support_boundary.md>
 - Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
 - Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>
+- Shared metadata runnable guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/shared_metadata_runnable_guide.md> for copyable current-API examples derived from one host-app-owned metadata source
 - Configuration: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration.md>
+- Configuration profile examples: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration_profiles.md> for advanced copyable initializer examples, not named profiles or presets
 - Field helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/field_helpers.md>
 - Controller helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/controller_helpers.md>
 
@@ -59,7 +61,7 @@ Use these checks when replacing existing form helpers or choosing a helper famil
 - [ ] If this app is replacing a server-rendered `collection_select`, review the practical `rfk_select` migration guide before adding extra reinitializers or controller glue.
 - [ ] Use `doc/field_helpers.md` when choosing between `rfk_select`, `rfk_grouped_select`, `rfk_enum_select`, `rfk_combobox`, `rfk_autocomplete`, `rfk_token_search`, `rfk_tags`, and `rfk_multi_select`.
 - [ ] If this app uses `rfk_token_search`, review `doc/token_suggestions.md` for suggestion endpoint basics and `doc/ransack_suggestions.md` when those suggestions should map to Ransack metadata.
-- [ ] If token suggestions, Ransack-oriented suggestions, and table filters share one app-owned metadata source, use `doc/shared_metadata_navigation.md` as the boundary map before copying patterns into this app's notes.
+- [ ] If token suggestions, Ransack-oriented suggestions, and table filters share one app-owned metadata source, use `doc/shared_metadata_navigation.md` as the boundary map, then copy `doc/shared_metadata_runnable_guide.md` only when this app needs a concrete current-API example.
 - [ ] If this app renders table filters or cell editors from metadata, review `doc/table_adapters.md` before wiring `rfk_table_filters` or `rfk_table_cell_editors`.
 - [ ] If those table metadata helpers need one group-level wrapper around the rendered batch, review `doc/table_group_html.md` before mixing that boundary with field-level `wrapper_html:`.
 
@@ -81,6 +83,7 @@ Use these references before shipping remote preloads, table metadata surfaces, o
 - Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>
 - Support boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/support_boundary.md>
 - Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
+- Configuration profile examples: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration_profiles.md>
 - Package-root helper release evidence: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/package_root_helper_release_evidence.md>
 - Visual reference family: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/visual_references.md>
 - Tom Select visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_visual_reference.html>
@@ -89,6 +92,7 @@ Use these references before shipping remote preloads, table metadata surfaces, o
 - Token suggestions: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/token_suggestions.md>
 - Ransack suggestions: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/ransack_suggestions.md>
 - Shared metadata navigation: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/shared_metadata_navigation.md>
+- Shared metadata runnable guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/shared_metadata_runnable_guide.md>
 - Table adapter metadata: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/table_adapters.md>
 - Table group wrapper attributes: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/table_group_html.md>
 
