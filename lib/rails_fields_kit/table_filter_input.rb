@@ -13,6 +13,7 @@ module RailsFieldsKit
       text_field
       text_area
       number_field
+      range_field
       money_field
       percent_field
       email_field
