@@ -10,7 +10,7 @@ The next release is primarily about making the 0.1.x public surface easier to ad
 
 - Token-oriented search helpers and suggestion builders make structured search inputs easier to wire while keeping query parsing and execution in the host application.
 - Table metadata adapters and FormBuilder rendering helpers let table integrations describe Rails Fields Kit fields without taking over table persistence or query ownership.
-- Package-root JavaScript exports, Tom Select request options, create-success events, install generator setup-note opt-out, and opt-in request-failure surfaces improve integration hooks around rendered fields and host-app setup.
+- Package-root JavaScript exports, Tom Select request options, create-success events, install generator setup-note opt-out, setup doctor status guidance, machine-readable setup doctor JSON output, and opt-in request-failure surfaces improve integration hooks around rendered fields and host-app setup.
 - Controller helper and FormBuilder documentation now call out landed endpoint-side query minimums, endpoint-side search match strategies, supported remote collection wrappers, and enum source boundaries without turning search execution, pagination metadata, adapter-specific SQL behavior, or arbitrary enum adapters into gem-owned behavior.
 - The fixed entries below mostly harden request lifecycle docs, suggestion metadata immutability, and table metadata normalization so release reviewers can distinguish user-facing additions from quality fixes.
 
@@ -46,6 +46,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 
 - `rails generate rails_fields_kit:install --skip-setup-notes` lets host apps skip only the generated `doc/rails_fields_kit_setup.md` artifact while still creating `config/initializers/rails_fields_kit.rb` and leaving Tom Select / importmap setup ownership unchanged.
 - `rails rails_fields_kit:doctor` output now starts with a short status legend and next-step guidance so first-time adopters can distinguish `[MISSING]` setup gaps from `[MANUAL]` host-app JavaScript checks; the doctor remains read-only and does not auto-fix setup, choose Tom Select policy, or define host-app CI gates.
+- `RailsFieldsKit::SetupDoctor#run(format: :json)` can emit a machine-readable representation of the same read-only setup checks for host-app scripts and release verification. The text output remains the default, and the JSON payload stays diagnostic data rather than a Rails Fields Kit-owned CI pass/fail policy, auto-fix mechanism, SARIF/JUnit output, or formal external schema.
 
 #### JavaScript exports and Tom Select integration
 
