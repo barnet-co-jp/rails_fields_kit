@@ -4,6 +4,8 @@
 
 For a static visual reference of how saved-search suggestions read beside field and value completions, see [`token_search_saved_search_visual_reference.html`](token_search_saved_search_visual_reference.html).
 
+When recording release or PR evidence for saved-search token suggestions, use [`saved_search_token_suggestion_evidence.md`](saved_search_token_suggestion_evidence.md) with the token suggestion lane in [`sample_app_results.md`](sample_app_results.md). Keep the evidence to suggestion option JSON such as token value, label, badge, and description instead of turning it into a saved-search selector or execution contract.
+
 If you are deciding how token suggestions, Ransack-oriented suggestions, table metadata, and future registry proposals relate to each other, start with [`shared_metadata_navigation.md`](shared_metadata_navigation.md).
 
 ## Basic usage
