@@ -8,18 +8,18 @@ class CustomersController < ApplicationController
 end
 ```
 
-## Choose the endpoint helper
+## Remote workflow chooser
 
-Use this short route before jumping into the detailed examples below. The helpers define endpoint roles; the host app still owns authentication, authorization, tenant scoping, query execution, validation policy, and any final response policy beyond the documented option shape.
+Use this overview to choose the endpoint helper before reading the detailed option reference below. Rails Fields Kit formats option JSON and wires the rendered field to the endpoint, while the host app still owns authentication, authorization, tenant scoping, query parsing, result execution, and persistence policy.
 
-| Use when | Helper | Pair with | Host app owns |
+| Workflow | Use | FormBuilder route | Endpoint helper |
 | --- | --- | --- | --- |
-| A field needs remote search results for the typed query. | `rfk_search_with` | `url:` on `rfk_select`, `rfk_combobox`, `rfk_multi_select`, `rfk_tags`, or similar Tom Select-backed fields | Safe scopes, allowlisted ordering, query semantics, and result visibility. |
-| An edit form has saved values but not the option labels needed for display. | `rfk_find_with` | `selected_url:` plus matching `selected_param:` / `selected_multiple_param:` when customized | Which saved IDs are visible to the current user and how missing IDs are handled. |
-| A combobox can create a new option from user-entered text. | `rfk_create_with` | `create_url:`, `create_param:`, and optional fixed `create_params:` | Assignment, authorization, validation, persistence, and whether to share the ordinary REST create action. |
-| A token search field needs static or context-built token suggestions. | `rfk_token_suggestions_with` | `rfk_token_search` suggestion URL | Parsing submitted token text and applying it to Ransack, a search object, or app-specific filtering. |
+| Remote search | Fetch option suggestions while the user types. | `rfk_combobox`, `rfk_autocomplete`, or another Tom Select-backed helper with `url:` | `rfk_search_with` |
+| Selected preload | Restore labels for saved values that are not present in the initial collection. | `selected_url:` with `selected:` or persisted model values | `rfk_find_with` |
+| Create-on-the-fly | Accept new option text and return the created option JSON. | `create_url:` with `create_param:` and optional `create_params:` | `rfk_create_with` |
+| Token suggestions | Suggest structured token text while leaving submitted query parsing to the host app. | `rfk_token_search` with `url:` | `rfk_token_suggestions_with` |
 
-The sections below remain the source of truth for signatures, options, request/response shapes, and boundary details.
+Keep the FormBuilder request option and controller helper option aligned. For example, a field using `selected_param: "customer_id"` should pair with `rfk_find_with id_param: :customer_id`, and a field using `create_param: "name"` should pair with `rfk_create_with create_param: "name"`. If the workflow question is mostly about which field helper to render, start from [`field_helpers.md`](field_helpers.md); this page focuses on endpoint responsibilities.
 
 ## `rfk_search_with`
 
@@ -44,7 +44,6 @@ rfk_search_with(
   distinct: true,
   limit: 20,
   minimum_query_length: 1,
-  match: :contains,
   wrap: "options"
 )
 ```
@@ -59,7 +58,6 @@ rfk_search_with(
 - `query_param:` request parameter name for the query. Defaults to `q`.
 - `limit:` maximum number of records. Defaults to `20`.
 - `minimum_query_length:` endpoint-side minimum query length. Defaults to `0`, preserving blank-query initial options.
-- `match:` SQL LIKE pattern strategy for the query. Supports `:contains` (default), `:prefix`, and `:exact`.
 - `scope:` base relation. Supports relation object, symbol scope, or callable evaluated in the controller instance.
 - `order:` order passed to the relation.
 - `distinct:` calls `distinct` before ordering/limiting.
@@ -111,31 +109,6 @@ When the query is shorter than the endpoint minimum, the helper returns an empty
 
 FormBuilder's field-level `min_length:` is a browser-side loading hint for the bundled Tom Select controller. `minimum_query_length:` is the server endpoint policy for direct requests, custom Tom Select configs, or host apps that do not want blank queries to expose initial options. Use both when the UI and endpoint should enforce the same minimum.
 
-### Search match policy
-
-`rfk_search_with` escapes the incoming query with `model.sanitize_sql_like` and applies the configured `match:` strategy to each `search:` column with Arel `matches`. The default remains `:contains`, so existing endpoints keep the `%query%` behavior.
-
-Supported strategies:
-
-| `match:` | LIKE pattern | Use when |
-| --- | --- | --- |
-| `:contains` | `%query%` | Existing partial match behavior should remain. |
-| `:prefix` | `query%` | Users type from the beginning of names, codes, or emails. |
-| `:exact` | `query` | The endpoint should only match the full searched value. |
-
-```ruby
-rfk_search_with(
-  model: Customer,
-  value: :id,
-  label: :name,
-  search: [:name, :email],
-  match: :prefix,
-  wrap: "options"
-)
-```
-
-Rails Fields Kit intentionally does not add a `case_sensitive:` or `case_insensitive:` option here. Case behavior depends on database adapter, collation, column type, and SQL function choices. For PostgreSQL `ILIKE`, normalized search columns, accent folding, Ransack, or authorization-aware custom query semantics, keep that ownership in the host app through `scope:` or a custom controller action.
-
 ### Rich option fields
 
 Use these to support rich Tom Select rendering.
@@ -172,6 +145,8 @@ rfk_find_with(
   id_param: :id,
   ids_param: :ids,
   scope: -> { current_account.customers },
+  order: { name: :asc },
+  preserve_order: true,
   wrap: "option"
 )
 ```
@@ -211,6 +186,10 @@ rfk_find_with(
 
 For multiple selected values, `selected_multiple_param:` changes the request key only; the value can still be comma-separated, such as `customer_ids=1,2,3`, and `rfk_find_with ids_param:` reads that key.
 
+By default, multiple selected preload responses keep the relation's natural order or the endpoint's `order:` option. Use `preserve_order: true` only when the response array should follow the incoming selected IDs, such as `ids=3,1,2` or parsed Rails array params. In that mode, Rails Fields Kit fetches the scoped records normally, skips missing IDs, and then sorts the returned records in Ruby by the normalized request values. This avoids database-specific ordering SQL and does not change authorization, scoping, query execution, or Tom Select runtime behavior.
+
+If `order:` and `preserve_order: true` are both present, `order:` still shapes the relation before loading, but the final selected preload payload is ordered by the incoming IDs. Use one of those policies per endpoint when possible: `order:` for relation-owned ordering, or `preserve_order: true` for saved-value display order.
+
 The response can be a single option, a wrapped option, an array of options, or a wrapped collection depending on the request. See [Output shape](#output-shape) for the supported collection wrappers.
 
 ## `rfk_create_with`
@@ -225,7 +204,6 @@ rfk_create_with(
   label: :name,
   create_attribute: :name,
   create_param: "name",
-  permitted_attributes: [:external_id, :segment],
   assign: ->(_customer) { { account_id: current_account.id } },
   authorize: ->(customer) { policy(customer).create? },
   before_save: :normalize_customer,
@@ -244,7 +222,6 @@ rfk_create_with(
 - `action:` action method to define. Defaults to `:create`.
 - `create_attribute:` model attribute to set from the incoming text.
 - `create_param:` request parameter name. Defaults to `text`.
-- `permitted_attributes:` additional request body keys that `params.permit(...)` may merge into the new record's base attributes.
 - `assign:` extra attributes assigned before validation. Supports hash, method name, or callable.
 - `authorize:` returns whether the create is allowed. Supports method name or callable. Returns `403` when false.
 - `before_save:` hook called before `save`. Supports method name or callable. Returns `422` when false.
@@ -264,16 +241,16 @@ The JSON body merges fixed `create_params:` values first, then writes the user's
 <%= f.rfk_combobox :customer_id,
   create_url: customers_path,
   create_param: "name",
-  create_params: { account_id: current_account.id, external_id: "lead-123" } %>
+  create_params: { account_id: current_account.id } %>
 ```
 
 Rails Fields Kit posts a body shaped like this:
 
 ```json
-{ "account_id": 123, "external_id": "lead-123", "name": "New Customer" }
+{ "account_id": 123, "name": "New Customer" }
 ```
 
-The endpoint-side `rfk_create_with create_param:` option must read the same key that the field sends. Use `permitted_attributes:` only for additional request keys that the create endpoint may persist from the parsed Rails params:
+The endpoint-side `rfk_create_with create_param:` option must read the same key that the field sends:
 
 ```ruby
 rfk_create_with(
@@ -283,12 +260,11 @@ rfk_create_with(
   label: :name,
   create_attribute: :name,
   create_param: "name",
-  permitted_attributes: [:external_id],
   assign: ->(_customer) { { account_id: current_account.id } }
 )
 ```
 
-`create_params:` is only request shaping. Treat incoming fixed values as hints or context from the rendered page; keep tenant scoping, authentication, authorization, CSRF policy, model validation, and persisted assignment decisions in the host app controller/model layer. `permitted_attributes:` only controls which extra incoming keys Rails Fields Kit may copy into the new record's base attributes. Prefer `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy for server-derived values and server-side enforcement.
+`create_params:` is only request shaping. Treat incoming fixed values as hints or context from the rendered page; keep tenant scoping, authentication, authorization, CSRF policy, model validation, and persisted assignment decisions in the host app controller/model layer. Prefer `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy for server-side enforcement.
 
 Use the standard RESTful `POST /customers` action when create-on-the-fly should share the host app's ordinary resource create path. Use a dedicated collection `POST` action when the option creation flow needs a narrower authorization policy, assignment rule, or response shape than the normal resource create action.
 
@@ -298,7 +274,7 @@ FormBuilder options such as `query_params:`, `selected_query_params:`, and `crea
 
 Use fixed params for contextual values that the endpoint still verifies with server-side state. For example, an app may render `query_params: { account_id: current_account.id }` so the request carries an account hint, while the controller still scopes through a trusted relation such as `scope: -> { current_account.customers }` instead of trusting the incoming `params[:account_id]` by itself.
 
-The same boundary applies to create-on-the-fly fields: `create_params:` adds fixed JSON fields to the request body, and `permitted_attributes:` can allow selected incoming keys to become base attributes, but `rfk_create_with` should still use `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy to decide what can be persisted.
+The same boundary applies to create-on-the-fly fields: `create_params:` adds fixed JSON fields to the request body, but `rfk_create_with` should still use `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy to decide what can be persisted.
 
 ## `rfk_token_suggestions_with`
 
@@ -333,7 +309,6 @@ Example with controller context:
 ```ruby
 rfk_token_suggestions_with(
   action: :search_tokens,
-  query_param: "term",
   suggestions: ->(query) {
     [
       { token: "status:#{query}", label: "Status #{query}", badge: "operator" },
