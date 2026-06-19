@@ -35,6 +35,7 @@ These upstream docs remain the source of truth for copyable examples, public API
 - Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
 - Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>
 - Configuration: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration.md>
+- Configuration profile examples: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration_profiles.md> for advanced copyable initializer examples, not named profiles or presets
 - Field helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/field_helpers.md>
 - Controller helper reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/controller_helpers.md>
 
@@ -81,6 +82,7 @@ Use these references before shipping remote preloads, table metadata surfaces, o
 - Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>
 - Support boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/support_boundary.md>
 - Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
+- Configuration profile examples: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration_profiles.md>
 - Package-root helper release evidence: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/package_root_helper_release_evidence.md>
 - Visual reference family: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/visual_references.md>
 - Tom Select visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_visual_reference.html>
