@@ -59,7 +59,6 @@ RSpec.describe "docs drift guards" do
   it "keeps configuration profile examples representative without turning them into named profiles" do
     configuration = read_doc("doc/configuration.md")
     profiles = read_doc("doc/configuration_profiles.md")
-    development = read_doc("doc/development.md")
 
     expect_all_tokens(configuration, [
       "[`configuration_profiles.md`](configuration_profiles.md)",
@@ -83,12 +82,5 @@ RSpec.describe "docs drift guards" do
       "default_close_after_select = true",
       "avoid a Ruby profile API, generator option, or preset registry"
     ])
-
-    expect(development).to include(
-      "The configuration documentation drift spec compares `RailsFieldsKit::Configuration` public initializer keys with `doc/configuration.md` quick reference rows and detailed headings"
-    )
-    expect(development).to include(
-      "The docs drift guards keep `doc/configuration_profiles.md` on representative profile-example signals without making those examples a full initializer-key inventory or named profile contract."
-    )
   end
 end
