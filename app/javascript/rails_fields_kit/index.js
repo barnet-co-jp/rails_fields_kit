@@ -13,9 +13,11 @@ const REQUEST_CONTRACT_ATTRIBUTES = {
   selectedUrl: `${TOM_SELECT_VALUE_PREFIX}-selected-url-value`,
   createUrl: `${TOM_SELECT_VALUE_PREFIX}-create-url-value`,
   queryParam: `${TOM_SELECT_VALUE_PREFIX}-query-param-value`,
+  queryParams: `${TOM_SELECT_VALUE_PREFIX}-query-params-value`,
   selectedParam: `${TOM_SELECT_VALUE_PREFIX}-selected-param-value`,
   selectedMultipleParam: `${TOM_SELECT_VALUE_PREFIX}-selected-multiple-param-value`,
   createParam: `${TOM_SELECT_VALUE_PREFIX}-create-param-value`,
+  createParams: `${TOM_SELECT_VALUE_PREFIX}-create-params-value`,
   minLength: `${TOM_SELECT_VALUE_PREFIX}-min-length-value`,
   errorSurfaceId: `${TOM_SELECT_VALUE_PREFIX}-error-surface-id-value`
 }
@@ -177,9 +179,11 @@ export function tomSelectRequestContract(element) {
     selectedUrl,
     createUrl,
     queryParam: requestContractValue(element, "queryParam"),
+    queryParams: objectDataValue(element, REQUEST_CONTRACT_ATTRIBUTES.queryParams),
     selectedParam: requestContractValue(element, "selectedParam"),
     selectedMultipleParam: requestContractValue(element, "selectedMultipleParam"),
     createParam: requestContractValue(element, "createParam"),
+    createParams: objectDataValue(element, REQUEST_CONTRACT_ATTRIBUTES.createParams),
     minLength: requestContractValue(element, "minLength"),
     errorSurfaceId: requestContractValue(element, "errorSurfaceId")
   }
