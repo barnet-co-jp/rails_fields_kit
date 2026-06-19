@@ -42,7 +42,6 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/native_field_visual_reference.html`: static visual reference for representative native helper states
 - `doc/native_numeric_fields.md`: focused `rfk_number_field`, `rfk_money_field`, and `rfk_percent_field` native wrapper boundary; formatting, rounding, currency, and masking stay host-app owned
 - `doc/native_contact_fields.md`: focused `rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field` native wrapper boundary; validation wording, normalization, phone policy, and search execution stay host-app owned
-- `doc/file_field.md`: focused `rfk_file_field` native wrapper boundary; multipart forms, Active Storage direct uploads, previews, progress UI, validation policy, storage, scanning, and upload JavaScript stay host-app owned
 - `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
 - `doc/configuration_wrapper_class_visual_reference.html`: static visual reference for initializer-driven wrapper class pass-through and host-app CSS ownership boundaries
 - `doc/table_metadata_visual_reference.html`: static visual reference for representative table metadata filter and editor lanes
@@ -55,7 +54,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 
 - Keep `README.md`, `doc/setup.md`, `doc/support_boundary.md`, `doc/public_api.md`, `doc/field_helpers.md`, `doc/controller_helpers.md`, `doc/configuration.md`, `doc/token_suggestions.md`, `doc/ransack_suggestions.md`, `doc/table_adapters.md`, `doc/select_migration.md`, `doc/events.md`, `doc/tom_select_turbo_lifecycle.md`, and any affected topic doc aligned when the current public surface or support boundary changes.
 - Do not document roadmap examples as current public API unless the code and `doc/public_api.md` already support them.
-- Keep host-app responsibilities explicit. Rails Fields Kit does not own query parsing, authorization, pagination, upload workflow, or the host app's JavaScript package manager setup.
+- Keep host-app responsibilities explicit. Rails Fields Kit does not own query parsing, authorization, pagination, or the host app's JavaScript package manager setup.
 - When setup guidance or docs discoverability changes, sync `README.md`, `doc/setup.md`, `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`, and root inventory docs such as `Product Profile.md` when they summarize maintainer-facing entrypoints.
 - When helper discoverability or representative UI states change, sync `README.md`, `doc/field_helpers.md`, and any affected static visual reference together.
 - When token suggestion, Ransack suggestion, or table metadata behavior changes, sync the related `doc/*.md` reference plus `doc/public_api.md` together.
