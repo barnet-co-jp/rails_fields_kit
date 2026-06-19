@@ -18,12 +18,20 @@ const checks = [
     args: ["scripts/check_package_exports.mjs"]
   },
   {
+    name: "direct contract helper exports smoke",
+    args: ["scripts/check_direct_contract_helper_exports.mjs"]
+  },
+  {
     name: "Tom Select query params smoke",
     args: ["scripts/check_tom_select_query_params.mjs"]
   },
   {
     name: "Tom Select interaction events smoke",
     args: ["scripts/check_tom_select_interaction_events.mjs"]
+  },
+  {
+    name: "Tom Select request cancellation smoke",
+    args: ["scripts/check_tom_select_request_cancellation.mjs"]
   },
   {
     name: "Tom Select selection contract smoke",
@@ -60,6 +68,10 @@ const checks = [
   {
     name: "Tom Select plugin contract smoke",
     args: ["scripts/check_tom_select_plugin_contract.mjs"]
+  },
+  {
+    name: "Tom Select field kind contract smoke",
+    args: ["scripts/check_tom_select_field_kind_contract.mjs"]
   },
   {
     name: "native affix contract smoke",

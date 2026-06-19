@@ -17,6 +17,21 @@ Use the existing helpers when they match the submitted value shape:
 
 These lanes let applications ship many nearby workflows without introducing a dedicated mention overlay surface.
 
+## Visual and evidence lane decision
+
+Keep mention-field review in this boundary document until a helper contract is accepted. Do not add `rfk_mention_field`, mention overlay screenshots, or mention-specific cards to the visual reference family as current Rails Fields Kit evidence.
+
+A standalone visual lane would be easy to misread as an implemented textarea mention helper because it would need to show overlay positioning, suggestion rows, highlighted tokens, hidden metadata, or authorization-aware results. Those are exactly the decisions that remain future feature work and host-app responsibility today.
+
+For current review, compare nearby helper lanes instead:
+
+- use `rfk_autocomplete` when the field stores plain text selected from suggestions
+- use `rfk_token_search` when the field stores structured search text
+- use `rfk_tags` when the field stores a tag list or selected IDs/values
+- use `rfk_text_area` when the field stores ordinary prose and the host app owns any mention parsing
+
+If a future PR needs visual evidence before the helper is accepted, mark the artifact as proposal-only in its title, body copy, and PR description; keep it out of `visual_references.md`, `visual_reference_index.html`, release evidence, and `public_api.md` until the helper lands.
+
 ## Future mention field decisions
 
 A future mention helper should be split into a separate feature issue before implementation. That issue should decide at least:
@@ -26,6 +41,21 @@ A future mention helper should be split into a separate feature issue before imp
 - whether suggestions can reuse `rfk_search_with` / `rfk_token_suggestions_with`, or need a separate endpoint shape
 - whether Tom Select is appropriate for the interaction, or a textarea overlay controller is required
 - how keyboard navigation, caret positioning, and screen-reader announcement are verified
+
+The safest first slice is a text-only textarea mention proposal, not a runtime helper. Treat the representative mention as a host-app-defined entity token. Documentation may use `@user` and `#tag` as examples, but Rails Fields Kit should not imply that it owns a user model, tag taxonomy, mention authorization, or notification workflow.
+
+For that first slice, keep submitted data as textarea text only. Hidden mention metadata, selected entity IDs, persisted mention links, and mention-specific serialization should be follow-up feature gates because they define storage and application semantics that the gem cannot safely guess.
+
+Suggestion endpoints should also stay comparative in the first slice. Document whether an application can adapt existing `rfk_search_with` or `rfk_token_suggestions_with` endpoints for suggestion rows, but do not introduce a mention-specific response shape until a later issue proves that the existing endpoint lanes are insufficient.
+
+Tom Select should not be assumed to fit textarea mentions. It works well for select, tag, and token-search controls, but inline textarea mentions need caret-relative overlay positioning, text-range replacement, keyboard focus coordination, and screen-reader announcement. Those interaction details should be split into future design and implementation issues before any `rfk_mention_field` helper is accepted.
+
+Before runtime implementation, split follow-up work along these boundaries:
+
+- overlay design and browser evidence for caret positioning, keyboard navigation, and screen-reader announcement
+- submitted metadata contract, if the text-only textarea value is not enough
+- suggestion endpoint shape, only if existing remote suggestion helpers cannot express the needed rows
+- visual proposal evidence, kept out of current public API and release evidence until the helper lands
 
 ## Host app responsibilities
 

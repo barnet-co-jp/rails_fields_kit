@@ -40,6 +40,7 @@ RSpec.describe "package-root helper release evidence guide" do
       "tomSelectPluginContract(element)",
       "tomSelectSelectionContract(element)",
       "tomSelectRequestContract(element)",
+      "tomSelectFieldKindContract(element)",
       "readRenderedErrorSurface(element)",
       "readRenderedTomSelectInteractionConfig(element)",
       "readRenderedSelectedPreloadConfig(element)",
