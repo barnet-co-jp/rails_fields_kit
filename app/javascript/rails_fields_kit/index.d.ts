@@ -32,6 +32,11 @@ export interface TomSelectRequestContract {
   errorSurfaceId: string | null
 }
 
+export interface TomSelectFieldKindContract {
+  controller: string
+  kind: string
+}
+
 export interface SelectedPreloadConfig {
   selectedUrl: string
   selectedParam: string
@@ -45,6 +50,8 @@ export interface NativeFieldAccessibilityContract {
   labelElement: HTMLLabelElement | null
   hintElement: Element | null
   errorElement: Element | null
+  prefixElement: Element | null
+  suffixElement: Element | null
   wrapperElement: Element | null
 }
 
@@ -52,6 +59,8 @@ export function tomSelectTextOverrideContract(element: Element | null | undefine
 export function tomSelectPluginContract(element: Element | null | undefined): TomSelectPluginContract | null
 export function tomSelectSelectionContract(element: Element | null | undefined): TomSelectSelectionContract | null
 export function tomSelectRequestContract(element: Element | null | undefined): TomSelectRequestContract | null
+export function tomSelectFieldKindContract(element: Element | null | undefined): TomSelectFieldKindContract | null
+export function readRenderedErrorSurface(element: Element | null | undefined): Element | null
 export function readRenderedSelectedPreloadConfig(element: Element | null | undefined): SelectedPreloadConfig | null
 export function nativeFieldAccessibilityContract(element: Element | null | undefined): NativeFieldAccessibilityContract | null
 
