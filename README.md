@@ -402,6 +402,7 @@ columns = [
     cell_editor: RailsFieldsKit::TableCellInput.enum_select(:status)
   }
 ]
+```
 
 ```erb
 <%= form_with model: @table_preferences do |f| %>
