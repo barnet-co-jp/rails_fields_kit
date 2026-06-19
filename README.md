@@ -159,13 +159,15 @@ For importmap, keep Tom Select on the host app's normal pinning flow and pin the
 rails generate rails_fields_kit:install --importmap
 ```
 
-The opt-in generator path adds the two Rails Fields Kit pins below when they are not already present. If the app does not have `config/importmap.rb`, add the pins manually instead:
+The opt-in generator path adds the Rails Fields Kit pins below when they are not already present. If the app does not have `config/importmap.rb`, add the pins manually instead:
 
 ```ruby
 # config/importmap.rb
 pin "tom-select"
 pin "rails_fields_kit", to: "rails_fields_kit/index.js"
+pin "rails_fields_kit/native_field_accessibility_contract", to: "rails_fields_kit/native_field_accessibility_contract.js"
 pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
+pin "rails_fields_kit/tom_select_text_override_contract", to: "rails_fields_kit/tom_select_text_override_contract.js"
 ```
 
 Then register the controller from the file where your app already boots Stimulus:
@@ -176,6 +178,8 @@ import { TomSelectController } from "rails_fields_kit"
 
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
+
+The package-root pin remains the normal route for controller registration and rendered-field contract helpers. The direct helper subpath pins mirror the generator and setup doctor source of truth for host apps that intentionally import those helper files directly; they do not change helper behavior or turn this README into a helper inventory.
 
 ### Direct imports and package exports
 
