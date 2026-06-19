@@ -23,7 +23,6 @@ The detailed entries remain the exhaustive source of truth for release review. K
 - `rfk_enum_select` now has a focused explicit `enum:` hash guide for Rails enum-shaped sources. Hash keys remain the submitted values, labels stay on the model I18n / humanized-key path, and arbitrary label/value DSLs, remote enum option lookup, and PORO enum adapters remain outside the current public surface.
 - `rfk_range_field` now provides a thin native range input wrapper with the same label, hint, error, affix, pass-through option, and accessibility wiring boundaries as the other native helpers. Browser slider behavior, live value previews, custom slider styling, multi-thumb controls, validation policy, and production CSS remain host-app responsibilities.
 - `rfk_password_field` now provides a thin native password input wrapper with the same label, hint, error, affix, pass-through option, and accessibility wiring boundaries as the other native helpers. Password visibility toggles, strength meters, credential policy, authentication workflow, and credential storage remain host-app responsibilities.
-- `rfk_file_field` now provides a thin native file input wrapper with the same label, hint, error, affix, pass-through option, and accessibility wiring boundaries as the other native helpers. Multipart form setup, Active Storage direct upload behavior, file previews, upload progress UI, validation policy, storage configuration, scanning, upload JavaScript, and production CSS remain host-app responsibilities.
 
 #### Token search and suggestion metadata
 
