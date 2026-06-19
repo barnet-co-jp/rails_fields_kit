@@ -25,7 +25,7 @@ RSpec.describe "generated setup note diagnostics" do
       "missing importmap pins",
       "unexpected Rails Fields Kit pin targets",
       "target-omitted pins",
-      "bundler aliases for `rails_fields_kit` and `rails_fields_kit/tom_select_controller` remain host-app setup responsibilities",
+      "bundler aliases for documented Rails Fields Kit entrypoints remain host-app setup responsibilities",
       "The doctor does not inspect or rewrite bundler config"
     )
   end
