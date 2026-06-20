@@ -58,6 +58,14 @@ The `summary` counts and `checks` array are inspection data. They can help a hos
 
 A common wrapper is to fail only when `summary["missing"]` is greater than zero, while recording `manual` checks for review. That is a host-app policy choice, not behavior enforced by `SetupDoctor`.
 
+## Release and sample evidence
+
+When release or sample-app evidence needs structured setup visibility, record a representative JSON check rather than copying the full payload schema into the evidence log. A narrow PR comment can name the branch or commit checked, the Ruby API call used, the observed `summary["missing"]` count, and whether any `manual` checks were reviewed as host-app advisory items.
+
+Use `doc/sample_app_results.md` for release-candidate evidence and a PR comment for narrow docs or setup-doctor evidence. In either location, link back to this guide as the payload source of truth and keep the evidence focused on what was observed for that branch.
+
+Do not treat this evidence lane as a CLI `--json` contract, a formal schema publication, auto-fix behavior, SARIF or JUnit output, or a universal host-app CI pass/fail policy.
+
 ## Boundary
 
 The doctor remains read-only. It does not inspect every possible asset or bundler path, rewrite files, install packages, register Stimulus controllers, emit SARIF or JUnit, publish a formal JSON schema, or decide the host app's JavaScript/CSS or CI policy.

@@ -38,8 +38,8 @@ RSpec.describe "generated setup note diagnostics" do
     )
 
     expect(generated_setup_note).to include(
-      "Read the setup doctor status legend first",
-      "fix `[MISSING]` lines before treating `[MANUAL]` lines as host-app JavaScript toolchain checks"
+      "Read the setup doctor status legend before triage",
+      "fix `[MISSING]` lines first, then treat `[MANUAL]` lines as host-app JavaScript toolchain checks"
     )
 
     expect(setup_doctor_review).to include(

@@ -63,7 +63,7 @@ module RailsFieldsKit
           relation = relation.where(value => ids)
           relation = relation.order(order) if order
           records = relation.limit(ids.size)
-          records = rfk_preserve_find_order(records, ids, value) if preserve_order
+          records = rfk_preserve_find_order(records, ids, value) if preserve_order || order.nil?
           options = records.map do |record|
             rfk_option_json(
               record,
