@@ -119,13 +119,15 @@ For importmap, keep Tom Select on the host app's normal pinning flow and pin the
 rails generate rails_fields_kit:install --importmap
 ```
 
-The opt-in generator path adds the two Rails Fields Kit pins below when they are not already present. If the app does not have `config/importmap.rb`, add the pins manually instead:
+The opt-in generator path adds the Rails Fields Kit pins below when they are not already present. If the app does not have `config/importmap.rb`, add the pins manually instead:
 
 ```ruby
 # config/importmap.rb
 pin "tom-select"
 pin "rails_fields_kit", to: "rails_fields_kit/index.js"
+pin "rails_fields_kit/native_field_accessibility_contract", to: "rails_fields_kit/native_field_accessibility_contract.js"
 pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
+pin "rails_fields_kit/tom_select_text_override_contract", to: "rails_fields_kit/tom_select_text_override_contract.js"
 ```
 
 Then register the controller from the file where the host app already boots Stimulus:
@@ -137,6 +139,8 @@ import { TomSelectController } from "rails_fields_kit"
 application.register("rails-fields-kit--tom-select", TomSelectController)
 ```
 
+The package-root pin remains the normal route for controller registration and rendered-field contract helpers. The direct helper subpath pins mirror the generator and setup doctor source of truth for host apps that intentionally import those helper files directly; they do not change helper behavior or turn this guide into a helper inventory.
+
 `rails_fields_kit/index.js` re-exports the same controller as `rails_fields_kit/tom_select_controller`, so both documented import paths stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source, package version, plugin pins, and any additional importmap conventions to the host app.
 
 The package root also exposes read-only rendered-field contract helpers, including `nativeFieldAccessibilityContract(element)` for native wrapper accessibility wiring. Import those helpers from `rails_fields_kit` only when host-app scripts need to inspect already-rendered labels, hints, errors, and wrapper elements; controller registration, validation messages, focus management, and visible feedback remain separate host-app responsibilities. Use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the current source of truth for the helper list and return shape.
@@ -147,6 +151,7 @@ When a build error, browser console error, or importmap resolution error says a 
 
 - If `import { TomSelectController } from "rails_fields_kit"` or a package-root contract helper import fails, check the bundler alias or importmap pin for `rails_fields_kit` and confirm it points at `rails_fields_kit/index.js`.
 - If `import TomSelectController from "rails_fields_kit/tom_select_controller"` fails, check the separate alias or pin for `rails_fields_kit/tom_select_controller` and confirm it points at `rails_fields_kit/tom_select_controller.js`.
+- If a direct helper subpath import such as `rails_fields_kit/native_field_accessibility_contract` or `rails_fields_kit/tom_select_text_override_contract` fails, check the matching alias or importmap pin and confirm it points at the same documented subpath file.
 - If both imports resolve but the field is not enhanced, check that the host app registered `rails-fields-kit--tom-select` on the Stimulus application it actually boots, and avoid starting a second Stimulus application just for Rails Fields Kit.
 - If the controller connects but Tom Select is missing or unstyled, check the host app's `tom-select` package or pin and CSS import separately. Changing the Rails Fields Kit import path does not install Tom Select, load Tom Select CSS, or choose plugin assets.
 

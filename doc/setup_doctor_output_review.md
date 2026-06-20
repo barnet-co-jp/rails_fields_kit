@@ -10,6 +10,7 @@ Use `doc/setup_doctor_output_narrow_wrap_review.md` with this route when the evi
 - Confirm that the status legend explains `[OK]`, `[MISSING]`, and `[MANUAL]` before the user reaches individual checks.
 - Confirm that `[OK]`, `[MISSING]`, and `[MANUAL]` lines are easy to scan as diagnostic evidence.
 - Confirm that importmap target mismatch output is readable after the target-drift diagnostic landed.
+- Confirm that unresolved import evidence records the failing documented path, checked alias or pin target, and remaining host-app follow-up without changing setup doctor behavior.
 - Confirm that package.json Tom Select dependency evidence reads as advisory visibility, not as host-app package policy.
 - Confirm that CSS import evidence distinguishes `[OK] CSS import` as a detected advisory signal from `[MANUAL] CSS import` as a host-app responsibility check.
 - Confirm that Stimulus registration evidence distinguishes `[OK] Stimulus registration` as a representative source signal from `[MANUAL] Stimulus registration` as host-app follow-up.
@@ -24,8 +25,9 @@ Use this artifact as the review aid for setup doctor evidence, then record the r
 - Use `doc/sample_app_checklist.md` to decide whether setup doctor evidence belongs in the release baseline or the host-app setup lane.
 - Record release-wide results in `doc/sample_app_results.md` under `Setup doctor checks`, including the app setup path: importmap, jsbundling, bundler-managed JavaScript, or another route.
 - For a narrow docs or setup-doctor PR, a PR comment is enough when it names the command, setup path, representative `[OK]` / `[MISSING]` / `[MANUAL]` lines, branch or commit, viewport or wrapping width, and result.
+- For unresolved import diagnostics, include the failing documented import path, whether the package-root `rails_fields_kit` path or direct `rails_fields_kit/tom_select_controller` path failed, the alias or importmap pin target checked, and any remaining host-app follow-up such as Stimulus boot, Tom Select install, or CSS import.
 - When the PR comment needs a reusable narrow evidence template, start from `doc/setup_doctor_output_narrow_wrap_review.md` and link the note back to this review route instead of copying the companion artifact wholesale.
-- Use the representative review states below to decide whether the PR evidence should cover the first-run legend, an advisory-only Tom Select package lane, a Stimulus registration advisory lane, a CSS import advisory lane, an importmap mismatch lane, or all of those states.
+- Use the representative review states below to decide whether the PR evidence should cover the first-run legend, an advisory-only Tom Select package lane, a Stimulus registration advisory lane, a CSS import advisory lane, an importmap mismatch lane, an unresolved import diagnostics lane, or all of those states.
 - Treat `[MANUAL]` lines as host-app responsibility checks. Do not count them as failed automatic checks unless the release issue explicitly changes setup doctor behavior.
 - Treat `[OK] CSS import` as evidence that setup doctor found a representative import signal; it does not mean Rails Fields Kit owns the app stylesheet pipeline, theme choice, or every possible asset path.
 - Treat `[OK] Stimulus registration` as evidence that setup doctor found a representative controller registration signal; it does not mean Rails Fields Kit owns the app boot file, `Application.start()` policy, or every possible controller registry.
@@ -42,6 +44,7 @@ Use these states when a PR or release asks for narrow terminal, wrapped Markdown
 | Stimulus registration advisory | The PR touches Stimulus registration detection, setup visibility, or release evidence for controller registration | `[OK] Stimulus registration` reads as a representative source signal, while `[MANUAL] Stimulus registration` reads as host-app boot policy follow-up rather than a failed automatic check. |
 | CSS import advisory | The PR touches CSS import detection, setup visibility, or release evidence for Tom Select stylesheets | `[OK] CSS import` reads as a representative detected import signal, while `[MANUAL] CSS import` reads as host-app stylesheet or bundler-pipeline follow-up rather than a failed automatic check. |
 | Importmap target mismatch | The PR changes importmap pin diagnostics or generated setup notes | Each wrapped mismatch keeps its `expected ...` and `found ...` values paired closely enough to review without re-running the command. |
+| Unresolved import diagnostics | The PR changes setup troubleshooting, package-root imports, direct controller imports, or setup evidence wording | The note distinguishes `rails_fields_kit` from `rails_fields_kit/tom_select_controller`, names the checked alias or pin target, and keeps Tom Select install, CSS import, and Stimulus boot as separate host-app follow-up. |
 
 For PR-level evidence, name the state and record the width used, such as `80-column terminal`, `390px Markdown preview`, or `GitHub PR comment code block`. For release-wide evidence, keep the detailed output in the release notes or PR comment and record the summary result in `doc/sample_app_results.md`.
 
@@ -54,6 +57,7 @@ Use this matrix when deciding which evidence note to write after a narrow or wra
 | `Stimulus registration advisory` | Advisory Ownership | Whether the captured state is `[OK]` or `[MANUAL]`, the representative entrypoint or absence of one, and the host-app boot-policy boundary. |
 | `CSS import advisory` | Advisory Ownership | Whether the captured state is `[OK]` or `[MANUAL]`, the representative stylesheet or entrypoint, and the host-app stylesheet / bundler boundary. |
 | `Importmap target mismatch` | Wrapping Evidence | The wrapped width, each expected target, each found target, and whether the pair remains readable without changing setup doctor wording. |
+| `Unresolved import diagnostics` | Unresolved Import Evidence | The failing documented import path, checked alias or importmap pin target, setup path, and remaining host-app follow-up separated by responsibility. |
 
 Do not create a new runtime output mode just to satisfy this review. If a state is unreadable after wrapping, record it as a docs/setup policy follow-up unless the issue explicitly asks to change setup doctor wording.
 
@@ -163,7 +167,7 @@ Review notes:
 - `[OK] CSS import` is a detected advisory state. It is safe evidence that one representative candidate path contains `tom-select/dist/css/tom-select*.css`.
 - `[MANUAL] CSS import` means setup doctor did not find a representative signal and the host app should confirm its own stylesheet or bundler pipeline.
 - Both states keep CSS install, theme selection, asset ordering, production styling, and full asset graph validation with the host app.
-- Do not treat `[MANUAL] CSS import` as a hard failure unless a separate release or setup policy issue explicitly changes the doctor behavior.
+- Do not treat `[MANUAL] CSS import` as a hard failure unless a separate release or setup policy issue explicitly changes setup doctor behavior.
 
 ## Importmap Target Mismatch
 
@@ -191,6 +195,37 @@ Review notes:
 - Missing pins and target mismatches can appear in one aggregated `Importmap pins` line.
 - CSS import and bundler alias checks remain host-app responsibilities unless a future issue explicitly changes the doctor behavior.
 
+## Unresolved Import Diagnostics
+
+Use this state when a setup or release note needs to show that a documented import failed to resolve without turning that result into a setup doctor runtime change.
+
+```text
+Evidence note: Unresolved import diagnostics
+Setup path: bundler-managed JavaScript
+Failing documented import: rails_fields_kit
+Checked target: bundler alias for rails_fields_kit -> app/javascript/rails_fields_kit/index.js
+Result: package-root import still unresolved in the host app bundle.
+Remaining follow-up: host app checks its bundler alias and package resolution; Tom Select package install, CSS import, and Stimulus boot policy are separate checks.
+```
+
+```text
+Evidence note: Unresolved import diagnostics
+Setup path: importmap
+Failing documented import: rails_fields_kit/tom_select_controller
+Checked target: importmap pin rails_fields_kit/tom_select_controller -> rails_fields_kit/tom_select_controller.js
+Result: direct controller import still unresolved in the browser importmap.
+Remaining follow-up: host app checks the importmap pin target and registration file; package-root helper imports are a separate path.
+```
+
+Review notes:
+
+- Record the failing documented path exactly as either `rails_fields_kit` or `rails_fields_kit/tom_select_controller` instead of collapsing both into generic unresolved imports.
+- For package-root failures, check the `rails_fields_kit` alias or pin target against `rails_fields_kit/index.js` and keep `doc/public_api.md#javascript-exports` as the helper list source of truth.
+- For direct controller failures, check the `rails_fields_kit/tom_select_controller` alias or pin target against `rails_fields_kit/tom_select_controller.js` and keep controller registration as a separate Stimulus boot check.
+- If both documented paths fail, record both paths and targets separately before changing host-app bundler aliases, importmap pins, or setup notes.
+- Do not describe unresolved import evidence as Tom Select package installation, CSS import, or Stimulus boot evidence. Those remain separate host-app responsibility checks.
+- Do not change setup doctor output wording, importmap generation, bundler alias detection, or auto-fix behavior from this review artifact.
+
 ## Narrow Evidence Checklist
 
 Use this checklist when recording release or PR evidence. Work from the status meaning first, then check advisory ownership, wrapping readability, and the evidence recording context.
@@ -217,6 +252,14 @@ Use this checklist when recording release or PR evidence. Work from the status m
 - [ ] Missing importmap target output includes both expected and observed target values.
 - [ ] Narrow-width evidence says whether the output was reviewed in a standard terminal width, a wrapped Markdown/code-block view, or both.
 - [ ] Wrapped mismatch lines still make the expected and observed target relationship readable without changing setup doctor wording.
+
+### Unresolved Import Evidence
+
+- [ ] Evidence names the failing documented import path as `rails_fields_kit` or `rails_fields_kit/tom_select_controller`.
+- [ ] Package-root evidence checks the `rails_fields_kit` alias or pin target separately from the direct controller target.
+- [ ] Direct controller evidence checks the `rails_fields_kit/tom_select_controller` alias or pin target separately from package-root helper imports.
+- [ ] Evidence records whether the app setup path is importmap, jsbundling, bundler-managed JavaScript, or another route.
+- [ ] Remaining Tom Select install, CSS import, and Stimulus boot follow-up stays separate from the unresolved import result.
 
 ### Recording Context
 
