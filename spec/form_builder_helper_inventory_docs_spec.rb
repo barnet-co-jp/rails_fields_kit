@@ -7,12 +7,14 @@ RSpec.describe "FormBuilder helper inventory docs" do
   let(:field_helpers) { File.read(File.join(repo_root, "doc/field_helpers.md")) }
   let(:range_field) { File.read(File.join(repo_root, "doc/range_field.md")) }
   let(:password_field) { File.read(File.join(repo_root, "doc/password_field.md")) }
+  let(:file_field) { File.read(File.join(repo_root, "doc/file_field.md")) }
 
   it "keeps the compact public API helper inventory represented in helper docs" do
     public_helpers = form_builder_helper_names_from(public_api)
     detailed_helper_sections = field_helpers.scan(/^### `(rfk_[a-z_]+)`/).flatten
     detailed_helper_sections += range_field.scan(/`(rfk_range_field)`/).flatten
     detailed_helper_sections += password_field.scan(/`(rfk_password_field)`/).flatten
+    detailed_helper_sections += file_field.scan(/`(rfk_file_field)`/).flatten
 
     expect(public_helpers).to eq(%w[
       rfk_select
@@ -36,6 +38,7 @@ RSpec.describe "FormBuilder helper inventory docs" do
       rfk_phone_field
       rfk_search_field
       rfk_password_field
+      rfk_file_field
     ])
     expect(detailed_helper_sections).to include(*public_helpers)
   end
