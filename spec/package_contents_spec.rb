@@ -24,6 +24,10 @@ RSpec.describe "package contents" do
   let(:sample_app_checklist) { File.read(sample_app_checklist_path) }
   let(:sample_app_results_path) { File.expand_path("../doc/sample_app_results.md", __dir__) }
   let(:sample_app_results) { File.read(sample_app_results_path) }
+  let(:datalist_boundary_path) { File.expand_path("../doc/datalist_boundary.md", __dir__) }
+  let(:datalist_boundary) { File.read(datalist_boundary_path) }
+  let(:slug_helper_boundary_path) { File.expand_path("../doc/slug_helper_boundary.md", __dir__) }
+  let(:slug_helper_boundary) { File.read(slug_helper_boundary_path) }
   let(:form_builder_paths) do
     %w[
       form_builder.rb
@@ -93,6 +97,25 @@ RSpec.describe "package contents" do
       "doc/tom_select_text_override_visual_reference.html",
       "doc/native_field_visual_reference.html",
       "doc/table_metadata_visual_reference.html"
+    )
+  end
+
+  it "keeps focused boundary sample evidence packaged without promoting proposal helpers" do
+    expect(specification.files).to include(
+      "doc/datalist_boundary_sample_evidence.html",
+      "doc/slug_helper_boundary_sample_evidence.html"
+    )
+
+    expect(datalist_boundary).to include(
+      "[`datalist_boundary_sample_evidence.html`](datalist_boundary_sample_evidence.html)",
+      "not a new public helper or production CSS contract",
+      "Do not list `rfk_datalist_field` in `doc/public_api.md` unless a later implementation PR actually adds and tests the helper"
+    )
+
+    expect(slug_helper_boundary).to include(
+      "[`slug_helper_boundary_sample_evidence.html`](slug_helper_boundary_sample_evidence.html)",
+      "does not currently provide a dedicated title-to-slug helper such as `rfk_slug_field`",
+      "no current `rfk_slug_field` public helper"
     )
   end
 
