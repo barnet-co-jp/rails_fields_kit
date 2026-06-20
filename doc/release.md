@@ -79,6 +79,7 @@ bundle exec rake build
    - `CHANGELOG.md`
    - `doc/setup.md`
    - `doc/setup_doctor_output_review.md` when setup doctor output or setup evidence is part of the release surface
+   - `doc/setup_doctor_machine_readable.md` when Ruby API JSON output or machine-readable setup evidence is part of the release surface
    - `doc/support_boundary.md`
    - `doc/public_api.md`
    - `doc/select_migration.md`
@@ -98,6 +99,7 @@ bundle exec rake build
    - `doc/token_search_saved_search_visual_reference.html`
    - `doc/controller_helpers.md`
    - `doc/token_suggestions.md`
+   - `doc/saved_search_token_suggestion_evidence.md` when saved-search token suggestion evidence is part of the release or PR scope
    - `doc/ransack_suggestions.md`
    - `doc/table_adapters.md`
    - `doc/configuration.md`
@@ -142,6 +144,8 @@ bundle exec rake build
 
    When package-root read-only helper exports are in scope, use [`package_root_helper_release_evidence.md`](package_root_helper_release_evidence.md) to choose representative helper checks before recording the final sample-app or release PR evidence. Keep `doc/public_api.md#javascript-exports` as the source of truth for the exported helper list and return-shape boundary.
 
+   When saved-search token suggestions are in release or PR scope, use [`saved_search_token_suggestion_evidence.md`](saved_search_token_suggestion_evidence.md) to keep the evidence on suggestion option JSON and record the final result in [`sample_app_results.md`](sample_app_results.md) or the PR comment. Keep token parsing, saved-search execution, persistence, authorization, sharing policy, and any independent saved-search selector helper outside this evidence lane.
+
    When table metadata rendering, group-level wrappers, or TableRenderer registry checks are in scope, use [`table_metadata_release_evidence.md`](table_metadata_release_evidence.md) to choose representative checks before recording the final sample-app or release PR evidence. Keep `doc/table_adapters.md` and `doc/table_group_html.md` as the source of truth for behavior and responsibility boundaries.
 
    After the install generator runs, run the read-only setup doctor in the sample app:
@@ -153,6 +157,8 @@ bundle exec rake build
    Record whether it reports the initializer and, when importmap is present, the Rails Fields Kit pins. Treat Tom Select package install, Stimulus registration, CSS import, and bundler alias output as manual checklist reminders rather than automatic pass/fail gates or auto-fix behavior.
 
    When recording or reviewing setup doctor CLI output evidence, use [`setup_doctor_output_review.md`](setup_doctor_output_review.md) for the `[OK]`, `[MISSING]`, `[MANUAL]`, and target-mismatch scanability lanes. Keep that artifact as review evidence, not as the source of runtime wording or setup policy.
+
+   When release or sample-app evidence needs structured setup visibility, use [`setup_doctor_machine_readable.md`](setup_doctor_machine_readable.md) as the source of truth for the Ruby API `format: :json` payload. Keep release evidence to representative JSON output usage and do not treat it as a CLI `--json` contract, auto-fix behavior, formal schema publication, or universal host-app CI pass/fail policy.
 
    When the release surface includes selected preload behavior, run the focused [`selected_preload_release_gate.md`](selected_preload_release_gate.md) before marking the sample app pass complete. Keep this check to the documented single-value and comma-separated multiple-ID request contract unless release planning explicitly changes that public surface.
 

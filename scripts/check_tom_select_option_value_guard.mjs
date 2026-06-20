@@ -35,22 +35,71 @@ await withTomSelectControllerSandbox("rails-fields-kit-option-value-guard-", ({ 
         { label: "Missing id" },
         { id: "", label: "Blank id" },
         { id: null, label: "Null id" },
+        { id: "extra", label: "Extra selected preload option" },
         "not-an-option"
       ]
     },
     ["valid-1", "missing"]
   )
 
-  assert.deepEqual(selectedController.tomSelect.addedOptions, [{ id: "valid-1", label: "Valid one" }])
-  assert.deepEqual(selectedController.tomSelect.addedItems, [["valid-1", true]])
+  assert.deepEqual(selectedController.tomSelect.addedOptions, [
+    { id: "valid-1", label: "Valid one" },
+    { id: "extra", label: "Extra selected preload option" }
+  ])
+  assert.deepEqual(selectedController.tomSelect.addedItems, [
+    ["valid-1", true],
+    ["extra", true]
+  ])
   assert.deepEqual(selectedController.tomSelect.refreshCalls, [false])
   assert.deepEqual(selectedController.dispatchedEvents, [
     [
       "selected-load",
       {
         detail: {
-          options: [{ id: "valid-1", label: "Valid one" }],
+          options: [
+            { id: "valid-1", label: "Valid one" },
+            { id: "extra", label: "Extra selected preload option" }
+          ],
           values: ["valid-1", "missing"]
+        }
+      }
+    ]
+  ])
+
+  const customSelectedController = buildController(TomSelectController)
+  customSelectedController.valueFieldValue = "slug"
+  customSelectedController.applySelectedOptions(
+    {
+      results: [
+        { slug: 0, label: "Zero" },
+        { slug: false, label: "False" },
+        { slug: "extra", label: "Extra" }
+      ]
+    },
+    ["0", "false"]
+  )
+
+  assert.deepEqual(customSelectedController.tomSelect.addedOptions, [
+    { slug: 0, label: "Zero" },
+    { slug: false, label: "False" },
+    { slug: "extra", label: "Extra" }
+  ])
+  assert.deepEqual(customSelectedController.tomSelect.addedItems, [
+    [0, true],
+    [false, true],
+    ["extra", true]
+  ])
+  assert.deepEqual(customSelectedController.dispatchedEvents, [
+    [
+      "selected-load",
+      {
+        detail: {
+          options: [
+            { slug: 0, label: "Zero" },
+            { slug: false, label: "False" },
+            { slug: "extra", label: "Extra" }
+          ],
+          values: ["0", "false"]
         }
       }
     ]
