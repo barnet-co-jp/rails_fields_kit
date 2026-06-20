@@ -170,6 +170,7 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :max_items, options.delete(:max_items))
       rfk_assign_data_value(data, :load_throttle, options.delete(:load_throttle))
       rfk_assign_data_value(data, :delimiter, options.delete(:delimiter))
+      rfk_assign_data_value(data, :dropdown_parent, options.delete(:dropdown_parent))
       rfk_assign_data_value(data, :preload, rfk_option_or_default(options, :preload, config.default_preload))
       rfk_assign_data_value(data, :open_on_focus, rfk_option_or_default(options, :open_on_focus, config.default_open_on_focus))
       rfk_assign_data_value(data, :close_after_select, rfk_option_or_default(options, :close_after_select, config.default_close_after_select))
