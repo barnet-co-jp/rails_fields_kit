@@ -18,6 +18,10 @@ const checks = [
     args: ["scripts/check_package_exports.mjs"]
   },
   {
+    name: "TypeScript declaration metadata smoke",
+    args: ["scripts/check_types_metadata.mjs"]
+  },
+  {
     name: "direct contract helper exports smoke",
     args: ["scripts/check_direct_contract_helper_exports.mjs"]
   },
@@ -80,6 +84,10 @@ const checks = [
   {
     name: "selected preload config contract smoke",
     args: ["scripts/check_selected_preload_config_contract.mjs"]
+  },
+  {
+    name: "Tom Select interaction config contract smoke",
+    args: ["scripts/check_tom_select_interaction_config_contract.mjs"]
   }
 ]
 
