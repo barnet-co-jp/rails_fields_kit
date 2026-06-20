@@ -3,14 +3,20 @@
 require "spec_helper"
 
 RSpec.describe "native FormBuilder helper public API inventory" do
-  let(:form_builder_path) { File.expand_path("../lib/rails_fields_kit/form_builder.rb", __dir__) }
-  let(:form_builder_source) { File.read(form_builder_path) }
+  let(:form_builder_paths) do
+    %w[
+      form_builder.rb
+      form_builder_file_field.rb
+    ].map { |filename| File.expand_path("../lib/rails_fields_kit/#{filename}", __dir__) }
+  end
+  let(:form_builder_source) { form_builder_paths.map { |path| File.read(path) }.join("\n") }
   let(:public_api_path) { File.expand_path("../doc/public_api.md", __dir__) }
   let(:public_api) { File.read(public_api_path) }
 
   let(:landed_native_helpers) do
-    native_source = form_builder_source.split(/^    def rfk_select\b/).first
-    native_source.scan(/^    def (rfk_[a-z0-9_]+)\b/).flatten.sort
+    form_builder_source.scan(/^    def (rfk_[a-z0-9_]+).*?\n(.*?)^    end/m).filter_map do |helper_name, body|
+      helper_name if body.include?("rfk_native_field(")
+    end.sort
   end
 
   let(:documented_native_helpers) do
@@ -32,7 +38,6 @@ RSpec.describe "native FormBuilder helper public API inventory" do
       rfk_color_field
       rfk_date_field
       rfk_datetime_local_field
-      rfk_file_field
       rfk_time_field
     ]
 
