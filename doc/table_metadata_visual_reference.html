@@ -555,6 +555,42 @@
 
         <article class="card">
           <div class="card-header">
+            <span class="tag native">Range Metadata</span>
+            <h2>Range helper constraints as ordinary native options</h2>
+            <p>Represents `range_field` metadata after the table integration chooses a native range helper for a filter or cell editor.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="strip">
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Priority threshold</span>
+                  <span class="metadata-chip">TableFilterInput.range_field</span>
+                </div>
+                <div class="control native">
+                  <span class="helper">0 to 100, step 5</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Completion editor</span>
+                  <span class="metadata-chip">TableCellInput.range_field</span>
+                </div>
+                <div class="control native">
+                  <span class="selected">65%</span>
+                </div>
+              </div>
+            </div>
+            <div class="toolbar">
+              <span class="pill">min / max / step pass through</span>
+              <span class="pill">Native helper mapping only</span>
+            </div>
+            <div class="stack-note">Use this lane to review range metadata readability only. Range pairs, query execution, custom sliders, multi-thumb controls, and table preference persistence stay with the host app or table integration.</div>
+          </div>
+          <p class="card-footer">This keeps `TableFilterInput.range_field` and `TableCellInput.range_field` visible as supported native helper metadata without implying a Rails Fields Kit-owned range query UI.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
             <span class="tag editor">Editors</span>
             <h2>Editable cell controls</h2>
             <p>Represents `rfk_table_cell_editors(columns)` when the table metadata describes the editor family and Rails Fields Kit only renders those controls.</p>
