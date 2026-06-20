@@ -66,6 +66,18 @@ Helper defaults to keep in mind:
 - Passing `plugins:` to those helpers is an explicit override, so include `"remove_button"` yourself when you still want that behavior.
 - `allow_clear: true` adds `clear_button` to the effective plugin list for that field.
 
+### Shared dropdown placement option
+
+All Tom Select-backed helpers can pass a string `dropdown_parent:` value through to Tom Select's `dropdownParent` option. Use it when a host app renders a field inside a modal, drawer, scroll container, or other clipped container and wants Tom Select to append the dropdown somewhere else, such as `"body"`.
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  dropdown_parent: "body" %>
+```
+
+Rails Fields Kit only renders the data value and forwards it to Tom Select. The value is a selector string; Rails Fields Kit does not resolve fallback elements, build a portal system, set z-index rules, or own modal / drawer / CSS framework policy. Leave `dropdown_parent:` unset when the default Tom Select placement is sufficient.
+
 ### `rfk_select`
 
 Use this for a normal single select that should get Tom Select behavior.
@@ -489,6 +501,7 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `max_items:` forwards Tom Select's maximum selected item count.
 - `load_throttle:` forwards Tom Select's remote load throttle in milliseconds.
 - `delimiter:` forwards Tom Select's delimiter option, useful for text-backed token inputs.
+- `dropdown_parent:` forwards Tom Select's `dropdownParent` selector string for host-app-owned clipping or modal placement workarounds.
 - `plugins:` passes explicit Tom Select plugin names for one field and overrides `config.default_plugins` for that field.
 - `loading_text:`, `no_results_text:`, and `create_text:` override the bundled or initializer-provided Tom Select copy for one field only.
 - `error_surface:` adds a stable nearby placeholder for request-failure handlers.
