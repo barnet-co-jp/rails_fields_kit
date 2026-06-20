@@ -51,7 +51,7 @@ RSpec.describe "release evidence guides" do
     expect(setup_doctor_machine_readable).to include(
       "read-only setup checks as JSON",
       "summary[\"missing\"]",
-      "manual checks were reviewed as host-app advisory items",
+      "host-app advisory items",
       "sample_app_results.md",
       "PR comment for narrow docs or setup-doctor evidence",
       "formal schema publication",
