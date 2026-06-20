@@ -74,6 +74,10 @@ const checks = [
     args: ["scripts/check_tom_select_field_kind_contract.mjs"]
   },
   {
+    name: "Tom Select dropdown parent smoke",
+    args: ["scripts/check_tom_select_dropdown_parent.mjs"]
+  },
+  {
     name: "native affix contract smoke",
     args: ["scripts/check_native_affix_contract_smoke.mjs"]
   },
