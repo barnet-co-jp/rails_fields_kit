@@ -10,6 +10,8 @@ When package-root read-only helper exports are in scope, use [`package_root_help
 
 When TableMetadata collection source shapes are in scope, use [`table_metadata_collection_evidence.md`](table_metadata_collection_evidence.md) to choose representative hash-like, table-like, and explicit false checks before recording the result.
 
+When a shared field/operator metadata source feeds token suggestions, Ransack suggestions, and table filter metadata, use [`shared_metadata_navigation.md#sample-app-and-release-evidence-lane`](shared_metadata_navigation.md#sample-app-and-release-evidence-lane) as the evidence source of truth so the release note stays in the current builders lane instead of implying a registry API.
+
 When the `rfk_text_area` autosize boundary is in scope, use [`textarea_autosize_release_evidence.md`](textarea_autosize_release_evidence.md) with the native helper lane so release notes do not treat host-owned autosize enhancement as Rails Fields Kit behavior.
 
 | Lane | Record in `sample_app_results.md` when... | PR comment is enough when... | Evidence to capture |
