@@ -14,6 +14,10 @@ const checks = [
     args: ["scripts/check_javascript_smoke_inventory.mjs"]
   },
   {
+    name: "JavaScript smoke inventory guard self-test",
+    args: ["scripts/check_javascript_smoke_inventory.mjs", "--self-test"]
+  },
+  {
     name: "package exports smoke",
     args: ["scripts/check_package_exports.mjs"]
   },

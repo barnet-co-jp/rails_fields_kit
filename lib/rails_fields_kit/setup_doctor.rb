@@ -59,7 +59,9 @@ module RailsFieldsKit
 
     BUNDLER_ALIASES = [
       "rails_fields_kit",
-      "rails_fields_kit/tom_select_controller"
+      "rails_fields_kit/native_field_accessibility_contract",
+      "rails_fields_kit/tom_select_controller",
+      "rails_fields_kit/tom_select_text_override_contract"
     ].freeze
 
     TOM_SELECT_CSS_IMPORT_PATTERN = %r{tom-select/dist/css/tom-select(?:[.\w-]*)\.css}
@@ -288,7 +290,7 @@ module RailsFieldsKit
           key: :bundler_alias,
           label: "Bundler alias",
           status: :manual,
-          message: "Representative bundler config was not found. Skip this item for importmap-only apps, or confirm the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths through the host app's Vite, jsbundling, or custom resolver policy."
+          message: "Representative bundler config was not found. Skip this item for importmap-only apps, or confirm the documented Rails Fields Kit import paths through the host app's Vite, jsbundling, or custom resolver policy."
         )
       end
 
@@ -304,7 +306,7 @@ module RailsFieldsKit
           key: :bundler_alias,
           label: "Bundler alias",
           status: :manual,
-          message: "Representative bundler config exists but could not be read. Confirm the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths manually; setup doctor does not fail or rewrite bundler config."
+          message: "Representative bundler config exists but could not be read. Confirm the documented Rails Fields Kit import paths manually; setup doctor does not fail or rewrite bundler config."
         )
       end
 
@@ -326,7 +328,7 @@ module RailsFieldsKit
           key: :bundler_alias,
           label: "Bundler alias",
           status: :manual,
-          message: "Representative bundler config did not show alias signals for #{missing_aliases.join(", ")}. Confirm the documented rails_fields_kit and rails_fields_kit/tom_select_controller import paths manually; setup doctor does not inspect every resolver shape or rewrite bundler config."
+          message: "Representative bundler config did not show alias signals for #{missing_aliases.join(", ")}. Confirm the documented Rails Fields Kit import paths manually; setup doctor does not inspect every resolver shape or rewrite bundler config."
         )
       end
     end
