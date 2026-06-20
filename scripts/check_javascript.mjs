@@ -84,6 +84,10 @@ const checks = [
   {
     name: "selected preload config contract smoke",
     args: ["scripts/check_selected_preload_config_contract.mjs"]
+  },
+  {
+    name: "Tom Select interaction config contract smoke",
+    args: ["scripts/check_tom_select_interaction_config_contract.mjs"]
   }
 ]
 
