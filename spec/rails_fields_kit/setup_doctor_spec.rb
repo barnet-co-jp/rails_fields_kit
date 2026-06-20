@@ -318,7 +318,9 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
           resolve: {
             alias: [
               { find: /^rails_fields_kit$/, replacement: "/bundle/rails_fields_kit/index.js" },
+              { find: /^rails_fields_kit\/native_field_accessibility_contract$/, replacement: "/bundle/rails_fields_kit/native_field_accessibility_contract.js" },
               { find: /^rails_fields_kit\/tom_select_controller$/, replacement: "/bundle/rails_fields_kit/tom_select_controller.js" },
+              { find: /^rails_fields_kit\/tom_select_text_override_contract$/, replacement: "/bundle/rails_fields_kit/tom_select_text_override_contract.js" },
             ],
           },
         })
@@ -329,6 +331,29 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       expect(bundler_check.status).to eq(:ok)
       expect(bundler_check.message).to include("Found Rails Fields Kit bundler alias signals in vite.config.ts")
       expect(bundler_check.message).to include("bundler choice and config policy stay with the host app")
+    end
+  end
+
+  it "keeps bundler alias config without direct helper subpaths as manual advisory" do
+    Dir.mktmpdir do |root|
+      write_file(root, "vite.config.ts", <<~TS)
+        export default {
+          resolve: {
+            alias: [
+              { find: /^rails_fields_kit$/, replacement: "/bundle/rails_fields_kit/index.js" },
+              { find: /^rails_fields_kit\/tom_select_controller$/, replacement: "/bundle/rails_fields_kit/tom_select_controller.js" },
+            ],
+          },
+        }
+      TS
+
+      bundler_check = check_for(described_class.new(root: root), :bundler_alias)
+
+      expect(bundler_check.status).to eq(:manual)
+      expect(bundler_check.message).to include("did not show alias signals for rails_fields_kit/native_field_accessibility_contract")
+      expect(bundler_check.message).to include("rails_fields_kit/tom_select_text_override_contract")
+      expect(bundler_check.message).not_to include("rails_fields_kit/tom_select_controller.")
+      expect(bundler_check.message).to include("does not inspect every resolver shape or rewrite bundler config")
     end
   end
 
@@ -348,6 +373,7 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
 
       expect(bundler_check.status).to eq(:manual)
       expect(bundler_check.message).to include("did not show alias signals for rails_fields_kit")
+      expect(bundler_check.message).to include("rails_fields_kit/native_field_accessibility_contract")
       expect(bundler_check.message).to include("does not inspect every resolver shape or rewrite bundler config")
     end
   end
@@ -370,7 +396,7 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       expect(output.string).to include("[MANUAL] Stimulus registration")
       expect(output.string).to include("[MANUAL] CSS import")
       expect(output.string).to include("[MANUAL] Bundler alias")
-      expect(output.string).to include("rails_fields_kit and rails_fields_kit/tom_select_controller")
+      expect(output.string).to include("documented Rails Fields Kit import paths")
       expect(output.string).to include("host app's Vite, jsbundling, or custom resolver policy")
       expect(output.string).to include("does not inspect every boot file")
     end

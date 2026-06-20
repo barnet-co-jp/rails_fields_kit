@@ -9,9 +9,18 @@
   "scripts": {
     "check:js": "node scripts/check_javascript.mjs"
   },
+  "types": "./app/javascript/rails_fields_kit/index.d.ts",
   "exports": {
-    ".": "./app/javascript/rails_fields_kit/index.js",
-    "./tom_select_controller": "./app/javascript/rails_fields_kit/tom_select_controller.js",
+    ".": {
+      "types": "./app/javascript/rails_fields_kit/index.d.ts",
+      "import": "./app/javascript/rails_fields_kit/index.js",
+      "default": "./app/javascript/rails_fields_kit/index.js"
+    },
+    "./tom_select_controller": {
+      "types": "./app/javascript/rails_fields_kit/tom_select_controller.d.ts",
+      "import": "./app/javascript/rails_fields_kit/tom_select_controller.js",
+      "default": "./app/javascript/rails_fields_kit/tom_select_controller.js"
+    },
     "./tom_select_text_override_contract": "./app/javascript/rails_fields_kit/tom_select_text_override_contract.js",
     "./native_field_accessibility_contract": "./app/javascript/rails_fields_kit/native_field_accessibility_contract.js"
   }

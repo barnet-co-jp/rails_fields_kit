@@ -21,6 +21,16 @@ When a host app only needs browser-native suggestions for a plain text value, ke
 
 This keeps the value contract identical to a normal text field. The submitted value is just `params[:model][:city]`; Rails Fields Kit does not add selected IDs, hidden metadata, selected preload, or a second value channel.
 
+## Sample evidence
+
+Use [`datalist_boundary_sample_evidence.html`](datalist_boundary_sample_evidence.html) as a static review artifact when comparing this proposal boundary with the existing Tom Select-backed helper lanes. The artifact is intentionally not registered as a current visual reference family member: it is evidence for the proposal boundary, not a new public helper or production CSS contract.
+
+The sample keeps three review points visible:
+
+- `rfk_text_field list:` remains an ordinary text input whose candidate list is owned by the host app
+- browser-native datalist filtering, popup display, keyboard behavior, and styling limits are outside the gem contract
+- selected IDs, preload, rich option metadata, create flows, and remote request behavior stay in the existing Tom Select-backed helper lanes
+
 ## Responsibility split
 
 Use this lane only when the host app has static or server-rendered candidates and accepts browser-native datalist behavior:
