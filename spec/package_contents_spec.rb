@@ -12,6 +12,8 @@ RSpec.describe "package contents" do
   let(:setup_doc) { File.read(setup_doc_path) }
   let(:public_api_path) { File.expand_path("../doc/public_api.md", __dir__) }
   let(:public_api) { File.read(public_api_path) }
+  let(:visual_references_path) { File.expand_path("../doc/visual_references.md", __dir__) }
+  let(:visual_references) { File.read(visual_references_path) }
   let(:textarea_autosize_path) { File.expand_path("../doc/textarea_autosize.md", __dir__) }
   let(:textarea_autosize) { File.read(textarea_autosize_path) }
   let(:field_helpers_path) { File.expand_path("../doc/field_helpers.md", __dir__) }
@@ -88,8 +90,18 @@ RSpec.describe "package contents" do
       "doc/ransack_suggestions.md",
       "doc/table_adapters.md",
       "doc/tom_select_visual_reference.html",
+      "doc/tom_select_text_override_visual_reference.html",
       "doc/native_field_visual_reference.html",
       "doc/table_metadata_visual_reference.html"
+    )
+  end
+
+  it "keeps text override visual reference packaged and mapped as a copy review lane" do
+    expect(specification.files).to include("doc/tom_select_text_override_visual_reference.html")
+    expect(visual_references).to include(
+      "[`tom_select_text_override_visual_reference.html`](tom_select_text_override_visual_reference.html)",
+      "Configured `no_results_text`, `loading_text`, and `create_text` copy states",
+      "without confusing it with locale ownership or request behavior"
     )
   end
 
