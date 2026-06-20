@@ -22,8 +22,13 @@ RSpec.describe "package contents" do
   let(:sample_app_checklist) { File.read(sample_app_checklist_path) }
   let(:sample_app_results_path) { File.expand_path("../doc/sample_app_results.md", __dir__) }
   let(:sample_app_results) { File.read(sample_app_results_path) }
-  let(:form_builder_path) { File.expand_path("../lib/rails_fields_kit/form_builder.rb", __dir__) }
-  let(:form_builder_source) { File.read(form_builder_path) }
+  let(:form_builder_paths) do
+    %w[
+      form_builder.rb
+      form_builder_file_field.rb
+    ].map { |filename| File.expand_path("../lib/rails_fields_kit/#{filename}", __dir__) }
+  end
+  let(:form_builder_source) { form_builder_paths.map { |path| File.read(path) }.join("\n") }
 
   it "ships the documented JavaScript package entrypoints" do
     expect(specification.files).to include(
@@ -170,6 +175,7 @@ RSpec.describe "package contents" do
       rfk_phone_field
       rfk_search_field
       rfk_password_field
+      rfk_file_field
     ])
     expect(documented_native_helpers).to eq(native_helpers)
     expect(quick_chooser).to include("the matching native helper such as")
