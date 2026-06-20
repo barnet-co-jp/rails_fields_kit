@@ -24,6 +24,7 @@
         --error-soft: #fdecef;
         --quiet: #4d5b67;
         --quiet-soft: #eef2f5;
+        --quiet-line: #aebbc7;
         --shadow: 0 1px 2px rgba(23, 33, 43, 0.06);
       }
 
@@ -153,6 +154,11 @@
         padding: 14px;
       }
 
+      .card.no-event-card {
+        border-color: var(--quiet-line);
+        background: linear-gradient(180deg, var(--surface) 0%, #f9fbfc 100%);
+      }
+
       .card-header {
         display: grid;
         gap: 6px;
@@ -183,7 +189,7 @@
       }
 
       .tag.no-event {
-        border-color: #b9c7d2;
+        border-color: var(--quiet-line);
         background: var(--quiet-soft);
         color: var(--quiet);
       }
@@ -211,9 +217,14 @@
         overflow: hidden;
       }
 
+      .no-event-card .control {
+        border-color: var(--quiet-line);
+      }
+
       .control-top {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
         gap: 8px;
         min-height: 44px;
         padding: 8px 10px;
@@ -225,6 +236,7 @@
       .placeholder {
         flex: 1;
         min-width: 0;
+        overflow-wrap: anywhere;
       }
 
       .placeholder { color: #737f8a; }
@@ -250,12 +262,20 @@
       }
 
       .status-note {
+        max-width: 100%;
         padding: 3px 7px;
         border: 1px solid #d1d7de;
         background: var(--surface-muted);
         color: #5f6b76;
         font-size: 0.74rem;
         font-weight: 600;
+        overflow-wrap: anywhere;
+      }
+
+      .status-note.no-event {
+        border-color: var(--quiet-line);
+        background: var(--quiet-soft);
+        color: var(--quiet);
       }
 
       .dropdown {
@@ -302,6 +322,21 @@
         margin-top: 3px;
         color: var(--muted);
         font-size: 0.84rem;
+      }
+
+      .boundary-callout {
+        display: grid;
+        gap: 3px;
+        padding: 8px 10px;
+        border: 1px solid var(--quiet-line);
+        background: var(--quiet-soft);
+        color: var(--quiet);
+        font-size: 0.83rem;
+      }
+
+      .boundary-callout strong {
+        color: var(--ink);
+        font-size: 0.86rem;
       }
 
       .event-list {
@@ -375,8 +410,8 @@
       <section class="review-note" aria-labelledby="release-focus-title">
         <h2 id="release-focus-title">Review focus</h2>
         <ul>
-          <li>Compare loading, visible failure, and no-event states without treating no-event as a new UI component.</li>
-          <li>Confirm stale or aborted requests do not look like host-app-visible failures.</li>
+          <li>Compare loading, visible failure, and suppressed no-event states without treating no-event as a new UI component.</li>
+          <li>Confirm stale or aborted requests stay visually quiet and do not read like host-app-visible failures.</li>
           <li>Keep success/failure event dispatch and request lifecycle details in the maintained events docs.</li>
         </ul>
       </section>
@@ -419,28 +454,32 @@
           <p class="card-footer">Use the request-failure reference when a PR changes visible error-surface feedback.</p>
         </article>
 
-        <article class="card">
+        <article class="card no-event-card">
           <div class="card-header">
-            <span class="tag no-event">No event</span>
+            <span class="tag no-event">Suppressed</span>
             <h2>Stale or aborted request is ignored</h2>
             <p>The older response is not the current field state, so it should not be styled as a visible failure.</p>
           </div>
           <div class="control" aria-hidden="true">
             <div class="control-top">
               <div class="query">northw</div>
-              <div class="status-note">Current query kept</div>
+              <div class="status-note no-event">Current query kept</div>
               <div class="caret">▾</div>
             </div>
             <div class="dropdown">
               <div class="message no-event"><strong>No success or failure event is dispatched</strong><span>The host app should not show failure UI for a response that belongs to a superseded or aborted request.</span></div>
             </div>
           </div>
+          <div class="boundary-callout" aria-hidden="true">
+            <strong>Suppressed, not failed</strong>
+            <span>No retry prompt or default error copy is implied by this state.</span>
+          </div>
           <p class="card-footer">This is the #520 boundary: visually quiet, documented, and separate from retry or fallback UI.</p>
         </article>
       </section>
 
       <section class="boundary-grid" aria-label="No-event boundary comparison">
-        <article class="card">
+        <article class="card no-event-card">
           <div class="card-header">
             <span class="tag no-event">Stale response</span>
             <h2>Earlier response arrives after a newer query</h2>
@@ -475,6 +514,7 @@
           <ul>
             <li>No-event copy stays visually quieter than visible failure copy.</li>
             <li>Loading, current failure, and stale/aborted no-event states are distinguishable at narrow width.</li>
+            <li>The suppressed state does not introduce retry prompts, fallback copy, or default failure UI.</li>
             <li>Event names, payloads, retry UI, and request controller behavior are not changed by this artifact.</li>
           </ul>
         </article>

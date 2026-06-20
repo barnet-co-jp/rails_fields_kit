@@ -17,7 +17,7 @@ RSpec.describe "Rails Fields Kit docs drift guards" do
     generated_setup_note = read_repo_file("lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md")
 
     expect(generated_setup_note).to include(
-      "Run `rails rails_fields_kit:doctor` after installation",
+      "Run `rails rails_fields_kit:doctor` after the first-pass wiring",
       "use the upstream setup doctor output review",
       "Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>"
     )

@@ -47,7 +47,10 @@ RSpec.describe "repository documentation drift guards" do
       "relative file targets",
       "repository-local Markdown heading anchors",
       "same-file HTML fragment links",
-      "external URLs and cross-file HTML element anchors remain intentionally outside its scope"
+      "repository-local static HTML fragment links",
+      "doc/*.html#id",
+      "external URLs, browser-rendered routes, JavaScript-generated dynamic ids, and visual approval remain intentionally outside its scope",
+      "external URL checker, browser crawler, or screenshot approval workflow"
     )
     expect(readme).to include(
       "[`doc/visual_references.md`](doc/visual_references.md)",
