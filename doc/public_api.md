@@ -267,6 +267,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `readRenderedErrorSurface(element)` | rendered-field contract reader | Resolves the opt-in request-failure placeholder element referenced by a rendered Tom Select-backed field's `errorSurfaceId`, or `null` when no placeholder is rendered or found. It does not create placeholders, reveal feedback, dispatch events, retry requests, or own visible copy. |
 | `readRenderedTomSelectInteractionConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select interaction configuration attributes and returns `maxOptions`, `maxItems`, `loadThrottle`, `delimiter`, `preload`, `openOnFocus`, `closeAfterSelect`, `hideSelected`, and `persist`, or `null` when the element is not a matching Rails Fields Kit field. It does not initialize Tom Select, mutate configuration, execute requests, or own interaction policy. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
+| `readRenderedTableFilterMetadata(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered table filter metadata attributes and returns `adapter`, `paramName`, and `fields`, or `null` when the element is not rendered from a table filter metadata lane. It does not execute Ransack, parse token queries, mutate Tom Select, or own table search behavior. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring, affix elements, and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, `prefixElement`, `suffixElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, format affix values, move focus, or own visible feedback. |
 
 ### Import patterns
@@ -279,6 +280,7 @@ import {
   nativeFieldAccessibilityContract,
   readRenderedErrorSurface,
   readRenderedSelectedPreloadConfig,
+  readRenderedTableFilterMetadata,
   readRenderedTomSelectInteractionConfig,
   tomSelectFieldKindContract,
   tomSelectPluginContract,
@@ -295,6 +297,7 @@ const interactionConfig = readRenderedTomSelectInteractionConfig(fieldElement)
 const pluginContract = tomSelectPluginContract(fieldElement)
 const requestContract = tomSelectRequestContract(fieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
+const tableFilterMetadata = readRenderedTableFilterMetadata(fieldElement)
 const selectionContract = tomSelectSelectionContract(fieldElement)
 ```
 
@@ -328,6 +331,8 @@ The helper does not read fixed params objects, execute `fetch`, inspect endpoint
 `readRenderedErrorSurface(element)` uses the same rendered `errorSurfaceId` lane to find the opt-in placeholder element in the same document. It is useful before or outside a request-failure event, but it does not mutate feedback visibility or replace request-failure events' `detail.surface` contract.
 
 `readRenderedTomSelectInteractionConfig(element)` reads the rendered Tom Select interaction configuration values that Rails Fields Kit put on the field, including numeric limits, boolean interaction toggles, delimiter, and `persist`. Missing optional values are returned as `null`, while missing `persist` follows the controller fallback and returns `false`. It does not initialize Tom Select, change controller values, infer initializer defaults, mutate selections, execute requests, or own host-app interaction policy.
+
+`readRenderedTableFilterMetadata(element)` reports only the rendered table-filter metadata contract. It is intended for fields rendered through `rfk_table_filters` / `TableRenderer.render_filter`, not direct `rfk_token_search` calls. The helper does not parse token strings, run Ransack, execute searches, or decide adapter support.
 
 For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`. `prefixElement` and `suffixElement` read the rendered affix elements inside the nearest `.rfk-field` wrapper when present and return `null` otherwise; they do not format values, parse currency or percent content, mutate markup, or change focus behavior.
 
