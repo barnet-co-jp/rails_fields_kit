@@ -18,6 +18,10 @@ const checks = [
     args: ["scripts/check_package_exports.mjs"]
   },
   {
+    name: "TypeScript declaration metadata smoke",
+    args: ["scripts/check_types_metadata.mjs"]
+  },
+  {
     name: "direct contract helper exports smoke",
     args: ["scripts/check_direct_contract_helper_exports.mjs"]
   },

@@ -18,7 +18,9 @@ RSpec.describe "importmap package exports" do
   end
 
   def importmap_target_for_export(export_target)
-    export_target.delete_prefix("./app/javascript/")
+    javascript_target = export_target.is_a?(Hash) ? export_target.fetch("default", export_target.fetch("import")) : export_target
+
+    javascript_target.delete_prefix("./app/javascript/")
   end
 
   it "keeps importmap pins aligned with package exports" do
