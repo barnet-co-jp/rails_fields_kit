@@ -8,6 +8,8 @@ For a product-neutral visual comparison of representative `rfk_table_filters(col
 
 For the focused boundary between the direct FormBuilder helpers and lower-level render/call-spec lanes, see [`table_direct_helper_boundary.md`](table_direct_helper_boundary.md).
 
+For range-specific table metadata examples, use [`table_range_field_metadata.md`](table_range_field_metadata.md). It keeps `TableFilterInput.range_field` and `TableCellInput.range_field` in the native metadata lane without adding range-pair query semantics, custom sliders, table persistence, or production styling.
+
 ## Filter input metadata
 
 Use `RailsFieldsKit::TableFilterInput` when a table column wants to describe a filter UI that should be rendered with Rails Fields Kit.
@@ -172,6 +174,15 @@ columns = [
     )
   },
   {
+    key: :priority,
+    filter_input: RailsFieldsKit::TableFilterInput.range_field(
+      :priority,
+      min: 1,
+      max: 10,
+      step: 1
+    )
+  },
+  {
     key: :notes,
     cell_editor: RailsFieldsKit::TableCellInput.text_area(
       :notes,
@@ -180,6 +191,8 @@ columns = [
   }
 ]
 ```
+
+Range metadata travels through this same native metadata path. Use [`table_range_field_metadata.md`](table_range_field_metadata.md) when the table column needs `TableFilterInput.range_field` or `TableCellInput.range_field` examples, `min` / `max` / `step` pass-through notes, or the boundary that keeps range-pair queries, Ransack execution, custom sliders, multi-thumb controls, table persistence, and production CSS outside Rails Fields Kit.
 
 Contact and search wrappers travel through the same native metadata path. Use them when the table column wants ordinary browser-native contact or search inputs with Rails Fields Kit wrapper wiring, not remote suggestions or token parsing:
 
