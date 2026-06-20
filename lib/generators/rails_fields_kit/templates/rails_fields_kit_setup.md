@@ -6,26 +6,27 @@ Use it as a lightweight adoption checklist for wiring Rails Fields Kit into this
 
 ## Start here
 
-Use this first pass to prove one server-rendered field before adding remote endpoints or richer Tom Select behavior.
+Finish this first pass before adding remote endpoints, release evidence, or visual review tasks. The goal is to prove one server-rendered field in this host app and record any app-specific ownership notes.
 
-- [ ] Run `rails rails_fields_kit:doctor` after installation to review detectable setup state, importmap pin target diagnostics, representative Stimulus registration advisory state, and manual checklist items.
-- [ ] Read the setup doctor status legend first: fix `[MISSING]` lines before treating `[MANUAL]` lines as host-app JavaScript toolchain checks.
-- [ ] Treat `[OK] Stimulus registration` as a representative source signal only; final Stimulus boot policy and any `[MANUAL]` follow-up stay with this host app.
-- [ ] When recording setup doctor evidence, use the upstream setup doctor output review to distinguish setup behavior from CLI output readability and to avoid treating `[MANUAL]` lines as automatic failures.
 - [ ] Confirm `config/initializers/rails_fields_kit.rb` matches this app's needs.
-- [ ] Review the upstream support boundary before assuming Ruby, Rails, Node, or repository JavaScript check coverage for this host app.
 - [ ] Install Tom Select with the JavaScript toolchain already used by this app.
 - [ ] Register `rails-fields-kit--tom-select` on the app's existing Stimulus application.
+- [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.
+- [ ] Follow the README first field quickstart or the setup guide `rfk_select` lane before adding remote endpoints.
+- [ ] Render one Rails Fields Kit field on a server-rendered form and record the field name below.
+- [ ] Run `rails rails_fields_kit:doctor` after the first-pass wiring to review detectable setup state, importmap pin target diagnostics, representative Stimulus registration advisory state, and manual checklist items.
+- [ ] Read the setup doctor status legend before triage: fix `[MISSING]` lines first, then treat `[MANUAL]` lines as host-app JavaScript toolchain checks.
+- [ ] Treat `[OK] Stimulus registration` as a representative source signal only; final Stimulus boot policy and any `[MANUAL]` follow-up stay with this host app.
+- [ ] When recording setup doctor evidence, use the upstream setup doctor output review to distinguish setup behavior from CLI output readability and to avoid treating `[MANUAL]` lines as automatic failures.
 - [ ] If setup doctor reports `[MANUAL] Stimulus registration`, confirm the existing boot file or controller index; this is host-app follow-up, not an automatic failure.
 - [ ] For Turbo-enabled apps, let the registered Stimulus controller handle normal `rfk_*` field reconnects; do not add a separate host-app `turbo:load` reinitializer unless custom markup lives outside Stimulus-managed DOM.
-- [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.
 - [ ] If `rails_fields_kit` or `rails_fields_kit/tom_select_controller` cannot be resolved, use the upstream setup guide's unresolved imports troubleshooting section before changing aliases, importmap pins, Stimulus registration, Tom Select package setup, or CSS imports.
-- [ ] Follow the README first field quickstart or the setup guide `rfk_select` lane before adding remote endpoints.
+- [ ] Review the upstream support boundary before assuming Ruby, Rails, Node, or repository JavaScript check coverage for this host app.
 - [ ] Record the first Rails Fields Kit field and any app-specific ownership notes below.
 
 ## Maintained docs to read first
 
-These upstream docs remain the source of truth for copyable examples, public API details, and release checks.
+Use these upstream docs after the first pass when you need maintained examples, public API details, release checks, or troubleshooting. This generated note should link back to source-of-truth docs rather than mirror their details.
 
 - README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>
 - Setup guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>
