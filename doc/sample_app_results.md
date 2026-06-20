@@ -15,7 +15,7 @@ The route map is a triage aid. Start with release-wide confidence for release ca
 | README first field quickstart evidence | `rfk_select` representative collection-backed single-value lane checks, Visual reference render checks | The README first field or quickstart sample needs endpoint-free, server-rendered collection evidence without mixing in setup/import, remote search, selected preload, create-on-the-fly, or token metadata lanes. | Setup/import verification, remote search, selected preload, create-on-the-fly, token metadata, or release-wide readiness. |
 | Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. | Runtime helper behavior, production CSS approval, sample-app field behavior, or CI success as visual approval. |
 | Remote lifecycle feedback | Selected preload representative lane checks, create-on-the-fly representative failure lane checks, visible feedback checks | Selected preload, remote search, create-on-the-fly, request-failure, or visible fallback behavior changed. | Setup/import checks, static visual reference approval, endpoint authorization policy, or retry UI ownership unless those surfaces changed. |
-| Token and table metadata | Token suggestion and Ransack suggestion metadata checks, table metadata checks | Token suggestions, saved-search metadata, Ransack metadata, table filters, or cell editor metadata changed. | Query execution, parser semantics, table preference persistence, visual reference rendering, or native wrapper evidence unless those lanes also changed. |
+| Token and table metadata | Token suggestion and Ransack suggestion metadata checks, table metadata checks | Token suggestions, saved-search metadata, Ransack metadata, table filters, range field table metadata, or cell editor metadata changed. | Query execution, parser semantics, table preference persistence, visual reference rendering, or native wrapper evidence unless those lanes also changed. |
 
 When adding a new evidence lane, place it near the closest feature-specific section and update this route map only when reviewers need a new starting point. Do not turn a feature-specific lane into a release-wide requirement without a separate release policy decision.
 
@@ -437,7 +437,7 @@ Notes:
 
 ## Table metadata checks
 
-Use this section when table metadata is part of the release surface, or when `doc/table_metadata_visual_reference.html` is release-critical evidence even though the static artifact itself did not change.
+Use this section when table metadata is part of the release surface, or when `doc/table_metadata_visual_reference.html` is release-critical evidence even though the static artifact itself did not change. When range field table metadata is in scope, use `doc/table_range_field_metadata.md` as the source-of-truth boundary for representative filter and cell editor evidence.
 
 - Visual reference artifact:
 - Viewport(s) checked:
@@ -445,6 +445,7 @@ Use this section when table metadata is part of the release surface, or when `do
   - [ ] filters
   - [ ] Ransack token filter metadata
   - [ ] native field metadata
+  - [ ] range field metadata
   - [ ] cell editors
   - [ ] custom helper mapping
 - Evidence location:
@@ -454,6 +455,8 @@ Use this section when table metadata is part of the release surface, or when `do
 - [ ] `rfk_table_filters` renders collected filter metadata
 - [ ] `rfk_table_cell_editors` renders collected cell editor metadata
 - [ ] native field metadata such as `search_field`, `money_field`, or `text_area` rendered through the documented helper path
+- [ ] range field metadata used `TableFilterInput.range_field` or `TableCellInput.range_field` and kept `min`, `max`, and `step` as ordinary native input options
+- [ ] range field table metadata evidence stayed separate from native `rfk_range_field` wrapper evidence unless that wrapper lane was also in scope
 - [ ] direct `TableRenderer` call-spec usage still matches the documented helper / method / options shape when used
 - [ ] a representative `TableRenderer.register_field_helper` mapping rendered through the documented call-spec path
 - [ ] `TableRenderer.reset_field_helpers!` restored the default mapping after the representative custom helper check
