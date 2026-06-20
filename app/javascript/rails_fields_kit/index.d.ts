@@ -37,6 +37,18 @@ export interface TomSelectFieldKindContract {
   kind: string
 }
 
+export interface TomSelectInteractionConfig {
+  maxOptions: number | null
+  maxItems: number | null
+  loadThrottle: number | null
+  delimiter: string | null
+  preload: boolean | null
+  openOnFocus: boolean | null
+  closeAfterSelect: boolean | null
+  hideSelected: boolean | null
+  persist: boolean
+}
+
 export interface SelectedPreloadConfig {
   selectedUrl: string
   selectedParam: string
@@ -60,6 +72,7 @@ export function tomSelectPluginContract(element: Element | null | undefined): To
 export function tomSelectSelectionContract(element: Element | null | undefined): TomSelectSelectionContract | null
 export function tomSelectRequestContract(element: Element | null | undefined): TomSelectRequestContract | null
 export function tomSelectFieldKindContract(element: Element | null | undefined): TomSelectFieldKindContract | null
+export function readRenderedTomSelectInteractionConfig(element: Element | null | undefined): TomSelectInteractionConfig | null
 export function readRenderedErrorSurface(element: Element | null | undefined): Element | null
 export function readRenderedSelectedPreloadConfig(element: Element | null | undefined): SelectedPreloadConfig | null
 export function nativeFieldAccessibilityContract(element: Element | null | undefined): NativeFieldAccessibilityContract | null
