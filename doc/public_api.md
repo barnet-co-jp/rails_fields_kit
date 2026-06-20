@@ -23,7 +23,7 @@ This document summarizes the public API intended to be stable for the 0.1.x seri
 | Area | Current public surface | Detailed docs |
 | --- | --- | --- |
 | Ruby setup | `require "rails_fields_kit"`, `RailsFieldsKit.configure`, configuration accessors | [`configuration.md`](configuration.md) |
-| FormBuilder helpers | Tom Select-backed helpers, table metadata helpers, and native wrapper helpers | [`field_helpers.md`](field_helpers.md), [`select_migration.md`](select_migration.md), [`enum_select.md`](enum_select.md), [`textarea_autosize.md`](textarea_autosize.md), [`range_field.md`](range_field.md), [`password_field.md`](password_field.md), [`native_numeric_fields.md`](native_numeric_fields.md), [`native_contact_fields.md`](native_contact_fields.md) |
+| FormBuilder helpers | Tom Select-backed helpers, table metadata helpers, and native wrapper helpers | [`field_helpers.md`](field_helpers.md), [`select_migration.md`](select_migration.md), [`enum_select.md`](enum_select.md), [`textarea_autosize.md`](textarea_autosize.md), [`range_field.md`](range_field.md), [`password_field.md`](password_field.md), [`file_field.md`](file_field.md), [`native_numeric_fields.md`](native_numeric_fields.md), [`native_contact_fields.md`](native_contact_fields.md) |
 | Controller helpers | Remote option JSON, selected preload, create-on-the-fly, and token suggestion endpoint helpers | [`controller_helpers.md`](controller_helpers.md) |
 | Token suggestions | Builder objects for token suggestion metadata and Ransack-compatible suggestion metadata | [`token_suggestions.md`](token_suggestions.md), [`ransack_suggestions.md`](ransack_suggestions.md) |
 | Table metadata | Metadata objects, collector methods, call-spec helpers, renderer helpers, and custom renderer registry mapping for optional table integrations | [`table_adapters.md`](table_adapters.md), [`table_group_html.md`](table_group_html.md) |
@@ -87,14 +87,16 @@ Native input helpers:
 - `rfk_phone_field`
 - `rfk_search_field`
 - `rfk_password_field`
+- `rfk_file_field`
 
-Native wrapper helpers pass ordinary Rails/native input attributes such as `maxlength`, `minlength`, `pattern`, `required`, `autocomplete`, and `inputmode` to the rendered input through top-level field options or `html:`. Range fields also pass ordinary range attributes such as `min`, `max`, and `step` through the same Rails/native input path. Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around that input; character counters, masking, browser validation-message policy, browser validation behavior, server-side validation rules, textarea autosize measurement, range live preview behavior, Turbo reconnect sizing, production CSS, and manual-resize policy remain host-app responsibility.
+Native wrapper helpers pass ordinary Rails/native input attributes such as `maxlength`, `minlength`, `pattern`, `required`, `autocomplete`, and `inputmode` to the rendered input through top-level field options or `html:`. Range fields also pass ordinary range attributes such as `min`, `max`, and `step` through the same Rails/native input path. File fields pass Rails file-input options such as `accept:`, `multiple:`, and `direct_upload:` through to Rails' native `file_field` helper without changing the submitted file parameter shape. Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around that input; character counters, masking, browser validation-message policy, browser validation behavior, server-side validation rules, textarea autosize measurement, range live preview behavior, Turbo reconnect sizing, multipart form setup, Active Storage direct upload JavaScript, preview UI, upload progress UI, file size and MIME validation policy, storage configuration, virus scanning, production CSS, and manual-resize policy remain host-app responsibility.
 
 See [`field_helpers.md`](field_helpers.md) for details.
 See [`grouped_select.md`](grouped_select.md) for the current collection-backed `<optgroup>` boundary and the separation from remote workflows or future optgroup metadata work.
 See [`textarea_autosize.md`](textarea_autosize.md) for the current `rfk_text_area` autosize boundary and host-app-owned enhancement guidance.
 See [`range_field.md`](range_field.md) for the current `rfk_range_field` thin wrapper boundary and range-specific non-goals.
 See [`password_field.md`](password_field.md) for the current `rfk_password_field` thin wrapper boundary and password-specific non-goals.
+See [`file_field.md`](file_field.md) for the current `rfk_file_field` thin wrapper boundary and file-upload ownership non-goals.
 See [`select_migration.md`](select_migration.md) for a practical server-rendered `collection_select` to `rfk_select` migration pattern.
 See [`enum_select.md`](enum_select.md) for the `rfk_enum_select` explicit `enum:` hash boundary, including keys-as-submitted-values behavior and the non-goal boundary around arbitrary label/value DSLs or remote enum option lookup.
 See [`collection_group_helpers.md`](collection_group_helpers.md) for the current non-API boundary around collection checkbox / radio groups, semantic `fieldset` / `legend`, group-level hint / error wiring, and host-app ownership of collection semantics.
@@ -106,8 +108,6 @@ Collection checkbox / radio group helpers are also not current public APIs. Host
 Tom Select-backed `rfk_*` helpers also support opt-in `error_surface:` and `error_surface_html:` options for fields that should expose a stable nearby placeholder on request failures. When enabled, request-failure events described in [`events.md`](events.md) can include that placeholder as `detail.surface`, while visible error copy and retry UI remain host-app responsibility.
 
 Tom Select-backed helpers also support field-level `allow_clear: true` for fields that should expose Tom Select's `clear_button` affordance. Rails Fields Kit adds `clear_button` to that field's effective plugin list, while Tom Select installation, plugin-specific assets, clear affordance styling, and empty-state wording remain host-app or Rails select-option responsibility. Explicit `plugins:` values still replace initializer defaults for the field; use [`field_helpers.md`](field_helpers.md) for the helper-level examples and override notes.
-
-Tom Select-backed helpers also support field-level `dropdown_parent:` as a string pass-through to Tom Select's `dropdownParent` option. Use it for host-app-owned modal, drawer, scroll-container, or overflow clipping workarounds; Rails Fields Kit does not resolve fallback elements, provide a portal system, set z-index policy, or own CSS framework layout decisions.
 
 `rfk_table_filters` and `rfk_table_cell_editors` are the direct FormBuilder rendering path. They collect table metadata and return safe-buffer helper output for ordinary Rails views. `TableMetadata.filter_calls` / `cell_editor_calls` and `TableRenderer.filter_call` / `cell_editor_call` are the call-spec path for table integrations that want to inspect or rearrange helper, method, and options before rendering. The batch convenience APIs `TableMetadata.render_filters` / `render_cell_editors` and `TableRenderer.render_filters` / `render_cell_editors` stay in that renderer lane and return ordered render result arrays rather than redefining the helper-level safe-buffer contract.
 
@@ -265,6 +265,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `tomSelectRequestContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select request data attributes and returns the controller identifier, remote search / selected preload / create endpoint flags, URL values, request parameter names, `minLength`, and `errorSurfaceId`, or `null` when the element is not a Rails Fields Kit Tom Select-backed field. It does not execute requests, parse query strings, mutate Tom Select, authorize endpoints, retry requests, or own visible feedback. |
 | `tomSelectFieldKindContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select helper-lane kind data and returns the controller identifier and `kind`, or `null` when the element is not a matching Rails Fields Kit field or no kind is rendered. It does not redefine helper taxonomy, mutate Tom Select, execute requests, or own visible behavior. |
 | `readRenderedErrorSurface(element)` | rendered-field contract reader | Resolves the opt-in request-failure placeholder element referenced by a rendered Tom Select-backed field's `errorSurfaceId`, or `null` when no placeholder is rendered or found. It does not create placeholders, reveal feedback, dispatch events, retry requests, or own visible copy. |
+| `readRenderedTomSelectInteractionConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select interaction configuration attributes and returns `maxOptions`, `maxItems`, `loadThrottle`, `delimiter`, `preload`, `openOnFocus`, `closeAfterSelect`, `hideSelected`, and `persist`, or `null` when the element is not a matching Rails Fields Kit field. It does not initialize Tom Select, mutate configuration, execute requests, or own interaction policy. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring, affix elements, and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, `prefixElement`, `suffixElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, format affix values, move focus, or own visible feedback. |
 
@@ -278,6 +279,7 @@ import {
   nativeFieldAccessibilityContract,
   readRenderedErrorSurface,
   readRenderedSelectedPreloadConfig,
+  readRenderedTomSelectInteractionConfig,
   tomSelectFieldKindContract,
   tomSelectPluginContract,
   tomSelectRequestContract,
@@ -289,6 +291,7 @@ const accessibilityContract = nativeFieldAccessibilityContract(inputElement)
 const copyContract = tomSelectTextOverrideContract(fieldElement)
 const errorSurface = readRenderedErrorSurface(fieldElement)
 const fieldKindContract = tomSelectFieldKindContract(fieldElement)
+const interactionConfig = readRenderedTomSelectInteractionConfig(fieldElement)
 const pluginContract = tomSelectPluginContract(fieldElement)
 const requestContract = tomSelectRequestContract(fieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
@@ -324,13 +327,15 @@ The helper does not read fixed params objects, execute `fetch`, inspect endpoint
 
 `readRenderedErrorSurface(element)` uses the same rendered `errorSurfaceId` lane to find the opt-in placeholder element in the same document. It is useful before or outside a request-failure event, but it does not mutate feedback visibility or replace request-failure events' `detail.surface` contract.
 
+`readRenderedTomSelectInteractionConfig(element)` reads the rendered Tom Select interaction configuration values that Rails Fields Kit put on the field, including numeric limits, boolean interaction toggles, delimiter, and `persist`. Missing optional values are returned as `null`, while missing `persist` follows the controller fallback and returns `false`. It does not initialize Tom Select, change controller values, infer initializer defaults, mutate selections, execute requests, or own host-app interaction policy.
+
 For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`. `prefixElement` and `suffixElement` read the rendered affix elements inside the nearest `.rfk-field` wrapper when present and return `null` otherwise; they do not format values, parse currency or percent content, mutate markup, or change focus behavior.
 
 Future package-root helpers should follow the same boundary: read the rendered Rails Fields Kit contract or configuration from an element, but do not take over request lifecycles, locale resolution, visible feedback, query parsing, retry UI, validation feedback, or other application-specific behavior. Proposal or open-PR helper names are not current public API until they are merged and listed in the table above.
 
 ## Stimulus values
 
-The Tom Select controller reads data values generated by the FormBuilder helpers. Publicly documented options include remote URLs, request parameter names, JSON field names, selected preload settings, create-on-the-fly settings, rendering labels, plugin lists, `max_options`, `max_items`, `load_throttle`, `delimiter`, and `dropdown_parent`.
+The Tom Select controller reads data values generated by the FormBuilder helpers. Publicly documented options include remote URLs, request parameter names, JSON field names, selected preload settings, create-on-the-fly settings, rendering labels, plugin lists, `max_options`, `max_items`, `load_throttle`, and `delimiter`.
 
 Rails Fields Kit also renders `data-rails-fields-kit--tom-select-kind-value` as a helper-lane signal for Tom Select-backed fields. Treat it as rendered configuration for Rails Fields Kit diagnostics and controller behavior rather than the preferred host-app integration surface: host apps should use documented helper options, events, and package-root contract readers when those surfaces exist. `rfk_grouped_select` currently renders through the collection-backed select lane, so its `kind` value matches that underlying lane instead of declaring a separate grouped-select taxonomy.
 
@@ -340,10 +345,6 @@ Remote endpoint extensions:
 - `selected_query_params:` adds fixed query parameters to selected preload requests.
 - `create_params:` adds fixed JSON fields to create requests.
 - `error_surface:` adds a generated placeholder id so request-failure events can expose `detail.surface` for host-app feedback.
-
-Placement extension:
-
-- `dropdown_parent:` passes a selector string through to Tom Select's `dropdownParent` option for host-app-owned clipping or modal placement workarounds. It does not make Rails Fields Kit own portal behavior, z-index, or CSS framework policy.
 
 `error_surface_html:` customizes the generated placeholder element, but it does not change the event names or move visible feedback responsibility into the gem.
 
