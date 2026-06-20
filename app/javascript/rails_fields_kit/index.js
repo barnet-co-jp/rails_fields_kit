@@ -49,8 +49,19 @@ const TABLE_FILTER_METADATA_ATTRIBUTES = {
   paramName: "data-rails-fields-kit-table-filter-param-name",
   fields: "data-rails-fields-kit-table-filter-fields"
 }
+const OPTION_PAYLOAD_MAPPING_ATTRIBUTES = {
+  kind: FIELD_KIND_ATTRIBUTE,
+  valueField: `${TOM_SELECT_VALUE_PREFIX}-value-field-value`,
+  labelField: `${TOM_SELECT_VALUE_PREFIX}-label-field-value`,
+  searchField: `${TOM_SELECT_VALUE_PREFIX}-search-field-value`,
+  optionDescriptionField: `${TOM_SELECT_VALUE_PREFIX}-option-description-field-value`,
+  optionBadgeField: `${TOM_SELECT_VALUE_PREFIX}-option-badge-field-value`
+}
 const DEFAULT_SELECTED_PARAM = "id"
 const DEFAULT_SELECTED_MULTIPLE_PARAM = "ids"
+const DEFAULT_VALUE_FIELD = "value"
+const DEFAULT_LABEL_FIELD = "text"
+const DEFAULT_SEARCH_FIELD = "text"
 const NATIVE_FIELD_TAGS = new Set(["input", "select", "textarea"])
 const NATIVE_FIELD_WRAPPER_SELECTOR = ".rfk-field"
 const NATIVE_FIELD_LABEL_SELECTOR = "label"
@@ -182,6 +193,16 @@ function nativeFieldLabel(element, wrapperElement = nativeFieldWrapper(element))
   return wrapperElement?.querySelector?.(NATIVE_FIELD_LABEL_SELECTOR) || null
 }
 
+function hasRenderedTomSelectContract(element) {
+  if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function") return false
+
+  return hasTomSelectController(element) || dataValue(element, OPTION_PAYLOAD_MAPPING_ATTRIBUTES.kind) !== null
+}
+
+function splitSearchFields(value) {
+  return value.split(",").map((field) => field.trim()).filter(Boolean)
+}
+
 export function tomSelectTextOverrideContract(element) {
   if (!element || typeof element.getAttribute !== "function") return null
 
@@ -266,7 +287,7 @@ export function readRenderedErrorSurface(element) {
 
 export function readRenderedTomSelectInteractionConfig(element) {
   if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function") return null
-  if (!hasTomSelectController(element) && !element.hasAttribute(FIELD_KIND_ATTRIBUTE)) return null
+  if (!hasRenderedTomSelectContract(element)) return null
 
   return {
     maxOptions: numberDataValue(element, INTERACTION_CONFIG_ATTRIBUTES.maxOptions),
@@ -292,6 +313,20 @@ export function readRenderedSelectedPreloadConfig(element) {
     selectedParam: dataValue(element, SELECTED_PRELOAD_ATTRIBUTES.selectedParam) || DEFAULT_SELECTED_PARAM,
     selectedMultipleParam: dataValue(element, SELECTED_PRELOAD_ATTRIBUTES.selectedMultipleParam) || DEFAULT_SELECTED_MULTIPLE_PARAM,
     selectedQueryParams: objectDataValue(element, SELECTED_PRELOAD_ATTRIBUTES.selectedQueryParams)
+  }
+}
+
+export function readRenderedOptionPayloadMapping(element) {
+  if (!hasRenderedTomSelectContract(element)) return null
+
+  const searchField = dataValue(element, OPTION_PAYLOAD_MAPPING_ATTRIBUTES.searchField) || DEFAULT_SEARCH_FIELD
+
+  return {
+    valueField: dataValue(element, OPTION_PAYLOAD_MAPPING_ATTRIBUTES.valueField) || DEFAULT_VALUE_FIELD,
+    labelField: dataValue(element, OPTION_PAYLOAD_MAPPING_ATTRIBUTES.labelField) || DEFAULT_LABEL_FIELD,
+    searchFields: splitSearchFields(searchField),
+    optionDescriptionField: dataValue(element, OPTION_PAYLOAD_MAPPING_ATTRIBUTES.optionDescriptionField) || null,
+    optionBadgeField: dataValue(element, OPTION_PAYLOAD_MAPPING_ATTRIBUTES.optionBadgeField) || null
   }
 }
 
