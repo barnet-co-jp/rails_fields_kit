@@ -12,6 +12,8 @@ RSpec.describe "package contents" do
   let(:setup_doc) { File.read(setup_doc_path) }
   let(:public_api_path) { File.expand_path("../doc/public_api.md", __dir__) }
   let(:public_api) { File.read(public_api_path) }
+  let(:visual_references_path) { File.expand_path("../doc/visual_references.md", __dir__) }
+  let(:visual_references) { File.read(visual_references_path) }
   let(:textarea_autosize_path) { File.expand_path("../doc/textarea_autosize.md", __dir__) }
   let(:textarea_autosize) { File.read(textarea_autosize_path) }
   let(:field_helpers_path) { File.expand_path("../doc/field_helpers.md", __dir__) }
@@ -22,6 +24,10 @@ RSpec.describe "package contents" do
   let(:sample_app_checklist) { File.read(sample_app_checklist_path) }
   let(:sample_app_results_path) { File.expand_path("../doc/sample_app_results.md", __dir__) }
   let(:sample_app_results) { File.read(sample_app_results_path) }
+  let(:datalist_boundary_path) { File.expand_path("../doc/datalist_boundary.md", __dir__) }
+  let(:datalist_boundary) { File.read(datalist_boundary_path) }
+  let(:slug_helper_boundary_path) { File.expand_path("../doc/slug_helper_boundary.md", __dir__) }
+  let(:slug_helper_boundary) { File.read(slug_helper_boundary_path) }
   let(:form_builder_paths) do
     %w[
       form_builder.rb
@@ -88,8 +94,37 @@ RSpec.describe "package contents" do
       "doc/ransack_suggestions.md",
       "doc/table_adapters.md",
       "doc/tom_select_visual_reference.html",
+      "doc/tom_select_text_override_visual_reference.html",
       "doc/native_field_visual_reference.html",
       "doc/table_metadata_visual_reference.html"
+    )
+  end
+
+  it "keeps focused boundary sample evidence packaged without promoting proposal helpers" do
+    expect(specification.files).to include(
+      "doc/datalist_boundary_sample_evidence.html",
+      "doc/slug_helper_boundary_sample_evidence.html"
+    )
+
+    expect(datalist_boundary).to include(
+      "[`datalist_boundary_sample_evidence.html`](datalist_boundary_sample_evidence.html)",
+      "not a new public helper or production CSS contract",
+      "Do not list `rfk_datalist_field` in `doc/public_api.md` unless a later implementation PR actually adds and tests the helper"
+    )
+
+    expect(slug_helper_boundary).to include(
+      "[`slug_helper_boundary_sample_evidence.html`](slug_helper_boundary_sample_evidence.html)",
+      "does not currently provide a dedicated title-to-slug helper such as `rfk_slug_field`",
+      "no current `rfk_slug_field` public helper"
+    )
+  end
+
+  it "keeps text override visual reference packaged and mapped as a copy review lane" do
+    expect(specification.files).to include("doc/tom_select_text_override_visual_reference.html")
+    expect(visual_references).to include(
+      "[`tom_select_text_override_visual_reference.html`](tom_select_text_override_visual_reference.html)",
+      "Configured `no_results_text`, `loading_text`, and `create_text` copy states",
+      "without confusing it with locale ownership or request behavior"
     )
   end
 
