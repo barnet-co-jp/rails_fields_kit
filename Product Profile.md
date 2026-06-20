@@ -68,6 +68,7 @@ Host applications remain responsible for:
 - `doc/password_field.md`: focused `rfk_password_field` native wrapper boundary and password-specific non-goals
 - `doc/native_numeric_fields.md`: focused `rfk_number_field`, `rfk_money_field`, and `rfk_percent_field` native wrapper boundary and numeric formatting non-goals
 - `doc/native_contact_fields.md`: focused `rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field` native wrapper boundary and contact/search ownership non-goals
+- `doc/mention_field_boundary.md`: proposal-only boundary for inline textarea mentions; compares current textarea, autocomplete, token-search, and tag lanes without making `rfk_mention_field` current public API
 - `doc/textarea_autosize.md`: focused `rfk_text_area` autosize boundary; autosize remains host-app owned in the current 0.1.x surface
 - `doc/textarea_autosize_release_evidence.md`: release and sample-app evidence guide for the current `rfk_text_area` autosize boundary without treating autosize as built-in behavior
 - `doc/visual_references.md`: maintained visual reference family map and scope notes
