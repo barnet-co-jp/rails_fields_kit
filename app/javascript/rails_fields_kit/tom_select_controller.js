@@ -26,6 +26,7 @@ export default class extends Controller {
     maxItems: Number,
     loadThrottle: Number,
     delimiter: String,
+    dropdownParent: String,
     preload: Boolean,
     openOnFocus: Boolean,
     closeAfterSelect: Boolean,
@@ -71,6 +72,7 @@ export default class extends Controller {
     if (this.hasMaxItemsValue) options.maxItems = this.maxItemsValue
     if (this.hasLoadThrottleValue) options.loadThrottle = this.loadThrottleValue
     if (this.hasDelimiterValue) options.delimiter = this.delimiterValue
+    if (this.hasDropdownParentValue) options.dropdownParent = this.dropdownParentValue
     if (this.hasPreloadValue) options.preload = this.preloadValue
     if (this.hasOpenOnFocusValue) options.openOnFocus = this.openOnFocusValue
     if (this.hasCloseAfterSelectValue) options.closeAfterSelect = this.closeAfterSelectValue
