@@ -103,7 +103,8 @@ RSpec.describe "package contents" do
   it "keeps focused boundary sample evidence packaged without promoting proposal helpers" do
     expect(specification.files).to include(
       "doc/datalist_boundary_sample_evidence.html",
-      "doc/slug_helper_boundary_sample_evidence.html"
+      "doc/slug_helper_boundary_sample_evidence.html",
+      "doc/native_character_counter_boundary_sample_evidence.html"
     )
 
     expect(datalist_boundary).to include(
@@ -116,6 +117,12 @@ RSpec.describe "package contents" do
       "[`slug_helper_boundary_sample_evidence.html`](slug_helper_boundary_sample_evidence.html)",
       "does not currently provide a dedicated title-to-slug helper such as `rfk_slug_field`",
       "no current `rfk_slug_field` public helper"
+    )
+
+    expect(visual_references).to include(
+      "[`native_character_counter_boundary_sample_evidence.html`](native_character_counter_boundary_sample_evidence.html)",
+      "host-owned counter copy",
+      "without presenting `character_counter:` or any helper option as current API"
     )
   end
 
