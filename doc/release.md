@@ -98,6 +98,7 @@ bundle exec rake build
    - `doc/token_search_saved_search_visual_reference.html`
    - `doc/controller_helpers.md`
    - `doc/token_suggestions.md`
+   - `doc/saved_search_token_suggestion_evidence.md` when saved-search token suggestion evidence is part of the release or PR scope
    - `doc/ransack_suggestions.md`
    - `doc/table_adapters.md`
    - `doc/configuration.md`
@@ -141,6 +142,8 @@ bundle exec rake build
    When setup or import evidence is part of the release or PR scope, record the host app's package manager, Tom Select version or pin, and CSS route in the Tom Select environment reproducibility memo in [`sample_app_results.md`](sample_app_results.md). Keep that memo separate from setup doctor `[OK]` / `[MANUAL]` visibility results: the memo records observed host-app package and asset choices, not Rails Fields Kit package-manager policy or a fixed Tom Select version requirement.
 
    When package-root read-only helper exports are in scope, use [`package_root_helper_release_evidence.md`](package_root_helper_release_evidence.md) to choose representative helper checks before recording the final sample-app or release PR evidence. Keep `doc/public_api.md#javascript-exports` as the source of truth for the exported helper list and return-shape boundary.
+
+   When saved-search token suggestions are in release or PR scope, use [`saved_search_token_suggestion_evidence.md`](saved_search_token_suggestion_evidence.md) to keep the evidence on suggestion option JSON and record the final result in [`sample_app_results.md`](sample_app_results.md) or the PR comment. Keep token parsing, saved-search execution, persistence, authorization, sharing policy, and any independent saved-search selector helper outside this evidence lane.
 
    When table metadata rendering, group-level wrappers, or TableRenderer registry checks are in scope, use [`table_metadata_release_evidence.md`](table_metadata_release_evidence.md) to choose representative checks before recording the final sample-app or release PR evidence. Keep `doc/table_adapters.md` and `doc/table_group_html.md` as the source of truth for behavior and responsibility boundaries.
 
