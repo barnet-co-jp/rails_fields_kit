@@ -40,17 +40,17 @@
       main {
         width: min(1160px, calc(100% - 32px));
         margin: 0 auto;
-        padding: 48px 0 64px;
+        padding: 38px 0 56px;
       }
 
       .hero {
         display: grid;
-        gap: 14px;
-        margin-bottom: 28px;
+        gap: 10px;
+        margin-bottom: 18px;
       }
 
       .eyebrow {
-        font-size: 0.78rem;
+        font-size: 0.75rem;
         font-weight: 700;
         letter-spacing: 0;
         text-transform: uppercase;
@@ -58,16 +58,17 @@
       }
 
       h1 {
+        max-width: 780px;
         margin: 0;
-        font-size: clamp(2rem, 4vw, 3rem);
+        font-size: 2.05rem;
         font-weight: 650;
-        line-height: 1.08;
+        line-height: 1.1;
       }
 
       .lede {
-        max-width: 780px;
+        max-width: 760px;
         margin: 0;
-        font-size: 1rem;
+        font-size: 0.96rem;
         color: var(--muted);
       }
 
@@ -81,8 +82,8 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 38px;
-        padding: 0 14px;
+        min-height: 36px;
+        padding: 0 12px;
         border: 1px solid var(--line-strong);
         color: var(--ink);
         text-decoration: none;
@@ -96,12 +97,12 @@
       .review-note {
         display: grid;
         gap: 6px;
-        margin-bottom: 18px;
-        padding: 14px 16px;
+        margin-bottom: 14px;
+        padding: 12px 14px;
         border: 1px solid #b9d5cc;
         background: var(--accent-soft);
         color: var(--muted);
-        font-size: 0.92rem;
+        font-size: 0.9rem;
       }
 
       .review-note strong {
@@ -110,14 +111,14 @@
 
       .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 14px;
       }
 
       .card {
         display: grid;
-        gap: 12px;
-        padding: 18px;
+        gap: 10px;
+        padding: 15px;
         border: 1px solid var(--line);
         background: var(--surface);
         box-shadow: var(--shadow);
@@ -125,13 +126,13 @@
 
       .card-header {
         display: grid;
-        gap: 8px;
+        gap: 7px;
       }
 
       .tag {
         justify-self: start;
-        padding: 4px 8px;
-        font-size: 0.74rem;
+        padding: 3px 7px;
+        font-size: 0.72rem;
         font-weight: 700;
         letter-spacing: 0;
         text-transform: uppercase;
@@ -165,7 +166,7 @@
 
       h2 {
         margin: 0;
-        font-size: 1.08rem;
+        font-size: 1.02rem;
         line-height: 1.25;
       }
 
@@ -173,13 +174,13 @@
       .card-footer {
         margin: 0;
         color: var(--muted);
-        font-size: 0.93rem;
+        font-size: 0.9rem;
       }
 
       .panel {
         display: grid;
-        gap: 12px;
-        padding: 14px;
+        gap: 10px;
+        padding: 12px;
         border: 1px solid var(--line-strong);
         background: var(--surface-strong);
       }
@@ -188,7 +189,7 @@
       .editor-stack,
       .callout {
         display: grid;
-        gap: 10px;
+        gap: 9px;
       }
 
       .field-row,
@@ -204,7 +205,7 @@
         justify-content: space-between;
         gap: 6px 8px;
         min-width: 0;
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         font-weight: 700;
         letter-spacing: 0;
         text-transform: uppercase;
@@ -222,7 +223,7 @@
         border: 1px solid var(--line);
         background: #eef2f6;
         color: #526170;
-        font-size: 0.72rem;
+        font-size: 0.7rem;
         font-weight: 700;
         letter-spacing: 0;
         line-height: 1.35;
@@ -235,8 +236,8 @@
         flex-wrap: wrap;
         align-items: center;
         gap: 8px 10px;
-        min-height: 46px;
-        padding: 10px 12px;
+        min-height: 42px;
+        padding: 9px 10px;
         border: 1px solid var(--line);
         background: #ffffff;
       }
@@ -252,7 +253,7 @@
       .control.textarea {
         display: grid;
         align-items: start;
-        min-height: 88px;
+        min-height: 82px;
       }
 
       .placeholder,
@@ -293,11 +294,11 @@
         display: inline-flex;
         align-items: center;
         max-width: 100%;
-        padding: 5px 9px;
+        padding: 4px 8px;
         border: 1px solid #b9cce5;
         background: var(--filter-soft);
         color: var(--filter);
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         font-weight: 700;
         line-height: 1.35;
         overflow-wrap: anywhere;
@@ -310,16 +311,16 @@
       }
 
       .stack-note {
-        padding: 11px;
+        padding: 10px;
         border: 1px solid var(--line);
         background: #eef2f6;
         color: var(--muted);
-        font-size: 0.9rem;
+        font-size: 0.88rem;
         overflow-wrap: anywhere;
       }
 
       .callout {
-        padding: 13px;
+        padding: 12px;
         border: 1px solid #b9d5cc;
         background: #f3faf7;
       }
@@ -329,8 +330,8 @@
       }
 
       .legend {
-        margin-top: 24px;
-        padding: 16px 18px;
+        margin-top: 20px;
+        padding: 14px 16px;
         border: 1px solid var(--line);
         background: var(--surface);
         color: var(--muted);
@@ -343,39 +344,43 @@
       @media (max-width: 640px) {
         main {
           width: min(100% - 20px, 1160px);
-          padding-top: 36px;
-          padding-bottom: 52px;
+          padding-top: 28px;
+          padding-bottom: 44px;
+        }
+
+        h1 {
+          font-size: 1.68rem;
         }
 
         .grid {
           grid-template-columns: minmax(0, 1fr);
-          gap: 14px;
+          gap: 12px;
         }
 
         .card {
           gap: 10px;
-          padding: 14px;
+          padding: 13px;
         }
 
         .panel {
-          padding: 12px;
+          padding: 11px;
         }
 
         .label-line {
           display: grid;
           justify-content: stretch;
           gap: 5px;
-          font-size: 0.78rem;
+          font-size: 0.76rem;
         }
 
         .metadata-chip {
           justify-self: start;
-          font-size: 0.7rem;
+          font-size: 0.68rem;
         }
 
         .control {
-          min-height: 42px;
-          padding: 9px 10px;
+          min-height: 40px;
+          padding: 8px 9px;
         }
 
         .toolbar {
@@ -390,7 +395,7 @@
         .stack-note,
         .review-note,
         .legend {
-          font-size: 0.88rem;
+          font-size: 0.86rem;
         }
       }
     </style>
