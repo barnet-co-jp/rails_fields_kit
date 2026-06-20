@@ -2,6 +2,8 @@
 
 Rails Fields Kit does not currently provide a dedicated title-to-slug helper such as `rfk_slug_field`. Host apps should keep slug workflows on the existing native wrapper lane until a future feature issue accepts a narrower public surface.
 
+Use [`slug_helper_boundary_sample_evidence.html`](slug_helper_boundary_sample_evidence.html) as the static review artifact for this boundary. It shows the current native wrapper lane beside host-owned slug workflow states without promoting a slug helper, slugify algorithm, JavaScript contract, or persistence behavior into the public API.
+
 Use current helpers like `rfk_text_field` when the title or slug value is an ordinary text input that benefits from shared labels, hints, errors, affixes, and accessibility wiring:
 
 ```erb
