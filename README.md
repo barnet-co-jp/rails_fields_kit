@@ -196,9 +196,9 @@ import TomSelectController from "rails_fields_kit/tom_select_controller"
 
 Use the package-root import for normal Stimulus registration. Use the direct controller entrypoint when a host app wants to pin or alias only that file.
 
-`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, and the package root also exposes read-only rendered-field contract helpers. Use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list and responsibility boundary.
+`rails_fields_kit/index.js` re-exports the same controller as the direct `rails_fields_kit/tom_select_controller` entrypoint, and the package root also exposes read-only rendered-field contract helpers. Use the JavaScript exports section in [`doc/public_api.md`](doc/public_api.md#javascript-exports) as the source of truth for the current helper list, return shapes, and responsibility boundaries.
 
-Keep this README as a representative route rather than a full helper inventory:
+The table below is a routing aid, not an exhaustive export list. Scan it to choose the nearest helper family, then follow the source-of-truth link when you need the exact current export names or contract details.
 
 | Helper family | Representative task | Representative helper | Source of truth |
 | --- | --- | --- | --- |
@@ -211,7 +211,9 @@ Keep this README as a representative route rather than a full helper inventory:
 | Tom Select copy values | Confirm rendered no-results, loading, and create copy values without taking over locale or visible copy policy | `tomSelectTextOverrideContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Native wrapper wiring | Inspect label, described-by, affix, and wrapper elements for native helpers without changing accessibility markup | `nativeFieldAccessibilityContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 
-For release or sample-app evidence about a package-root helper lane, use [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) instead of expanding this README into a helper inventory. Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
+If the helper family you need is not named in this representative table, do not infer a different import policy from the README. Check [`doc/public_api.md#javascript-exports`](doc/public_api.md#javascript-exports) for the complete current package-root surface and use [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) only when the review is about release or sample-app evidence for a helper lane.
+
+Rails Fields Kit still leaves the Tom Select pin source, bundler aliases, and any additional importmap conventions to the host app.
 
 If either documented import path cannot be resolved, use [`doc/setup.md#troubleshoot-unresolved-imports`](doc/setup.md#troubleshoot-unresolved-imports) to check whether the package-root import or direct controller import is failing before changing bundler aliases, importmap pins, or Stimulus boot files.
 
