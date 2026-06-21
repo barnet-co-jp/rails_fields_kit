@@ -62,6 +62,10 @@ const checks = [
     args: ["scripts/check_tom_select_label_fallback.mjs"]
   },
   {
+    name: "Tom Select item renderer smoke",
+    args: ["scripts/check_tom_select_item_renderer.mjs"]
+  },
+  {
     name: "Tom Select option value guard smoke",
     args: ["scripts/check_tom_select_option_value_guard.mjs"]
   },
@@ -80,6 +84,10 @@ const checks = [
   {
     name: "Tom Select field kind contract smoke",
     args: ["scripts/check_tom_select_field_kind_contract.mjs"]
+  },
+  {
+    name: "Tom Select dropdown parent smoke",
+    args: ["scripts/check_tom_select_dropdown_parent.mjs"]
   },
   {
     name: "native affix contract smoke",

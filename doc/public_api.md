@@ -264,11 +264,13 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `tomSelectTextOverrideContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered text override data attributes and returns `noResultsText`, `loadingText`, and `createText`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not execute requests, resolve locales, mutate Tom Select, or own visible feedback. |
 | `tomSelectPluginContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select plugin data and returns `plugins`, `hasClearButton`, and `hasRemoveButton`, or `null` when the element does not look like a matching Rails Fields Kit field. It does not install plugin assets, expose Tom Select plugin objects, mutate selections, style clear/remove controls, or own empty-state behavior. |
 | `tomSelectSelectionContract(element)` | rendered-field contract reader | Reads an initialized Rails Fields Kit Tom Select-backed field and returns `{ values }` using the same current-value shape as forwarded interaction events, or `null` when the element is not a matching initialized field. It does not mutate Tom Select, expose the controller instance, execute requests, change hidden fields, or own validation feedback. |
-| `tomSelectRequestContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select request data attributes and returns the controller identifier, remote search / selected preload / create endpoint flags, URL values, request parameter names, `minLength`, and `errorSurfaceId`, or `null` when the element is not a Rails Fields Kit Tom Select-backed field. It does not execute requests, parse query strings, mutate Tom Select, authorize endpoints, retry requests, or own visible feedback. |
+| `tomSelectRequestContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select request data attributes and returns the controller identifier, remote search / selected preload / create endpoint flags, URL values, request parameter names, remote search `queryParams`, create `createParams`, `minLength`, and `errorSurfaceId`, or `null` when the element is not a Rails Fields Kit Tom Select-backed field. It does not execute requests, parse query strings, mutate Tom Select, authorize endpoints, retry requests, or own visible feedback. |
 | `tomSelectFieldKindContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select helper-lane kind data and returns the controller identifier and `kind`, or `null` when the element is not a matching Rails Fields Kit field or no kind is rendered. It does not redefine helper taxonomy, mutate Tom Select, execute requests, or own visible behavior. |
 | `readRenderedErrorSurface(element)` | rendered-field contract reader | Resolves the opt-in request-failure placeholder element referenced by a rendered Tom Select-backed field's `errorSurfaceId`, or `null` when no placeholder is rendered or found. It does not create placeholders, reveal feedback, dispatch events, retry requests, or own visible copy. |
 | `readRenderedTomSelectInteractionConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select interaction configuration attributes and returns `maxOptions`, `maxItems`, `loadThrottle`, `delimiter`, `preload`, `openOnFocus`, `closeAfterSelect`, `hideSelected`, and `persist`, or `null` when the element is not a matching Rails Fields Kit field. It does not initialize Tom Select, mutate configuration, execute requests, or own interaction policy. |
 | `readRenderedSelectedPreloadConfig(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered selected preload data attributes and returns `selectedUrl`, `selectedParam`, `selectedMultipleParam`, and `selectedQueryParams`, or `null` when no selected preload URL is rendered. It does not execute selected preload requests, authorize endpoints, mutate Tom Select, or own visible fallback or retry UI. |
+| `readRenderedOptionPayloadMapping(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select option payload mapping data and returns `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField`, or `null` when the element is not a rendered Tom Select-backed field. It does not execute requests, parse endpoint responses, mutate Tom Select, validate payloads, or own option rendering HTML. |
+| `readRenderedTableFilterMetadata(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered table filter metadata attributes and returns `adapter`, `paramName`, and `fields`, or `null` when the element is not rendered from a table filter metadata lane. It does not execute Ransack, parse token queries, mutate Tom Select, or own table search behavior. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring, affix elements, and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, `prefixElement`, `suffixElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, format affix values, move focus, or own visible feedback. |
 
 ### Import patterns
@@ -280,7 +282,9 @@ import {
   TomSelectController,
   nativeFieldAccessibilityContract,
   readRenderedErrorSurface,
+  readRenderedOptionPayloadMapping,
   readRenderedSelectedPreloadConfig,
+  readRenderedTableFilterMetadata,
   readRenderedTomSelectInteractionConfig,
   tomSelectFieldKindContract,
   tomSelectPluginContract,
@@ -294,9 +298,11 @@ const copyContract = tomSelectTextOverrideContract(fieldElement)
 const errorSurface = readRenderedErrorSurface(fieldElement)
 const fieldKindContract = tomSelectFieldKindContract(fieldElement)
 const interactionConfig = readRenderedTomSelectInteractionConfig(fieldElement)
+const optionPayloadMapping = readRenderedOptionPayloadMapping(fieldElement)
 const pluginContract = tomSelectPluginContract(fieldElement)
 const requestContract = tomSelectRequestContract(fieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(fieldElement)
+const tableFilterMetadata = readRenderedTableFilterMetadata(fieldElement)
 const selectionContract = tomSelectSelectionContract(fieldElement)
 ```
 
@@ -329,16 +335,22 @@ For Tom Select plugin state, `tomSelectPluginContract(element)` reports the rend
 - `hasRemoteSearch`, `hasSelectedPreload`, and `hasCreateEndpoint`: booleans derived from the rendered URL values.
 - `url`, `selectedUrl`, and `createUrl`: rendered endpoint values, or `null` when that lane is absent.
 - `queryParam`, `selectedParam`, `selectedMultipleParam`, and `createParam`: rendered request parameter names, using the controller defaults when the attributes are absent.
+- `queryParams`: rendered fixed remote search params as a plain object, or `{}` when absent, invalid, or not an object.
+- `createParams`: rendered fixed create params as a plain object, or `{}` when absent, invalid, or not an object.
 - `minLength`: the rendered numeric minimum query length, defaulting to `0` when absent or not numeric.
 - `errorSurfaceId`: the rendered request-failure placeholder id, or `null` when no error surface is rendered.
 
-The helper does not read fixed params objects, execute `fetch`, inspect endpoint responses, parse query strings, or decide authorization / retry / visible feedback policy.
+The helper does not execute `fetch`, inspect endpoint responses, parse query strings, or decide authorization / retry / visible feedback policy. Selected preload fixed params remain on `readRenderedSelectedPreloadConfig(element).selectedQueryParams`, so remote search, selected preload, and create fixed params keep distinct read-only surfaces.
 
 `tomSelectFieldKindContract(element)` reports only the rendered helper-lane kind value for matching Rails Fields Kit Tom Select-backed fields. It returns the controller identifier and `kind`, or `null` for non-matching elements and fields without a rendered kind value. The helper does not define a new helper taxonomy, reinterpret grouped-select rendering, execute requests, mutate Tom Select, or own visible behavior.
 
 `readRenderedErrorSurface(element)` uses the same rendered `errorSurfaceId` lane to find the opt-in placeholder element in the same document. It is useful before or outside a request-failure event, but it does not mutate feedback visibility or replace request-failure events' `detail.surface` contract.
 
 `readRenderedTomSelectInteractionConfig(element)` reads the rendered Tom Select interaction configuration values that Rails Fields Kit put on the field, including numeric limits, boolean interaction toggles, delimiter, and `persist`. Missing optional values are returned as `null`, while missing `persist` follows the controller fallback and returns `false`. It does not initialize Tom Select, change controller values, infer initializer defaults, mutate selections, execute requests, or own host-app interaction policy.
+
+`readRenderedOptionPayloadMapping(element)` reports only the rendered option payload mapping config. It returns `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField`, applying controller defaults when attributes are absent. It does not execute endpoints, inspect response payloads, render options, mutate Tom Select, or decide endpoint validation / authorization policy.
+
+`readRenderedTableFilterMetadata(element)` reports only the rendered table-filter metadata contract. It is intended for fields rendered through `rfk_table_filters` / `TableRenderer.render_filter`, not direct `rfk_token_search` calls. The helper does not parse token strings, run Ransack, execute searches, or decide adapter support.
 
 For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`. `prefixElement` and `suffixElement` read the rendered affix elements inside the nearest `.rfk-field` wrapper when present and return `null` otherwise; they do not format values, parse currency or percent content, mutate markup, or change focus behavior.
 
