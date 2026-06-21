@@ -140,10 +140,14 @@ function gemJavaScriptPath(entrypoint: string) {
 resolve: {
   alias: [
     { find: /^rails_fields_kit$/, replacement: gemJavaScriptPath("index.js") },
+    { find: /^rails_fields_kit\/native_field_accessibility_contract$/, replacement: gemJavaScriptPath("native_field_accessibility_contract.js") },
     { find: /^rails_fields_kit\/tom_select_controller$/, replacement: gemJavaScriptPath("tom_select_controller.js") },
+    { find: /^rails_fields_kit\/tom_select_text_override_contract$/, replacement: gemJavaScriptPath("tom_select_text_override_contract.js") },
   ],
 }
 ```
+
+Keep the package-root alias for normal controller registration and rendered-field contract helper imports. Add the direct controller or helper subpath aliases only when the host app intentionally imports those files directly; this mirrors the setup doctor and importmap source of truth without making this README a full helper inventory.
 
 Load Tom Select's CSS through your application's stylesheet pipeline or bundler:
 
@@ -201,6 +205,7 @@ Keep this README as a representative route rather than a full helper inventory:
 | Request configuration | Check rendered endpoints, request param names, `minLength`, and error-surface id without executing requests | `tomSelectRequestContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Request-failure surface | Resolve the opt-in placeholder that request-failure events can pass back to host-app feedback UI | `readRenderedErrorSurface(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Selection state | Inspect initialized current values without mutating Tom Select, hidden fields, or events | `tomSelectSelectionContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Helper kind | Read the rendered Rails Fields Kit helper-lane kind without defining a new taxonomy or mutating Tom Select | `tomSelectFieldKindContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Selected preload configuration | Check rendered selected-preload URL, param names, and fixed query params | `readRenderedSelectedPreloadConfig(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Plugin configuration | Read the effective plugin list and derived clear/remove flags without owning plugin assets or styling | `tomSelectPluginContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Tom Select copy values | Confirm rendered no-results, loading, and create copy values without taking over locale or visible copy policy | `tomSelectTextOverrideContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
@@ -217,6 +222,7 @@ import {
   nativeFieldAccessibilityContract,
   readRenderedErrorSurface,
   readRenderedSelectedPreloadConfig,
+  tomSelectFieldKindContract,
   tomSelectPluginContract,
   tomSelectRequestContract,
   tomSelectSelectionContract,
@@ -226,13 +232,14 @@ import {
 const requestContract = tomSelectRequestContract(tomSelectFieldElement)
 const errorSurface = readRenderedErrorSurface(tomSelectFieldElement)
 const selectionContract = tomSelectSelectionContract(tomSelectFieldElement)
+const fieldKind = tomSelectFieldKindContract(tomSelectFieldElement)
 const copyContract = tomSelectTextOverrideContract(tomSelectFieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(tomSelectFieldElement)
 const pluginContract = tomSelectPluginContract(tomSelectFieldElement)
 const nativeAccessibility = nativeFieldAccessibilityContract(nativeFieldElement)
 ```
 
-These helpers return rendered contract or wiring details for host-app inspection only. Endpoint authorization, request execution, visible fallback copy, retry UI, plugin assets and styling, selection mutation, validation policy, and focus management remain host-app responsibilities.
+These helpers return rendered contract or wiring details for host-app inspection only. Endpoint authorization, request execution, helper taxonomy decisions, visible fallback copy, retry UI, plugin assets and styling, selection mutation, validation policy, and focus management remain host-app responsibilities.
 
 ## Usage
 
