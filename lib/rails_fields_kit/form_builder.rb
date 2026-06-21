@@ -66,7 +66,7 @@ module RailsFieldsKit
 
     def rfk_grouped_select(method, grouped_collection:, **options)
       options[:grouped_collection] = grouped_collection
-      rfk_tom_select_field(method, :select, collection: nil, **options)
+      rfk_tom_select_field(method, :grouped_select, collection: nil, **options)
     end
 
     def rfk_enum_select(method, enum: nil, **options)
