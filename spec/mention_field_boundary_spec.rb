@@ -9,6 +9,7 @@ RSpec.describe "mention field boundary docs" do
   let(:boundary_doc) { File.read(File.expand_path("../doc/mention_field_boundary.md", __dir__)) }
   let(:public_api) { File.read(File.expand_path("../doc/public_api.md", __dir__)) }
   let(:roadmap) { File.read(File.expand_path("../ROADMAP.md", __dir__)) }
+  let(:visual_references) { File.read(File.expand_path("../doc/visual_references.md", __dir__)) }
 
   it "ships the mention field boundary doc as maintained package documentation" do
     expect(specification.files).to include("doc/mention_field_boundary.md")
@@ -27,6 +28,12 @@ RSpec.describe "mention field boundary docs" do
       "host-app-owned parsing, authorization, and persistence"
     )
     expect(form_builder_section).not_to include("rfk_mention_field")
+  end
+
+  it "keeps mention proposal names out of the current visual reference family" do
+    expect(visual_references).not_to include("rfk_mention_field")
+    expect(visual_references).not_to include("mention overlay")
+    expect(visual_references).not_to include("mention-specific")
   end
 
   it "keeps the boundary doc explicit about current lanes and host-owned responsibilities" do
