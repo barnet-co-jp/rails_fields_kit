@@ -99,6 +99,30 @@ Suggested evidence note:
 readRenderedSelectedPreloadConfig: PASS on <field selector>. selectedUrl / selectedParam / selectedMultipleParam / selectedQueryParams matched rendered config; comparable no-selected-url field returned null. Request execution and fallback UI were checked separately or left out of scope.
 ```
 
+## Option payload mapping reader
+
+Use this lane when `readRenderedOptionPayloadMapping(element)` is in release scope.
+
+Representative import:
+
+```js
+import { readRenderedOptionPayloadMapping } from "rails_fields_kit"
+```
+
+Check a rendered Tom Select-backed field that customizes option payload fields:
+
+- `readRenderedOptionPayloadMapping(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes the documented `valueField`, `labelField`, split `searchFields`, `optionDescriptionField`, and `optionBadgeField` values for the representative field.
+- A default-mapping field reports the documented fallback values.
+- A comparable non-Tom Select or unrelated element returns `null`.
+- The evidence stays read-only; endpoint execution, response validation, option rendering HTML, authorization, mutation, and visible feedback remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+readRenderedOptionPayloadMapping: PASS on <field selector>. valueField / labelField / searchFields / optionDescriptionField / optionBadgeField matched rendered config; default and unrelated-element boundaries matched the public API docs. Endpoint execution, response validation, option rendering HTML, authorization, mutation, and visible feedback remained out of scope.
+```
+
 ## Text override contract reader
 
 Use this lane when `tomSelectTextOverrideContract(element)` is in release scope.

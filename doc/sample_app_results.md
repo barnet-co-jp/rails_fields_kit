@@ -6,6 +6,8 @@ Use the route map below to choose the evidence lane for the release or PR under 
 
 The route map is a triage aid. Start with release-wide confidence for release candidates, then add only the feature-specific lane that changed. A narrow PR can cite the relevant lane in a PR comment instead of filling every section here.
 
+If the route map is too broad for a narrow PR, use `doc/sample_app_results_route_guide.md` as the quick decision table. It explains when to update this evidence log, when a PR comment is enough, and how to use `PASS`, `FAIL`, `SOURCE REVIEW ONLY`, and `DEFERRED` without treating CI success or source review as browser approval.
+
 | Review goal | Start with | Use when | Keep separate from |
 | --- | --- | --- | --- |
 | Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. | Feature-specific helper, visual, remote, token, or table lanes unless the release candidate explicitly includes them. |
@@ -173,7 +175,7 @@ Notes:
 
 ## Visual reference render checks
 
-Use this section when the release or PR changes one of the static visual reference HTML files.
+Use this section when the release or PR changes one of the static visual reference HTML files. For narrow static visual reference PRs, use `doc/sample_app_results_route_guide.md` to decide whether this matrix needs an entry or whether a scoped PR comment is enough.
 
 - Changed visual reference file(s):
 - Rendered artifact or screenshot link(s):
