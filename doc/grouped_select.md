@@ -14,13 +14,14 @@
 ) %>
 ```
 
-The helper forwards the grouped collection to the existing select rendering path, so the generated field keeps the same wrapper classes, Tom Select data attributes, prompts, and error handling as `rfk_select`.
+The helper forwards the grouped collection to the existing select rendering path, so the generated field keeps the same wrapper classes, Tom Select data attributes, prompts, and error handling as `rfk_select`. The rendered field kind is `grouped_select` for read-only contract checks through `tomSelectFieldKindContract(element)`, while ordinary select submission, selected values, disabled values, and `<optgroup>` rendering stay in the same collection-backed select lane.
 
 ## Use This Lane For
 
 - grouped options rendered from existing Rails option arrays
 - prompts, selected values, disabled values, and field-level HTML options already supported by Rails select helpers
 - Rails Fields Kit select wrappers and Tom Select initialization
+- QA or integration checks that need to distinguish grouped selects from ordinary `rfk_select` fields through the rendered kind contract
 
 ## Option Metadata Boundary
 
@@ -40,6 +41,6 @@ Per-option `option_html:` attributes and group-level optgroup metadata are inten
 
 ## Review Checklist
 
-- Keep this helper on the existing select lane; do not add a parallel public helper surface.
+- Confirm `rfk_grouped_select` renders `data-rails-fields-kit--tom-select-kind-value="grouped_select"` while `rfk_select` continues to render `select`.
 - Confirm prompts, selected values, disabled values, and Tom Select data attributes continue to match `rfk_select` expectations.
 - Treat custom per-option HTML and optgroup attributes as out of scope unless a separate public API decision is made.
