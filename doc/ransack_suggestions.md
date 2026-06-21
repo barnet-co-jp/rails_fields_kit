@@ -214,6 +214,17 @@ The same `ransack_fields` map can also be passed to `RailsFieldsKit::TableFilter
 
 That means the adapter metadata is descriptive. Rails Fields Kit does not add a direct `rfk_table_filters(..., adapter: :ransack)` helper option today, does not parse the submitted query string, and does not call Ransack. If a table integration needs to build `params[:q]`, it should read the metadata or use its own host-app parser and keep authorization, scoping, pagination, and relation execution outside Rails Fields Kit.
 
+When the metadata is rendered through `rfk_table_filters(columns)`, `RailsFieldsKit::TableMetadata.render_filters`, or `RailsFieldsKit::TableRenderer.render_filter`, host-app JavaScript can read the rendered field with the package-root helper:
+
+```js
+import { readRenderedTableFilterMetadata } from "rails_fields_kit"
+
+const metadata = readRenderedTableFilterMetadata(queryField)
+// => { adapter: "ransack", paramName: "q", fields: { name: "name_cont" } }
+```
+
+Use that rendered metadata as a parser input or QA check, not as an execution engine. The host app still owns token parsing, current-user filtering, `params[:q]` construction, and the final Ransack call.
+
 For the table filter metadata view, see [`table_adapters.md`](table_adapters.md#token-search-filter-metadata). For the general token suggestion view of the same metadata source, see [`token_suggestions.md`](token_suggestions.md#shared-metadata-source-pattern).
 
 ## Responsibility boundary
@@ -256,6 +267,23 @@ class OrderTokenQuery
     end
   end
 end
+```
+
+When the token search was rendered from `TableFilterInput.ransack_filter`, the host app can build the same whitelist from rendered metadata instead of duplicating the map in JavaScript:
+
+```js
+import { readRenderedTableFilterMetadata } from "rails_fields_kit"
+
+const metadata = readRenderedTableFilterMetadata(document.querySelector("[name='query']"))
+
+if (metadata?.adapter === "ransack") {
+  const allowedFields = metadata.fields
+  const paramName = metadata.paramName || "q"
+
+  // Send the submitted token string plus the allowlist to a host-app parser.
+  // Rails Fields Kit does not parse the token string or call Ransack here.
+  submitSearch({ paramName, allowedFields })
+}
 ```
 
 Use that parser in the host app's controller or search object:

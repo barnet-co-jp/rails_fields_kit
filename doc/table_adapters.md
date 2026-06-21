@@ -109,6 +109,17 @@ filter = RailsFieldsKit::TableFilterInput.ransack_filter(
 
 This is the current public entrypoint for Ransack-oriented table filter metadata. It declares the intended adapter and allowed fields, but it does not parse token text, build `params[:q]`, or execute Ransack. The host application or table integration remains responsible for those steps.
 
+When this metadata is rendered through `rfk_table_filters(columns)`, `RailsFieldsKit::TableMetadata.render_filters`, or `RailsFieldsKit::TableRenderer.render_filter`, Rails Fields Kit keeps the Ransack adapter metadata on the rendered token-search field. Host-app scripts can read that rendered contract without reaching into the Stimulus controller:
+
+```js
+import { readRenderedTableFilterMetadata } from "rails_fields_kit"
+
+const metadata = readRenderedTableFilterMetadata(queryField)
+// => { adapter: "ransack", paramName: "q", fields: { name: "name_cont" } }
+```
+
+Use the rendered metadata as a bridge back to the same host-app parser allowlist, not as a Rails Fields Kit query engine. The helper returns `null` when the element is not a rendered table-filter metadata lane, and it does not parse token text, build `params[:q]`, authorize fields, or call Ransack.
+
 For a copyable host-app example that turns submitted token text into `params[:q]`, see [`ransack_suggestions.md`](ransack_suggestions.md#copyable-host-app-parser-example).
 
 The helper-level DSL shown in `ROADMAP.md`, such as `rfk_table_filters @table_preferences, adapter: :ransack`, is still a future proposal. Current integrations should keep preparing metadata first and then render it through `rfk_table_filters(columns)`.

@@ -85,6 +85,7 @@ The detailed entries remain the exhaustive source of truth for release review. K
 
 #### Remote request lifecycle and events
 
+- Tom Select selected items now render with compact token markup instead of reusing rich dropdown option blocks, so selected values keep their label-focused chip layout while dropdown options retain descriptions and badges.
 - Tom Select failure events now share a consistent detail shape with `operation`, request context, `response`, `payload`, and `status` across remote search, selected preload, and create failures, and include `surface` when `error_surface: true` is enabled.
 - Remote search, selected preload, and create-on-the-fly now document that aborted requests, disconnect-time aborts, and stale responses do not dispatch success or failure events; failure events remain limited to current request errors.
 - Remote option rendering now falls back to the configured value field for the visible label when the configured label field is missing or blank; this is display-only and does not change submitted values, endpoint payloads, authorization, or request lifecycle behavior.
