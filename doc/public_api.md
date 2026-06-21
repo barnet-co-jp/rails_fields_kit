@@ -254,6 +254,8 @@ The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_typ
 
 Package-root imports use the documented `rails_fields_kit` entrypoint. The current exports are split between the Stimulus controller and read-only rendered-field contract readers.
 
+`package.json` also publishes TypeScript declaration metadata for the package root and direct controller entrypoint through its `types` fields. Treat those `.d.ts` files as package metadata and editor assistance for the documented runtime exports below; they do not add a separate runtime API, expose Tom Select internals, or define a host-app `tsconfig` policy. Use [`typescript_declaration_release_evidence.md`](typescript_declaration_release_evidence.md) when declaration visibility is in release or PR evidence scope.
+
 ### Current package-root exports
 
 | Export | Kind | Responsibility boundary |
@@ -303,6 +305,15 @@ Direct controller import is also supported when the host app wants only the cont
 ```js
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
+
+Direct helper subpath imports are supported only for helper files that `package.json` exports for host apps that intentionally pin or alias those files directly:
+
+```js
+import nativeFieldAccessibilityContract from "rails_fields_kit/native_field_accessibility_contract"
+import tomSelectTextOverrideContract from "rails_fields_kit/tom_select_text_override_contract"
+```
+
+Prefer package-root imports for normal rendered-field contract helper use. Direct helper subpaths are setup and troubleshooting routes for explicit host-app pins or bundler aliases; they do not add helper names, return shapes, or responsibility boundaries beyond the package-root table above. Keep the package-root table in this document as the helper inventory source of truth, and keep README, setup, and generated setup notes as routing guidance rather than mirrors of every helper export.
 
 ### Contract reader boundary
 
