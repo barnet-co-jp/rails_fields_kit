@@ -17,6 +17,7 @@ module RailsFieldsKit
       :default_plugins,
       :default_min_length,
       :default_max_options,
+      :default_load_throttle,
       :default_preload,
       :default_open_on_focus,
       :default_close_after_select,
@@ -48,6 +49,7 @@ module RailsFieldsKit
       @default_plugins = []
       @default_min_length = 0
       @default_max_options = nil
+      @default_load_throttle = nil
       @default_preload = nil
       @default_open_on_focus = nil
       @default_close_after_select = nil
