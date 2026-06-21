@@ -520,6 +520,7 @@
         <span class="review-pill">Rendered contract reader scan</span>
         <span class="review-pill">Native browser semantics scan</span>
         <span class="review-pill">Constraint attribute boundary scan</span>
+        <span class="review-pill">Native file input boundary scan</span>
         <span class="review-pill">Multiline textarea scan</span>
         <span class="review-pill">Desktop and narrow viewport scan</span>
         <span class="review-pill">Static artifact only</span>
@@ -767,6 +768,47 @@
         </article>
 
         <article class="card">
+          <div class="tag metadata">File input boundary</div>
+          <h2>File upload wrapper stays native</h2>
+          <p>
+            `rfk_file_field` belongs to the native wrapper family: Rails Fields Kit owns label, hint,
+            error, required marker, and accessibility wiring while the browser and host app own upload behavior.
+          </p>
+          <div class="example metadata-surface">
+            <div class="field-block error-state">
+              <div class="label-row">
+                <span>Compliance attachment</span>
+                <span class="required">Required</span>
+              </div>
+              <div class="control-row">
+                <div class="input">Choose File: supplier-audit.pdf</div>
+                <span class="affix trailing">native file input</span>
+              </div>
+              <div class="hint">Accepted formats: PDF or CSV. Multiple files are allowed when the host app passes `multiple:`.</div>
+              <div class="error">Attach the signed compliance file before submitting.</div>
+            </div>
+            <div class="metadata-list">
+              <div class="metadata-row">
+                <span class="metadata-key">`accept:`</span>
+                <span class="metadata-value">Pass-through browser hint for selectable file types; it is not a Rails Fields Kit validation policy.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">`multiple:`</span>
+                <span class="metadata-value">Host-app choice for one or many files; preview layout and removal UI stay outside this native lane.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">`direct_upload:`</span>
+                <span class="metadata-value">Rails / Active Storage wiring remains host-app owned; this artifact does not add progress, retry, or storage behavior.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">Review boundary</span>
+                <span class="metadata-value">Static wrapper readability only: no multipart setup, scanning policy, preview UI, or upload lifecycle changes.</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
           <div class="tag focus">Keyboard focus</div>
           <h2>Focus-visible ring stays clear around affixes</h2>
           <p>
@@ -988,6 +1030,7 @@
           <span>Native browser semantics distinguish `rfk_search_field`, `rfk_email_field`, and `rfk_url_field` from Tom Select-backed helpers.</span>
           <span>Multiline `rfk_text_area` keeps long content, long hints, and validation copy readable in one native wrapper lane.</span>
           <span>Input metadata and constraint attributes stay visible without adding masks, formatting, or validation policy.</span>
+          <span>`rfk_file_field` stays a native wrapper lane: upload workflow, previews, progress, storage, and scanning remain host-app responsibilities.</span>
           <span>Narrow viewport stress keeps long label, hint, error, required marker, and money affixes readable.</span>
           <span>Keyboard focus remains visible around affix-heavy fields and text areas.</span>
           <span>Field-level wrapper customization layers extra attributes onto the same generated pieces.</span>
