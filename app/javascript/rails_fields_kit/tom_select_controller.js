@@ -117,7 +117,7 @@ export default class extends Controller {
   renderers() {
     return {
       option: (data, escape) => this.optionTemplate(data, escape, "option"),
-      item: (data, escape) => this.optionTemplate(data, escape, "item"),
+      item: (data, escape) => this.itemTemplate(data, escape),
       no_results: () => `<div class="no-results" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.renderText(this.noResultsTextValue, "No results found"))}</div>`,
       loading: () => `<div class="loading" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.renderText(this.loadingTextValue, "Loading..."))}</div>`,
       option_create: (data, escape) => `<div class="create">${escape(this.renderText(this.createTextValue, "Add"))} <strong>${escape(data.input)}</strong></div>`
@@ -138,6 +138,16 @@ export default class extends Controller {
     parts.push("</div>")
 
     return parts.join("")
+  }
+
+  itemTemplate(data, escape) {
+    const label = escape(this.optionLabel(data))
+
+    return [
+      `<span class="rfk-item-token">`,
+      `<span class="rfk-item-label">${label}</span>`,
+      `</span>`
+    ].join("")
   }
 
   optionLabel(data) {
