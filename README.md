@@ -140,10 +140,14 @@ function gemJavaScriptPath(entrypoint: string) {
 resolve: {
   alias: [
     { find: /^rails_fields_kit$/, replacement: gemJavaScriptPath("index.js") },
+    { find: /^rails_fields_kit\/native_field_accessibility_contract$/, replacement: gemJavaScriptPath("native_field_accessibility_contract.js") },
     { find: /^rails_fields_kit\/tom_select_controller$/, replacement: gemJavaScriptPath("tom_select_controller.js") },
+    { find: /^rails_fields_kit\/tom_select_text_override_contract$/, replacement: gemJavaScriptPath("tom_select_text_override_contract.js") },
   ],
 }
 ```
+
+Keep the package-root alias for normal controller registration and rendered-field contract helper imports. Add the direct controller or helper subpath aliases only when the host app intentionally imports those files directly; this mirrors the setup doctor and importmap source of truth without making this README a full helper inventory.
 
 Load Tom Select's CSS through your application's stylesheet pipeline or bundler:
 
