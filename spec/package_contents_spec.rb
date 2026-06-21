@@ -71,7 +71,7 @@ RSpec.describe "package contents" do
       "read-only rendered-field contract helpers",
       "[`doc/public_api.md`](doc/public_api.md#javascript-exports)",
       "source of truth",
-      "current helper list and responsibility boundary"
+      "current helper list, return shapes, and responsibility boundaries"
     )
 
     expect(setup_doc).to include(
