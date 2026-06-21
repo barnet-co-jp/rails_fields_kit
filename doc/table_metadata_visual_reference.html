@@ -40,17 +40,17 @@
       main {
         width: min(1160px, calc(100% - 32px));
         margin: 0 auto;
-        padding: 38px 0 56px;
+        padding: 48px 0 64px;
       }
 
       .hero {
         display: grid;
-        gap: 10px;
-        margin-bottom: 18px;
+        gap: 14px;
+        margin-bottom: 28px;
       }
 
       .eyebrow {
-        font-size: 0.75rem;
+        font-size: 0.78rem;
         font-weight: 700;
         letter-spacing: 0;
         text-transform: uppercase;
@@ -58,17 +58,16 @@
       }
 
       h1 {
-        max-width: 780px;
         margin: 0;
-        font-size: 2.05rem;
+        font-size: clamp(2rem, 4vw, 3rem);
         font-weight: 650;
-        line-height: 1.1;
+        line-height: 1.08;
       }
 
       .lede {
-        max-width: 760px;
+        max-width: 780px;
         margin: 0;
-        font-size: 0.96rem;
+        font-size: 1rem;
         color: var(--muted);
       }
 
@@ -82,8 +81,8 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 36px;
-        padding: 0 12px;
+        min-height: 38px;
+        padding: 0 14px;
         border: 1px solid var(--line-strong);
         color: var(--ink);
         text-decoration: none;
@@ -97,12 +96,12 @@
       .review-note {
         display: grid;
         gap: 6px;
-        margin-bottom: 14px;
-        padding: 12px 14px;
+        margin-bottom: 18px;
+        padding: 14px 16px;
         border: 1px solid #b9d5cc;
         background: var(--accent-soft);
         color: var(--muted);
-        font-size: 0.9rem;
+        font-size: 0.92rem;
       }
 
       .review-note strong {
@@ -111,14 +110,14 @@
 
       .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
       }
 
       .card {
         display: grid;
-        gap: 10px;
-        padding: 15px;
+        gap: 12px;
+        padding: 18px;
         border: 1px solid var(--line);
         background: var(--surface);
         box-shadow: var(--shadow);
@@ -126,13 +125,13 @@
 
       .card-header {
         display: grid;
-        gap: 7px;
+        gap: 8px;
       }
 
       .tag {
         justify-self: start;
-        padding: 3px 7px;
-        font-size: 0.72rem;
+        padding: 4px 8px;
+        font-size: 0.74rem;
         font-weight: 700;
         letter-spacing: 0;
         text-transform: uppercase;
@@ -166,7 +165,7 @@
 
       h2 {
         margin: 0;
-        font-size: 1.02rem;
+        font-size: 1.08rem;
         line-height: 1.25;
       }
 
@@ -174,13 +173,13 @@
       .card-footer {
         margin: 0;
         color: var(--muted);
-        font-size: 0.9rem;
+        font-size: 0.93rem;
       }
 
       .panel {
         display: grid;
-        gap: 10px;
-        padding: 12px;
+        gap: 12px;
+        padding: 14px;
         border: 1px solid var(--line-strong);
         background: var(--surface-strong);
       }
@@ -189,7 +188,7 @@
       .editor-stack,
       .callout {
         display: grid;
-        gap: 9px;
+        gap: 10px;
       }
 
       .field-row,
@@ -205,7 +204,7 @@
         justify-content: space-between;
         gap: 6px 8px;
         min-width: 0;
-        font-size: 0.8rem;
+        font-size: 0.82rem;
         font-weight: 700;
         letter-spacing: 0;
         text-transform: uppercase;
@@ -223,7 +222,7 @@
         border: 1px solid var(--line);
         background: #eef2f6;
         color: #526170;
-        font-size: 0.7rem;
+        font-size: 0.72rem;
         font-weight: 700;
         letter-spacing: 0;
         line-height: 1.35;
@@ -236,8 +235,8 @@
         flex-wrap: wrap;
         align-items: center;
         gap: 8px 10px;
-        min-height: 42px;
-        padding: 9px 10px;
+        min-height: 46px;
+        padding: 10px 12px;
         border: 1px solid var(--line);
         background: #ffffff;
       }
@@ -253,7 +252,7 @@
       .control.textarea {
         display: grid;
         align-items: start;
-        min-height: 82px;
+        min-height: 88px;
       }
 
       .placeholder,
@@ -294,11 +293,11 @@
         display: inline-flex;
         align-items: center;
         max-width: 100%;
-        padding: 4px 8px;
+        padding: 5px 9px;
         border: 1px solid #b9cce5;
         background: var(--filter-soft);
         color: var(--filter);
-        font-size: 0.8rem;
+        font-size: 0.82rem;
         font-weight: 700;
         line-height: 1.35;
         overflow-wrap: anywhere;
@@ -311,16 +310,16 @@
       }
 
       .stack-note {
-        padding: 10px;
+        padding: 11px;
         border: 1px solid var(--line);
         background: #eef2f6;
         color: var(--muted);
-        font-size: 0.88rem;
+        font-size: 0.9rem;
         overflow-wrap: anywhere;
       }
 
       .callout {
-        padding: 12px;
+        padding: 13px;
         border: 1px solid #b9d5cc;
         background: #f3faf7;
       }
@@ -330,8 +329,8 @@
       }
 
       .legend {
-        margin-top: 20px;
-        padding: 14px 16px;
+        margin-top: 24px;
+        padding: 16px 18px;
         border: 1px solid var(--line);
         background: var(--surface);
         color: var(--muted);
@@ -344,43 +343,39 @@
       @media (max-width: 640px) {
         main {
           width: min(100% - 20px, 1160px);
-          padding-top: 28px;
-          padding-bottom: 44px;
-        }
-
-        h1 {
-          font-size: 1.68rem;
+          padding-top: 36px;
+          padding-bottom: 52px;
         }
 
         .grid {
           grid-template-columns: minmax(0, 1fr);
-          gap: 12px;
+          gap: 14px;
         }
 
         .card {
           gap: 10px;
-          padding: 13px;
+          padding: 14px;
         }
 
         .panel {
-          padding: 11px;
+          padding: 12px;
         }
 
         .label-line {
           display: grid;
           justify-content: stretch;
           gap: 5px;
-          font-size: 0.76rem;
+          font-size: 0.78rem;
         }
 
         .metadata-chip {
           justify-self: start;
-          font-size: 0.68rem;
+          font-size: 0.7rem;
         }
 
         .control {
-          min-height: 40px;
-          padding: 8px 9px;
+          min-height: 42px;
+          padding: 9px 10px;
         }
 
         .toolbar {
@@ -395,7 +390,7 @@
         .stack-note,
         .review-note,
         .legend {
-          font-size: 0.86rem;
+          font-size: 0.88rem;
         }
       }
     </style>
@@ -556,6 +551,42 @@
             </div>
           </div>
           <p class="card-footer">This helps keep table integrations metadata-first even when the rendered control is a native input instead of a Tom Select-backed helper.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag native">Range Metadata</span>
+            <h2>Range helper constraints as ordinary native options</h2>
+            <p>Represents `range_field` metadata after the table integration chooses a native range helper for a filter or cell editor.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="strip">
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Priority threshold</span>
+                  <span class="metadata-chip">TableFilterInput.range_field</span>
+                </div>
+                <div class="control native">
+                  <span class="helper">0 to 100, step 5</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Completion editor</span>
+                  <span class="metadata-chip">TableCellInput.range_field</span>
+                </div>
+                <div class="control native">
+                  <span class="selected">65%</span>
+                </div>
+              </div>
+            </div>
+            <div class="toolbar">
+              <span class="pill">min / max / step pass through</span>
+              <span class="pill">Native helper mapping only</span>
+            </div>
+            <div class="stack-note">Use this lane to review range metadata readability only. Range pairs, query execution, custom sliders, multi-thumb controls, and table preference persistence stay with the host app or table integration.</div>
+          </div>
+          <p class="card-footer">This keeps `TableFilterInput.range_field` and `TableCellInput.range_field` visible as supported native helper metadata without implying a Rails Fields Kit-owned range query UI.</p>
         </article>
 
         <article class="card">

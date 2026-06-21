@@ -36,9 +36,11 @@ assert.deepEqual(
     "data-rails-fields-kit--tom-select-selected-url-value": "/people/selected",
     "data-rails-fields-kit--tom-select-create-url-value": "/people",
     "data-rails-fields-kit--tom-select-query-param-value": "term",
+    "data-rails-fields-kit--tom-select-query-params-value": JSON.stringify({ active: "1", scope: "internal" }),
     "data-rails-fields-kit--tom-select-selected-param-value": "person_id",
     "data-rails-fields-kit--tom-select-selected-multiple-param-value": "person_ids",
     "data-rails-fields-kit--tom-select-create-param-value": "name",
+    "data-rails-fields-kit--tom-select-create-params-value": JSON.stringify({ source: "rfk", audit: "manual" }),
     "data-rails-fields-kit--tom-select-min-length-value": "2",
     "data-rails-fields-kit--tom-select-error-surface-id-value": "person-error"
   })),
@@ -51,13 +53,15 @@ assert.deepEqual(
     selectedUrl: "/people/selected",
     createUrl: "/people",
     queryParam: "term",
+    queryParams: { active: "1", scope: "internal" },
     selectedParam: "person_id",
     selectedMultipleParam: "person_ids",
     createParam: "name",
+    createParams: { source: "rfk", audit: "manual" },
     minLength: 2,
     errorSurfaceId: "person-error"
   },
-  "request contract reader should expose rendered request lanes without executing requests"
+  "request contract reader should expose rendered request lanes and fixed params without executing requests"
 )
 assert.deepEqual(
   packageRoot.tomSelectRequestContract(new FakeElement("select", { "data-controller": "rails-fields-kit--tom-select" })),
@@ -70,13 +74,40 @@ assert.deepEqual(
     selectedUrl: null,
     createUrl: null,
     queryParam: "q",
+    queryParams: {},
     selectedParam: "id",
     selectedMultipleParam: "ids",
     createParam: "text",
+    createParams: {},
     minLength: 0,
     errorSurfaceId: null
   },
   "request contract reader should expose safe defaults for local Tom Select-backed fields"
+)
+assert.deepEqual(
+  packageRoot.tomSelectRequestContract(new FakeElement("select", {
+    "data-controller": "rails-fields-kit--tom-select",
+    "data-rails-fields-kit--tom-select-query-params-value": "not-json",
+    "data-rails-fields-kit--tom-select-create-params-value": JSON.stringify(["not", "object"])
+  })),
+  {
+    controller: "rails-fields-kit--tom-select",
+    hasRemoteSearch: false,
+    hasSelectedPreload: false,
+    hasCreateEndpoint: false,
+    url: null,
+    selectedUrl: null,
+    createUrl: null,
+    queryParam: "q",
+    queryParams: {},
+    selectedParam: "id",
+    selectedMultipleParam: "ids",
+    createParam: "text",
+    createParams: {},
+    minLength: 0,
+    errorSurfaceId: null
+  },
+  "request contract reader should treat invalid or non-object fixed params as empty objects"
 )
 
 const label = new FakeElement("label", { for: "order_customer_name" })
