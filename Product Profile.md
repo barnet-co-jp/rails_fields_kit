@@ -94,6 +94,7 @@ Host applications remain responsible for:
 - `doc/token_suggestions.md` and `doc/ransack_suggestions.md`: token-search suggestion surfaces and host-app responsibility boundary
 - `doc/table_adapters.md`: table metadata bridge
 - `doc/table_direct_helper_boundary.md`: direct table FormBuilder helper `columns`-only boundary and lower-level render/call-spec lane guidance
+- `doc/table_range_field_metadata.md`: focused table metadata guide for `TableFilterInput.range_field` / `TableCellInput.range_field`; range-pair queries, custom sliders, table persistence, Ransack execution, and production styling stay out of scope
 - `doc/table_group_html.md`: direct table FormBuilder helper group-level wrapper attributes
 - `doc/public_api.md`: intended stable API for 0.1.x
 - `doc/package_root_helper_release_evidence.md`: focused release and sample-app evidence guide for package-root rendered-field contract helpers; `doc/public_api.md` remains the source of truth for helper names and return shapes
