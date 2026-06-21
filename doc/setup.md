@@ -108,10 +108,14 @@ function gemJavaScriptPath(entrypoint: string) {
 resolve: {
   alias: [
     { find: /^rails_fields_kit$/, replacement: gemJavaScriptPath("index.js") },
+    { find: /^rails_fields_kit\/native_field_accessibility_contract$/, replacement: gemJavaScriptPath("native_field_accessibility_contract.js") },
     { find: /^rails_fields_kit\/tom_select_controller$/, replacement: gemJavaScriptPath("tom_select_controller.js") },
+    { find: /^rails_fields_kit\/tom_select_text_override_contract$/, replacement: gemJavaScriptPath("tom_select_text_override_contract.js") },
   ],
 }
 ```
+
+Keep the package-root alias for normal controller registration and rendered-field contract helper imports. Add the direct controller or helper subpath aliases only when the host app intentionally imports those files directly; this mirrors the setup doctor and importmap source of truth without making this setup guide a full helper inventory.
 
 For importmap, keep Tom Select on the host app's normal pinning flow and pin the Rails Fields Kit entrypoints explicitly. When `config/importmap.rb` already exists, the install generator can append the Rails Fields Kit pins without taking over Tom Select or other importmap policy:
 
