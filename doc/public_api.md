@@ -80,10 +80,6 @@ Native input helpers:
 - `rfk_text_area`
 - `rfk_number_field`
 - `rfk_range_field`
-- `rfk_date_field`
-- `rfk_time_field`
-- `rfk_datetime_local_field`
-- `rfk_color_field`
 - `rfk_money_field`
 - `rfk_percent_field`
 - `rfk_email_field`
@@ -99,7 +95,7 @@ See [`field_helpers.md`](field_helpers.md) for details.
 See [`grouped_select.md`](grouped_select.md) for the current collection-backed `<optgroup>` boundary and the separation from remote workflows or future optgroup metadata work.
 See [`textarea_autosize.md`](textarea_autosize.md) for the current `rfk_text_area` autosize boundary and host-app-owned enhancement guidance.
 See [`range_field.md`](range_field.md) for the current `rfk_range_field` thin wrapper boundary and range-specific non-goals.
-See [`native_date_time_color_fields.md`](native_date_time_color_fields.md) for the current `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, and `rfk_color_field` thin wrapper boundary and native picker non-goals.
+See [`native_date_time_color_fields.md`](native_date_time_color_fields.md) for the native date, time, datetime-local, and color wrapper boundary and native picker non-goals.
 See [`password_field.md`](password_field.md) for the current `rfk_password_field` thin wrapper boundary and password-specific non-goals.
 See [`file_field.md`](file_field.md) for the current `rfk_file_field` thin wrapper boundary and file-upload ownership non-goals.
 See [`select_migration.md`](select_migration.md) for a practical server-rendered `collection_select` to `rfk_select` migration pattern.
