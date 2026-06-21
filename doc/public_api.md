@@ -254,6 +254,8 @@ The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_typ
 
 Package-root imports use the documented `rails_fields_kit` entrypoint. The current exports are split between the Stimulus controller and read-only rendered-field contract readers.
 
+`package.json` also publishes TypeScript declaration metadata for the package root and direct controller entrypoint through its `types` fields. Treat those `.d.ts` files as package metadata and editor assistance for the documented runtime exports below; they do not add a separate runtime API, expose Tom Select internals, or define a host-app `tsconfig` policy. Use [`typescript_declaration_release_evidence.md`](typescript_declaration_release_evidence.md) when declaration visibility is in release or PR evidence scope.
+
 ### Current package-root exports
 
 | Export | Kind | Responsibility boundary |
