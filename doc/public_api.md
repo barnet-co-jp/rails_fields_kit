@@ -304,6 +304,15 @@ Direct controller import is also supported when the host app wants only the cont
 import TomSelectController from "rails_fields_kit/tom_select_controller"
 ```
 
+Direct helper subpath imports are supported only for helper files that `package.json` exports for host apps that intentionally pin or alias those files directly:
+
+```js
+import nativeFieldAccessibilityContract from "rails_fields_kit/native_field_accessibility_contract"
+import tomSelectTextOverrideContract from "rails_fields_kit/tom_select_text_override_contract"
+```
+
+Prefer package-root imports for normal rendered-field contract helper use. Direct helper subpaths are setup and troubleshooting routes for explicit host-app pins or bundler aliases; they do not add helper names, return shapes, or responsibility boundaries beyond the package-root table above. Keep the package-root table in this document as the helper inventory source of truth, and keep README, setup, and generated setup notes as routing guidance rather than mirrors of every helper export.
+
 ### Contract reader boundary
 
 Rendered-field contract helpers stay read-only. They inspect data attributes, current Tom Select value state, and element references that Rails Fields Kit already rendered and return plain objects for host-app scripts that need to inspect configuration or selection state without reaching into the Stimulus controller instance, mutating Tom Select, or duplicating wrapper traversal.
