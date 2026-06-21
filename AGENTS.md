@@ -76,6 +76,7 @@ Before release-oriented docs updates, review:
 - `doc/release.md`
 - `doc/final_release_checklist.md`
 - `doc/selected_preload_release_gate.md`
+- `doc/setup_doctor_machine_readable.md` when SetupDoctor JSON output or structured setup evidence is part of the release surface
 - `doc/package_root_helper_release_evidence.md`: focused release and sample-app evidence guide for package-root rendered-field contract helpers
 - `doc/table_metadata_release_evidence.md`: focused release and sample-app evidence guide for table metadata rendering, group-level wrappers, and TableRenderer registry lanes
 - `doc/sample_app_checklist.md`
