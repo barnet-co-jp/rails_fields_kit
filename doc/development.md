@@ -69,7 +69,7 @@ This repository intentionally does not commit a single `.nvmrc` or `.node-versio
 npm run check:js
 ```
 
-This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It starts with the smoke inventory guard, then runs lightweight Node sandbox checks through the same public import paths that CI uses.
+This command checks the public package entrypoint and Tom Select controller source without installing additional npm dependencies. It starts with the smoke inventory guard, checks CI workflow token permissions stay read-only for repository contents, then runs lightweight Node sandbox checks through the same public import paths that CI uses.
 
 Read the `check:js` coverage as guard families. Do not treat this guide as the script membership source of truth:
 
@@ -77,11 +77,13 @@ Read the `check:js` coverage as guard families. Do not treat this guide as the s
 - request lifecycle and event payloads: fixed query params, Tom Select forwarded interaction event payloads, request success / failure details, create request headers and response normalization, error-surface metadata, Tom Select Turbo lifecycle behavior, and Turbo lifecycle cleanup
 - rendered text, option, and fallback semantics: label fallback, option value guards, render text fallback, render text accessibility boundaries, and escaping or live-region cues that should stay package-owned
 - package-root contract readers: selection state, plugin state, selected preload config, and similar read-only rendered-field helpers that inspect existing data without exposing Tom Select internals or adding mutation APIs
-- docs and smoke-inventory drift: runner membership, docs wording, and public JavaScript export documentation that should stay aligned without turning this guide, README, or `doc/public_api.md` into an exhaustive smoke inventory
+- docs and smoke-inventory drift: runner membership, read-only workflow permissions, docs wording, and public JavaScript export documentation that should stay aligned without turning this guide, README, or `doc/public_api.md` into an exhaustive smoke inventory
 
 Within the request lifecycle family, keep the Tom Select forwarded interaction event payloads boundaries visible: `change` forwards the scalar value plus the normalized `values` array, single-value `clear` wraps Tom Select's scalar cleared value as `values: [""]`, and multiple-value `clear` keeps the empty array shape. This family also includes the Tom Select Turbo lifecycle smoke so the Tom Select Turbo lifecycle behavior remains covered alongside request abort, stale-response, and cleanup checks.
 
 Exact smoke script membership belongs to `scripts/check_javascript.mjs`, and `scripts/check_javascript_smoke_inventory.mjs` verifies that CI-owned `scripts/check_*.mjs` files are either run by `npm run check:js` or explicitly documented as standalone with a short, single-line reason. Update those sources first when adding, removing, or intentionally exempting a smoke; keep this section focused on the guard families and responsibility boundaries.
+
+The CI workflow permissions smoke keeps `.github/workflows/ci.yml` on an explicit top-level `permissions: contents: read` policy and checks that `contents: write` or `pull-requests: write` permissions are not introduced by the JavaScript check lane. Treat it as a repository hardening signal, not as a replacement for GitHub branch protection, review policy, or release approval.
 
 The package export smoke derives package-root named-export expectations from the JavaScript exports table in `doc/public_api.md` and stops reading at the next level-2 heading, so later public API tables are not treated as package-root export rows. It also derives callable helper assertions from rows whose `Kind` marks them as contract readers, while keeping the `TomSelectController` class export, package-root default export, and direct controller entrypoint checks separate.
 
@@ -117,7 +119,7 @@ Current CI adds these repository-level confirmations on top of the local workflo
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - Representative Rails compatibility checks for pull requests and `main` pushes: Rails 7.0 on Ruby 3.1 and Rails 8.0 on Ruby 3.3
-- `npm run check:js` on Node 22.x and Node 24.x for JavaScript syntax plus the smoke inventory guard, package/import metadata checks, Tom Select request lifecycle and event payload checks, rendered text and option semantics checks, package-root contract reader checks, and docs or smoke-inventory drift checks
+- `npm run check:js` on Node 22.x and Node 24.x for JavaScript syntax plus the smoke inventory guard, CI workflow read-only permission smoke, package/import metadata checks, Tom Select request lifecycle and event payload checks, rendered text and option semantics checks, package-root contract reader checks, and docs or smoke-inventory drift checks
 - gem build, install, and `require "rails_fields_kit"` smoke checks
 
 ## Open PR freshness checks
