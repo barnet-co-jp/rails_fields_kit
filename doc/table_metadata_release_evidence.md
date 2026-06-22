@@ -2,6 +2,8 @@
 
 Use this guide when a release or focused PR needs sample app evidence for table metadata rendering, group-level wrappers, or the TableRenderer registry. Keep it as a narrow companion to `doc/sample_app_checklist.md` and record the actual result in `doc/sample_app_results.md` or the PR comment for the scoped change.
 
+For TableRenderer registry work, this guide is the release evidence route. It helps reviewers choose one representative registration, introspection, and cleanup check without turning the public API docs into an exhaustive manual test checklist.
+
 ## Source of truth
 
 - Use `doc/public_api.md` for current public TableRenderer method names.
@@ -20,6 +22,18 @@ This guide does not define new runtime behavior. It only helps reviewers choose 
 | Custom-only unregister cleanup | A custom-only mapping is removed with `unregister_field_helper`, then the type is no longer renderable | Removing built-in mappings or changing built-in factory `known_types` |
 | Built-in override fallback | A built-in field type is temporarily registered to a custom helper, then `unregister_field_helper` restores the built-in default helper | Treating the override as a permanent helper remapping or changing public fallback semantics |
 | Native contact/search table metadata | One or two `TableFilterInput` or `TableCellInput` examples using `email_field`, `url_field`, `phone_field`, or browser-native `search_field`, with rendered wrapper and metadata notes | Email deliverability, URL normalization, phone formatting, server-side validation, remote suggestions, token parsing, query execution |
+
+## TableRenderer registry evidence route
+
+Use this route when a release, PR, or review question mentions `RailsFieldsKit::TableRenderer.register_field_helper`, `registered_field_types`, `unregister_field_helper`, or `reset_field_helpers!`.
+
+1. Start from the public method list in `doc/public_api.md` and behavior examples in `doc/table_adapters.md`.
+2. Exercise one representative custom field type through the documented call-spec path.
+3. Record whether `registered_field_types` exposes the custom type after registration without exposing helper method names as the evidence contract.
+4. Record the cleanup path that matches the scoped change: `reset_field_helpers!` for release-wide cleanup, `unregister_field_helper` for a custom-only mapping, or unregistering a built-in override to confirm default fallback restoration.
+5. Put the final `PASS`, `FAIL`, `SKIPPED`, or `OUT OF SCOPE` note in `doc/sample_app_results.md` for release candidates, or in the PR comment for a narrow docs/spec change.
+
+Keep the evidence representative. Do not require every built-in type, every helper method name, or every table integration to be rechecked just because one registry lane is in scope.
 
 ## Checklist items
 
