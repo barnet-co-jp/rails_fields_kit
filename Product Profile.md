@@ -15,7 +15,7 @@ Rails Fields Kit is a Ruby gem that gives Rails applications a focused set of fo
 - wrap Tom Select in Rails-friendly helpers for naming, redisplay, validation, and accessibility
 - support remote search, selected preload, and create-on-the-fly workflows
 - expose stable integration points for controller helpers, token suggestion builders, JavaScript rendered-contract helpers, table metadata, and read-only setup verification
-- keep native wrappers such as `rfk_password_field` thin, Rails-friendly, and explicit about host-app-owned behavior
+- keep native wrappers such as `rfk_password_field`, `rfk_date_field`, and `rfk_color_field` thin, Rails-friendly, and explicit about host-app-owned behavior
 - stay easy to adopt from ordinary Rails forms without taking over the whole frontend stack
 
 ## Responsibility boundary
@@ -32,10 +32,11 @@ Host applications remain responsible for:
 - authorization, scoping, pagination, and result execution
 - app-specific success and error UI copy
 - password-specific UX such as visibility toggles, strength meters, credential policy, authentication workflow, and credential storage
+- date/time/datetime-local/color UX such as timezone conversion, masking, custom picker UI, browser normalization, validation policy, and production styling
 
 ## Current public surface
 
-- FormBuilder helpers such as `rfk_select`, `rfk_combobox`, `rfk_tags`, `rfk_token_search`, `rfk_password_field`, `rfk_table_filters`, and `rfk_table_cell_editors`
+- FormBuilder helpers such as `rfk_select`, `rfk_combobox`, `rfk_tags`, `rfk_token_search`, `rfk_password_field`, `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, `rfk_color_field`, `rfk_table_filters`, and `rfk_table_cell_editors`
 - controller helpers under `RailsFieldsKit::Searchable`
 - token suggestion builders including `RailsFieldsKit::TokenSuggestions.build` and `RailsFieldsKit::RansackSuggestions.build`
 - table metadata objects including `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
@@ -52,6 +53,7 @@ Host applications remain responsible for:
 - auto-fixing host app setup or frontend toolchain wiring
 - replacing dedicated table or search gems
 - owning password visibility toggles, strength meters, credential policy, authentication workflow, or credential storage
+- owning timezone conversion, masking, custom picker UI, browser normalization, validation policy, or production styling for native date/time/datetime-local/color inputs
 
 ## Key docs
 
@@ -68,6 +70,7 @@ Host applications remain responsible for:
 - `doc/password_field.md`: focused `rfk_password_field` native wrapper boundary and password-specific non-goals
 - `doc/native_numeric_fields.md`: focused `rfk_number_field`, `rfk_money_field`, and `rfk_percent_field` native wrapper boundary and numeric formatting non-goals
 - `doc/native_contact_fields.md`: focused `rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field` native wrapper boundary and contact/search ownership non-goals
+- `doc/native_date_time_color_fields.md`: focused `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, and `rfk_color_field` native wrapper boundary and date/time/color ownership non-goals
 - `doc/mention_field_boundary.md`: proposal-only boundary for inline textarea mentions; compares current textarea, autocomplete, token-search, and tag lanes without making `rfk_mention_field` current public API
 - `doc/textarea_autosize.md`: focused `rfk_text_area` autosize boundary; autosize remains host-app owned in the current 0.1.x surface
 - `doc/textarea_autosize_release_evidence.md`: release and sample-app evidence guide for the current `rfk_text_area` autosize boundary without treating autosize as built-in behavior
