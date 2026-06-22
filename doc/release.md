@@ -110,6 +110,7 @@ bundle exec rake build
    - `doc/package_root_helper_release_evidence.md` when package-root read-only helper exports are part of the release evidence scope
    - `doc/table_metadata_release_evidence.md` when table metadata rendering, group-level wrappers, or TableRenderer registry checks are part of the release evidence scope
    - `doc/sample_app_results.md`
+   - `doc/sample_app_results_route_guide.md` when choosing whether narrow PR evidence belongs in the full sample app evidence log or a PR comment
    - `doc/selected_preload_release_gate.md` when selected preload behavior is part of the release surface
    - `doc/final_release_checklist.md`
    - `doc/release.md`
@@ -137,6 +138,8 @@ bundle exec rake build
    Do not use `package.json`'s `version` field as the gem release version. The package file is included so host apps and package checks can resolve the documented JavaScript entrypoints and `exports` metadata; it is not an npm publish target.
 
 10. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
+
+   Use [`sample_app_results_route_guide.md`](sample_app_results_route_guide.md) when the change under review is a narrow PR, source-only visual review, or package-root helper evidence slice and you need to choose between the full sample app evidence log and a compact PR comment. The guide is only a recording-lane selector; it does not add a release gate or turn CI success into browser visual approval.
 
    Confirm the host app's Tom Select package version, pin source, plugin CSS, and plugin-specific asset loading through that app's normal JavaScript dependency review. Rails Fields Kit documents and packages its own import paths, but it does not fix, detect, or auto-correct Tom Select versions or plugin asset policy as part of the gem release gate.
 
