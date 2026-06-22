@@ -95,6 +95,14 @@ For a side-by-side chooser and helper-specific examples, see [`doc/field_helpers
 
 Use [`doc/setup.md`](doc/setup.md) as the maintained setup walkthrough. This README keeps the two common JavaScript routes separate so host apps can follow the route that matches their existing toolchain.
 
+| If the host app uses... | Start with | Keep details in |
+| --- | --- | --- |
+| Bundler, Vite, or another JavaScript bundler | Install Tom Select with the app's package manager, register `TomSelectController` from the package root, and add aliases only when the gem entrypoints are not resolved automatically. | [`doc/setup.md`](doc/setup.md) for setup examples and [`doc/public_api.md#javascript-exports`](doc/public_api.md#javascript-exports) for the current export list. |
+| Importmap | Let the opt-in generator add Rails Fields Kit pins when possible, or add the documented pins manually, then register the same package-root controller. | [`doc/setup.md`](doc/setup.md) for pin troubleshooting and setup doctor output. |
+| Direct controller or helper subpath imports | Use them only when the host app intentionally pins or aliases a specific file. | [`doc/public_api.md#javascript-exports`](doc/public_api.md#javascript-exports) for helper names, return shapes, and responsibility boundaries. |
+
+This README is a route map. Do not treat the representative helper-family table below as the full package-root export inventory; use `doc/public_api.md` when you need exact names, return shapes, or direct helper subpath policy.
+
 ### Bundler or Vite route
 
 Install Tom Select with the JavaScript package manager your app already uses:
