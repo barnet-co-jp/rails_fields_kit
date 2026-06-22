@@ -18,6 +18,10 @@ const checks = [
     args: ["scripts/check_javascript_smoke_inventory.mjs", "--self-test"]
   },
   {
+    name: "CI workflow permissions smoke",
+    args: ["scripts/check_ci_workflow_permissions.mjs"]
+  },
+  {
     name: "package exports smoke",
     args: ["scripts/check_package_exports.mjs"]
   },
