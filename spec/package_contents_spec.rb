@@ -20,6 +20,8 @@ RSpec.describe "package contents" do
   let(:field_helpers) { File.read(field_helpers_path) }
   let(:controller_helpers_path) { File.expand_path("../doc/controller_helpers.md", __dir__) }
   let(:controller_helpers) { File.read(controller_helpers_path) }
+  let(:configuration_profiles_path) { File.expand_path("../doc/configuration_profiles.md", __dir__) }
+  let(:configuration_profiles) { File.read(configuration_profiles_path) }
   let(:sample_app_checklist_path) { File.expand_path("../doc/sample_app_checklist.md", __dir__) }
   let(:sample_app_checklist) { File.read(sample_app_checklist_path) }
   let(:sample_app_results_path) { File.expand_path("../doc/sample_app_results.md", __dir__) }
@@ -71,7 +73,7 @@ RSpec.describe "package contents" do
       "read-only rendered-field contract helpers",
       "[`doc/public_api.md`](doc/public_api.md#javascript-exports)",
       "source of truth",
-      "current helper list and responsibility boundary"
+      "current helper list, return shapes, and responsibility boundaries"
     )
 
     expect(setup_doc).to include(
@@ -221,6 +223,28 @@ RSpec.describe "package contents" do
     ])
     expect(documented_native_helpers).to eq(native_helpers)
     expect(quick_chooser).to include("the matching native helper such as")
+  end
+
+  it "keeps README configuration profile route aligned with the docs-only boundary" do
+    docs_map = markdown_section(readme, "## Docs map")
+    configuration_profiles_boundary = markdown_section(configuration_profiles, "## Boundary")
+
+    expect(specification.files).to include("doc/configuration_profiles.md")
+    expect(docs_map).to include(
+      "[`doc/configuration.md`](doc/configuration.md)",
+      "field-level override precedence",
+      "[`doc/configuration_profiles.md`](doc/configuration_profiles.md)",
+      "docs-only copyable profile examples"
+    )
+    expect(configuration_profiles).to include(
+      "does not ship named initializer profiles",
+      "starting points for app-owned configuration",
+      "not presets, modes, or design system policy owned by the gem"
+    )
+    expect(configuration_profiles_boundary).to include(
+      "avoid a Ruby profile API, generator option, or preset registry",
+      "separate feature decision"
+    )
   end
 
   it "ships the release-facing verification docs linked from README" do
