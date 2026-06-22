@@ -26,6 +26,10 @@ RSpec.describe "package contents" do
   let(:sample_app_checklist) { File.read(sample_app_checklist_path) }
   let(:sample_app_results_path) { File.expand_path("../doc/sample_app_results.md", __dir__) }
   let(:sample_app_results) { File.read(sample_app_results_path) }
+  let(:sample_app_results_route_guide_path) { File.expand_path("../doc/sample_app_results_route_guide.md", __dir__) }
+  let(:sample_app_results_route_guide) { File.read(sample_app_results_route_guide_path) }
+  let(:package_root_helper_release_evidence_path) { File.expand_path("../doc/package_root_helper_release_evidence.md", __dir__) }
+  let(:package_root_helper_release_evidence) { File.read(package_root_helper_release_evidence_path) }
   let(:datalist_boundary_path) { File.expand_path("../doc/datalist_boundary.md", __dir__) }
   let(:datalist_boundary) { File.read(datalist_boundary_path) }
   let(:slug_helper_boundary_path) { File.expand_path("../doc/slug_helper_boundary.md", __dir__) }
@@ -283,6 +287,7 @@ RSpec.describe "package contents" do
     narrow_pr_chooser = markdown_section(sample_app_checklist, "### Choose the representative lane for a narrow PR")
     results_route_map = sample_app_results.split("\n## Target release\n", 2).first
     javascript_setup_results = markdown_section(sample_app_results, "## JavaScript setup checks")
+    plugin_contract_lane = markdown_section(package_root_helper_release_evidence, "## Tom Select plugin contract reader")
 
     expect(checklist_chooser).to include(
       "sample_app_results.md",
@@ -307,7 +312,40 @@ RSpec.describe "package contents" do
     expect(javascript_setup_results).to include(
       "package-root helper lanes in release scope were selected from `doc/package_root_helper_release_evidence.md`",
       "matched the current `doc/public_api.md#javascript-exports` helper list",
-      "Package-root helper lanes checked:"
+      "Package-root helper lanes checked:",
+      "helper-specific examples such as native accessibility, Tom Select plugin contract, or selected preload config stayed tied to the selected evidence lane"
+    )
+
+    expect(plugin_contract_lane).to include(
+      "tomSelectPluginContract(element)",
+      "package-root import",
+      "allow_clear: true",
+      "hasClearButton",
+      "hasRemoveButton",
+      "unrelated element returned null",
+      "Plugin assets, styling, mutation, empty-state copy, and Tom Select plugin lifecycle remained host-app or Tom Select responsibilities"
+    )
+  end
+
+  it "keeps sample app evidence result vocabulary aligned with the route guide" do
+    route_guide_visual_words = markdown_section(sample_app_results_route_guide, "## Visual Reference Result Words")
+    visual_reference_results = markdown_section(sample_app_results, "## Visual reference render checks")
+
+    ["PASS", "FAIL", "SOURCE REVIEW ONLY", "DEFERRED"].each do |result_word|
+      expect(route_guide_visual_words).to include("`#{result_word}`")
+      expect(visual_reference_results).to include("`#{result_word}`")
+    end
+
+    expect(route_guide_visual_words).to include(
+      "A real browser checked the named artifact, viewport, and lane",
+      "Do not use `PASS` for GitHub Actions success",
+      "not visual approval"
+    )
+    expect(visual_reference_results).to include(
+      "Browser review result",
+      "Evidence location",
+      "Do not treat CI success or source review alone as visual approval",
+      "not new helper behavior"
     )
   end
 
