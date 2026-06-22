@@ -318,7 +318,7 @@ RSpec.describe "package contents" do
 
     expect(plugin_contract_lane).to include(
       "tomSelectPluginContract(element)",
-      "package-root import",
+      "import { tomSelectPluginContract } from \"rails_fields_kit\"",
       "allow_clear: true",
       "hasClearButton",
       "hasRemoveButton",
