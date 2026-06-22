@@ -26,6 +26,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/setup_doctor_output_review.md`: focused setup doctor CLI diagnostic evidence review for `[OK]`, `[MISSING]`, `[MANUAL]`, and importmap target mismatch scanability
 - `doc/package_root_helper_release_evidence.md`: release and sample-app evidence guide for package-root rendered-field contract helpers; keep `doc/public_api.md#javascript-exports` as the helper list and return-shape source of truth
 - `doc/table_metadata_release_evidence.md`: release and sample-app evidence guide for table metadata rendering, group-level wrappers, and TableRenderer registry lanes
+- `doc/sample_app_results_route_guide.md`: recording-lane selector for release-wide sample-app evidence, narrow PR comments, source-only visual reviews, and deferred browser-capable evidence
 - `doc/visual_references.md`: maintained map for the static visual reference family and each artifact's scope
 - `doc/visual_reference_index.html`: static index for choosing the right visual reference artifact during design or release review
 - `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states
@@ -80,6 +81,7 @@ Before release-oriented docs updates, review:
 - `doc/setup_doctor_machine_readable.md` when SetupDoctor JSON output or structured setup evidence is part of the release surface
 - `doc/package_root_helper_release_evidence.md`: focused release and sample-app evidence guide for package-root rendered-field contract helpers
 - `doc/table_metadata_release_evidence.md`: focused release and sample-app evidence guide for table metadata rendering, group-level wrappers, and TableRenderer registry lanes
+- `doc/sample_app_results_route_guide.md`: recording-lane selector for full sample-app evidence, narrow PR comments, source-only visual reviews, and deferred browser-capable checks
 - `doc/sample_app_checklist.md`
 - `doc/sample_app_results.md`
 - `doc/release_notes_0_1_1.md`: current version-specific release note draft; update this bullet when the maintained current release note moves to a new version file
