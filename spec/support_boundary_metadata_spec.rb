@@ -58,7 +58,7 @@ RSpec.describe "support boundary metadata" do
     expect(support_boundary).to include(
       "not a Tom Select runtime support policy",
       "package manager policy",
-      "browser support policy"
+      "broader browser compatibility matrix"
     )
   end
 end
