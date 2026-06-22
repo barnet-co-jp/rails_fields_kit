@@ -110,6 +110,7 @@ bundle exec rake build
    - `doc/package_root_helper_release_evidence.md` when package-root read-only helper exports are part of the release evidence scope
    - `doc/table_metadata_release_evidence.md` when table metadata rendering, group-level wrappers, or TableRenderer registry checks are part of the release evidence scope
    - `doc/sample_app_results.md`
+   - `doc/sample_app_results_route_guide.md` when choosing whether narrow PR evidence belongs in the full sample app evidence log or a PR comment
    - `doc/selected_preload_release_gate.md` when selected preload behavior is part of the release surface
    - `doc/final_release_checklist.md`
    - `doc/release.md`
@@ -138,6 +139,8 @@ bundle exec rake build
 
 10. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
 
+   Use [`sample_app_results_route_guide.md`](sample_app_results_route_guide.md) when the change under review is a narrow PR, source-only visual review, or package-root helper evidence slice and you need to choose between the full sample app evidence log and a compact PR comment. The guide is only a recording-lane selector; it does not add a release gate or turn CI success into browser visual approval.
+
    Confirm the host app's Tom Select package version, pin source, plugin CSS, and plugin-specific asset loading through that app's normal JavaScript dependency review. Rails Fields Kit documents and packages its own import paths, but it does not fix, detect, or auto-correct Tom Select versions or plugin asset policy as part of the gem release gate.
 
    When setup or import evidence is part of the release or PR scope, record the host app's package manager, Tom Select version or pin, and CSS route in the Tom Select environment reproducibility memo in [`sample_app_results.md`](sample_app_results.md). Keep that memo separate from setup doctor `[OK]` / `[MANUAL]` visibility results: the memo records observed host-app package and asset choices, not Rails Fields Kit package-manager policy or a fixed Tom Select version requirement.
@@ -156,7 +159,7 @@ bundle exec rake build
 
    Record whether it reports the initializer and, when importmap is present, the Rails Fields Kit pins. Treat Tom Select package install, Stimulus registration, CSS import, and bundler alias output as manual checklist reminders rather than automatic pass/fail gates or auto-fix behavior.
 
-   When recording or reviewing setup doctor CLI output evidence, use [`setup_doctor_output_review.md`](setup_doctor_output_review.md) for the `[OK]`, `[MISSING]`, `[MANUAL]`, and target-mismatch scanability lanes. Keep that artifact as review evidence, not as the source of runtime wording or setup policy.
+   When recording or reviewing setup doctor CLI output evidence, use [`setup_doctor_output_review.md`](setup_doctor_output_review.md) for the `[OK]`, `[MISSING]`, and `[MANUAL]` visibility lanes. Keep that artifact as review evidence, not as the source of runtime wording or setup policy.
 
    When release or sample-app evidence needs structured setup visibility, use [`setup_doctor_machine_readable.md`](setup_doctor_machine_readable.md) as the source of truth for the Ruby API `format: :json` payload. Keep release evidence to representative JSON output usage and do not treat it as a CLI `--json` contract, auto-fix behavior, formal schema publication, or universal host-app CI pass/fail policy.
 
