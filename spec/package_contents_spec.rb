@@ -238,7 +238,7 @@ RSpec.describe "package contents" do
     )
     expect(configuration_profiles).to include(
       "does not ship named initializer profiles",
-      "docs-only copyable examples",
+      "starting points for app-owned configuration",
       "not presets, modes, or design system policy owned by the gem"
     )
     expect(configuration_profiles_boundary).to include(
