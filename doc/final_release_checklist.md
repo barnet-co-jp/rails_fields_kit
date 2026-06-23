@@ -8,6 +8,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Run `bundle install`.
 - [ ] Run `bundle exec standardrb`.
 - [ ] Run `bundle exec rspec`.
+- [ ] Run `npm run check:js` locally; use the GitHub Actions JavaScript matrix as the final Node 22.x / 24.x branch-head confirmation.
 - [ ] Run `bundle exec rake build`.
 - [ ] Run `BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rspec`.
 - [ ] Run `BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rspec`.
