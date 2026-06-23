@@ -25,9 +25,11 @@ export interface TomSelectRequestContract {
   selectedUrl: string | null
   createUrl: string | null
   queryParam: string
+  queryParams: Record<string, unknown>
   selectedParam: string
   selectedMultipleParam: string
   createParam: string
+  createParams: Record<string, unknown>
   minLength: number
   errorSurfaceId: string | null
 }
