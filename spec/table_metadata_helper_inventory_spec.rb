@@ -5,7 +5,9 @@ require "spec_helper"
 RSpec.describe "table metadata helper inventory" do
   let(:repo_root) { File.expand_path("..", __dir__) }
   let(:public_api_path) { File.join(repo_root, "doc/public_api.md") }
+  let(:table_file_field_metadata_path) { File.join(repo_root, "doc/table_file_field_metadata.md") }
   let(:public_api) { File.read(public_api_path) }
+  let(:table_file_field_metadata) { File.read(table_file_field_metadata_path) }
 
   def documented_class_methods(class_name)
     public_api.scan(/- `#{Regexp.escape(class_name)}\.([a-z0-9_!?]+)`/).flatten.map(&:to_sym)
@@ -23,8 +25,9 @@ RSpec.describe "table metadata helper inventory" do
 
   it "keeps TableCellInput.known_types aligned with the documented helper family" do
     documented_factories = documented_factory_methods("RailsFieldsKit::TableCellInput")
+    cell_only_factories = table_file_field_metadata.scan(/`TableCellInput\.([a-z0-9_!?]+)`/).flatten.map(&:to_sym)
 
-    expect(RailsFieldsKit::TableCellInput.known_types).to eq(documented_factories)
+    expect(RailsFieldsKit::TableCellInput.known_types).to eq(documented_factories + cell_only_factories)
   end
 
   it "keeps TableFilterInput factory methods wired to their documented field types" do
