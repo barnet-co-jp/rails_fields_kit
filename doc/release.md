@@ -162,7 +162,7 @@ bundle exec rake build
 
    Record whether it reports the initializer and, when importmap is present, the Rails Fields Kit pins. Treat Tom Select package install, Stimulus registration, CSS import, and bundler alias output as manual checklist reminders rather than automatic pass/fail gates or auto-fix behavior.
 
-   When recording or reviewing setup doctor CLI output evidence, use [`setup_doctor_output_review.md`](setup_doctor_output_review.md) for the `[OK]`, `[MISSING]`, and target-mismatch scanability lanes. Keep that artifact as review evidence, not as the source of runtime wording or setup policy.
+   When recording or reviewing setup doctor CLI output evidence, use [`setup_doctor_output_review.md`](setup_doctor_output_review.md) for the `[OK]`, `[MISSING]`, `[MANUAL]`, and target-mismatch scanability lanes. Keep that artifact as review evidence, not as the source of runtime wording or setup policy.
 
    When release or sample-app evidence needs structured setup visibility, use [`setup_doctor_machine_readable.md`](setup_doctor_machine_readable.md) as the source of truth for the Ruby API `format: :json` payload. Keep release evidence to representative JSON output usage and do not treat it as a CLI `--json` contract, auto-fix behavior, formal schema publication, or universal host-app CI pass/fail policy.
 
