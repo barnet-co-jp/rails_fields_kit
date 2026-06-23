@@ -169,6 +169,7 @@ module RailsFieldsKit
         raise ArgumentError, "table metadata method is required" unless method
 
         options = normalize_options(metadata[:options])
+        options[:_rfk_rendered_kind] = :select if field_type == "enum_select" && helper == :rfk_enum_select
 
         {
           helper: helper,
