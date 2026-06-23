@@ -24,10 +24,11 @@ RSpec.describe "table metadata helper inventory" do
 
   it "keeps TableCellInput.known_types aligned with the documented helper family" do
     documented_factories = documented_factory_methods("RailsFieldsKit::TableCellInput")
-    cell_only_factories = [:file_field]
+    expected_factories = documented_factories.dup
+    expected_factories.insert(expected_factories.index(:token_search), :file_field)
 
     expect(File.read(table_file_field_metadata_path)).to include("TableCellInput.file_field")
-    expect(RailsFieldsKit::TableCellInput.known_types).to eq(documented_factories + cell_only_factories)
+    expect(RailsFieldsKit::TableCellInput.known_types).to eq(expected_factories)
   end
 
   it "keeps TableFilterInput factory methods wired to their documented field types" do
