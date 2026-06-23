@@ -109,6 +109,7 @@ bundle exec rake build
    - `doc/sample_app_checklist.md`
    - `doc/package_root_helper_release_evidence.md` when package-root read-only helper exports are part of the release evidence scope
    - `doc/table_metadata_release_evidence.md` when table metadata rendering, group-level wrappers, or TableRenderer registry checks are part of the release evidence scope
+   - `doc/token_table_sample_app_evidence.md` when token search, token suggestions, Ransack suggestion metadata, or table metadata sample-app evidence is part of the release or PR scope
    - `doc/sample_app_results.md`
    - `doc/sample_app_results_route_guide.md` when choosing whether narrow PR evidence belongs in the full sample app evidence log or a PR comment
    - `doc/selected_preload_release_gate.md` when selected preload behavior is part of the release surface
@@ -150,6 +151,8 @@ bundle exec rake build
    When saved-search token suggestions are in release or PR scope, use [`saved_search_token_suggestion_evidence.md`](saved_search_token_suggestion_evidence.md) to keep the evidence on suggestion option JSON and record the final result in [`sample_app_results.md`](sample_app_results.md) or the PR comment. Keep token parsing, saved-search execution, persistence, authorization, sharing policy, and any independent saved-search selector helper outside this evidence lane.
 
    When table metadata rendering, group-level wrappers, or TableRenderer registry checks are in scope, use [`table_metadata_release_evidence.md`](table_metadata_release_evidence.md) to choose representative checks before recording the final sample-app or release PR evidence. Keep `doc/table_adapters.md` and `doc/table_group_html.md` as the source of truth for behavior and responsibility boundaries.
+
+   When token search, token suggestions, Ransack suggestion metadata, or table metadata sample-app evidence is in scope, use [`token_table_sample_app_evidence.md`](token_table_sample_app_evidence.md) as the companion lane selector before recording the final result in `doc/sample_app_results.md` or a scoped PR comment. Keep token parsing, Ransack or query execution, authorization, table persistence, pagination, visible save/error copy, and final table layout as host-app or table-integration responsibilities.
 
    After the install generator runs, run the read-only setup doctor in the sample app:
 
