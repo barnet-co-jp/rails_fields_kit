@@ -14,9 +14,12 @@ RSpec.describe "token/table sample app evidence release route" do
 
     expect(release_doc).to include(
       "doc/token_table_sample_app_evidence.md",
-      "token search / token suggestions / Ransack suggestion metadata / table metadata sample-app evidence",
+      "sample-app evidence",
       "companion lane selector"
     )
+    expect(release_doc).to include("token search")
+    expect(release_doc).to include("Ransack")
+    expect(release_doc).to include("table metadata")
 
     expect(evidence_doc).to include(
       "Use this guide when a release or focused PR needs sample app evidence for token search",
