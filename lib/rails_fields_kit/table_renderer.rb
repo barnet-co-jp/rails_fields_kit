@@ -102,11 +102,11 @@ module RailsFieldsKit
       end
 
       def render_cell_editor(form_builder, editor)
-        render_call(form_builder, cell_editor_call(editor))
+        render_call(form_builder, cell_editor_call(editor), table_cell_editor: true)
       end
 
       def render_cell_editors(form_builder, editors)
-        cell_editor_calls(editors).map { |call| render_call(form_builder, call) }
+        cell_editor_calls(editors).map { |call| render_call(form_builder, call, table_cell_editor: true) }
       end
 
       private
@@ -168,13 +168,10 @@ module RailsFieldsKit
         method = normalize_method_name(metadata[:method])
         raise ArgumentError, "table metadata method is required" unless method
 
-        options = normalize_options(metadata[:options])
-        options[:_rfk_rendered_kind] = :select if field_type == "enum_select" && helper == :rfk_enum_select
-
         {
           helper: helper,
           method: method,
-          options: options
+          options: normalize_options(metadata[:options])
         }
       end
 
@@ -193,7 +190,7 @@ module RailsFieldsKit
         normalized_hash
       end
 
-      def render_call(form_builder, call, table_filter: false)
+      def render_call(form_builder, call, table_filter: false, table_cell_editor: false)
         method = call.fetch(:method)
         raise ArgumentError, "table metadata method is required" unless method
 
@@ -207,6 +204,16 @@ module RailsFieldsKit
             return form_builder.public_send(helper, method, **options)
           ensure
             Thread.current[:rails_fields_kit_render_table_filter_metadata] = previous
+          end
+        end
+
+        if table_cell_editor
+          previous = Thread.current[:rails_fields_kit_render_table_cell_editor_metadata]
+          Thread.current[:rails_fields_kit_render_table_cell_editor_metadata] = true
+          begin
+            return form_builder.public_send(helper, method, **options)
+          ensure
+            Thread.current[:rails_fields_kit_render_table_cell_editor_metadata] = previous
           end
         end
 
