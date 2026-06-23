@@ -220,3 +220,7 @@ bundle exec rake build
 ```
 
 - Prepare the next release note draft when useful.
+
+## Notes
+
+This project intentionally avoids owning the JavaScript package manager or importmap setup. Host applications should install Tom Select and register the Stimulus controller using the documented public import paths through their existing JavaScript toolchain.
