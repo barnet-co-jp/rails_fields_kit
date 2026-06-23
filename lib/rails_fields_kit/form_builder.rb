@@ -73,7 +73,7 @@ module RailsFieldsKit
       explicit_enum = !enum.nil?
       enum_values = explicit_enum ? enum : object.class.public_send(method.to_s.pluralize)
       collection = enum_values.keys.map { |key| [rfk_enum_label(method, key, explicit: explicit_enum), key] }
-      rfk_tom_select_field(method, :select, collection: collection, **options)
+      rfk_tom_select_field(method, :enum_select, collection: collection, **options)
     end
 
     def rfk_combobox(method, collection: nil, **options)
