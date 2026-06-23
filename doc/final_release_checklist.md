@@ -36,6 +36,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `Product Profile.md`.
 - [ ] Review `AGENTS.md`.
 - [ ] Review `doc/setup.md`.
+- [ ] Review `doc/setup_doctor_machine_readable.md` when structured setup evidence or SetupDoctor Ruby JSON output is in release scope.
 - [ ] Review `doc/support_boundary.md`.
 - [ ] Review `doc/public_api.md`.
 - [ ] Review `doc/select_migration.md`.
@@ -99,6 +100,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Confirm the documented JavaScript import paths resolve in the sample app.
 - [ ] Confirm Tom Select CSS is loaded.
 - [ ] Confirm remote search works.
+- [ ] When structured setup evidence is in release scope, record a representative `RailsFieldsKit::SetupDoctor#run(format: :json)` result using `doc/setup_doctor_machine_readable.md` as the payload source of truth; keep CLI `--json`, formal schema, SARIF/JUnit output, auto-fix behavior, and universal host-app CI policy out of this evidence lane.
 - [ ] Confirm `doc/visual_references.md` remains accurate as the family index for Tom Select, text override copy, native helper, table metadata, and saved search token visual references.
 
 Record visual reference and sample app evidence in a compact matrix before treating the detailed checks below as complete. Keep the evidence in `doc/sample_app_results.md` or the release PR comment, and include artifact, viewport, state lane, responsibility boundary, and evidence location for each changed or release-critical visual surface.
