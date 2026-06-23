@@ -56,6 +56,20 @@ export interface SelectedPreloadConfig {
   selectedQueryParams: Record<string, unknown>
 }
 
+export interface OptionPayloadMapping {
+  valueField: string
+  labelField: string
+  searchFields: string[]
+  optionDescriptionField: string | null
+  optionBadgeField: string | null
+}
+
+export interface TableFilterMetadata {
+  adapter: string
+  paramName: string | null
+  fields: Record<string, unknown>
+}
+
 export interface NativeFieldAccessibilityContract {
   describedByIds: string[]
   describedByElements: Element[]
@@ -75,6 +89,8 @@ export function tomSelectFieldKindContract(element: Element | null | undefined):
 export function readRenderedTomSelectInteractionConfig(element: Element | null | undefined): TomSelectInteractionConfig | null
 export function readRenderedErrorSurface(element: Element | null | undefined): Element | null
 export function readRenderedSelectedPreloadConfig(element: Element | null | undefined): SelectedPreloadConfig | null
+export function readRenderedOptionPayloadMapping(element: Element | null | undefined): OptionPayloadMapping | null
+export function readRenderedTableFilterMetadata(element: Element | null | undefined): TableFilterMetadata | null
 export function nativeFieldAccessibilityContract(element: Element | null | undefined): NativeFieldAccessibilityContract | null
 
 export { TomSelectController }
