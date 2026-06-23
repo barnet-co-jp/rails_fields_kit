@@ -88,10 +88,11 @@ RSpec.describe "table metadata objects" do
       )
     end
 
-    it "exposes known filter field types" do
+    it "exposes known filter field types without file upload factories" do
       expect(described_class.known_types).to include(:combobox, :token_search)
       expect(described_class.known_type?(:combobox)).to be(true)
       expect(described_class.known_type?(" token_search ")).to be(true)
+      expect(described_class.known_type?(:file_field)).to be(false)
       expect(described_class.known_type?(:unknown_field)).to be(false)
       expect(described_class.known_type?(nil)).to be(false)
       expect(described_class.known_type?(" ")).to be(false)
@@ -209,6 +210,26 @@ RSpec.describe "table metadata objects" do
       )
     end
 
+    it "builds file field cell editor metadata from the built-in factory" do
+      input = described_class.file_field(
+        :attachment,
+        accept: "image/png",
+        multiple: true,
+        direct_upload: true
+      )
+
+      expect(input.to_table_cell_editor).to eq(
+        type: "rails_fields_kit",
+        field_type: "file_field",
+        method: "attachment",
+        options: {
+          accept: "image/png",
+          multiple: true,
+          direct_upload: true
+        }
+      )
+    end
+
     it "builds table cell editor metadata from a dynamic type" do
       input = described_class.from_type(
         :enum_select,
@@ -227,9 +248,10 @@ RSpec.describe "table metadata objects" do
     end
 
     it "exposes known cell editor field types" do
-      expect(described_class.known_types).to include(:combobox, :token_search)
+      expect(described_class.known_types).to include(:combobox, :token_search, :file_field)
       expect(described_class.known_type?(:combobox)).to be(true)
       expect(described_class.known_type?(" token_search ")).to be(true)
+      expect(described_class.known_type?(:file_field)).to be(true)
       expect(described_class.known_type?(:unknown_field)).to be(false)
       expect(described_class.known_type?(nil)).to be(false)
       expect(described_class.known_type?(" ")).to be(false)
