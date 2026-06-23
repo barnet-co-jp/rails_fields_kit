@@ -44,6 +44,7 @@ export interface TomSelectInteractionConfig {
   maxItems: number | null
   loadThrottle: number | null
   delimiter: string | null
+  dropdownParent: string | null
   preload: boolean | null
   openOnFocus: boolean | null
   closeAfterSelect: boolean | null
