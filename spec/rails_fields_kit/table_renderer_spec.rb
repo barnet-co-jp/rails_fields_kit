@@ -458,7 +458,7 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     form_builder = FakeTableFormBuilder.new
     metadata = {field_type: "enum_select", method: "status", options: {}}
 
-    expect(described_class.render_cell_editers(form_builder, metadata)).to eq(["enum_select"])
+    expect(described_class.render_cell_editors(form_builder, metadata)).to eq(["enum_select"])
     expect(form_builder.calls).to eq([
       [:rfk_enum_select, :status, {}]
     ])
