@@ -33,6 +33,11 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       "enum_select"
     end
 
+    def rfk_file_field(method, **options)
+      calls << [:rfk_file_field, method, options]
+      "file_field"
+    end
+
     def custom_table_field(method, **options)
       calls << [:custom_table_field, method, options]
       "custom"
@@ -271,6 +276,20 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     )
   end
 
+  it "builds a file field cell editor call spec" do
+    metadata = {
+      field_type: "file_field",
+      method: "attachment",
+      options: {accept: "image/png", multiple: true, direct_upload: true}
+    }
+
+    expect(described_class.cell_editor_call(metadata)).to eq(
+      helper: :rfk_file_field,
+      method: :attachment,
+      options: {accept: "image/png", multiple: true, direct_upload: true}
+    )
+  end
+
   it "builds a cell editor call spec from hash-like metadata" do
     metadata = FakeHashLikeMetadata.new(
       field_type: "enum_select",
@@ -407,6 +426,20 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     ])
   end
 
+  it "renders file field cell editors through a form builder" do
+    form_builder = FakeTableFormBuilder.new
+    metadata = {
+      field_type: "file_field",
+      method: "attachment",
+      options: {accept: "image/png", multiple: true, direct_upload: true}
+    }
+
+    expect(described_class.render_cell_editor(form_builder, metadata)).to eq("file_field")
+    expect(form_builder.calls).to eq([
+      [:rfk_file_field, :attachment, {accept: "image/png", multiple: true, direct_upload: true}]
+    ])
+  end
+
   it "renders cell editors in batches" do
     form_builder = FakeTableFormBuilder.new
     editors = [
@@ -425,7 +458,7 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     form_builder = FakeTableFormBuilder.new
     metadata = {field_type: "enum_select", method: "status", options: {}}
 
-    expect(described_class.render_cell_editors(form_builder, metadata)).to eq(["enum_select"])
+    expect(described_class.render_cell_editers(form_builder, metadata)).to eq(["enum_select"])
     expect(form_builder.calls).to eq([
       [:rfk_enum_select, :status, {}]
     ])
@@ -449,7 +482,8 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     expect(described_class.field_helpers).to include(
       "combobox" => :rfk_combobox,
       "token_search" => :rfk_token_search,
-      "enum_select" => :rfk_enum_select
+      "enum_select" => :rfk_enum_select,
+      "file_field" => :rfk_file_field
     )
   end
 
@@ -464,7 +498,8 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     expect(described_class.registered_field_types).to include(
       "combobox",
       "token_search",
-      "enum_select"
+      "enum_select",
+      "file_field"
     )
     expect(described_class.registered_field_types).not_to include(:rfk_combobox)
   end
