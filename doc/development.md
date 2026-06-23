@@ -138,6 +138,8 @@ For review queue triage and release prep, confirm these current signals together
 
 When those signals disagree, leave a short reviewer-facing queue note instead of relying on an old summary. Include the PR head SHA, workflow run number and conclusion, compare result (`ahead_by`, `behind_by`, and `status`), effective changed files, mergeability, duplicate closing PRs if any, and the remaining decision owner.
 
+Use `.github/pr_freshness_queue_note.md` when you need a pasteable manual note for that queue summary. Treat it as reviewer-facing queue hygiene only; it is not a CI job, automatic branch refresh, stale PR cleanup rule, merge decision, or visual approval substitute.
+
 Use these queue classifications consistently:
 
 - `review-ready`: the head workflow is green, `behind_by:0`, the PR is mergeable, changed files match the intended scope, and no unresolved browser-capable or public API adoption review remains
