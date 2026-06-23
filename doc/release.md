@@ -109,6 +109,7 @@ bundle exec rake build
    - `doc/sample_app_checklist.md`
    - `doc/package_root_helper_release_evidence.md` when package-root read-only helper exports are part of the release evidence scope
    - `doc/table_metadata_release_evidence.md` when table metadata rendering, group-level wrappers, or TableRenderer registry checks are part of the release evidence scope
+   - `doc/token_table_sample_app_evidence.md` when token search, token suggestions, Ransack suggestion metadata, or table metadata sample-app evidence is part of the release or PR scope
    - `doc/sample_app_results.md`
    - `doc/sample_app_results_route_guide.md` when choosing whether narrow PR evidence belongs in the full sample app evidence log or a PR comment
    - `doc/selected_preload_release_gate.md` when selected preload behavior is part of the release surface
@@ -151,6 +152,8 @@ bundle exec rake build
 
    When table metadata rendering, group-level wrappers, or TableRenderer registry checks are in scope, use [`table_metadata_release_evidence.md`](table_metadata_release_evidence.md) to choose representative checks before recording the final sample-app or release PR evidence. Keep `doc/table_adapters.md` and `doc/table_group_html.md` as the source of truth for behavior and responsibility boundaries.
 
+   When token search, token suggestions, Ransack suggestion metadata, or table metadata sample-app evidence is in scope, use [`token_table_sample_app_evidence.md`](token_table_sample_app_evidence.md) as the companion lane selector before recording the final result in `doc/sample_app_results.md` or a scoped PR comment. Keep token parsing, Ransack or query execution, authorization, table persistence, pagination, visible save/error copy, and final table layout as host-app or table-integration responsibilities.
+
    After the install generator runs, run the read-only setup doctor in the sample app:
 
    ```bash
@@ -159,7 +162,7 @@ bundle exec rake build
 
    Record whether it reports the initializer and, when importmap is present, the Rails Fields Kit pins. Treat Tom Select package install, Stimulus registration, CSS import, and bundler alias output as manual checklist reminders rather than automatic pass/fail gates or auto-fix behavior.
 
-   When recording or reviewing setup doctor CLI output evidence, use [`setup_doctor_output_review.md`](setup_doctor_output_review.md) for the `[OK]`, `[MISSING]`, `[MANUAL]`, and target-mismatch scanability lanes. Keep that artifact as review evidence, not as the source of runtime wording or setup policy.
+   When recording or reviewing setup doctor CLI output evidence, use [`setup_doctor_output_review.md`](setup_doctor_output_review.md) for the `[OK]`, `[MISSING]`, and target-mismatch scanability lanes. Keep that artifact as review evidence, not as the source of runtime wording or setup policy.
 
    When release or sample-app evidence needs structured setup visibility, use [`setup_doctor_machine_readable.md`](setup_doctor_machine_readable.md) as the source of truth for the Ruby API `format: :json` payload. Keep release evidence to representative JSON output usage and do not treat it as a CLI `--json` contract, auto-fix behavior, formal schema publication, or universal host-app CI pass/fail policy.
 
@@ -217,7 +220,3 @@ bundle exec rake build
 ```
 
 - Prepare the next release note draft when useful.
-
-## Notes
-
-This project intentionally avoids owning the JavaScript package manager or importmap setup. Host applications should install Tom Select and register the Stimulus controller using the documented public import paths through their existing JavaScript toolchain.
