@@ -65,7 +65,6 @@ const expectedIndexSignals = [
   "export interface TomSelectInteractionConfig",
   "maxOptions: number | null",
   "delimiter: string | null",
-  "dropdownParent: string | null",
   "persist: boolean",
   "export interface SelectedPreloadConfig",
   "selectedMultipleParam: string",
