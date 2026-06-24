@@ -166,6 +166,7 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :create_param, rfk_option_or_default(options, :create_param, config.default_create_param))
       rfk_assign_data_value(data, :value_field, rfk_option_or_default(options, :value_field, config.default_value_field))
       rfk_assign_data_value(data, :label_field, rfk_option_or_default(options, :label_field, config.default_label_field))
+      rfk_assign_data_value(data, :label_fallback, options.delete(:label_fallback))
       rfk_assign_data_value(data, :search_field, rfk_option_or_default(options, :search_field, config.default_search_field))
       rfk_assign_data_value(data, :min_length, rfk_option_or_default(options, :min_length, config.default_min_length))
       rfk_assign_data_value(data, :max_options, rfk_option_or_default(options, :max_options, config.default_max_options))
