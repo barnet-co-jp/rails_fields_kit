@@ -87,6 +87,8 @@ Request-failure feedback options such as `error_surface:` and `error_surface_htm
 | `prefix_class` | `"rfk-prefix"` | `prefix_html:` | Prefix elements | Appended to generated prefix classes. |
 | `suffix_class` | `"rfk-suffix"` | `suffix_html:` | Suffix elements | Appended to generated suffix classes. |
 
+The wrapper and affix class options above apply to HTML that Rails Fields Kit renders around the field. They do not pass Tom Select's internal `classNames` option through to generated control, dropdown, wrapper, option, item, or loading markup.
+
 ## Controller
 
 ### `controller_name`
@@ -174,6 +176,14 @@ Some helpers seed their own representative plugin defaults before the initialize
 
 Rails Fields Kit passes plugin names through to the rendered Tom Select configuration. It does not install Tom Select plugins, import plugin-specific assets, or own plugin-specific behavior beyond the documented helper defaults. Keep those concerns in the host app's Tom Select setup.
 
+### Tom Select internal class names
+
+Rails Fields Kit's class configuration is limited to the wrapper, label, hint, error, affix, and control wrapper pieces that Rails Fields Kit renders. It is not a Tom Select theme or internal DOM class API.
+
+Tom Select also supports its own `classNames` configuration for internal parts such as the generated control, dropdown, option, item, and loading states. Rails Fields Kit does not currently expose `classNames`, `tom_select_class_names:`, or an initializer-level equivalent as public API. Host apps that need those internal hooks should keep that customization in their Tom Select setup, stylesheet, or local controller extension until a separate feature explicitly adopts a narrow public option.
+
+If a future feature adds a field-level option for Tom Select internal class customization, it should stay separate from `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:`. That follow-up should also document which Tom Select class parts are supported and keep production CSS, theme presets, dark mode, density policy, and Tom Select internal DOM compatibility in the host-app responsibility lane.
+
 ### `default_min_length`
 
 Minimum query length before remote loading starts.
@@ -253,6 +263,8 @@ end
 
 That helper renders `lookup`, `uuid`, `display_name`, `display_name,email`, `10`, and `150` for its Tom Select data values. Other helpers that omit those options still use the initializer defaults. The same pattern applies to request parameter defaults (`query_param:`, `selected_param:`, `selected_multiple_param:`, `create_param:`), JSON field defaults (`value_field:`, `label_field:`, `search_field:`, `option_description_field:`, `option_badge_field:`), and Tom Select defaults (`min_length:`, `max_options:`, `load_throttle:`, `preload:`, `open_on_focus:`, `close_after_select:`, `hide_selected:`, `persist:`).
 
+Wrapper and affix class overrides follow a different lane: `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` customize Rails Fields Kit-rendered wrapper pieces only. They do not change Tom Select's generated internal class names, and there is no current field-level `tom_select_class_names:` option in this public configuration contract.
+
 ## Render text defaults
 
 When the initializer leaves these values unset, Rails Fields Kit uses bundled locale-aware copy at render time. That keeps the default Tom Select wording closer to the host app locale without taking away existing override paths.
@@ -321,6 +333,8 @@ Use that host-owned wrapper to standardize placeholder classes or event-handler 
 ## Wrapper class defaults
 
 These defaults set the repo-wide baseline classes appended to wrapper pieces. Use helper-level `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` when one field needs extra classes, `data`, or aria attributes without changing the initializer for every field.
+
+These defaults do not target Tom Select's internal generated markup. Keep Tom Select `classNames` customization host-owned unless a future, separately planned feature adds a dedicated field-level option for it.
 
 ### `wrapper_class`
 
