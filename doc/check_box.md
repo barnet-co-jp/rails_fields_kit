@@ -4,6 +4,8 @@
 
 Use it when a host app wants the ordinary Rails `check_box` parameter contract while reusing Rails Fields Kit wrapper, label, hint, validation error, and accessibility wiring.
 
+For release or sample-app evidence, use [`check_box_release_evidence.md`](check_box_release_evidence.md) to choose a representative checkbox lane without expanding this helper into radio buttons, collection groups, validation UI policy, label placement redesign, or production CSS ownership.
+
 ```erb
 <%= f.rfk_check_box :active,
   wrapper: true,
@@ -35,6 +37,14 @@ With `wrapper: true`, the helper uses the same generated pieces as the native te
 - `accessibility: false` to opt out of automatic `aria-describedby`, `aria-invalid`, and `aria-required` wiring
 
 Generated hint and error ids use the form object name and method, for example `user_active_hint` and `user_active_error`. Passing a custom checkbox `id:` does not rename those generated ids, so repeated fields should use distinct object names or host-owned ids with `accessibility: false`.
+
+## Release Evidence Boundary
+
+Sample app and release evidence should stay representative:
+
+- check one model-backed checkbox lane instead of mirroring every native helper option
+- record hidden unchecked input, checked/unchecked values, wrapper pieces, validation rerender, and accessibility boundary only when that release or PR depends on them
+- keep radio buttons, collection groups, visual references, validation UI, final copy, and production CSS as separate host-app or follow-up decisions
 
 ## Non-goals
 
