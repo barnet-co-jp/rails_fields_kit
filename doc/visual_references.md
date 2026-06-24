@@ -143,7 +143,7 @@ Use this section as a task guide, not an exhaustive API inventory. Pick the grou
 Use the evidence location that matches the scope of the visual change.
 
 - Record release-wide or release-critical checks in [`sample_app_results.md`](sample_app_results.md), using the Visual reference render checks matrix when the changed artifact is part of release readiness.
-- Record a small PR-level check in the PR comment when the change is a narrow static-docs update and the release evidence log is not being refreshed yet.
+- Record a small PR-level check in the PR comment when the change is a narrow static-docs update and the release evidence log is not being updated yet.
 - Keep individual artifact screenshot, browser rendering, or redesign follow-ups in their own issue or PR instead of expanding this map into an approval workflow.
 
 For each visual-reference evidence note, include at least the artifact, viewport, lane or state, responsibility boundary, result, and any blocker. If the run is connector-only and no browser screenshot is available, say what was checked instead, such as source review, CI, or a static render, and name the remaining human or browser-capable check rather than treating CI green as visual approval.
