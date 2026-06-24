@@ -22,6 +22,7 @@ RailsFieldsKit.configure do |config|
   # Default Tom Select remote search behavior.
   config.default_min_length = 0
   config.default_max_options = nil
+  config.default_load_throttle = nil
   config.default_preload = nil
 
   # Default Tom Select UX behavior. Leave nil to use Tom Select defaults.

@@ -66,7 +66,7 @@ module RailsFieldsKit
 
     def rfk_grouped_select(method, grouped_collection:, **options)
       options[:grouped_collection] = grouped_collection
-      rfk_tom_select_field(method, :select, collection: nil, **options)
+      rfk_tom_select_field(method, :grouped_select, collection: nil, **options)
     end
 
     def rfk_enum_select(method, enum: nil, **options)
@@ -167,11 +167,12 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :create_param, rfk_option_or_default(options, :create_param, config.default_create_param))
       rfk_assign_data_value(data, :value_field, rfk_option_or_default(options, :value_field, config.default_value_field))
       rfk_assign_data_value(data, :label_field, rfk_option_or_default(options, :label_field, config.default_label_field))
+      rfk_assign_data_value(data, :label_fallback, options.delete(:label_fallback))
       rfk_assign_data_value(data, :search_field, rfk_option_or_default(options, :search_field, config.default_search_field))
       rfk_assign_data_value(data, :min_length, rfk_option_or_default(options, :min_length, config.default_min_length))
       rfk_assign_data_value(data, :max_options, rfk_option_or_default(options, :max_options, config.default_max_options))
       rfk_assign_data_value(data, :max_items, options.delete(:max_items))
-      rfk_assign_data_value(data, :load_throttle, options.delete(:load_throttle))
+      rfk_assign_data_value(data, :load_throttle, rfk_option_or_default(options, :load_throttle, config.default_load_throttle))
       rfk_assign_data_value(data, :delimiter, options.delete(:delimiter))
       rfk_assign_data_value(data, :dropdown_parent, options.delete(:dropdown_parent))
       rfk_assign_data_value(data, :preload, rfk_option_or_default(options, :preload, config.default_preload))

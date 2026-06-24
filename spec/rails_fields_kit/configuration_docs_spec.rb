@@ -55,6 +55,7 @@ RSpec.describe RailsFieldsKit::Configuration, "documentation" do
       "default_plugins" => "`plugins:`",
       "default_min_length" => "`min_length:`",
       "default_max_options" => "`max_options:`",
+      "default_load_throttle" => "`load_throttle:`",
       "default_preload" => "`preload:`",
       "default_open_on_focus" => "`open_on_focus:`",
       "default_close_after_select" => "`close_after_select:`",
@@ -83,6 +84,7 @@ RSpec.describe RailsFieldsKit::Configuration, "documentation" do
 
     expect(quick_reference_rows.values_at(
       "default_max_options",
+      "default_load_throttle",
       "default_preload",
       "default_open_on_focus",
       "default_close_after_select",
