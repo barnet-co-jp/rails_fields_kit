@@ -106,6 +106,7 @@ RSpec.describe RailsFieldsKit::FormBuilder do
       }
     )
 
+    expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"grouped_select\"")
     expect(html).to include("<optgroup label=\"Active\">")
     expect(html).to include("<option value=\"1\">Acme Corp</option>")
     expect(html).to include("<optgroup label=\"Archived\">")
@@ -283,6 +284,7 @@ RSpec.describe RailsFieldsKit::FormBuilder do
       include_blank: "Select an owner"
     )
 
+    expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"grouped_select\"")
     expect(html).to include("<option value=\"\">Select an owner</option>")
     expect(html).to include("<optgroup label=\"Active\">")
     expect(html).to include("<optgroup label=\"Archived\">")
