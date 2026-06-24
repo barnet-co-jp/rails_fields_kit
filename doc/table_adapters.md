@@ -10,6 +10,8 @@ For the focused boundary between the direct FormBuilder helpers and lower-level 
 
 For range-specific table metadata examples, use [`table_range_field_metadata.md`](table_range_field_metadata.md). It keeps `TableFilterInput.range_field` and `TableCellInput.range_field` in the native metadata lane without adding range-pair query semantics, custom sliders, table persistence, or production styling.
 
+For date, time, datetime-local, and color wrapper behavior, use [`native_date_time_color_fields.md`](native_date_time_color_fields.md). Table metadata for those helpers stays in the same native wrapper lane and does not add custom pickers, timezone conversion, masking, query persistence, or table-specific validation policy.
+
 ## Filter input metadata
 
 Use `RailsFieldsKit::TableFilterInput` when a table column wants to describe a filter UI that should be rendered with Rails Fields Kit.
@@ -194,6 +196,24 @@ columns = [
     )
   },
   {
+    key: :starts_on,
+    filter_input: RailsFieldsKit::TableFilterInput.date_field(
+      :starts_on,
+      min: Date.current
+    )
+  },
+  {
+    key: :published_at,
+    cell_editor: RailsFieldsKit::TableCellInput.datetime_local_field(
+      :published_at,
+      step: 60
+    )
+  },
+  {
+    key: :accent_color,
+    cell_editor: RailsFieldsKit::TableCellInput.color_field(:accent_color)
+  },
+  {
     key: :notes,
     cell_editor: RailsFieldsKit::TableCellInput.text_area(
       :notes,
@@ -204,6 +224,8 @@ columns = [
 ```
 
 Range metadata travels through this same native metadata path. Use [`table_range_field_metadata.md`](table_range_field_metadata.md) when the table column needs `TableFilterInput.range_field` or `TableCellInput.range_field` examples, `min` / `max` / `step` pass-through notes, or the boundary that keeps range-pair queries, Ransack execution, custom sliders, multi-thumb controls, table persistence, and production CSS outside Rails Fields Kit.
+
+Date, time, datetime-local, and color metadata also travel through this native metadata path. `TableFilterInput.date_field`, `TableFilterInput.time_field`, `TableFilterInput.datetime_local_field`, `TableFilterInput.color_field`, and the matching `TableCellInput` factories pass ordinary options such as `min`, `max`, `step`, `required`, `disabled`, and `readonly` through metadata `options` to the corresponding FormBuilder helper. Browser-native picker behavior, timezone or locale formatting, masking, custom color palettes, validation policy, query execution, and persistence remain host-app or table-integration responsibility; see [`native_date_time_color_fields.md`](native_date_time_color_fields.md) for the helper-level boundary.
 
 Contact and search wrappers travel through the same native metadata path. Use them when the table column wants ordinary browser-native contact or search inputs with Rails Fields Kit wrapper wiring, not remote suggestions or token parsing:
 
@@ -235,12 +257,12 @@ contact_columns = [
 Those metadata objects normalize to the same hash protocol:
 
 ```ruby
-RailsFieldsKit::TableFilterInput.search_field(:keyword).to_table_filter
+RailsFieldsKit::TableFilterInput.date_field(:starts_on, min: Date.current).to_table_filter
 # => {
 #      type: "rails_fields_kit",
-#      field_type: "search_field",
-#      method: "keyword",
-#      options: {}
+#      field_type: "date_field",
+#      method: "starts_on",
+#      options: { min: Date.current }
 #    }
 ```
 
@@ -609,6 +631,23 @@ A host app or table helper can pass the metadata objects into column-like defini
     :minimum_total,
     step: 0.01
   )
+}
+```
+
+```ruby
+{
+  key: :starts_on,
+  filter_input: RailsFieldsKit::TableFilterInput.date_field(
+    :starts_on,
+    min: Date.current
+  )
+}
+```
+
+```ruby
+{
+  key: :accent_color,
+  cell_editor: RailsFieldsKit::TableCellInput.color_field(:accent_color)
 }
 ```
 

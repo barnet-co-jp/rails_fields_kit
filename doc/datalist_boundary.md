@@ -21,6 +21,14 @@ When a host app only needs browser-native suggestions for a plain text value, ke
 
 This keeps the value contract identical to a normal text field. The submitted value is just `params[:model][:city]`; Rails Fields Kit does not add selected IDs, hidden metadata, selected preload, or a second value channel.
 
+## Feature gate decision
+
+For #1803, Rails Fields Kit should not add `rfk_datalist_field` in the current slice. The current recommendation remains `rfk_text_field list:` plus host-owned `<datalist>` markup because that path already keeps the submitted value ordinary text while avoiding a new public helper name.
+
+A future helper is still a reasonable candidate, but it needs its own implementation issue after repeated host apps show the same wrapper need. That follow-up should be limited to wrapper, label, hint, error, affix, accessibility wiring, and the `list` attribute around an ordinary text input. It should not add remote search, selected preload, selected IDs, hidden metadata, create-on-the-fly behavior, rich option rendering, browser UI normalization, polyfills, or production CSS.
+
+Keep this document as the proposal boundary until a later implementation PR adds and tests a helper. Do not add `rfk_datalist_field` to `doc/public_api.md`, setup notes, package metadata, or visual reference inventory from this proposal slice alone.
+
 ## Sample evidence
 
 Use [`datalist_boundary_sample_evidence.html`](datalist_boundary_sample_evidence.html) as a static review artifact when comparing this proposal boundary with the existing Tom Select-backed helper lanes. The artifact is intentionally not registered as a current visual reference family member: it is evidence for the proposal boundary, not a new public helper or production CSS contract.

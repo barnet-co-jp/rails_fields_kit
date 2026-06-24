@@ -24,6 +24,7 @@ try {
       `  [kindAttribute]: "combobox",\n` +
       `  "data-rails-fields-kit--tom-select-max-options-value": "25",\n` +
       `  "data-rails-fields-kit--tom-select-load-throttle-value": "300",\n` +
+      `  "data-rails-fields-kit--tom-select-dropdown-parent-value": "body",\n` +
       `  "data-rails-fields-kit--tom-select-preload-value": "true",\n` +
       `  "data-rails-fields-kit--tom-select-open-on-focus-value": "false",\n` +
       `  "data-rails-fields-kit--tom-select-close-after-select-value": "true",\n` +
@@ -35,6 +36,7 @@ try {
       `  maxItems: null,\n` +
       `  loadThrottle: 300,\n` +
       `  delimiter: null,\n` +
+      `  dropdownParent: "body",\n` +
       `  preload: true,\n` +
       `  openOnFocus: false,\n` +
       `  closeAfterSelect: true,\n` +
@@ -53,6 +55,7 @@ try {
       `  maxItems: 20,\n` +
       `  loadThrottle: null,\n` +
       `  delimiter: " ",\n` +
+      `  dropdownParent: null,\n` +
       `  preload: null,\n` +
       `  openOnFocus: null,\n` +
       `  closeAfterSelect: null,\n` +
@@ -68,6 +71,7 @@ try {
       `  maxItems: null,\n` +
       `  loadThrottle: null,\n` +
       `  delimiter: null,\n` +
+      `  dropdownParent: null,\n` +
       `  preload: null,\n` +
       `  openOnFocus: null,\n` +
       `  closeAfterSelect: null,\n` +

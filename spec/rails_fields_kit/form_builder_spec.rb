@@ -106,6 +106,7 @@ RSpec.describe RailsFieldsKit::FormBuilder do
       }
     )
 
+    expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"grouped_select\"")
     expect(html).to include("<optgroup label=\"Active\">")
     expect(html).to include("<option value=\"1\">Acme Corp</option>")
     expect(html).to include("<optgroup label=\"Archived\">")
@@ -283,6 +284,7 @@ RSpec.describe RailsFieldsKit::FormBuilder do
       include_blank: "Select an owner"
     )
 
+    expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"grouped_select\"")
     expect(html).to include("<option value=\"\">Select an owner</option>")
     expect(html).to include("<optgroup label=\"Active\">")
     expect(html).to include("<optgroup label=\"Archived\">")
@@ -578,6 +580,7 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     RailsFieldsKit.configure do |config|
       config.default_query_param = "term"
       config.default_min_length = 3
+      config.default_load_throttle = 250
       config.default_no_results_text = "Nothing here"
     end
 
@@ -585,6 +588,24 @@ RSpec.describe RailsFieldsKit::FormBuilder do
 
     expect(html).to include("data-rails-fields-kit--tom-select-query-param-value=\"term\"")
     expect(html).to include("data-rails-fields-kit--tom-select-min-length-value=\"3\"")
+    expect(html).to include("data-rails-fields-kit--tom-select-load-throttle-value=\"250\"")
     expect(html).to include("data-rails-fields-kit--tom-select-no-results-text-value=\"Nothing here\"")
+  end
+
+  it "prefers field-level load throttle over the configured default" do
+    RailsFieldsKit.configure do |config|
+      config.default_load_throttle = 250
+    end
+
+    html = form_builder.rfk_combobox(:customer_id, url: "/customers.json", load_throttle: 100)
+
+    expect(html).to include("data-rails-fields-kit--tom-select-load-throttle-value=\"100\"")
+    expect(html).not_to include("data-rails-fields-kit--tom-select-load-throttle-value=\"250\"")
+  end
+
+  it "omits load throttle when neither helper nor configuration sets it" do
+    html = form_builder.rfk_combobox(:customer_id, url: "/customers.json")
+
+    expect(html).not_to include("data-rails-fields-kit--tom-select-load-throttle-value")
   end
 end
