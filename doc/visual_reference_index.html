@@ -113,6 +113,11 @@
         overflow-wrap: anywhere;
       }
 
+      .hero-links a,
+      .quick-list a {
+        flex: 1 1 176px;
+      }
+
       .hero-links a:hover,
       .quick-list a:hover,
       .task-links a:hover,
@@ -129,7 +134,15 @@
         margin-bottom: 24px;
       }
 
+      .role-strip {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
       .summary-item,
+      .role-item,
       .family-card,
       .task-card,
       .reference-card,
@@ -144,13 +157,24 @@
         box-shadow: var(--shadow);
       }
 
+      .role-item {
+        gap: 8px;
+      }
+
       .summary-item strong {
         font-size: 1.35rem;
         line-height: 1;
         overflow-wrap: anywhere;
       }
 
+      .role-item strong {
+        font-size: 0.98rem;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+      }
+
       .summary-item span,
+      .role-item span:last-child,
       .section-heading p,
       .family-card p,
       .family-card li,
@@ -299,7 +323,7 @@
       @media (max-width: 480px) {
         main { width: min(100% - 20px, 1120px); }
         .summary { grid-template-columns: 1fr; }
-        .summary-item, .family-card, .task-card, .reference-card, .workflow { padding: 14px; }
+        .summary-item, .role-item, .family-card, .task-card, .reference-card, .workflow { padding: 14px; }
 
         .hero-links a,
         .quick-list a,
@@ -345,6 +369,24 @@
           <strong>Main</strong>
           <span>List only references that have landed on main.</span>
         </div>
+      </section>
+
+      <section class="role-strip" aria-label="Reference role boundaries">
+        <article class="role-item">
+          <span class="tag primary">field UI</span>
+          <strong>Rendered helper lanes</strong>
+          <span>Use visual HTML artifacts for field chrome, copy, states, and narrow-width readability.</span>
+        </article>
+        <article class="role-item">
+          <span class="tag info">diagnostics</span>
+          <strong>Evidence and setup lanes</strong>
+          <span>Use Setup Doctor and sample evidence docs for CLI diagnostics or release recording, not field layout approval.</span>
+        </article>
+        <article class="role-item">
+          <span class="tag warning">contract</span>
+          <strong>Public API source</strong>
+          <span>Use public_api.md for landed exports; this index only routes reviewers to the nearest current lane.</span>
+        </article>
       </section>
 
       <section aria-labelledby="quick-links-title">
