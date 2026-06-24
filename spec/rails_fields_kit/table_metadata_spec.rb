@@ -71,6 +71,42 @@ RSpec.describe "table metadata objects" do
       )
     end
 
+    it "builds native date/time/color table filter metadata from factories" do
+      date_input = described_class.date_field(
+        :starts_on,
+        min: "2026-01-01",
+        max: "2026-12-31"
+      )
+      time_input = described_class.time_field(:starts_at, step: 900)
+      datetime_input = described_class.datetime_local_field(:published_at, step: 60)
+      color_input = described_class.color_field(:accent_color, required: true)
+
+      expect(date_input.to_table_filter).to eq(
+        type: "rails_fields_kit",
+        field_type: "date_field",
+        method: "starts_on",
+        options: {
+          min: "2026-01-01",
+          max: "2026-12-31"
+        }
+      )
+      expect(time_input.to_table_filter).to include(
+        field_type: "time_field",
+        method: "starts_at",
+        options: { step: 900 }
+      )
+      expect(datetime_input.to_table_filter).to include(
+        field_type: "datetime_local_field",
+        method: "published_at",
+        options: { step: 60 }
+      )
+      expect(color_input.to_table_filter).to include(
+        field_type: "color_field",
+        method: "accent_color",
+        options: { required: true }
+      )
+    end
+
     it "builds table filter metadata from a dynamic type" do
       input = described_class.from_type(
         :combobox,
@@ -89,7 +125,14 @@ RSpec.describe "table metadata objects" do
     end
 
     it "exposes known filter field types without file upload factories" do
-      expect(described_class.known_types).to include(:combobox, :token_search)
+      expect(described_class.known_types).to include(
+        :combobox,
+        :token_search,
+        :date_field,
+        :time_field,
+        :datetime_local_field,
+        :color_field
+      )
       expect(described_class.known_type?(:combobox)).to be(true)
       expect(described_class.known_type?(" token_search ")).to be(true)
       expect(described_class.known_type?(:file_field)).to be(false)
@@ -210,6 +253,34 @@ RSpec.describe "table metadata objects" do
       )
     end
 
+    it "builds native date/time/color table cell editor metadata from factories" do
+      date_input = described_class.date_field(:starts_on, min: "2026-01-01")
+      time_input = described_class.time_field(:starts_at, step: 900)
+      datetime_input = described_class.datetime_local_field(:published_at, step: 60)
+      color_input = described_class.color_field(:accent_color, required: true)
+
+      expect(date_input.to_table_cell_editor).to include(
+        field_type: "date_field",
+        method: "starts_on",
+        options: { min: "2026-01-01" }
+      )
+      expect(time_input.to_table_cell_editor).to include(
+        field_type: "time_field",
+        method: "starts_at",
+        options: { step: 900 }
+      )
+      expect(datetime_input.to_table_cell_editor).to include(
+        field_type: "datetime_local_field",
+        method: "published_at",
+        options: { step: 60 }
+      )
+      expect(color_input.to_table_cell_editor).to include(
+        field_type: "color_field",
+        method: "accent_color",
+        options: { required: true }
+      )
+    end
+
     it "builds file field cell editor metadata from the built-in factory" do
       input = described_class.file_field(
         :attachment,
@@ -248,7 +319,15 @@ RSpec.describe "table metadata objects" do
     end
 
     it "exposes known cell editor field types" do
-      expect(described_class.known_types).to include(:combobox, :token_search, :file_field)
+      expect(described_class.known_types).to include(
+        :combobox,
+        :token_search,
+        :date_field,
+        :time_field,
+        :datetime_local_field,
+        :color_field,
+        :file_field
+      )
       expect(described_class.known_type?(:combobox)).to be(true)
       expect(described_class.known_type?(" token_search ")).to be(true)
       expect(described_class.known_type?(:file_field)).to be(true)

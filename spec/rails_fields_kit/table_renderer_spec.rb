@@ -38,6 +38,26 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       "file_field"
     end
 
+    def rfk_date_field(method, **options)
+      calls << [:rfk_date_field, method, options]
+      "date_field"
+    end
+
+    def rfk_time_field(method, **options)
+      calls << [:rfk_time_field, method, options]
+      "time_field"
+    end
+
+    def rfk_datetime_local_field(method, **options)
+      calls << [:rfk_datetime_local_field, method, options]
+      "datetime_local_field"
+    end
+
+    def rfk_color_field(method, **options)
+      calls << [:rfk_color_field, method, options]
+      "color_field"
+    end
+
     def custom_table_field(method, **options)
       calls << [:custom_table_field, method, options]
       "custom"
@@ -266,6 +286,27 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     )
   end
 
+  it "maps native date/time/color metadata to FormBuilder helpers" do
+    form_builder = FakeTableFormBuilder.new
+    filters = [
+      {field_type: "date_field", method: "starts_on", options: {min: "2026-01-01"}},
+      {field_type: "time_field", method: "starts_at", options: {step: 900}}
+    ]
+    editors = [
+      {field_type: "datetime_local_field", method: "published_at", options: {step: 60}},
+      {field_type: "color_field", method: "accent_color", options: {required: true}}
+    ]
+
+    expect(described_class.render_filters(form_builder, filters)).to eq(["date_field", "time_field"])
+    expect(described_class.render_cell_editors(form_builder, editors)).to eq(["datetime_local_field", "color_field"])
+    expect(form_builder.calls).to eq([
+      [:rfk_date_field, :starts_on, {min: "2026-01-01"}],
+      [:rfk_time_field, :starts_at, {step: 900}],
+      [:rfk_datetime_local_field, :published_at, {step: 60}],
+      [:rfk_color_field, :accent_color, {required: true}]
+    ])
+  end
+
   it "builds a cell editor call spec" do
     metadata = {field_type: "enum_select", method: "status", options: {}}
 
@@ -483,6 +524,10 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       "combobox" => :rfk_combobox,
       "token_search" => :rfk_token_search,
       "enum_select" => :rfk_enum_select,
+      "date_field" => :rfk_date_field,
+      "time_field" => :rfk_time_field,
+      "datetime_local_field" => :rfk_datetime_local_field,
+      "color_field" => :rfk_color_field,
       "file_field" => :rfk_file_field
     )
   end
@@ -499,6 +544,10 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       "combobox",
       "token_search",
       "enum_select",
+      "date_field",
+      "time_field",
+      "datetime_local_field",
+      "color_field",
       "file_field"
     )
     expect(described_class.registered_field_types).not_to include(:rfk_combobox)

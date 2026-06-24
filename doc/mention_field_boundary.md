@@ -21,6 +21,8 @@ These lanes let applications ship many nearby workflows without introducing a de
 
 Keep mention-field review in this boundary document until a helper contract is accepted. Do not add `rfk_mention_field`, mention overlay screenshots, or mention-specific cards to the visual reference family as current Rails Fields Kit evidence.
 
+Use [`mention_field_boundary_sample_evidence.html`](mention_field_boundary_sample_evidence.html) only as proposal-only review evidence when a design reviewer needs to compare adjacent helper responsibilities before the helper exists. The artifact is intentionally kept out of `visual_references.md`, `visual_reference_index.html`, release evidence, and `public_api.md` so it cannot be mistaken for current public API.
+
 A standalone visual lane would be easy to misread as an implemented textarea mention helper because it would need to show overlay positioning, suggestion rows, highlighted tokens, hidden metadata, or authorization-aware results. Those are exactly the decisions that remain future feature work and host-app responsibility today.
 
 For current review, compare nearby helper lanes instead:

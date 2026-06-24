@@ -121,13 +121,21 @@ RSpec.describe "package metadata" do
         "import" => "./app/javascript/rails_fields_kit/index.js",
         "default" => "./app/javascript/rails_fields_kit/index.js"
       },
-      "./native_field_accessibility_contract" => "./app/javascript/rails_fields_kit/native_field_accessibility_contract.js",
+      "./native_field_accessibility_contract" => {
+        "types" => "./app/javascript/rails_fields_kit/native_field_accessibility_contract.d.ts",
+        "import" => "./app/javascript/rails_fields_kit/native_field_accessibility_contract.js",
+        "default" => "./app/javascript/rails_fields_kit/native_field_accessibility_contract.js"
+      },
       "./tom_select_controller" => {
         "types" => "./app/javascript/rails_fields_kit/tom_select_controller.d.ts",
         "import" => "./app/javascript/rails_fields_kit/tom_select_controller.js",
         "default" => "./app/javascript/rails_fields_kit/tom_select_controller.js"
       },
-      "./tom_select_text_override_contract" => "./app/javascript/rails_fields_kit/tom_select_text_override_contract.js"
+      "./tom_select_text_override_contract" => {
+        "types" => "./app/javascript/rails_fields_kit/tom_select_text_override_contract.d.ts",
+        "import" => "./app/javascript/rails_fields_kit/tom_select_text_override_contract.js",
+        "default" => "./app/javascript/rails_fields_kit/tom_select_text_override_contract.js"
+      }
     )
   end
 

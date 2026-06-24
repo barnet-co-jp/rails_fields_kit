@@ -14,6 +14,10 @@ module RailsFieldsKit
       text_area
       number_field
       range_field
+      date_field
+      time_field
+      datetime_local_field
+      color_field
       money_field
       percent_field
       email_field
