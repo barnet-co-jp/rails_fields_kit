@@ -53,6 +53,7 @@ Default behavior uses three different patterns:
 | `default_plugins` | `[]` | `plugins:` | Tom Select-backed helpers | Helper defaults can seed plugins first; `allow_clear: true` adds `clear_button`. |
 | `default_min_length` | `0` | `min_length:` | Remote loading | Minimum query length before loading starts. |
 | `default_max_options` | `nil` | `max_options:` | Tom Select dropdowns | `nil` leaves the Tom Select data value unset. |
+| `default_load_throttle` | `nil` | `load_throttle:` | Remote loading | `nil` leaves the Tom Select data value unset. |
 | `default_preload` | `nil` | `preload:` | Tom Select preload behavior | `nil` leaves the Tom Select data value unset. |
 | `default_open_on_focus` | `nil` | `open_on_focus:` | Tom Select focus behavior | `nil` leaves the Tom Select data value unset. |
 | `default_close_after_select` | `nil` | `close_after_select:` | Tom Select selection behavior | `nil` leaves the Tom Select data value unset. |
@@ -185,6 +186,14 @@ Maximum number of options Tom Select should show.
 
 Default: `nil`
 
+### `default_load_throttle`
+
+Remote loading throttle in milliseconds for Tom Select-backed helpers when the helper call does not pass `load_throttle:`.
+
+Default: `nil`
+
+Field-level `load_throttle:` replaces this initializer default for that one helper. Leave the initializer unset when the host app wants Tom Select or its local setup to own remote loading cadence.
+
 ### `default_preload`
 
 Tom Select preload behavior.
@@ -227,6 +236,7 @@ RailsFieldsKit.configure do |config|
   config.default_label_field = "name"
   config.default_search_field = "name,email"
   config.default_max_options = 50
+  config.default_load_throttle = 300
 end
 ```
 
@@ -237,10 +247,11 @@ end
   value_field: "uuid",
   label_field: "display_name",
   search_field: "display_name,email",
-  max_options: 10 %>
+  max_options: 10,
+  load_throttle: 150 %>
 ```
 
-That helper renders `lookup`, `uuid`, `display_name`, `display_name,email`, and `10` for its Tom Select data values. Other helpers that omit those options still use the initializer defaults. The same pattern applies to request parameter defaults (`query_param:`, `selected_param:`, `selected_multiple_param:`, `create_param:`), JSON field defaults (`value_field:`, `label_field:`, `search_field:`, `option_description_field:`, `option_badge_field:`), and Tom Select defaults (`min_length:`, `max_options:`, `preload:`, `open_on_focus:`, `close_after_select:`, `hide_selected:`, `persist:`).
+That helper renders `lookup`, `uuid`, `display_name`, `display_name,email`, `10`, and `150` for its Tom Select data values. Other helpers that omit those options still use the initializer defaults. The same pattern applies to request parameter defaults (`query_param:`, `selected_param:`, `selected_multiple_param:`, `create_param:`), JSON field defaults (`value_field:`, `label_field:`, `search_field:`, `option_description_field:`, `option_badge_field:`), and Tom Select defaults (`min_length:`, `max_options:`, `load_throttle:`, `preload:`, `open_on_focus:`, `close_after_select:`, `hide_selected:`, `persist:`).
 
 ## Render text defaults
 
@@ -371,6 +382,7 @@ RailsFieldsKit.configure do |config|
   config.default_search_field = "name,email"
   config.default_min_length = 2
   config.default_max_options = 50
+  config.default_load_throttle = 300
 
   # Use only plugin names already available in your Tom Select setup.
   # Field-level plugins: overrides this default for one helper.

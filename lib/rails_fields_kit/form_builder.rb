@@ -171,7 +171,7 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :min_length, rfk_option_or_default(options, :min_length, config.default_min_length))
       rfk_assign_data_value(data, :max_options, rfk_option_or_default(options, :max_options, config.default_max_options))
       rfk_assign_data_value(data, :max_items, options.delete(:max_items))
-      rfk_assign_data_value(data, :load_throttle, options.delete(:load_throttle))
+      rfk_assign_data_value(data, :load_throttle, rfk_option_or_default(options, :load_throttle, config.default_load_throttle))
       rfk_assign_data_value(data, :delimiter, options.delete(:delimiter))
       rfk_assign_data_value(data, :dropdown_parent, options.delete(:dropdown_parent))
       rfk_assign_data_value(data, :preload, rfk_option_or_default(options, :preload, config.default_preload))
