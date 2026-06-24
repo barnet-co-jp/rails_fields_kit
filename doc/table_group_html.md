@@ -68,7 +68,14 @@ That split keeps the responsibilities distinct:
 - Field-level `wrapper_html:` belongs to each rendered Rails Fields Kit control.
 - Group-level `group_html:` belongs to the single wrapper around the joined table helper output.
 - Semantic wrappers such as `fieldset` and `legend` belong to the host app, where the surrounding form, layout, heading structure, and accessibility copy are known.
+- Group-level hint text, group-level error copy, and any `aria-describedby` relationship for a semantic group also belong to the host app today.
+
+## Future semantic wrapper proposal boundary
+
+If Rails Fields Kit later adopts a semantic group helper or option, treat it as a separate public surface from `group_html:`. Do not reinterpret the current `group_html:` option as a `fieldset` builder or as ownership of `legend`, group hint, group error, or group-level `aria-describedby` wiring.
+
+A future implementation issue should be able to choose its own helper or option name, focused FormBuilder specs, docs sync, and visual/sample evidence without changing the current `<div>` wrapper contract. Until that separate surface lands and is listed in `doc/public_api.md`, host apps should keep semantic grouping markup around the Rails Fields Kit output.
 
 This option does not change the lower-level table metadata contracts. `RailsFieldsKit::TableMetadata.render_filters`, `RailsFieldsKit::TableMetadata.render_cell_editors`, `RailsFieldsKit::TableRenderer.render_filters`, and `RailsFieldsKit::TableRenderer.render_cell_editors` continue to return ordered arrays for integrations that want to inspect, reorder, or wrap controls themselves.
 
-Rails Fields Kit still does not own table layout, query execution, persistence, authorization, pagination, semantic group naming, or visible save/error copy. Host apps and table integrations remain responsible for those flows.
+Rails Fields Kit still does not own table layout, query execution, persistence, authorization, pagination, semantic group naming, group-level hint/error copy, group-level `aria-describedby` wiring, or visible save/error copy. Host apps and table integrations remain responsible for those flows.
