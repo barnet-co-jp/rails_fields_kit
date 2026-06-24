@@ -20,6 +20,14 @@ RSpec.describe "package contents" do
   let(:field_helpers) { File.read(field_helpers_path) }
   let(:controller_helpers_path) { File.expand_path("../doc/controller_helpers.md", __dir__) }
   let(:controller_helpers) { File.read(controller_helpers_path) }
+  let(:token_suggestions_path) { File.expand_path("../doc/token_suggestions.md", __dir__) }
+  let(:token_suggestions) { File.read(token_suggestions_path) }
+  let(:saved_search_token_suggestion_evidence_path) { File.expand_path("../doc/saved_search_token_suggestion_evidence.md", __dir__) }
+  let(:saved_search_token_suggestion_evidence) { File.read(saved_search_token_suggestion_evidence_path) }
+  let(:shared_metadata_navigation_path) { File.expand_path("../doc/shared_metadata_navigation.md", __dir__) }
+  let(:shared_metadata_navigation) { File.read(shared_metadata_navigation_path) }
+  let(:shared_metadata_runnable_guide_path) { File.expand_path("../doc/shared_metadata_runnable_guide.md", __dir__) }
+  let(:shared_metadata_runnable_guide) { File.read(shared_metadata_runnable_guide_path) }
   let(:configuration_profiles_path) { File.expand_path("../doc/configuration_profiles.md", __dir__) }
   let(:configuration_profiles) { File.read(configuration_profiles_path) }
   let(:sample_app_checklist_path) { File.expand_path("../doc/sample_app_checklist.md", __dir__) }
@@ -103,6 +111,42 @@ RSpec.describe "package contents" do
       "doc/tom_select_text_override_visual_reference.html",
       "doc/native_field_visual_reference.html",
       "doc/table_metadata_visual_reference.html"
+    )
+  end
+
+  it "keeps token and shared metadata evidence guides packaged without promoting new ownership" do
+    expect(specification.files).to include(
+      "doc/saved_search_token_suggestion_evidence.md",
+      "doc/shared_metadata_navigation.md",
+      "doc/shared_metadata_runnable_guide.md"
+    )
+
+    expect(token_suggestions).to include(
+      "[`saved_search_token_suggestion_evidence.md`](saved_search_token_suggestion_evidence.md)",
+      "saved-search token suggestions",
+      "suggestion option JSON",
+      "not currently provide an independent saved search selector helper"
+    )
+
+    expect(saved_search_token_suggestion_evidence).to include(
+      "Use this guide when a release or narrow PR needs representative evidence",
+      "token suggestion option JSON for `rfk_token_search`",
+      "not a separate saved-search selector helper",
+      "The host app owns parser behavior, search execution, saved-search storage, permissions, and any saved-search management UI"
+    )
+
+    expect(shared_metadata_navigation).to include(
+      "[`shared_metadata_runnable_guide.md`](shared_metadata_runnable_guide.md)",
+      "app-owned metadata source",
+      "not a Rails Fields Kit-owned registry or query execution path"
+    )
+
+    expect(shared_metadata_runnable_guide).to include(
+      "one host-app-owned metadata source",
+      "RailsFieldsKit::TokenSuggestions.build",
+      "RailsFieldsKit::RansackSuggestions.build",
+      "RailsFieldsKit::TableFilterInput.ransack_filter",
+      "Do not treat this guide as a registry API"
     )
   end
 
