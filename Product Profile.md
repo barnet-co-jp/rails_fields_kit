@@ -15,7 +15,7 @@ Rails Fields Kit is a Ruby gem that gives Rails applications a focused set of fo
 - wrap Tom Select in Rails-friendly helpers for naming, redisplay, validation, and accessibility
 - support remote search, selected preload, and create-on-the-fly workflows
 - expose stable integration points for controller helpers, token suggestion builders, JavaScript rendered-contract helpers, table metadata, and read-only setup verification
-- keep native wrappers such as `rfk_password_field`, `rfk_date_field`, and `rfk_color_field` thin, Rails-friendly, and explicit about host-app-owned behavior
+- keep native wrappers such as `rfk_password_field`, `rfk_file_field`, `rfk_check_box`, `rfk_date_field`, and `rfk_color_field` thin, Rails-friendly, and explicit about host-app-owned behavior
 - stay easy to adopt from ordinary Rails forms without taking over the whole frontend stack
 
 ## Responsibility boundary
@@ -36,7 +36,7 @@ Host applications remain responsible for:
 
 ## Current public surface
 
-- FormBuilder helpers such as `rfk_select`, `rfk_combobox`, `rfk_tags`, `rfk_token_search`, `rfk_password_field`, `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, `rfk_color_field`, `rfk_table_filters`, and `rfk_table_cell_editors`
+- FormBuilder helpers such as `rfk_select`, `rfk_combobox`, `rfk_tags`, `rfk_token_search`, `rfk_password_field`, `rfk_file_field`, `rfk_check_box`, `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, `rfk_color_field`, `rfk_table_filters`, and `rfk_table_cell_editors`
 - controller helpers under `RailsFieldsKit::Searchable`
 - token suggestion builders including `RailsFieldsKit::TokenSuggestions.build` and `RailsFieldsKit::RansackSuggestions.build`
 - table metadata objects including `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
@@ -68,6 +68,8 @@ Host applications remain responsible for:
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
 - `doc/field_helpers.md` and `doc/controller_helpers.md`: public helper references
 - `doc/password_field.md`: focused `rfk_password_field` native wrapper boundary and password-specific non-goals
+- `doc/file_field.md`: focused `rfk_file_field` native wrapper boundary and file-upload ownership non-goals
+- `doc/check_box.md`: focused `rfk_check_box` native wrapper boundary and Rails checkbox contract non-goals
 - `doc/native_numeric_fields.md`: focused `rfk_number_field`, `rfk_money_field`, and `rfk_percent_field` native wrapper boundary and numeric formatting non-goals
 - `doc/native_contact_fields.md`: focused `rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field` native wrapper boundary and contact/search ownership non-goals
 - `doc/native_date_time_color_fields.md`: focused `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, and `rfk_color_field` native wrapper boundary and date/time/color ownership non-goals
