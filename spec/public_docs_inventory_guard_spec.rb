@@ -99,6 +99,6 @@ RSpec.describe "public docs inventory guards" do
   end
 
   def markdown_section(document, heading)
-    document.split(heading, 2).last.split(/\n(?=#{1,3}\s)/, 2).first
+    document.split(heading, 2).last.split(/\n(?=\#{1,3}\s)/, 2).first
   end
 end
