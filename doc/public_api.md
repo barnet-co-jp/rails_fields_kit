@@ -287,6 +287,7 @@ Package-root imports use the documented `rails_fields_kit` entrypoint. The curre
 | `readRenderedOptionPayloadMapping(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered Tom Select option payload mapping data and returns `valueField`, `labelField`, `searchFields`, `optionDescriptionField`, and `optionBadgeField`, or `null` when the element is not a rendered Tom Select-backed field. It does not execute requests, parse endpoint responses, mutate Tom Select, validate payloads, or own option rendering HTML. |
 | `readRenderedTableFilterMetadata(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered table filter metadata attributes and returns `adapter`, `paramName`, and `fields`, or `null` when the element is not rendered from a table filter metadata lane. It does not execute Ransack, parse token queries, mutate Tom Select, or own table search behavior. |
 | `nativeFieldAccessibilityContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea accessibility wiring, affix elements, and returns `describedByIds`, `describedByElements`, `labelElement`, `hintElement`, `errorElement`, `prefixElement`, `suffixElement`, and `wrapperElement`, or `null` for non-element or non-native-field inputs. It does not generate ids, mutate aria attributes, create validation messages, format affix values, move focus, or own visible feedback. |
+| `nativeFieldConstraintContract(element)` | rendered-field contract reader | Reads Rails Fields Kit-rendered native input, select, or textarea constraint attributes and returns `maxLength`, `minLength`, `pattern`, `autocomplete`, and `inputMode`, or `null` for non-element or non-native-field inputs. It does not mutate DOM attributes, run validation, own browser validation messages, masking, formatting, normalization, autocomplete policy, or visible feedback. |
 
 ### Import patterns
 
@@ -296,6 +297,7 @@ Package-root imports use the documented entrypoint:
 import {
   TomSelectController,
   nativeFieldAccessibilityContract,
+  nativeFieldConstraintContract,
   readRenderedErrorSurface,
   readRenderedOptionPayloadMapping,
   readRenderedSelectedPreloadConfig,
@@ -309,6 +311,7 @@ import {
 } from "rails_fields_kit"
 
 const accessibilityContract = nativeFieldAccessibilityContract(inputElement)
+const constraintContract = nativeFieldConstraintContract(inputElement)
 const copyContract = tomSelectTextOverrideContract(fieldElement)
 const errorSurface = readRenderedErrorSurface(fieldElement)
 const fieldKindContract = tomSelectFieldKindContract(fieldElement)
@@ -331,6 +334,7 @@ Direct helper subpath imports are supported only for helper files that `package.
 
 ```js
 import nativeFieldAccessibilityContract from "rails_fields_kit/native_field_accessibility_contract"
+import nativeFieldConstraintContract from "rails_fields_kit/native_field_constraint_contract"
 import tomSelectTextOverrideContract from "rails_fields_kit/tom_select_text_override_contract"
 ```
 
@@ -368,6 +372,8 @@ The helper does not execute `fetch`, inspect endpoint responses, parse query str
 `readRenderedTableFilterMetadata(element)` reports only the rendered table-filter metadata contract. It is intended for fields rendered through `rfk_table_filters` / `TableRenderer.render_filter`, not direct `rfk_token_search` calls. The helper does not parse token strings, run Ransack, execute searches, or decide adapter support.
 
 For native fields, `labelElement` first uses the rendered `label[for]` association and then falls back to the nearest `.rfk-field` wrapper label. Missing labels return `null`. `prefixElement` and `suffixElement` read the rendered affix elements inside the nearest `.rfk-field` wrapper when present and return `null` otherwise; they do not format values, parse currency or percent content, mutate markup, or change focus behavior.
+
+`nativeFieldConstraintContract(element)` reports only native constraint attributes already rendered on Rails Fields Kit native input, select, or textarea elements. It returns string values from `getAttribute()` and `null` for absent attributes, so it preserves the HTML attribute contract rather than normalizing numeric limits or applying browser validation state. The helper does not mutate attributes, run validation, own validation messages, apply masking or formatting, normalize input, decide autocomplete policy, or create visible feedback.
 
 Future package-root helpers should follow the same boundary: read the rendered Rails Fields Kit contract or configuration from an element, but do not take over request lifecycles, locale resolution, visible feedback, query parsing, retry UI, validation feedback, or other application-specific behavior. Proposal or open-PR helper names are not current public API until they are merged and listed in the table above.
 
