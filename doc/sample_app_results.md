@@ -17,7 +17,7 @@ If the route map is too broad for a narrow PR, use `doc/sample_app_results_route
 | README first field quickstart evidence | `rfk_select` representative collection-backed single-value lane checks, Visual reference render checks | The README first field or quickstart sample needs endpoint-free, server-rendered collection evidence without mixing in setup/import, remote search, selected preload, create-on-the-fly, or token metadata lanes. | Setup/import verification, remote search, selected preload, create-on-the-fly, token metadata, or release-wide readiness. |
 | Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. | Runtime helper behavior, production CSS approval, sample-app field behavior, or CI success as visual approval. |
 | Remote lifecycle feedback | Selected preload representative lane checks, create-on-the-fly representative failure lane checks, visible feedback checks | Selected preload, remote search, create-on-the-fly, request-failure, or visible fallback behavior changed. | Setup/import checks, static visual reference approval, endpoint authorization policy, or retry UI ownership unless those surfaces changed. |
-| Token and table metadata | Token suggestion and Ransack suggestion metadata checks, table metadata checks | Token suggestions, saved-search metadata, Ransack metadata, table filters, range field table metadata, or cell editor metadata changed. | Query execution, parser semantics, table preference persistence, visual reference rendering, or native wrapper evidence unless those lanes also changed. |
+| Token and table metadata | `rfk_token_search` representative token-entry lane checks, token suggestion and Ransack suggestion metadata checks, table metadata checks | `rfk_token_search` helper rendering, submitted token text, token suggestions, saved-search metadata, Ransack metadata, table filters, range field table metadata, or cell editor metadata changed. | Query execution, parser semantics, table preference persistence, visual reference rendering, native wrapper evidence, or suggestion/table metadata approval unless those lanes also changed. |
 
 When adding a new evidence lane, place it near the closest feature-specific section and update this route map only when reviewers need a new starting point. Do not turn a feature-specific lane into a release-wide requirement without a separate release policy decision.
 
@@ -134,6 +134,8 @@ Use this memo only to make release evidence reproducible. Tom Select package ver
 Package-root helper lanes checked:
 
 Use this table as the helper-specific evidence log. Choose helper names from `doc/public_api.md#javascript-exports`, use `doc/package_root_helper_release_evidence.md` for the representative lane guidance, and record only helpers that are in release or PR scope. Do not mirror the full helper family here when a helper is unrelated to the change under review.
+
+When the scoped helper lane is `tomSelectPluginContract(element)` for `allow_clear: true`, record it in this package-root helper table instead of the Tom Select plugin override section below. The row should name the representative field, the `clear_button` / `hasClearButton` evidence, and any explicit `plugins:` field that was intentionally checked, while leaving plugin assets, clear/remove styling, selection mutation, empty-state copy, and Tom Select plugin lifecycle outside Rails Fields Kit ownership.
 
 In the `Result` column, use `PASS` when the scoped helper lane was checked successfully, `FAIL` when it was checked and did not satisfy the lane, `SKIPPED` when an in-scope lane was intentionally deferred, and `OUT OF SCOPE` when a package-root helper boundary was reviewed and deliberately left outside this release or PR. For `SKIPPED` and `OUT OF SCOPE`, use `Evidence notes` to name the reason, follow-up, or boundary instead of leaving the row blank. Do not add rows for unrelated helpers solely to prove they were not checked.
 
@@ -275,7 +277,7 @@ Use this section when the native helper Browser semantics lane is release-critic
 
 - [ ] search, email, URL, telephone, money, and percent examples were checked in the Browser semantics lane when those helpers were in release scope
 - [ ] the evidence note distinguished browser-provided semantics from Rails Fields Kit-owned wrapper, hint, error, affix, and accessibility wiring
-- [ ] formatting, masking, browser validation-message policy, autocomplete policy, locale policy, and custom picker behavior remained host-app responsibilities
+- [ ] formatting, masking, browser validation-message policy, autocomplete policy, and custom picker behavior remained host-app responsibilities
 - [ ] the Browser semantics lane evidence stayed separate from runtime sample-app field behavior unless a release candidate explicitly required both
 - [ ] any remaining browser-capable visual review was recorded as a blocker or follow-up instead of treating CI green as visual approval
 
@@ -417,6 +419,22 @@ Use this section when the release or PR changes `doc/enum_select.md`, the explic
 - [ ] the rendered labels followed the documented model I18n / humanized fallback boundary for those keys
 - [ ] an edit form or validation rerender kept the same selected explicit enum key and redisplayed the matching label for that representative field
 - [ ] evidence notes distinguished the explicit Rails enum-shaped hash source from arbitrary label/value pairs, remote enum options, Ransack filters, and table metadata adapter behavior
+
+Notes:
+
+## `rfk_token_search` representative token-entry lane checks
+
+Use this section when a release or narrow PR needs evidence for the `rfk_token_search` helper entry itself. Keep it separate from suggestion metadata and table metadata: this lane records that a representative token-search field rendered and submitted token text through the host app route, not that Rails Fields Kit parsed or executed the search.
+
+- Representative helper: `rfk_token_search`
+- Representative field or route:
+- Evidence location:
+
+- [ ] the representative `rfk_token_search` field rendered in the expected page or source-reviewed helper call
+- [ ] submitted token text or the observed query param shape was recorded for the host app route under review
+- [ ] if suggestions were also in scope, their `rfk_token_suggestions_with`, `TokenSuggestions.build`, or `RansackSuggestions.build` evidence was recorded separately in the metadata lane below
+- [ ] the evidence note made clear that token parsing, `params[:q]` construction, saved-search resolution, Ransack execution, query authorization, table persistence, and user-visible results remain host-app responsibilities
+- [ ] `SOURCE REVIEW ONLY` or `DEFERRED` was used when a browser/sample-app run was not actually performed
 
 Notes:
 
