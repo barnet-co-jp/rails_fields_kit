@@ -61,6 +61,7 @@ module RailsFieldsKit
     BUNDLER_ALIASES = [
       "rails_fields_kit",
       "rails_fields_kit/native_field_accessibility_contract",
+      "rails_fields_kit/native_field_constraint_contract",
       "rails_fields_kit/tom_select_controller",
       "rails_fields_kit/tom_select_text_override_contract"
     ].freeze
