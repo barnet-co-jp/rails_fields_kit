@@ -20,8 +20,11 @@ module RailsFieldsKit
       "app/javascript/application.ts",
       "app/javascript/entrypoints/application.js",
       "app/javascript/entrypoints/application.ts",
+      "app/javascript/entrypoints/application.jsx",
+      "app/javascript/entrypoints/application.tsx",
       "app/frontend/entrypoints/application.js",
       "app/frontend/entrypoints/application.ts",
+      "app/frontend/entrypoints/application.jsx",
       "app/frontend/entrypoints/application.tsx"
     ].freeze
 
@@ -32,8 +35,11 @@ module RailsFieldsKit
       "app/javascript/controllers/index.ts",
       "app/javascript/entrypoints/application.js",
       "app/javascript/entrypoints/application.ts",
+      "app/javascript/entrypoints/application.jsx",
+      "app/javascript/entrypoints/application.tsx",
       "app/frontend/entrypoints/application.js",
       "app/frontend/entrypoints/application.ts",
+      "app/frontend/entrypoints/application.jsx",
       "app/frontend/entrypoints/application.tsx"
     ].freeze
 
