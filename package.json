@@ -30,6 +30,11 @@
       "types": "./app/javascript/rails_fields_kit/native_field_accessibility_contract.d.ts",
       "import": "./app/javascript/rails_fields_kit/native_field_accessibility_contract.js",
       "default": "./app/javascript/rails_fields_kit/native_field_accessibility_contract.js"
+    },
+    "./native_field_constraint_contract": {
+      "types": "./app/javascript/rails_fields_kit/native_field_constraint_contract.d.ts",
+      "import": "./app/javascript/rails_fields_kit/native_field_constraint_contract.js",
+      "default": "./app/javascript/rails_fields_kit/native_field_constraint_contract.js"
     }
   }
 }
