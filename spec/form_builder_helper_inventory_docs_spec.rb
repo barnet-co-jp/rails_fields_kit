@@ -6,14 +6,18 @@ RSpec.describe "FormBuilder helper inventory docs" do
   let(:public_api) { File.read(File.join(repo_root, "doc/public_api.md")) }
   let(:field_helpers) { File.read(File.join(repo_root, "doc/field_helpers.md")) }
   let(:range_field) { File.read(File.join(repo_root, "doc/range_field.md")) }
+  let(:native_date_time_color_fields) { File.read(File.join(repo_root, "doc/native_date_time_color_fields.md")) }
   let(:password_field) { File.read(File.join(repo_root, "doc/password_field.md")) }
+  let(:check_box) { File.read(File.join(repo_root, "doc/check_box.md")) }
   let(:file_field) { File.read(File.join(repo_root, "doc/file_field.md")) }
 
   it "keeps the compact public API helper inventory represented in helper docs" do
     public_helpers = form_builder_helper_names_from(public_api)
     detailed_helper_sections = field_helpers.scan(/^### `(rfk_[a-z_]+)`/).flatten
     detailed_helper_sections += range_field.scan(/`(rfk_range_field)`/).flatten
+    detailed_helper_sections += native_date_time_color_fields.scan(/`(rfk_(?:date|time|datetime_local|color)_field)`/).flatten
     detailed_helper_sections += password_field.scan(/`(rfk_password_field)`/).flatten
+    detailed_helper_sections += check_box.scan(/`(rfk_check_box)`/).flatten
     detailed_helper_sections += file_field.scan(/`(rfk_file_field)`/).flatten
 
     expect(public_helpers).to eq(%w[
@@ -38,7 +42,12 @@ RSpec.describe "FormBuilder helper inventory docs" do
       rfk_phone_field
       rfk_search_field
       rfk_password_field
+      rfk_check_box
       rfk_file_field
+      rfk_date_field
+      rfk_time_field
+      rfk_datetime_local_field
+      rfk_color_field
     ])
     expect(detailed_helper_sections).to include(*public_helpers)
   end

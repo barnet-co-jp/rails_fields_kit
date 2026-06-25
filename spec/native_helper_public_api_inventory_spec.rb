@@ -6,7 +6,9 @@ RSpec.describe "native FormBuilder helper public API inventory" do
   let(:form_builder_paths) do
     %w[
       form_builder.rb
+      form_builder_check_box.rb
       form_builder_file_field.rb
+      form_builder_native_date_time_fields.rb
     ].map { |filename| File.expand_path("../lib/rails_fields_kit/#{filename}", __dir__) }
   end
   let(:form_builder_source) { form_builder_paths.map { |path| File.read(path) }.join("\n") }
@@ -15,7 +17,7 @@ RSpec.describe "native FormBuilder helper public API inventory" do
 
   let(:landed_native_helpers) do
     form_builder_source.scan(/^    def (rfk_[a-z0-9_]+).*?\n(.*?)^    end/m).filter_map do |helper_name, body|
-      helper_name if body.include?("rfk_native_field(")
+      helper_name if body.include?("rfk_native_field(") || body.include?("check_box(method")
     end.sort
   end
 
@@ -31,14 +33,9 @@ RSpec.describe "native FormBuilder helper public API inventory" do
     expect(documented_native_helpers).to eq(landed_native_helpers)
   end
 
-  it "keeps proposal-only native helper names out of the current public API list" do
+  it "keeps proposal-only native helper aliases out of the current public API list" do
     proposal_only_helpers = %w[
-      rfk_check_box
       rfk_checkbox
-      rfk_color_field
-      rfk_date_field
-      rfk_datetime_local_field
-      rfk_time_field
     ]
 
     expect(documented_native_helpers & proposal_only_helpers).to be_empty
