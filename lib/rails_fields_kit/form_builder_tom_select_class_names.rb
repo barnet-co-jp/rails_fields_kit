@@ -10,7 +10,8 @@ module RailsFieldsKit
       end
 
       html_options[:disabled] = options.delete(:disabled) if [true, false].include?(options[:disabled])
-      rfk_assign_data_value(html_options[:data] ||= {}, :class_names, options.delete(:tom_select_class_names))
+      data = html_options[:data] ||= {}
+      rfk_assign_data_value(data, :class_names, options.delete(:tom_select_class_names))
     end
   end
 end
