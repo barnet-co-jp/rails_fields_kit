@@ -487,7 +487,7 @@
       <section aria-labelledby="task-picker-title">
         <div class="section-heading">
           <h2 id="task-picker-title">Pick by reviewer task</h2>
-          <p>Start from the task that matches the PR or release question, then open the primary artifact first. Secondary links are there only when the review needs a neighboring lane; they do not introduce proposal-only artifacts.</p>
+          <p>Start from the task that matches the PR or release question, then open the primary artifact first. Secondary links are there only when the review needs a neighboring lane; companion discovery routes to the maintained Markdown map instead of turning this index into a full artifact inventory.</p>
         </div>
 
         <div class="task-grid">
@@ -534,6 +534,27 @@
               <a href="native_field_visual_reference.html">Primary: native stress</a>
               <a href="configuration_wrapper_class_visual_reference.html">Wrapper class narrow lane</a>
               <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
+            </nav>
+          </article>
+
+          <article class="task-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">focused companion</span>
+                <span class="tag info">map-only evidence</span>
+              </div>
+              <h3>Companion artifact discovery</h3>
+              <p>Use when a focused companion or map-only evidence lane exists, but the one-screen index should stay limited to current primary routes.</p>
+            </header>
+            <ul>
+              <li>Open the Markdown reference map as the maintained source of truth before adding a new card to this page.</li>
+              <li>Use companion lanes only when the review question matches their scoped boundary.</li>
+              <li>Keep proposal-only helpers, unmerged artifacts, and full inventory mirrors out of this index.</li>
+            </ul>
+            <nav class="task-links" aria-label="Companion artifact discovery references">
+              <a href="visual_references.md#reference-map">Primary: reference map</a>
+              <a href="visual_references.md#how-to-use-this-family">Task guide</a>
+              <a href="visual_references.md#recording-browser-evidence">Evidence notes</a>
             </nav>
           </article>
 
@@ -830,6 +851,7 @@
         <div class="workflow">
           <ol>
             <li>Choose the reviewer task, helper family, lane, or release gate that matches the current PR or design question.</li>
+            <li>For focused companion or map-only evidence lanes, open visual_references.md before adding another card to this one-screen index.</li>
             <li>For package-root contract readers, confirm the current public export and boundary in public_api.md before opening a visual lane.</li>
             <li>Use package_root_helper_release_evidence.md when the review is about representative package-root helper evidence, not field appearance.</li>
             <li>Use setup_doctor_output_review.md when the review is about CLI diagnostic evidence, not field UI visual references.</li>
@@ -840,7 +862,7 @@
         </div>
       </section>
 
-      <p class="scope-note"><strong>Scope note.</strong> This page is a static index for documentation artifacts. It does not define public helper behavior, JavaScript exports, request lifecycle events, setup diagnostics, or runtime rendering contracts. Use public_api.md#javascript-exports as the source of truth before treating a contract reader as current public API.</p>
+      <p class="scope-note"><strong>Scope note.</strong> This page is a static index for documentation artifacts. It does not define public helper behavior, JavaScript exports, request lifecycle events, setup diagnostics, or runtime rendering contracts. Use visual_references.md as the maintained source-of-truth map for focused companion and map-only evidence lanes, and use public_api.md#javascript-exports before treating a contract reader as current public API.</p>
     </main>
   </body>
 </html>
