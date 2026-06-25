@@ -67,6 +67,7 @@ RSpec.describe "public docs inventory guards" do
   it "keeps table metadata known types aligned with the public API method list" do
     filter_methods = documented_class_methods("TableFilterInput")
     cell_methods = documented_class_methods("TableCellInput")
+    table_metadata_intro = markdown_section(public_api, "## Table metadata adapters")
 
     expect(filter_methods).to eq(
       %w[known_types known_type? from_type] +
@@ -80,9 +81,11 @@ RSpec.describe "public docs inventory guards" do
 
     expect(filter_methods).to include("ransack_filter")
     expect(cell_methods).not_to include("ransack_filter")
-    expect(markdown_section(public_api, "## Table metadata adapters")).to include(
+    expect(table_metadata_intro).to include(
       "Ransack-compatible token-search metadata",
-      "without the Ransack-specific filter entrypoint",
+      "without the Ransack-specific filter entrypoint"
+    )
+    expect(public_api).to include(
       "`TableRenderer.registered_field_types`",
       "`TableFilterInput.known_types` and `TableCellInput.known_types` remain limited to the built-in factory family"
     )
