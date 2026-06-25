@@ -323,7 +323,7 @@ end
 class CustomersController < ApplicationController
   include RailsFieldsKit::Searchable
 
-  rfk_search_with action: :search, model: Customer, value: :id, label: :name
+  rfk_search_with action: :search, model: Customer, value: :id, label: :name, search: [:name, :email]
   rfk_find_with action: :selected, model: Customer, value: :id, label: :name
   rfk_create_with action: :create_customer, model: Customer, value: :id, label: :name, create_attribute: :name
 end
