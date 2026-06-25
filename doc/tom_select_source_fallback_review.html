@@ -47,9 +47,12 @@
       .placeholder { color: #737f8a; }
       .token { display: inline-flex; max-width: 100%; padding: 4px 8px; border: 1px solid #b7d2c7; background: var(--accent-soft); color: #174c43; font-weight: 600; }
       .token.subtle { border-color: #c0d4ea; background: var(--info-soft); color: #2b5278; }
+      .token.warning { border-color: #d6b663; background: var(--warning-soft); color: var(--warning); }
       .caret { flex: none; color: var(--muted); }
       .dropdown { display: grid; gap: 1px; background: var(--line); }
       .option, .message { padding: 8px 10px; background: var(--surface); }
+      .option.is-selected { background: var(--accent-soft); }
+      .option.is-disabled { background: var(--muted-surface); color: var(--muted); }
       .message { background: var(--warning-soft); color: var(--warning); }
       .option strong, .message strong { display: block; font-size: 0.91rem; }
       .option span, .message span { display: block; margin-top: 3px; color: var(--muted); font-size: 0.84rem; }
@@ -71,7 +74,7 @@
       <section class="hero">
         <div class="eyebrow">Rails Fields Kit</div>
         <h1>Tom Select Source and Fallback Review</h1>
-        <p class="lede">Focused static artifact for two adjacent review questions: explicit enum sources should look like the same enum-select family, and remote option label fallback should be visibly display-only.</p>
+        <p class="lede">Focused static artifact for adjacent review questions: enum sources and option states should look like the same enum-select family, and remote option label fallback should be visibly display-only.</p>
         <div class="hero-links">
           <a href="tom_select_visual_reference.html">Tom Select core reference</a>
           <a href="enum_select.md">Enum select boundary</a>
@@ -81,21 +84,34 @@
       <section class="note" aria-labelledby="review-focus-title">
         <h2 id="review-focus-title">Review focus</h2>
         <ul>
-          <li>Compare labels and option copy only; helper behavior and payload contracts stay in the topic docs.</li>
+          <li>Compare labels, submitted keys, placeholder copy, selected state, and disabled option readability only; helper behavior and payload contracts stay in the topic docs.</li>
           <li>Check that long option labels, status badges, and fallback text wrap without crowding the control.</li>
-          <li>Do not treat this page as a new helper API, renderer change, or endpoint validation proposal.</li>
+          <li>Do not treat this page as a new helper API, renderer change, enum translation policy, validation policy, authorization rule, or endpoint validation proposal.</li>
         </ul>
       </section>
       <section class="grid" aria-label="Tom Select source and fallback lanes">
         <article class="card">
           <div class="card-header"><span class="tag enum">Rails Enum Source</span><h2>Model enum state</h2><p>Baseline <code>rfk_enum_select</code> state where labels come from model I18n and the enum-backed attribute owns the submitted key.</p></div>
-          <div class="control" aria-hidden="true"><div class="control-top"><div class="selection"><span class="token subtle">Published</span></div><div class="caret">v</div></div><div class="dropdown"><div class="option"><strong>Draft</strong><span>Submitted value: draft</span></div><div class="option"><strong>Published</strong><span>Submitted value: published</span></div><div class="option"><strong>Archived</strong><span>Submitted value: archived</span></div></div></div>
+          <div class="control" aria-hidden="true"><div class="control-top"><div class="selection"><span class="token subtle">Published</span></div><div class="caret">v</div></div><div class="dropdown"><div class="option"><strong>Draft</strong><span>Submitted value: draft</span></div><div class="option is-selected"><strong>Published</strong><span>Selected; submitted value: published</span></div><div class="option"><strong>Archived</strong><span>Submitted value: archived</span></div></div></div>
           <p class="card-footer">Use this as the ordinary model-backed comparison lane before checking explicit <code>enum:</code> sources.</p>
         </article>
         <article class="card">
           <div class="card-header"><span class="tag enum">Explicit Enum Source</span><h2>Hash-backed enum keys</h2><p>Explicit <code>enum:</code> keeps the same enum-select visual family; the hash keys remain the public submitted values.</p></div>
-          <div class="control" aria-hidden="true"><div class="control-top"><div class="selection"><span class="token subtle">Published</span></div><div class="caret">v</div></div><div class="dropdown"><div class="option"><strong>Draft</strong><span><code>enum: { "draft" => 0 }</code> submits draft</span></div><div class="option"><strong>Published</strong><span><code>enum: { "published" => 1 }</code> submits published</span></div><div class="option"><strong>Archived</strong><span>Labels still come from model I18n or humanized keys</span></div></div></div>
+          <div class="control" aria-hidden="true"><div class="control-top"><div class="selection"><span class="token subtle">Published</span></div><div class="caret">v</div></div><div class="dropdown"><div class="option"><strong>Draft</strong><span><code>enum: { "draft" => 0 }</code> submits draft</span></div><div class="option is-selected"><strong>Published</strong><span><code>enum: { "published" => 1 }</code> is selected</span></div><div class="option"><strong>Archived</strong><span>Labels still come from model I18n or humanized keys</span></div></div></div>
           <p class="card-footer">Detailed submitted-value and label boundaries remain in <code>doc/enum_select.md</code>.</p>
+        </article>
+        <article class="card">
+          <div class="card-header"><span class="tag enum">Enum State Matrix</span><h2>Placeholder, selected, and disabled states</h2><p>Representative enum-select review lane for the states that are easiest to misread as validation, authorization, or renderer policy.</p></div>
+          <div class="control" aria-hidden="true"><div class="control-top"><div class="placeholder">Choose workflow status</div><div class="caret">v</div></div><div class="dropdown"><div class="option"><strong>Draft</strong><span>Enabled option; submitted key: draft</span></div><div class="option is-selected"><strong>Published</strong><span>Selected state; submitted key stays published</span></div><div class="option is-disabled"><strong>Archived</strong><span>Disabled option cue; host app owns why it is unavailable</span></div></div></div>
+          <table aria-label="Enum option state boundaries">
+            <thead><tr><th>State</th><th>Review expectation</th><th>Not owned here</th></tr></thead>
+            <tbody>
+              <tr><td>Placeholder</td><td>Prompt is readable before a key is selected.</td><td>Required validation or default-value policy.</td></tr>
+              <tr><td>Selected</td><td>Visible label and submitted enum key remain distinct.</td><td>Enum translation or persistence behavior.</td></tr>
+              <tr><td>Disabled</td><td>Unavailable option remains legible without implying authorization logic.</td><td>Authorization, query execution, or option filtering.</td></tr>
+            </tbody>
+          </table>
+          <p class="card-footer">This lane is static review evidence only; it does not change <code>rfk_enum_select</code>, Tom Select rendering, or production CSS.</p>
         </article>
         <article class="card">
           <div class="card-header"><span class="tag remote">Label Present</span><h2>Remote option uses the label field</h2><p>Normal remote result where the configured label field is present and remains the visible label.</p></div>
@@ -114,6 +130,7 @@
           <thead><tr><th>Case</th><th>Visible review expectation</th><th>Not changed here</th></tr></thead>
           <tbody>
             <tr><td>Explicit <code>enum:</code> hash</td><td>Looks like the same enum-select family as model enum source.</td><td>Enum DSL, FormBuilder behavior, label/value pair support.</td></tr>
+            <tr><td>Enum option states</td><td>Placeholder, selected, disabled, label, and submitted key copy are readable at the same review surface.</td><td>Enum translation, validation, authorization, query execution, renderer markup, production CSS.</td></tr>
             <tr><td>Remote label missing</td><td>Value appears as the display label so the option is not blank.</td><td>Submitted value, payload shape, endpoint validation, retry UI.</td></tr>
             <tr><td><code>0</code> or <code>false</code> label</td><td>Still treated as a present label, not as missing display copy.</td><td>Renderer markup, Tom Select lifecycle, request behavior.</td></tr>
           </tbody>
