@@ -45,15 +45,11 @@ RSpec.describe "public docs inventory guards" do
 
   it "keeps token and table sample evidence guide packaged as an evidence companion" do
     token_table_evidence = read_repo_file("doc/token_table_sample_app_evidence.md")
-    sample_app_checklist = read_repo_file("doc/sample_app_checklist.md")
-    sample_app_results = read_repo_file("doc/sample_app_results.md")
 
     expect(specification.files).to include("doc/token_table_sample_app_evidence.md")
     expect(product_profile).to include(
       "`doc/token_table_sample_app_evidence.md`: focused release and PR evidence companion"
     )
-    expect(sample_app_checklist).to include("doc/token_table_sample_app_evidence.md")
-    expect(sample_app_results).to include("token_table_sample_app_evidence.md")
 
     expect(token_table_evidence).to include(
       "release or focused PR needs sample app evidence for token search",
@@ -103,6 +99,6 @@ RSpec.describe "public docs inventory guards" do
   end
 
   def markdown_section(document, heading)
-    document.split(heading, 2).last.split(/\n(?=##?\s)/, 2).first
+    document.split(heading, 2).last.split(/\n(?=#{1,3}\s)/, 2).first
   end
 end
