@@ -6,7 +6,8 @@ RSpec.describe "Tom Select data value drift" do
   REPO_ROOT = File.expand_path("../..", __dir__)
   FORM_BUILDER_DATA_VALUE_SOURCES = [
     File.read(File.join(REPO_ROOT, "lib/rails_fields_kit/form_builder.rb")),
-    File.read(File.join(REPO_ROOT, "lib/rails_fields_kit/form_builder_label_fallback.rb"))
+    File.read(File.join(REPO_ROOT, "lib/rails_fields_kit/form_builder_label_fallback.rb")),
+    File.read(File.join(REPO_ROOT, "lib/rails_fields_kit/form_builder_tom_select_class_names.rb"))
   ].freeze
   TOM_SELECT_CONTROLLER_SOURCE = File.read(File.join(REPO_ROOT, "app/javascript/rails_fields_kit/tom_select_controller.js"))
 
