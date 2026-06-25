@@ -12,7 +12,8 @@ Use this companion note when a release or PR needs manual evidence but the full 
 | Package-root helper or setup visibility PR | Use the package-root helper or setup lane only if that surface changed. | Yes for narrow PR proof. | A release-wide helper inventory. |
 | Runtime helper behavior PR | Use the nearest helper lane when manual sample-app evidence is required. | Yes for scoped test or CI notes. | Static visual artifact approval. |
 | Selected preload ordering evidence | Use the selected preload representative lane only when the PR or release depends on preserved selected-label ordering. | Yes for a narrow `rfk_find_with preserve_order: true` docs or evidence PR. | A new ordering SQL, authorization, or endpoint scoping contract. |
-| Token search entry evidence | Use the token-search representative entry lane when the PR or release depends on `rfk_token_search` helper rendering or submitted token text. | Yes for a narrow token-search sample docs PR. | Token parser behavior, query execution, Ransack execution, or table metadata approval. |
+| Token search entry evidence | Use the token-search representative entry lane when the PR or release depends on `rfk_token_search` helper rendering or submitted token text. | Yes for a narrow token-search sample docs PR. | Token parser behavior, query execution, Ransack execution, suggestion payload approval, or table metadata approval. |
+| Token or Ransack suggestion metadata evidence | Use the token suggestion and Ransack suggestion metadata lane only when the PR or release depends on `TokenSuggestions.build`, `RansackSuggestions.build`, or `rfk_token_suggestions_with` payloads. | Yes for a narrow metadata/docs PR that names the checked builder or endpoint shape. | `rfk_token_search` helper rendering approval, submitted token parsing, query execution, Ransack execution, table persistence, or user-visible search result approval. |
 
 ## Focused Representative Lanes
 
@@ -46,6 +47,20 @@ A scoped evidence note should include:
 
 Do not use this lane to approve the suggestion payload, shared metadata source, or table metadata adapter. Those belong in the token suggestion, Ransack suggestion, or table metadata lanes.
 
+### Token and Ransack suggestion metadata
+
+Record this lane when the review needs evidence for suggestion payloads, separate from the `rfk_token_search` entry field.
+
+A scoped evidence note should include:
+
+- Representative token suggestion endpoint or source-reviewed `TokenSuggestions.build` call.
+- Operator, field, value, and saved-search suggestion examples that were checked.
+- Representative `RansackSuggestions.build` payload when Ransack-compatible metadata is in scope, including field, predicate, and value metadata.
+- Whether the `rfk_token_search` helper entry field was checked separately through the token-entry lane.
+- Confirmation that submitted token parsing, `params[:q]` construction, Ransack execution, query authorization, table persistence, and user-visible search results remain host-app responsibilities.
+
+Do not use this lane to approve helper rendering or submitted token text. Those belong in the token-entry lane above. Do not use it to approve table filter rendering or table persistence; table metadata evidence has its own lane.
+
 ## Visual Reference Result Words
 
 | Result | Use it when | Evidence note should include |
@@ -73,6 +88,25 @@ Visual evidence note
 ```
 
 If the note says `SOURCE REVIEW ONLY` or `DEFERRED`, name the missing browser-capable check instead of treating the PR as visually approved.
+
+### Token evidence PR comment shape
+
+Use this shape when token-search or suggestion metadata evidence is narrow enough for a PR comment instead of the release evidence log.
+
+```markdown
+Token evidence note
+
+- Lane: token entry / token suggestion metadata / Ransack suggestion metadata / shared metadata source
+- Representative field, endpoint, or builder: `...`
+- Checked here: source review / sample app route / CI / docs link review
+- Result: PASS / FAIL / SOURCE REVIEW ONLY / DEFERRED
+- Evidence observed: rendered helper state, submitted token text, wrapped option payload, Ransack metadata, or shared source derivation
+- Separate lane checked: yes/no, and link or note if the token entry field and suggestion metadata were both exercised
+- Responsibility boundary: token parsing, `params[:q]` construction, Ransack execution, query authorization, table persistence, and user-visible results remain host-app responsibilities
+- Remaining follow-up: ...
+```
+
+If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark sample-app execution as complete.
 
 ## Boundaries
 
