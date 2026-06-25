@@ -14,7 +14,7 @@ This document lists the FormBuilder helpers provided by Rails Fields Kit.
 | Tag-style multiple selection or create-on-the-fly tags | `rfk_tags` | Optimized for tag entry and optional remote tag creation. |
 | Grouped `<optgroup>` choices | `rfk_grouped_select` | Keeps grouped collection structure explicit. |
 | A Rails enum attribute | `rfk_enum_select` | Uses the enum-backed attribute directly. |
-| A native browser input with shared wrapper, hint, error, affix, and accessibility behavior | Native wrapper family. Start with `rfk_text_field`, `rfk_text_area`, or `rfk_search_field`; use `rfk_password_field`, `rfk_range_field`, `rfk_file_field`, or the matching native helper such as `rfk_email_field`, `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, or `rfk_color_field` when that focused boundary matches. | Stays in the ordinary HTML input flow while reusing Rails Fields Kit wrapper conventions. Use [`doc/public_api.md`](public_api.md) for the current helper inventory, [`password_field.md`](password_field.md) for password-specific non-goals, [`range_field.md`](range_field.md) for browser-native slider boundaries, [`file_field.md`](file_field.md) for file-upload ownership boundaries, [`native_numeric_fields.md`](native_numeric_fields.md) for numeric formatting non-goals, [`native_contact_fields.md`](native_contact_fields.md) for contact/search ownership boundaries, and [`native_date_time_color_fields.md`](native_date_time_color_fields.md) for browser-native date/time/datetime-local/color boundaries. |
+| A native browser input with shared wrapper, hint, error, affix, and accessibility behavior | Native wrapper family. Start with `rfk_text_field`, `rfk_text_area`, or `rfk_search_field`; use `rfk_password_field`, `rfk_check_box`, `rfk_range_field`, `rfk_file_field`, or the matching native helper such as `rfk_email_field`, `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, or `rfk_color_field` when that focused boundary matches. | Stays in the ordinary HTML input flow while reusing Rails Fields Kit wrapper conventions. Use [`doc/public_api.md`](public_api.md) for the current helper inventory, [`password_field.md`](password_field.md) for password-specific non-goals, [`check_box.md`](check_box.md) for Rails checkbox contract boundaries, [`range_field.md`](range_field.md) for browser-native slider boundaries, [`file_field.md`](file_field.md) for file-upload ownership boundaries, [`native_numeric_fields.md`](native_numeric_fields.md) for numeric formatting non-goals, [`native_contact_fields.md`](native_contact_fields.md) for contact/search ownership boundaries, and [`native_date_time_color_fields.md`](native_date_time_color_fields.md) for browser-native date/time/datetime-local/color boundaries. |
 | Inline textarea mentions such as `@user` or `#tag` | No current Rails Fields Kit helper; see [`mention_field_boundary.md`](mention_field_boundary.md). | Keeps textarea mention overlay, parsing, hidden metadata, authorization, persistence, and suggestion endpoint shape in the proposal / host-app responsibility lane instead of implying a current `rfk_mention_field` API. |
 
 If the choice is mostly about who owns search semantics, use this rule of thumb: `rfk_select`, `rfk_multi_select`, `rfk_grouped_select`, and `rfk_enum_select` stay collection-first; `rfk_combobox` and `rfk_autocomplete` call remote endpoints for suggestions; `rfk_token_search` goes one step further by letting the host app parse submitted token text or build `params[:q]` later. When a native browser search input is enough, `rfk_search_field` stays in the native wrapper lane and does not call remote endpoints or take over token parsing.
@@ -283,6 +283,8 @@ These helpers use native HTML inputs while sharing the same wrapper, hint, error
 
 Rails Fields Kit provides dedicated `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, and `rfk_color_field` helpers for browser-native date, time, datetime-local, and color controls. Use [`native_date_time_color_fields.md`](native_date_time_color_fields.md) for the focused helper mapping and the host-app-owned picker, timezone, masking, validation, and production CSS boundaries.
 
+Use [`check_box.md`](check_box.md) for the focused `rfk_check_box` boundary. It keeps Rails' ordinary checkbox submission contract, hidden unchecked field, checked / unchecked values, and model-backed checked state in Rails' helper lane while Rails Fields Kit provides wrapper and accessibility wiring around the single checkbox control.
+
 For a product-neutral visual comparison of representative native helper states, see [`native_field_visual_reference.html`](native_field_visual_reference.html). For password inputs, use [`password_field.md`](password_field.md) as the dedicated boundary note: Rails Fields Kit provides the native wrapper lane, while visibility toggles, strength meters, credential policy, authentication flow, and password-specific validation copy stay with the host app. For file inputs, use [`file_field.md`](file_field.md) as the dedicated boundary note: Rails Fields Kit provides the native wrapper lane, while multipart form setup, Active Storage direct uploads, preview UI, progress UI, storage configuration, scanning, and validation policy stay with the host app. For range sliders, use [`range_field.md`](range_field.md) as the dedicated boundary note: Rails Fields Kit provides the same thin native wrapper lane, while live value previews, custom slider styling, multi-thumb controls, and production CSS stay with the host app. For numeric helpers, use [`native_numeric_fields.md`](native_numeric_fields.md) for the formatting, rounding, currency, and masking boundaries that stay with the host app. For contact and native search helpers, use [`native_contact_fields.md`](native_contact_fields.md) for validation wording, normalization, phone policy, search execution, and remote suggestion boundaries.
 
 If you want one representative lane before the per-helper snippets below, start with a wrapped text field and treat the rest of the native helper family as variations on that same shared contract.
@@ -429,6 +431,18 @@ These options only customize rendered HTML attributes. They do not change valida
 <%= f.rfk_search_field :keyword,
   placeholder: "Search" %>
 ```
+
+### `rfk_check_box`
+
+```erb
+<%= f.rfk_check_box :active,
+  wrapper: true,
+  label: "Active?",
+  checked_value: "yes",
+  unchecked_value: "no" %>
+```
+
+`rfk_check_box` stays in the same native wrapper lane as the other Rails-backed inputs, but its submitted value contract is Rails' standard `check_box` contract. Rails Fields Kit owns wrapper, label, hint, error, affix, and accessibility wiring around the single checkbox control; Rails still owns the hidden unchecked field, checked / unchecked values, and model-backed checked state. Use [`check_box.md`](check_box.md) for the focused boundary, and keep radio buttons, collection checkbox / radio groups, validation UI policy, label placement redesign, and production CSS out of this helper lane.
 
 ### `rfk_file_field`
 
