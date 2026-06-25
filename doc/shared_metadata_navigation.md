@@ -9,14 +9,16 @@ Use this page when you need one allowed field/operator list to feed token sugges
 3. Use [`table_adapters.md`](table_adapters.md#token-search-filter-metadata) when a table integration only needs to carry field metadata into Rails Fields Kit table filter rendering.
 4. Copy [`shared_metadata_runnable_guide.md`](shared_metadata_runnable_guide.md) when a PR or sample app needs a small representative example that derives all three views from one host-app-owned source.
 5. Use [`sample_app_results_route_guide.md`](sample_app_results_route_guide.md#rfk_token_search-representative-token-entry) when the review needs sample-app evidence for the `rfk_token_search` helper entry field itself, separate from suggestion metadata.
-6. Check [`public_api.md`](public_api.md) for the stable 0.1.x API inventory before depending on a helper, package export, Stimulus value, event, or metadata object.
-7. Treat [`../ROADMAP.md`](../ROADMAP.md) as future direction unless the same behavior is also documented in `public_api.md` or a current feature doc.
+6. Use [`sample_app_results_route_guide.md`](sample_app_results_route_guide.md#token-and-ransack-suggestion-metadata) when a narrow PR needs a PR comment for token or Ransack suggestion payload evidence without updating the full release evidence log.
+7. Check [`public_api.md`](public_api.md) for the stable 0.1.x API inventory before depending on a helper, package export, Stimulus value, event, or metadata object.
+8. Treat [`../ROADMAP.md`](../ROADMAP.md) as future direction unless the same behavior is also documented in `public_api.md` or a current feature doc.
 
 ## Boundary summary
 
 - Current public API: `TokenSuggestions.build`, `RansackSuggestions.build`, `TableFilterInput.ransack_filter`, table metadata objects, renderer helpers, documented FormBuilder helpers, package-root JavaScript exports, Stimulus values, and events listed in `public_api.md`.
 - Host-app pattern: keeping one app-owned metadata source and passing derived hashes into the current builders. Rails Fields Kit receives ordinary arguments; it does not own the source registry.
 - Token-search entry field: `rfk_token_search` renders and submits token text for the host app. It is evidence for helper rendering and submitted param shape, not for parsing, search execution, Ransack execution, table behavior, authorization, or saved-search resolution.
+- Token and Ransack suggestion metadata: `TokenSuggestions.build`, `RansackSuggestions.build`, and `rfk_token_suggestions_with` evidence can confirm suggestion payloads, field/operator/value metadata, and Ransack-compatible metadata. That evidence is separate from token-entry helper rendering and still does not approve parsing, `params[:q]` construction, query execution, table persistence, authorization, or user-visible search results.
 - Future proposal: helper-level adapter DSLs or a Rails Fields Kit-owned field/operator registry shown in `ROADMAP.md` before they are accepted and added to the public API docs.
 
 ## Runnable guide decision
@@ -87,6 +89,8 @@ Record evidence for the following checks in `doc/sample_app_results.md`, a relea
 - The evidence keeps query parsing, `params[:q]` construction, Ransack execution, authorization, relation construction, pagination, and user-visible feedback in the host app boundary.
 
 When the sample app evidence is about the `rfk_token_search` field itself, record that separately with the token-entry lane in `sample_app_results_route_guide.md`. The token-entry lane can confirm helper rendering and submitted token text, while this shared metadata lane confirms suggestion and metadata payloads. Do not combine those results into one approval unless the PR or release intentionally exercised both.
+
+When a narrow PR only clarifies metadata evidence, use the token/Ransack suggestion metadata PR comment shape in `sample_app_results_route_guide.md` instead of filling `sample_app_results.md`. Name whether the checked surface was `TokenSuggestions.build`, `RansackSuggestions.build`, `rfk_token_suggestions_with`, or the shared-source derivation, and keep the token-entry field lane separate unless it was actually exercised.
 
 A compact release note is enough when the sample app already shows token suggestions, Ransack suggestions, and table filter metadata separately. Add a dedicated sample-app row only when the release claim depends on the shared-source adoption pattern itself.
 

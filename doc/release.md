@@ -84,6 +84,8 @@ bundle exec rake build
    - `doc/public_api.md`
    - `doc/select_migration.md`
    - `doc/field_helpers.md`
+   - `doc/check_box.md` when the `rfk_check_box` wrapper or checkbox boundary is part of the release surface
+   - `doc/check_box_release_evidence.md` when checkbox sample-app or release evidence is part of the release surface
    - `doc/native_numeric_fields.md` when native numeric wrapper helpers are part of the release surface
    - `doc/native_contact_fields.md` when native contact or native search wrapper helpers are part of the release surface
    - `doc/visual_references.md`
