@@ -149,6 +149,8 @@ The package-root pin remains the normal route for controller registration and re
 
 The package root also exposes read-only rendered-field contract helpers, including `nativeFieldAccessibilityContract(element)` for native wrapper accessibility wiring. Import those helpers from `rails_fields_kit` only when host-app scripts need to inspect already-rendered labels, hints, errors, and wrapper elements; controller registration, validation messages, focus management, and visible feedback remain separate host-app responsibilities. Use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the current source of truth for the helper list and return shape.
 
+The direct helper subpath examples in this setup guide are intentionally limited to the helper files that `package.json` exposes as direct entrypoints today. Do not extend the alias or importmap examples by copying every package-root helper name from the public API table; prefer package-root imports for the broader rendered-field contract helper family unless a host app deliberately pins one of the documented direct helper files.
+
 ### Troubleshoot unresolved imports
 
 When a build error, browser console error, or importmap resolution error says a Rails Fields Kit import cannot be resolved, first identify which documented path is failing instead of changing every setup step at once:
@@ -321,7 +323,7 @@ end
 class CustomersController < ApplicationController
   include RailsFieldsKit::Searchable
 
-  rfk_search_with action: :search, model: Customer, value: :id, label: :name, search: [:name, :email]
+  rfk_search_with action: :search, model: Customer, value: :id, label: :name
   rfk_find_with action: :selected, model: Customer, value: :id, label: :name
   rfk_create_with action: :create_customer, model: Customer, value: :id, label: :name, create_attribute: :name
 end
