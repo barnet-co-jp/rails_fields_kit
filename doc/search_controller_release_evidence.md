@@ -49,6 +49,7 @@ For `match:`, name the strategy and the representative query/result instead of m
 
 ## Source-of-truth docs
 
-- `doc/controller_helpers.md` documents `rfk_search_with`, `minimum_query_length:`, `match:`, and the endpoint responsibility boundary.
+- `doc/controller_helpers.md` documents `rfk_search_with`, `minimum_query_length:`, and the endpoint responsibility boundary.
+- This guide documents the release-evidence shape for `minimum_query_length:` and `match:` without turning either option into sample-app-wide mandatory evidence.
 - `doc/sample_app_results.md` records manual release-candidate evidence only when the release scope actually checks a remote search endpoint.
 - `CHANGELOG.md` records shipped public surface changes, but it should not become the evidence log for every endpoint route.
