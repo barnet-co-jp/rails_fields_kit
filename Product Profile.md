@@ -67,6 +67,7 @@ Host applications remain responsible for:
 - `doc/support_boundary.md`: supported Ruby / Rails / Node boundaries and representative CI evidence
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
 - `doc/field_helpers.md` and `doc/controller_helpers.md`: public helper references
+- `doc/search_controller_release_evidence.md`: release evidence guide for `rfk_search_with minimum_query_length:` and `match:` endpoint policy; keep endpoint behavior in `doc/controller_helpers.md` and host-app search execution out of scope
 - `doc/password_field.md`: focused `rfk_password_field` native wrapper boundary and password-specific non-goals
 - `doc/file_field.md`: focused `rfk_file_field` native wrapper boundary and file-upload ownership non-goals
 - `doc/check_box.md`: focused `rfk_check_box` native wrapper boundary and Rails checkbox contract non-goals
