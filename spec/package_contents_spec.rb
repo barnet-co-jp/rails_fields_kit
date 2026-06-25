@@ -306,6 +306,7 @@ RSpec.describe "package contents" do
     expect(specification.files).to include(
       "doc/development.md",
       "doc/sample_app_results.md",
+      "doc/sample_app_results_route_guide.md",
       "doc/final_release_checklist.md",
       "doc/selected_preload_release_gate.md",
       "doc/release.md",
@@ -381,6 +382,19 @@ RSpec.describe "package contents" do
   it "keeps sample app evidence result vocabulary aligned with the route guide" do
     route_guide_visual_words = markdown_section(sample_app_results_route_guide, "## Visual Reference Result Words")
     visual_reference_results = markdown_section(sample_app_results, "## Visual reference render checks")
+
+    expect(specification.files).to include("doc/sample_app_results_route_guide.md")
+    expect(sample_app_results).to include(
+      "`doc/sample_app_results_route_guide.md`",
+      "when to update this evidence log",
+      "without treating CI success or source review as browser approval"
+    )
+    expect(sample_app_results_route_guide).to include(
+      "Use this companion note when a release or PR needs manual evidence",
+      "Record in PR comment",
+      "SOURCE REVIEW ONLY",
+      "DEFERRED"
+    )
 
     ["PASS", "FAIL", "SOURCE REVIEW ONLY", "DEFERRED"].each do |result_word|
       expect(route_guide_visual_words).to include("`#{result_word}`")
