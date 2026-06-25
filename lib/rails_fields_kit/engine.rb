@@ -7,6 +7,7 @@ require "rails_fields_kit/form_builder_check_box"
 require "rails_fields_kit/form_builder_file_field"
 require "rails_fields_kit/form_builder_label_fallback"
 require "rails_fields_kit/form_builder_native_date_time_fields"
+require "rails_fields_kit/form_builder_radio_button"
 require "rails_fields_kit/form_builder_table_groups"
 require "rails_fields_kit/option_html_context"
 
