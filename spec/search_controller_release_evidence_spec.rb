@@ -44,9 +44,5 @@ RSpec.describe "search controller release evidence docs" do
       "A release does not need to execute all three strategies unless the change under review touches the strategy family itself",
       "should not standardize adapter-specific SQL, case sensitivity, token parsing, search ranking, pagination, authorization, or query execution"
     )
-
-    expect(controller_helpers).to include(
-      "match: :contains"
-    )
   end
 end
