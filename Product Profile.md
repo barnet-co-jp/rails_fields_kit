@@ -102,6 +102,9 @@ This inventory is for maintainers who need to find the right source of truth qui
 
 ### Proposal-only boundary docs
 
+- `doc/masked_input_boundary.md`: proposal-only boundary for masked inputs; keeps `rfk_masked_field` out of the current public API while pointing host apps to current native wrapper and host-owned masking lanes
+- `doc/slug_helper_boundary.md`: proposal-only boundary for title-to-slug workflows; keeps `rfk_slug_field`, slug generation, uniqueness, transliteration, reserved words, validation, and persistence out of the current public API
+- `doc/datalist_boundary.md`: proposal-only boundary for HTML datalist support; keeps `rfk_datalist_field` out of the current public API and separates browser-native datalist limits from Tom Select-backed lanes
 - `doc/mention_field_boundary.md`: proposal-only boundary for inline textarea mentions; compares current textarea, autocomplete, token-search, and tag lanes without making `rfk_mention_field` current public API
 
 ### Visual reference family
