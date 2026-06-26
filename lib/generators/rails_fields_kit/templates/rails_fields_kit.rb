@@ -44,6 +44,9 @@ RailsFieldsKit.configure do |config|
   # Default Tom Select plugins applied by helpers.
   config.default_plugins = []
 
+  # Add Tom Select's clear_button plugin when a helper omits allow_clear:.
+  config.default_allow_clear = false
+
   # Optional wrapper classes used when helpers are called with wrapper: true.
   config.wrapper_class = "rfk-field"
   config.label_class = "rfk-label"
