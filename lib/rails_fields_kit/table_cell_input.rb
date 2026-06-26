@@ -25,6 +25,7 @@ module RailsFieldsKit
       phone_field
       search_field
       password_field
+      check_box
       file_field
       token_search
     ].freeze
