@@ -33,6 +33,11 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       "enum_select"
     end
 
+    def rfk_file_field(method, **options)
+      calls << [:rfk_file_field, method, options]
+      "file_field"
+    end
+
     def rfk_date_field(method, **options)
       calls << [:rfk_date_field, method, options]
       "date_field"
@@ -312,6 +317,20 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     )
   end
 
+  it "builds a file field cell editor call spec" do
+    metadata = {
+      field_type: "file_field",
+      method: "attachment",
+      options: {accept: "image/png", multiple: true, direct_upload: true}
+    }
+
+    expect(described_class.cell_editor_call(metadata)).to eq(
+      helper: :rfk_file_field,
+      method: :attachment,
+      options: {accept: "image/png", multiple: true, direct_upload: true}
+    )
+  end
+
   it "builds a cell editor call spec from hash-like metadata" do
     metadata = FakeHashLikeMetadata.new(
       field_type: "enum_select",
@@ -448,6 +467,20 @@ RSpec.describe RailsFieldsKit::TableRenderer do
     ])
   end
 
+  it "renders file field cell editors through a form builder" do
+    form_builder = FakeTableFormBuilder.new
+    metadata = {
+      field_type: "file_field",
+      method: "attachment",
+      options: {accept: "image/png", multiple: true, direct_upload: true}
+    }
+
+    expect(described_class.render_cell_editor(form_builder, metadata)).to eq("file_field")
+    expect(form_builder.calls).to eq([
+      [:rfk_file_field, :attachment, {accept: "image/png", multiple: true, direct_upload: true}]
+    ])
+  end
+
   it "renders cell editors in batches" do
     form_builder = FakeTableFormBuilder.new
     editors = [
@@ -494,7 +527,8 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       "date_field" => :rfk_date_field,
       "time_field" => :rfk_time_field,
       "datetime_local_field" => :rfk_datetime_local_field,
-      "color_field" => :rfk_color_field
+      "color_field" => :rfk_color_field,
+      "file_field" => :rfk_file_field
     )
   end
 
@@ -513,7 +547,8 @@ RSpec.describe RailsFieldsKit::TableRenderer do
       "date_field",
       "time_field",
       "datetime_local_field",
-      "color_field"
+      "color_field",
+      "file_field"
     )
     expect(described_class.registered_field_types).not_to include(:rfk_combobox)
   end
