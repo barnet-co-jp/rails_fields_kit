@@ -86,6 +86,10 @@ const checks = [
     args: ["scripts/check_tom_select_plugin_contract.mjs"]
   },
   {
+    name: "Tom Select classNames smoke",
+    args: ["scripts/check_tom_select_class_names.mjs"]
+  },
+  {
     name: "Tom Select field kind contract smoke",
     args: ["scripts/check_tom_select_field_kind_contract.mjs"]
   },
