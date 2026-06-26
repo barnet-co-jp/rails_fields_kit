@@ -33,10 +33,16 @@ en:
           published: Published
 ```
 
+## Rendered Kind
+
+`rfk_enum_select` renders `data-rails-fields-kit--tom-select-kind-value="enum_select"` so `tomSelectFieldKindContract(element)` can distinguish enum-backed select fields from arbitrary `rfk_select` fields.
+
+This is only a read-only rendered contract signal. It does not change the select element, submitted enum keys, selected or disabled option handling, enum collection generation, Tom Select initialization, or the package-root contract reader return shape.
+
 ## Boundary
 
 Use explicit `enum:` for a small hash-like enum source that follows the Rails enum shape. Do not use it as a general label/value DSL.
 
 Choose `rfk_select` instead when you need arbitrary label/value pairs, object collections, disabled options with custom grouping semantics, or options that are not Rails enum-style keys.
 
-Remote enum lookup, Ransack filters, and table metadata adapter behavior stay outside `rfk_enum_select`; use the dedicated helpers and docs for those paths.
+Remote enum lookup, Ransack filters, enum i18n policy, enum validation, authorization, query execution, production CSS, and table metadata adapter behavior stay outside `rfk_enum_select`; use the dedicated helpers and docs for those paths.
