@@ -65,6 +65,24 @@ Helper defaults to keep in mind:
 - `rfk_tags` and `rfk_token_search` use `remove_button` by default when `plugins:` is omitted.
 - Passing `plugins:` to those helpers is an explicit override, so include `"remove_button"` yourself when you still want that behavior.
 - `allow_clear: true` adds `clear_button` to the effective plugin list for that field.
+- `config.default_allow_clear = true` applies the same semantic clear-button default when a helper omits `allow_clear:`; pass `allow_clear: false` to suppress only Rails Fields Kit's semantic auto-add for one field.
+
+Use [`default_allow_clear.md`](default_allow_clear.md) for app-wide clear-button default examples and the boundary between semantic `allow_clear:` behavior and raw `plugins:` / `default_plugins` pass-through.
+
+### Shared Tom Select class names option
+
+Use `tom_select_class_names:` when one Tom Select-backed helper needs to pass Tom Select's internal `classNames` option for generated parts such as the control, dropdown, option, item, or loading states:
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  tom_select_class_names: {
+    control: "ts-control app-select-control",
+    dropdown: "ts-dropdown app-select-dropdown"
+  } %>
+```
+
+This option is separate from Rails Fields Kit wrapper customization. Use `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` for HTML Rails Fields Kit renders around the field; use `tom_select_class_names:` only for Tom Select internal generated markup on that one field. Rails Fields Kit does not add an initializer-level default, production CSS, theme preset, dark mode, density policy, or Tom Select internal DOM compatibility guarantee. See [`tom_select_class_names.md`](tom_select_class_names.md) for focused examples and non-goals.
 
 ### `rfk_select`
 
@@ -516,6 +534,8 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `load_throttle:` forwards Tom Select's remote load throttle in milliseconds.
 - `delimiter:` forwards Tom Select's delimiter option, useful for text-backed token inputs.
 - `plugins:` passes explicit Tom Select plugin names for one field and overrides `config.default_plugins` for that field.
+- `allow_clear:` controls Rails Fields Kit's semantic `clear_button` auto-add for one field and can override `config.default_allow_clear`.
+- `tom_select_class_names:` passes Tom Select internal `classNames` for one field without changing Rails Fields Kit wrapper classes.
 - `loading_text:`, `no_results_text:`, and `create_text:` override the bundled or initializer-provided Tom Select copy for one field only.
 - `error_surface:` adds a stable nearby placeholder for request-failure handlers.
 - `error_surface_html:` customizes that generated placeholder element.
