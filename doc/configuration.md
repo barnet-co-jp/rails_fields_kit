@@ -88,7 +88,7 @@ Request-failure feedback options such as `error_surface:` and `error_surface_htm
 | `prefix_class` | `"rfk-prefix"` | `prefix_html:` | Prefix elements | Appended to generated prefix classes. |
 | `suffix_class` | `"rfk-suffix"` | `suffix_html:` | Suffix elements | Appended to generated suffix classes. |
 
-The wrapper and affix class options above apply to HTML that Rails Fields Kit renders around the field. They do not pass Tom Select's internal `classNames` option through to generated control, dropdown, wrapper, option, item, or loading markup.
+The wrapper and affix class options above apply to HTML that Rails Fields Kit renders around the field. They do not pass Tom Select's internal `classNames` option through to generated control, dropdown, wrapper, option, item, or loading markup. Use field-level `tom_select_class_names:` only when one helper needs Tom Select internal class hooks, and keep that separate from wrapper, label, hint, error, and affix classes.
 
 ## Controller
 
@@ -193,11 +193,22 @@ See [`default_allow_clear.md`](default_allow_clear.md) for focused examples and 
 
 ### Tom Select internal class names
 
-Rails Fields Kit's class configuration is limited to the wrapper, label, hint, error, affix, and control wrapper pieces that Rails Fields Kit renders. It is not a Tom Select theme or internal DOM class API.
+Rails Fields Kit's initializer class configuration is limited to the wrapper, label, hint, error, affix, and control wrapper pieces that Rails Fields Kit renders. It is not a Tom Select theme or initializer-level internal DOM class API.
 
-Tom Select also supports its own `classNames` configuration for internal parts such as the generated control, dropdown, option, item, and loading states. Rails Fields Kit does not currently expose `classNames`, `tom_select_class_names:`, or an initializer-level equivalent as public API. Host apps that need those internal hooks should keep that customization in their Tom Select setup, stylesheet, or local controller extension until a separate feature explicitly adopts a narrow public option.
+Use field-level `tom_select_class_names:` when one Tom Select-backed helper needs to pass Tom Select's `classNames` option for internal generated parts such as the control, dropdown, option, item, or loading states:
 
-If a future feature adds a field-level option for Tom Select internal class customization, it should stay separate from `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:`. That follow-up should also document which Tom Select class parts are supported and keep production CSS, theme presets, dark mode, density policy, and Tom Select internal DOM compatibility in the host-app responsibility lane.
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  tom_select_class_names: {
+    control: "ts-control app-select-control",
+    dropdown: "ts-dropdown app-select-dropdown"
+  } %>
+```
+
+`tom_select_class_names:` is separate from `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:`. Rails Fields Kit passes the provided hash through to Tom Select for that one rendered field; it does not add an initializer-level default, production CSS, theme presets, dark mode, density policy, or Tom Select internal DOM compatibility guarantees.
+
+See [`tom_select_class_names.md`](tom_select_class_names.md) for focused examples and non-goals.
 
 ### `default_min_length`
 
@@ -280,7 +291,7 @@ end
 
 That helper renders `lookup`, `uuid`, `display_name`, `display_name,email`, `10`, and `150` for its Tom Select data values and does not add `clear_button` because `allow_clear: false` overrides the app-wide clear default. Other helpers that omit those options still use the initializer defaults. The same pattern applies to request parameter defaults (`query_param:`, `selected_param:`, `selected_multiple_param:`, `create_param:`), JSON field defaults (`value_field:`, `label_field:`, `search_field:`, `option_description_field:`, `option_badge_field:`), and Tom Select defaults (`plugins:`, `allow_clear:`, `min_length:`, `max_options:`, `load_throttle:`, `preload:`, `open_on_focus:`, `close_after_select:`, `hide_selected:`, `persist:`).
 
-Wrapper and affix class overrides follow a different lane: `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` customize Rails Fields Kit-rendered wrapper pieces only. They do not change Tom Select's generated internal class names, and there is no current field-level `tom_select_class_names:` option in this public configuration contract.
+Wrapper and affix class overrides follow a different lane: `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` customize Rails Fields Kit-rendered wrapper pieces only. Use `tom_select_class_names:` when one Tom Select-backed field needs internal Tom Select class hooks for that rendered field.
 
 ## Render text defaults
 
@@ -351,7 +362,7 @@ Use that host-owned wrapper to standardize placeholder classes or event-handler 
 
 These defaults set the repo-wide baseline classes appended to wrapper pieces. Use helper-level `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` when one field needs extra classes, `data`, or aria attributes without changing the initializer for every field.
 
-These defaults do not target Tom Select's internal generated markup. Keep Tom Select `classNames` customization host-owned unless a future, separately planned feature adds a dedicated field-level option for it.
+These defaults do not target Tom Select's internal generated markup. Use `tom_select_class_names:` for a one-field internal classNames pass-through, or keep broader Tom Select theming in the host app.
 
 ### `wrapper_class`
 
