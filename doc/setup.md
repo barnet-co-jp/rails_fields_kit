@@ -109,6 +109,7 @@ resolve: {
   alias: [
     { find: /^rails_fields_kit$/, replacement: gemJavaScriptPath("index.js") },
     { find: /^rails_fields_kit\/native_field_accessibility_contract$/, replacement: gemJavaScriptPath("native_field_accessibility_contract.js") },
+    { find: /^rails_fields_kit\/native_field_constraint_contract$/, replacement: gemJavaScriptPath("native_field_constraint_contract.js") },
     { find: /^rails_fields_kit\/tom_select_controller$/, replacement: gemJavaScriptPath("tom_select_controller.js") },
     { find: /^rails_fields_kit\/tom_select_text_override_contract$/, replacement: gemJavaScriptPath("tom_select_text_override_contract.js") },
   ],
@@ -130,6 +131,7 @@ The opt-in generator path adds the Rails Fields Kit pins below when they are not
 pin "tom-select"
 pin "rails_fields_kit", to: "rails_fields_kit/index.js"
 pin "rails_fields_kit/native_field_accessibility_contract", to: "rails_fields_kit/native_field_accessibility_contract.js"
+pin "rails_fields_kit/native_field_constraint_contract", to: "rails_fields_kit/native_field_constraint_contract.js"
 pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
 pin "rails_fields_kit/tom_select_text_override_contract", to: "rails_fields_kit/tom_select_text_override_contract.js"
 ```
@@ -157,7 +159,7 @@ When a build error, browser console error, or importmap resolution error says a 
 
 - If `import { TomSelectController } from "rails_fields_kit"` or a package-root contract helper import fails, check the bundler alias or importmap pin for `rails_fields_kit` and confirm it points at `rails_fields_kit/index.js`.
 - If `import TomSelectController from "rails_fields_kit/tom_select_controller"` fails, check the separate alias or pin for `rails_fields_kit/tom_select_controller` and confirm it points at `rails_fields_kit/tom_select_controller.js`.
-- If a direct helper subpath import such as `rails_fields_kit/native_field_accessibility_contract` or `rails_fields_kit/tom_select_text_override_contract` fails, check the matching alias or importmap pin and confirm it points at the same documented subpath file.
+- If a direct helper subpath import such as `rails_fields_kit/native_field_accessibility_contract`, `rails_fields_kit/native_field_constraint_contract`, or `rails_fields_kit/tom_select_text_override_contract` fails, check the matching alias or importmap pin and confirm it points at the same documented subpath file.
 - If both imports resolve but the field is not enhanced, check that the host app registered `rails-fields-kit--tom-select` on the Stimulus application it actually boots, and avoid starting a second Stimulus application just for Rails Fields Kit.
 - If the controller connects but Tom Select is missing or unstyled, check the host app's `tom-select` package or pin and CSS import separately. Changing the Rails Fields Kit import path does not install Tom Select, load Tom Select CSS, or choose plugin assets.
 

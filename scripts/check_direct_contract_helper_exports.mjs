@@ -40,11 +40,15 @@ try {
     probePath,
     `import {
   nativeFieldAccessibilityContract,
+  nativeFieldConstraintContract,
   tomSelectTextOverrideContract
 } from "rails_fields_kit"
 import directNativeFieldAccessibilityContract, {
   nativeFieldAccessibilityContract as namedNativeFieldAccessibilityContract
 } from "rails_fields_kit/native_field_accessibility_contract"
+import directNativeFieldConstraintContract, {
+  nativeFieldConstraintContract as namedNativeFieldConstraintContract
+} from "rails_fields_kit/native_field_constraint_contract"
 import directTomSelectTextOverrideContract, {
   tomSelectTextOverrideContract as namedTomSelectTextOverrideContract
 } from "rails_fields_kit/tom_select_text_override_contract"
@@ -61,6 +65,16 @@ assert.equal(
   "native accessibility direct named export should reuse the package-root helper"
 )
 assert.equal(
+  nativeFieldConstraintContract,
+  directNativeFieldConstraintContract,
+  "native constraint direct default export should reuse the package-root helper"
+)
+assert.equal(
+  nativeFieldConstraintContract,
+  namedNativeFieldConstraintContract,
+  "native constraint direct named export should reuse the package-root helper"
+)
+assert.equal(
   tomSelectTextOverrideContract,
   directTomSelectTextOverrideContract,
   "text override direct default export should reuse the package-root helper"
@@ -71,8 +85,10 @@ assert.equal(
   "text override direct named export should reuse the package-root helper"
 )
 assert.equal(typeof directNativeFieldAccessibilityContract, "function")
+assert.equal(typeof directNativeFieldConstraintContract, "function")
 assert.equal(typeof directTomSelectTextOverrideContract, "function")
 assert.equal(directNativeFieldAccessibilityContract(null), null)
+assert.equal(directNativeFieldConstraintContract(null), null)
 assert.equal(directTomSelectTextOverrideContract(null), null)
 `
   )

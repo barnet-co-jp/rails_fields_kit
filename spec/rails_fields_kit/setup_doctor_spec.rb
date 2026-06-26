@@ -42,6 +42,7 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       write_file(root, "config/importmap.rb", <<~RUBY)
         pin "rails_fields_kit", to: "rails_fields_kit/index.js"
         pin "rails_fields_kit/native_field_accessibility_contract", to: "rails_fields_kit/native_field_accessibility_contract.js"
+        pin "rails_fields_kit/native_field_constraint_contract", to: "rails_fields_kit/native_field_constraint_contract.js"
         pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
         pin "rails_fields_kit/tom_select_text_override_contract", to: "rails_fields_kit/tom_select_text_override_contract.js"
       RUBY
@@ -319,6 +320,7 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
             alias: [
               { find: /^rails_fields_kit$/, replacement: "/bundle/rails_fields_kit/index.js" },
               { find: /^rails_fields_kit\/native_field_accessibility_contract$/, replacement: "/bundle/rails_fields_kit/native_field_accessibility_contract.js" },
+              { find: /^rails_fields_kit\/native_field_constraint_contract$/, replacement: "/bundle/rails_fields_kit/native_field_constraint_contract.js" },
               { find: /^rails_fields_kit\/tom_select_controller$/, replacement: "/bundle/rails_fields_kit/tom_select_controller.js" },
               { find: /^rails_fields_kit\/tom_select_text_override_contract$/, replacement: "/bundle/rails_fields_kit/tom_select_text_override_contract.js" },
             ],
@@ -351,6 +353,7 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
 
       expect(bundler_check.status).to eq(:manual)
       expect(bundler_check.message).to include("did not show alias signals for rails_fields_kit/native_field_accessibility_contract")
+      expect(bundler_check.message).to include("rails_fields_kit/native_field_constraint_contract")
       expect(bundler_check.message).to include("rails_fields_kit/tom_select_text_override_contract")
       expect(bundler_check.message).not_to include("rails_fields_kit/tom_select_controller.")
       expect(bundler_check.message).to include("does not inspect every resolver shape or rewrite bundler config")
@@ -374,6 +377,7 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       expect(bundler_check.status).to eq(:manual)
       expect(bundler_check.message).to include("did not show alias signals for rails_fields_kit")
       expect(bundler_check.message).to include("rails_fields_kit/native_field_accessibility_contract")
+      expect(bundler_check.message).to include("rails_fields_kit/native_field_constraint_contract")
       expect(bundler_check.message).to include("does not inspect every resolver shape or rewrite bundler config")
     end
   end

@@ -84,6 +84,14 @@ export interface NativeFieldAccessibilityContract {
   wrapperElement: Element | null
 }
 
+export interface NativeFieldConstraintContract {
+  maxLength: string | null
+  minLength: string | null
+  pattern: string | null
+  autocomplete: string | null
+  inputMode: string | null
+}
+
 export function tomSelectTextOverrideContract(element: Element | null | undefined): TomSelectTextOverrideContract | null
 export function tomSelectPluginContract(element: Element | null | undefined): TomSelectPluginContract | null
 export function tomSelectSelectionContract(element: Element | null | undefined): TomSelectSelectionContract | null
@@ -95,6 +103,7 @@ export function readRenderedSelectedPreloadConfig(element: Element | null | unde
 export function readRenderedOptionPayloadMapping(element: Element | null | undefined): OptionPayloadMapping | null
 export function readRenderedTableFilterMetadata(element: Element | null | undefined): TableFilterMetadata | null
 export function nativeFieldAccessibilityContract(element: Element | null | undefined): NativeFieldAccessibilityContract | null
+export function nativeFieldConstraintContract(element: Element | null | undefined): NativeFieldConstraintContract | null
 
 export { TomSelectController }
 export default TomSelectController

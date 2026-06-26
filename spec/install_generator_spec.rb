@@ -82,6 +82,7 @@ RSpec.describe RailsFieldsKit::Generators::InstallGenerator do
       "pin \"tom-select\"",
       "pin \"rails_fields_kit\", to: \"rails_fields_kit/index.js\"",
       "pin \"rails_fields_kit/native_field_accessibility_contract\", to: \"rails_fields_kit/native_field_accessibility_contract.js\"",
+      "pin \"rails_fields_kit/native_field_constraint_contract\", to: \"rails_fields_kit/native_field_constraint_contract.js\"",
       "pin \"rails_fields_kit/tom_select_controller\", to: \"rails_fields_kit/tom_select_controller.js\"",
       "pin \"rails_fields_kit/tom_select_text_override_contract\", to: \"rails_fields_kit/tom_select_text_override_contract.js\""
     )
@@ -96,6 +97,7 @@ RSpec.describe RailsFieldsKit::Generators::InstallGenerator do
     expect(read_file("config/importmap.rb")).to include(
       "pin \"rails_fields_kit\", to: \"rails_fields_kit/index.js\"",
       "pin \"rails_fields_kit/native_field_accessibility_contract\", to: \"rails_fields_kit/native_field_accessibility_contract.js\"",
+      "pin \"rails_fields_kit/native_field_constraint_contract\", to: \"rails_fields_kit/native_field_constraint_contract.js\"",
       "pin \"rails_fields_kit/tom_select_controller\", to: \"rails_fields_kit/tom_select_controller.js\"",
       "pin \"rails_fields_kit/tom_select_text_override_contract\", to: \"rails_fields_kit/tom_select_text_override_contract.js\""
     )
@@ -121,6 +123,7 @@ RSpec.describe RailsFieldsKit::Generators::InstallGenerator do
     expect(importmap.scan(/pin "rails_fields_kit"/).size).to eq(1)
     expect(importmap).to include(
       "pin \"rails_fields_kit/native_field_accessibility_contract\", to: \"rails_fields_kit/native_field_accessibility_contract.js\"",
+      "pin \"rails_fields_kit/native_field_constraint_contract\", to: \"rails_fields_kit/native_field_constraint_contract.js\"",
       "pin \"rails_fields_kit/tom_select_controller\", to: \"rails_fields_kit/tom_select_controller.js\"",
       "pin \"rails_fields_kit/tom_select_text_override_contract\", to: \"rails_fields_kit/tom_select_text_override_contract.js\""
     )
@@ -130,6 +133,7 @@ RSpec.describe RailsFieldsKit::Generators::InstallGenerator do
     write_file "config/importmap.rb", <<~RUBY
       pin "rails_fields_kit", to: "rails_fields_kit/index.js"
       pin "rails_fields_kit/native_field_accessibility_contract", to: "rails_fields_kit/native_field_accessibility_contract.js"
+      pin "rails_fields_kit/native_field_constraint_contract", to: "rails_fields_kit/native_field_constraint_contract.js"
       pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
       pin "rails_fields_kit/tom_select_text_override_contract", to: "rails_fields_kit/tom_select_text_override_contract.js"
     RUBY
