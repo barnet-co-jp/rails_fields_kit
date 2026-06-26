@@ -186,6 +186,15 @@ Use the matrix below for changed or release-critical visual references before tr
 
 In the `Browser review result` column, use `PASS` only when the named viewport was actually reviewed in a browser, `FAIL` when the browser review found an issue, `SOURCE REVIEW ONLY` when connector-only or source-level review checked the changed HTML/CSS without rendering it, and `DEFERRED` when browser-capable review is intentionally handed off. For `SOURCE REVIEW ONLY` and `DEFERRED`, use `Evidence location` to name the source diff, PR comment, reviewer handoff, or follow-up. Do not treat CI success or source review alone as visual approval.
 
+Example entries for source-only or deferred static visual reference review:
+
+| Artifact | Viewport checked | State or lane checked | Browser review result | Responsibility boundary confirmed | Evidence location |
+| --- | --- | --- | --- | --- | --- |
+| `doc/tom_select_visual_reference.html` | desktop / narrow | Restored Preload Evidence | `SOURCE REVIEW ONLY` | Runtime behavior and production CSS unchanged | Source diff reviewed; browser-capable desktop / narrow check remains required. |
+| `doc/tom_select_visual_reference.html` | desktop / narrow | Restored Preload Evidence | `DEFERRED` | Runtime behavior and production CSS unchanged | PR comment hands off browser-capable desktop / narrow review to reviewer before visual approval. |
+
+Use `SOURCE REVIEW ONLY` when the changed source was reviewed but not rendered in a browser. Use `DEFERRED` when the browser-capable review is deliberately handed off; always name the missing artifact, viewport, lane, and handoff context instead of leaving the evidence blank.
+
 | Artifact | Viewport checked | State or lane checked | Browser review result | Responsibility boundary confirmed | Evidence location |
 | --- | --- | --- | --- | --- | --- |
 |  |  |  |  |  |  |
@@ -464,7 +473,7 @@ Notes:
 - [ ] an `error_surface: true` field exposed a usable inline placeholder during a representative request failure
 - [ ] a representative `error_surface_html:` field preserved its custom wrapper class or attrs without losing the shared placeholder `id`, hidden default, `role`, `aria-live`, or `aria-atomic` contract
 - [ ] request-failure events for that custom placeholder field still surfaced the same inline placeholder through `event.detail.surface`
-- [ ] stale inline error content cleared after success or a follow-up interaction
+- [ ] stale inline error content cleared after success or a follow-up interaction when the message stayed inside the placeholder
 - [ ] a comparable field without `error_surface: true` kept the default no-inline-placeholder behavior
 
 Notes:
