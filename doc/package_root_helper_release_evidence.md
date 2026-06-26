@@ -269,6 +269,27 @@ Suggested evidence note:
 nativeFieldAccessibilityContract: PASS on <field selector>. label / hint / error / wrapper / describedByIds matched the rendered native helper contract; unsupported element returned null. Focus management, validation policy, and visible copy remained host-app review items.
 ```
 
+## Native constraint contract reader
+
+Use this lane when `nativeFieldConstraintContract(element)` is in release scope.
+
+Representative import: use the package-root helper named `nativeFieldConstraintContract` from `rails_fields_kit`, matching the import pattern documented in `doc/public_api.md#javascript-exports`.
+
+Check a representative Rails Fields Kit-rendered native helper field, such as `rfk_text_field`, `rfk_search_field`, or `rfk_text_area`, with ordinary native constraint attributes rendered:
+
+- `nativeFieldConstraintContract(fieldElement)` returns a plain object for the rendered native input, select, or textarea.
+- The result confirms representative string-or-null attribute reads for `maxLength`, `minLength`, `pattern`, `autocomplete`, and `inputMode` according to the field under review.
+- A comparable field without one of those attributes returns `null` for the absent attribute instead of normalizing or inventing a default.
+- A comparable unsupported element or non-native Rails Fields Kit target returns `null` when that is the documented boundary.
+- The evidence stays read-only; the helper only inspects rendered HTML attributes and does not mutate attributes, run validation, normalize numeric limits, apply masking or formatting, decide autocomplete policy, or create visible feedback.
+- Host apps still own browser validation messages, validation policy, masking, formatting, normalization, autocomplete policy, and any user-facing copy around constraint failures.
+
+Suggested evidence note:
+
+```text
+nativeFieldConstraintContract: PASS on <field selector>. maxLength / minLength / pattern / autocomplete / inputMode matched the rendered native helper attributes with absent values returning null; unsupported element returned null. Validation messages, masking, formatting, normalization, autocomplete policy, and visible copy remained host-app responsibilities.
+```
+
 ## Evidence placement
 
 For release candidates, record the checked helper lanes in `doc/sample_app_results.md` under JavaScript setup checks and the relevant behavior lane. For narrow PRs, a PR comment is enough when it includes:
