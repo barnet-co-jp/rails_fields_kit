@@ -23,11 +23,37 @@ This keeps the value contract identical to a normal text field. The submitted va
 
 ## Feature gate decision
 
-For #1803, Rails Fields Kit should not add `rfk_datalist_field` in the current slice. The current recommendation remains `rfk_text_field list:` plus host-owned `<datalist>` markup because that path already keeps the submitted value ordinary text while avoiding a new public helper name.
+For #1803 and #2202, Rails Fields Kit should not add `rfk_datalist_field` in the current slice. The current recommendation remains `rfk_text_field list:` plus host-owned `<datalist>` markup because that path already keeps the submitted value ordinary text while avoiding a new public helper name.
 
 A future helper is still a reasonable candidate, but it needs its own implementation issue after repeated host apps show the same wrapper need. That follow-up should be limited to wrapper, label, hint, error, affix, accessibility wiring, and the `list` attribute around an ordinary text input. It should not add remote search, selected preload, selected IDs, hidden metadata, create-on-the-fly behavior, rich option rendering, browser UI normalization, polyfills, or production CSS.
 
 Keep this document as the proposal boundary until a later implementation PR adds and tests a helper. Do not add `rfk_datalist_field` to `doc/public_api.md`, setup notes, package metadata, or visual reference inventory from this proposal slice alone.
+
+## Future helper adoption criteria
+
+Reconsider a dedicated helper only when the host-app pattern is repeated enough that the current recommendation causes avoidable duplication. The minimum signal should be more specific than "datalist might be useful": host apps should need the same Rails Fields Kit wrapper, label, hint, error, affix, and `aria-describedby` wiring around an ordinary text input that points at browser-native candidates.
+
+Before implementation, the follow-up issue should answer these questions:
+
+- whether the submitted value remains ordinary text with no selected ID, hidden metadata, or secondary value channel
+- whether candidates are static or server-rendered at page render time
+- whether Rails Fields Kit owns only input wrapper and `list` id wiring, or also renders the matching `<datalist>` element
+- how repeated fields avoid id collisions when a helper-generated datalist id is involved
+- how the helper name avoids implying Tom Select behavior, remote option loading, rich rendering, or create-on-the-fly support
+
+If those answers require request lifecycles, selected preload, option payload mapping, hidden selected IDs, authorization policy, or custom popup styling, keep the use case in the existing Tom Select-backed lanes instead of making it a datalist helper.
+
+## Helper ownership options
+
+Use these comparison points when a future implementation issue is planned:
+
+| Option | Rails Fields Kit would own | Host app would still own | Use only if |
+| --- | --- | --- | --- |
+| Current pattern: `rfk_text_field list:` plus host-owned `<datalist>` | Native wrapper, label, hint, error, affix, accessibility wiring, and pass-through `list` attribute | `<datalist>` markup, candidate scoping, authorization, ids, and all browser-native datalist behavior | The host app already has one-off or varied candidate markup needs |
+| Input wiring helper | Native wrapper plus a stable `list` id convention for the text input | Candidate markup and every `<option>` value | Several apps repeat the same wiring but need full ownership of candidate rendering |
+| Helper-rendered datalist | Native wrapper, `list` id wiring, and simple server-rendered `<option value>` output | Candidate source selection, authorization, browser-native filtering/display, styling limits, and submitted text handling | A later feature issue accepts a narrow static/server-rendered candidate shape |
+
+None of these options should make Rails Fields Kit own browser-native popup rendering, keyboard behavior, datalist styling normalization, polyfills, remote endpoints, selected preload, selected IDs, rich option metadata, or create flows.
 
 ## Sample evidence
 

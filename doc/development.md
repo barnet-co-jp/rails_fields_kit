@@ -42,6 +42,8 @@ The configuration documentation drift spec compares `RailsFieldsKit::Configurati
 
 The repository documentation drift spec covers two narrow repository-maintenance boundaries: generated setup notes upstream links must point at existing repository docs, and `doc/support_boundary.md` plus this development guide must stay aligned with the Ruby / Rails / Node version values declared in gem metadata, package metadata, and representative CI rows. It also keeps gemspec metadata URLs pointed at repository-local source, changelog, and setup documentation targets without turning the check into an external URL validator or RubyGems publish workflow.
 
+The public docs inventory guard spec keeps package and source signals aligned with the public docs inventory without making this guide a full spec mirror. It checks that native date/time/color helper docs stay packaged and represented in the public API, that focused token/table sample evidence remains listed as an evidence companion, and that table metadata known types stay aligned with the public API method list while preserving the Ransack-specific filter boundary.
+
 The setup example documentation drift spec keeps the JavaScript setup signals in `README.md` and `doc/setup.md` aligned for package-root imports, direct controller imports, bundler aliases, and importmap pins without freezing the full prose.
 
 The suggestion payload documentation drift spec keeps `TokenSuggestions` and `RansackSuggestions` docs aligned with representative option payload keys, custom output field names, and Ransack metadata keys without freezing full examples or prose.
