@@ -11,8 +11,10 @@ RSpec.describe "docs package inventory guard" do
   let(:readme) { read_doc("README.md") }
   let(:setup_doc) { read_doc("doc/setup.md") }
   let(:public_api) { read_doc("doc/public_api.md") }
+  let(:sample_app_results) { read_doc("doc/sample_app_results.md") }
   let(:visual_references) { read_doc("doc/visual_references.md") }
   let(:native_select_boundary) { read_doc("doc/native_select_boundary_sample_evidence.html") }
+  let(:range_field) { read_doc("doc/range_field.md") }
   let(:tom_select_no_event_boundary) { read_doc("doc/tom_select_no_event_boundary_review.html") }
   let(:dropdown_parent_release_evidence) { read_doc("doc/dropdown_parent_release_evidence.md") }
 
@@ -55,6 +57,27 @@ RSpec.describe "docs package inventory guard" do
       "remote grouped options, authorization, and query execution are not Rails Fields Kit-owned"
     )
     expect(public_api).not_to include("rfk_native_select")
+  end
+
+  it "keeps range field release evidence routed through native wrapper lanes" do
+    expect(specification.files).to include("doc/range_field.md", "doc/sample_app_results.md")
+    expect(public_api).to include("`rfk_range_field`", "[`range_field.md`](range_field.md)")
+    expect(range_field).to include(
+      "## Release Evidence Lane",
+      "feature-specific native wrapper evidence",
+      "native helper representative wrapper and accessibility lane",
+      "native constraint attribute lane",
+      "ordinary range options such as `min:`, `max:`, and `step:`",
+      "live value previews",
+      "custom slider styling",
+      "multi-thumb range controls",
+      "production CSS"
+    )
+    expect(sample_app_results).to include(
+      "Native wrapper and accessibility",
+      "Native constraint attribute checks",
+      "range field table metadata evidence stayed separate from native `rfk_range_field` wrapper evidence"
+    )
   end
 
   it "keeps Tom Select no-event boundary evidence packaged and scoped" do
