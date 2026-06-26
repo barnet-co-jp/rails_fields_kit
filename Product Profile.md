@@ -14,7 +14,7 @@ Rails Fields Kit is a Ruby gem that gives Rails applications a focused set of fo
 
 - wrap Tom Select in Rails-friendly helpers for naming, redisplay, validation, and accessibility
 - support remote search, selected preload, and create-on-the-fly workflows
-- expose stable integration points for controller helpers, token suggestion builders, JavaScript rendered-contract helpers, table metadata, and read-only setup verification
+- expose stable integration points for controller helpers, token suggestion builders, JavaScript rendered-contract helpers, table metadata, configuration defaults, and read-only setup verification
 - keep native wrappers such as `rfk_password_field`, `rfk_file_field`, `rfk_check_box`, `rfk_date_field`, and `rfk_color_field` thin, Rails-friendly, and explicit about host-app-owned behavior
 - stay easy to adopt from ordinary Rails forms without taking over the whole frontend stack
 
@@ -27,6 +27,7 @@ Host applications remain responsible for:
 - installing Tom Select in their chosen JavaScript toolchain
 - registering Stimulus controllers, choosing the boot file, and deciding the final frontend setup policy
 - loading CSS through their chosen frontend setup
+- installing, enabling, and styling Tom Select plugins such as `clear_button`
 - parsing submitted token search text
 - building `params[:q]` or equivalent search params
 - authorization, scoping, pagination, and result execution
@@ -40,6 +41,7 @@ Host applications remain responsible for:
 - controller helpers under `RailsFieldsKit::Searchable`
 - token suggestion builders including `RailsFieldsKit::TokenSuggestions.build` and `RailsFieldsKit::RansackSuggestions.build`
 - table metadata objects including `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
+- configuration defaults documented in `doc/configuration.md`, including `default_allow_clear` for the semantic Tom Select clear-button default
 - package-root JavaScript exports including `TomSelectController` and rendered-field contract helpers documented in `doc/public_api.md`
 - Stimulus events dispatched by `rails-fields-kit--tom-select`
 - read-only setup verification through `rails rails_fields_kit:doctor` and `RailsFieldsKit::SetupDoctor`, including text evidence, Ruby-facing `checks`, structured JSON representation, and representative Stimulus registration advisory signal, while leaving Tom Select package install, final Stimulus boot policy, CSS import, bundler aliases as host-app responsibilities, and CI pass/fail policy or auto-fix behavior with the host app
@@ -80,6 +82,7 @@ This inventory is for maintainers who need to find the right source of truth qui
 - `doc/public_api.md`: intended stable API for 0.1.x
 - `doc/field_helpers.md` and `doc/controller_helpers.md`: public helper references
 - `doc/configuration.md`: initializer defaults and override precedence
+- `doc/default_allow_clear.md`: focused app-wide `allow_clear` default guide; keep `clear_button` plugin installation, styling, empty-state copy, and lifecycle behavior with the host app
 - `doc/styling_boundary.md`: reader-facing source of truth for wrapper classes, styling hooks, and host-app CSS ownership
 - `doc/events.md`: Stimulus event contract
 - `doc/tom_select_turbo_lifecycle.md`: Turbo and Stimulus connect/disconnect lifecycle boundary for Tom Select-backed helpers
