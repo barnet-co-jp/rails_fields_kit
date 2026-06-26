@@ -23,6 +23,8 @@ These class names come from `RailsFieldsKit::Configuration` defaults and are app
 
 Request-failure placeholders use `rfk-tom-select-error-surface` when a Tom Select-backed field opts into `error_surface: true`. That class identifies the generated status placeholder; visible copy, reveal timing, retry UI, and styling remain host-app responsibilities.
 
+Tom Select internal generated parts use a separate lane. Use field-level [`tom_select_class_names:`](tom_select_class_names.md) when one Tom Select-backed helper needs to pass Tom Select's `classNames` option for generated control, dropdown, option, item, or loading states. That option is not an initializer-level Rails Fields Kit theme, and it does not make Rails Fields Kit own production CSS, theme presets, dark mode, density, or Tom Select internal DOM compatibility.
+
 ## Responsibility boundary
 
 Rails Fields Kit owns these pieces:
@@ -30,11 +32,13 @@ Rails Fields Kit owns these pieces:
 - Rendering the documented wrapper, label, hint, error, control, prefix, and suffix hooks when the corresponding helper options ask for them.
 - Appending initializer defaults and per-field `*_html:` classes instead of replacing host-app classes.
 - Keeping wrapper, hint, error, affix, and accessibility wiring available to both native wrapper helpers and Tom Select-backed helpers.
+- Passing field-level `tom_select_class_names:` through to Tom Select when one helper explicitly asks for internal class hooks.
 
 Host apps own these pieces:
 
 - Production CSS, CSS framework integration, theme tokens, dark mode, density, spacing, and responsive layout policy.
 - Deciding whether the default `rfk-*` hooks are enough or whether initializer defaults should be replaced with application-specific classes.
+- Deciding which Tom Select internal `classNames` values are appropriate for the host app's Tom Select version and stylesheet.
 - Styling Tom Select plugin affordances, request-failure visible feedback, password-specific UX, textarea autosize behavior, browser validation copy, and table layout.
 
 ## Native and Tom Select differences
