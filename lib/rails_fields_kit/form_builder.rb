@@ -139,7 +139,7 @@ module RailsFieldsKit
       disabled = options.delete(:disabled)
       option_html = options.delete(:option_html) || {}
       selected = options.delete(:selected)
-      allow_clear = options.delete(:allow_clear)
+      allow_clear = options.key?(:allow_clear) ? options.delete(:allow_clear) : config.default_allow_clear
       error_surface = options.delete(:error_surface)
       error_surface_html = options.delete(:error_surface_html) || {}
       value_method = options.delete(:value_method) || :id

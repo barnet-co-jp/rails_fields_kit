@@ -15,6 +15,7 @@ module RailsFieldsKit
       :default_label_field,
       :default_search_field,
       :default_plugins,
+      :default_allow_clear,
       :default_min_length,
       :default_max_options,
       :default_load_throttle,
@@ -47,6 +48,7 @@ module RailsFieldsKit
       @default_label_field = "text"
       @default_search_field = "text"
       @default_plugins = []
+      @default_allow_clear = false
       @default_min_length = 0
       @default_max_options = nil
       @default_load_throttle = nil
