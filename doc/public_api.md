@@ -45,6 +45,7 @@ require "rails_fields_kit"
 ```ruby
 RailsFieldsKit.configure do |config|
   config.default_query_param = "q"
+  config.default_allow_clear = false
 end
 ```
 
@@ -54,7 +55,7 @@ Public configuration methods:
 - `RailsFieldsKit.configure`
 - `RailsFieldsKit.reset_configuration!`
 
-Configuration attributes are documented in [`configuration.md`](configuration.md).
+Configuration attributes are documented in [`configuration.md`](configuration.md). Tom Select interaction attributes include `default_allow_clear`, an app-wide semantic clear-button default that applies only when a helper omits field-level `allow_clear:`; use [`default_allow_clear.md`](default_allow_clear.md) for focused examples and non-goals.
 
 ## FormBuilder helpers
 
@@ -114,7 +115,7 @@ Collection checkbox / radio group helpers are also not current public APIs. Host
 
 Tom Select-backed `rfk_*` helpers also support opt-in `error_surface:` and `error_surface_html:` options for fields that should expose a stable nearby placeholder on request failures. When enabled, request-failure events described in [`events.md`](events.md) can include that placeholder as `detail.surface`, while visible error copy and retry UI remain host-app responsibility.
 
-Tom Select-backed helpers also support field-level `allow_clear: true` for fields that should expose Tom Select's `clear_button` affordance. Rails Fields Kit adds `clear_button` to that field's effective plugin list, while Tom Select installation, plugin-specific assets, clear affordance styling, and empty-state wording remain host-app or Rails select-option responsibility. Explicit `plugins:` values still replace initializer defaults for the field; use [`field_helpers.md`](field_helpers.md) for the helper-level examples and override notes.
+Tom Select-backed helpers also support field-level `allow_clear: true` for fields that should expose Tom Select's `clear_button` affordance. When `config.default_allow_clear = true`, the same semantic clear-button default applies app-wide only for helpers that omit `allow_clear:`; field-level `allow_clear: false` suppresses that semantic auto-add for one field. Rails Fields Kit adds `clear_button` to that field's effective plugin list, while Tom Select installation, plugin-specific assets, clear affordance styling, and empty-state wording remain host-app or Rails select-option responsibility. Explicit `plugins:` values still replace initializer defaults for the field, and raw `default_plugins` entries are not removed by `allow_clear: false`; use [`field_helpers.md`](field_helpers.md) for helper-level examples and [`default_allow_clear.md`](default_allow_clear.md) for app-wide default boundaries.
 
 `rfk_table_filters` and `rfk_table_cell_editors` are the direct FormBuilder rendering path. They collect table metadata and return safe-buffer helper output for ordinary Rails views. `TableMetadata.filter_calls` / `cell_editor_calls` and `TableRenderer.filter_call` / `cell_editor_call` are the call-spec path for table integrations that want to inspect or rearrange helper, method, and options before rendering. The batch convenience APIs `TableMetadata.render_filters` / `render_cell_editors` and `TableRenderer.render_filters` / `render_cell_editors` stay in that renderer lane and return ordered render result arrays rather than redefining the helper-level safe-buffer contract.
 
