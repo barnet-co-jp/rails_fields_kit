@@ -20,6 +20,8 @@ Keep collection group review in this boundary document until a collection helper
 
 The visual reference family should not add a standalone collection group lane yet. A static artifact that shows collection checkbox or collection radio groups too prominently can make proposal-only helpers look like current Rails Fields Kit behavior. For now, reviewers should use this page as the source of truth and treat any collection group screenshot, sample app note, or PR comment as host-app-owned evidence rather than Rails Fields Kit rendered-state evidence.
 
+Use the focused proposal-only sample evidence when a future helper proposal needs a static comparison surface: [`collection_group_boundary_sample_evidence.html`](collection_group_boundary_sample_evidence.html). That artifact is not a current visual reference family member, release evidence lane, README entry, or public API inventory item. It exists only to keep future design review from confusing single-control wrapper behavior with host-app-owned collection group semantics.
+
 Use the following distinction when reviewing nearby native fields:
 
 - Single checkbox or radio wrappers can be reviewed as individual field helpers after they are merged and listed in `public_api.md`.
