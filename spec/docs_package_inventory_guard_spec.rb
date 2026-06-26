@@ -50,7 +50,8 @@ RSpec.describe "docs package inventory guard" do
       "Plain select stays browser-native",
       "Grouped select preserves optgroup meaning",
       "Searchable choices use Tom Select lanes",
-      "remote optgroup endpoints, custom renderers, option payload mapping, search execution, authorization, persistence, and production CSS"
+      "Native browser selection semantics, Tom Select rendering, search execution, authorization, persistence, endpoint payloads, and production CSS remain outside this artifact.",
+      "remote grouped options, authorization, and query execution are not Rails Fields Kit-owned"
     )
     expect(public_api).not_to include("rfk_native_select")
   end
