@@ -139,7 +139,8 @@
         box-shadow: var(--shadow);
       }
 
-      .card.focus-review {
+      .card.focus-review,
+      .card.restored-preload-review {
         grid-column: 1 / -1;
         border-color: #adc6e4;
       }
@@ -318,6 +319,29 @@
         color: #1f3f78;
       }
 
+      .token-stack {
+        display: inline-grid;
+        gap: 2px;
+        min-width: 0;
+      }
+
+      .token-meta {
+        color: #3f647c;
+        font-size: 0.78rem;
+        font-weight: 500;
+      }
+
+      .token-badge {
+        margin-left: 6px;
+        padding: 1px 5px;
+        border: 1px solid #9bcdbc;
+        background: #f5fffb;
+        color: #176b5f;
+        font-size: 0.7rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
       .control.disabled {
         border-color: #c6cbd0;
         background: #f4f5f6;
@@ -416,25 +440,29 @@
         color: var(--accent);
       }
 
-      .focus-review-grid {
+      .focus-review-grid,
+      .restored-preload-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 12px;
       }
 
-      .focus-pane {
+      .focus-pane,
+      .restore-pane {
         display: grid;
         gap: 8px;
         min-width: 0;
       }
 
-      .focus-pane h3 {
+      .focus-pane h3,
+      .restore-pane h3 {
         margin: 0;
         font-size: 0.9rem;
         line-height: 1.25;
       }
 
-      .focus-pane p {
+      .focus-pane p,
+      .restore-pane p {
         margin: 0;
         color: var(--muted);
         font-size: 0.84rem;
@@ -493,7 +521,8 @@
       }
 
       @media (max-width: 760px) {
-        .focus-review-grid {
+        .focus-review-grid,
+        .restored-preload-grid {
           grid-template-columns: 1fr;
         }
       }
@@ -635,6 +664,41 @@
             <div class="dropdown"><div class="message"><strong>Selected label restored from saved value</strong><span>The field can stay settled until the next user-driven search, while `selected-load` and `selected-load-error` remain host-app hooks.</span></div></div>
           </div>
           <p class="card-footer">Use this card to distinguish edit-form label restore from ordinary selected state and remote search success or failure.</p>
+        </article>
+
+        <article class="card restored-preload-review">
+          <div class="card-header">
+            <span class="tag preload">Restored Preload Evidence</span>
+            <h2>Restored selected options beside labels, hints, and metadata</h2>
+            <p>Static lane for checking saved-value restoration across single, multiple, and rich metadata states without changing endpoint behavior.</p>
+          </div>
+          <div class="restored-preload-grid" aria-hidden="true">
+            <div class="restore-pane">
+              <h3>Single restored value</h3>
+              <div class="control">
+                <div class="control-top"><div class="selection"><span class="token subtle">Northwind Supplies</span></div><div class="status-note">Preloaded</div><div class="caret">▾</div></div>
+                <div class="dropdown"><div class="message"><strong>Placeholder remains hidden while the saved label is visible</strong><span>Use this to compare restored label, field label, hint, and adjacent validation copy before a new query starts.</span></div></div>
+              </div>
+              <p>Confirms the ordinary edit-form restore does not read like an empty field or request failure.</p>
+            </div>
+            <div class="restore-pane">
+              <h3>Multiple restored values</h3>
+              <div class="control">
+                <div class="control-top"><div class="selection selection--multiple"><span class="token subtle">Operations</span><span class="token subtle">Finance</span><span class="token subtle">Support Desk</span></div><div class="status-note">3 restored</div><div class="caret">▾</div></div>
+                <div class="dropdown"><div class="message"><strong>Restored tokens wrap before the query resumes</strong><span>Desktop and narrow review should check that restored labels, hints, and error-adjacent copy do not crowd each other.</span></div></div>
+              </div>
+              <p>Shows `selected_multiple_param:` style restoration as a readability lane, not a token parsing contract.</p>
+            </div>
+            <div class="restore-pane">
+              <h3>Rich restored option</h3>
+              <div class="control">
+                <div class="control-top"><div class="selection"><span class="token subtle"><span class="token-stack"><span>Northwind Supplies <span class="token-badge">Active</span></span><span class="token-meta">Procurement account restored from saved ID</span></span></span></div><div class="caret">▾</div></div>
+                <div class="dropdown"><div class="option"><strong>Northwind Supplies</strong><span>Badge and description stay display-only; endpoint payload shape and authorization remain host-app responsibilities.</span></div></div>
+              </div>
+              <p>Use this to inspect label, badge, and description hierarchy without making rich payload policy part of the visual artifact.</p>
+            </div>
+          </div>
+          <p class="card-footer">Selected preload request execution, retry UI, authorization, fallback copy, Turbo lifecycle behavior, and production CSS stay outside this static reference.</p>
         </article>
 
         <article class="card">
