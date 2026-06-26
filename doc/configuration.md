@@ -24,7 +24,7 @@ Default behavior uses three different patterns:
 
 - Concrete values such as `"q"` or `"value"` are rendered unless the field-level option overrides them.
 - `nil` Tom Select interaction defaults leave the matching data value unset so the host app's Tom Select setup or Tom Select itself can decide.
-- Render text defaults use bundled locale-aware copy with English fallback when the initializer is unset; this is different from omitting a Tom Select data value.
+- Render text defaults use bundled locale-aware copy with English fallback when unset; this is different from omitting a Tom Select data value.
 
 ### Controller and remote request params
 
@@ -51,6 +51,7 @@ Default behavior uses three different patterns:
 | Initializer key | Default or fallback | Field-level override | Applies to | Notes |
 | --- | --- | --- | --- | --- |
 | `default_plugins` | `[]` | `plugins:` | Tom Select-backed helpers | Helper defaults can seed plugins first; `allow_clear: true` adds `clear_button`. |
+| `default_allow_clear` | `false` | `allow_clear:` | Tom Select-backed helpers | Adds `clear_button` when a helper omits `allow_clear:` and the app-wide default is enabled. |
 | `default_min_length` | `0` | `min_length:` | Remote loading | Minimum query length before loading starts. |
 | `default_max_options` | `nil` | `max_options:` | Tom Select dropdowns | `nil` leaves the Tom Select data value unset. |
 | `default_load_throttle` | `nil` | `load_throttle:` | Remote loading | `nil` leaves the Tom Select data value unset. |
@@ -176,6 +177,20 @@ Some helpers seed their own representative plugin defaults before the initialize
 
 Rails Fields Kit passes plugin names through to the rendered Tom Select configuration. It does not install Tom Select plugins, import plugin-specific assets, or own plugin-specific behavior beyond the documented helper defaults. Keep those concerns in the host app's Tom Select setup.
 
+### `default_allow_clear`
+
+App-wide semantic default for adding Tom Select's `clear_button` plugin when a helper does not pass `allow_clear:`.
+
+Default: `false`
+
+Field-level `allow_clear:` replaces this initializer default for that one helper. Use `allow_clear: true` when one field should be clearable even though the app-wide default is off. Use `allow_clear: false` when one field should suppress the app-wide clear affordance.
+
+`allow_clear: false` only suppresses Rails Fields Kit's semantic auto-add. It does not remove plugin names that the host app supplies directly through `plugins:` or `RailsFieldsKit.configuration.default_plugins`.
+
+`default_plugins` remains the raw Tom Select plugin pass-through. `default_allow_clear` only controls the semantic clear-button default and does not install Tom Select plugins, import plugin-specific assets, define styling, or own plugin lifecycle behavior.
+
+See [`default_allow_clear.md`](default_allow_clear.md) for focused examples and non-goals.
+
 ### Tom Select internal class names
 
 Rails Fields Kit's class configuration is limited to the wrapper, label, hint, error, affix, and control wrapper pieces that Rails Fields Kit renders. It is not a Tom Select theme or internal DOM class API.
@@ -247,6 +262,7 @@ RailsFieldsKit.configure do |config|
   config.default_search_field = "name,email"
   config.default_max_options = 50
   config.default_load_throttle = 300
+  config.default_allow_clear = true
 end
 ```
 
@@ -258,10 +274,11 @@ end
   label_field: "display_name",
   search_field: "display_name,email",
   max_options: 10,
-  load_throttle: 150 %>
+  load_throttle: 150,
+  allow_clear: false %>
 ```
 
-That helper renders `lookup`, `uuid`, `display_name`, `display_name,email`, `10`, and `150` for its Tom Select data values. Other helpers that omit those options still use the initializer defaults. The same pattern applies to request parameter defaults (`query_param:`, `selected_param:`, `selected_multiple_param:`, `create_param:`), JSON field defaults (`value_field:`, `label_field:`, `search_field:`, `option_description_field:`, `option_badge_field:`), and Tom Select defaults (`min_length:`, `max_options:`, `load_throttle:`, `preload:`, `open_on_focus:`, `close_after_select:`, `hide_selected:`, `persist:`).
+That helper renders `lookup`, `uuid`, `display_name`, `display_name,email`, `10`, and `150` for its Tom Select data values and does not add `clear_button` because `allow_clear: false` overrides the app-wide clear default. Other helpers that omit those options still use the initializer defaults. The same pattern applies to request parameter defaults (`query_param:`, `selected_param:`, `selected_multiple_param:`, `create_param:`), JSON field defaults (`value_field:`, `label_field:`, `search_field:`, `option_description_field:`, `option_badge_field:`), and Tom Select defaults (`plugins:`, `allow_clear:`, `min_length:`, `max_options:`, `load_throttle:`, `preload:`, `open_on_focus:`, `close_after_select:`, `hide_selected:`, `persist:`).
 
 Wrapper and affix class overrides follow a different lane: `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` customize Rails Fields Kit-rendered wrapper pieces only. They do not change Tom Select's generated internal class names, and there is no current field-level `tom_select_class_names:` option in this public configuration contract.
 
@@ -397,6 +414,7 @@ RailsFieldsKit.configure do |config|
   config.default_min_length = 2
   config.default_max_options = 50
   config.default_load_throttle = 300
+  config.default_allow_clear = true
 
   # Use only plugin names already available in your Tom Select setup.
   # Field-level plugins: overrides this default for one helper.

@@ -133,6 +133,37 @@ const missingLabelInput = new FakeElement("select")
 buildDocumentWithWrapper([missingLabelInput])
 assert.equal(packageRoot.nativeFieldAccessibilityContract(missingLabelInput).labelElement, null, "native accessibility contract should return null when no label exists")
 assert.equal(packageRoot.nativeFieldAccessibilityContract(new FakeElement("div")), null, "native accessibility contract should ignore non-native elements")
+
+assert.deepEqual(
+  packageRoot.nativeFieldConstraintContract(new FakeElement("input", {
+    maxlength: "12",
+    minlength: "2",
+    pattern: "[A-Z0-9-]+",
+    autocomplete: "off",
+    inputmode: "numeric"
+  })),
+  {
+    maxLength: "12",
+    minLength: "2",
+    pattern: "[A-Z0-9-]+",
+    autocomplete: "off",
+    inputMode: "numeric"
+  },
+  "native constraint contract should expose rendered native constraint attributes as strings"
+)
+assert.deepEqual(
+  packageRoot.nativeFieldConstraintContract(new FakeElement("textarea")),
+  {
+    maxLength: null,
+    minLength: null,
+    pattern: null,
+    autocomplete: null,
+    inputMode: null
+  },
+  "native constraint contract should return null values for absent constraint attributes"
+)
+assert.equal(packageRoot.nativeFieldConstraintContract(new FakeElement("div")), null, "native constraint contract should ignore non-native elements")
+assert.equal(packageRoot.nativeFieldConstraintContract(null), null, "native constraint contract should ignore missing elements")
 `
 }
 

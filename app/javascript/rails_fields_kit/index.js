@@ -66,6 +66,13 @@ const DEFAULT_VALUE_FIELD = "value"
 const DEFAULT_LABEL_FIELD = "text"
 const DEFAULT_SEARCH_FIELD = "text"
 const NATIVE_FIELD_TAGS = new Set(["input", "select", "textarea"])
+const NATIVE_CONSTRAINT_ATTRIBUTES = {
+  maxLength: "maxlength",
+  minLength: "minlength",
+  pattern: "pattern",
+  autocomplete: "autocomplete",
+  inputMode: "inputmode"
+}
 const NATIVE_FIELD_WRAPPER_SELECTOR = ".rfk-field"
 const NATIVE_FIELD_LABEL_SELECTOR = "label"
 const NATIVE_FIELD_HINT_CLASS = "rfk-hint"
@@ -148,6 +155,10 @@ function pluginValues(element) {
 function isNativeFormControl(element) {
   const tagName = element?.tagName?.toLowerCase?.()
   return NATIVE_FIELD_TAGS.has(tagName)
+}
+
+function nativeConstraintAttributeValue(element, attributeName) {
+  return element.hasAttribute(attributeName) ? element.getAttribute(attributeName) : null
 }
 
 function describedByIdsFor(element) {
@@ -368,6 +379,17 @@ export function nativeFieldAccessibilityContract(element) {
     suffixElement: nativeFieldAffix(wrapperElement, NATIVE_FIELD_SUFFIX_CLASS),
     wrapperElement
   }
+}
+
+export function nativeFieldConstraintContract(element) {
+  if (!element || typeof element.getAttribute !== "function" || typeof element.hasAttribute !== "function" || !isNativeFormControl(element)) return null
+
+  return Object.fromEntries(
+    Object.entries(NATIVE_CONSTRAINT_ATTRIBUTES).map(([key, attributeName]) => [
+      key,
+      nativeConstraintAttributeValue(element, attributeName)
+    ])
+  )
 }
 
 export { TomSelectController }

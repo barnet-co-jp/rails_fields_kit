@@ -8,10 +8,12 @@ const indexTypesPath = "./app/javascript/rails_fields_kit/index.d.ts"
 const controllerTypesPath = "./app/javascript/rails_fields_kit/tom_select_controller.d.ts"
 const textOverrideTypesPath = "./app/javascript/rails_fields_kit/tom_select_text_override_contract.d.ts"
 const nativeAccessibilityTypesPath = "./app/javascript/rails_fields_kit/native_field_accessibility_contract.d.ts"
+const nativeConstraintTypesPath = "./app/javascript/rails_fields_kit/native_field_constraint_contract.d.ts"
 const indexTypes = path.join(repoRoot, indexTypesPath)
 const controllerTypes = path.join(repoRoot, controllerTypesPath)
 const textOverrideTypes = path.join(repoRoot, textOverrideTypesPath)
 const nativeAccessibilityTypes = path.join(repoRoot, nativeAccessibilityTypesPath)
+const nativeConstraintTypes = path.join(repoRoot, nativeConstraintTypesPath)
 
 const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8"))
 
@@ -38,16 +40,27 @@ assert.deepEqual(
   },
   "direct native accessibility export should declare thin subpath types without changing runtime paths"
 )
+assert.deepEqual(
+  packageJson.exports["./native_field_constraint_contract"],
+  {
+    types: nativeConstraintTypesPath,
+    import: "./app/javascript/rails_fields_kit/native_field_constraint_contract.js",
+    default: "./app/javascript/rails_fields_kit/native_field_constraint_contract.js"
+  },
+  "direct native constraint export should declare thin subpath types without changing runtime paths"
+)
 
 await access(indexTypes)
 await access(controllerTypes)
 await access(textOverrideTypes)
 await access(nativeAccessibilityTypes)
+await access(nativeConstraintTypes)
 
 const indexDeclaration = await readFile(indexTypes, "utf8")
 const controllerDeclaration = await readFile(controllerTypes, "utf8")
 const textOverrideDeclaration = await readFile(textOverrideTypes, "utf8")
 const nativeAccessibilityDeclaration = await readFile(nativeAccessibilityTypes, "utf8")
+const nativeConstraintDeclaration = await readFile(nativeConstraintTypes, "utf8")
 
 const expectedIndexSignals = [
   "export interface TomSelectTextOverrideContract",
@@ -81,6 +94,9 @@ const expectedIndexSignals = [
   "labelElement: HTMLLabelElement | null",
   "prefixElement: Element | null",
   "suffixElement: Element | null",
+  "export interface NativeFieldConstraintContract",
+  "maxLength: string | null",
+  "inputMode: string | null",
   "export function tomSelectTextOverrideContract",
   "export function tomSelectPluginContract",
   "export function tomSelectSelectionContract",
@@ -92,6 +108,7 @@ const expectedIndexSignals = [
   "export function readRenderedOptionPayloadMapping",
   "export function readRenderedTableFilterMetadata",
   "export function nativeFieldAccessibilityContract",
+  "export function nativeFieldConstraintContract",
   "export { TomSelectController }",
   "export default TomSelectController"
 ]
@@ -105,5 +122,7 @@ assert.ok(textOverrideDeclaration.includes("tomSelectTextOverrideContract as def
 assert.ok(textOverrideDeclaration.includes("export type { TomSelectTextOverrideContract } from \"./index.js\""), "direct text override declaration should re-export its package-root type")
 assert.ok(nativeAccessibilityDeclaration.includes("nativeFieldAccessibilityContract as default"), "direct native accessibility declaration should mirror the default helper re-export")
 assert.ok(nativeAccessibilityDeclaration.includes("export type { NativeFieldAccessibilityContract } from \"./index.js\""), "direct native accessibility declaration should re-export its package-root type")
+assert.ok(nativeConstraintDeclaration.includes("nativeFieldConstraintContract as default"), "direct native constraint declaration should mirror the default helper re-export")
+assert.ok(nativeConstraintDeclaration.includes("export type { NativeFieldConstraintContract } from \"./index.js\""), "direct native constraint declaration should re-export its package-root type")
 
 console.log("rails_fields_kit TypeScript declaration metadata smoke passed")

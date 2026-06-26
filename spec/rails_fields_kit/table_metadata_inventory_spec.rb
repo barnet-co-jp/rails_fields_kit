@@ -11,20 +11,42 @@ RSpec.describe "table metadata native helper inventory" do
 
   it "keeps table metadata native factories aligned with the FormBuilder native helper inventory" do
     native_field_types = native_helper_field_types_from(form_builder_source)
-    intentional_table_metadata_exceptions = {}
-    expected_table_metadata_types = native_field_types - intentional_table_metadata_exceptions.keys
+    filter_metadata_exceptions = {
+      file_field: "file uploads are cell-editor metadata only; filters would imply query/upload semantics"
+    }
+    cell_metadata_exceptions = {}
+    renderer_metadata_exceptions = {}
 
     filter_factory_types = common_field_types_from(table_filter_input_source)
     cell_factory_types = common_field_types_from(table_cell_input_source)
     renderer_field_types = default_renderer_field_types_from(table_renderer_source)
 
-    expect_no_missing_types("TableFilterInput::COMMON_FIELD_TYPES", filter_factory_types, expected_table_metadata_types, intentional_table_metadata_exceptions)
-    expect_no_missing_types("TableCellInput::COMMON_FIELD_TYPES", cell_factory_types, expected_table_metadata_types, intentional_table_metadata_exceptions)
-    expect_no_missing_types("TableRenderer::DEFAULT_FIELD_HELPERS", renderer_field_types, expected_table_metadata_types, intentional_table_metadata_exceptions)
+    expect_no_missing_types(
+      "TableFilterInput::COMMON_FIELD_TYPES",
+      filter_factory_types,
+      native_field_types - filter_metadata_exceptions.keys,
+      filter_metadata_exceptions
+    )
+    expect_no_missing_types(
+      "TableCellInput::COMMON_FIELD_TYPES",
+      cell_factory_types,
+      native_field_types - cell_metadata_exceptions.keys,
+      cell_metadata_exceptions
+    )
+    expect_no_missing_types(
+      "TableRenderer::DEFAULT_FIELD_HELPERS",
+      renderer_field_types,
+      native_field_types - renderer_metadata_exceptions.keys,
+      renderer_metadata_exceptions
+    )
 
-    intentional_table_metadata_exceptions.each_key do |field_type|
+    filter_metadata_exceptions.each_key do |field_type|
       expect(filter_factory_types).not_to include(field_type)
+    end
+    cell_metadata_exceptions.each_key do |field_type|
       expect(cell_factory_types).not_to include(field_type)
+    end
+    renderer_metadata_exceptions.each_key do |field_type|
       expect(renderer_field_types).not_to include(field_type)
     end
   end

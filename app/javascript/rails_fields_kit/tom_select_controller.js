@@ -38,7 +38,8 @@ export default class extends Controller {
     createText: String,
     optionDescriptionField: String,
     optionBadgeField: String,
-    plugins: Array
+    plugins: Array,
+    classNames: Object
   }
 
   connect() {
@@ -69,6 +70,7 @@ export default class extends Controller {
       render: this.renderers()
     }
 
+    if (this.hasClassNamesValue) options.classNames = this.classNamesValue
     if (this.hasMaxOptionsValue) options.maxOptions = this.maxOptionsValue
     if (this.hasMaxItemsValue) options.maxItems = this.maxItemsValue
     if (this.hasLoadThrottleValue) options.loadThrottle = this.loadThrottleValue

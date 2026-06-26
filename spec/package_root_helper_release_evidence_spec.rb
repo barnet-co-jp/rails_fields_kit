@@ -46,7 +46,8 @@ RSpec.describe "package-root helper release evidence guide" do
       "readRenderedSelectedPreloadConfig(element)",
       "readRenderedOptionPayloadMapping(element)",
       "readRenderedTableFilterMetadata(element)",
-      "nativeFieldAccessibilityContract(element)"
+      "nativeFieldAccessibilityContract(element)",
+      "nativeFieldConstraintContract(element)"
     )
 
     expect(evidence_guide).to include(

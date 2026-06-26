@@ -13,6 +13,7 @@ RSpec.describe "generated initializer template" do
     default_label_field: "text",
     default_search_field: "text",
     default_plugins: [],
+    default_allow_clear: false,
     default_min_length: 0,
     default_max_options: nil,
     default_load_throttle: nil,

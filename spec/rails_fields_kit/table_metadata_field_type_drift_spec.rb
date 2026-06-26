@@ -7,14 +7,18 @@ RSpec.describe "table metadata field type drift" do
     RailsFieldsKit::TableRenderer.reset_field_helpers!
   end
 
-  it "keeps TableFilterInput known types aligned with default renderer helpers" do
+  it "keeps TableFilterInput known types aligned with filter-capable default renderer helpers" do
+    renderer_only_types = ["file_field"]
     known_types = RailsFieldsKit::TableFilterInput.known_types.map(&:to_s).sort
     helper_types = RailsFieldsKit::TableRenderer.field_helpers.keys.sort
+    filter_helper_types = helper_types - renderer_only_types
 
-    expect(known_types - helper_types).to eq([]),
+    expect(known_types - filter_helper_types).to eq([]),
       "expected every TableFilterInput known type to have a default TableRenderer helper mapping"
-    expect(helper_types - known_types).to eq([]),
-      "expected every default TableRenderer helper mapping to be exposed as a TableFilterInput known type"
+    expect(filter_helper_types - known_types).to eq([]),
+      "expected every filter-capable default TableRenderer helper mapping to be exposed as a TableFilterInput known type"
+    expect(RailsFieldsKit::TableFilterInput.known_type?(:file_field)).to be(false),
+      "expected file_field to stay cell-editor-only because table filters imply query semantics"
   end
 
   it "keeps every known table filter type renderable through its default helper" do

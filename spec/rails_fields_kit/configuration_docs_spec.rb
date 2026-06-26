@@ -53,6 +53,7 @@ RSpec.describe RailsFieldsKit::Configuration, "documentation" do
       "default_option_description_field" => "`option_description_field:`",
       "default_option_badge_field" => "`option_badge_field:`",
       "default_plugins" => "`plugins:`",
+      "default_allow_clear" => "`allow_clear:`",
       "default_min_length" => "`min_length:`",
       "default_max_options" => "`max_options:`",
       "default_load_throttle" => "`load_throttle:`",
