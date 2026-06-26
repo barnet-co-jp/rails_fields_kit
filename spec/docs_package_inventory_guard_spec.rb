@@ -22,6 +22,7 @@ RSpec.describe "docs package inventory guard" do
       tom_select_controller
       tom_select_text_override_contract
       native_field_accessibility_contract
+      native_field_constraint_contract
     ])
 
     direct_exports.each do |entrypoint|
