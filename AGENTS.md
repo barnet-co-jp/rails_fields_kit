@@ -25,6 +25,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/setup_doctor_machine_readable.md`: structured JSON output guide for SetupDoctor `schema_version`, `summary`, and `checks` payloads; keep host-app CI pass/fail policy and auto-fix behavior out of this doc
 - `doc/setup_doctor_output_review.md`: focused setup doctor CLI diagnostic evidence review for `[OK]`, `[MISSING]`, `[MANUAL]`, and importmap target mismatch scanability
 - `doc/package_root_helper_release_evidence.md`: release and sample-app evidence guide for package-root rendered-field contract helpers; keep `doc/public_api.md#javascript-exports` as the helper list and return-shape source of truth
+- `doc/default_allow_clear.md`: focused app-wide `allow_clear` default guide; keep `clear_button` plugin installation, styling, empty-state copy, selection mutation, and lifecycle behavior with the host app
 - `doc/dropdown_parent_release_evidence.md`: focused release and sample-app evidence note for Tom Select-backed `dropdown_parent:` selector pass-through and no-config boundaries; keep modal, drawer, portal, z-index, and production CSS ownership with the host app
 - `doc/table_metadata_release_evidence.md`: release and sample-app evidence guide for table metadata rendering, group-level wrappers, and TableRenderer registry lanes
 - `doc/token_table_sample_app_evidence.md`: release and PR evidence companion for token search, token suggestions, Ransack suggestion metadata, and table metadata lanes; keep token parsing, query execution, authorization, and table persistence host-app owned
@@ -64,6 +65,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - Do not document roadmap examples as current public API unless the code and `doc/public_api.md` already support them.
 - Keep host-app responsibilities explicit. Rails Fields Kit does not own query parsing, authorization, pagination, or the host app's JavaScript package manager setup.
 - When setup guidance or docs discoverability changes, sync `README.md`, `doc/setup.md`, `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`, and root inventory docs such as `Product Profile.md` when they summarize maintainer-facing entrypoints.
+- When configuration defaults change, sync `doc/configuration.md`, any focused configuration guide such as `doc/default_allow_clear.md`, generated initializer notes, and root inventory docs when they summarize maintainer-facing entrypoints.
 - When helper discoverability or representative UI states change, sync `README.md`, `doc/field_helpers.md`, and any affected static visual reference together.
 - When token suggestion, Ransack suggestion, or table metadata behavior changes, sync the related `doc/*.md` reference plus `doc/public_api.md` together.
 - When event dispatch, selected preload, create-on-the-fly behavior, or Tom Select lifecycle behavior changes, sync `doc/events.md`, `doc/tom_select_turbo_lifecycle.md`, `doc/sample_app_checklist.md`, and `doc/sample_app_results.md` together.
@@ -84,6 +86,7 @@ Before release-oriented docs updates, review:
 - `doc/selected_preload_release_gate.md`
 - `doc/setup_doctor_machine_readable.md` when SetupDoctor JSON output or structured setup evidence is part of the release surface
 - `doc/package_root_helper_release_evidence.md`: focused release and sample-app evidence guide for package-root rendered-field contract helpers
+- `doc/default_allow_clear.md`: focused release-relevant guide for the app-wide `allow_clear` default and Tom Select `clear_button` responsibility boundary
 - `doc/dropdown_parent_release_evidence.md`: focused release and sample-app evidence note for `dropdown_parent:` selector pass-through and no-config checks
 - `doc/table_metadata_release_evidence.md`: focused release and sample-app evidence guide for table metadata rendering, group-level wrappers, and TableRenderer registry lanes
 - `doc/token_table_sample_app_evidence.md`: focused release and PR evidence companion for token search, token suggestions, Ransack suggestion metadata, or table metadata lanes
