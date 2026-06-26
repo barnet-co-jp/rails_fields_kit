@@ -166,7 +166,8 @@
 
       .tag.focus,
       .tag.customization,
-      .tag.noneditable {
+      .tag.noneditable,
+      .tag.radio {
         border-color: #9bcdbc;
         background: var(--accent-soft);
         color: var(--accent);
@@ -362,6 +363,53 @@
         min-height: 88px;
       }
 
+      .radio-group {
+        display: grid;
+        gap: 7px;
+      }
+
+      .radio-option {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        min-width: 0;
+        padding: 8px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+      }
+
+      .radio-option.is-checked {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+      }
+
+      .radio-dot {
+        flex: none;
+        width: 15px;
+        height: 15px;
+        margin-top: 3px;
+        border: 2px solid var(--line-strong);
+        border-radius: 50%;
+        background: #ffffff;
+      }
+
+      .radio-option.is-checked .radio-dot {
+        border-color: var(--accent);
+        box-shadow: inset 0 0 0 3px #ffffff;
+        background: var(--accent);
+      }
+
+      .radio-copy {
+        display: grid;
+        gap: 2px;
+        min-width: 0;
+      }
+
+      .radio-copy strong,
+      .radio-copy span {
+        overflow-wrap: anywhere;
+      }
+
       .hint {
         color: var(--muted);
         font-size: 0.82rem;
@@ -506,7 +554,7 @@
         <p class="lede">
           Diagnostic QA surface for the native helper family: wrapper, validation, affixes, metadata,
           browser semantics, ordinary constraint attributes, focus, customization, non-editable states, narrow viewport stress, generated aria ids, multiline text areas,
-          and the accessibility opt-out boundary.
+          radio button wrapper states, and the accessibility opt-out boundary.
         </p>
         <div class="hero-links">
           <a href="field_helpers.md">Read helper details</a>
@@ -521,6 +569,7 @@
         <span class="review-pill">Native browser semantics scan</span>
         <span class="review-pill">Constraint attribute boundary scan</span>
         <span class="review-pill">Native file input boundary scan</span>
+        <span class="review-pill">Radio button wrapper scan</span>
         <span class="review-pill">Multiline textarea scan</span>
         <span class="review-pill">Desktop and narrow viewport scan</span>
         <span class="review-pill">Static artifact only</span>
@@ -606,6 +655,70 @@
               <div class="metadata-row">
                 <span class="metadata-key">Narrow check</span>
                 <span class="metadata-value">At 460px, textarea content, hint, and error copy wrap below the label without horizontal overflow.</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="tag radio">Radio button wrapper</div>
+          <h2>Single radio helper keeps group ownership clear</h2>
+          <p>
+            `rfk_radio_button` shows checked and unchecked single-control wrapper states while leaving
+            collection groups, fieldsets, legends, and production styling with the host app.
+          </p>
+          <div class="example focus-surface">
+            <div class="field-block">
+              <div class="label-row">
+                <span>Notification channel</span>
+                <span class="required">Required</span>
+              </div>
+              <div class="radio-group" role="radiogroup" aria-label="Notification channel">
+                <div class="radio-option is-checked" role="radio" aria-checked="true">
+                  <span class="radio-dot" aria-hidden="true"></span>
+                  <span class="radio-copy">
+                    <strong>Email updates</strong>
+                    <span class="hint">Checked state for tag value `email`; label and hint remain inside the native wrapper lane.</span>
+                  </span>
+                </div>
+                <div class="radio-option" role="radio" aria-checked="false">
+                  <span class="radio-dot" aria-hidden="true"></span>
+                  <span class="radio-copy">
+                    <strong>Phone callback</strong>
+                    <span class="hint">Unchecked state shares the same method name without becoming a collection helper.</span>
+                  </span>
+                </div>
+              </div>
+              <div class="hint">Same-name grouping is Rails native radio-button behavior; this artifact only reviews wrapper readability.</div>
+            </div>
+            <div class="field-block error-state">
+              <div class="label-row">
+                <span>Escalation priority</span>
+                <span class="required">Required</span>
+              </div>
+              <div class="radio-group" role="radiogroup" aria-label="Escalation priority">
+                <div class="radio-option" role="radio" aria-checked="false">
+                  <span class="radio-dot" aria-hidden="true"></span>
+                  <span class="radio-copy">
+                    <strong>Custom value: partner_success</strong>
+                    <span class="hint">Custom tag values stay visible without implying ranking, routing, or validation semantics.</span>
+                  </span>
+                </div>
+              </div>
+              <div class="error">Choose one escalation priority before saving.</div>
+            </div>
+            <div class="metadata-list">
+              <div class="metadata-row">
+                <span class="metadata-key">Helper lane</span>
+                <span class="metadata-value">Representative `rfk_radio_button(method, tag_value, **options)` wrapper state after #2168.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">Boundary</span>
+                <span class="metadata-value">No collection radio group, fieldset / legend builder, group validation UI, production CSS, or runtime behavior is added here.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">Narrow check</span>
+                <span class="metadata-value">Radio copy, hint, error, required marker, and custom tag value wrap inside the card at the existing 460px breakpoint.</span>
               </div>
             </div>
           </div>
@@ -1026,6 +1139,7 @@
         <div class="checklist">
           <span>Hero scale stays below the state cards so reviewers scan helper states first.</span>
           <span>Shared wrapper contract: label, hint, affixes, validation redisplay.</span>
+          <span>`rfk_radio_button` shows checked, unchecked, custom value, required, hint, and validation copy without claiming collection group or fieldset ownership.</span>
           <span>Native helper lane only: no remote search, selected preload, or create-on-the-fly semantics.</span>
           <span>Native browser semantics distinguish `rfk_search_field`, `rfk_email_field`, and `rfk_url_field` from Tom Select-backed helpers.</span>
           <span>Multiline `rfk_text_area` keeps long content, long hints, and validation copy readable in one native wrapper lane.</span>
