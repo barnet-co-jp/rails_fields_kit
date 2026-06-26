@@ -8,6 +8,7 @@ Use this companion note when a release or PR needs manual evidence but the full 
 | --- | --- | --- | --- |
 | Release candidate or release PR | Yes. Fill the release-wide baseline and any feature-specific lane that changed. | Optional summary only. | A feature-only spot check. |
 | Narrow static visual reference PR | Only when the artifact is release-critical or the release evidence log is being refreshed. | Usually yes. Name the artifact, viewport, lane, result, and blocker. | CI success as visual approval. |
+| Turbo reconnect visual reference route | Only when the release or release candidate depends on Turbo reconnect visual evidence. | Usually yes. Name the Turbo reconnect artifact, restored-wrapper lane, viewport, and whether the result is browser-run or deferred. | Turbo lifecycle, Stimulus boot policy, or Tom Select reconnect behavior approval. |
 | Source-only or connector-only visual review | Use `SOURCE REVIEW ONLY` or `DEFERRED` if the evidence log is in scope. | Yes. State what source was checked and what browser pass remains. | Browser `PASS`. |
 | Package-root helper or setup visibility PR | Use the package-root helper or setup lane only if that surface changed. | Yes for narrow PR proof. | A release-wide helper inventory. |
 | Runtime helper behavior PR | Use the nearest helper lane when manual sample-app evidence is required. | Yes for scoped test or CI notes. | Static visual artifact approval. |
@@ -18,6 +19,20 @@ Use this companion note when a release or PR needs manual evidence but the full 
 ## Focused Representative Lanes
 
 Use these focused lanes when the full results checklist is too broad for the PR, but reviewers still need a named sample-app evidence shape.
+
+### Turbo reconnect focused visual reference
+
+Record this lane when the review needs visual evidence for `doc/tom_select_turbo_reconnect_visual_reference.html` and the change is about static restored-wrapper readability rather than runtime reconnect behavior.
+
+A scoped evidence note should include:
+
+- Artifact: `doc/tom_select_turbo_reconnect_visual_reference.html`.
+- Viewport and lane, such as desktop restored-wrapper, narrow restored-wrapper, ordinary settled field, or duplicate-wrapper caution.
+- Whether the evidence was a real browser `PASS`, `SOURCE REVIEW ONLY`, or `DEFERRED`.
+- Whether the evidence belongs in a narrow PR comment or the release-wide `sample_app_results.md` log.
+- Confirmation that Turbo reconnect cleanup, Stimulus boot policy, Tom Select instance lifecycle, request cancellation, stale-response guards, production CSS, and screenshot approval policy remain out of scope.
+
+Do not use this lane to approve reconnect behavior. Runtime lifecycle checks stay in `doc/tom_select_turbo_lifecycle.md`, JavaScript checks, or host-app QA notes.
 
 ### Selected preload with preserved request order
 
