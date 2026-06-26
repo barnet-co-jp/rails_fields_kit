@@ -6,6 +6,7 @@ RSpec.describe "table metadata helper inventory" do
   let(:repo_root) { File.expand_path("..", __dir__) }
   let(:public_api_path) { File.join(repo_root, "doc/public_api.md") }
   let(:table_file_field_metadata_path) { File.join(repo_root, "doc/table_file_field_metadata.md") }
+  let(:checkbox_doc_path) { File.join(repo_root, "doc/table_check_box_metadata.md") }
   let(:public_api) { File.read(public_api_path) }
 
   def documented_class_methods(class_name)
@@ -19,6 +20,7 @@ RSpec.describe "table metadata helper inventory" do
   it "keeps TableFilterInput.known_types aligned with the documented helper family" do
     documented_factories = documented_factory_methods("RailsFieldsKit::TableFilterInput")
 
+    expect(File.read(checkbox_doc_path)).to include("TableFilterInput.check_box")
     expect(RailsFieldsKit::TableFilterInput.known_types).to eq(documented_factories - [:ransack_filter])
   end
 
@@ -26,6 +28,7 @@ RSpec.describe "table metadata helper inventory" do
     documented_factories = documented_factory_methods("RailsFieldsKit::TableCellInput")
 
     expect(File.read(table_file_field_metadata_path)).to include("TableCellInput.file_field")
+    expect(File.read(checkbox_doc_path)).to include("TableCellInput.check_box")
     expect(RailsFieldsKit::TableCellInput.known_types).to eq(documented_factories)
   end
 

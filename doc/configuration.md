@@ -41,7 +41,7 @@ Default behavior uses three different patterns:
 | Initializer key | Default or fallback | Field-level override | Applies to | Notes |
 | --- | --- | --- | --- | --- |
 | `default_value_field` | `"value"` | `value_field:` | JSON-backed option helpers | JSON key read for option values. |
-| `default_label_field` | `"text"` | `label_field:` | JSON key read for option labels. |
+| `default_label_field` | `"text"` | `label_field:` | JSON-backed option helpers | JSON key read for option labels. |
 | `default_search_field` | `"text"` | `search_field:` | Tom Select search config | Use a comma-separated string for multiple fields. |
 | `default_option_description_field` | `nil` | `option_description_field:` | Option rendering metadata | `nil` means no secondary description field is rendered. |
 | `default_option_badge_field` | `nil` | `option_badge_field:` | Option rendering metadata | `nil` means no badge field is rendered. |

@@ -26,6 +26,7 @@ module RailsFieldsKit
       "phone_field" => :rfk_phone_field,
       "search_field" => :rfk_search_field,
       "password_field" => :rfk_password_field,
+      "check_box" => :rfk_check_box,
       "file_field" => :rfk_file_field
     }.freeze
 

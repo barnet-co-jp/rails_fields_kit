@@ -192,6 +192,7 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 - `RailsFieldsKit::TableFilterInput.phone_field`
 - `RailsFieldsKit::TableFilterInput.search_field`
 - `RailsFieldsKit::TableFilterInput.password_field`
+- `RailsFieldsKit::TableFilterInput.check_box`
 - `RailsFieldsKit::TableFilterInput.token_search`
 - `RailsFieldsKit::TableFilterInput.ransack_filter`
 - `RailsFieldsKit::TableFilterInput#to_h`
@@ -225,6 +226,7 @@ Public metadata methods are grouped by class so reviewers can scan the contract 
 - `RailsFieldsKit::TableCellInput.phone_field`
 - `RailsFieldsKit::TableCellInput.search_field`
 - `RailsFieldsKit::TableCellInput.password_field`
+- `RailsFieldsKit::TableCellInput.check_box`
 - `RailsFieldsKit::TableCellInput.file_field`
 - `RailsFieldsKit::TableCellInput.token_search`
 - `RailsFieldsKit::TableCellInput#to_h`
