@@ -14,6 +14,7 @@ RSpec.describe "docs package inventory guard" do
   let(:visual_references) { read_doc("doc/visual_references.md") }
   let(:native_select_boundary) { read_doc("doc/native_select_boundary_sample_evidence.html") }
   let(:tom_select_no_event_boundary) { read_doc("doc/tom_select_no_event_boundary_review.html") }
+  let(:dropdown_parent_release_evidence) { read_doc("doc/dropdown_parent_release_evidence.md") }
 
   it "keeps documented direct subpath examples aligned with package exports" do
     direct_exports = package_json.fetch("exports").keys.grep_v(".").map { |path| path.delete_prefix("./") }
@@ -68,6 +69,18 @@ RSpec.describe "docs package inventory guard" do
       "No success or failure event is dispatched",
       "No request-start or request-finish event proposal",
       "No built-in retry, cancellation banner, toast, or fallback UI"
+    )
+  end
+
+  it "keeps dropdown parent release evidence packaged and scoped" do
+    expect(specification.files).to include("doc/dropdown_parent_release_evidence.md")
+    expect(dropdown_parent_release_evidence).to include(
+      "Selector pass-through",
+      "No-config boundary",
+      "dropdown_parent: \"body\"",
+      "data-rails-fields-kit--tom-select-dropdown-parent-value",
+      "dropdownParent: \"body\"",
+      "Do not use this lane as proof of browser positioning, modal layout, portal implementation, z-index policy, or production CSS"
     )
   end
 
