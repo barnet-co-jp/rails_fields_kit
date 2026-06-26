@@ -54,7 +54,7 @@ Public configuration methods:
 - `RailsFieldsKit.configure`
 - `RailsFieldsKit.reset_configuration!`
 
-Configuration attributes are documented in [`configuration.md`](configuration.md).
+Configuration attributes are documented in [`configuration.md`](configuration.md). Use [`default_allow_clear.md`](default_allow_clear.md) for the app-wide semantic clear-button default and field-level `allow_clear:` priority. Tom Select internal `classNames` customization is field-level only through `tom_select_class_names:`; it does not add an initializer-level default.
 
 ## FormBuilder helpers
 
@@ -114,7 +114,9 @@ Collection checkbox / radio group helpers are also not current public APIs. Host
 
 Tom Select-backed `rfk_*` helpers also support opt-in `error_surface:` and `error_surface_html:` options for fields that should expose a stable nearby placeholder on request failures. When enabled, request-failure events described in [`events.md`](events.md) can include that placeholder as `detail.surface`, while visible error copy and retry UI remain host-app responsibility.
 
-Tom Select-backed helpers also support field-level `allow_clear: true` for fields that should expose Tom Select's `clear_button` affordance. Rails Fields Kit adds `clear_button` to that field's effective plugin list, while Tom Select installation, plugin-specific assets, clear affordance styling, and empty-state wording remain host-app or Rails select-option responsibility. Explicit `plugins:` values still replace initializer defaults for the field; use [`field_helpers.md`](field_helpers.md) for the helper-level examples and override notes.
+Tom Select-backed helpers also support field-level `allow_clear: true` for fields that should expose Tom Select's `clear_button` affordance. Rails Fields Kit adds `clear_button` to that field's effective plugin list, while Tom Select installation, plugin-specific assets, clear affordance styling, and empty-state wording remain host-app or Rails select-option responsibility. When `config.default_allow_clear` is enabled, helpers that omit `allow_clear:` use that app-wide semantic default; `allow_clear: false` suppresses only Rails Fields Kit's semantic auto-add for that field. Explicit `plugins:` values still replace initializer plugin defaults for the field and are not removed by `allow_clear: false`; use [`field_helpers.md`](field_helpers.md) and [`default_allow_clear.md`](default_allow_clear.md) for the helper-level examples and override notes.
+
+Tom Select-backed helpers also support field-level `tom_select_class_names:` for passing Tom Select's internal `classNames` option to one rendered field. Keep this separate from Rails Fields Kit wrapper customization (`wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:`). Rails Fields Kit passes the provided hash through to Tom Select; production CSS, theme presets, dark mode, density policy, and Tom Select internal DOM compatibility stay host-app responsibilities. Use [`tom_select_class_names.md`](tom_select_class_names.md) for focused examples and non-goals.
 
 `rfk_table_filters` and `rfk_table_cell_editors` are the direct FormBuilder rendering path. They collect table metadata and return safe-buffer helper output for ordinary Rails views. `TableMetadata.filter_calls` / `cell_editor_calls` and `TableRenderer.filter_call` / `cell_editor_call` are the call-spec path for table integrations that want to inspect or rearrange helper, method, and options before rendering. The batch convenience APIs `TableMetadata.render_filters` / `render_cell_editors` and `TableRenderer.render_filters` / `render_cell_editors` stay in that renderer lane and return ordered render result arrays rather than redefining the helper-level safe-buffer contract.
 
@@ -163,7 +165,7 @@ Class responsibilities:
 | `RailsFieldsKit::TableMetadata` | Collects filter and cell editor metadata from columns or table-like objects. | Can return metadata hashes, FormBuilder call specs, or ordered render result arrays. |
 | `RailsFieldsKit::TableRenderer` | Maps metadata into FormBuilder helper calls or render results. | Owns the field type registry and custom helper mapping for table integrations. |
 
-Public metadata methods are grouped by class so reviewers can scan the contract without reading one long mixed list. Use [`table_adapters.md`](table_adapters.md) as the source of truth for examples, custom renderer registry setup, and the difference between built-in factory types and custom renderable mappings.
+Public metadata methods are grouped by class so reviewers can scan the contract without reading one long mixed list. Use [`table_adapters.md`](table_adapters.md) as the source of truth for examples, custom registry examples, and the difference between built-in factory types and custom renderable mappings.
 
 ### TableFilterInput methods
 
@@ -380,7 +382,7 @@ Future package-root helpers should follow the same boundary: read the rendered R
 
 ## Stimulus values
 
-The Tom Select controller reads data values generated by the FormBuilder helpers. Publicly documented options include remote URLs, request parameter names, JSON field names, selected preload settings, create-on-the-fly settings, rendering labels, plugin lists, `max_options`, `max_items`, `load_throttle`, `delimiter`, and `dropdown_parent`.
+The Tom Select controller reads data values generated by the FormBuilder helpers. Publicly documented options include remote URLs, request parameter names, JSON field names, selected preload settings, create-on-the-fly settings, rendering labels, plugin lists, `max_options`, `max_items`, `load_throttle`, `delimiter`, `dropdown_parent`, `tom_select_class_names`, and semantic clear-button data.
 
 Rails Fields Kit also renders `data-rails-fields-kit--tom-select-kind-value` as a helper-lane signal for Tom Select-backed fields. Treat it as rendered configuration for Rails Fields Kit diagnostics and controller behavior rather than the preferred host-app integration surface: host apps should use documented helper options, events, and package-root contract readers when those surfaces exist. `rfk_grouped_select` currently renders through the collection-backed select lane, so its `kind` value matches that underlying lane instead of declaring a separate grouped-select taxonomy.
 
