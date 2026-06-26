@@ -9,6 +9,7 @@ Use this companion note when a release or PR needs manual evidence but the full 
 | Release candidate or release PR | Yes. Fill the release-wide baseline and any feature-specific lane that changed. | Optional summary only. | A feature-only spot check. |
 | Narrow static visual reference PR | Only when the artifact is release-critical or the release evidence log is being refreshed. | Usually yes. Name the artifact, viewport, lane, result, and blocker. | CI success as visual approval. |
 | Turbo reconnect visual reference route | Only when the release or release candidate depends on Turbo reconnect visual evidence. | Usually yes. Name the Turbo reconnect artifact, restored-wrapper lane, viewport, and whether the result is browser-run or deferred. | Turbo lifecycle, Stimulus boot policy, or Tom Select reconnect behavior approval. |
+| SetupDoctor output review | Use the Setup doctor checks lane only when a release candidate, release PR, or setup-focused change depends on CLI diagnostic evidence. | Yes for a narrow setup-doctor or setup-visibility PR. Name the command, setup path, representative status lines, wrapping surface, and result. | Host-app CI pass/fail policy, auto-fix approval, Tom Select install approval, Stimulus boot policy, CSS pipeline approval, or bundler alias confirmation. |
 | Source-only or connector-only visual review | Use `SOURCE REVIEW ONLY` or `DEFERRED` if the evidence log is in scope. | Yes. State what source was checked and what browser pass remains. | Browser `PASS`. |
 | Package-root helper or setup visibility PR | Use the package-root helper or setup lane only if that surface changed. | Yes for narrow PR proof. | A release-wide helper inventory. |
 | Runtime helper behavior PR | Use the nearest helper lane when manual sample-app evidence is required. | Yes for scoped test or CI notes. | Static visual artifact approval. |
@@ -19,6 +20,21 @@ Use this companion note when a release or PR needs manual evidence but the full 
 ## Focused Representative Lanes
 
 Use these focused lanes when the full results checklist is too broad for the PR, but reviewers still need a named sample-app evidence shape.
+
+### SetupDoctor output review
+
+Record this lane when the review needs evidence for the human-readable `rails rails_fields_kit:doctor` diagnostic output rather than field UI, setup doctor JSON, generator behavior, or host-app setup policy.
+
+A scoped evidence note should include:
+
+- Command and setup path, such as importmap, jsbundling, bundler-managed JavaScript, or another host-app route.
+- Representative status lines, such as first-run legend, `[OK]` / `[MISSING]` / `[MANUAL]` setup checks, target mismatch, Stimulus registration advisory, CSS import advisory, or unresolved import diagnostics.
+- Whether the evidence belongs in a narrow PR comment or the release-wide `sample_app_results.md` Setup doctor checks lane.
+- Result word: `PASS`, `FAIL`, `SOURCE REVIEW ONLY`, or `DEFERRED`, with the terminal width, GitHub PR comment code block, or Markdown preview surface when wrapping readability is in scope.
+- Confirmation that `[MANUAL]` lines remain host-app responsibility checks, not automatic failures.
+- Confirmation that host-app CI pass/fail policy, auto-fix behavior, Tom Select package install, Stimulus boot policy, CSS pipeline, bundler aliases, and setup doctor JSON payloads remain out of scope.
+
+Do not use this lane to approve frontend setup ownership. Human-readable CLI diagnostic evidence stays in `doc/setup_doctor_output_review.md`; machine-readable JSON payload evidence stays in `doc/setup_doctor_machine_readable.md`.
 
 ### Turbo reconnect focused visual reference
 
@@ -104,6 +120,25 @@ Visual evidence note
 
 If the note says `SOURCE REVIEW ONLY` or `DEFERRED`, name the missing browser-capable check instead of treating the PR as visually approved.
 
+### SetupDoctor evidence PR comment shape
+
+Use this shape when SetupDoctor human-readable output evidence is narrow enough for a PR comment instead of the release evidence log.
+
+```markdown
+SetupDoctor evidence note
+
+- Lane: setup doctor output review
+- Command and setup path: `rails rails_fields_kit:doctor`, importmap / jsbundling / bundler-managed JavaScript / other
+- Representative state: first-run mixed status / Stimulus registration advisory / CSS import advisory / importmap target mismatch / unresolved import diagnostics
+- Checked here: source review / terminal run / wrapped Markdown review / CI / docs link review
+- Result: PASS / FAIL / SOURCE REVIEW ONLY / DEFERRED
+- Evidence observed: representative `[OK]`, `[MISSING]`, or `[MANUAL]` lines; width or preview surface if wrapping was checked
+- Responsibility boundary: host-app CI policy, auto-fix behavior, Tom Select install, Stimulus boot policy, CSS pipeline, bundler aliases, and setup doctor JSON payloads remain out of scope
+- Remaining follow-up: ...
+```
+
+If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark host-app setup execution as complete.
+
 ### Token evidence PR comment shape
 
 Use this shape when token-search or suggestion metadata evidence is narrow enough for a PR comment instead of the release evidence log.
@@ -125,7 +160,7 @@ If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not ma
 
 ## Boundaries
 
-- Keep release-wide baseline evidence separate from feature-specific helper, visual, remote, token, or table lanes.
+- Keep release-wide baseline evidence separate from feature-specific helper, visual, remote, token, table, or setup-doctor lanes.
 - Do not turn a feature-specific lane into a release-wide requirement without a separate release policy decision.
 - Do not record sample app evidence that was not actually run.
 - Do not redesign visual artifacts, helper behavior, setup doctor output, or release policy from this guide.
