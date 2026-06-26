@@ -86,7 +86,7 @@ This inventory is for maintainers who need to find the right source of truth qui
 - `doc/select_migration.md`: practical `collection_select` to `rfk_select` migration pattern
 - `doc/token_suggestions.md` and `doc/ransack_suggestions.md`: token-search suggestion surfaces and host-app responsibility boundary
 - `doc/table_adapters.md`: table metadata bridge
-- `doc/table_direct_helper_boundary.md`: direct table FormBuilder helper `columns`-only boundary and lower-level render/call-spec lane guidance
+- `doc/table_direct_helper_boundary.md`: direct table FormBuilder helper safe-join boundary, optional single outer `group_html:` wrapper, and lower-level render/call-spec lane guidance
 - `doc/table_group_html.md`: direct table FormBuilder helper group-level wrapper attributes
 - `doc/table_range_field_metadata.md`: focused table metadata guide for `TableFilterInput.range_field` / `TableCellInput.range_field`; range-pair queries, custom sliders, table persistence, Ransack execution, and production styling stay out of scope
 
