@@ -10,6 +10,7 @@ RSpec.describe "docs package inventory guard" do
   let(:package_json) { JSON.parse(File.read(File.join(root, "package.json"))) }
   let(:readme) { read_doc("README.md") }
   let(:setup_doc) { read_doc("doc/setup.md") }
+  let(:setup_doctor_machine_readable) { read_doc("doc/setup_doctor_machine_readable.md") }
   let(:public_api) { read_doc("doc/public_api.md") }
   let(:sample_app_results) { read_doc("doc/sample_app_results.md") }
   let(:token_table_sample_app_evidence) { read_doc("doc/token_table_sample_app_evidence.md") }
@@ -43,6 +44,18 @@ RSpec.describe "docs package inventory guard" do
       "Do not extend the alias or importmap examples by copying every package-root helper name from the public API table"
     )
     expect(public_api).to include("## JavaScript exports")
+  end
+
+  it "keeps setup doctor machine-readable guide packaged and scoped to Ruby JSON usage" do
+    expect(specification.files).to include("doc/setup_doctor_machine_readable.md")
+    expect(readme).to include("[`doc/setup_doctor_machine_readable.md`](doc/setup_doctor_machine_readable.md)")
+    expect(setup_doctor_machine_readable).to include(
+      "RailsFieldsKit::SetupDoctor.new.run(io: output, format: :json)",
+      "\"schema_version\": 1",
+      "`manual`: advisory host-app check",
+      "Rails Fields Kit does not define a universal pass/fail policy",
+      "Do not treat this evidence lane as a CLI `--json` contract"
+    )
   end
 
   it "keeps map-only native select boundary evidence packaged and scoped" do
