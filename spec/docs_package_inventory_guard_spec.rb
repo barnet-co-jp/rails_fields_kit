@@ -16,6 +16,7 @@ RSpec.describe "docs package inventory guard" do
   let(:sample_app_results_route_guide) { read_doc("doc/sample_app_results_route_guide.md") }
   let(:token_table_sample_app_evidence) { read_doc("doc/token_table_sample_app_evidence.md") }
   let(:visual_references) { read_doc("doc/visual_references.md") }
+  let(:native_character_counter_boundary) { read_doc("doc/native_character_counter_boundary_sample_evidence.html") }
   let(:native_select_boundary) { read_doc("doc/native_select_boundary_sample_evidence.html") }
   let(:range_field) { read_doc("doc/range_field.md") }
   let(:tom_select_no_event_boundary) { read_doc("doc/tom_select_no_event_boundary_review.html") }
@@ -59,6 +60,25 @@ RSpec.describe "docs package inventory guard" do
       "Rails Fields Kit does not define a universal pass/fail policy",
       "Do not treat this evidence lane as a CLI `--json` contract"
     )
+  end
+
+  it "keeps map-only native character counter boundary evidence packaged and scoped" do
+    expect(specification.files).to include("doc/native_character_counter_boundary_sample_evidence.html")
+    expect(visual_references).to include(
+      "[`native_character_counter_boundary_sample_evidence.html`](native_character_counter_boundary_sample_evidence.html)",
+      "native `maxlength` pass-through",
+      "host-owned counter copy",
+      "without presenting `character_counter:` or any helper option as current API"
+    )
+    expect(native_character_counter_boundary).to include(
+      "Character counter sample evidence",
+      "This static review artifact compares native wrapper wiring with host-app-owned character counter enhancements",
+      "Ordinary native attribute pass-through such as <code>maxlength</code>",
+      "Counter text and update timing",
+      "No <code>character_counter:</code> helper option",
+      "No runtime JavaScript or production CSS"
+    )
+    expect(public_api).not_to include("character_counter:")
   end
 
   it "keeps map-only native select boundary evidence packaged and scoped" do
