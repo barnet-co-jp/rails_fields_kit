@@ -12,6 +12,8 @@ For range-specific table metadata examples, use [`table_range_field_metadata.md`
 
 For date, time, datetime-local, and color wrapper behavior, use [`native_date_time_color_fields.md`](native_date_time_color_fields.md). Table metadata for those helpers stays in the same native wrapper lane and does not add custom pickers, timezone conversion, masking, query persistence, or table-specific validation policy.
 
+For file input cell-editor metadata, use [`table_file_field_metadata.md`](table_file_field_metadata.md). It keeps `TableCellInput.file_field` cell-editor-only and does not add `TableFilterInput.file_field`, upload execution, query semantics, table persistence, or production styling.
+
 ## Table responsibility boundary
 
 Rails Fields Kit table metadata describes which Rails Fields Kit control can be rendered for a table column. It does not own the table's result set or navigation policy.
@@ -605,8 +607,7 @@ A host app or table helper can pass the metadata objects into column-like defini
   key: :customer_id,
   filter: RailsFieldsKit::TableFilterInput.combobox(
     :customer_id,
-    url: customers_path(format: :json),
-    selected_url: selected_customers_path(format: :json)
+    url: customers_path(format: :json)
   )
 }
 ```
