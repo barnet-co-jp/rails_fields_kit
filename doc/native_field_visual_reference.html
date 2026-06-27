@@ -519,6 +519,7 @@
         <span class="review-pill">Generated aria id scan</span>
         <span class="review-pill">Rendered contract reader scan</span>
         <span class="review-pill">Native browser semantics scan</span>
+        <span class="review-pill">Number and phone actual fields scan</span>
         <span class="review-pill">Constraint attribute boundary scan</span>
         <span class="review-pill">Native file input boundary scan</span>
         <span class="review-pill">Multiline textarea scan</span>
@@ -644,6 +645,51 @@
         </article>
 
         <article class="card">
+          <div class="tag metadata">Actual numeric and phone fields</div>
+          <h2>Number and telephone lanes stay browser-native</h2>
+          <p>
+            `rfk_number_field` and `rfk_phone_field` get concrete rendered states without adding masks,
+            formatting, browser validation copy, search execution, or phone policy to Rails Fields Kit.
+          </p>
+          <div class="example metadata-surface">
+            <div class="two-up">
+              <div class="field-block error-state">
+                <div class="label-row">
+                  <span>Seat count</span>
+                  <span class="required">Required</span>
+                </div>
+                <div class="control-row">
+                  <div class="input">0</div>
+                  <span class="affix trailing">min 1</span>
+                </div>
+                <div class="hint">Representative `rfk_number_field`; min, max, and step stay ordinary native attributes.</div>
+                <div class="error">Enter at least one seat before saving.</div>
+              </div>
+              <div class="field-block">
+                <div class="label-row">
+                  <span>Support phone</span>
+                </div>
+                <div class="control-row">
+                  <div class="input">+81 3 1234 5678</div>
+                  <span class="affix trailing">autocomplete="tel"</span>
+                </div>
+                <div class="hint">Representative `rfk_phone_field`; formatting, normalization, and call policy remain host-app owned.</div>
+              </div>
+            </div>
+            <div class="metadata-list">
+              <div class="metadata-row">
+                <span class="metadata-key">Number boundary</span>
+                <span class="metadata-value">The sample makes required state, hint, error, and constraint cue readable without adding custom validation UI.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">Phone boundary</span>
+                <span class="metadata-value">Telephone autocomplete is browser metadata; masking, regional rules, and normalization stay outside this artifact.</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
           <div class="tag stress">Narrow viewport stress</div>
           <h2>Long labels and affixes stay readable</h2>
           <p>
@@ -742,6 +788,10 @@
           </p>
           <div class="example metadata-surface">
             <div class="metadata-list">
+              <div class="metadata-row">
+                <span class="metadata-key">`rfk_number_field`</span>
+                <span class="metadata-value">`min`, `max`, and `step` remain browser-native constraints; validation wording stays host-app owned.</span>
+              </div>
               <div class="metadata-row">
                 <span class="metadata-key">`rfk_money_field`</span>
                 <span class="metadata-value">`inputmode="decimal"` with optional prefix or suffix copy.</span>
@@ -1028,6 +1078,7 @@
           <span>Shared wrapper contract: label, hint, affixes, validation redisplay.</span>
           <span>Native helper lane only: no remote search, selected preload, or create-on-the-fly semantics.</span>
           <span>Native browser semantics distinguish `rfk_search_field`, `rfk_email_field`, and `rfk_url_field` from Tom Select-backed helpers.</span>
+          <span>`rfk_number_field` and `rfk_phone_field` show concrete native states without owning formatting, normalization, browser validation copy, or phone policy.</span>
           <span>Multiline `rfk_text_area` keeps long content, long hints, and validation copy readable in one native wrapper lane.</span>
           <span>Input metadata and constraint attributes stay visible without adding masks, formatting, or validation policy.</span>
           <span>`rfk_file_field` stays a native wrapper lane: upload workflow, previews, progress, storage, and scanning remain host-app responsibilities.</span>
