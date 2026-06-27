@@ -12,6 +12,8 @@ When TableMetadata collection source shapes are in scope, use [`table_metadata_c
 
 When checkbox table metadata is in scope, use [`table_check_box_metadata.md`](table_check_box_metadata.md) as the source-of-truth boundary before recording table metadata evidence. Keep `TableFilterInput.check_box` / `TableCellInput.check_box` evidence in the table metadata lane, separate from native `rfk_check_box` wrapper evidence.
 
+When file field table metadata is in scope, use [`table_file_field_metadata.md`](table_file_field_metadata.md) as the source-of-truth boundary before recording table metadata evidence. Keep `TableCellInput.file_field` evidence in the cell-editor metadata lane, and do not add `TableFilterInput.file_field` evidence because upload controls are not filter/query helpers.
+
 When a shared field/operator metadata source feeds token suggestions, Ransack suggestions, and table filter metadata, use [`shared_metadata_navigation.md#sample-app-and-release-evidence-lane`](shared_metadata_navigation.md#sample-app-and-release-evidence-lane) as the evidence source of truth so the release note stays in the current builders lane instead of implying a registry API.
 
 When the `rfk_text_area` autosize boundary is in scope, use [`textarea_autosize_release_evidence.md`](textarea_autosize_release_evidence.md) with the native helper lane so release notes do not treat host-owned autosize enhancement as Rails Fields Kit behavior.
@@ -35,7 +37,7 @@ Use this chooser before copying checklist items into a PR comment. Pick the smal
 | Native wrapper, accessibility, constraint attributes, generated described-by id boundary, or field-level customization | `Native helper representative wrapper and accessibility lane checks` and the native customization lane | PR comment for a focused helper/docs PR; release evidence only when the release depends on the lane | Tom Select request lifecycle, masking, validation-message policy, server-side validation |
 | `rfk_text_area` autosize boundary or host-owned autosize enhancement notes | `Native helper representative wrapper and accessibility lane checks`, then `textarea_autosize_release_evidence.md` | PR comment for a focused docs PR; `sample_app_results.md` for release candidates | built-in `autosize:` option, JavaScript measurement, production CSS preset, Turbo reconnect sizing hook |
 | Remote search, selected preload, create-on-the-fly, request-failure feedback, Turbo, or events | The matching remote lifecycle, visible feedback, Turbo, or event lane | PR comment for one representative field; release results when the behavior is release-critical | endpoint authorization policy, retry UI, visible copy ownership unless the PR changes that surface |
-| Token suggestions, Ransack suggestions, table filters, cell editors, checkbox table metadata, or TableMetadata collection shape | `Token suggestion and Ransack suggestion metadata` or `Verify table metadata adapters` | PR comment for scoped metadata/docs work; release evidence for release candidates | query execution, parser semantics, boolean query policy, checked-value interpretation, preference persistence, or table integration redesign |
+| Token suggestions, Ransack suggestions, table filters, cell editors, checkbox table metadata, file field table metadata, or TableMetadata collection shape | `Token suggestion and Ransack suggestion metadata` or `Verify table metadata adapters` | PR comment for scoped metadata/docs work; release evidence for release candidates | query execution, parser semantics, boolean query policy, checked-value interpretation, file upload execution, multipart form policy, Active Storage direct upload, preview UI, preference persistence, or table integration redesign |
 
 Avoid duplicating the whole checklist into a PR comment. Use the comment for scoped evidence and use `sample_app_results.md` as the primary release evidence log.
 
@@ -309,6 +311,7 @@ Create a minimal table definition that exercises:
 
 - `RailsFieldsKit::TableFilterInput.combobox` or `RailsFieldsKit::TableFilterInput.token_search`
 - `RailsFieldsKit::TableFilterInput.check_box` or `RailsFieldsKit::TableCellInput.check_box` when checkbox table metadata is in release or PR scope
+- `RailsFieldsKit::TableCellInput.file_field` when file field table metadata is in release or PR scope
 - `RailsFieldsKit::TableCellInput.enum_select` or another current editor helper
 - `rfk_table_filters`
 - `rfk_table_cell_editors`
@@ -320,6 +323,8 @@ Verify:
 - native metadata such as `TableFilterInput.search_field`, `money_field`, `text_area`, or `check_box` also renders through the documented helper path when the integration uses common field helpers
 - checkbox table metadata, when in scope, keeps `checked_value:` / `unchecked_value:` as Rails checkbox helper contract evidence and stays separate from the native `rfk_check_box` wrapper lane
 - checkbox table metadata evidence does not imply boolean query semantics, tri-state filtering, bulk edit persistence, table preference persistence, or authorization policy ownership by Rails Fields Kit
+- file field table metadata, when in scope, keeps `accept:`, `multiple:`, and `direct_upload:` as Rails file helper option pass-through evidence and stays in the cell-editor metadata lane
+- file field table metadata evidence does not imply `TableFilterInput.file_field`, multipart form policy, Active Storage direct upload JavaScript, preview UI, upload progress UI, table persistence, query execution, file validation policy, storage configuration, virus scanning, authorization, or production CSS ownership by Rails Fields Kit
 - any direct `TableRenderer.filter_call` or `TableRenderer.cell_editor_call` usage in your integration still matches the documented call-spec shape
 - a representative `TableRenderer.register_field_helper` mapping can be rendered through the documented call-spec path, and `TableRenderer.reset_field_helpers!` restores the default mapping after that scoped customization
 - token search or Ransack-oriented metadata, if used, is still treated as UI metadata or rendering assistance rather than query execution
