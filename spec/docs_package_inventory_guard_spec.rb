@@ -12,6 +12,7 @@ RSpec.describe "docs package inventory guard" do
   let(:setup_doc) { read_doc("doc/setup.md") }
   let(:public_api) { read_doc("doc/public_api.md") }
   let(:sample_app_results) { read_doc("doc/sample_app_results.md") }
+  let(:token_table_sample_app_evidence) { read_doc("doc/token_table_sample_app_evidence.md") }
   let(:visual_references) { read_doc("doc/visual_references.md") }
   let(:native_select_boundary) { read_doc("doc/native_select_boundary_sample_evidence.html") }
   let(:range_field) { read_doc("doc/range_field.md") }
@@ -78,6 +79,25 @@ RSpec.describe "docs package inventory guard" do
       "Native wrapper and accessibility",
       "Native constraint attribute checks",
       "range field table metadata evidence stayed separate from native `rfk_range_field` wrapper evidence"
+    )
+  end
+
+  it "keeps token and table sample app evidence packaged and scoped" do
+    expect(specification.files).to include("doc/token_table_sample_app_evidence.md", "doc/sample_app_results.md")
+    expect(token_table_sample_app_evidence).to include(
+      "after the older combined sample-app issue was split",
+      "`rfk_token_search` helper or token-search setup",
+      "`rfk_token_suggestions_with` or `RailsFieldsKit::TokenSuggestions.build`",
+      "`RailsFieldsKit::RansackSuggestions.build`",
+      "`rfk_table_filters` / `rfk_table_cell_editors`",
+      "query execution, preference persistence, authorization, pagination",
+      "submitted token text is parsed and executed by the host app"
+    )
+    expect(sample_app_results).to include(
+      "Token and table metadata",
+      "`rfk_token_search` representative token-entry lane checks",
+      "## Token suggestion and Ransack suggestion metadata checks",
+      "## Table metadata checks"
     )
   end
 
