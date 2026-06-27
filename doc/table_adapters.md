@@ -373,7 +373,8 @@ columns = [
     key: :customer_id,
     filter: RailsFieldsKit::TableFilterInput.combobox(
       :customer_id,
-      url: customers_path(format: :json)
+      url: customers_path(format: :json),
+      selected_url: selected_customers_path(format: :json)
     )
   },
   {
@@ -607,7 +608,8 @@ A host app or table helper can pass the metadata objects into column-like defini
   key: :customer_id,
   filter: RailsFieldsKit::TableFilterInput.combobox(
     :customer_id,
-    url: customers_path(format: :json)
+    url: customers_path(format: :json),
+    selected_url: selected_customers_path(format: :json)
   )
 }
 ```
