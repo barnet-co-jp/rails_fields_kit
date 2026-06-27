@@ -10,6 +10,8 @@ For the focused boundary between the direct FormBuilder helpers and lower-level 
 
 For range-specific table metadata examples, use [`table_range_field_metadata.md`](table_range_field_metadata.md). It keeps `TableFilterInput.range_field` and `TableCellInput.range_field` in the native metadata lane without adding range-pair query semantics, custom sliders, table persistence, or production styling.
 
+For checkbox table metadata, use [`table_check_box_metadata.md`](table_check_box_metadata.md). It keeps `TableFilterInput.check_box` and `TableCellInput.check_box` in the metadata and renderer lane without adding boolean query semantics, tri-state filtering, bulk edit, table persistence, or production styling.
+
 For date, time, datetime-local, and color wrapper behavior, use [`native_date_time_color_fields.md`](native_date_time_color_fields.md). Table metadata for those helpers stays in the same native wrapper lane and does not add custom pickers, timezone conversion, masking, query persistence, or table-specific validation policy.
 
 For file input cell-editor metadata, use [`table_file_field_metadata.md`](table_file_field_metadata.md). It keeps `TableCellInput.file_field` cell-editor-only and does not add `TableFilterInput.file_field`, upload execution, query semantics, table persistence, or production styling.
