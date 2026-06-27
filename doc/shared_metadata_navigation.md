@@ -21,6 +21,17 @@ Use this page when you need one allowed field/operator list to feed token sugges
 - Token and Ransack suggestion metadata: `TokenSuggestions.build`, `RansackSuggestions.build`, and `rfk_token_suggestions_with` evidence can confirm suggestion payloads, field/operator/value metadata, and Ransack-compatible metadata. That evidence is separate from token-entry helper rendering and still does not approve parsing, `params[:q]` construction, query execution, table persistence, authorization, or user-visible search results.
 - Future proposal: helper-level adapter DSLs or a Rails Fields Kit-owned field/operator registry shown in `ROADMAP.md` before they are accepted and added to the public API docs.
 
+## Helper-level Ransack DSL proposal gate
+
+Do not implement helper-level Ransack DSL from this page or from the roadmap examples alone. `rfk_token_search ..., adapter: :ransack` and `rfk_table_filters ..., adapter: :ransack` are proposal shapes until a later feature issue accepts a concrete public API and updates `public_api.md`.
+
+If that proposal moves forward, choose one first slice at a time:
+
+- `rfk_token_search ..., adapter: :ransack` would be a token-entry helper surface. It would need a rendered data contract and docs that still leave token parsing, `params[:q]` construction, Ransack execution, authorization, allowed predicate enforcement, and pagination in the host app.
+- `rfk_table_filters ..., adapter: :ransack` would be a table rendering convenience surface. It would need to derive from existing table metadata without replacing `TableFilterInput.ransack_filter` or making table preference persistence, query execution, or result navigation Rails Fields Kit responsibilities.
+
+Do not land both helper-level shapes in the same first slice. The current metadata-first pattern already works without the shared metadata Ruby registry proposal (#2219), and a future registry decision should stay separate from any helper-level DSL decision.
+
 ## Runnable guide decision
 
 Use the copyable runnable guide when prose examples are not enough evidence for review. The guide shows one ordinary Ruby metadata source, then derives the current public token suggestion, Ransack suggestion, and table filter metadata views from it. It is intentionally a docs/sample fixture pattern, not a Rails Fields Kit-owned registry or query execution path.
