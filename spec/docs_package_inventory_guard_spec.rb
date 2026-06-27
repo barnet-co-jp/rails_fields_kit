@@ -16,6 +16,7 @@ RSpec.describe "docs package inventory guard" do
   let(:sample_app_results_route_guide) { read_doc("doc/sample_app_results_route_guide.md") }
   let(:token_table_sample_app_evidence) { read_doc("doc/token_table_sample_app_evidence.md") }
   let(:visual_references) { read_doc("doc/visual_references.md") }
+  let(:visual_reference_index) { read_doc("doc/visual_reference_index.html") }
   let(:native_character_counter_boundary) { read_doc("doc/native_character_counter_boundary_sample_evidence.html") }
   let(:native_select_boundary) { read_doc("doc/native_select_boundary_sample_evidence.html") }
   let(:range_field) { read_doc("doc/range_field.md") }
@@ -59,6 +60,31 @@ RSpec.describe "docs package inventory guard" do
       "`manual`: advisory host-app check",
       "Rails Fields Kit does not define a universal pass/fail policy",
       "Do not treat this evidence lane as a CLI `--json` contract"
+    )
+  end
+
+  it "keeps visual reference index packaged and scoped as a reviewer entrypoint" do
+    expect(specification.files).to include("doc/visual_reference_index.html")
+    expect(readme).to include(
+      "[`doc/visual_references.md`](doc/visual_references.md)",
+      "[`doc/visual_reference_index.html`](doc/visual_reference_index.html)"
+    )
+    expect(visual_references).to include(
+      "one-screen reviewer entrypoint",
+      "artifact links",
+      "helper-family picker",
+      "task picker",
+      "narrow viewport readability check",
+      "CI green as visual approval"
+    )
+    expect(visual_reference_index).to include(
+      "Visual Reference Index",
+      "Pick by artifact",
+      "Pick by helper family",
+      "Pick by reviewer task",
+      "Narrow",
+      "Public API source",
+      "runtime behavior, search execution, authorization, and persistence out of scope"
     )
   end
 
