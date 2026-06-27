@@ -12,6 +12,14 @@ For range-specific table metadata examples, use [`table_range_field_metadata.md`
 
 For date, time, datetime-local, and color wrapper behavior, use [`native_date_time_color_fields.md`](native_date_time_color_fields.md). Table metadata for those helpers stays in the same native wrapper lane and does not add custom pickers, timezone conversion, masking, query persistence, or table-specific validation policy.
 
+## Table responsibility boundary
+
+Rails Fields Kit table metadata describes which Rails Fields Kit control can be rendered for a table column. It does not own the table's result set or navigation policy.
+
+`rfk_table_filters`, `rfk_table_cell_editors`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer` can collect metadata, keep field type / helper mapping / rendered contract details together, and produce FormBuilder call specs or rendered controls. The host application or table integration still owns result pagination, sorting, page-size selector choices, cursor or offset policy, query params construction, authorization, persistence, and user-visible feedback.
+
+Use table metadata as the UI bridge for the filter or editor controls attached to a column. Keep pagination controls, sort links, saved sort state, page-size persistence, and search execution in the table integration or host app layer, even when the filter UI is rendered with Rails Fields Kit helpers.
+
 ## Filter input metadata
 
 Use `RailsFieldsKit::TableFilterInput` when a table column wants to describe a filter UI that should be rendered with Rails Fields Kit.
