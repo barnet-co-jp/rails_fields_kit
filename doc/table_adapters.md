@@ -373,8 +373,7 @@ columns = [
     key: :customer_id,
     filter: RailsFieldsKit::TableFilterInput.combobox(
       :customer_id,
-      url: customers_path(format: :json),
-      selected_url: selected_customers_path(format: :json)
+      url: customers_path(format: :json)
     )
   },
   {
