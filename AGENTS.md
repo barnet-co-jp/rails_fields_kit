@@ -48,6 +48,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/native_contact_fields.md`: focused `rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field` native wrapper boundary; validation wording, normalization, phone policy, and search execution stay host-app owned
 - `doc/native_date_time_color_fields.md`: focused `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, and `rfk_color_field` native wrapper boundary; timezone conversion, masking, custom picker UI, browser normalization, and production CSS stay host-app owned
 - `doc/check_box.md`: focused `rfk_check_box` native wrapper boundary; Rails checkbox checked/unchecked value contract stays native while collection groups, radio buttons, validation UI, label placement redesign, and production CSS stay out of scope
+- `doc/radio_button.md`: focused `rfk_radio_button` native wrapper boundary; Rails radio value, checked state, and same-name group contract stay native while collection groups, fieldset / legend builders, group validation UI, and production CSS stay out of scope
 - `doc/check_box_release_evidence.md`: release and sample-app evidence guide for `rfk_check_box`; keep evidence focused on the single checkbox wrapper and Rails checkbox contract, not collection groups or future radio helper work
 - `doc/mention_field_boundary.md`: proposal-only boundary for inline textarea mentions; keep `rfk_mention_field`, overlay behavior, hidden metadata, authorization, persistence, and mention-specific endpoint contracts out of the current public API until accepted
 - `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
@@ -87,7 +88,7 @@ Before release-oriented docs updates, review:
 - `doc/setup_doctor_machine_readable.md` when SetupDoctor JSON output or structured setup evidence is part of the release surface
 - `doc/package_root_helper_release_evidence.md`: focused release and sample-app evidence guide for package-root rendered-field contract helpers
 - `doc/default_allow_clear.md`: focused release-relevant guide for the app-wide `allow_clear` default and Tom Select `clear_button` responsibility boundary
-- `doc/dropdown_parent_release_evidence.md`: focused release and sample-app evidence note for `dropdown_parent:` selector pass-through and no-config checks
+- `doc/dropdown_parent_release_evidence.md`: focused release and sample-app evidence note for Tom Select-backed `dropdown_parent:` selector pass-through and no-config checks
 - `doc/table_metadata_release_evidence.md`: focused release and sample-app evidence guide for table metadata rendering, group-level wrappers, and TableRenderer registry lanes
 - `doc/token_table_sample_app_evidence.md`: focused release and PR evidence companion for token search, token suggestions, Ransack suggestion metadata, or table metadata lanes
 - `doc/sample_app_results_route_guide.md`: recording-lane selector for full sample-app evidence, narrow PR comments, source-only visual reviews, and deferred browser-capable checks
