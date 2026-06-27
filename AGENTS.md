@@ -88,7 +88,7 @@ Before release-oriented docs updates, review:
 - `doc/setup_doctor_machine_readable.md` when SetupDoctor JSON output or structured setup evidence is part of the release surface
 - `doc/package_root_helper_release_evidence.md`: focused release and sample-app evidence guide for package-root rendered-field contract helpers
 - `doc/default_allow_clear.md`: focused release-relevant guide for the app-wide `allow_clear` default and Tom Select `clear_button` responsibility boundary
-- `doc/dropdown_parent_release_evidence.md`: focused release and sample-app evidence note for Tom Select-backed `dropdown_parent:` selector pass-through and no-config checks
+- `doc/dropdown_parent_release_evidence.md`: focused release and sample-app evidence note for `dropdown_parent:` selector pass-through and no-config checks
 - `doc/table_metadata_release_evidence.md`: focused release and sample-app evidence guide for table metadata rendering, group-level wrappers, and TableRenderer registry lanes
 - `doc/token_table_sample_app_evidence.md`: focused release and PR evidence companion for token search, token suggestions, Ransack suggestion metadata, or table metadata lanes
 - `doc/sample_app_results_route_guide.md`: recording-lane selector for full sample-app evidence, narrow PR comments, source-only visual reviews, and deferred browser-capable checks
