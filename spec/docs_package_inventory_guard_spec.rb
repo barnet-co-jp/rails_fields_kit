@@ -13,6 +13,7 @@ RSpec.describe "docs package inventory guard" do
   let(:setup_doctor_machine_readable) { read_doc("doc/setup_doctor_machine_readable.md") }
   let(:public_api) { read_doc("doc/public_api.md") }
   let(:sample_app_results) { read_doc("doc/sample_app_results.md") }
+  let(:sample_app_results_route_guide) { read_doc("doc/sample_app_results_route_guide.md") }
   let(:token_table_sample_app_evidence) { read_doc("doc/token_table_sample_app_evidence.md") }
   let(:visual_references) { read_doc("doc/visual_references.md") }
   let(:native_character_counter_boundary) { read_doc("doc/native_character_counter_boundary_sample_evidence.html") }
@@ -20,6 +21,8 @@ RSpec.describe "docs package inventory guard" do
   let(:range_field) { read_doc("doc/range_field.md") }
   let(:tom_select_no_event_boundary) { read_doc("doc/tom_select_no_event_boundary_review.html") }
   let(:dropdown_parent_release_evidence) { read_doc("doc/dropdown_parent_release_evidence.md") }
+  let(:release_doc) { read_doc("doc/release.md") }
+  let(:product_profile) { read_doc("Product Profile.md") }
 
   it "keeps documented direct subpath examples aligned with package exports" do
     direct_exports = package_json.fetch("exports").keys.grep_v(".").map { |path| path.delete_prefix("./") }
@@ -131,6 +134,25 @@ RSpec.describe "docs package inventory guard" do
       "`rfk_token_search` representative token-entry lane checks",
       "## Token suggestion and Ransack suggestion metadata checks",
       "## Table metadata checks"
+    )
+  end
+
+  it "keeps sample app results route guide packaged as a recording-lane selector" do
+    expect(specification.files).to include("doc/sample_app_results_route_guide.md")
+    expect(release_doc).to include(
+      "[`sample_app_results_route_guide.md`](sample_app_results_route_guide.md)",
+      "recording-lane selector",
+      "does not add a release gate or turn CI success into browser visual approval"
+    )
+    expect(product_profile).to include(
+      "`doc/sample_app_results_route_guide.md`: recording-lane selector for release-wide sample-app evidence, narrow PR comments, source-only visual reviews, and deferred browser-capable evidence"
+    )
+    expect(sample_app_results_route_guide).to include(
+      "it does not add a release gate, change runtime behavior, or replace the full checklist",
+      "CI success as visual approval",
+      "`SOURCE REVIEW ONLY`",
+      "`DEFERRED`",
+      "Do not use `PASS` for GitHub Actions success, source review, static diff review, or a successful package build"
     )
   end
 
