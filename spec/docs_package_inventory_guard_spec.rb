@@ -17,6 +17,9 @@ RSpec.describe "docs package inventory guard" do
   let(:token_table_sample_app_evidence) { read_doc("doc/token_table_sample_app_evidence.md") }
   let(:visual_references) { read_doc("doc/visual_references.md") }
   let(:visual_reference_index) { read_doc("doc/visual_reference_index.html") }
+  let(:styling_boundary) { read_doc("doc/styling_boundary.md") }
+  let(:configuration_doc) { read_doc("doc/configuration.md") }
+  let(:configuration_wrapper_class_visual_reference) { read_doc("doc/configuration_wrapper_class_visual_reference.html") }
   let(:native_character_counter_boundary) { read_doc("doc/native_character_counter_boundary_sample_evidence.html") }
   let(:native_select_boundary) { read_doc("doc/native_select_boundary_sample_evidence.html") }
   let(:range_field) { read_doc("doc/range_field.md") }
@@ -85,6 +88,26 @@ RSpec.describe "docs package inventory guard" do
       "Narrow",
       "Public API source",
       "runtime behavior, search execution, authorization, and persistence out of scope"
+    )
+  end
+
+  it "keeps configuration wrapper class visual reference packaged and scoped as class pass-through evidence" do
+    expect(specification.files).to include("doc/configuration_wrapper_class_visual_reference.html")
+    expect(styling_boundary).to include(
+      "[`configuration_wrapper_class_visual_reference.html`](configuration_wrapper_class_visual_reference.html)",
+      "rendered class pass-through lane"
+    )
+    expect(configuration_doc).to include(
+      "## Wrapper and affix classes",
+      "wrapper_html:",
+      "tom_select_class_names:"
+    )
+    expect(configuration_wrapper_class_visual_reference).to include(
+      "Configuration Wrapper Class Visual Reference",
+      "host-app class pass-through only",
+      "Rails Fields Kit does not own framework styles or production CSS",
+      "Initializer class defaults only",
+      "Static artifact only"
     )
   end
 
