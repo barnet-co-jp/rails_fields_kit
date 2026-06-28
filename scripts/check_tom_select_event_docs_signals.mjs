@@ -78,8 +78,8 @@ assertSignals(
   [
     "request lifecycle and event payloads",
     "Tom Select forwarded interaction event payloads",
+    "request success / failure details",
     "error-surface metadata",
-    "visible feedback ownership",
     "smoke inventory guard"
   ],
   "JavaScript smoke family docs"
