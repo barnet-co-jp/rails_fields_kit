@@ -14,15 +14,22 @@ RSpec.describe "PR freshness queue note" do
       "combined status",
       "compare",
       "mergeability",
-      "changed files",
-      "remaining gate",
-      "next reviewer action"
+      "changed files"
     ]
 
     shared_signals.each do |signal|
       expect(queue_note).to include(signal)
       expect(development_doc).to include(signal)
     end
+
+    expect(queue_note).to include(
+      "remaining gate",
+      "next reviewer action"
+    )
+    expect(development_doc).to include(
+      "remaining decision owner",
+      "When those signals disagree"
+    )
   end
 
   it "keeps classification vocabulary aligned without automating review decisions" do
