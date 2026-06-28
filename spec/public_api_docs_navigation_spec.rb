@@ -29,7 +29,7 @@ RSpec.describe "public API docs navigation guard" do
     )
 
     expect(readme).to include("doc/public_api.md", "doc/public_api.md#javascript-exports")
-    expect(setup_doc).to include("doc/public_api.md#javascript-exports")
+    expect(setup_doc).to include("public_api.md#javascript-exports")
   end
 
   it "keeps Stimulus values docs focused on representative value families and integration boundaries" do
