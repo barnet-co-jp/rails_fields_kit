@@ -115,6 +115,7 @@ This inventory is for maintainers who need to find the right source of truth qui
 
 - `doc/visual_references.md`: maintained visual reference family map and scope notes
 - `doc/visual_reference_index.html`: one-screen reviewer entrypoint for the static visual reference family
+- `doc/visual_reference_browser_evidence.md`: manual browser-capable desktop and narrow viewport evidence runbook for static visual reference PRs; CI success and source review are not browser approval
 - `doc/tom_select_visual_reference.html` and `doc/native_field_visual_reference.html`: static visual references for representative Tom Select-backed and native helper states
 - `doc/tom_select_rich_option_review.html`: companion visual reference for Tom Select rich option label, description, and badge density review
 - `doc/tom_select_source_fallback_review.html`: focused companion visual reference for explicit `enum:` sources and remote option label fallback display review

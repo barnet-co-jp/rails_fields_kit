@@ -22,12 +22,13 @@ PR freshness queue note:
 
 - `review-ready`: the head workflow is green, the compare is `behind_by:0`, the PR is mergeable, changed files match the intended scope, and no unresolved browser-capable or public API adoption review remains.
 - `needs-refresh`: CI may be green, but it ran before the latest `main`, the compare shows `behind_by > 0` or `status:diverged`, the PR is not mergeable, or changed files include stale main-side noise.
-- `needs-browser-evidence`: docs or static visual artifact scope is otherwise current, but desktop or narrow viewport evidence is still missing. CI success and source review do not replace this.
+- `needs-browser-evidence`: docs or static visual artifact scope is otherwise current, but desktop or narrow viewport evidence is still missing. CI success and source review do not replace this. Use `doc/visual_reference_browser_evidence.md` for the browser check runbook and `doc/visual_references.md#recording-browser-evidence` for the handoff template.
 - `needs-human`: duplicate closing PR choice, helper naming, return shape, public adoption boundary, product surface decision, or another review decision cannot be resolved from CI and docs alone.
 
 ## Notes
 
 - When the combined status list is empty, check the head commit's GitHub Actions workflow runs before saying CI is absent.
 - For static visual PRs, record browser evidence separately from source review. A green CI run only confirms repository checks.
+- When `classification` is `needs-browser-evidence`, link the exact artifact and changed lane, then point the next reviewer to `doc/visual_reference_browser_evidence.md` before asking for desktop or narrow viewport proof.
 - For replacement PRs, link the superseded PR and say whether the old branch should be closed or left for human review.
 - Keep the note short enough to paste into a PR comment without turning the PR body into a full audit log.
