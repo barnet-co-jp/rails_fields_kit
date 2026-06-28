@@ -7,12 +7,16 @@ RSpec.describe "README JavaScript export routing aid" do
   let(:public_api) { File.read(File.expand_path("../doc/public_api.md", __dir__)) }
 
   it "keeps the README helper-family table as a routing aid instead of an export inventory" do
-    readme_js_setup = markdown_section(readme, "### Direct imports and package exports")
+    readme_js_setup = markdown_section(readme, "## JavaScript setup")
+    readme_direct_imports = markdown_section(readme, "### Direct imports and package exports")
     javascript_exports = markdown_section(public_api, "## JavaScript exports")
 
     expect(readme_js_setup).to include(
       "This README is a route map",
-      "representative helper-family table below as the full package-root export inventory",
+      "representative helper-family table below as the full package-root export inventory"
+    )
+
+    expect(readme_direct_imports).to include(
       "routing aid, not an exhaustive export list",
       "exact current export names or contract details",
       "[`doc/public_api.md`](doc/public_api.md#javascript-exports)",
