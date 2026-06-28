@@ -24,8 +24,12 @@ RSpec.describe "native wrapper constraint docs" do
     )
 
     expect(quick_chooser).to include(
-      "native browser input with shared wrapper, hint, error, affix, and accessibility behavior",
-      "Stays in the ordinary HTML input flow while reusing Rails Fields Kit wrapper conventions"
+      "native browser input with shared wrapper, hint, error, affix, and accessibility behavior for text, textarea, or search",
+      "Start with `rfk_text_field`, `rfk_text_area`, or `rfk_search_field`",
+      "Stays in the ordinary HTML input flow while reusing Rails Fields Kit wrapper conventions",
+      "Use [`doc/public_api.md`](public_api.md) for the current helper inventory",
+      "Native date, time, datetime-local, or color controls",
+      "Keeps browser-native picker behavior, timezone conversion, locale formatting, masking, and production CSS outside Rails Fields Kit"
     )
 
     expect(readme).to include(
