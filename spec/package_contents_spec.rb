@@ -277,7 +277,12 @@ RSpec.describe "package contents" do
       rfk_color_field
     ])
     expect(documented_native_helpers).to eq(native_helpers)
-    expect(quick_chooser).to include("the matching native helper such as")
+    expect(quick_chooser).to include(
+      "native browser input with shared wrapper, hint, error, affix, and accessibility behavior for text, textarea, or search",
+      "A native password, checkbox, file, or range control with focused ownership boundaries",
+      "Native numeric, money, percent, email, URL, or phone inputs",
+      "Native date, time, datetime-local, or color controls"
+    )
   end
 
   it "keeps README configuration profile route aligned with the docs-only boundary" do
