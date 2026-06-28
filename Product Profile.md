@@ -92,6 +92,8 @@ This inventory is for maintainers who need to find the right source of truth qui
 - `doc/table_direct_helper_boundary.md`: direct table FormBuilder helper safe-join boundary, optional single outer `group_html:` wrapper, and lower-level render/call-spec lane guidance
 - `doc/table_group_html.md`: direct table FormBuilder helper group-level wrapper attributes
 - `doc/table_range_field_metadata.md`: focused table metadata guide for `TableFilterInput.range_field` / `TableCellInput.range_field`; range-pair queries, custom sliders, table persistence, Ransack execution, and production styling stay out of scope
+- `doc/table_check_box_metadata.md`: focused table metadata guide for `TableFilterInput.check_box` / `TableCellInput.check_box`; boolean query semantics, tri-state filtering, bulk edit, table persistence, and production styling stay out of scope
+- `doc/table_file_field_metadata.md`: focused table metadata guide for `TableCellInput.file_field`; file upload execution, preview UI, storage policy, query execution, table persistence, and `TableFilterInput.file_field` stay out of scope
 
 ### Helper boundary docs
 
