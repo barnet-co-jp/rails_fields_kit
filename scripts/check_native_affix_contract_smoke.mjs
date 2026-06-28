@@ -159,6 +159,28 @@ try {
   assert.equal(plainContract.prefixElement, null, "native field contract should return null when no prefix exists")
   assert.equal(plainContract.suffixElement, null, "native field contract should return null when no suffix exists")
 
+  const hintElement = new FakeElement("p", { id: "customer_email_hint", class: "rfk-hint" })
+  const errorElement = new FakeElement("p", { id: "customer_email_error", class: "rfk-error" })
+  const describedInput = new FakeElement("input", {
+    id: "customer_email",
+    "aria-describedby": "customer_email_hint customer_email_error customer_email_hint missing_description"
+  })
+  buildDocumentWithWrapper([describedInput, hintElement, errorElement])
+
+  const describedContract = nativeFieldAccessibilityContract(describedInput)
+  assert.deepEqual(
+    describedContract.describedByIds,
+    ["customer_email_hint", "customer_email_error", "missing_description"],
+    "native field contract should expose deduplicated aria-describedby ids while preserving order"
+  )
+  assert.deepEqual(
+    describedContract.describedByElements,
+    [hintElement, errorElement],
+    "native field contract should resolve existing described-by elements and skip missing ids"
+  )
+  assert.equal(describedContract.hintElement, hintElement, "native field contract should expose the rendered hint element")
+  assert.equal(describedContract.errorElement, errorElement, "native field contract should expose the rendered error element")
+
   assert.equal(nativeFieldAccessibilityContract(new FakeElement("div")), null, "native field contract should ignore non-native elements")
 
   console.log("rails_fields_kit native affix contract smoke passed")
