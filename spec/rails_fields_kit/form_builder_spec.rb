@@ -292,6 +292,40 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include(">Beta LLC</option>")
   end
 
+  it "keeps grouped select selected and disabled option boundaries" do
+    html = form_builder(DummyModel.new("draft", "2", [], nil, 1, 1000, 10, "a@example.com", "https://example.com", "03-0000-0000"), :document_set).rfk_grouped_select(
+      :customer_id,
+      grouped_collection: {
+        "Active" => [["Acme Corp", "1"]],
+        "Archived" => [["Beta LLC", "2"], ["Old Corp", "3"]]
+      },
+      selected: "2",
+      disabled: ["3"],
+      include_blank: "Select an owner"
+    )
+
+    expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"grouped_select\"")
+    expect(html).to include("<option value=\"\">Select an owner</option>")
+    expect(html).to include("value=\"2\" selected=\"selected\"").or include("selected=\"selected\" value=\"2\"")
+    expect(html).to include("value=\"3\" disabled=\"disabled\"").or include("disabled=\"disabled\" value=\"3\"")
+  end
+
+  it "keeps grouped select boolean disabled as a whole-field state" do
+    html = form_builder.rfk_grouped_select(
+      :customer_id,
+      grouped_collection: {
+        "Active" => [["Acme Corp", "1"]],
+        "Archived" => [["Old Corp", "2"]]
+      },
+      disabled: true
+    )
+
+    expect(html).to include("data-rails-fields-kit--tom-select-kind-value=\"grouped_select\"")
+    expect(html).to include("<select")
+    expect(html).to include("disabled=\"disabled\"")
+    expect(html).to include("<option value=\"1\">Acme Corp</option>")
+  end
+
   it "renders enum selects" do
     html = form_builder.rfk_enum_select(:status)
 
@@ -471,7 +505,9 @@ RSpec.describe RailsFieldsKit::FormBuilder do
 
     expect(html).to include("type=\"text\"")
     expect(html).to include("class=\"rfk-field\"")
+    expect(html).to include("class=\"rfk-label\"")
     expect(html).to include("Keyword</label>")
+    expect(html).to include("class=\"rfk-hint\"")
     expect(html).to include("Free text search")
   end
 
