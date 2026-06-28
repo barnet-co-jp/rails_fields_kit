@@ -14,6 +14,8 @@ Use this companion note when a release or PR needs manual evidence but the full 
 | Package-root helper or setup visibility PR | Use the package-root helper or setup lane only if that surface changed. | Yes for narrow PR proof. | A release-wide helper inventory. |
 | Runtime helper behavior PR | Use the nearest helper lane when manual sample-app evidence is required. | Yes for scoped test or CI notes. | Static visual artifact approval. |
 | Selected preload ordering evidence | Use the selected preload representative lane only when the PR or release depends on preserved selected-label ordering. | Yes for a narrow `rfk_find_with preserve_order: true` docs or evidence PR. | A new ordering SQL, authorization, or endpoint scoping contract. |
+| Selected preload request params evidence | Use the selected preload representative lane only when the PR or release depends on Rails array params, comma-separated ids, or a custom `ids_param:` key. | Yes for a narrow `rfk_find_with` request-shape docs or evidence PR. | Endpoint authorization, tenant scoping, ordering, missing-id policy, or selected preload response-shape redesign. |
+| Remote collection wrapper evidence | Use the remote lifecycle lane only when the PR or release depends on raw arrays, `{ options: [...] }`, or `{ results: [...] }` collection wrappers. | Yes for a narrow output-shape docs or evidence PR. | Create-on-the-fly `{ option: ... }`, pagination metadata, arbitrary response adapters, authorization, query execution, or Tom Select renderer approval. |
 | Remote search minimum query length evidence | Use the remote lifecycle lane only when the PR or release depends on endpoint-side blank-query policy. | Yes for a narrow `rfk_search_with minimum_query_length:` docs or evidence PR. Name the blank query, short query, `wrap:` shape, and result. | Field-level `min_length:` approval, authorization policy, tenant scoping, Ransack execution, Tom Select lifecycle approval, or visible feedback approval. |
 | Token search entry evidence | Use the token-search representative entry lane when the PR or release depends on `rfk_token_search` helper rendering or submitted token text. | Yes for a narrow token-search sample docs PR. | Token parser behavior, query execution, Ransack execution, suggestion payload approval, or table metadata approval. |
 | Token or Ransack suggestion metadata evidence | Use the token suggestion and Ransack suggestion metadata lane only when the PR or release depends on `TokenSuggestions.build`, `RansackSuggestions.build`, or `rfk_token_suggestions_with` payloads. | Yes for a narrow metadata/docs PR that names the checked builder or endpoint shape. | `rfk_token_search` helper rendering approval, submitted token parsing, query execution, Ransack execution, table persistence, or user-visible search result approval. |
@@ -64,6 +66,33 @@ A scoped evidence note should include:
 - Confirmation that ordering SQL, endpoint authorization, relation scope, retry UI, and final fallback copy remain host-app responsibilities.
 
 Do not treat this lane as a new database-ordering contract. It records that the sample endpoint returned labels in the request order after the host app supplied the scoped records.
+
+### Selected preload request params
+
+Record this lane when the review needs evidence that `rfk_find_with` accepts the selected preload request shape used by a multiple-value field.
+
+A scoped evidence note should include:
+
+- Representative field and selected preload endpoint.
+- Incoming request shape, such as Rails array params parsed as `ids: ["1", "2"]`, comma-separated `ids=1,2`, or a custom key from `selected_multiple_param:` paired with `ids_param:`.
+- Whether visible labels restored for the same saved values without leaving raw IDs in the field.
+- Whether ordering was checked separately through the preserved request order lane, or left out of scope.
+- Confirmation that endpoint authorization, tenant scoping, relation ordering, missing-id policy, retry UI, and selected preload fallback copy remain host-app responsibilities.
+
+Do not use this lane to approve response wrapper shapes, selected preload UI copy, or endpoint authorization. It records request-shape compatibility for the selected preload endpoint under review.
+
+### Remote collection response wrappers
+
+Record this lane when remote search or selected preload evidence needs to mention the supported collection wrapper shape returned by the endpoint.
+
+A scoped evidence note should include:
+
+- Representative endpoint and workflow: remote search, selected preload, or both.
+- Response shape checked: raw array, `{ "options": [...] }`, or `{ "results": [...] }`.
+- Whether the same option payload fields still came from the configured `value_field`, `label_field`, `description_field`, or `badge_field` contract when those fields were in scope.
+- Confirmation that create-on-the-fly `{ "option": ... }`, pagination metadata, arbitrary response adapters, authorization, query execution, and Tom Select renderer behavior remain out of scope.
+
+Do not use this lane for create-on-the-fly responses. `results` is a collection wrapper for remote search and selected preload evidence, not a pagination contract or generic adapter surface.
 
 ### Remote search minimum query length
 
@@ -154,6 +183,25 @@ SetupDoctor evidence note
 ```
 
 If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark host-app setup execution as complete.
+
+### Remote evidence PR comment shape
+
+Use this shape when selected preload request params or remote collection wrapper evidence is narrow enough for a PR comment instead of the release evidence log.
+
+```markdown
+Remote evidence note
+
+- Lane: selected preload request params / remote collection response wrappers
+- Representative field or endpoint: `...`
+- Checked here: source review / sample app route / CI / docs link review
+- Result: PASS / FAIL / SOURCE REVIEW ONLY / DEFERRED
+- Evidence observed: Rails array params, comma-separated ids, custom `ids_param:`, raw array, `{ "options": [...] }`, or `{ "results": [...] }`
+- Separate lane checked: yes/no, and link or note if request params, ordering, and response wrapper shapes were intentionally split
+- Responsibility boundary: endpoint authorization, tenant scoping, query execution, missing-id policy, pagination metadata, arbitrary adapters, retry UI, and visible fallback copy remain host-app responsibilities
+- Remaining follow-up: ...
+```
+
+If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark sample-app execution as complete.
 
 ### Token evidence PR comment shape
 
