@@ -32,6 +32,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/sample_app_results_route_guide.md`: recording-lane selector for release-wide sample-app evidence, narrow PR comments, source-only visual reviews, and deferred browser-capable evidence
 - `doc/visual_references.md`: maintained map for the static visual reference family and each artifact's scope
 - `doc/visual_reference_index.html`: static index for choosing the right visual reference artifact during design or release review
+- `doc/visual_reference_browser_evidence.md`: manual reviewer runbook for browser-capable desktop and narrow viewport evidence on static visual reference PRs; CI success and source review do not replace this evidence
 - `doc/tom_select_visual_reference.html`: static visual reference for representative Tom Select-backed states
 - `doc/tom_select_rich_option_review.html`: companion visual reference for Tom Select rich option label, description, and badge density review
 - `doc/tom_select_source_fallback_review.html`: focused companion visual reference for explicit `enum:` sources and remote option label fallback display review
@@ -92,6 +93,7 @@ Before release-oriented docs updates, review:
 - `doc/table_metadata_release_evidence.md`: focused release and sample-app evidence guide for table metadata rendering, group-level wrappers, and TableRenderer registry lanes
 - `doc/token_table_sample_app_evidence.md`: focused release and PR evidence companion for token search, token suggestions, Ransack suggestion metadata, or table metadata lanes
 - `doc/sample_app_results_route_guide.md`: recording-lane selector for full sample-app evidence, narrow PR comments, source-only visual reviews, and deferred browser-capable checks
+- `doc/visual_reference_browser_evidence.md`: manual browser-capable evidence runbook for narrow static visual reference PRs when desktop or narrow viewport proof is still needed
 - `doc/sample_app_checklist.md`
 - `doc/sample_app_results.md`
 - `doc/release_notes_0_1_1.md`: current version-specific release note draft; update this bullet when the maintained current release note moves to a new version file
