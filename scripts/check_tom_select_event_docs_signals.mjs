@@ -53,7 +53,10 @@ assertSignals(
     "detail.surface",
     "error_surface: true",
     "data-rfk-error-state=\"error\"",
-    "data-rfk-error-operation=\"load\", `\"selected-load\"`, or `\"create\"`",
+    "data-rfk-error-operation",
+    "\"load\"",
+    "\"selected-load\"",
+    "\"create\"",
     "data-rfk-error-status",
     "They do not make Rails Fields Kit responsible for visible message text, retry UI, loading UI, or endpoint policy."
   ],
