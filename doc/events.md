@@ -102,19 +102,21 @@ If the app mirrors the same error in another element, clear that extra UI from t
 Use one small host-app controller when a field needs separate handling for remote search, selected preload, and create-on-the-fly failures. Keep the field helper responsible for wiring the existing events, and keep message copy, retry controls, analytics, and any extra UI state in the host app.
 
 ```erb
-<%= f.rfk_combobox :customer_id,
-  url: customers_path(format: :json),
-  selected_url: selected_customers_path(format: :json),
-  create_url: customers_path,
-  selected: @order.customer_id,
-  error_surface: true,
-  html: {
-    data: {
-      controller: "customers",
-      customers_target: "feedback",
-      action: "rails-fields-kit--tom-select:load->customers#clearFeedback rails-fields-kit--tom-select:selected-load->customers#clearFeedback rails-fields-kit--tom-select:create->customers#clearFeedback rails-fields-kit--tom-select:change->customers#clearFeedback rails-fields-kit--tom-select:load-error->customers#remoteSearchFailed rails-fields-kit--tom-select:selected-load-error->customers#selectedPreloadFailed rails-fields-kit--tom-select:create-error->customers#createFailed"
-    }
-  } %>
+<div data-controller="customers">
+  <%= f.rfk_combobox :customer_id,
+    url: customers_path(format: :json),
+    selected_url: selected_customers_path(format: :json),
+    create_url: customers_path,
+    selected: @order.customer_id,
+    error_surface: true,
+    html: {
+      data: {
+        action: "rails-fields-kit--tom-select:load->customers#clearFeedback rails-fields-kit--tom-select:selected-load->customers#clearFeedback rails-fields-kit--tom-select:create->customers#clearFeedback rails-fields-kit--tom-select:change->customers#clearFeedback rails-fields-kit--tom-select:load-error->customers#remoteSearchFailed rails-fields-kit--tom-select:selected-load-error->customers#selectedPreloadFailed rails-fields-kit--tom-select:create-error->customers#createFailed"
+      }
+    } %>
+
+  <div data-customers-target="feedback" role="status" aria-live="polite"></div>
+</div>
 ```
 
 ```js
