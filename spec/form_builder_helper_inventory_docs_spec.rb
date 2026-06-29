@@ -43,6 +43,7 @@ RSpec.describe "FormBuilder helper inventory docs" do
       rfk_search_field
       rfk_password_field
       rfk_check_box
+      rfk_radio_button
       rfk_file_field
       rfk_date_field
       rfk_time_field
