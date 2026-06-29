@@ -14,14 +14,16 @@ class SelectedPreloadRelation
     SelectedPreloadRelation.new(@records.select { |record| lookup_ids.include?(record.id.to_s) })
   end
 
-  def to_a
-    @records
+  def order(_value)
+    self
+  end
+
+  def limit(value)
+    @records.first(value)
   end
 end
 
 class SelectedPreloadModel
-  extend RailsFieldsKit::Searchable
-
   Record = Struct.new(:id, :label, keyword_init: true) do
     def display_label
       label
@@ -46,39 +48,59 @@ class SelectedPreloadModel
   end
 end
 
+class SelectedPreloadController
+  include RailsFieldsKit::Searchable
+
+  attr_accessor :params
+  attr_reader :rendered_json
+
+  rfk_find_with(
+    action: :selected,
+    model: SelectedPreloadModel,
+    value: :id,
+    label: :display_label,
+    value_field: "id",
+    label_field: "text"
+  )
+
+  def render(json:, status: :ok)
+    @rendered_json = json
+    @rendered_status = status
+  end
+end
+
+class CustomSelectedPreloadController
+  include RailsFieldsKit::Searchable
+
+  attr_accessor :params
+  attr_reader :rendered_json
+
+  rfk_find_with(
+    action: :selected,
+    model: SelectedPreloadModel,
+    value: :id,
+    label: :display_label,
+    ids_param: :customer_ids,
+    value_field: "id",
+    label_field: "text"
+  )
+
+  def render(json:, status: :ok)
+    @rendered_json = json
+    @rendered_status = status
+  end
+end
+
 RSpec.describe "selected preload request params" do
-  let(:controller_class) do
-    Class.new do
-      include RailsFieldsKit::Searchable::ControllerMethods
-
-      attr_accessor :params
-    end
-  end
-
-  let(:controller) { controller_class.new }
-
-  before do
-    RailsFieldsKit.configure do |config|
-      config.searchable_models = {
-        "selected_preload_records" => {
-          class_name: "SelectedPreloadModel",
-          search_columns: [:label],
-          display_method: :display_label
-        }
-      }
-    end
-  end
+  let(:controller) { SelectedPreloadController.new }
 
   it "keeps comma-separated selected preload ids as the outgoing JS request shape" do
-    controller.params = {
-      model: "selected_preload_records",
-      ids: "1, 2, ,3"
-    }
+    controller.params = { ids: "1, 2, ,3" }
 
-    result = controller.rfk_search_options
+    controller.selected
 
     expect(SelectedPreloadModel.last_lookup_ids).to eq(["1", "2", "3"])
-    expect(result).to eq([
+    expect(controller.rendered_json).to eq([
       { id: "1", text: "One" },
       { id: "2", text: "Two" },
       { id: "3", text: "Three" }
@@ -86,31 +108,25 @@ RSpec.describe "selected preload request params" do
   end
 
   it "accepts Rails-parsed Array params for selected preload ids" do
-    controller.params = {
-      model: "selected_preload_records",
-      ids: ["2", " ", "1"]
-    }
+    controller.params = { ids: ["2", " ", "1"] }
 
-    result = controller.rfk_search_options
+    controller.selected
 
     expect(SelectedPreloadModel.last_lookup_ids).to eq(["2", "1"])
-    expect(result).to eq([
+    expect(controller.rendered_json).to eq([
       { id: "2", text: "Two" },
       { id: "1", text: "One" }
     ])
   end
 
   it "accepts Rails-parsed Array params for custom selected preload ids_param" do
-    controller.params = {
-      model: "selected_preload_records",
-      customer_ids: ["3", "", "1"],
-      ids_param: "customer_ids"
-    }
+    custom_controller = CustomSelectedPreloadController.new
+    custom_controller.params = { customer_ids: ["3", "", "1"] }
 
-    result = controller.rfk_search_options
+    custom_controller.selected
 
     expect(SelectedPreloadModel.last_lookup_ids).to eq(["3", "1"])
-    expect(result).to eq([
+    expect(custom_controller.rendered_json).to eq([
       { id: "3", text: "Three" },
       { id: "1", text: "One" }
     ])
