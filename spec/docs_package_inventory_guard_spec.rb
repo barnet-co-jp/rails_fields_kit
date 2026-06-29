@@ -23,6 +23,7 @@ RSpec.describe "docs package inventory guard" do
   let(:native_character_counter_boundary) { read_doc("doc/native_character_counter_boundary_sample_evidence.html") }
   let(:native_select_boundary) { read_doc("doc/native_select_boundary_sample_evidence.html") }
   let(:range_field) { read_doc("doc/range_field.md") }
+  let(:native_date_time_color_fields) { read_doc("doc/native_date_time_color_fields.md") }
   let(:tom_select_no_event_boundary) { read_doc("doc/tom_select_no_event_boundary_review.html") }
   let(:dropdown_parent_release_evidence) { read_doc("doc/dropdown_parent_release_evidence.md") }
   let(:release_doc) { read_doc("doc/release.md") }
@@ -164,6 +165,25 @@ RSpec.describe "docs package inventory guard" do
       "Native wrapper and accessibility",
       "Native constraint attribute checks",
       "range field table metadata evidence stayed separate from native `rfk_range_field` wrapper evidence"
+    )
+  end
+
+  it "keeps native date, time, datetime-local, and color docs packaged and scoped" do
+    expect(specification.files).to include("doc/native_date_time_color_fields.md")
+    expect(public_api).to include(
+      "[`native_date_time_color_fields.md`](native_date_time_color_fields.md)",
+      "`rfk_date_field`",
+      "`rfk_time_field`",
+      "`rfk_datetime_local_field`",
+      "`rfk_color_field`"
+    )
+    expect(native_date_time_color_fields).to include(
+      "browser-native date, time, datetime-local, and color inputs",
+      "reuse Rails Fields Kit's wrapper, label, hint, error, affix, and accessibility wiring",
+      "browser-native picker behavior and browser support differences",
+      "custom date picker, time picker, or color picker integrations",
+      "masking, polyfills, and production CSS for picker controls",
+      "timezone conversion and storage semantics"
     )
   end
 
