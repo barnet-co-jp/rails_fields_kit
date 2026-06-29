@@ -46,9 +46,9 @@ RSpec.describe "package contents" do
     %w[
       form_builder.rb
       form_builder_check_box.rb
+      form_builder_radio_button.rb
       form_builder_file_field.rb
       form_builder_native_date_time_fields.rb
-      form_builder_radio_button.rb
     ].map { |filename| File.expand_path("../lib/rails_fields_kit/#{filename}", __dir__) }
   end
   let(:form_builder_source) { form_builder_paths.map { |path| File.read(path) }.join("\n") }
