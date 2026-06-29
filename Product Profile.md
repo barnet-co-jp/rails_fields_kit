@@ -86,7 +86,7 @@ This inventory is for maintainers who need to find the right source of truth qui
 - `doc/styling_boundary.md`: reader-facing source of truth for wrapper classes, styling hooks, and host-app CSS ownership
 - `doc/events.md`: Stimulus event contract
 - `doc/tom_select_turbo_lifecycle.md`: Turbo and Stimulus connect/disconnect lifecycle boundary for Tom Select-backed helpers
-- `doc/select_migration.md`: practical `collection_select` to `rfk_select` migration pattern
+- `doc/select_migration.md`, `doc/grouped_select.md`, and `doc/enum_select.md`: focused collection-backed select docs for ordinary Rails select migration, optgroup choices, and enum-backed choices
 - `doc/token_suggestions.md` and `doc/ransack_suggestions.md`: token-search suggestion surfaces and host-app responsibility boundary
 - `doc/table_adapters.md`: table metadata bridge
 - `doc/table_direct_helper_boundary.md`: direct table FormBuilder helper safe-join boundary, optional single outer `group_html:` wrapper, and lower-level render/call-spec lane guidance
