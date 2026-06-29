@@ -95,9 +95,9 @@ RSpec.describe "selected preload request params" do
 
     expect(SELECTED_PRELOAD_LOOKUP_IDS).to eq(["1", "2", "3"])
     expect(controller.rendered_json).to eq([
-      { id: "1", text: "One" },
-      { id: "2", text: "Two" },
-      { id: "3", text: "Three" }
+      { "id" => 1, "text" => "One" },
+      { "id" => 2, "text" => "Two" },
+      { "id" => 3, "text" => "Three" }
     ])
   end
 
@@ -108,8 +108,8 @@ RSpec.describe "selected preload request params" do
 
     expect(SELECTED_PRELOAD_LOOKUP_IDS).to eq(["2", "1"])
     expect(controller.rendered_json).to eq([
-      { id: "2", text: "Two" },
-      { id: "1", text: "One" }
+      { "id" => 2, "text" => "Two" },
+      { "id" => 1, "text" => "One" }
     ])
   end
 
@@ -121,8 +121,8 @@ RSpec.describe "selected preload request params" do
 
     expect(SELECTED_PRELOAD_LOOKUP_IDS).to eq(["3", "1"])
     expect(custom_controller.rendered_json).to eq([
-      { id: "3", text: "Three" },
-      { id: "1", text: "One" }
+      { "id" => 3, "text" => "Three" },
+      { "id" => 1, "text" => "One" }
     ])
   end
 end
