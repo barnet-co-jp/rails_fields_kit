@@ -97,6 +97,67 @@ If the host app writes its inline error copy into `detail.surface`, keep that co
 
 If the app mirrors the same error in another element, clear that extra UI from the same success or follow-up hooks. Rails Fields Kit only resets the opt-in placeholder that it rendered.
 
+## Copyable request-failure recipes
+
+Use one small host-app controller when a field needs separate handling for remote search, selected preload, and create-on-the-fly failures. Keep the field helper responsible for wiring the existing events, and keep message copy, retry controls, analytics, and any extra UI state in the host app.
+
+```erb
+<div data-controller="customers">
+  <%= f.rfk_combobox :customer_id,
+    url: customers_path(format: :json),
+    selected_url: selected_customers_path(format: :json),
+    create_url: customers_path,
+    selected: @order.customer_id,
+    error_surface: true,
+    html: {
+      data: {
+        action: "rails-fields-kit--tom-select:load->customers#clearFeedback rails-fields-kit--tom-select:selected-load->customers#clearFeedback rails-fields-kit--tom-select:create->customers#clearFeedback rails-fields-kit--tom-select:change->customers#clearFeedback rails-fields-kit--tom-select:load-error->customers#remoteSearchFailed rails-fields-kit--tom-select:selected-load-error->customers#selectedPreloadFailed rails-fields-kit--tom-select:create-error->customers#createFailed"
+      }
+    } %>
+
+  <div data-customers-target="feedback" role="status" aria-live="polite"></div>
+</div>
+```
+
+```js
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  static targets = ["feedback"]
+
+  remoteSearchFailed(event) {
+    this.showFailure(event, "Unable to load matching customers.")
+  }
+
+  selectedPreloadFailed(event) {
+    this.showFailure(event, "Unable to restore the saved customer label.")
+  }
+
+  createFailed(event) {
+    this.showFailure(event, "Unable to create that customer.")
+  }
+
+  clearFeedback(event) {
+    if (event.detail?.surface) event.detail.surface.textContent = ""
+    if (this.hasFeedbackTarget) this.feedbackTarget.textContent = ""
+  }
+
+  showFailure(event, fallbackMessage) {
+    const { payload, status, surface } = event.detail
+    const message = payload?.error || payload?.message || fallbackMessage
+
+    if (surface) surface.textContent = message
+    if (this.hasFeedbackTarget) {
+      this.feedbackTarget.textContent = status ? `${message} (${status})` : message
+    }
+  }
+}
+```
+
+This recipe intentionally uses only the current `load-error`, `selected-load-error`, and `create-error` hooks. It does not add a request-start event, built-in loading UI, built-in retry UI, toast UI, or a new payload shape. If the app renders retry buttons, loading affordances, or analytics from these hooks, keep those policies in the host controller and clear any UI outside `detail.surface` from the same success or follow-up hooks that clear `feedbackTarget` above.
+
+If the host app only wants field-adjacent visible copy, writing to `detail.surface` is enough. If the app mirrors the same message into another target, that mirror is app-owned state, so clear it explicitly on the success or interaction hooks the app cares about.
+
 ## Interaction forwarding
 
 These events forward common Tom Select interactions:
