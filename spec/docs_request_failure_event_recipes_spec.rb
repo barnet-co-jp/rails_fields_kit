@@ -21,7 +21,9 @@ RSpec.describe "request failure event recipes docs" do
 
   it "keeps visible copy and mirrored UI responsibility in the host app" do
     expect(recipe_section).to include(
+      "<div data-controller=\"customers\">",
       "error_surface: true",
+      "<div data-customers-target=\"feedback\" role=\"status\" aria-live=\"polite\"></div>",
       "if (surface) surface.textContent = message",
       "if (this.hasFeedbackTarget)",
       "message copy, retry controls, analytics, and any extra UI state in the host app",
