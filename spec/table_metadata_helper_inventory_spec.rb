@@ -7,6 +7,7 @@ RSpec.describe "table metadata helper inventory" do
   let(:public_api_path) { File.join(repo_root, "doc/public_api.md") }
   let(:table_file_field_metadata_path) { File.join(repo_root, "doc/table_file_field_metadata.md") }
   let(:checkbox_doc_path) { File.join(repo_root, "doc/table_check_box_metadata.md") }
+  let(:radio_doc_path) { File.join(repo_root, "doc/table_radio_button_metadata.md") }
   let(:public_api) { File.read(public_api_path) }
 
   def documented_class_methods(class_name)
@@ -15,6 +16,12 @@ RSpec.describe "table metadata helper inventory" do
 
   def documented_factory_methods(class_name)
     documented_class_methods(class_name) - %i[known_types known_type? from_type]
+  end
+
+  def table_cell_factory_options(field_type)
+    return { tag_value: "published" } if field_type == :radio_button
+
+    {}
   end
 
   it "keeps TableFilterInput.known_types aligned with the documented helper family" do
@@ -29,6 +36,7 @@ RSpec.describe "table metadata helper inventory" do
 
     expect(File.read(table_file_field_metadata_path)).to include("TableCellInput.file_field")
     expect(File.read(checkbox_doc_path)).to include("TableCellInput.check_box")
+    expect(File.read(radio_doc_path)).to include("TableCellInput.radio_button")
     expect(RailsFieldsKit::TableCellInput.known_types).to eq(documented_factories)
   end
 
@@ -47,7 +55,11 @@ RSpec.describe "table metadata helper inventory" do
     RailsFieldsKit::TableCellInput.known_types.each do |field_type|
       expect(RailsFieldsKit::TableCellInput).to respond_to(field_type)
 
-      input = RailsFieldsKit::TableCellInput.public_send(field_type, :status)
+      input = RailsFieldsKit::TableCellInput.public_send(
+        field_type,
+        :status,
+        **table_cell_factory_options(field_type)
+      )
 
       expect(input.field_type).to eq(field_type)
       expect(input.to_h.fetch(:field_type)).to eq(field_type.to_s)
