@@ -22,6 +22,8 @@ RSpec.describe "docs package inventory guard" do
   let(:configuration_wrapper_class_visual_reference) { read_doc("doc/configuration_wrapper_class_visual_reference.html") }
   let(:native_character_counter_boundary) { read_doc("doc/native_character_counter_boundary_sample_evidence.html") }
   let(:native_select_boundary) { read_doc("doc/native_select_boundary_sample_evidence.html") }
+  let(:collection_group_helpers) { read_doc("doc/collection_group_helpers.md") }
+  let(:collection_group_boundary_sample_evidence) { read_doc("doc/collection_group_boundary_sample_evidence.html") }
   let(:grouped_select) { read_doc("doc/grouped_select.md") }
   let(:range_field) { read_doc("doc/range_field.md") }
   let(:native_date_time_color_fields) { read_doc("doc/native_date_time_color_fields.md") }
@@ -146,6 +148,28 @@ RSpec.describe "docs package inventory guard" do
       "remote grouped options, authorization, and query execution are not Rails Fields Kit-owned"
     )
     expect(public_api).not_to include("rfk_native_select")
+  end
+
+  it "keeps proposal-only collection group boundary evidence packaged and unpromoted" do
+    expect(specification.files).to include("doc/collection_group_boundary_sample_evidence.html")
+    expect(collection_group_helpers).to include(
+      "collection checkbox and radio groups outside the current FormBuilder helper API",
+      "collection_group_boundary_sample_evidence.html",
+      "proposal-only sample evidence",
+      "not a current visual reference family member, release evidence lane, README entry, or public API inventory item"
+    )
+    expect(collection_group_boundary_sample_evidence).to include(
+      "Collection Group Boundary Sample Evidence",
+      "Proposal-only evidence",
+      "does not introduce a Rails Fields Kit collection helper, public API, production CSS, runtime JavaScript, or release visual reference lane",
+      "host-app-owned collection group markup",
+      "Host apps own collection fieldset, legend, group hint, group error, option labels, checked-state semantics, and option policy.",
+      "No public API, README, or visual index entry",
+      "No collection checkbox or radio helper implementation"
+    )
+    expect(readme).not_to include("collection_group_boundary_sample_evidence.html")
+    expect(public_api).not_to include("collection_group_boundary_sample_evidence.html")
+    expect(visual_references).not_to include("collection_group_boundary_sample_evidence.html")
   end
 
   it "keeps grouped select focused docs packaged and routed from public API" do
