@@ -252,7 +252,7 @@ RSpec.describe "docs package inventory guard" do
   it "keeps sample app results route guide packaged as a recording-lane selector" do
     expect(specification.files).to include("doc/sample_app_results_route_guide.md")
     expect(release_doc).to include(
-      "[`sample_app_results_route_guide.md`](doc/sample_app_results_route_guide.md)",
+      "[`sample_app_results_route_guide.md`](sample_app_results_route_guide.md)",
       "recording-lane selector",
       "does not add a release gate or turn CI success into browser visual approval"
     )
