@@ -43,7 +43,7 @@ module RailsFieldsKit
       end
 
       def radio_button(field_name = nil, tag_value:, **options)
-        from_type(:radio_button, field_name, **{ tag_value: tag_value }.merge(options))
+        from_type(:radio_button, field_name, tag_value: tag_value, **options)
       end
 
       def from_type(field_type, field_name = nil, **options)
