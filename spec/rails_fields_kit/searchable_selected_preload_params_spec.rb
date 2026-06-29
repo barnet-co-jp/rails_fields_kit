@@ -2,6 +2,8 @@
 
 require "spec_helper"
 
+SELECTED_PRELOAD_LOOKUP_IDS = []
+
 class SelectedPreloadRelation
   def initialize(records)
     @records = records
@@ -10,7 +12,7 @@ class SelectedPreloadRelation
   def where(conditions)
     values = conditions.fetch(:id)
     lookup_ids = Array(values).map(&:to_s)
-    SelectedPreloadModel.record_lookup_ids(lookup_ids)
+    SELECTED_PRELOAD_LOOKUP_IDS.replace(lookup_ids)
     SelectedPreloadRelation.new(@records.select { |record| lookup_ids.include?(record.id.to_s) })
   end
 
@@ -30,16 +32,8 @@ class SelectedPreloadModel
     end
   end
 
-  def self.record_lookup_ids(ids)
-    @last_lookup_ids = ids
-  end
-
-  def self.last_lookup_ids
-    @last_lookup_ids
-  end
-
   def self.all
-    record_lookup_ids(nil)
+    SELECTED_PRELOAD_LOOKUP_IDS.clear
     SelectedPreloadRelation.new([
       Record.new(id: 1, label: "One"),
       Record.new(id: 2, label: "Two"),
@@ -99,7 +93,7 @@ RSpec.describe "selected preload request params" do
 
     controller.selected
 
-    expect(SelectedPreloadModel.last_lookup_ids).to eq(["1", "2", "3"])
+    expect(SELECTED_PRELOAD_LOOKUP_IDS).to eq(["1", "2", "3"])
     expect(controller.rendered_json).to eq([
       { id: "1", text: "One" },
       { id: "2", text: "Two" },
@@ -112,7 +106,7 @@ RSpec.describe "selected preload request params" do
 
     controller.selected
 
-    expect(SelectedPreloadModel.last_lookup_ids).to eq(["2", "1"])
+    expect(SELECTED_PRELOAD_LOOKUP_IDS).to eq(["2", "1"])
     expect(controller.rendered_json).to eq([
       { id: "2", text: "Two" },
       { id: "1", text: "One" }
@@ -125,7 +119,7 @@ RSpec.describe "selected preload request params" do
 
     custom_controller.selected
 
-    expect(SelectedPreloadModel.last_lookup_ids).to eq(["3", "1"])
+    expect(SELECTED_PRELOAD_LOOKUP_IDS).to eq(["3", "1"])
     expect(custom_controller.rendered_json).to eq([
       { id: "3", text: "Three" },
       { id: "1", text: "One" }
