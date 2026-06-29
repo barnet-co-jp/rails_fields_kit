@@ -22,6 +22,7 @@ RSpec.describe "docs package inventory guard" do
   let(:configuration_wrapper_class_visual_reference) { read_doc("doc/configuration_wrapper_class_visual_reference.html") }
   let(:native_character_counter_boundary) { read_doc("doc/native_character_counter_boundary_sample_evidence.html") }
   let(:native_select_boundary) { read_doc("doc/native_select_boundary_sample_evidence.html") }
+  let(:grouped_select) { read_doc("doc/grouped_select.md") }
   let(:range_field) { read_doc("doc/range_field.md") }
   let(:native_date_time_color_fields) { read_doc("doc/native_date_time_color_fields.md") }
   let(:tom_select_no_event_boundary) { read_doc("doc/tom_select_no_event_boundary_review.html") }
@@ -147,6 +148,24 @@ RSpec.describe "docs package inventory guard" do
     expect(public_api).not_to include("rfk_native_select")
   end
 
+  it "keeps grouped select focused docs packaged and routed from public API" do
+    form_builder_helpers = markdown_section(public_api, "## FormBuilder helpers")
+
+    expect(specification.files).to include("doc/grouped_select.md")
+    expect(form_builder_helpers).to include(
+      "`rfk_grouped_select`",
+      "[`grouped_select.md`](grouped_select.md)",
+      "collection-backed `<optgroup>` boundary",
+      "separation from remote workflows or future optgroup metadata work"
+    )
+    expect(grouped_select).to include(
+      "`rfk_grouped_select`",
+      "rendered field kind is `grouped_select`",
+      "ordinary select submission, selected values, disabled values, and `<optgroup>` rendering stay in the same collection-backed select lane",
+      "Per-option `option_html:` attributes and group-level optgroup metadata are intentionally outside this helper's public boundary"
+    )
+  end
+
   it "keeps range field release evidence routed through native wrapper lanes" do
     expect(specification.files).to include("doc/range_field.md", "doc/sample_app_results.md")
     expect(public_api).to include("`rfk_range_field`", "[`range_field.md`](range_field.md)")
@@ -254,5 +273,9 @@ RSpec.describe "docs package inventory guard" do
 
   def read_doc(relative_path)
     File.read(File.join(root, relative_path))
+  end
+
+  def markdown_section(document, heading)
+    document.split(heading, 2).last.split(/\n(?=##?\s)/, 2).first
   end
 end
