@@ -82,6 +82,18 @@ For event-driven host feedback lifecycle review, open [`tom_select_host_feedback
 
 Use this section as a task guide, not an exhaustive API inventory. Pick the group that matches the review job, then open only the source-of-truth doc and visual lane named there.
 
+### Quick task picker
+
+| Review job | Start here | Keep out of scope |
+| --- | --- | --- |
+| Release evidence or entrypoint scan | [`final_release_checklist.md`](final_release_checklist.md), [`sample_app_results.md`](sample_app_results.md), and [`visual_reference_index.html`](visual_reference_index.html) | Do not treat CI green, package builds, or source review as browser visual approval. |
+| Design or copy readability | The focused visual reference named in the PR, then the matching family lane below | Do not expand a narrow wording or spacing change into runtime behavior, production CSS, or a family redesign. |
+| Request-failure or host feedback | [`tom_select_request_failure_visual_reference.html`](tom_select_request_failure_visual_reference.html) and [`tom_select_host_feedback_lifecycle_visual_reference.html`](tom_select_host_feedback_lifecycle_visual_reference.html) | Do not add retry policy, default copy, lifecycle timing, or endpoint behavior to Rails Fields Kit. |
+| Contract-reader or package-root boundary | [`public_api.md#javascript-exports`](public_api.md#javascript-exports), then the nearest landed visual lane | Do not copy the full API inventory into the HTML index or present proposal-only helpers as current API. |
+| Native, table, token, or saved-search ownership | The native helper, table metadata, or token/saved-search lanes below plus their source-of-truth docs | Do not turn host-app query execution, persistence, authorization, or styling into static artifact ownership. |
+
+Evidence shorthand: source review checks file content, links, headings, and scope text; browser visual approval checks the rendered artifact at the stated viewport. Keep those two results separate in PR comments and release notes.
+
 ### Release evidence and entrypoints
 
 - For release verification, start from [`final_release_checklist.md`](final_release_checklist.md) and record manual evidence in [`sample_app_results.md`](sample_app_results.md) or the release PR comment when a release or PR changes the one-screen index or a visual reference artifact.
