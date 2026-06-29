@@ -63,7 +63,8 @@ When the lane is in scope, confirm only the relevant items below:
 - [ ] Unregistering a custom override for a built-in field type restores the built-in default helper.
 - [ ] Native contact/search table metadata evidence stays limited to Rails Fields Kit wrapper rendering and table metadata mapping, with `doc/native_contact_fields.md` as the contact/search ownership source of truth.
 - [ ] Browser-native `search_field` evidence is not described as remote suggestions, token parsing, Ransack query execution, or table query execution.
-- [ ] Query execution, preference persistence, authorization, pagination, visible save/error copy, validation policy, normalization, final table layout, semantic group naming, group hint/error copy, and group-level accessibility policy remain host-app or table integration responsibilities.
+- [ ] Query execution, preference persistence, authorization, pagination, visible save/error copy, validation policy, normalization, and final table layout remain host-app or table integration responsibilities.
+- [ ] Semantic group naming, group hint/error copy, and group-level accessibility policy also remain host-app responsibilities unless a separate future surface lands.
 
 ## Result template
 
