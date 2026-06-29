@@ -226,6 +226,7 @@ The table below is a routing aid, not an exhaustive export list. Scan it to choo
 | Plugin configuration | Read the effective plugin list and derived clear/remove flags without owning plugin assets or styling | `tomSelectPluginContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Tom Select copy values | Confirm rendered no-results, loading, and create copy values without taking over locale or visible copy policy | `tomSelectTextOverrideContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 | Native wrapper wiring | Inspect label, described-by, affix, and wrapper elements for native helpers without changing accessibility markup | `nativeFieldAccessibilityContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
+| Native constraint attributes | Inspect rendered native `maxlength`, `minlength`, `pattern`, `autocomplete`, and `inputmode` attributes without owning browser validation messages or formatting policy | `nativeFieldConstraintContract(...)` | [`doc/public_api.md`](doc/public_api.md#javascript-exports) |
 
 If the helper family you need is not named in this representative table, do not infer a different import policy from the README. Check [`doc/public_api.md#javascript-exports`](doc/public_api.md#javascript-exports) for the complete current package-root surface and use [`doc/package_root_helper_release_evidence.md`](doc/package_root_helper_release_evidence.md) only when the review is about release or sample-app evidence for a helper lane.
 
@@ -238,6 +239,7 @@ Host-app scripts can inspect representative rendered contracts without executing
 ```js
 import {
   nativeFieldAccessibilityContract,
+  nativeFieldConstraintContract,
   readRenderedErrorSurface,
   readRenderedSelectedPreloadConfig,
   tomSelectFieldKindContract,
@@ -255,9 +257,10 @@ const copyContract = tomSelectTextOverrideContract(tomSelectFieldElement)
 const selectedPreloadConfig = readRenderedSelectedPreloadConfig(tomSelectFieldElement)
 const pluginContract = tomSelectPluginContract(tomSelectFieldElement)
 const nativeAccessibility = nativeFieldAccessibilityContract(nativeFieldElement)
+const nativeConstraints = nativeFieldConstraintContract(nativeFieldElement)
 ```
 
-These helpers return rendered contract or wiring details for host-app inspection only. Endpoint authorization, request execution, helper taxonomy decisions, visible fallback copy, retry UI, plugin assets and styling, selection mutation, validation policy, and focus management remain host-app responsibilities.
+These helpers return rendered contract or wiring details for host-app inspection only. Endpoint authorization, request execution, helper taxonomy decisions, visible fallback copy, retry UI, plugin assets and styling, selection mutation, validation policy, browser validation messages, formatting, normalization, and focus management remain host-app responsibilities.
 
 ## Usage
 
