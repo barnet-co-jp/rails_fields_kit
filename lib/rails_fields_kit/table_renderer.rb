@@ -27,6 +27,7 @@ module RailsFieldsKit
       "search_field" => :rfk_search_field,
       "password_field" => :rfk_password_field,
       "check_box" => :rfk_check_box,
+      "radio_button" => :rfk_radio_button,
       "file_field" => :rfk_file_field
     }.freeze
 
@@ -217,13 +218,30 @@ module RailsFieldsKit
           previous = Thread.current[:rails_fields_kit_render_table_cell_editor_metadata]
           Thread.current[:rails_fields_kit_render_table_cell_editor_metadata] = true
           begin
-            return form_builder.public_send(helper, method, **options)
+            return render_form_builder_call(form_builder, helper, method, options)
           ensure
             Thread.current[:rails_fields_kit_render_table_cell_editor_metadata] = previous
           end
         end
 
+        render_form_builder_call(form_builder, helper, method, options)
+      end
+
+      def render_form_builder_call(form_builder, helper, method, options)
+        if helper == :rfk_radio_button
+          radio_options = options.dup
+          tag_value = extract_required_option!(radio_options, :tag_value, "table radio button metadata tag_value is required")
+          return form_builder.public_send(helper, method, tag_value, **radio_options)
+        end
+
         form_builder.public_send(helper, method, **options)
+      end
+
+      def extract_required_option!(options, key, message)
+        return options.delete(key) if options.key?(key)
+        return options.delete(key.to_s) if options.key?(key.to_s)
+
+        raise ArgumentError, message
       end
 
       def table_adapter_metadata?(options)
