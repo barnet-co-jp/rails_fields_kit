@@ -9,6 +9,7 @@ RSpec.describe "FormBuilder helper inventory docs" do
   let(:native_date_time_color_fields) { File.read(File.join(repo_root, "doc/native_date_time_color_fields.md")) }
   let(:password_field) { File.read(File.join(repo_root, "doc/password_field.md")) }
   let(:check_box) { File.read(File.join(repo_root, "doc/check_box.md")) }
+  let(:radio_button) { File.read(File.join(repo_root, "doc/radio_button.md")) }
   let(:file_field) { File.read(File.join(repo_root, "doc/file_field.md")) }
 
   it "keeps the compact public API helper inventory represented in helper docs" do
@@ -18,6 +19,7 @@ RSpec.describe "FormBuilder helper inventory docs" do
     detailed_helper_sections += native_date_time_color_fields.scan(/`(rfk_(?:date|time|datetime_local|color)_field)`/).flatten
     detailed_helper_sections += password_field.scan(/`(rfk_password_field)`/).flatten
     detailed_helper_sections += check_box.scan(/`(rfk_check_box)`/).flatten
+    detailed_helper_sections += radio_button.scan(/`(rfk_radio_button)`/).flatten
     detailed_helper_sections += file_field.scan(/`(rfk_file_field)`/).flatten
 
     expect(public_helpers).to eq(%w[
@@ -43,6 +45,7 @@ RSpec.describe "FormBuilder helper inventory docs" do
       rfk_search_field
       rfk_password_field
       rfk_check_box
+      rfk_radio_button
       rfk_file_field
       rfk_date_field
       rfk_time_field

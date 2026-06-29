@@ -9,6 +9,7 @@ RSpec.describe "native FormBuilder helper public API inventory" do
       form_builder_check_box.rb
       form_builder_file_field.rb
       form_builder_native_date_time_fields.rb
+      form_builder_radio_button.rb
     ].map { |filename| File.expand_path("../lib/rails_fields_kit/#{filename}", __dir__) }
   end
   let(:form_builder_source) { form_builder_paths.map { |path| File.read(path) }.join("\n") }
@@ -21,7 +22,7 @@ RSpec.describe "native FormBuilder helper public API inventory" do
 
   let(:landed_native_helpers) do
     form_builder_source.scan(/^    def (rfk_[a-z0-9_]+).*?\n(.*?)^    end/m).filter_map do |helper_name, body|
-      helper_name if body.include?("rfk_native_field(") || body.include?("check_box(method")
+      helper_name if body.include?("rfk_native_field(") || body.include?("check_box(method") || body.include?("radio_button(method")
     end.sort
   end
 
