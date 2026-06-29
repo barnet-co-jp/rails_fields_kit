@@ -84,8 +84,7 @@ RSpec.describe "rfk_enum_select option metadata" do
       }
     )
 
-    expect(html).to include("value=\"draft\" disabled=\"disabled\"").or include("disabled=\"disabled\" value=\"draft\"")
-    expect(html).to include(">Draft label</option>")
+    expect(html).to include("<option disabled=\"disabled\" selected=\"selected\" value=\"draft\">Draft label</option>")
     expect(html).to include("value=\"published\"")
     expect(html).to include("data-qa=\"enum-published\"")
     expect(html).to include(">Published label</option>")
