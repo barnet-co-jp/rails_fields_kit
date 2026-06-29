@@ -2,6 +2,8 @@
 
 Use this guide when a release or focused PR needs sample app evidence for table metadata rendering, group-level wrappers, or the TableRenderer registry. Keep it as a narrow companion to `doc/sample_app_checklist.md` and record the actual result in `doc/sample_app_results.md` or the PR comment for the scoped change.
 
+For direct table helper `group_html:` work, this guide is the release evidence route. It helps reviewers choose one representative group-wrapper check without turning `doc/sample_app_results.md` into a full table helper inventory or treating semantic grouping as Rails Fields Kit-owned behavior.
+
 For TableRenderer registry work, this guide is the release evidence route. It helps reviewers choose one representative registration, introspection, and cleanup check without turning the public API docs into an exhaustive manual test checklist.
 
 ## Source of truth
@@ -17,11 +19,23 @@ This guide does not define new runtime behavior. It only helps reviewers choose 
 
 | Change in scope | Representative evidence | Keep out of scope |
 | --- | --- | --- |
-| Direct table helper group wrappers | One `rfk_table_filters` or `rfk_table_cell_editors` sample that passes `group_html:` and shows one outer group wrapper around joined output | Field-level `wrapper_html:` behavior changes, table layout ownership, query execution, persistence, authorization |
+| Direct table helper group wrappers | One `rfk_table_filters` or `rfk_table_cell_editors` sample that passes `group_html:` and shows one outer group wrapper around joined output | Field-level `wrapper_html:` behavior changes, semantic `fieldset` / `legend` ownership, group-level hint/error wiring, table layout ownership, query execution, persistence, authorization |
 | TableRenderer registry introspection | One custom helper registration where `registered_field_types` includes the custom type, followed by cleanup with `reset_field_helpers!` or `unregister_field_helper` | Redesigning registry return shapes, changing helper names, adding metadata persistence |
 | Custom-only unregister cleanup | A custom-only mapping is removed with `unregister_field_helper`, then the type is no longer renderable | Removing built-in mappings or changing built-in factory `known_types` |
 | Built-in override fallback | A built-in field type is temporarily registered to a custom helper, then `unregister_field_helper` restores the built-in default helper | Treating the override as a permanent helper remapping or changing public fallback semantics |
 | Native contact/search table metadata | One or two `TableFilterInput` or `TableCellInput` examples using `email_field`, `url_field`, `phone_field`, or browser-native `search_field`, with rendered wrapper and metadata notes | Email deliverability, URL normalization, phone formatting, server-side validation, remote suggestions, token parsing, query execution |
+
+## Direct table helper group-wrapper evidence route
+
+Use this route when a release, PR, or review question mentions `rfk_table_filters(..., group_html: ...)`, `rfk_table_cell_editors(..., group_html: ...)`, or the group-level wrapper boundary from `doc/table_group_html.md`.
+
+1. Start from `doc/table_group_html.md` for the current `<div>` attribute pass-through contract and host-app semantic grouping boundary.
+2. Exercise one representative direct helper call, either `rfk_table_filters` or `rfk_table_cell_editors`, with `group_html:` adding a class plus one `data` or `aria` attribute to the outer wrapper.
+3. Record that each rendered field keeps its own helper options and field-level `wrapper_html:` behavior inside the group.
+4. Record whether the result belongs in the release-wide `doc/sample_app_results.md` table metadata lane or in a scoped PR comment for a narrow docs/spec change.
+5. Put the final `PASS`, `FAIL`, `SOURCE REVIEW ONLY`, `DEFERRED`, or `OUT OF SCOPE` note in the chosen evidence location.
+
+Keep this lane representative. Do not require both filter and cell-editor helpers, every table metadata type, or every possible wrapper attribute unless the release or PR actually changes those surfaces. If a screen needs `fieldset`, `legend`, group hint text, group error copy, or group-level `aria-describedby`, record that as host-app-owned surrounding markup rather than Rails Fields Kit `group_html:` evidence.
 
 ## TableRenderer registry evidence route
 
@@ -41,6 +55,7 @@ When the lane is in scope, confirm only the relevant items below:
 
 - [ ] `group_html:` adds attributes to one outer table-helper group wrapper while each rendered field keeps its own field-level wrapper behavior.
 - [ ] Evidence notes distinguish group-level `group_html:` from field-level `wrapper_html:`.
+- [ ] Evidence notes keep semantic `fieldset`, `legend`, group hint/error copy, and group-level `aria-describedby` wiring with the host app unless a separate future surface lands.
 - [ ] A representative custom field helper registration is renderable through the documented call-spec path.
 - [ ] `RailsFieldsKit::TableRenderer.registered_field_types` exposes renderable custom types without exposing helper method names.
 - [ ] `RailsFieldsKit::TableFilterInput.known_types` and `RailsFieldsKit::TableCellInput.known_types` remain limited to the built-in factory family.
@@ -49,6 +64,7 @@ When the lane is in scope, confirm only the relevant items below:
 - [ ] Native contact/search table metadata evidence stays limited to Rails Fields Kit wrapper rendering and table metadata mapping, with `doc/native_contact_fields.md` as the contact/search ownership source of truth.
 - [ ] Browser-native `search_field` evidence is not described as remote suggestions, token parsing, Ransack query execution, or table query execution.
 - [ ] Query execution, preference persistence, authorization, pagination, visible save/error copy, validation policy, normalization, and final table layout remain host-app or table integration responsibilities.
+- [ ] Semantic group naming, group hint/error copy, and group-level accessibility policy also remain host-app responsibilities unless a separate future surface lands.
 
 ## Result template
 
@@ -62,4 +78,4 @@ Copy the compact result into `doc/sample_app_results.md` for release candidates,
 | Built-in override fallback |  |  |  |
 | Native contact/search table metadata |  |  |  |
 
-Use `PASS` only for checks actually exercised. Use `OUT OF SCOPE` when the lane was reviewed and deliberately excluded from the release or PR scope.
+Use `PASS` only for checks actually exercised. Use `SOURCE REVIEW ONLY` or `DEFERRED` when the evidence location only reviewed docs/source or intentionally hands off a sample-app/browser-capable check. Use `OUT OF SCOPE` when the lane was reviewed and deliberately excluded from the release or PR scope.
