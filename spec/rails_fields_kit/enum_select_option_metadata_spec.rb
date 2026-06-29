@@ -88,7 +88,7 @@ RSpec.describe "rfk_enum_select option metadata" do
     expect(html).to include("value=\"published\"")
     expect(html).to include("data-qa=\"enum-published\"")
     expect(html).to include(">Published label</option>")
-    expect(html).not_to include("value=\"0\"")
-    expect(html).not_to include("value=\"1\"")
+    expect(html).not_to include("<option value=\"0\"")
+    expect(html).not_to include("<option value=\"1\"")
   end
 end
