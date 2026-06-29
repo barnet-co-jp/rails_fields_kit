@@ -9,7 +9,8 @@ Use this companion note when a release or PR needs manual evidence but the full 
 | Release candidate or release PR | Yes. Fill the release-wide baseline and any feature-specific lane that changed. | Optional summary only. | A feature-only spot check. |
 | Narrow static visual reference PR | Only when the artifact is release-critical or the release evidence log is being refreshed. | Usually yes. Name the artifact, viewport, lane, result, and blocker. | CI success as visual approval. |
 | Turbo reconnect visual reference route | Only when the release or release candidate depends on Turbo reconnect visual evidence. | Usually yes. Name the Turbo reconnect artifact, restored-wrapper lane, viewport, and whether the result is browser-run or deferred. | Turbo lifecycle, Stimulus boot policy, or Tom Select reconnect behavior approval. |
-| SetupDoctor output review | Use the Setup doctor checks lane only when a release candidate, release PR, or setup-focused change depends on CLI diagnostic evidence. | Yes for a narrow setup-doctor or setup-visibility PR. Name the command, setup path, representative status lines, wrapping surface, and result. | Host-app CI pass/fail policy, auto-fix approval, Tom Select install approval, Stimulus boot policy, CSS pipeline approval, or bundler alias confirmation. |
+| SetupDoctor output review | Use the Setup doctor checks lane only when a release candidate, release PR, or setup-focused change depends on CLI diagnostic evidence. | Yes for a narrow setup-doctor or setup-visibility PR. Name the command, setup path, representative status lines, wrapping surface, and result. | Host-app CI pass/fail policy, auto-fix approval, Tom Select install approval, Stimulus boot policy, CSS pipeline approval, bundler alias confirmation, or setup doctor JSON payload approval. |
+| SetupDoctor JSON payload evidence | Use the Setup doctor checks lane only when a release candidate, release PR, or setup-focused change depends on machine-readable setup visibility. | Yes for a narrow setup-doctor JSON docs or evidence PR. Name the branch or commit, Ruby API call, observed `summary["missing"]`, manual advisory review, and result. | Human-readable CLI wrapping approval, full JSON schema copy, CLI `--json` contract, auto-fix behavior, SARIF/JUnit output, or universal host-app CI policy. |
 | Source-only or connector-only visual review | Use `SOURCE REVIEW ONLY` or `DEFERRED` if the evidence log is in scope. | Yes. State what source was checked and what browser pass remains. | Browser `PASS`. |
 | Package-root helper or setup visibility PR | Use the package-root helper or setup lane only if that surface changed. | Yes for narrow PR proof. | A release-wide helper inventory. |
 | Runtime helper behavior PR | Use the nearest helper lane when manual sample-app evidence is required. | Yes for scoped test or CI notes. | Static visual artifact approval. |
@@ -38,6 +39,22 @@ A scoped evidence note should include:
 - Confirmation that host-app CI pass/fail policy, auto-fix behavior, Tom Select package install, Stimulus boot policy, CSS pipeline, bundler aliases, and setup doctor JSON payloads remain out of scope.
 
 Do not use this lane to approve frontend setup ownership. Human-readable CLI diagnostic evidence stays in `doc/setup_doctor_output_review.md`; machine-readable JSON payload evidence stays in `doc/setup_doctor_machine_readable.md`.
+
+### SetupDoctor JSON payload evidence
+
+Record this lane when the review needs evidence for the machine-readable `RailsFieldsKit::SetupDoctor` JSON payload rather than the human-readable CLI output, terminal wrapping, generator behavior, or host-app setup policy.
+
+A scoped evidence note should include:
+
+- Branch or commit checked.
+- Ruby API call used, such as `RailsFieldsKit::SetupDoctor.new.run(io: output, format: :json)`.
+- Observed `summary["missing"]` count and whether any `manual` checks were reviewed as host-app advisory items.
+- One representative check key or status when useful for the review.
+- Whether the evidence belongs in a narrow PR comment or the release-wide `sample_app_results.md` Setup doctor checks lane.
+- Result word: `PASS`, `FAIL`, `SOURCE REVIEW ONLY`, or `DEFERRED`.
+- Link back to `doc/setup_doctor_machine_readable.md` as the payload source of truth.
+
+Do not copy the full payload schema into sample evidence. Do not use this lane to approve the human-readable CLI wrapping surface, a CLI `--json` contract, formal JSON schema publication, auto-fix behavior, SARIF/JUnit output, or a universal host-app CI pass/fail policy.
 
 ### Turbo reconnect focused visual reference
 
@@ -183,6 +200,26 @@ SetupDoctor evidence note
 ```
 
 If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark host-app setup execution as complete.
+
+### SetupDoctor JSON evidence PR comment shape
+
+Use this shape when SetupDoctor machine-readable JSON payload evidence is narrow enough for a PR comment instead of the release evidence log.
+
+```markdown
+SetupDoctor JSON evidence note
+
+- Lane: setup doctor JSON payload evidence
+- Ruby API call: `RailsFieldsKit::SetupDoctor.new.run(io: output, format: :json)`
+- Branch or commit checked: `...`
+- Checked here: source review / Ruby API run / CI / docs link review
+- Result: PASS / FAIL / SOURCE REVIEW ONLY / DEFERRED
+- Evidence observed: `summary["missing"]`, representative check key/status, and whether manual advisory checks were reviewed
+- Payload source of truth: `doc/setup_doctor_machine_readable.md`
+- Responsibility boundary: human-readable CLI wrapping, CLI `--json`, formal schema publication, auto-fix behavior, SARIF/JUnit output, and host-app CI policy remain out of scope
+- Remaining follow-up: ...
+```
+
+If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark JSON execution as complete.
 
 ### Remote evidence PR comment shape
 
