@@ -48,6 +48,7 @@ RSpec.describe "package contents" do
       form_builder_check_box.rb
       form_builder_file_field.rb
       form_builder_native_date_time_fields.rb
+      form_builder_radio_button.rb
     ].map { |filename| File.expand_path("../lib/rails_fields_kit/#{filename}", __dir__) }
   end
   let(:form_builder_source) { form_builder_paths.map { |path| File.read(path) }.join("\n") }
@@ -270,6 +271,7 @@ RSpec.describe "package contents" do
       rfk_search_field
       rfk_password_field
       rfk_check_box
+      rfk_radio_button
       rfk_file_field
       rfk_date_field
       rfk_time_field
@@ -279,7 +281,7 @@ RSpec.describe "package contents" do
     expect(documented_native_helpers).to eq(native_helpers)
     expect(quick_chooser).to include(
       "native browser input with shared wrapper, hint, error, affix, and accessibility behavior for text, textarea, or search",
-      "A native password, checkbox, file, or range control with focused ownership boundaries",
+      "A native password, checkbox, radio, file, or range control with focused ownership boundaries",
       "Native numeric, money, percent, email, URL, or phone inputs",
       "Native date, time, datetime-local, or color controls"
     )
@@ -443,7 +445,7 @@ RSpec.describe "package contents" do
 
   def native_helper_names_from(source)
     source.scan(/^    def (rfk_[a-z_]+).*?\n(.*?)^    end/m).filter_map do |helper_name, body|
-      helper_name if body.include?("rfk_native_field(") || body.include?("check_box(method")
+      helper_name if body.include?("rfk_native_field(") || body.include?("check_box(method") || body.include?("radio_button(method")
     end
   end
 
