@@ -129,7 +129,8 @@
         text-transform: uppercase;
       }
 
-      .tag.clearable {
+      .tag.clearable,
+      .tag.default {
         border-color: #9bcdbc;
         background: var(--accent-soft);
         color: var(--accent);
@@ -192,6 +193,13 @@
         background: var(--accent-soft);
         color: var(--accent);
         font-size: 0.78rem;
+      }
+
+      .clear-button.is-suppressed {
+        border-color: var(--line);
+        background: var(--surface-muted);
+        color: var(--muted);
+        text-decoration: line-through;
       }
 
       .remove-button,
@@ -285,10 +293,11 @@
       <section class="hero" aria-labelledby="page-title">
         <div class="eyebrow">Tom Select companion artifact</div>
         <h1 id="page-title">Plugin and Clearable State Review</h1>
-        <p class="lede">Static review lane for distinguishing a whole-field clear affordance from per-item remove buttons. It is a documentation artifact only; Rails Fields Kit does not own Tom Select plugin assets, plugin behavior, or production styling policy.</p>
+        <p class="lede">Static review lane for distinguishing explicit field-level clear affordances, app-wide <code>default_allow_clear</code> inheritance, and per-item remove buttons. It is a documentation artifact only; Rails Fields Kit does not own Tom Select plugin assets, plugin behavior, or production styling policy.</p>
         <nav class="hero-links" aria-label="Related references">
           <a href="visual_references.md">Visual reference map</a>
           <a href="tom_select_visual_reference.html">Tom Select core reference</a>
+          <a href="default_allow_clear.md">Default allow clear guide</a>
           <a href="public_api.md#javascript-exports">Current JavaScript exports</a>
         </nav>
       </section>
@@ -310,6 +319,26 @@
             <div class="dropdown">
               <div class="option active"><strong>Operations workspace</strong><small>Current value, clearable as one field</small></div>
               <div class="option"><strong>Support workspace</strong><small>Another server-rendered option</small></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <header>
+            <span class="tag default">default_allow_clear</span>
+            <h2>App-wide default remains a semantic opt-in</h2>
+            <p>When a helper leaves <code>allow_clear:</code> unset, the app-wide default can add the same whole-field clear affordance without turning plugin styling or lifecycle into Rails Fields Kit behavior.</p>
+          </header>
+          <div class="control" role="img" aria-label="App-wide default allow clear state with inherited clear and field-level suppression">
+            <div class="control-top">
+              <div class="selection">Quarterly account review with a long selected label</div>
+              <span class="clear-button" aria-hidden="true">Clear</span>
+              <span class="dropdown-indicator" aria-hidden="true">v</span>
+            </div>
+            <div class="control-note"><strong>Inherited default:</strong> <code>allow_clear:</code> is unset, so <code>default_allow_clear</code> supplies the whole-field clear button.</div>
+            <div class="dropdown">
+              <div class="option active"><strong>default_allow_clear = true</strong><small>Selected item, hint, and validation-adjacent copy stay readable in the same field chrome.</small></div>
+              <div class="option"><strong>allow_clear: false</strong><small><span class="clear-button is-suppressed" aria-hidden="true">Clear</span> Field-level suppression remains visible as a configuration decision, not a plugin failure.</small></div>
             </div>
           </div>
         </article>
@@ -359,9 +388,9 @@
         <span class="tag boundary">Scope boundary</span>
         <h2 id="boundary-title">What this artifact checks</h2>
         <ul>
-          <li>Whole-field clear and per-item remove affordances are visually distinct at desktop and narrow widths.</li>
+          <li>Whole-field clear, inherited <code>default_allow_clear</code>, field-level suppression, and per-item remove affordances are visually distinct at desktop and narrow widths.</li>
           <li>Long selected labels and long tags wrap inside the control instead of forcing horizontal overflow.</li>
-          <li>Plugin assets, styling, event payloads, and Tom Select lifecycle behavior remain host-app or Tom Select responsibilities.</li>
+          <li>Plugin assets, styling, event payloads, selection mutation, and Tom Select lifecycle behavior remain host-app or Tom Select responsibilities.</li>
           <li>Current package-root helper names are not copied here; use <code>public_api.md#javascript-exports</code> as the source of truth.</li>
         </ul>
       </section>
@@ -370,8 +399,8 @@
         <span class="tag clearable">Review prompts</span>
         <h2 id="review-title">Desktop and narrow viewport checks</h2>
         <ul>
-          <li>At desktop width, compare the single-select clear button against the multi-item remove buttons without reading them as the same action.</li>
-          <li>At 390px-equivalent width, confirm long tag text wraps and the clear/remove controls remain reachable without overlapping labels.</li>
+          <li>At desktop width, compare explicit <code>allow_clear: true</code>, inherited <code>default_allow_clear</code>, and multi-item remove buttons without reading them as the same action.</li>
+          <li>At 390px-equivalent width, confirm long tag text, long selected labels, hint copy, and clear/remove controls remain reachable without overlapping labels or validation-adjacent copy.</li>
           <li>Confirm the artifact reads as a static design review lane, not a proposal for Rails Fields Kit to ship plugin styles or clear-event behavior.</li>
         </ul>
       </section>
