@@ -29,12 +29,12 @@ RSpec.describe "native wrapper focused docs inventory guard" do
       "`rfk_url_field`",
       "`rfk_phone_field`"
     )
+    expect(public_api).to include("[`native_contact_fields.md`](native_contact_fields.md)")
     expect(public_api_form_builder_helpers).to include(
       "`rfk_email_field`",
       "`rfk_url_field`",
       "`rfk_phone_field`",
-      "`rfk_search_field`",
-      "[`native_contact_fields.md`](native_contact_fields.md)"
+      "`rfk_search_field`"
     )
     expect(native_contact_fields).to include(
       "`rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field`",
@@ -68,11 +68,11 @@ RSpec.describe "native wrapper focused docs inventory guard" do
       "`rfk_money_field`",
       "`rfk_percent_field`"
     )
+    expect(public_api).to include("[`native_numeric_fields.md`](native_numeric_fields.md)")
     expect(public_api_form_builder_helpers).to include(
       "`rfk_number_field`",
       "`rfk_money_field`",
-      "`rfk_percent_field`",
-      "[`native_numeric_fields.md`](native_numeric_fields.md)"
+      "`rfk_percent_field`"
     )
     expect(native_numeric_fields).to include(
       "`rfk_number_field`, `rfk_money_field`, and `rfk_percent_field`",
