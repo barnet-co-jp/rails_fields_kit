@@ -18,12 +18,13 @@ RSpec.describe "Tom Select clearable visual reference inventory" do
       "plugin assets, styling, event payloads, selection mutation, and Tom Select lifecycle behavior outside Rails Fields Kit"
     )
     expect(clearable_review).to include(
-      "Rails Fields Kit Tom Select Plugin Clearable Review",
-      "Whole-field clear affordance",
-      "Tag remove buttons are not whole-field clear",
-      "Rails Fields Kit does not ship Tom Select plugin assets, theme CSS, selection mutation logic, or lifecycle events"
+      "Plugin and Clearable State Review",
+      "Single select with whole-field clear",
+      "Multi item removal is a different affordance",
+      "Explicit plugin choices stay host-owned",
+      "Plugin assets, styling, event payloads, selection mutation, and Tom Select lifecycle behavior remain host-app or Tom Select responsibilities"
     )
-    expect(public_api).to include("allow_clear: true")
+    expect(public_api).to include("default_allow_clear")
   end
 
   def read_repo_file(path)
