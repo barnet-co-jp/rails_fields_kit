@@ -280,12 +280,12 @@ RSpec.describe "docs package inventory guard" do
     )
     expect(tom_select_request_failure_visual_reference).to include(
       "Duplicate field id boundary",
-      "Same object and method",
-      "rfk_project_category_error_surface",
+      "same object and method appear more than once on a page",
+      "same object/method needs explicit ids",
       "error_surface: true",
       "aria-describedby",
-      "Events target the wrapper instance that initiated the request",
-      "Retry UI, visible default copy, endpoint behavior, and request lifecycle timing remain host-app responsibilities."
+      "detail.surface",
+      "message, reveal timing, retry action"
     )
   end
 
