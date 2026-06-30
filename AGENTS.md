@@ -46,7 +46,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/tom_select_text_override_visual_reference.html`: static visual reference for configured Tom Select text override copy states
 - `doc/native_field_visual_reference.html`: static visual reference for representative native helper states
 - `doc/native_numeric_fields.md`: focused `rfk_number_field`, `rfk_money_field`, and `rfk_percent_field` native wrapper boundary; formatting, rounding, currency, and masking stay host-app owned
-- `doc/native_contact_fields.md`: focused `rfk_email_field`, `rfk_url_field`, and `rfk_phone_field`, and `rfk_search_field` native wrapper boundary; validation wording, normalization, phone policy, and search execution stay host-app owned
+- `doc/native_contact_fields.md`: focused `rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field` native wrapper boundary; validation wording, normalization, phone policy, and search execution stay host-app owned
 - `doc/native_date_time_color_fields.md`: focused `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, and `rfk_color_field` native wrapper boundary; timezone conversion, masking, custom picker UI, browser normalization, and production CSS stay host-app owned
 - `doc/password_field.md`: focused `rfk_password_field` native wrapper boundary; password visibility toggles, strength meters, credential policy, authentication workflow, and credential storage stay host-app owned
 - `doc/check_box.md`: focused `rfk_check_box` native wrapper boundary; Rails checkbox checked/unchecked value contract stays native while collection groups, radio buttons, validation UI, label placement redesign, and production CSS stay out of scope
