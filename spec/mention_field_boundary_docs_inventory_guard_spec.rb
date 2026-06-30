@@ -32,7 +32,8 @@ RSpec.describe "mention field boundary docs inventory" do
       "Do not add `rfk_mention_field`, mention overlay screenshots, or mention-specific cards to the visual reference family as current Rails Fields Kit evidence",
       "Use [`mention_field_boundary_sample_evidence.html`](mention_field_boundary_sample_evidence.html) only as proposal-only review evidence",
       "The host app still parses and executes submitted search text",
-      "mention parsing, overlay UI, and persisted mention metadata stay with the host app",
+      "The textarea remains native",
+      "Autosize, parsing, mention overlay UI, and persisted mention metadata stay with the host app",
       "authorization and scoping for suggestion endpoints",
       "persistence of mention links or hidden metadata"
     )
