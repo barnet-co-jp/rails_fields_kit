@@ -79,7 +79,7 @@ RSpec.describe "repository docs drift guards" do
     expect(public_api_doc).to include(
       "Use the sections below for the exact public names",
       "this file is the compact public API index",
-      "Use [`table_adapters.md`](table_adapters.md) as the source of truth for examples, custom registry examples, and the difference between built-in factory types and custom renderable mappings",
+      "Use [`table_adapters.md`](table_adapters.md) as the source of truth for examples, custom renderer registry setup, and the difference between built-in factory types and custom renderable mappings",
       "Keep the package-root table in this document as the helper inventory source of truth, and keep README, setup, and generated setup notes as routing guidance rather than mirrors of every helper export"
     )
   end
