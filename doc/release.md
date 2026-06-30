@@ -86,6 +86,8 @@ bundle exec rake build
    - `doc/field_helpers.md`
    - `doc/check_box.md` when the `rfk_check_box` wrapper or checkbox boundary is part of the release surface
    - `doc/check_box_release_evidence.md` when checkbox sample-app or release evidence is part of the release surface
+   - `doc/radio_button.md` when the `rfk_radio_button` wrapper or radio button boundary is part of the release surface
+   - `doc/radio_button_release_evidence.md` when radio button sample-app or release evidence is part of the release surface
    - `doc/native_numeric_fields.md` when native numeric wrapper helpers are part of the release surface
    - `doc/native_contact_fields.md` when native contact or native search wrapper helpers are part of the release surface
    - `doc/visual_references.md`
@@ -152,7 +154,7 @@ bundle exec rake build
 
    When saved-search token suggestions are in release or PR scope, use [`saved_search_token_suggestion_evidence.md`](saved_search_token_suggestion_evidence.md) to keep the evidence on suggestion option JSON and record the final result in [`sample_app_results.md`](sample_app_results.md) or the PR comment. Keep token parsing, saved-search execution, persistence, authorization, sharing policy, and any independent saved-search selector helper outside this evidence lane.
 
-   When table metadata rendering, group-level wrappers, or TableRenderer registry checks are in scope, use [`table_metadata_release_evidence.md`](table_metadata_release_evidence.md) to choose representative checks before recording the final sample-app or release PR evidence. Keep `doc/table_adapters.md` and `doc/table_group_html.md` as the source of truth for behavior and responsibility boundaries.
+   When table metadata rendering, group-level wrappers, or TableRenderer registry checks are in scope, use [`table_metadata_release_evidence.md`](table_metadata_release_evidence.md) to choose representative helper checks before recording the final sample-app or release PR evidence. Keep `doc/table_adapters.md` and `doc/table_group_html.md` as the source of truth for behavior and responsibility boundaries.
 
    When token search, token suggestions, Ransack suggestion metadata, or table metadata sample-app evidence is in scope, use [`token_table_sample_app_evidence.md`](token_table_sample_app_evidence.md) as the companion lane selector before recording the final result in `doc/sample_app_results.md` or a scoped PR comment. Keep token parsing, Ransack or query execution, authorization, table persistence, pagination, visible save/error copy, and final table layout as host-app or table-integration responsibilities.
 

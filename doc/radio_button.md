@@ -36,6 +36,10 @@ By default the generated label is tied to the radio id for the given `tag_value`
 
 Generated hint and error ids use the form object name and method, for example `user_status_hint` and `user_status_error`. For repeated controls that need custom ids or group-level accessible descriptions, keep that grouping markup in the host app and set `accessibility: false` on individual radio helpers as needed.
 
+## Release Evidence
+
+When a release or narrow PR needs sample-app evidence for this helper, use [`radio_button_release_evidence.md`](radio_button_release_evidence.md). Keep the evidence focused on one radio option's wrapper, label, hint, validation error, checked state, `tag_value`, and accessibility wiring. Do not record collection group, fieldset / legend, group validation UI, production CSS, or business state policy as Rails Fields Kit-owned behavior.
+
 ## Non-goals
 
 This helper intentionally stays small:
