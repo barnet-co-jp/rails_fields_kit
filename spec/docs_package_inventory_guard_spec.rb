@@ -273,7 +273,8 @@ RSpec.describe "docs package inventory guard" do
     expect(specification.files).to include("doc/tom_select_request_failure_visual_reference.html")
     expect(visual_references).to include(
       "[`tom_select_request_failure_visual_reference.html`](tom_select_request_failure_visual_reference.html)",
-      "duplicate object/method `error_surface: true` review lane",
+      "For duplicate object/method `error_surface: true` review",
+      "duplicate field id boundary lane",
       "repeated-field id ownership",
       "`aria-describedby`",
       "request-failure event targeting"
