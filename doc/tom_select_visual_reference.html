@@ -395,16 +395,6 @@
         background: var(--focus);
       }
 
-      .option.is-disabled {
-        background: #f6f7f8;
-        color: #66717c;
-      }
-
-      .option.is-disabled strong,
-      .option.is-disabled span {
-        color: #66717c;
-      }
-
       .option strong,
       .action strong,
       .message strong {
@@ -752,12 +742,12 @@
         </article>
 
         <article class="card">
-          <div class="card-header"><span class="tag grouped">Grouped Select</span><h2>Grouped choices with optgroup review cues</h2><p>Represents `rfk_grouped_select` when prompt, selected value, disabled option, and long optgroup labels need to stay readable as one collection-backed surface.</p></div>
+          <div class="card-header"><span class="tag grouped">Grouped Select</span><h2>Grouped choices with visible optgroup headings</h2><p>Represents `rfk_grouped_select` when related options need clear buckets.</p></div>
           <div class="control" aria-hidden="true">
-            <div class="control-top"><div class="selection"><span class="token subtle">Acme South</span></div><div class="status-note">Selected</div><div class="caret">▾</div></div>
-            <div class="dropdown"><div class="message empty"><strong>Prompt before selection: Choose an account owner</strong><span>The prompt is review context only; once a value is selected, the visible label should not read as an empty field.</span></div><div class="option-group-label">Current Accounts With Long Regional Ownership Label</div><div class="option grouped-option"><strong>Acme North</strong><span>Representative option inside the first grouped collection</span></div><div class="option grouped-option is-active"><strong>Acme South</strong><span>Selected value stays readable while the group heading remains visible above it</span></div><div class="option-group-label">Archived Accounts</div><div class="option grouped-option is-disabled"><strong>Legacy Retail</strong><span>Disabled option remains visible without becoming a remote-search or authorization contract</span></div></div>
+            <div class="control-top"><div class="placeholder">Choose an account owner</div><div class="caret">▾</div></div>
+            <div class="dropdown"><div class="option-group-label">Current Accounts</div><div class="option grouped-option"><strong>Acme North</strong><span>Representative option inside the first grouped collection</span></div><div class="option grouped-option"><strong>Acme South</strong><span>Grouped select keeps category structure readable before a value is chosen</span></div><div class="option-group-label">Archived Accounts</div><div class="option grouped-option"><strong>Legacy Retail</strong><span>Optgroup headings make archived sets easy to scan without changing semantics</span></div></div>
           </div>
-          <p class="card-footer">Use this lane to review optgroup headings, disabled option metadata, prompt contrast, selected value readability, and long labels without adding grouped search, custom renderers, or endpoint behavior.</p>
+          <p class="card-footer">Compared with ordinary `rfk_select`, this state keeps the grouped collection structure explicit.</p>
         </article>
 
         <article class="card">
