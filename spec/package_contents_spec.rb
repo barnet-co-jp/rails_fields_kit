@@ -235,6 +235,20 @@ RSpec.describe "package contents" do
     )
   end
 
+  it "keeps blank-query remote search policies readable without moving host-app responsibilities" do
+    blank_query_policy = markdown_section(controller_helpers, "### Blank query policy")
+
+    expect(blank_query_policy).to include(
+      "Choose the blank-query behavior deliberately",
+      "Allow a scoped initial option list",
+      "Block empty or too-short server requests",
+      "FormBuilder's field-level `min_length:` is a browser-side loading hint",
+      "`minimum_query_length:` is the server endpoint policy",
+      "such as `{ \"options\": [] }`",
+      "The host app remains responsible for authorization, tenant scoping, query parsing, search execution"
+    )
+  end
+
   it "keeps allow_clear public option docs aligned with the Tom Select clear plugin boundary" do
     tom_select_helpers = markdown_section(field_helpers, "## Tom Select-backed helpers")
     public_api_form_builder = markdown_section(public_api, "## FormBuilder helpers")
