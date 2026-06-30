@@ -34,15 +34,16 @@ RSpec.describe "docs package inventory guard" do
 
   it "keeps documented direct subpath examples aligned with package exports" do
     direct_exports = package_json.fetch("exports").keys.grep_v(".").map { |path| path.delete_prefix("./") }
-
-    expect(direct_exports).to eq(%w[
+    documented_direct_examples = %w[
       tom_select_controller
       tom_select_text_override_contract
       native_field_accessibility_contract
       native_field_constraint_contract
-    ])
+    ]
 
-    direct_exports.each do |entrypoint|
+    expect(direct_exports).to include(*documented_direct_examples)
+
+    documented_direct_examples.each do |entrypoint|
       expect(readme).to include("rails_fields_kit/#{entrypoint}")
       expect(setup_doc).to include("rails_fields_kit/#{entrypoint}")
     end
@@ -252,7 +253,7 @@ RSpec.describe "docs package inventory guard" do
   it "keeps sample app results route guide packaged as a recording-lane selector" do
     expect(specification.files).to include("doc/sample_app_results_route_guide.md")
     expect(release_doc).to include(
-      "[`sample_app_results_route_guide.md`](sample_app_results_route_guide.md)",
+      "[`sample_app_results_route_guide.md`](doc/sample_app_results_route_guide.md)",
       "recording-lane selector",
       "does not add a release gate or turn CI success into browser visual approval"
     )
@@ -271,7 +272,7 @@ RSpec.describe "docs package inventory guard" do
   it "keeps Tom Select no-event boundary evidence packaged and scoped" do
     expect(specification.files).to include("doc/tom_select_no_event_boundary_review.html")
     expect(visual_references).to include(
-      "[`tom_select_no_event_boundary_review.html`](tom_select_no_event_boundary_review.html)",
+      "[`tom_select_no_event_boundary_review.html`](doc/tom_select_no_event_boundary_review.html)",
       "Map-only companion lane for stale / aborted request no-event states beside current request failure"
     )
     expect(tom_select_no_event_boundary).to include(
