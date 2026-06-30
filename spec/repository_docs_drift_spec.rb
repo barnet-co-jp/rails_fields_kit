@@ -10,6 +10,8 @@ RSpec.describe "repository docs drift guards" do
   let(:configuration_profiles) { read_repo_file("doc/configuration_profiles.md") }
   let(:support_boundary) { read_repo_file("doc/support_boundary.md") }
   let(:development_doc) { read_repo_file("doc/development.md") }
+  let(:readme) { read_repo_file("README.md") }
+  let(:public_api_doc) { read_repo_file("doc/public_api.md") }
   let(:gemspec) { read_repo_file("rails_fields_kit.gemspec") }
   let(:package_metadata) { JSON.parse(read_repo_file("package.json")) }
   let(:ci_workflow) { read_repo_file(".github/workflows/ci.yml") }
@@ -64,6 +66,42 @@ RSpec.describe "repository docs drift guards" do
       "starting points for app-owned configuration",
       "not presets, modes, or design system policy owned by the gem",
       "avoid a Ruby profile API, generator option, or preset registry"
+    )
+  end
+
+  it "keeps README as a docs route map and public API docs as the exact inventory" do
+    expect(readme).to include(
+      "Use this map as a first reader route, not a full documentation inventory",
+      "keep proposal-only boundaries in `doc/*_boundary.md` until they become current public API",
+      "This README is a route map. Do not treat the representative helper-family table below as the full package-root export inventory"
+    )
+
+    expect(public_api_doc).to include(
+      "Use the sections below for the exact public names",
+      "this file is the compact public API index",
+      "Use [`table_adapters.md`](table_adapters.md) as the source of truth for examples, custom renderer registry setup, and the difference between built-in factory types and custom renderable mappings",
+      "Keep the package-root table in this document as the helper inventory source of truth, and keep README, setup, and generated setup notes as routing guidance rather than mirrors of every helper export"
+    )
+  end
+
+  it "keeps representative focused docs discoverable from the public API index without promoting proposals" do
+    expect(public_api_doc).to include(
+      "[`native_date_time_color_fields.md`](native_date_time_color_fields.md)",
+      "[`native_numeric_fields.md`](native_numeric_fields.md)",
+      "[`native_contact_fields.md`](native_contact_fields.md)",
+      "[`controller_helpers.md`](controller_helpers.md)",
+      "[`token_suggestions.md`](token_suggestions.md)",
+      "[`ransack_suggestions.md`](ransack_suggestions.md)",
+      "[`events.md`](events.md)"
+    )
+
+    expect(readme).to include(
+      "Rails Fields Kit does not currently provide collection group helpers",
+      "do not treat `rfk_mention_field` as part of the current public API"
+    )
+    expect(public_api_doc).to include(
+      "Collection checkbox / radio group helpers are also not current public APIs",
+      "Proposal or open-PR helper names are not current public API until they are merged and listed in the table above"
     )
   end
 
