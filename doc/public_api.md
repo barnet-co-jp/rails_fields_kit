@@ -98,10 +98,10 @@ Native input helpers:
 
 Native wrapper helpers keep the public helper inventory compact while routing family-specific behavior to the focused docs above:
 
-- Attribute pass-through: ordinary Rails/native input attributes such as `maxlength`, `minlength`, `pattern`, `required`, `autocomplete`, and `inputmode` pass to the rendered input through top-level field options or `html:`. Range, date, time, datetime-local, and color fields also pass native attributes such as `min`, `max`, and `step` through the same Rails/native input path.
+- Attribute pass-through: Native wrapper helpers pass ordinary Rails/native input attributes such as `maxlength`, `minlength`, `pattern`, `required`, `autocomplete`, and `inputmode` to the rendered input through top-level field options or `html:`. Range, date, time, datetime-local, and color fields also pass native attributes such as `min`, `max`, and `step` through the same Rails/native input path.
 - Rails-native contracts: checkbox fields pass checked and unchecked values through Rails' native `check_box` helper, while radio fields pass their `tag_value` and checked state through Rails' native `radio_button` helper. Collection checkbox and radio groups stay out of Rails Fields Kit scope.
 - File uploads: file fields pass Rails file-input options such as `accept:`, `multiple:`, and `direct_upload:` through to Rails' native `file_field` helper without changing the submitted file parameter shape.
-- Rails Fields Kit ownership: Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around the native input.
+- Rails Fields Kit ownership: Rails Fields Kit owns the wrapper, hint, error, affix, and accessibility wiring around that input.
 - Host-app responsibility: character counters, masking, browser validation-message policy, browser validation behavior, server-side validation rules, textarea autosize measurement, range live preview behavior, date/time parsing, timezone conversion, locale formatting, custom pickers, Turbo reconnect sizing, multipart form setup, Active Storage direct upload JavaScript, preview UI, upload progress UI, file size and MIME validation policy, storage configuration, virus scanning, production CSS, group-level radio validation UI, fieldset / legend generation, and manual-resize policy remain host-app responsibility.
 
 See [`field_helpers.md`](field_helpers.md) for details.
