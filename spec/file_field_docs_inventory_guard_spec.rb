@@ -25,7 +25,7 @@ RSpec.describe "file field docs inventory guard" do
       "file-upload ownership non-goals"
     )
     expect(readme_helper_route).to include(
-      "password, checkbox, radio, file, or range controls",
+      "password, checkbox, file, or range controls",
       "[`doc/file_field.md`](doc/file_field.md)"
     )
     expect(helper_boundary_docs).to include(
