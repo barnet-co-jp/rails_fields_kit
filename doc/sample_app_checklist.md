@@ -8,6 +8,8 @@ Use the checklist below to decide what to exercise, then record only the evidenc
 
 When package-root read-only helper exports are in scope, use [`package_root_helper_release_evidence.md`](package_root_helper_release_evidence.md) to choose representative helper checks before recording the result.
 
+When setup doctor JSON output is in scope, use [`setup_doctor_machine_readable.md`](setup_doctor_machine_readable.md) as the payload source of truth before recording evidence. Keep the evidence representative: branch or commit checked, Ruby API call used, observed `summary["missing"]`, and whether manual advisory checks were reviewed as host-app responsibilities.
+
 When TableMetadata collection source shapes are in scope, use [`table_metadata_collection_evidence.md`](table_metadata_collection_evidence.md) to choose representative hash-like, table-like, and explicit false checks before recording the result.
 
 When checkbox table metadata is in scope, use [`table_check_box_metadata.md`](table_check_box_metadata.md) as the source-of-truth boundary before recording table metadata evidence. Keep `TableFilterInput.check_box` / `TableCellInput.check_box` evidence in the table metadata lane, separate from native `rfk_check_box` wrapper evidence.
@@ -21,7 +23,7 @@ When the `rfk_text_area` autosize boundary is in scope, use [`textarea_autosize_
 | Lane | Record in `sample_app_results.md` when... | PR comment is enough when... | Evidence to capture |
 | --- | --- | --- | --- |
 | Release baseline | Preparing a release candidate or release PR | Never; keep release baseline evidence in the results file | version, tester, gem source, branch head CI, local checks, generator result |
-| Host-app setup and package-root exports | Setup, importmap, bundler, Stimulus registration, generated notes, or package-root helper exports are in release scope | A narrow docs/spec PR only confirms one export or setup note signal | import path or command checked, package-root helper evidence guide lane when relevant, branch/commit, pass/fail notes; screenshots are not expected unless a visual surface changed |
+| Host-app setup and package-root exports | Setup, importmap, bundler, Stimulus registration, generated notes, setup doctor JSON output, or package-root helper exports are in release scope | A narrow docs/spec PR only confirms one export, setup note signal, or representative JSON payload lane | import path or command checked, setup doctor JSON `summary["missing"]` and manual advisory review when relevant, package-root helper evidence guide lane when relevant, branch/commit, pass/fail notes; screenshots are not expected unless a visual surface changed |
 | Visual references | A static visual reference, one-screen index, visual lane, or release-critical rendered state changed | A small visual docs PR needs review notes before release evidence is collected | artifact, viewport, state or lane, responsibility boundary, evidence location |
 | Native, remote, token, table, Turbo, and event lanes | The release candidate depends on that behavior family | A focused feature PR checks one representative lane and does not claim release readiness | lane name, representative field or endpoint, observed event/result, host-app responsibility boundary |
 | Deferred or blocked evidence | A release candidate intentionally carries known caveats | A PR needs human visual/browser verification or a follow-up issue | blocker, required human check, follow-up issue or PR link |
@@ -32,7 +34,7 @@ Use this chooser before copying checklist items into a PR comment. Pick the smal
 
 | Change in scope | Start with this checklist lane | Evidence usually recorded in | Keep out of scope for the narrow PR |
 | --- | --- | --- | --- |
-| Setup docs, generated notes, importmap/jsbundling visibility, or package-root helper import/read-only contract | `Host-app setup and package-root exports`, then `JavaScript setup checks` or the helper-specific evidence guide | PR comment for narrow docs/spec work; `sample_app_results.md` for release candidates | visual screenshots, request execution, helper behavior not changed by the PR |
+| Setup docs, generated notes, importmap/jsbundling visibility, setup doctor JSON output, or package-root helper import/read-only contract | `Host-app setup and package-root exports`, then `Verify setup doctor JSON evidence`, `JavaScript setup checks`, or the helper-specific evidence guide | PR comment for narrow docs/spec work; `sample_app_results.md` for release candidates | visual screenshots, request execution, helper behavior not changed by the PR, full JSON schema mirrors, or universal host-app CI pass/fail policy |
 | Static visual reference HTML, one-screen index, or visual reference map wording | `Visual references`, then `Visual reference render checks` | PR comment when browser-capable review is still pending; `sample_app_results.md` for release-critical artifact changes | runtime CSS, production helper markup, or CI success as visual approval |
 | Native wrapper, accessibility, constraint attributes, generated described-by id boundary, or field-level customization | `Native helper representative wrapper and accessibility lane checks` and the native customization lane | PR comment for a focused helper/docs PR; release evidence only when the release depends on the lane | Tom Select request lifecycle, masking, validation-message policy, server-side validation |
 | `rfk_text_area` autosize boundary or host-owned autosize enhancement notes | `Native helper representative wrapper and accessibility lane checks`, then `textarea_autosize_release_evidence.md` | PR comment for a focused docs PR; `sample_app_results.md` for release candidates | built-in `autosize:` option, JavaScript measurement, production CSS preset, Turbo reconnect sizing hook |
@@ -75,6 +77,24 @@ Confirm these files are created:
 - `doc/rails_fields_kit_setup.md`
 
 Confirm the generated setup notes still match the maintained walkthrough in `doc/setup.md` and the documented JavaScript registration flow.
+
+## Verify setup doctor JSON evidence
+
+Use this lane only when structured setup visibility is in release or PR scope. Keep the runtime payload contract in [`setup_doctor_machine_readable.md`](setup_doctor_machine_readable.md); this checklist records what was observed for the branch under review.
+
+```ruby
+output = StringIO.new
+RailsFieldsKit::SetupDoctor.new.run(io: output, format: :json)
+payload = JSON.parse(output.string)
+```
+
+Verify:
+
+- the evidence names the branch or commit checked and the Ruby API call used
+- `summary["missing"]` was recorded as the representative required setup signal
+- manual advisory checks were reviewed as host-app follow-up items rather than automatic Rails Fields Kit failures
+- evidence notes link back to `setup_doctor_machine_readable.md` instead of copying the full payload schema
+- CLI `--json`, auto-fix behavior, formal schema publication, SARIF / JUnit output, and universal host-app CI pass/fail policy stayed out of scope
 
 ## Register JavaScript
 
