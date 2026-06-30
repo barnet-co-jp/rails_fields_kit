@@ -119,7 +119,7 @@ See [`collection_group_helpers.md`](collection_group_helpers.md) for the current
 
 Current Ransack-oriented public surface stays metadata-first. `rfk_token_search` is a general token-search UI helper, while `rfk_table_filters(columns)` renders metadata that was already prepared elsewhere. Helper-level DSL examples such as `rfk_token_search ..., adapter: :ransack` or `rfk_table_filters @table_preferences, adapter: :ransack` are not current public APIs in the 0.1.x contract.
 
-Collection checkbox / radio group helpers are also not current public APIs. Host apps should keep using ordinary Rails collection helpers or host-app markup for group semantics until a future helper is merged and listed here. Future proposal names, open-PR helper names, and single-control wrapper helpers must not be read as current collection group API.
+Collection checkbox / radio group helpers are also not current public APIs. Host apps should keep using ordinary Rails collection helpers or host-app markup for group semantics until a future helper is merged and listed here. Future proposal names, open PR helper names, and single-control wrapper helpers must not be read as current collection group API.
 
 Tom Select-backed `rfk_*` helpers also support opt-in `error_surface:` and `error_surface_html:` options for fields that should expose a stable nearby placeholder on request failures. When enabled, request-failure events described in [`events.md`](events.md) can include that placeholder as `detail.surface`, while visible error copy and retry UI remain host-app responsibility.
 
