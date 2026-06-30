@@ -46,12 +46,13 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/tom_select_text_override_visual_reference.html`: static visual reference for configured Tom Select text override copy states
 - `doc/native_field_visual_reference.html`: static visual reference for representative native helper states
 - `doc/native_numeric_fields.md`: focused `rfk_number_field`, `rfk_money_field`, and `rfk_percent_field` native wrapper boundary; formatting, rounding, currency, and masking stay host-app owned
-- `doc/native_contact_fields.md`: focused `rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field` native wrapper boundary; validation wording, normalization, phone policy, and search execution stay host-app owned
+- `doc/native_contact_fields.md`: focused `rfk_email_field`, `rfk_url_field`, and `rfk_phone_field`, and `rfk_search_field` native wrapper boundary; validation wording, normalization, phone policy, and search execution stay host-app owned
 - `doc/native_date_time_color_fields.md`: focused `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, and `rfk_color_field` native wrapper boundary; timezone conversion, masking, custom picker UI, browser normalization, and production CSS stay host-app owned
 - `doc/password_field.md`: focused `rfk_password_field` native wrapper boundary; password visibility toggles, strength meters, credential policy, authentication workflow, and credential storage stay host-app owned
 - `doc/check_box.md`: focused `rfk_check_box` native wrapper boundary; Rails checkbox checked/unchecked value contract stays native while collection groups, radio buttons, validation UI, label placement redesign, and production CSS stay out of scope
 - `doc/radio_button.md`: focused `rfk_radio_button` native wrapper boundary; Rails radio value, checked state, and same-name group contract stay native while collection groups, fieldset / legend builders, group validation UI, and production CSS stay out of scope
 - `doc/check_box_release_evidence.md`: release and sample-app evidence guide for `rfk_check_box`; keep evidence focused on the single checkbox wrapper and Rails checkbox contract, not collection groups or future radio helper work
+- `doc/radio_button_release_evidence.md`: release and sample-app evidence guide for `rfk_radio_button`; keep evidence focused on the single radio wrapper and Rails radio contract, not collection groups, fieldset / legend builders, or group validation UI
 - `doc/mention_field_boundary.md`: proposal-only boundary for inline textarea mentions; keep `rfk_mention_field`, overlay behavior, hidden metadata, authorization, persistence, and mention-specific endpoint contracts out of the current public API until accepted
 - `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
 - `doc/configuration_wrapper_class_visual_reference.html`: static visual reference for initializer-driven wrapper class pass-through and host-app CSS ownership boundaries
@@ -103,6 +104,7 @@ Before release-oriented docs updates, review:
 - `doc/release_notes_0_1_0.md`: historical release note reference kept in the packaged docs map
 - `doc/password_field.md` when the `rfk_password_field` wrapper, password-specific non-goals, or password visual/evidence docs are part of the release surface
 - `doc/check_box.md` and `doc/check_box_release_evidence.md` when the `rfk_check_box` wrapper or checkbox sample-app evidence is part of the release surface
+- `doc/radio_button.md` and `doc/radio_button_release_evidence.md` when the `rfk_radio_button` wrapper or radio button sample-app evidence is part of the release surface
 - `doc/table_direct_helper_boundary.md` when table metadata direct helper layout or lower-level render/call-spec boundaries are part of the release surface
 - `doc/table_range_field_metadata.md` when range-specific table metadata is part of the release surface
 - `doc/table_check_box_metadata.md` when checkbox-specific table metadata is part of the release surface
