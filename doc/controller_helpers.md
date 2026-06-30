@@ -109,6 +109,56 @@ When the query is shorter than the endpoint minimum, the helper returns an empty
 
 FormBuilder's field-level `min_length:` is a browser-side loading hint for the bundled Tom Select controller. `minimum_query_length:` is the server endpoint policy for direct requests, custom Tom Select configs, or host apps that do not want blank queries to expose initial options. Use both when the UI and endpoint should enforce the same minimum.
 
+Choose the blank-query behavior deliberately:
+
+| Policy | FormBuilder option | Endpoint option | Blank or too-short request result |
+| --- | --- | --- | --- |
+| Allow a scoped initial option list | omit `min_length:` or keep it at `0` | omit `minimum_query_length:` or keep it at `0` | Returns the limited scoped relation in the configured `wrap:` shape. |
+| Block empty or too-short server requests | set `min_length:` to the same threshold for the browser hint | set `minimum_query_length:` to the server threshold | Returns the empty wrapped collection, such as `{ "options": [] }`. |
+
+For an endpoint that may show initial suggestions on focus, keep both sides permissive and rely on the host app's trusted scope and limit:
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  open_on_focus: true,
+  preload: true %>
+```
+
+```ruby
+rfk_search_with(
+  model: Customer,
+  value: :id,
+  label: :name,
+  search: [:name, :email],
+  scope: -> { current_account.customers.active },
+  limit: 10,
+  wrap: "options"
+)
+```
+
+For an endpoint that should not expose options until the user types enough text, align the browser hint with the endpoint policy:
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  min_length: 2 %>
+```
+
+```ruby
+rfk_search_with(
+  model: Customer,
+  value: :id,
+  label: :name,
+  search: [:name, :email],
+  scope: -> { current_account.customers.active },
+  minimum_query_length: 2,
+  wrap: "options"
+)
+```
+
+The second setup still only shapes when options are returned. The host app remains responsible for authorization, tenant scoping, query parsing, search execution, and deciding whether blank queries should be allowed for each endpoint.
+
 ### Rich option fields
 
 Use these to support rich Tom Select rendering.
