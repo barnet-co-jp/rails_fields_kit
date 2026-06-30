@@ -15,7 +15,7 @@ RSpec.describe "file field docs inventory guard" do
 
   it "keeps file field focused docs packaged and routed from native wrapper docs" do
     form_builder_helpers = rfk_file_field_docs_markdown_section(rfk_file_field_docs_public_api, "## FormBuilder helpers")
-    docs_map = rfk_file_field_docs_markdown_section(rfk_file_field_docs_readme, "## Docs map")
+    readme_helper_route = rfk_file_field_docs_markdown_section(rfk_file_field_docs_readme, "## Choosing a helper")
     helper_boundary_docs = rfk_file_field_docs_markdown_section(rfk_file_field_docs_product_profile, "### Helper boundary docs")
 
     expect(rfk_file_field_docs_specification.files).to include("doc/file_field.md")
@@ -24,7 +24,10 @@ RSpec.describe "file field docs inventory guard" do
       "[`file_field.md`](file_field.md)",
       "file-upload ownership non-goals"
     )
-    expect(docs_map).to include("[`doc/file_field.md`](doc/file_field.md)")
+    expect(readme_helper_route).to include(
+      "password, checkbox, file, or range controls",
+      "[`doc/file_field.md`](doc/file_field.md)"
+    )
     expect(helper_boundary_docs).to include(
       "`doc/file_field.md`",
       "focused `rfk_file_field` native wrapper boundary",
