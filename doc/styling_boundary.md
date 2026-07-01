@@ -4,7 +4,7 @@ Rails Fields Kit renders a small set of wrapper and affordance classes so host a
 
 Use this document when you need the reader-facing source of truth for wrapper classes and host-app CSS ownership. Use [`configuration.md`](configuration.md#wrapper-and-affix-classes) for initializer defaults and [`visual_references.md`](visual_references.md) for static review routes.
 
-For release or PR evidence, record what was checked in [`sample_app_results.md`](sample_app_results.md)'s native wrapper customization checks or visual reference render matrix. Link the evidence back here for the styling boundary, and to [`configuration_wrapper_class_visual_reference.html`](configuration_wrapper_class_visual_reference.html) when reviewers need a rendered class pass-through lane.
+For release or PR evidence, record what was checked in [`sample_app_results.md`](sample_app_results.md)'s native wrapper customization checks or visual reference render matrix. Link the evidence back here for the styling boundary, to [`configuration_wrapper_class_visual_reference.html`](configuration_wrapper_class_visual_reference.html) when reviewers need a rendered class pass-through lane, and to [`tom_select_class_names_visual_boundary.html`](tom_select_class_names_visual_boundary.html) when they need to compare wrapper hooks with Tom Select internal generated part class names.
 
 ## Current styling hooks
 
@@ -23,7 +23,7 @@ These class names come from `RailsFieldsKit::Configuration` defaults and are app
 
 Request-failure placeholders use `rfk-tom-select-error-surface` when a Tom Select-backed field opts into `error_surface: true`. That class identifies the generated status placeholder; visible copy, reveal timing, retry UI, and styling remain host-app responsibilities.
 
-Tom Select internal generated parts use a separate lane. Use field-level [`tom_select_class_names:`](tom_select_class_names.md) when one Tom Select-backed helper needs to pass Tom Select's `classNames` option for generated control, dropdown, option, item, or loading states. That option is not an initializer-level Rails Fields Kit theme, and it does not make Rails Fields Kit own production CSS, theme presets, dark mode, density, or Tom Select internal DOM compatibility.
+Tom Select internal generated parts use a separate lane. Use field-level [`tom_select_class_names:`](tom_select_class_names.md) when one Tom Select-backed helper needs to pass Tom Select's `classNames` option for generated control, dropdown, option, item, or loading states. Use [`tom_select_class_names_visual_boundary.html`](tom_select_class_names_visual_boundary.html) for a static review lane that compares that internal classNames pass-through with Rails Fields Kit wrapper hooks. That option is not an initializer-level Rails Fields Kit theme, and it does not make Rails Fields Kit own production CSS, theme presets, dark mode, density, or Tom Select internal DOM compatibility.
 
 ## Responsibility boundary
 
