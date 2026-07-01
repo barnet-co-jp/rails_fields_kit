@@ -99,6 +99,31 @@ Suggested evidence note:
 readRenderedSelectedPreloadConfig: PASS on <field selector>. selectedUrl / selectedParam / selectedMultipleParam / selectedQueryParams matched rendered config; comparable no-selected-url field returned null. Request execution and fallback UI were checked separately or left out of scope.
 ```
 
+## Tom Select interaction config reader
+
+Use this lane when `readRenderedTomSelectInteractionConfig(element)` is in release scope.
+
+Representative import:
+
+```js
+import { readRenderedTomSelectInteractionConfig } from "rails_fields_kit"
+```
+
+Check a rendered Tom Select-backed field that customizes interaction configuration:
+
+- `readRenderedTomSelectInteractionConfig(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
+- The result exposes representative rendered values such as `maxOptions`, `maxItems`, `loadThrottle`, `delimiter`, `dropdownParent`, `preload`, `openOnFocus`, `closeAfterSelect`, `hideSelected`, and `persist` according to the field under review.
+- Numeric values remain numeric-or-null, string values remain string-or-null, and boolean values remain boolean-or-null except `persist`, which follows the documented boolean default.
+- A default or minimally configured field reports the documented null/default boundaries instead of inventing app policy.
+- A comparable non-Tom Select or unrelated element returns `null`.
+- The evidence stays read-only; Tom Select initialization, request execution, modal / drawer / portal layout, z-index policy, interaction policy, and production CSS remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+readRenderedTomSelectInteractionConfig: PASS on <field selector>. maxOptions / maxItems / loadThrottle / delimiter / dropdownParent / preload / openOnFocus / closeAfterSelect / hideSelected / persist matched rendered interaction config; default and unrelated-element boundaries matched the public API docs. Tom Select initialization, request execution, modal layout, z-index policy, interaction policy, and production CSS remained out of scope.
+```
+
 ## Option payload mapping reader
 
 Use this lane when `readRenderedOptionPayloadMapping(element)` is in release scope.
@@ -121,6 +146,30 @@ Suggested evidence note:
 
 ```text
 readRenderedOptionPayloadMapping: PASS on <field selector>. valueField / labelField / searchFields / optionDescriptionField / optionBadgeField matched rendered config; default and unrelated-element boundaries matched the public API docs. Endpoint execution, response validation, option rendering HTML, authorization, mutation, and visible feedback remained out of scope.
+```
+
+## Table filter metadata reader
+
+Use this lane when `readRenderedTableFilterMetadata(element)` is in release scope.
+
+Representative import:
+
+```js
+import { readRenderedTableFilterMetadata } from "rails_fields_kit"
+```
+
+Check a rendered table filter metadata lane, such as a token-search or Ransack-oriented filter field produced from Rails Fields Kit table metadata:
+
+- `readRenderedTableFilterMetadata(fieldElement)` returns a plain object only for an element that carries the rendered table filter metadata attributes.
+- The result exposes the documented `adapter`, `paramName`, and `fields` values for the representative table filter field.
+- The `fields` value is treated as rendered metadata, not as a query parser, execution plan, authorization policy, or table persistence contract.
+- A comparable Rails Fields Kit field without table filter metadata, or an unrelated element, returns `null`.
+- The evidence stays read-only; Ransack execution, token parsing, table query behavior, filter persistence, endpoint behavior, and visible feedback remain outside this helper evidence lane.
+
+Suggested evidence note:
+
+```text
+readRenderedTableFilterMetadata: PASS on <field selector>. adapter / paramName / fields matched the rendered table filter metadata for the representative field; no-metadata and unrelated elements returned null. Ransack execution, token parsing, table query behavior, filter persistence, endpoint behavior, and visible feedback remained out of scope.
 ```
 
 ## Text override contract reader

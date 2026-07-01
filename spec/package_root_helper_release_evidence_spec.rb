@@ -59,7 +59,9 @@ RSpec.describe "package-root helper release evidence guide" do
 
     expect(helper_specific_lanes).to contain_exactly(
       "readRenderedSelectedPreloadConfig",
+      "readRenderedTomSelectInteractionConfig",
       "readRenderedOptionPayloadMapping",
+      "readRenderedTableFilterMetadata",
       "tomSelectTextOverrideContract",
       "tomSelectPluginContract",
       "tomSelectSelectionContract",
