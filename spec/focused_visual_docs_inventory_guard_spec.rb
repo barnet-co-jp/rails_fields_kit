@@ -53,7 +53,7 @@ RSpec.describe "focused visual docs inventory guard" do
     expect(tom_select_source_fallback_review).to include(
       "Tom Select Source and Fallback Review",
       "Enum select boundary",
-      "Controller helper fallback"
+      "Remote label fallback"
     )
   end
 
