@@ -27,6 +27,7 @@ RSpec.describe "docs package inventory guard" do
   let(:grouped_select) { read_doc("doc/grouped_select.md") }
   let(:range_field) { read_doc("doc/range_field.md") }
   let(:native_date_time_color_fields) { read_doc("doc/native_date_time_color_fields.md") }
+  let(:file_field) { read_doc("doc/file_field.md") }
   let(:tom_select_request_failure_visual_reference) { read_doc("doc/tom_select_request_failure_visual_reference.html") }
   let(:tom_select_no_event_boundary) { read_doc("doc/tom_select_no_event_boundary_review.html") }
   let(:dropdown_parent_release_evidence) { read_doc("doc/dropdown_parent_release_evidence.md") }
@@ -228,6 +229,23 @@ RSpec.describe "docs package inventory guard" do
       "custom date picker, time picker, or color picker integrations",
       "masking, polyfills, and production CSS for picker controls",
       "timezone conversion and storage semantics"
+    )
+  end
+
+  it "keeps file field focused docs packaged and scoped to native option pass-through" do
+    expect(specification.files).to include("doc/file_field.md")
+    expect(readme).to include("[`doc/file_field.md`](doc/file_field.md)")
+    expect(public_api).to include(
+      "`rfk_file_field`",
+      "[`file_field.md`](file_field.md)",
+      "file fields pass Rails file-input options such as `accept:`, `multiple:`, and `direct_upload:` through to Rails' native `file_field` helper",
+      "multipart form setup, Active Storage direct upload JavaScript, preview UI, upload progress UI, file size and MIME validation policy, storage configuration, virus scanning, production CSS"
+    )
+    expect(file_field).to include(
+      "Ordinary Rails `file_field` options such as `accept:`, `multiple:`, `direct_upload:`",
+      "Rails Fields Kit does not change the submitted file parameter shape",
+      "The host app remains responsible for multipart form setup, Active Storage direct upload behavior, file preview UI, upload progress UI, accepted file policy, file size and MIME validation, storage configuration, virus scanning, and production CSS",
+      "Rails Fields Kit does not add upload JavaScript or replace Rails' file upload workflow"
     )
   end
 
