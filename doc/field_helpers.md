@@ -10,6 +10,7 @@ This document lists the FormBuilder helpers provided by Rails Fields Kit.
 | Remote search, selected preload, or create-on-the-fly while still submitting a selected ID or value | `rfk_combobox` | Uses remote JSON endpoints for options instead of relying on the initial collection. |
 | Suggestion UI for a text value that stays free text when submitted | `rfk_autocomplete` | Suggestions help typing, but the submitted value is still plain text. |
 | Structured search text such as `status:open keyword` with suggestion metadata | `rfk_token_search` | Rails Fields Kit owns the token input UI, while the host app still parses and executes the query. |
+| Request-failure feedback for any Tom Select-backed helper | Keep the chosen helper and opt into `error_surface:`. | Adds a stable hidden placeholder for host-owned visible feedback while leaving copy, retry UI, reveal timing, and production CSS with the host app. See [Shared request-failure feedback options](#shared-request-failure-feedback-options). |
 | Ordinary multiple selection from a known collection | `rfk_multi_select` | Keeps a select-style multiple value flow without implying tag creation. |
 | Tag-style multiple selection or create-on-the-fly tags | `rfk_tags` | Optimized for tag entry and optional remote tag creation. |
 | Grouped `<optgroup>` choices | `rfk_grouped_select` | Keeps grouped collection structure explicit. |
@@ -51,6 +52,8 @@ All Tom Select-backed helpers support the same opt-in request-failure feedback o
 Use `error_surface: true` when the host app wants Rails Fields Kit to render a stable nearby placeholder for request-failure handlers. Use `error_surface_html:` when that placeholder needs custom classes or wrapper attributes.
 
 When enabled, Rails Fields Kit appends a hidden polite status placeholder near the field, wires that placeholder into `aria-describedby`, and exposes the element as `event.detail.surface` on request-failure events documented in [`events.md`](events.md). The host app still decides when to reveal that placeholder, what message to render, and whether to add retry UI.
+
+Use [`events.md`](events.md) for the event payloads, request-state metadata, and copyable host-controller recipes. Use [`tom_select_request_failure_visual_reference.html`](tom_select_request_failure_visual_reference.html) for static request-failure surface review, and [`tom_select_host_feedback_lifecycle_visual_reference.html`](tom_select_host_feedback_lifecycle_visual_reference.html) when the review is about host-owned visible feedback and follow-up clearing cues. Those visual references are review routes only; they do not add built-in retry UI, default copy, request lifecycle timing, or production CSS to Rails Fields Kit.
 
 The same shared option contract applies even when a given helper only uses part of the remote workflow set. For example, a field without create-on-the-fly support will never dispatch `create-error`, but it can still use `error_surface:` for `load-error` or `selected-load-error` when those hooks apply.
 
