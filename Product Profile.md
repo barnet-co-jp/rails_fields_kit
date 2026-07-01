@@ -84,6 +84,7 @@ This inventory is for maintainers who need to find the right source of truth qui
 - `doc/configuration.md`: initializer defaults and override precedence
 - `doc/default_allow_clear.md`: focused app-wide `allow_clear` default guide; keep `clear_button` plugin installation, styling, empty-state copy, and lifecycle behavior with the host app
 - `doc/styling_boundary.md`: reader-facing source of truth for wrapper classes, styling hooks, and host-app CSS ownership
+- `doc/tom_select_class_names.md`: focused field-level Tom Select internal `classNames` pass-through guide; keep wrapper customization, production CSS, theme presets, and initializer-level defaults out of this lane
 - `doc/events.md`: Stimulus event contract
 - `doc/tom_select_turbo_lifecycle.md`: Turbo and Stimulus connect/disconnect lifecycle boundary for Tom Select-backed helpers
 - `doc/select_migration.md`, `doc/grouped_select.md`, and `doc/enum_select.md`: focused collection-backed select docs for ordinary Rails select migration, optgroup choices, and enum-backed choices
