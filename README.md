@@ -411,7 +411,7 @@ rfk_token_suggestions_with(
 )
 ```
 
-This remains metadata-first. Rails Fields Kit helps the field advertise allowed tokens, but the host app still parses the submitted text and turns it into `params[:q]` or an equivalent search object input. Helper-level DSL examples such as `rfk_token_search ..., adapter: :ransack` stay in `ROADMAP.md` as future proposals, not current public API. See [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](token_suggestions.md), and [`doc/ransack_suggestions.md`](ransack_suggestions.md) for the maintained reference.
+This remains metadata-first. Rails Fields Kit helps the field advertise allowed tokens, but the host app still parses the submitted text and turns it into `params[:q]` or an equivalent search object input. Helper-level DSL examples such as `rfk_token_search ..., adapter: :ransack` stay in `ROADMAP.md` as future proposals, not current public API. See [`doc/controller_helpers.md`](doc/controller_helpers.md), [`doc/token_suggestions.md`](doc/token_suggestions.md), and [`doc/ransack_suggestions.md`](doc/ransack_suggestions.md) for the maintained reference.
 
 ### Table metadata helpers
 
@@ -443,7 +443,7 @@ columns = [
 <% end %>
 ```
 
-This keeps the table gem or host app responsible for collecting column definitions, executing queries, and saving preferences. Rails Fields Kit only turns the documented metadata into FormBuilder helper calls. For the full protocol, renderer call specs, and custom renderer registry boundary, see [`doc/table_adapters.md`](table_adapters.md). For the direct FormBuilder safe-join boundary, optional single outer `group_html:` wrapper, and lower-level render/call-spec lanes, see [`doc/table_direct_helper_boundary.md`](table_direct_helper_boundary.md). For `group_html:` examples and semantic grouping boundaries, see [`doc/table_group_html.md`](table_group_html.md).
+This keeps the table gem or host app responsible for collecting column definitions, executing queries, and saving preferences. Rails Fields Kit only turns the documented metadata into FormBuilder helper calls. For the full protocol, renderer call specs, and custom renderer registry boundary, see [`doc/table_adapters.md`](doc/table_adapters.md). For the direct FormBuilder safe-join boundary, optional single outer `group_html:` wrapper, and lower-level render/call-spec lanes, see [`doc/table_direct_helper_boundary.md`](doc/table_direct_helper_boundary.md). For `group_html:` examples and semantic grouping boundaries, see [`doc/table_group_html.md`](doc/table_group_html.md).
 
 ### Object collections, grouped selects, and enum selects
 
@@ -483,7 +483,7 @@ Rails enum-like attributes can use `rfk_enum_select`:
 <%= f.rfk_enum_select :status %>
 ```
 
-For explicit `enum:` hashes, keys remain the submitted values and labels stay on the model I18n / humanized-key path. Use [`doc/enum_select.md`](enum_select.md) for that boundary; arbitrary label/value DSLs, remote enum options, and PORO enum adapters are not current public APIs.
+For explicit `enum:` hashes, keys remain the submitted values and labels stay on the model I18n / humanized-key path. Use [`doc/enum_select.md`](doc/enum_select.md) for that boundary; arbitrary label/value DSLs, remote enum options, and PORO enum adapters are not current public APIs.
 
 ### Multiple selects and tags
 
