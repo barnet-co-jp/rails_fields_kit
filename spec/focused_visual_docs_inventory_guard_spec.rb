@@ -47,8 +47,8 @@ RSpec.describe "focused visual docs inventory guard" do
     expect(specification.files).to include("doc/tom_select_source_fallback_review.html")
     expect(visual_references).to include(
       "[`tom_select_source_fallback_review.html`](tom_select_source_fallback_review.html)",
-      "explicit enum source / remote label fallback review lane",
-      "not a new API or endpoint behavior spec"
+      "Focused companion lane for explicit `enum:` source and remote option label fallback display review",
+      "without treating this artifact as runtime behavior or endpoint policy"
     )
     expect(tom_select_source_fallback_review).to include(
       "Tom Select Source and Fallback Review",
