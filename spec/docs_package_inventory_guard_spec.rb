@@ -27,6 +27,8 @@ RSpec.describe "docs package inventory guard" do
   let(:grouped_select) { read_doc("doc/grouped_select.md") }
   let(:range_field) { read_doc("doc/range_field.md") }
   let(:native_date_time_color_fields) { read_doc("doc/native_date_time_color_fields.md") }
+  let(:file_field) { read_doc("doc/file_field.md") }
+  let(:tom_select_request_failure_visual_reference) { read_doc("doc/tom_select_request_failure_visual_reference.html") }
   let(:tom_select_no_event_boundary) { read_doc("doc/tom_select_no_event_boundary_review.html") }
   let(:dropdown_parent_release_evidence) { read_doc("doc/dropdown_parent_release_evidence.md") }
   let(:release_doc) { read_doc("doc/release.md") }
@@ -231,6 +233,23 @@ RSpec.describe "docs package inventory guard" do
     )
   end
 
+  it "keeps file field focused docs packaged and scoped to native option pass-through" do
+    expect(specification.files).to include("doc/file_field.md")
+    expect(readme).to include("[`doc/file_field.md`](doc/file_field.md)")
+    expect(public_api).to include(
+      "`rfk_file_field`",
+      "[`file_field.md`](file_field.md)",
+      "file fields pass Rails file-input options such as `accept:`, `multiple:`, and `direct_upload:` through to Rails' native `file_field` helper",
+      "multipart form setup, Active Storage direct upload JavaScript, preview UI, upload progress UI, file size and MIME validation policy, storage configuration, virus scanning, production CSS"
+    )
+    expect(file_field).to include(
+      "Ordinary Rails `file_field` options such as `accept:`, `multiple:`, `direct_upload:`",
+      "Rails Fields Kit does not change the submitted file parameter shape",
+      "The host app remains responsible for multipart form setup, Active Storage direct upload behavior, file preview UI, upload progress UI, accepted file policy, file size and MIME validation, storage configuration, virus scanning, and production CSS",
+      "Rails Fields Kit does not add upload JavaScript or replace Rails' file upload workflow"
+    )
+  end
+
   it "keeps token and table sample app evidence packaged and scoped" do
     expect(specification.files).to include("doc/token_table_sample_app_evidence.md", "doc/sample_app_results.md")
     expect(token_table_sample_app_evidence).to include(
@@ -266,6 +285,27 @@ RSpec.describe "docs package inventory guard" do
       "`SOURCE REVIEW ONLY`",
       "`DEFERRED`",
       "Do not use `PASS` for GitHub Actions success, source review, static diff review, or a successful package build"
+    )
+  end
+
+  it "keeps request failure duplicate field id evidence packaged and scoped" do
+    expect(specification.files).to include("doc/tom_select_request_failure_visual_reference.html")
+    expect(visual_references).to include(
+      "[`tom_select_request_failure_visual_reference.html`](tom_select_request_failure_visual_reference.html)",
+      "For duplicate object/method `error_surface: true` review",
+      "duplicate field id boundary lane",
+      "repeated-field id ownership",
+      "`aria-describedby`",
+      "request-failure event targeting"
+    )
+    expect(tom_select_request_failure_visual_reference).to include(
+      "Duplicate field id boundary",
+      "same object and method appear more than once on a page",
+      "same object/method needs explicit ids",
+      "error_surface: true",
+      "aria-describedby",
+      "detail.surface",
+      "message, reveal timing, retry action"
     )
   end
 
