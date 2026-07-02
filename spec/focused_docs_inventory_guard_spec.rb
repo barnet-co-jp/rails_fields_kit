@@ -9,6 +9,7 @@ RSpec.describe "focused docs inventory guard" do
   let(:readme) { read_doc("README.md") }
   let(:roadmap) { read_doc("ROADMAP.md") }
   let(:public_api) { read_doc("doc/public_api.md") }
+  let(:field_helpers) { read_doc("doc/field_helpers.md") }
   let(:table_file_field_metadata) { read_doc("doc/table_file_field_metadata.md") }
   let(:datalist_boundary) { read_doc("doc/datalist_boundary.md") }
   let(:visual_reference_browser_evidence) { read_doc("doc/visual_reference_browser_evidence.md") }
@@ -45,6 +46,12 @@ RSpec.describe "focused docs inventory guard" do
       "[`doc/datalist_boundary.md`](doc/datalist_boundary.md)",
       "current proposal boundary for HTML datalist support",
       "keeps `rfk_datalist_field` out of the current public API"
+    )
+    expect(field_helpers).to include(
+      "[`datalist_boundary.md`](datalist_boundary.md)",
+      "`rfk_text_field list:` plus host-owned `<datalist>` markup",
+      "separate from Tom Select-backed autocomplete or combobox workflows",
+      "Keep `rfk_datalist_field`, `rfk_slug_field`, and `rfk_masked_field`"
     )
     expect(datalist_boundary).to include(
       "This document records the proposal boundary for HTML `datalist` support",
