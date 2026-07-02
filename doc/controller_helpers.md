@@ -12,12 +12,31 @@ end
 
 Use this overview to choose the endpoint helper before reading the detailed option reference below. Rails Fields Kit formats option JSON and wires the rendered field to the endpoint, while the host app still owns authentication, authorization, tenant scoping, query parsing, result execution, and persistence policy.
 
-| Workflow | Use | FormBuilder route | Endpoint helper |
-| --- | --- | --- | --- |
-| Remote search | Fetch option suggestions while the user types. | `rfk_combobox`, `rfk_autocomplete`, or another Tom Select-backed helper with `url:` | `rfk_search_with` |
-| Selected preload | Restore labels for saved values that are not present in the initial collection. | `selected_url:` with `selected:` or persisted model values | `rfk_find_with` |
-| Create-on-the-fly | Accept new option text and return the created option JSON. | `create_url:` with `create_param:` and optional `create_params:` | `rfk_create_with` |
-| Token suggestions | Suggest structured token text while leaving submitted query parsing to the host app. | `rfk_token_search` with `url:` | `rfk_token_suggestions_with` |
+Scan by workflow first, then match the rendered field option to the controller helper. This keeps the endpoint route readable in narrow Markdown views without turning this page into the field-helper chooser.
+
+### Remote search
+
+- Use when the field should fetch option suggestions while the user types.
+- Render with `rfk_combobox`, `rfk_autocomplete`, or another Tom Select-backed helper that has `url:`.
+- Pair with `rfk_search_with` in the controller.
+
+### Selected preload
+
+- Use when the field must restore labels for saved values that are not present in the initial collection.
+- Render with `selected_url:` plus `selected:` or persisted model values.
+- Pair with `rfk_find_with` in the controller.
+
+### Create-on-the-fly
+
+- Use when the field may accept new option text and expects created option JSON back.
+- Render with `create_url:`, `create_param:`, and optional `create_params:`.
+- Pair with `rfk_create_with` in the controller.
+
+### Token suggestions
+
+- Use when the field should suggest structured token text while submitted query parsing stays in the host app.
+- Render with `rfk_token_search` and `url:`.
+- Pair with `rfk_token_suggestions_with` in the controller.
 
 Keep the FormBuilder request option and controller helper option aligned. For example, a field using `selected_param: "customer_id"` should pair with `rfk_find_with id_param: :customer_id`, and a field using `create_param: "name"` should pair with `rfk_create_with create_param: "name"`. If the workflow question is mostly about which field helper to render, start from [`field_helpers.md`](field_helpers.md); this page focuses on endpoint responsibilities.
 
@@ -328,6 +347,18 @@ Use the standard RESTful `POST /customers` action when create-on-the-fly should 
 FormBuilder options such as `query_params:`, `selected_query_params:`, and `create_params:` are request-shaping helpers. They add fixed values to the outgoing remote search, selected preload, or create request, but they do not move authorization, tenant scoping, validation, or assignment policy into Rails Fields Kit.
 
 Use fixed params for contextual values that the endpoint still verifies with server-side state. For example, an app may render `query_params: { account_id: current_account.id }` so the request carries an account hint, while the controller still scopes through a trusted relation such as `scope: -> { current_account.customers }` instead of trusting the incoming `params[:account_id]` by itself.
+
+Array values on `query_params:` and `selected_query_params:` stay in the URL query lane. Rails Fields Kit appends one entry per value, so a field like this:
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  selected_url: selected_customers_path(format: :json),
+  query_params: { account_id: current_account.id, status: ["active", "priority"] },
+  selected_query_params: { account_id: current_account.id, status: ["active", "priority"] } %>
+```
+
+sends fixed scope as repeated query entries such as `status=active&status=priority` on remote search and selected preload requests. The endpoint should still reduce those values to an allowlisted, trusted relation, for example by intersecting `Array(params[:status])` with the statuses the current user may search before applying the relation scope. Do not treat the repeated query entries as authorization, tenant ownership, query execution, or Ransack parsing policy.
 
 The same boundary applies to create-on-the-fly fields: `create_params:` adds fixed JSON fields to the request body, but `rfk_create_with` should still use `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy to decide what can be persisted. Use `permitted_attributes:` only when the endpoint intentionally accepts additional request fields as model attributes after Rails strong-params filtering; it is not a substitute for server-side tenant scoping or authorization.
 
