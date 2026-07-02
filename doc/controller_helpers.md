@@ -348,6 +348,33 @@ FormBuilder options such as `query_params:`, `selected_query_params:`, and `crea
 
 Use fixed params for contextual values that the endpoint still verifies with server-side state. For example, an app may render `query_params: { account_id: current_account.id }` so the request carries an account hint, while the controller still scopes through a trusted relation such as `scope: -> { current_account.customers }` instead of trusting the incoming `params[:account_id]` by itself.
 
+Array fixed params for remote search and selected preload stay in the URL query lane. Rails Fields Kit sends each array value as a repeated query entry for the same key, so `query_params: { status: ["active", "trial"] }` is request-shaped as `status=active&status=trial` before the typed `query_param:` value is applied. For selected preload, `selected_query_params:` follows the same URL-query rule while `selected_multiple_param:` / `rfk_find_with ids_param:` still identify the selected IDs being restored.
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  selected_url: selected_customers_path(format: :json),
+  query_params: { account_id: current_account.id, status: ["active", "trial"] },
+  selected_query_params: { account_id: current_account.id, status: ["active", "trial"] } %>
+```
+
+```ruby
+CUSTOMER_STATUSES = %w[active trial].freeze
+
+rfk_search_with(
+  model: Customer,
+  value: :id,
+  label: :name,
+  search: [:name, :email],
+  scope: -> {
+    requested_statuses = Array(params[:status]).map(&:to_s) & CUSTOMER_STATUSES
+    current_account.customers.where(status: requested_statuses.presence || CUSTOMER_STATUSES)
+  }
+)
+```
+
+Treat those fixed query params as request context, not proof of authorization. The endpoint still chooses the trusted scope, allowlists accepted statuses or tenants, and decides what records the current user may search or restore.
+
 The same boundary applies to create-on-the-fly fields: `create_params:` adds fixed JSON fields to the request body, but `rfk_create_with` should still use `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy to decide what can be persisted. Use `permitted_attributes:` only when the endpoint intentionally accepts additional request fields as model attributes after Rails strong-params filtering; it is not a substitute for server-side tenant scoping or authorization.
 
 ## `rfk_token_suggestions_with`
