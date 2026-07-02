@@ -7,8 +7,10 @@ RSpec.describe "focused docs inventory guard" do
   let(:root) { File.expand_path("..", __dir__) }
   let(:specification) { Gem::Specification.load(File.join(root, "rails_fields_kit.gemspec")) }
   let(:readme) { read_doc("README.md") }
+  let(:roadmap) { read_doc("ROADMAP.md") }
   let(:public_api) { read_doc("doc/public_api.md") }
   let(:table_file_field_metadata) { read_doc("doc/table_file_field_metadata.md") }
+  let(:datalist_boundary) { read_doc("doc/datalist_boundary.md") }
   let(:visual_reference_browser_evidence) { read_doc("doc/visual_reference_browser_evidence.md") }
   let(:sample_app_results_route_guide) { read_doc("doc/sample_app_results_route_guide.md") }
   let(:dropdown_parent_release_evidence) { read_doc("doc/dropdown_parent_release_evidence.md") }
@@ -29,6 +31,28 @@ RSpec.describe "focused docs inventory guard" do
       "`TableFilterInput.file_field` is not a built-in factory",
       "The host application owns multipart form setup, Active Storage direct upload JavaScript, preview UI, upload progress UI, file validation policy, storage configuration, virus scanning, table persistence, query execution, authorization, and production CSS"
     )
+  end
+
+  it "keeps datalist proposal boundary docs packaged without promoting a current helper" do
+    form_builder_helpers = markdown_section(public_api, "## FormBuilder helpers")
+
+    expect(specification.files).to include("doc/datalist_boundary.md")
+    expect(readme).to include(
+      "[`doc/datalist_boundary.md`](doc/datalist_boundary.md)",
+      "Rails Fields Kit does not currently provide `rfk_masked_field`, `rfk_slug_field`, or `rfk_datalist_field`"
+    )
+    expect(roadmap).to include(
+      "[`doc/datalist_boundary.md`](doc/datalist_boundary.md)",
+      "current proposal boundary for HTML datalist support",
+      "keeps `rfk_datalist_field` out of the current public API"
+    )
+    expect(datalist_boundary).to include(
+      "This document records the proposal boundary for HTML `datalist` support",
+      "It does not add `rfk_datalist_field` to the current public API",
+      "`rfk_text_field list:` plus host-owned `<datalist>` markup",
+      "Do not add `rfk_datalist_field` to `doc/public_api.md`"
+    )
+    expect(form_builder_helpers).not_to include("rfk_datalist_field")
   end
 
   it "keeps browser evidence runbook packaged without turning source review or CI into visual approval" do
@@ -83,5 +107,9 @@ RSpec.describe "focused docs inventory guard" do
 
   def read_doc(relative_path)
     File.read(File.join(root, relative_path))
+  end
+
+  def markdown_section(document, heading)
+    document.split(heading, 2).last.split(/\n(?=##?\s)/, 2).first
   end
 end
