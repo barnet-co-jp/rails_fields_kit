@@ -229,12 +229,19 @@ Accepted request params:
 
 The same string and Array handling applies when you use a custom `ids_param:`. Raw repeated query keys are only covered when the host app's request stack normalizes them to the configured param as an Array.
 
-When a field customizes selected preload request names, keep the FormBuilder option and endpoint option in sync:
+When a field customizes selected preload request names, keep the single-value and multiple-value paths aligned separately:
 
-| FormBuilder option | Outgoing selected preload param | `rfk_find_with` option |
-| --- | --- | --- |
-| `selected_param: "customer_id"` | `customer_id` for one value | `id_param: :customer_id` |
-| `selected_multiple_param: "customer_ids"` | `customer_ids` for multiple values | `ids_param: :customer_ids` |
+Single selected value:
+
+- FormBuilder option: `selected_param: "customer_id"`.
+- Outgoing selected preload param: `customer_id` for one value.
+- Controller helper option: `rfk_find_with id_param: :customer_id`.
+
+Multiple selected values:
+
+- FormBuilder option: `selected_multiple_param: "customer_ids"`.
+- Outgoing selected preload param: `customer_ids` for multiple values.
+- Controller helper option: `rfk_find_with ids_param: :customer_ids`.
 
 ```erb
 <%= f.rfk_combobox :customer_id,
