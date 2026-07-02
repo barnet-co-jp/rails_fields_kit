@@ -59,7 +59,6 @@ RSpec.describe "focused docs inventory guard" do
       "[`table_range_field_metadata.md`](table_range_field_metadata.md)",
       "TableFilterInput.range_field",
       "TableCellInput.range_field",
-      "min`, `max`, and `step",
       "without adding range-pair query semantics, custom sliders, table persistence, or production styling",
       "[`table_check_box_metadata.md`](table_check_box_metadata.md)",
       "TableFilterInput.check_box",
