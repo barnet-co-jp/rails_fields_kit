@@ -410,6 +410,27 @@
         overflow-wrap: anywhere;
       }
 
+      .radio-token {
+        display: inline-flex;
+        align-items: center;
+        justify-self: start;
+        max-width: 100%;
+        padding: 2px 6px;
+        border: 1px dashed #9bcdbc;
+        background: #f7fbf9;
+        color: var(--accent);
+        font-size: 0.78rem;
+        font-weight: 650;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+      }
+
+      .radio-token code {
+        color: inherit;
+        font: inherit;
+        overflow-wrap: anywhere;
+      }
+
       .hint {
         color: var(--muted);
         font-size: 0.82rem;
@@ -543,6 +564,10 @@
         .textarea {
           flex-basis: 100%;
         }
+
+        .radio-option {
+          gap: 7px;
+        }
       }
     </style>
   </head>
@@ -664,7 +689,7 @@
           <div class="tag radio">Radio button wrapper</div>
           <h2>Single radio helper keeps group ownership clear</h2>
           <p>
-            `rfk_radio_button` shows checked and unchecked single-control wrapper states while leaving
+            `rfk_radio_button` shows checked, unchecked, long tag value, and error states while leaving
             collection groups, fieldsets, legends, and production styling with the host app.
           </p>
           <div class="example focus-surface">
@@ -689,7 +714,7 @@
                   </span>
                 </div>
               </div>
-              <div class="hint">Same-name grouping is Rails native radio-button behavior; this artifact only reviews wrapper readability.</div>
+              <div class="hint">Same-name grouping is Rails native radio-button behavior; this artifact only reviews one option's wrapper readability at a time.</div>
             </div>
             <div class="field-block error-state">
               <div class="label-row">
@@ -700,8 +725,9 @@
                 <div class="radio-option" role="radio" aria-checked="false">
                   <span class="radio-dot" aria-hidden="true"></span>
                   <span class="radio-copy">
-                    <strong>Custom value: partner_success</strong>
-                    <span class="hint">Custom tag values stay visible without implying ranking, routing, or validation semantics.</span>
+                    <strong>Custom tag value</strong>
+                    <span class="radio-token">tag value: <code>partner_success_requires_manual_review</code></span>
+                    <span class="hint">Long custom tag values wrap as visible helper metadata without implying ranking, routing, or validation semantics.</span>
                   </span>
                 </div>
               </div>
@@ -718,7 +744,7 @@
               </div>
               <div class="metadata-row">
                 <span class="metadata-key">Narrow check</span>
-                <span class="metadata-value">Radio copy, hint, error, required marker, and custom tag value wrap inside the card at the existing 460px breakpoint.</span>
+                <span class="metadata-value">At 390px-460px, radio label, hint, error, required marker, and long `tag_value` copy should wrap inside the card without clipping or overlap.</span>
               </div>
             </div>
           </div>
@@ -1139,7 +1165,7 @@
         <div class="checklist">
           <span>Hero scale stays below the state cards so reviewers scan helper states first.</span>
           <span>Shared wrapper contract: label, hint, affixes, validation redisplay.</span>
-          <span>`rfk_radio_button` shows checked, unchecked, custom value, required, hint, and validation copy without claiming collection group or fieldset ownership.</span>
+          <span>`rfk_radio_button` shows checked, unchecked, long custom tag value, required, hint, and validation copy without claiming collection group or fieldset ownership.</span>
           <span>Native helper lane only: no remote search, selected preload, or create-on-the-fly semantics.</span>
           <span>Native browser semantics distinguish `rfk_search_field`, `rfk_email_field`, and `rfk_url_field` from Tom Select-backed helpers.</span>
           <span>Multiline `rfk_text_area` keeps long content, long hints, and validation copy readable in one native wrapper lane.</span>
