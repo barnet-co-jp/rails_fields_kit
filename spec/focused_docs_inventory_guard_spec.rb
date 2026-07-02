@@ -11,6 +11,9 @@ RSpec.describe "focused docs inventory guard" do
   let(:table_file_field_metadata) { read_doc("doc/table_file_field_metadata.md") }
   let(:visual_reference_browser_evidence) { read_doc("doc/visual_reference_browser_evidence.md") }
   let(:sample_app_results_route_guide) { read_doc("doc/sample_app_results_route_guide.md") }
+  let(:dropdown_parent_release_evidence) { read_doc("doc/dropdown_parent_release_evidence.md") }
+  let(:token_table_sample_app_evidence) { read_doc("doc/token_table_sample_app_evidence.md") }
+  let(:search_controller_release_evidence) { read_doc("doc/search_controller_release_evidence.md") }
 
   it "keeps table file field metadata packaged and routed without promoting upload ownership" do
     expect(specification.files).to include("doc/table_file_field_metadata.md")
@@ -45,6 +48,36 @@ RSpec.describe "focused docs inventory guard" do
       "Narrow: about `390x844`",
       "CI success and source review are useful context, but they are not browser visual approval",
       "Do not mark a visual reference as browser-approved unless the desktop and narrow browser review actually ran"
+    )
+  end
+
+  it "keeps release evidence guides packaged without expanding sample app ownership" do
+    expect(specification.files).to include(
+      "doc/dropdown_parent_release_evidence.md",
+      "doc/token_table_sample_app_evidence.md",
+      "doc/search_controller_release_evidence.md"
+    )
+
+    expect(dropdown_parent_release_evidence).to include(
+      "selector pass-through and no-config behavior",
+      "Render a Tom Select-backed helper with `dropdown_parent: \"body\"`",
+      "confirm `dropdownParent` is absent from Tom Select options",
+      "Do not use this lane as proof of browser positioning, modal layout, portal implementation, z-index policy, or production CSS"
+    )
+
+    expect(token_table_sample_app_evidence).to include(
+      "Use this guide when a release or focused PR needs sample app evidence for token search, token suggestions, Ransack suggestion metadata, or table metadata rendering",
+      "Use `doc/sample_app_checklist.md` to choose whether evidence belongs in a release result file or a narrow PR comment",
+      "Use `doc/sample_app_results.md` only as the release evidence log, not as a source of new behavior",
+      "submitted token text is parsed and executed by the host app",
+      "query execution, preference persistence, authorization, pagination, visible save/error copy, and final table layout remain host-app or table integration responsibilities"
+    )
+
+    expect(search_controller_release_evidence).to include(
+      "representative evidence for `rfk_search_with` endpoint-side policy, especially `minimum_query_length:` or `match:`",
+      "FormBuilder `min_length:` remains a browser-side loading hint",
+      "`match: :prefix` confirms prefix-only suggestions",
+      "The evidence should not standardize adapter-specific SQL, case sensitivity, token parsing, search ranking, pagination, authorization, or query execution"
     )
   end
 
