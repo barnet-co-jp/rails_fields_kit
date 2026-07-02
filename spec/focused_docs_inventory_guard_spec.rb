@@ -73,14 +73,16 @@ RSpec.describe "focused docs inventory guard" do
       "[`doc/native_numeric_fields.md`](doc/native_numeric_fields.md)",
       "[`doc/native_contact_fields.md`](doc/native_contact_fields.md)"
     )
+    expect(public_api).to include(
+      "[`native_numeric_fields.md`](native_numeric_fields.md)",
+      "[`native_contact_fields.md`](native_contact_fields.md)"
+    )
     expect(field_helpers).to include(
       "[`native_numeric_fields.md`](native_numeric_fields.md)",
       "[`native_contact_fields.md`](native_contact_fields.md)",
       "formatting, rounding, normalization, validation wording, and phone policy with the host app"
     )
     expect(form_builder_helpers).to include(
-      "[`native_numeric_fields.md`](native_numeric_fields.md)",
-      "[`native_contact_fields.md`](native_contact_fields.md)",
       "`rfk_number_field`",
       "`rfk_money_field`",
       "`rfk_percent_field`",
