@@ -157,6 +157,8 @@ For remote search, current public behavior is a JSON `GET` request to `url:`. Ra
 
 Fixed `query_params:` and `selected_query_params:` values are URL query params. Array values are sent as repeated query entries for the same key, while `null` / `undefined` values are skipped instead of being serialized. `create_params:` uses a different lane: those fixed values are merged into the create-on-the-fly JSON request body before the user's `create_param:` value is written.
 
+Remote option labels use the configured `label_field:` for display and `value_field:` for the submitted option value. If a remote search, selected preload, or create-on-the-fly option is missing its label, the bundled renderer only falls back to the configured `value_field:` for the visible label; it does not change the submitted value, option payload shape, endpoint authorization, or request lifecycle. See [`controller_helpers.md#remote-option-label-fallback`](controller_helpers.md#remote-option-label-fallback) for the endpoint-side boundary.
+
 #### Representative `error_surface` example
 
 The shared request-failure feedback options above apply here too. This combobox example is representative, not combobox-only:
@@ -498,7 +500,7 @@ These options only customize rendered HTML attributes. They do not change valida
   accept: "application/pdf" %>
 ```
 
-`rfk_file_field` stays in the same native wrapper lane as the other Rails-backed inputs. Rails Fields Kit owns wrapper, label, hint, error, affix, and accessibility wiring around Rails' `file_field`; the host app still owns multipart form setup, Active Storage direct upload JavaScript, preview UI, upload progress UI, storage configuration, scanning, and file validation policy. Use [`file_field.md`](file_field.md) for the focused boundary.
+`rfk_file_field` stays in the same native wrapper lane as the other Rails-backed inputs. Rails Fields Kit owns wrapper, label, hint, error, affix, and accessibility wiring around Rails' `file_field`; the host app still owns multipart form setup, Active Storage direct uploads, preview UI, upload progress UI, storage configuration, scanning, and file validation policy. Use [`file_field.md`](file_field.md) for the focused boundary.
 
 ## Shared wrapper options
 
