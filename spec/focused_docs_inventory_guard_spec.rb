@@ -7,13 +7,17 @@ RSpec.describe "focused docs inventory guard" do
   let(:root) { File.expand_path("..", __dir__) }
   let(:specification) { Gem::Specification.load(File.join(root, "rails_fields_kit.gemspec")) }
   let(:readme) { read_doc("README.md") }
+  let(:roadmap) { read_doc("ROADMAP.md") }
   let(:public_api) { read_doc("doc/public_api.md") }
+  let(:field_helpers) { read_doc("doc/field_helpers.md") }
   let(:table_file_field_metadata) { read_doc("doc/table_file_field_metadata.md") }
+  let(:datalist_boundary) { read_doc("doc/datalist_boundary.md") }
   let(:visual_reference_browser_evidence) { read_doc("doc/visual_reference_browser_evidence.md") }
   let(:sample_app_results_route_guide) { read_doc("doc/sample_app_results_route_guide.md") }
   let(:dropdown_parent_release_evidence) { read_doc("doc/dropdown_parent_release_evidence.md") }
   let(:token_table_sample_app_evidence) { read_doc("doc/token_table_sample_app_evidence.md") }
   let(:search_controller_release_evidence) { read_doc("doc/search_controller_release_evidence.md") }
+  let(:radio_button_release_evidence) { read_doc("doc/radio_button_release_evidence.md") }
 
   it "keeps table file field metadata packaged and routed without promoting upload ownership" do
     expect(specification.files).to include("doc/table_file_field_metadata.md")
@@ -29,6 +33,34 @@ RSpec.describe "focused docs inventory guard" do
       "`TableFilterInput.file_field` is not a built-in factory",
       "The host application owns multipart form setup, Active Storage direct upload JavaScript, preview UI, upload progress UI, file validation policy, storage configuration, virus scanning, table persistence, query execution, authorization, and production CSS"
     )
+  end
+
+  it "keeps datalist proposal boundary docs packaged without promoting a current helper" do
+    form_builder_helpers = markdown_section(public_api, "## FormBuilder helpers")
+
+    expect(specification.files).to include("doc/datalist_boundary.md")
+    expect(readme).to include(
+      "[`doc/datalist_boundary.md`](doc/datalist_boundary.md)",
+      "Rails Fields Kit does not currently provide `rfk_masked_field`, `rfk_slug_field`, or `rfk_datalist_field`"
+    )
+    expect(roadmap).to include(
+      "[`doc/datalist_boundary.md`](doc/datalist_boundary.md)",
+      "current proposal boundary for HTML datalist support",
+      "keeps `rfk_datalist_field` out of the current public API"
+    )
+    expect(field_helpers).to include(
+      "[`datalist_boundary.md`](datalist_boundary.md)",
+      "`rfk_text_field list:` plus host-owned `<datalist>` markup",
+      "separate from Tom Select-backed autocomplete or combobox workflows",
+      "Keep `rfk_datalist_field`, `rfk_slug_field`, and `rfk_masked_field`"
+    )
+    expect(datalist_boundary).to include(
+      "This document records the proposal boundary for HTML `datalist` support",
+      "It does not add `rfk_datalist_field` to the current public API",
+      "`rfk_text_field list:` plus host-owned `<datalist>` markup",
+      "Do not add `rfk_datalist_field` to `doc/public_api.md`"
+    )
+    expect(form_builder_helpers).not_to include("rfk_datalist_field")
   end
 
   it "keeps browser evidence runbook packaged without turning source review or CI into visual approval" do
@@ -55,7 +87,8 @@ RSpec.describe "focused docs inventory guard" do
     expect(specification.files).to include(
       "doc/dropdown_parent_release_evidence.md",
       "doc/token_table_sample_app_evidence.md",
-      "doc/search_controller_release_evidence.md"
+      "doc/search_controller_release_evidence.md",
+      "doc/radio_button_release_evidence.md"
     )
 
     expect(dropdown_parent_release_evidence).to include(
@@ -79,9 +112,22 @@ RSpec.describe "focused docs inventory guard" do
       "`match: :prefix` confirms prefix-only suggestions",
       "The evidence should not standardize adapter-specific SQL, case sensitivity, token parsing, search ranking, pagination, authorization, or query execution"
     )
+
+    expect(radio_button_release_evidence).to include(
+      "representative sample-app evidence for `rfk_radio_button`",
+      "single-control native wrapper around Rails' standard `radio_button` helper",
+      "the helper call, including the method and `tag_value`",
+      "same-name grouping behavior remains Rails standard radio behavior",
+      "collection iteration, fieldset / legend markup, group-level validation UI, and layout policy stay in the host app",
+      "production CSS, final spacing, and browser-specific visual approval stay outside this guide"
+    )
   end
 
   def read_doc(relative_path)
     File.read(File.join(root, relative_path))
+  end
+
+  def markdown_section(document, heading)
+    document.split(heading, 2).last.split(/\n(?=##?\s)/, 2).first
   end
 end
