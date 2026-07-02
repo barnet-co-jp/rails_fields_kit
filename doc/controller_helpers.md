@@ -329,6 +329,18 @@ FormBuilder options such as `query_params:`, `selected_query_params:`, and `crea
 
 Use fixed params for contextual values that the endpoint still verifies with server-side state. For example, an app may render `query_params: { account_id: current_account.id }` so the request carries an account hint, while the controller still scopes through a trusted relation such as `scope: -> { current_account.customers }` instead of trusting the incoming `params[:account_id]` by itself.
 
+Array values on `query_params:` and `selected_query_params:` stay in the URL query lane. Rails Fields Kit appends one entry per value, so a field like this:
+
+```erb
+<%= f.rfk_combobox :customer_id,
+  url: customers_path(format: :json),
+  selected_url: selected_customers_path(format: :json),
+  query_params: { account_id: current_account.id, status: ["active", "priority"] },
+  selected_query_params: { account_id: current_account.id, status: ["active", "priority"] } %>
+```
+
+sends fixed scope as repeated query entries such as `status=active&status=priority` on remote search and selected preload requests. The endpoint should still reduce those values to an allowlisted, trusted relation, for example by intersecting `Array(params[:status])` with the statuses the current user may search before applying the relation scope. Do not treat the repeated query entries as authorization, tenant ownership, query execution, or Ransack parsing policy.
+
 The same boundary applies to create-on-the-fly fields: `create_params:` adds fixed JSON fields to the request body, but `rfk_create_with` should still use `assign:`, `authorize:`, `before_save:`, model validations, or ordinary controller policy to decide what can be persisted. Use `permitted_attributes:` only when the endpoint intentionally accepts additional request fields as model attributes after Rails strong-params filtering; it is not a substitute for server-side tenant scoping or authorization.
 
 ## `rfk_token_suggestions_with`
