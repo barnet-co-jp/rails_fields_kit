@@ -84,6 +84,7 @@ This inventory is for maintainers who need to find the right source of truth qui
 - `doc/configuration.md`: initializer defaults and override precedence
 - `doc/default_allow_clear.md`: focused app-wide `allow_clear` default guide; keep `clear_button` plugin installation, styling, empty-state copy, and lifecycle behavior with the host app
 - `doc/styling_boundary.md`: reader-facing source of truth for wrapper classes, styling hooks, and host-app CSS ownership
+- `doc/tom_select_class_names.md`: focused field-level Tom Select internal `classNames` pass-through guide; keep wrapper customization, production CSS, theme presets, and initializer-level defaults out of this lane
 - `doc/events.md`: Stimulus event contract
 - `doc/tom_select_turbo_lifecycle.md`: Turbo and Stimulus connect/disconnect lifecycle boundary for Tom Select-backed helpers
 - `doc/select_migration.md`, `doc/grouped_select.md`, and `doc/enum_select.md`: focused collection-backed select docs for ordinary Rails select migration, optgroup choices, and enum-backed choices
@@ -119,6 +120,8 @@ This inventory is for maintainers who need to find the right source of truth qui
 - `doc/visual_reference_index.html`: one-screen reviewer entrypoint for the static visual reference family
 - `doc/visual_reference_browser_evidence.md`: manual browser-capable desktop and narrow viewport evidence runbook for static visual reference PRs; CI success and source review are not browser approval
 - `doc/tom_select_visual_reference.html` and `doc/native_field_visual_reference.html`: static visual references for representative Tom Select-backed and native helper states
+- `doc/native_character_counter_boundary_sample_evidence.html`: map-only native companion evidence for `maxlength` pass-through beside host-owned character counter copy; it does not make `character_counter:` a current helper option
+- `doc/native_select_boundary_sample_evidence.html`: map-only native companion artifact for plain native select, grouped optgroup select, and Tom Select-backed collection boundary comparison; remote optgroup endpoints, custom renderers, search execution, authorization, persistence, and production CSS stay out of scope
 - `doc/tom_select_rich_option_review.html`: companion visual reference for Tom Select rich option label, description, and badge density review
 - `doc/tom_select_source_fallback_review.html`: focused companion visual reference for explicit `enum:` sources and remote option label fallback display review
 - `doc/tom_select_turbo_reconnect_visual_reference.html`: focused companion visual reference for Turbo reconnect behavior review
