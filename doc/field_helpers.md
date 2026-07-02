@@ -153,6 +153,10 @@ Use this for searchable remote selects and editable comboboxes.
 
 For remote search, current public behavior is a JSON `GET` request to `url:`. Rails Fields Kit appends `query_params:` to that URL as fixed query string scope first, then sets `query_param:` to the typed query value. The host app owns that endpoint's authorization, scoping, and response records; use `selected_url:` for selected-option preload and `create_url:` for create-on-the-fly JSON `POST` requests instead of mixing those request shapes into the remote search endpoint.
 
+`preload:` belongs to the remote option-list workflow. It lets Tom Select load suggestions before the user has typed a search query, subject to the same `url:` endpoint and the host app's blank-query policy. Selected preload is a separate label-hydration workflow: use `selected_url:` plus `selected:` or persisted model values when the form starts with saved IDs that are not already present in the rendered options.
+
+When multiple saved values need selected-option hydration in the same order they were submitted, keep that ordering policy in the selected preload endpoint. See [`controller_helpers.md#rfk_find_with`](controller_helpers.md#rfk_find_with) for `rfk_find_with preserve_order: true`, accepted `id_param:` / `ids_param:` inputs, and the endpoint-side source of truth.
+
 `open_on_focus:` and `preload:` are passed through to Tom Select for the remote field; Rails Fields Kit does not add a separate blank-query policy around that combination. If the host app expects focus to show initial suggestions, confirm that the endpoint deliberately accepts the resulting blank or initial query and returns an appropriately scoped, limited result set. `min_length:` is a client-side load gate before the request is made; it does not decide what the server should return for an allowed blank query. Use [`controller_helpers.md#blank-query-policy`](controller_helpers.md#blank-query-policy) for the endpoint-side `minimum_query_length:` policy when the server should reject blank or too-short direct requests.
 
 Fixed `query_params:` and `selected_query_params:` values are URL query params. Array values are sent as repeated query entries for the same key, while `null` / `undefined` values are skipped instead of being serialized. `create_params:` uses a different lane: those fixed values are merged into the create-on-the-fly JSON request body before the user's `create_param:` value is written.
@@ -555,7 +559,7 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `query_params:` adds fixed query parameters to the remote search `GET` URL before the typed query is applied.
 - `selected_query_params:` adds fixed query parameters to the selected-option preload URL.
 - `create_params:` adds fixed JSON fields to create-on-the-fly POST requests.
-- `preload:` forwards Tom Select's preload option. For remote search fields, any blank or initial load it permits is still governed by the host app endpoint.
+- `preload:` forwards Tom Select's preload option. For remote search fields, any blank or initial load it permits is still governed by the host app endpoint. It does not restore labels for already selected IDs; use `selected_url:` plus `selected:` or the saved model value for that selected preload workflow.
 - `open_on_focus:` forwards Tom Select's open-on-focus option. It can reveal already loaded options or work with `preload:` depending on the Tom Select flow, but it does not create a Rails Fields Kit server-side blank-query policy.
 - `min_length:` gates client-side remote loading before a request is sent. It is separate from endpoint-side rules for whether blank or short queries return options; use [`controller_helpers.md#blank-query-policy`](controller_helpers.md#blank-query-policy) for the matching `minimum_query_length:` endpoint policy.
 - `max_items:` forwards Tom Select's maximum selected item count.
