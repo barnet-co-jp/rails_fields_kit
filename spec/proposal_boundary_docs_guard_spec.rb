@@ -49,7 +49,7 @@ RSpec.describe "proposal boundary docs guard" do
     expect(datalist_boundary).to include(
       "It does not add `rfk_datalist_field` to the current public API.",
       "`rfk_text_field list:` plus host-owned `<datalist>` markup",
-      "Do not add `rfk_datalist_field` to `doc/public_api.md` unless a later implementation PR actually adds and tests the helper"
+      "Do not list `rfk_datalist_field` in `doc/public_api.md` unless a later implementation PR actually adds and tests the helper"
     )
   end
 
