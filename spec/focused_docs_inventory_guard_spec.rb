@@ -12,6 +12,8 @@ RSpec.describe "focused docs inventory guard" do
   let(:field_helpers) { read_doc("doc/field_helpers.md") }
   let(:table_file_field_metadata) { read_doc("doc/table_file_field_metadata.md") }
   let(:datalist_boundary) { read_doc("doc/datalist_boundary.md") }
+  let(:native_numeric_fields) { read_doc("doc/native_numeric_fields.md") }
+  let(:native_contact_fields) { read_doc("doc/native_contact_fields.md") }
   let(:visual_reference_browser_evidence) { read_doc("doc/visual_reference_browser_evidence.md") }
   let(:sample_app_results_route_guide) { read_doc("doc/sample_app_results_route_guide.md") }
   let(:dropdown_parent_release_evidence) { read_doc("doc/dropdown_parent_release_evidence.md") }
@@ -61,6 +63,49 @@ RSpec.describe "focused docs inventory guard" do
       "Do not add `rfk_datalist_field` to `doc/public_api.md`"
     )
     expect(form_builder_helpers).not_to include("rfk_datalist_field")
+  end
+
+  it "keeps native numeric and contact focused docs packaged without promoting host-app-owned behavior" do
+    form_builder_helpers = markdown_section(public_api, "## FormBuilder helpers")
+
+    expect(specification.files).to include("doc/native_numeric_fields.md", "doc/native_contact_fields.md")
+    expect(readme).to include(
+      "[`doc/native_numeric_fields.md`](doc/native_numeric_fields.md)",
+      "[`doc/native_contact_fields.md`](doc/native_contact_fields.md)"
+    )
+    expect(field_helpers).to include(
+      "[`native_numeric_fields.md`](native_numeric_fields.md)",
+      "[`native_contact_fields.md`](native_contact_fields.md)",
+      "formatting, rounding, normalization, validation wording, and phone policy with the host app"
+    )
+    expect(form_builder_helpers).to include(
+      "[`native_numeric_fields.md`](native_numeric_fields.md)",
+      "[`native_contact_fields.md`](native_contact_fields.md)",
+      "`rfk_number_field`",
+      "`rfk_money_field`",
+      "`rfk_percent_field`",
+      "`rfk_email_field`",
+      "`rfk_url_field`",
+      "`rfk_phone_field`",
+      "`rfk_search_field`"
+    )
+    expect(native_numeric_fields).to include(
+      "`rfk_number_field`, `rfk_money_field`, and `rfk_percent_field`",
+      "delegates to Rails' native `number_field` helper",
+      "delegates to Rails' native `text_field` helper, defaults `inputmode` to `decimal`, and uses `currency:` as the prefix when provided",
+      "generated label, hint, validation error, prefix, and suffix output",
+      "aria-describedby`, `aria-invalid`, and `aria-required` wiring",
+      "The host app remains responsible for number formatting, locale-specific separators, rounding, currency conversion, currency display policy, decimal precision, browser validation-message wording, server-side validation, and persistence"
+    )
+    expect(native_contact_fields).to include(
+      "`rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field`",
+      "delegates to Rails' native `email_field` helper",
+      "delegates to Rails' native `url_field` helper",
+      "delegates to Rails' native `telephone_field` helper and defaults `autocomplete` to `tel`",
+      "delegates to Rails' native `search_field` helper",
+      "generated label, hint, validation error, prefix, and suffix output",
+      "The host app remains responsible for browser-native validation-message wording, email deliverability checks, URL normalization, phone-number formatting, country-specific phone policy, search execution, autocomplete policy, server-side validation, and persistence"
+    )
   end
 
   it "keeps browser evidence runbook packaged without turning source review or CI into visual approval" do
