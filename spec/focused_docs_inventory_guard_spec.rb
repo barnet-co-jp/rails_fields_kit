@@ -17,6 +17,7 @@ RSpec.describe "focused docs inventory guard" do
   let(:dropdown_parent_release_evidence) { read_doc("doc/dropdown_parent_release_evidence.md") }
   let(:token_table_sample_app_evidence) { read_doc("doc/token_table_sample_app_evidence.md") }
   let(:search_controller_release_evidence) { read_doc("doc/search_controller_release_evidence.md") }
+  let(:radio_button_release_evidence) { read_doc("doc/radio_button_release_evidence.md") }
 
   it "keeps table file field metadata packaged and routed without promoting upload ownership" do
     expect(specification.files).to include("doc/table_file_field_metadata.md")
@@ -86,7 +87,8 @@ RSpec.describe "focused docs inventory guard" do
     expect(specification.files).to include(
       "doc/dropdown_parent_release_evidence.md",
       "doc/token_table_sample_app_evidence.md",
-      "doc/search_controller_release_evidence.md"
+      "doc/search_controller_release_evidence.md",
+      "doc/radio_button_release_evidence.md"
     )
 
     expect(dropdown_parent_release_evidence).to include(
@@ -109,6 +111,15 @@ RSpec.describe "focused docs inventory guard" do
       "FormBuilder `min_length:` remains a browser-side loading hint",
       "`match: :prefix` confirms prefix-only suggestions",
       "The evidence should not standardize adapter-specific SQL, case sensitivity, token parsing, search ranking, pagination, authorization, or query execution"
+    )
+
+    expect(radio_button_release_evidence).to include(
+      "representative sample-app evidence for `rfk_radio_button`",
+      "single-control native wrapper around Rails' standard `radio_button` helper",
+      "the helper call, including the method and `tag_value`",
+      "same-name grouping behavior remains Rails standard radio behavior",
+      "collection iteration, fieldset / legend markup, group-level validation UI, and layout policy stay in the host app",
+      "production CSS, final spacing, and browser-specific visual approval stay outside this guide"
     )
   end
 
