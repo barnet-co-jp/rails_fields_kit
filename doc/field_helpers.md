@@ -21,14 +21,14 @@ This document lists the FormBuilder helpers provided by Rails Fields Kit.
 | A native file upload or range control | Use `rfk_file_field` or `rfk_range_field`. | Keeps upload handling, storage policy, range live preview behavior, and production styling with the host app. Use [`file_field.md`](file_field.md) or [`range_field.md`](range_field.md). |
 | Native numeric, money, percent, email, URL, or phone inputs | Use the matching native helper such as `rfk_number_field`, `rfk_money_field`, `rfk_percent_field`, `rfk_email_field`, `rfk_url_field`, or `rfk_phone_field`. | Keeps formatting, rounding, normalization, validation wording, and phone policy with the host app while Rails Fields Kit owns the shared wrapper lane. Use [`native_numeric_fields.md`](native_numeric_fields.md) and [`native_contact_fields.md`](native_contact_fields.md). |
 | Native date, time, datetime-local, or color controls | Use `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, or `rfk_color_field`. | Keeps browser-native picker behavior, timezone conversion, locale formatting, masking, and production CSS outside Rails Fields Kit. Use [`native_date_time_color_fields.md`](native_date_time_color_fields.md). |
-| Browser-native datalist suggestions, title-to-slug workflows, or masked inputs | No current Rails Fields Kit helper; use the existing native wrapper lane plus [`datalist_boundary.md`](datalist_boundary.md), [`slug_helper_boundary.md`](slug_helper_boundary.md), or [`masked_input_boundary.md`](masked_input_boundary.md). | Keeps `rfk_datalist_field`, `rfk_slug_field`, and `rfk_masked_field` in proposal-only docs while host apps own candidate markup, slug generation, masking libraries, normalization, validation, and persistence policy. |
+| Browser-native datalist suggestions, title-to-slug workflows, or masked inputs | No current Rails Fields Kit helper; use the existing native wrapper lane plus [`datalist_boundary.md`](datalist_boundary.md), [`slug_helper_boundary.md`](slug_helper_boundary.md), or [`masked_input_boundary.md`](masked_input_boundary.md). | For browser-native datalist suggestions, keep using `rfk_text_field list:` plus host-owned `<datalist>` markup; the proposal doc explains why this is separate from Tom Select-backed autocomplete or combobox workflows. Keep `rfk_datalist_field`, `rfk_slug_field`, and `rfk_masked_field` in proposal-only docs while host apps own candidate markup, slug generation, masking libraries, normalization, validation, and persistence policy. |
 | Inline textarea mentions such as `@user` or `#tag` | No current Rails Fields Kit helper; see [`mention_field_boundary.md`](mention_field_boundary.md). | Keeps textarea mention overlay, parsing, hidden metadata, authorization, persistence, and suggestion endpoint shape in the proposal / host-app responsibility lane instead of implying a current `rfk_mention_field` API. |
 
 The `A native password, checkbox, radio, file, or range control with focused ownership boundaries` helper family is intentionally split across the password, boolean/radio, and file/range rows above so `rfk_password_field` is not read as the helper for every native control.
 
 If the choice is mostly about who owns search semantics, use this rule of thumb: `rfk_select`, `rfk_multi_select`, `rfk_grouped_select`, and `rfk_enum_select` stay collection-first; `rfk_combobox` and `rfk_autocomplete` call remote endpoints for suggestions; `rfk_token_search` goes one step further by letting the host app parse submitted token text or build `params[:q]` later. When a native browser search input is enough, `rfk_search_field` stays in the native wrapper lane and does not call remote endpoints or take over token parsing.
 
-Datalist, slug, and masked-input helpers are proposal-only. Use [`datalist_boundary.md`](datalist_boundary.md), [`slug_helper_boundary.md`](slug_helper_boundary.md), and [`masked_input_boundary.md`](masked_input_boundary.md) when comparing current native wrapper helpers with those future directions; keep `rfk_datalist_field`, `rfk_slug_field`, `rfk_masked_field`, datalist candidate ownership, slug generation, masking libraries, normalization, validation, and persistence policy out of the current public helper inventory until they land.
+Datalist, slug, and masked-input helpers are proposal-only. Use [`datalist_boundary.md`](datalist_boundary.md), [`slug_helper_boundary.md`](slug_helper_boundary.md), and [`masked_input_boundary.md`](masked_input_boundary.md) when comparing current native wrapper helpers with those future directions. For datalist specifically, the current route is `rfk_text_field list:` plus host-owned `<datalist>` markup; this keeps submitted values as ordinary text and keeps selected IDs, preload, rich option metadata, create flows, and remote request behavior in the existing Tom Select-backed lanes. Keep `rfk_datalist_field`, `rfk_slug_field`, `rfk_masked_field`, datalist candidate ownership, slug generation, masking libraries, normalization, validation, and persistence policy out of the current public helper inventory until they land.
 
 Inline textarea mentions are proposal-only. Use [`mention_field_boundary.md`](mention_field_boundary.md) when comparing `rfk_text_area`, `rfk_autocomplete`, `rfk_token_search`, and `rfk_tags` with a future mention helper; keep `rfk_mention_field`, textarea overlay behavior, hidden metadata, and mention-specific endpoint contracts out of the current public helper inventory until they land.
 
@@ -76,7 +76,7 @@ Rails Fields Kit only passes the plugin names through to the rendered Tom Select
 Helper defaults to keep in mind:
 
 - `rfk_tags` and `rfk_token_search` use `remove_button` by default when `plugins:` is omitted.
-- Passing `plugins:` to those helpers is an explicit override, so include `"remove_button"` yourself when you still want that behavior.
+- Passing `plugins:` to those helpers is an explicit override, so include `"remove_button"` yourself if the token UI should still show remove controls.
 - `allow_clear: true` adds `clear_button` to the effective plugin list for that field.
 - `config.default_allow_clear = true` applies the same semantic clear-button default when a helper omits `allow_clear:`; pass `allow_clear: false` to suppress only Rails Fields Kit's semantic auto-add for one field.
 
@@ -152,6 +152,10 @@ Use this for searchable remote selects and editable comboboxes.
 ```
 
 For remote search, current public behavior is a JSON `GET` request to `url:`. Rails Fields Kit appends `query_params:` to that URL as fixed query string scope first, then sets `query_param:` to the typed query value. The host app owns that endpoint's authorization, scoping, and response records; use `selected_url:` for selected-option preload and `create_url:` for create-on-the-fly JSON `POST` requests instead of mixing those request shapes into the remote search endpoint.
+
+`preload:` belongs to the remote option-list workflow. It lets Tom Select load suggestions before the user has typed a search query, subject to the same `url:` endpoint and the host app's blank-query policy. Selected preload is a separate label-hydration workflow: use `selected_url:` plus `selected:` or persisted model values when the form starts with saved IDs that are not already present in the rendered options.
+
+When multiple saved values need selected-option hydration in the same order they were submitted, keep that ordering policy in the selected preload endpoint. See [`controller_helpers.md#rfk_find_with`](controller_helpers.md#rfk_find_with) for `rfk_find_with preserve_order: true`, accepted `id_param:` / `ids_param:` inputs, and the endpoint-side source of truth.
 
 `open_on_focus:` and `preload:` are passed through to Tom Select for the remote field; Rails Fields Kit does not add a separate blank-query policy around that combination. If the host app expects focus to show initial suggestions, confirm that the endpoint deliberately accepts the resulting blank or initial query and returns an appropriately scoped, limited result set. `min_length:` is a client-side load gate before the request is made; it does not decide what the server should return for an allowed blank query. Use [`controller_helpers.md#blank-query-policy`](controller_helpers.md#blank-query-policy) for the endpoint-side `minimum_query_length:` policy when the server should reject blank or too-short direct requests.
 
@@ -500,7 +504,7 @@ These options only customize rendered HTML attributes. They do not change valida
   accept: "application/pdf" %>
 ```
 
-`rfk_file_field` stays in the same native wrapper lane as the other Rails-backed inputs. Rails Fields Kit owns wrapper, label, hint, error, affix, and accessibility wiring around Rails' `file_field`; the host app still owns multipart form setup, Active Storage direct upload JavaScript, preview UI, upload progress UI, storage configuration, scanning, and file validation policy. Use [`file_field.md`](file_field.md) for the focused boundary.
+`rfk_file_field` stays in the same native wrapper lane as the other Rails-backed inputs. Rails Fields Kit owns wrapper, label, hint, error, affix, and accessibility wiring around Rails' `file_field`; the host app still owns multipart form setup, Active Storage direct uploads, preview UI, progress UI, storage configuration, scanning, and file validation policy. Use [`file_field.md`](file_field.md) for the focused boundary.
 
 ## Shared wrapper options
 
@@ -555,7 +559,7 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `query_params:` adds fixed query parameters to the remote search `GET` URL before the typed query is applied.
 - `selected_query_params:` adds fixed query parameters to the selected-option preload URL.
 - `create_params:` adds fixed JSON fields to create-on-the-fly POST requests.
-- `preload:` forwards Tom Select's preload option. For remote search fields, any blank or initial load it permits is still governed by the host app endpoint.
+- `preload:` forwards Tom Select's preload option. For remote search fields, any blank or initial load it permits is still governed by the host app endpoint. It does not restore labels for already selected IDs; use `selected_url:` plus `selected:` or the saved model value for that selected preload workflow.
 - `open_on_focus:` forwards Tom Select's open-on-focus option. It can reveal already loaded options or work with `preload:` depending on the Tom Select flow, but it does not create a Rails Fields Kit server-side blank-query policy.
 - `min_length:` gates client-side remote loading before a request is sent. It is separate from endpoint-side rules for whether blank or short queries return options; use [`controller_helpers.md#blank-query-policy`](controller_helpers.md#blank-query-policy) for the matching `minimum_query_length:` endpoint policy.
 - `max_items:` forwards Tom Select's maximum selected item count.
