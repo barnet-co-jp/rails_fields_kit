@@ -498,7 +498,7 @@ These options only customize rendered HTML attributes. They do not change valida
   accept: "application/pdf" %>
 ```
 
-`rfk_file_field` stays in the same native wrapper lane as the other Rails-backed inputs. Rails Fields Kit owns wrapper, label, hint, error, affix, and accessibility wiring around Rails' `file_field`; the host app still owns multipart form setup, Active Storage direct uploads, preview UI, upload progress UI, storage configuration, scanning, and file validation policy. Use [`file_field.md`](file_field.md) for the focused boundary.
+`rfk_file_field` stays in the same native wrapper lane as the other Rails-backed inputs. Rails Fields Kit owns wrapper, label, hint, error, affix, and accessibility wiring around Rails' `file_field`; the host app still owns multipart form setup, Active Storage direct upload JavaScript, preview UI, upload progress UI, storage configuration, scanning, and file validation policy. Use [`file_field.md`](file_field.md) for the focused boundary.
 
 ## Shared wrapper options
 
