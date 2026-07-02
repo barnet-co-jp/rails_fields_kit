@@ -12,12 +12,31 @@ end
 
 Use this overview to choose the endpoint helper before reading the detailed option reference below. Rails Fields Kit formats option JSON and wires the rendered field to the endpoint, while the host app still owns authentication, authorization, tenant scoping, query parsing, result execution, and persistence policy.
 
-| Workflow | Use | FormBuilder route | Endpoint helper |
-| --- | --- | --- | --- |
-| Remote search | Fetch option suggestions while the user types. | `rfk_combobox`, `rfk_autocomplete`, or another Tom Select-backed helper with `url:` | `rfk_search_with` |
-| Selected preload | Restore labels for saved values that are not present in the initial collection. | `selected_url:` with `selected:` or persisted model values | `rfk_find_with` |
-| Create-on-the-fly | Accept new option text and return the created option JSON. | `create_url:` with `create_param:` and optional `create_params:` | `rfk_create_with` |
-| Token suggestions | Suggest structured token text while leaving submitted query parsing to the host app. | `rfk_token_search` with `url:` | `rfk_token_suggestions_with` |
+Scan by workflow first, then match the rendered field option to the controller helper. This keeps the endpoint route readable in narrow Markdown views without turning this page into the field-helper chooser.
+
+### Remote search
+
+- Use when the field should fetch option suggestions while the user types.
+- Render with `rfk_combobox`, `rfk_autocomplete`, or another Tom Select-backed helper that has `url:`.
+- Pair with `rfk_search_with` in the controller.
+
+### Selected preload
+
+- Use when the field must restore labels for saved values that are not present in the initial collection.
+- Render with `selected_url:` plus `selected:` or persisted model values.
+- Pair with `rfk_find_with` in the controller.
+
+### Create-on-the-fly
+
+- Use when the field may accept new option text and expects created option JSON back.
+- Render with `create_url:`, `create_param:`, and optional `create_params:`.
+- Pair with `rfk_create_with` in the controller.
+
+### Token suggestions
+
+- Use when the field should suggest structured token text while submitted query parsing stays in the host app.
+- Render with `rfk_token_search` and `url:`.
+- Pair with `rfk_token_suggestions_with` in the controller.
 
 Keep the FormBuilder request option and controller helper option aligned. For example, a field using `selected_param: "customer_id"` should pair with `rfk_find_with id_param: :customer_id`, and a field using `create_param: "name"` should pair with `rfk_create_with create_param: "name"`. If the workflow question is mostly about which field helper to render, start from [`field_helpers.md`](field_helpers.md); this page focuses on endpoint responsibilities.
 
