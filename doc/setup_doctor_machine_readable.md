@@ -62,6 +62,20 @@ A common wrapper is to fail only when `summary["missing"]` is greater than zero,
 
 When release or sample-app evidence needs structured setup visibility, record a representative JSON check rather than copying the full payload schema into the evidence log. A narrow PR comment can name the branch or commit checked, the Ruby API call used, the observed `summary["missing"]` count, and whether any `manual` checks were reviewed as host-app advisory items.
 
+Use this short note shape when a PR comment or narrow Markdown preview is the evidence surface:
+
+```text
+Setup doctor JSON evidence
+Branch/head: <branch or commit checked>
+Ruby API: RailsFieldsKit::SetupDoctor.new.run(io: output, format: :json)
+Observed summary["missing"]: <count>
+Manual advisory checks reviewed: <yes/no, with short scope>
+Remaining host-app follow-up: <none or short owner/action>
+Boundary: JSON output only; no CLI --json, schema publication, or CI policy change.
+```
+
+Keep each line short enough that a 390px-equivalent PR comment can wrap without losing the key/value relationship. If the evidence needs detailed wrapped text output, use `doc/setup_doctor_output_review.md` instead of expanding this JSON note into a full setup-doctor transcript.
+
 Use `doc/sample_app_results.md` for release-candidate evidence and a PR comment for narrow docs or setup-doctor evidence. In either location, link back to this guide as the payload source of truth and keep the evidence focused on what was observed for that branch.
 
 Do not treat this evidence lane as a CLI `--json` contract, a formal schema publication, auto-fix behavior, SARIF or JUnit output, or a universal host-app CI pass/fail policy.
