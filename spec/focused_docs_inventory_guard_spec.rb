@@ -36,7 +36,7 @@ RSpec.describe "focused docs inventory guard" do
     )
     expect(sample_app_results_route_guide).to include(
       "Source-only or connector-only visual review",
-      "Source review / browser pass / CI / docs link review",
+      "source review / browser pass / CI / docs link review",
       "Do not use `PASS` for GitHub Actions success, source review, static diff review, or a successful package build"
     )
     expect(visual_reference_browser_evidence).to include(
