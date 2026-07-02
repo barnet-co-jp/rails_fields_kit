@@ -51,7 +51,7 @@ RSpec.describe "focused docs inventory guard" do
       "[`datalist_boundary.md`](datalist_boundary.md)",
       "`rfk_text_field list:` plus host-owned `<datalist>` markup",
       "separate from Tom Select-backed autocomplete or combobox workflows",
-      "keep `rfk_datalist_field`, `rfk_slug_field`, `rfk_masked_field`"
+      "Keep `rfk_datalist_field`, `rfk_slug_field`, and `rfk_masked_field`"
     )
     expect(datalist_boundary).to include(
       "This document records the proposal boundary for HTML `datalist` support",
