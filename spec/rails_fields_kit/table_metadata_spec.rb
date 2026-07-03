@@ -124,19 +124,20 @@ RSpec.describe "table metadata objects" do
       )
     end
 
-    it "exposes known filter field types without file upload or radio button factories" do
+    it "exposes known filter field types without file upload factories" do
       expect(described_class.known_types).to include(
         :combobox,
         :token_search,
         :date_field,
         :time_field,
         :datetime_local_field,
-        :color_field
+        :color_field,
+        :radio_button
       )
       expect(described_class.known_type?(:combobox)).to be(true)
       expect(described_class.known_type?(" token_search ")).to be(true)
+      expect(described_class.known_type?(:radio_button)).to be(true)
       expect(described_class.known_type?(:file_field)).to be(false)
-      expect(described_class.known_type?(:radio_button)).to be(false)
       expect(described_class.known_type?(:unknown_field)).to be(false)
       expect(described_class.known_type?(nil)).to be(false)
       expect(described_class.known_type?(" ")).to be(false)
