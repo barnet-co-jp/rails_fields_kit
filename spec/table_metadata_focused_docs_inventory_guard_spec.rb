@@ -11,6 +11,7 @@ RSpec.describe "table metadata focused docs inventory" do
   let(:direct_helper_boundary) { read_doc("doc/table_direct_helper_boundary.md") }
   let(:range_metadata) { read_doc("doc/table_range_field_metadata.md") }
   let(:checkbox_metadata) { read_doc("doc/table_check_box_metadata.md") }
+  let(:radio_metadata) { read_doc("doc/table_radio_button_metadata.md") }
   let(:file_metadata) { read_doc("doc/table_file_field_metadata.md") }
 
   it "keeps the direct helper boundary doc packaged and routed from table metadata docs" do
@@ -35,6 +36,7 @@ RSpec.describe "table metadata focused docs inventory" do
     expect(specification.files).to include(
       "doc/table_range_field_metadata.md",
       "doc/table_check_box_metadata.md",
+      "doc/table_radio_button_metadata.md",
       "doc/table_file_field_metadata.md"
     )
     expect(table_adapters).to include(
@@ -50,8 +52,9 @@ RSpec.describe "table metadata focused docs inventory" do
     expect(public_api).to include(
       "use [`table_range_field_metadata.md`](table_range_field_metadata.md) for range metadata",
       "[`table_check_box_metadata.md`](table_check_box_metadata.md) for checkbox metadata",
+      "[`table_radio_button_metadata.md`](table_radio_button_metadata.md) for radio button cell-editor metadata",
       "[`table_file_field_metadata.md`](table_file_field_metadata.md) for file cell-editor metadata",
-      "These guides do not add range-pair query semantics, boolean query policy, file upload execution, table persistence, or production styling"
+      "These guides do not add range-pair query semantics, boolean query policy, radio group generation, file upload execution, table persistence, or production styling"
     )
   end
 
@@ -69,6 +72,14 @@ RSpec.describe "table metadata focused docs inventory" do
       "tri-state filtering or indeterminate-state UI",
       "bulk edit behavior and persistence",
       "authorization and table execution policy"
+    )
+    expect(radio_metadata).to include(
+      "TableCellInput.radio_button",
+      "maps `radio_button` metadata to `rfk_radio_button`",
+      "`tag_value:` is required",
+      "TableFilterInput.radio_button` is intentionally not a built-in factory type",
+      "collection radio group helpers",
+      "table query execution or persistence"
     )
     expect(file_metadata).to include(
       "RailsFieldsKit::TableCellInput.file_field",
