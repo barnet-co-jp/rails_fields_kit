@@ -220,3 +220,4 @@ These are useful proposals, not current public API, and should not distract from
 - Treat app-specific search meaning as host app responsibility.
 - Keep integrations optional and dependency-light.
 - Make generated markup work naturally with Turbo-driven page updates.
+- Document where Rails Fields Kit stops and host app code begins.
