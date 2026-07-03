@@ -9,6 +9,7 @@ RSpec.describe "focused docs inventory guard" do
   let(:readme) { read_doc("README.md") }
   let(:roadmap) { read_doc("ROADMAP.md") }
   let(:public_api) { read_doc("doc/public_api.md") }
+  let(:visual_references) { read_doc("doc/visual_references.md") }
   let(:field_helpers) { read_doc("doc/field_helpers.md") }
   let(:table_adapters) { read_doc("doc/table_adapters.md") }
   let(:table_file_field_metadata) { read_doc("doc/table_file_field_metadata.md") }
