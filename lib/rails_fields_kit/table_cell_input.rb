@@ -26,6 +26,7 @@ module RailsFieldsKit
       search_field
       password_field
       check_box
+      radio_button
       file_field
       token_search
     ].freeze
@@ -39,6 +40,10 @@ module RailsFieldsKit
         define_method(field_type) do |field_name = nil, **options|
           from_type(field_type, field_name, **options)
         end
+      end
+
+      def radio_button(field_name = nil, tag_value:, **options)
+        from_type(:radio_button, field_name, tag_value: tag_value, **options)
       end
 
       def from_type(field_type, field_name = nil, **options)

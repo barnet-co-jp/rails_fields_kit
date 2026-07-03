@@ -124,7 +124,7 @@ RSpec.describe "table metadata objects" do
       )
     end
 
-    it "exposes known filter field types without file upload factories" do
+    it "exposes known filter field types without file upload or radio button factories" do
       expect(described_class.known_types).to include(
         :combobox,
         :token_search,
@@ -136,6 +136,7 @@ RSpec.describe "table metadata objects" do
       expect(described_class.known_type?(:combobox)).to be(true)
       expect(described_class.known_type?(" token_search ")).to be(true)
       expect(described_class.known_type?(:file_field)).to be(false)
+      expect(described_class.known_type?(:radio_button)).to be(false)
       expect(described_class.known_type?(:unknown_field)).to be(false)
       expect(described_class.known_type?(nil)).to be(false)
       expect(described_class.known_type?(" ")).to be(false)
@@ -281,6 +282,30 @@ RSpec.describe "table metadata objects" do
       )
     end
 
+    it "builds radio button table cell editor metadata from the built-in factory" do
+      input = described_class.radio_button(
+        :status,
+        tag_value: "published",
+        label: "Published",
+        checked: true
+      )
+
+      expect(input.to_table_cell_editor).to eq(
+        type: "rails_fields_kit",
+        field_type: "radio_button",
+        method: "status",
+        options: {
+          tag_value: "published",
+          label: "Published",
+          checked: true
+        }
+      )
+    end
+
+    it "requires a radio button tag value for the built-in factory" do
+      expect { described_class.radio_button(:status) }.to raise_error(ArgumentError)
+    end
+
     it "builds file field cell editor metadata from the built-in factory" do
       input = described_class.file_field(
         :attachment,
@@ -326,10 +351,12 @@ RSpec.describe "table metadata objects" do
         :time_field,
         :datetime_local_field,
         :color_field,
+        :radio_button,
         :file_field
       )
       expect(described_class.known_type?(:combobox)).to be(true)
       expect(described_class.known_type?(" token_search ")).to be(true)
+      expect(described_class.known_type?(:radio_button)).to be(true)
       expect(described_class.known_type?(:file_field)).to be(true)
       expect(described_class.known_type?(:unknown_field)).to be(false)
       expect(described_class.known_type?(nil)).to be(false)
