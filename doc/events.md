@@ -4,6 +4,8 @@ Rails Fields Kit dispatches Stimulus events from the `rails-fields-kit--tom-sele
 
 These events are integration hooks. Rails Fields Kit does not render visible success or error messages by itself, so host applications should subscribe to the events they care about and decide how to show feedback.
 
+Separately from request-failure events, Tom Select dropdown messages rendered from `no_results_text:` and `loading_text:` are short status messages inside the dropdown. The bundled renderer emits those no-results and loading messages with `role="status"`, `aria-live="polite"`, and `aria-atomic="true"` so copy overrides remain accessible status text. Keep those overrides short and state-like; long help, retry controls, loading policy, endpoint behavior, and visible feedback outside the dropdown remain host-app responsibilities.
+
 When a field is rendered with `error_surface: true`, the controller also includes `detail.surface` on request-failure events. That surface is an opt-in empty placeholder element near the field where the host app can render its own message or retry UI.
 
 By default, Rails Fields Kit generates the placeholder id from the form object and method, such as `dummy_model_customer_id_error_surface`. If the same object and method are rendered more than once on a page, pass an explicit `error_surface_html: { id: "..." }` for each field instance. The explicit id is used consistently for the surface element, the field's `aria-describedby`, and the controller data value that resolves `event.detail.surface`.
@@ -180,6 +182,7 @@ These are useful even when the field does not use remote search or create-on-the
 - Use `item-add` / `change` when the app cares that the selection actually changed after Tom Select accepted the value.
 - Use `load-error`, `selected-load-error`, or `create-error` when the app wants visible error UI, retry UI, or logging.
 - Use `detail.surface` with `error_surface: true` when the app wants a stable placeholder next to the field without replacing the controller.
+- Keep `no_results_text:` and `loading_text:` as dropdown-local status copy overrides, not request-failure UI or retry surfaces.
 - Keep visible feedback in the host app. Rails Fields Kit only dispatches the events.
 
 Example:
