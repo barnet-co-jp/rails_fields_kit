@@ -22,10 +22,13 @@ Use [`selected_preload_contract.md`](selected_preload_contract.md) when validati
 - Render one edit-form field with `selected_url:` and multiple saved IDs.
 - Confirm the field starts from ID-only values and restores visible labels for each saved ID.
 - Confirm the request uses the configured `selected_multiple_param:` key.
-- With the default configuration, confirm that key is `ids` and its value is comma-separated, for example `ids=1,2,3`.
+- With the default configuration, confirm that outgoing JavaScript request key is `ids` and its value is comma-separated, for example `ids=1,2,3`.
 - Confirm the endpoint accepts comma-separated `ids`, matching `rfk_find_with` documentation.
+- Confirm the endpoint helper also accepts Rails-parsed Array input for the configured `ids_param:`, such as `params[:ids] == ["1", "2"]` or a custom `params[:customer_ids] == ["1", "2"]`.
+- Treat raw repeated query keys or `ids[]` URLs as supported only after the host app request stack has normalized them to the configured param as an Array. Do not describe the bundled Tom Select request as sending repeated params unless the JavaScript request encoding changes in a separate feature.
+- Confirm blank or whitespace-only values do not become lookup IDs when either comma-separated or Array input is used.
 - Confirm the endpoint returns usable option objects with the configured value field for each restored ID; use [`selected_preload_contract.md`](selected_preload_contract.md) for accepted and invalid payload shapes.
-- Keep repeated params or `ids[]` support as a separate feature discussion unless release planning explicitly changes the public contract.
+- Keep changing the outgoing selected preload request encoding as a separate feature discussion unless release planning explicitly changes the public contract.
 
 ## Drift Checks
 
