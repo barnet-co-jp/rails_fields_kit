@@ -10,6 +10,7 @@ RSpec.describe "repository docs drift guards" do
   let(:configuration_doc) { read_repo_file("doc/configuration.md") }
   let(:configuration_profiles) { read_repo_file("doc/configuration_profiles.md") }
   let(:controller_helpers_doc) { read_repo_file("doc/controller_helpers.md") }
+  let(:events_doc) { read_repo_file("doc/events.md") }
   let(:support_boundary) { read_repo_file("doc/support_boundary.md") }
   let(:development_doc) { read_repo_file("doc/development.md") }
   let(:readme) { read_repo_file("README.md") }
@@ -17,6 +18,7 @@ RSpec.describe "repository docs drift guards" do
   let(:public_api_doc) { read_repo_file("doc/public_api.md") }
   let(:datalist_boundary) { read_repo_file("doc/datalist_boundary.md") }
   let(:mention_boundary) { read_repo_file("doc/mention_field_boundary.md") }
+  let(:visual_references_doc) { read_repo_file("doc/visual_references.md") }
   let(:gemspec) { read_repo_file("rails_fields_kit.gemspec") }
   let(:package_metadata) { JSON.parse(read_repo_file("package.json")) }
   let(:ci_workflow) { read_repo_file(".github/workflows/ci.yml") }
@@ -122,6 +124,40 @@ RSpec.describe "repository docs drift guards" do
       "permitted_attributes:` or trusted server-owned values through `assign:`",
       "[`field_helpers.md`](field_helpers.md)",
       "this page focuses on endpoint responsibilities"
+    )
+  end
+
+  it "keeps request-failure recipes and host feedback boundaries represented in docs" do
+    request_failure_recipe = markdown_top_level_section(events_doc, "## Copyable request-failure recipes")
+    choosing_the_right_hook = markdown_top_level_section(events_doc, "## Choosing the right hook")
+    visual_feedback_lanes = markdown_section(visual_references_doc, "### Request-failure and host-feedback lanes")
+
+    expect(events_doc).to include(
+      "When a field is rendered with `error_surface: true`, the controller also includes `detail.surface` on request-failure events",
+      "visible message text, retry UI, loading UI, or endpoint policy",
+      "Rails Fields Kit does not dispatch a separate request-start event or render built-in loading, retry, or fallback UI"
+    )
+
+    expect(request_failure_recipe).to include(
+      "rails-fields-kit--tom-select:load-error->customers#remoteSearchFailed",
+      "rails-fields-kit--tom-select:selected-load-error->customers#selectedPreloadFailed",
+      "rails-fields-kit--tom-select:create-error->customers#createFailed",
+      "current `load-error`, `selected-load-error`, and `create-error` hooks",
+      "It does not add a request-start event, built-in loading UI, built-in retry UI, toast UI, or a new payload shape",
+      "message copy, retry controls, analytics, and any extra UI state in the host app"
+    )
+
+    expect(choosing_the_right_hook).to include(
+      "Use `load-error`, `selected-load-error`, or `create-error` when the app wants visible error UI, retry UI, or logging",
+      "Use `detail.surface` with `error_surface: true` when the app wants a stable placeholder next to the field without replacing the controller",
+      "Keep visible feedback in the host app. Rails Fields Kit only dispatches the events."
+    )
+
+    expect(visual_feedback_lanes).to include(
+      "tom_select_request_failure_visual_reference.html",
+      "tom_select_host_feedback_lifecycle_visual_reference.html",
+      "keeping retry copy, reveal timing, and request lifecycle behavior with the host app",
+      "host-owned inline feedback, `detail.surface` placement, and follow-up clearing cues"
     )
   end
 
