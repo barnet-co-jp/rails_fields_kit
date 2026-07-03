@@ -9,6 +9,7 @@ RSpec.describe "focused docs inventory guard" do
   let(:readme) { read_doc("README.md") }
   let(:roadmap) { read_doc("ROADMAP.md") }
   let(:public_api) { read_doc("doc/public_api.md") }
+  let(:visual_references) { read_doc("doc/visual_references.md") }
   let(:field_helpers) { read_doc("doc/field_helpers.md") }
   let(:table_adapters) { read_doc("doc/table_adapters.md") }
   let(:table_file_field_metadata) { read_doc("doc/table_file_field_metadata.md") }
@@ -23,6 +24,10 @@ RSpec.describe "focused docs inventory guard" do
   let(:token_table_sample_app_evidence) { read_doc("doc/token_table_sample_app_evidence.md") }
   let(:search_controller_release_evidence) { read_doc("doc/search_controller_release_evidence.md") }
   let(:radio_button_release_evidence) { read_doc("doc/radio_button_release_evidence.md") }
+  let(:tom_select_no_event_boundary_review) { read_doc("doc/tom_select_no_event_boundary_review.html") }
+  let(:tom_select_plugin_clearable_review) { read_doc("doc/tom_select_plugin_clearable_review.html") }
+  let(:setup_doctor_output_review) { read_doc("doc/setup_doctor_output_review.md") }
+  let(:setup_doctor_output_narrow_wrap_review) { read_doc("doc/setup_doctor_output_narrow_wrap_review.md") }
 
   it "keeps table file field metadata packaged and routed without promoting upload ownership" do
     expect(specification.files).to include("doc/table_file_field_metadata.md")
@@ -177,6 +182,57 @@ RSpec.describe "focused docs inventory guard" do
       "Narrow: about `390x844`",
       "CI success and source review are useful context, but they are not browser visual approval",
       "Do not mark a visual reference as browser-approved unless the desktop and narrow browser review actually ran"
+    )
+  end
+
+  it "keeps map-only Tom Select companion artifacts packaged without promoting runtime ownership" do
+    expect(specification.files).to include(
+      "doc/tom_select_no_event_boundary_review.html",
+      "doc/tom_select_plugin_clearable_review.html"
+    )
+
+    expect(visual_references).to include(
+      "[`tom_select_no_event_boundary_review.html`](tom_select_no_event_boundary_review.html)",
+      "stale-response silence from current request failure",
+      "request-start / finish events",
+      "[`tom_select_plugin_clearable_review.html`](tom_select_plugin_clearable_review.html)",
+      "single-select whole-field clear affordance",
+      "multi-item remove buttons",
+      "plugin assets, styling, event payloads, selection mutation, and Tom Select lifecycle behavior outside Rails Fields Kit"
+    )
+
+    expect(tom_select_no_event_boundary_review).to include(
+      "Static QA lane for request cancellation and stale response boundaries",
+      "Stale or aborted request is ignored",
+      "No success or failure event is dispatched",
+      "Event names, payloads, retry UI, and request controller behavior are not changed by this artifact"
+    )
+
+    expect(tom_select_plugin_clearable_review).to include(
+      "Plugin and Clearable State Review",
+      "Single select with whole-field clear",
+      "Multi item removal is a different affordance",
+      "Plugin assets, styling, event payloads, selection mutation, and Tom Select lifecycle behavior remain host-app or Tom Select responsibilities"
+    )
+  end
+
+  it "keeps setup doctor narrow-wrap review evidence packaged without changing setup behavior" do
+    expect(specification.files).to include(
+      "doc/setup_doctor_output_review.md",
+      "doc/setup_doctor_output_narrow_wrap_review.md"
+    )
+
+    expect(setup_doctor_output_review).to include(
+      "Use `doc/setup_doctor_output_narrow_wrap_review.md` with this route",
+      "80-column terminal, GitHub PR comment code block, or 390px Markdown preview",
+      "setup doctor runtime wording, exit-code behavior, auto-fix policy, and host-app setup policy here as non-goals"
+    )
+
+    expect(setup_doctor_output_narrow_wrap_review).to include(
+      "Setup Doctor Narrow Wrap Review Aid",
+      "review evidence only",
+      "does not define setup doctor runtime wording, exit-code behavior, auto-fix policy, host-app setup policy, or production UI",
+      "expected/found pairs stayed adjacent; [MANUAL] read as host-app follow-up, not failure"
     )
   end
 
