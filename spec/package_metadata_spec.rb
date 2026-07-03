@@ -10,6 +10,40 @@ RSpec.describe "package metadata" do
   let(:repo_root) { File.expand_path("..", __dir__) }
   let(:package_json_path) { File.join(repo_root, "package.json") }
 
+  def package_json
+    JSON.parse(File.read(package_json_path))
+  end
+
+  def package_exports
+    package_json.fetch("exports")
+  end
+
+  def package_export_import_paths
+    package_exports.transform_values { |metadata| metadata.fetch("import") }
+  end
+
+  def direct_package_import_names
+    package_exports.keys.reject { |export_name| export_name == "." }.map { |export_name| export_name.delete_prefix("./") }
+  end
+
+  def copy_package_entrypoints(package_dir, node_package_entrypoint_dir)
+    package_export_import_paths.each do |export_name, import_path|
+      unless import_path.start_with?("./app/javascript/rails_fields_kit/") && import_path.end_with?(".js")
+        raise "#{export_name} import path must point at a packaged JavaScript entrypoint: #{import_path}"
+      end
+
+      entrypoint_name = import_path.delete_prefix("./app/javascript/rails_fields_kit/")
+      FileUtils.cp(
+        File.join(repo_root, import_path.delete_prefix("./")),
+        File.join(package_dir, entrypoint_name)
+      )
+      FileUtils.cp(
+        File.join(package_dir, entrypoint_name),
+        File.join(node_package_entrypoint_dir, entrypoint_name)
+      )
+    end
+  end
+
   def build_entrypoint_sandbox
     Dir.mktmpdir("rails-fields-kit-entrypoints") do |tmpdir|
       package_dir = File.join(tmpdir, "app/javascript/rails_fields_kit")
@@ -25,46 +59,7 @@ RSpec.describe "package metadata" do
 
       File.write(File.join(tmpdir, "package.json"), "{\n  \"type\": \"module\"\n}\n")
       FileUtils.cp(package_json_path, File.join(node_package_dir, "package.json"))
-      FileUtils.cp(
-        File.join(repo_root, "app/javascript/rails_fields_kit/index.js"),
-        File.join(package_dir, "index.js")
-      )
-      FileUtils.cp(
-        File.join(repo_root, "app/javascript/rails_fields_kit/native_field_accessibility_contract.js"),
-        File.join(package_dir, "native_field_accessibility_contract.js")
-      )
-      FileUtils.cp(
-        File.join(repo_root, "app/javascript/rails_fields_kit/native_field_constraint_contract.js"),
-        File.join(package_dir, "native_field_constraint_contract.js")
-      )
-      FileUtils.cp(
-        File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
-        File.join(package_dir, "tom_select_controller.js")
-      )
-      FileUtils.cp(
-        File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_text_override_contract.js"),
-        File.join(package_dir, "tom_select_text_override_contract.js")
-      )
-      FileUtils.cp(
-        File.join(package_dir, "index.js"),
-        File.join(node_package_entrypoint_dir, "index.js")
-      )
-      FileUtils.cp(
-        File.join(package_dir, "native_field_accessibility_contract.js"),
-        File.join(node_package_entrypoint_dir, "native_field_accessibility_contract.js")
-      )
-      FileUtils.cp(
-        File.join(package_dir, "native_field_constraint_contract.js"),
-        File.join(node_package_entrypoint_dir, "native_field_constraint_contract.js")
-      )
-      FileUtils.cp(
-        File.join(package_dir, "tom_select_controller.js"),
-        File.join(node_package_entrypoint_dir, "tom_select_controller.js")
-      )
-      FileUtils.cp(
-        File.join(package_dir, "tom_select_text_override_contract.js"),
-        File.join(node_package_entrypoint_dir, "tom_select_text_override_contract.js")
-      )
+      copy_package_entrypoints(package_dir, node_package_entrypoint_dir)
       File.write(
         File.join(stimulus_dir, "package.json"),
         "{\n  \"name\": \"@hotwired/stimulus\",\n  \"type\": \"module\",\n  \"exports\": \"./index.js\"\n}\n"
@@ -118,7 +113,7 @@ RSpec.describe "package metadata" do
   end
 
   it "exports the documented JavaScript entrypoints" do
-    package = JSON.parse(File.read(package_json_path))
+    package = package_json
 
     expect(package.fetch("name")).to eq("rails_fields_kit")
     expect(package.fetch("type")).to eq("module")
@@ -187,10 +182,16 @@ RSpec.describe "package metadata" do
     build_entrypoint_sandbox do |tmpdir|
       script = <<~JS
         const rootModule = await import("rails_fields_kit")
-        const controllerModule = await import("rails_fields_kit/tom_select_controller")
-        const nativeAccessibilityContractModule = await import("rails_fields_kit/native_field_accessibility_contract")
-        const nativeConstraintContractModule = await import("rails_fields_kit/native_field_constraint_contract")
-        const textContractModule = await import("rails_fields_kit/tom_select_text_override_contract")
+        const directImportNames = #{JSON.generate(direct_package_import_names)}
+        const directModules = {}
+        for (const importName of directImportNames) {
+          directModules[importName] = await import(`rails_fields_kit/${importName}`)
+        }
+
+        const controllerModule = directModules["tom_select_controller"]
+        const nativeAccessibilityContractModule = directModules["native_field_accessibility_contract"]
+        const nativeConstraintContractModule = directModules["native_field_constraint_contract"]
+        const textContractModule = directModules["tom_select_text_override_contract"]
 
         if (typeof controllerModule.default !== "function") {
           throw new Error("direct controller package import did not export a default controller class")
