@@ -33,6 +33,22 @@ en:
           published: Published
 ```
 
+## Option Metadata
+
+`rfk_enum_select` accepts the same rendered-option metadata lane as collection-backed `rfk_select` for choices that are already present in the enum source:
+
+```erb
+<%= f.rfk_enum_select :status,
+  disabled: ["archived"],
+  option_html: {
+    "draft" => { data: { state: "initial" } }
+  } %>
+```
+
+Use value-array `disabled:` when an enum key should render as a disabled `<option>`. Use `option_html:` when an enum key needs rendered attributes such as `data` or classes before Tom Select connects. Hash keys are matched against the rendered enum option value, so explicit `enum:` sources still submit the enum key rather than the backing integer.
+
+This metadata lane only decorates already-rendered enum options. It does not add an arbitrary label/value DSL, remote enum lookup, authorization policy, dynamic visibility rules, endpoint payload mapping, or rich Tom Select renderer behavior. If the option list is not Rails-enum-shaped, use `rfk_select` or a remote helper instead.
+
 ## Rendered Kind
 
 `rfk_enum_select` renders `data-rails-fields-kit--tom-select-kind-value="enum_select"` so `tomSelectFieldKindContract(element)` can distinguish enum-backed select fields from arbitrary `rfk_select` fields.
@@ -43,6 +59,6 @@ This is only a read-only rendered contract signal. It does not change the select
 
 Use explicit `enum:` for a small hash-like enum source that follows the Rails enum shape. Do not use it as a general label/value DSL.
 
-Choose `rfk_select` instead when you need arbitrary label/value pairs, object collections, disabled options with custom grouping semantics, or options that are not Rails enum-style keys.
+Choose `rfk_select` instead when you need arbitrary label/value pairs, object collections, custom collection shaping, or options that are not Rails enum-style keys.
 
-Remote enum lookup, Ransack filters, enum i18n policy, enum validation, authorization, query execution, production CSS, and table metadata adapter behavior stay outside `rfk_enum_select`; use the dedicated helpers and docs for those paths.
+Remote enum lookup, Ransack filters, enum i18n policy, enum validation, authorization, query execution, production CSS, dynamic option visibility, and table metadata adapter behavior stay outside `rfk_enum_select`; use the dedicated helpers and docs for those paths.

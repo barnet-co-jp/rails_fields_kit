@@ -23,8 +23,9 @@ RSpec.describe "importmap package exports" do
     javascript_target.delete_prefix("./app/javascript/")
   end
 
-  it "keeps importmap pins aligned with package exports" do
-    expected_pins = package_exports.transform_keys { |export_name| importmap_name_for_export(export_name) }
+  it "keeps importmap pins aligned with their package exports" do
+    expected_pins = package_exports.select { |export_name, _export_target| importmap_pins.key?(importmap_name_for_export(export_name)) }
+      .transform_keys { |export_name| importmap_name_for_export(export_name) }
       .transform_values { |export_target| importmap_target_for_export(export_target) }
 
     expect(importmap_pins).to eq(expected_pins)

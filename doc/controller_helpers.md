@@ -29,7 +29,7 @@ Scan by workflow first, then match the rendered field option to the controller h
 ### Create-on-the-fly
 
 - Use when the field may accept new option text and expects created option JSON back.
-- Render with `create_url:`, `create_param:`, and optional `create_params:`.
+- Render with `create_url:`, `create_param:`, and optional `create_params:`. Treat `create_params:` as fixed JSON body values for the create `POST`, not as URL query params.
 - Pair with `rfk_create_with` in the controller.
 
 ### Token suggestions
@@ -38,7 +38,7 @@ Scan by workflow first, then match the rendered field option to the controller h
 - Render with `rfk_token_search` and `url:`.
 - Pair with `rfk_token_suggestions_with` in the controller.
 
-Keep the FormBuilder request option and controller helper option aligned. For example, a field using `selected_param: "customer_id"` should pair with `rfk_find_with id_param: :customer_id`, and a field using `create_param: "name"` should pair with `rfk_create_with create_param: "name"`. If the workflow question is mostly about which field helper to render, start from [`field_helpers.md`](field_helpers.md); this page focuses on endpoint responsibilities.
+Keep the FormBuilder request option and controller helper option aligned. For example, a field using `selected_param: "customer_id"` should pair with `rfk_find_with id_param: :customer_id`, and a field using `create_param: "name"` should pair with `rfk_create_with create_param: "name"`. If a field also uses `create_params:`, read those values as outgoing create JSON body fields; persist only explicitly accepted client fields through `permitted_attributes:` or trusted server-owned values through `assign:`. If the workflow question is mostly about which field helper to render, start from [`field_helpers.md`](field_helpers.md); this page focuses on endpoint responsibilities.
 
 ## `rfk_search_with`
 

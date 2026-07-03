@@ -254,7 +254,8 @@
         gap: 10px;
       }
 
-      .option-title strong {
+      .option-title strong,
+      .message strong {
         min-width: 0;
         font-size: 0.96rem;
         overflow-wrap: anywhere;
@@ -268,13 +269,29 @@
       }
 
       .badge,
-      .option-kind {
+      .option-kind,
+      .option-token-value {
         flex: none;
         max-width: 100%;
         padding: 2px 7px;
         border: 1px solid var(--line);
         background: #eef2f6;
         color: #526170;
+        overflow-wrap: anywhere;
+      }
+
+      .option-token-value {
+        border-style: dashed;
+        border-color: #b9d5cc;
+        background: #f7fbf9;
+        color: var(--saved);
+        font-size: 0.78rem;
+        font-weight: 650;
+      }
+
+      .option-token-value code {
+        color: inherit;
+        font: inherit;
         overflow-wrap: anywhere;
       }
 
@@ -354,6 +371,10 @@
         .option-title {
           flex-direction: column;
         }
+
+        .option-meta {
+          align-items: flex-start;
+        }
       }
     </style>
   </head>
@@ -406,6 +427,7 @@
                 </div>
                 <div class="option-meta">
                   <span class="option-kind saved">kind: saved search</span>
+                  <span class="option-token-value">token value: <code>saved:mine</code></span>
                   <span>My saved search</span>
                 </div>
               </div>
@@ -416,12 +438,13 @@
                 </div>
                 <div class="option-meta">
                   <span class="option-kind saved">kind: saved search</span>
+                  <span class="option-token-value">token value: <code>saved:recently-updated</code></span>
                   <span>Saved query owned by the host app.</span>
                 </div>
               </div>
             </div>
           </div>
-          <p class="card-footer">The saved suggestions stand out through badge text, kind labels, and a left edge accent while keeping the same option shape as other token suggestions.</p>
+          <p class="card-footer">The saved suggestions stand out through badge text, kind labels, token values, and a left edge accent while keeping the same option shape as other token suggestions.</p>
         </article>
 
         <article class="card">
@@ -433,7 +456,7 @@
           <div class="control" aria-hidden="true">
             <div class="control-top">
               <div class="selection">
-                <span class="token saved">saved:mine</span>
+                <span class="token saved"><span class="token-kind">saved</span><span class="token-label">saved:mine</span></span>
                 <span class="token">status:open</span>
               </div>
               <div class="caret">v</div>
@@ -515,6 +538,7 @@
                 </div>
                 <div class="option-meta">
                   <span class="option-kind saved">kind: saved search</span>
+                  <span class="option-token-value">token value: <code>saved:stalled-orders</code></span>
                   <span>Saved search shortcut supplied by the app.</span>
                 </div>
               </div>
@@ -529,7 +553,7 @@
         <p>Use this checklist when reviewing the saved-search token state across desktop and narrow viewports.</p>
         <ul>
           <li><strong>Desktop:</strong> saved-search options remain visually comparable with field and value options while the left edge accent and `kind: saved search` label are easy to scan.</li>
-          <li><strong>Narrow viewport:</strong> long option titles, multi-token selections, remove affordances, and helper copy wrap inside the dropdown without clipping the badge, token, or card boundary.</li>
+          <li><strong>Narrow viewport:</strong> long option titles, saved-search token values, multi-token selections, remove affordances, and helper copy wrap inside the dropdown without clipping the badge, token, or card boundary.</li>
           <li><strong>Density:</strong> the fixed hero size, plain-case chips, and unexpanded letter spacing keep the state-comparison cards ahead of decorative heading treatment.</li>
           <li><strong>Delimiter reading:</strong> the space-delimited multi-token state remains readable without implying that Rails Fields Kit owns token parsing or query execution.</li>
           <li><strong>Kind reading:</strong> saved, field, value, and free-text suggestions can be distinguished by visible text and layout, not color alone.</li>
