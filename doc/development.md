@@ -44,6 +44,8 @@ The repository documentation drift spec covers two narrow repository-maintenance
 
 The public docs inventory guard spec keeps package and source signals aligned with the public docs inventory without making this guide a full spec mirror. It checks that native date/time/color helper docs stay packaged and represented in the public API, that focused token/table sample evidence remains listed as an evidence companion, and that table metadata known types stay aligned with the public API method list while preserving the Ransack-specific filter boundary.
 
+The sample app results route guide spec keeps `doc/sample_app_results_route_guide.md` packaged and reachable as the narrow PR evidence route guide for release-wide sample-app evidence, PR comments, source-only visual reviews, and deferred browser-capable checks. Treat that guide as a recording-lane selector, not a release gate, sample app execution requirement, CI job, or browser visual approval substitute.
+
 The setup example documentation drift spec keeps the JavaScript setup signals in `README.md` and `doc/setup.md` aligned for package-root imports, direct controller imports, bundler aliases, and importmap pins without freezing the full prose.
 
 The suggestion payload documentation drift spec keeps `TokenSuggestions` and `RansackSuggestions` docs aligned with representative option payload keys, custom output field names, and Ransack metadata keys without freezing full examples or prose.
