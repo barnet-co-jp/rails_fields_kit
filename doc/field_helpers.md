@@ -403,7 +403,7 @@ The wrapper customization options map to generated pieces this way:
 | `error_html:` | generated validation error message |
 | `control_html:` | prefix/suffix control wrapper |
 | `prefix_html:` | prefix affix |
-| `suffix_html:` | prefix affix |
+| `suffix_html:` | suffix affix |
 | `html:` | input or select element itself |
 
 These options only customize rendered HTML attributes. They do not change validation behavior, remote loading, query parsing, or host-app authorization and scoping responsibilities.
