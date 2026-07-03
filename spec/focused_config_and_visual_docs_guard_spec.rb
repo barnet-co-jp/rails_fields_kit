@@ -13,8 +13,10 @@ RSpec.describe "focused configuration and visual docs inventory guard" do
   let(:field_helpers) { read_doc("doc/field_helpers.md") }
   let(:controller_helpers) { read_doc("doc/controller_helpers.md") }
   let(:visual_references) { read_doc("doc/visual_references.md") }
+  let(:release_guide) { read_doc("doc/release.md") }
   let(:default_allow_clear) { read_doc("doc/default_allow_clear.md") }
   let(:tom_select_source_fallback_review) { read_doc("doc/tom_select_source_fallback_review.html") }
+  let(:tom_select_error_surface_contract_visual_reference) { read_doc("doc/tom_select_error_surface_contract_visual_reference.html") }
   let(:native_accessibility_contract_visual_reference) { read_doc("doc/native_accessibility_contract_visual_reference.html") }
 
   it "keeps the default_allow_clear focused guide packaged and routed without taking over plugin behavior" do
@@ -75,6 +77,34 @@ RSpec.describe "focused configuration and visual docs inventory guard" do
       "Remote label missing",
       "Display-only fallback when a remote option is missing the configured label field or returns an empty label",
       "This companion artifact supplements the existing Tom Select core reference without changing production helper markup or runtime JavaScript"
+    )
+  end
+
+  it "keeps the error surface contract visual reference packaged and routed without promoting retry UI" do
+    expect(specification.files).to include("doc/tom_select_error_surface_contract_visual_reference.html")
+
+    expect(visual_references).to include(
+      "[`tom_select_error_surface_contract_visual_reference.html`](tom_select_error_surface_contract_visual_reference.html)",
+      "Focused `error_surface: true` live-region contract states and wrapper customization boundaries",
+      "hidden-by-default live region, host-app-visible feedback, and custom wrapper attribute lane",
+      "without treating retry UI, visible copy, or request lifecycle behavior as built in"
+    )
+    expect(release_guide).to include(
+      "`doc/tom_select_error_surface_contract_visual_reference.html`",
+      "request-failure accessibility contract evidence"
+    )
+
+    expect(tom_select_error_surface_contract_visual_reference).to include(
+      "Error Surface Accessibility Contract Reference",
+      "Focused visual review lane for the current <code>error_surface: true</code> placeholder",
+      "<code>role=\"status\"</code>",
+      "<code>aria-live=\"polite\"</code>",
+      "<code>aria-atomic=\"true\"</code>",
+      "hidden default boundary without adding visible retry UI",
+      "Visible host-app state",
+      "No request lifecycle, event payload, or retry behavior changes.",
+      "<code>error_surface_html:</code> changes attributes only",
+      "Do not change Tom Select lifecycle, event payload, helper markup, retry action, or production CSS from this artifact"
     )
   end
 
