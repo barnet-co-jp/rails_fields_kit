@@ -20,7 +20,11 @@ RSpec.describe "table metadata helper inventory" do
   end
 
   def documented_filter_factory_methods
-    documented_factory_methods("RailsFieldsKit::TableFilterInput") + focused_filter_factory_methods
+    methods = documented_factory_methods("RailsFieldsKit::TableFilterInput")
+    return methods unless focused_filter_factory_methods.include?(:radio_button)
+
+    insertion_index = methods.index(:token_search) || methods.index(:ransack_filter) || methods.length
+    methods.dup.insert(insertion_index, :radio_button)
   end
 
   def focused_filter_factory_methods
