@@ -365,6 +365,8 @@ Native wrapper helpers also pass ordinary Rails field options to the rendered in
 
 Those attributes stay browser-native and host-app behavior. Rails Fields Kit does not add character counters, input masks, browser validation-message policy, or server-side validation rules for native wrapper helpers; it only keeps the wrapper, hint, error, affix, and accessibility wiring around the native input.
 
+For character-counter questions, keep `maxlength` in that current native attribute lane and use [`native_character_counter_boundary_sample_evidence.html`](native_character_counter_boundary_sample_evidence.html) only as map-only sample evidence for the host-owned enhancement boundary. That artifact compares Rails Fields Kit wrapper / hint / error wiring with host-app-owned live counter copy, over-limit messaging, validation wording, and production CSS; it does not make `character_counter:` or a counter controller part of the current public API.
+
 When the host app needs to own that accessibility wiring itself, keep the same wrapper lane and opt out explicitly:
 
 ```erb
@@ -575,8 +577,6 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 For remote search and selected-option preload, fixed params are URL query params. Scalar values are set on the request URL, array values are appended as repeated query entries for the same key, and `null` / `undefined` values are skipped. `create_params:` is separate: Rails Fields Kit merges those fixed values into the create-on-the-fly JSON body, not the request URL.
 
 When neither the field nor the initializer sets those values, Rails Fields Kit falls back to bundled locale-aware copy at render time. The bundled baseline currently includes English and Japanese, and falls back to English when a locale-specific key is not present.
-
-Use `config.default_loading_text`, `config.default_no_results_text`, and `config.default_create_text` in the initializer when the whole host app should share the same baseline wording. Use the helper options above when a single field needs different copy.
 
 Example:
 
