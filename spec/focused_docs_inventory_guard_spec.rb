@@ -155,7 +155,7 @@ RSpec.describe "focused docs inventory guard" do
       "The host app remains responsible for number formatting, locale-specific separators, rounding, currency conversion, currency display policy, decimal precision, browser validation-message wording, server-side validation, and persistence"
     )
     expect(native_contact_fields).to include(
-      "`rfk_email_field`, `rfk_url_field`, and `rfk_search_field`",
+      "`rfk_email_field`, `rfk_url_field`, `rfk_phone_field`, and `rfk_search_field`",
       "delegates to Rails' native `email_field` helper",
       "delegates to Rails' native `url_field` helper",
       "delegates to Rails' native `telephone_field` helper and defaults `autocomplete` to `tel`",
