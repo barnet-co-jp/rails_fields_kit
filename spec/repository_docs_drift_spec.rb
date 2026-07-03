@@ -6,8 +6,10 @@ require "spec_helper"
 RSpec.describe "repository docs drift guards" do
   let(:root) { File.expand_path("..", __dir__) }
   let(:configuration_source) { read_repo_file("lib/rails_fields_kit/configuration.rb") }
+  let(:searchable_source) { read_repo_file("lib/rails_fields_kit/searchable.rb") }
   let(:configuration_doc) { read_repo_file("doc/configuration.md") }
   let(:configuration_profiles) { read_repo_file("doc/configuration_profiles.md") }
+  let(:controller_helpers_doc) { read_repo_file("doc/controller_helpers.md") }
   let(:support_boundary) { read_repo_file("doc/support_boundary.md") }
   let(:development_doc) { read_repo_file("doc/development.md") }
   let(:readme) { read_repo_file("README.md") }
@@ -69,6 +71,31 @@ RSpec.describe "repository docs drift guards" do
       "starting points for app-owned configuration",
       "not presets, modes, or design system policy owned by the gem",
       "avoid a Ruby profile API, generator option, or preset registry"
+    )
+  end
+
+  it "keeps controller helper keyword options represented in controller helper docs" do
+    signature = searchable_source.match(/def rfk_search_with\((?<signature>[^\n]+)\)/)[:signature]
+    documented_options = controller_helpers_doc
+      .match(/### Common options\n\n(?<section>.*?)(?:\n### |\n## )/m)[:section]
+      .scan(/`([a-z_]+):`/)
+      .flatten
+
+    expected_common_options = %w[
+      action model value label search query_param limit minimum_query_length scope order distinct wrap
+    ]
+
+    expect(signature.scan(/([a-z_]+):/).flatten).to include(*expected_common_options)
+    expect(documented_options).to include(*expected_common_options)
+    expect(controller_helpers_doc).to include(
+      "minimum_query_length: 1",
+      "minimum_query_length:` endpoint-side minimum query length",
+      "FormBuilder's field-level `min_length:` is a browser-side loading hint",
+      "endpoint-side relation helpers, not request-parameter sanitizers"
+    )
+    expect(development_doc).to include(
+      "remote request option documentation drift spec",
+      "controller helper keyword options"
     )
   end
 
