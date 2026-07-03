@@ -54,6 +54,8 @@ When checking the table FormBuilder helper surface, read `lib/rails_fields_kit/f
 
 The remote request option documentation drift spec keeps representative request-shaping option names visible across README, `doc/field_helpers.md`, and `doc/controller_helpers.md`. It checks public option signals such as `query_params:`, `selected_query_params:`, `create_params:`, `selected_param:`, `selected_multiple_param:`, and `create_param:` without turning README into a full mirror of the endpoint helper reference.
 
+It also checks representative controller helper keyword options such as `minimum_query_length:`, `scope:`, `order:`, and `wrap:` against `doc/controller_helpers.md` so endpoint helper docs drift is caught without generating docs or freezing full prose.
+
 Representative compatibility checks are also useful before review or release:
 
 ```bash
