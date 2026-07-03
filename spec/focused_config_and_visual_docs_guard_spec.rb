@@ -71,7 +71,7 @@ RSpec.describe "focused configuration and visual docs inventory guard" do
       "Tom Select Source and Fallback Review",
       "Compare labels, submitted keys, placeholder copy, selected state, and disabled option readability only",
       "Do not treat this page as a new helper API, renderer change, enum translation policy, validation policy, authorization rule, or endpoint validation proposal",
-      "Explicit `enum:` hash",
+      "Explicit <code>enum:</code> hash",
       "Remote label missing",
       "Display-only fallback when a remote option is missing the configured label field or returns an empty label",
       "This companion artifact supplements the existing Tom Select core reference without changing production helper markup or runtime JavaScript"
@@ -94,7 +94,7 @@ RSpec.describe "focused configuration and visual docs inventory guard" do
       "Native Accessibility Contract Reference",
       "Focused visual review lane for the current `nativeFieldAccessibilityContract(element)`",
       "wrapper, label, hint, error, and `aria-describedby` pieces",
-      "labelElement` resolves an explicit `label[for]` first, then the nearest wrapper label fallback",
+      "Confirm <code>labelElement</code> resolves an explicit <code>label[for]</code> first, then the nearest wrapper label fallback.",
       "Do not change native helper markup, JavaScript helper behavior, or the reader return shape from this artifact"
     )
   end
