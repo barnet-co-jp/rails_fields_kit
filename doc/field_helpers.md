@@ -403,7 +403,7 @@ The wrapper customization options map to generated pieces this way:
 | `error_html:` | generated validation error message |
 | `control_html:` | prefix/suffix control wrapper |
 | `prefix_html:` | prefix affix |
-| `suffix_html:` | suffix affix |
+| `suffix_html:` | prefix affix |
 | `html:` | input or select element itself |
 
 These options only customize rendered HTML attributes. They do not change validation behavior, remote loading, query parsing, or host-app authorization and scoping responsibilities.
@@ -577,6 +577,8 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 For remote search and selected-option preload, fixed params are URL query params. Scalar values are set on the request URL, array values are appended as repeated query entries for the same key, and `null` / `undefined` values are skipped. `create_params:` is separate: Rails Fields Kit merges those fixed values into the create-on-the-fly JSON body, not the request URL.
 
 When neither the field nor the initializer sets those values, Rails Fields Kit falls back to bundled locale-aware copy at render time. The bundled baseline currently includes English and Japanese, and falls back to English when a locale-specific key is not present.
+
+Use `config.default_loading_text`, `config.default_no_results_text`, and `config.default_create_text` in the initializer when the whole host app should share the same baseline wording. Use the helper options above when a single field needs different copy.
 
 Example:
 
