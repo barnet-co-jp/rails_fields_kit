@@ -10,7 +10,10 @@ RSpec.describe "focused docs inventory guard" do
   let(:roadmap) { read_doc("ROADMAP.md") }
   let(:public_api) { read_doc("doc/public_api.md") }
   let(:field_helpers) { read_doc("doc/field_helpers.md") }
+  let(:table_adapters) { read_doc("doc/table_adapters.md") }
   let(:table_file_field_metadata) { read_doc("doc/table_file_field_metadata.md") }
+  let(:table_range_field_metadata) { read_doc("doc/table_range_field_metadata.md") }
+  let(:table_check_box_metadata) { read_doc("doc/table_check_box_metadata.md") }
   let(:datalist_boundary) { read_doc("doc/datalist_boundary.md") }
   let(:native_numeric_fields) { read_doc("doc/native_numeric_fields.md") }
   let(:native_contact_fields) { read_doc("doc/native_contact_fields.md") }
@@ -34,6 +37,53 @@ RSpec.describe "focused docs inventory guard" do
       "cell-editor-only",
       "`TableFilterInput.file_field` is not a built-in factory",
       "The host application owns multipart form setup, Active Storage direct upload JavaScript, preview UI, upload progress UI, file validation policy, storage configuration, virus scanning, table persistence, query execution, authorization, and production CSS"
+    )
+  end
+
+  it "keeps focused range and checkbox table metadata docs packaged without promoting table semantics" do
+    expect(specification.files).to include(
+      "doc/table_range_field_metadata.md",
+      "doc/table_check_box_metadata.md"
+    )
+
+    expect(public_api).to include(
+      "[`table_range_field_metadata.md`](table_range_field_metadata.md)",
+      "[`table_check_box_metadata.md`](table_check_box_metadata.md)",
+      "range-pair query semantics",
+      "boolean query policy",
+      "table persistence",
+      "production styling"
+    )
+
+    expect(table_adapters).to include(
+      "[`table_range_field_metadata.md`](table_range_field_metadata.md)",
+      "TableFilterInput.range_field",
+      "TableCellInput.range_field",
+      "without adding range-pair query semantics, custom sliders, table persistence, or production styling",
+      "[`table_check_box_metadata.md`](table_check_box_metadata.md)",
+      "TableFilterInput.check_box",
+      "TableCellInput.check_box",
+      "without adding boolean query semantics, tri-state filtering, bulk edit, table persistence, or production styling"
+    )
+
+    expect(table_range_field_metadata).to include(
+      "RailsFieldsKit::TableFilterInput.range_field",
+      "RailsFieldsKit::TableCellInput.range_field",
+      "TableRenderer` maps `range_field` to `rfk_range_field`",
+      "Treat `min`, `max`, and `step` as ordinary native input options",
+      "Rails Fields Kit does not add range-pair query semantics, multi-thumb sliders, custom slider UI, table preference persistence, Ransack execution, or production styling"
+    )
+
+    expect(table_check_box_metadata).to include(
+      "TableFilterInput.check_box",
+      "TableCellInput.check_box",
+      "TableRenderer` dispatches this field type to `rfk_check_box`",
+      "pass-through of `checked_value:`, `unchecked_value:`, and ordinary wrapper options",
+      "interpreting submitted checked and unchecked values",
+      "query construction, including Ransack predicates",
+      "tri-state filtering or indeterminate-state UI",
+      "bulk edit behavior and persistence",
+      "authorization and table execution policy"
     )
   end
 
