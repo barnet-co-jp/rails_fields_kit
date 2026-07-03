@@ -365,6 +365,8 @@ Native wrapper helpers also pass ordinary Rails field options to the rendered in
 
 Those attributes stay browser-native and host-app behavior. Rails Fields Kit does not add character counters, input masks, browser validation-message policy, or server-side validation rules for native wrapper helpers; it only keeps the wrapper, hint, error, affix, and accessibility wiring around the native input.
 
+For character-counter questions, keep `maxlength` in that current native attribute lane and use [`native_character_counter_boundary_sample_evidence.html`](native_character_counter_boundary_sample_evidence.html) only as map-only sample evidence for the host-owned enhancement boundary. That artifact compares Rails Fields Kit wrapper / hint / error wiring with host-app-owned live counter copy, over-limit messaging, validation wording, and production CSS; it does not make `character_counter:` or a counter controller part of the current public API.
+
 When the host app needs to own that accessibility wiring itself, keep the same wrapper lane and opt out explicitly:
 
 ```erb
