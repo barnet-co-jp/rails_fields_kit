@@ -69,7 +69,7 @@ RSpec.describe "public docs inventory guards" do
     filter_methods = documented_class_methods("TableFilterInput")
     cell_methods = documented_class_methods("TableCellInput")
     table_metadata_intro = markdown_section(public_api, "## Table metadata adapters")
-    focused_filter_methods = filter_methods + focused_table_filter_methods
+    focused_filter_methods = with_focused_table_filter_methods(filter_methods)
 
     expect(focused_filter_methods).to eq(
       %w[known_types known_type? from_type] +
@@ -105,6 +105,13 @@ RSpec.describe "public docs inventory guards" do
 
   def focused_table_filter_methods
     radio_metadata.include?("TableFilterInput.radio_button") ? ["radio_button"] : []
+  end
+
+  def with_focused_table_filter_methods(methods)
+    return methods unless focused_table_filter_methods.include?("radio_button")
+
+    insertion_index = methods.index("token_search") || methods.index("ransack_filter") || methods.length
+    methods.dup.insert(insertion_index, "radio_button")
   end
 
   def markdown_section(document, heading)
