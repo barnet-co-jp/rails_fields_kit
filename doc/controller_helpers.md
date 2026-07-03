@@ -29,7 +29,7 @@ Scan by workflow first, then match the rendered field option to the controller h
 ### Create-on-the-fly
 
 - Use when the field may accept new option text and expects created option JSON back.
-- Render with `create_url:`, `create_param:`, and optional `create_params:`.
+- Render with `create_url:`, `create_param:`, and optional `create_params:`; fixed `create_params:` values go in the JSON body, unlike `query_params:` / `selected_query_params:` on URL query requests.
 - Pair with `rfk_create_with` in the controller.
 
 ### Token suggestions
