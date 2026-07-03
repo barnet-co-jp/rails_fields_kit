@@ -26,6 +26,7 @@ module RailsFieldsKit
       search_field
       password_field
       check_box
+      radio_button
     ].freeze
 
     KNOWN_FIELD_TYPES = (COMMON_FIELD_TYPES + %i[token_search]).freeze
