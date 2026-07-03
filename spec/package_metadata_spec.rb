@@ -134,10 +134,20 @@ RSpec.describe "package metadata" do
         "import" => "./app/javascript/rails_fields_kit/native_field_constraint_contract.js",
         "default" => "./app/javascript/rails_fields_kit/native_field_constraint_contract.js"
       },
+      "./read_rendered_error_surface" => {
+        "types" => "./app/javascript/rails_fields_kit/read_rendered_error_surface.d.ts",
+        "import" => "./app/javascript/rails_fields_kit/read_rendered_error_surface.js",
+        "default" => "./app/javascript/rails_fields_kit/read_rendered_error_surface.js"
+      },
       "./tom_select_controller" => {
         "types" => "./app/javascript/rails_fields_kit/tom_select_controller.d.ts",
         "import" => "./app/javascript/rails_fields_kit/tom_select_controller.js",
         "default" => "./app/javascript/rails_fields_kit/tom_select_controller.js"
+      },
+      "./tom_select_plugin_contract" => {
+        "types" => "./app/javascript/rails_fields_kit/tom_select_plugin_contract.d.ts",
+        "import" => "./app/javascript/rails_fields_kit/tom_select_plugin_contract.js",
+        "default" => "./app/javascript/rails_fields_kit/tom_select_plugin_contract.js"
       },
       "./tom_select_text_override_contract" => {
         "types" => "./app/javascript/rails_fields_kit/tom_select_text_override_contract.d.ts",
@@ -191,6 +201,8 @@ RSpec.describe "package metadata" do
         const controllerModule = directModules["tom_select_controller"]
         const nativeAccessibilityContractModule = directModules["native_field_accessibility_contract"]
         const nativeConstraintContractModule = directModules["native_field_constraint_contract"]
+        const pluginContractModule = directModules["tom_select_plugin_contract"]
+        const errorSurfaceModule = directModules["read_rendered_error_surface"]
         const textContractModule = directModules["tom_select_text_override_contract"]
 
         if (typeof controllerModule.default !== "function") {
@@ -203,6 +215,14 @@ RSpec.describe "package metadata" do
 
         if (rootModule.TomSelectController !== controllerModule.default) {
           throw new Error("package root named export no longer matches the direct controller package import")
+        }
+
+        if (typeof rootModule.tomSelectPluginContract !== "function") {
+          throw new Error("package root import did not expose tomSelectPluginContract")
+        }
+
+        if (typeof rootModule.readRenderedErrorSurface !== "function") {
+          throw new Error("package root import did not expose readRenderedErrorSurface")
         }
 
         if (typeof rootModule.tomSelectTextOverrideContract !== "function") {
@@ -219,6 +239,14 @@ RSpec.describe "package metadata" do
 
         if (rootModule.nativeFieldConstraintContract !== nativeConstraintContractModule.default) {
           throw new Error("package root named export no longer matches the direct native field constraint contract import")
+        }
+
+        if (rootModule.tomSelectPluginContract !== pluginContractModule.default) {
+          throw new Error("package root named export no longer matches the direct Tom Select plugin contract import")
+        }
+
+        if (rootModule.readRenderedErrorSurface !== errorSurfaceModule.default) {
+          throw new Error("package root named export no longer matches the direct rendered error surface import")
         }
 
         if (rootModule.tomSelectTextOverrideContract !== textContractModule.default) {

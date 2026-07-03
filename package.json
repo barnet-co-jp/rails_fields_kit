@@ -26,6 +26,16 @@
       "import": "./app/javascript/rails_fields_kit/tom_select_text_override_contract.js",
       "default": "./app/javascript/rails_fields_kit/tom_select_text_override_contract.js"
     },
+    "./tom_select_plugin_contract": {
+      "types": "./app/javascript/rails_fields_kit/tom_select_plugin_contract.d.ts",
+      "import": "./app/javascript/rails_fields_kit/tom_select_plugin_contract.js",
+      "default": "./app/javascript/rails_fields_kit/tom_select_plugin_contract.js"
+    },
+    "./read_rendered_error_surface": {
+      "types": "./app/javascript/rails_fields_kit/read_rendered_error_surface.d.ts",
+      "import": "./app/javascript/rails_fields_kit/read_rendered_error_surface.js",
+      "default": "./app/javascript/rails_fields_kit/read_rendered_error_surface.js"
+    },
     "./native_field_accessibility_contract": {
       "types": "./app/javascript/rails_fields_kit/native_field_accessibility_contract.d.ts",
       "import": "./app/javascript/rails_fields_kit/native_field_accessibility_contract.js",
