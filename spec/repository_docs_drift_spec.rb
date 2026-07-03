@@ -99,6 +99,32 @@ RSpec.describe "repository docs drift guards" do
     )
   end
 
+  it "keeps controller helper workflow chooser and option alignment boundaries visible" do
+    workflow_chooser = markdown_top_level_section(controller_helpers_doc, "## Remote workflow chooser")
+
+    expect(workflow_chooser).to include(
+      "Remote search",
+      "Selected preload",
+      "Create-on-the-fly",
+      "Token suggestions",
+      "Rails Fields Kit formats option JSON and wires the rendered field to the endpoint",
+      "host app still owns authentication, authorization, tenant scoping, query parsing, result execution, and persistence policy",
+      "Scan by workflow first, then match the rendered field option to the controller helper",
+      "field-helper chooser"
+    )
+
+    expect(workflow_chooser).to include(
+      "selected_param: \"customer_id\"",
+      "rfk_find_with id_param: :customer_id",
+      "create_param: \"name\"",
+      "rfk_create_with create_param: \"name\"",
+      "If a field also uses `create_params:`, read those values as outgoing create JSON body fields",
+      "permitted_attributes:` or trusted server-owned values through `assign:`",
+      "[`field_helpers.md`](field_helpers.md)",
+      "this page focuses on endpoint responsibilities"
+    )
+  end
+
   it "keeps README as a docs route map and public API docs as the exact inventory" do
     expect(readme).to include(
       "Use this map as a first reader route, not a full documentation inventory",
@@ -169,5 +195,13 @@ RSpec.describe "repository docs drift guards" do
 
   def read_repo_file(path)
     File.read(File.join(root, path))
+  end
+
+  def markdown_section(document, heading)
+    document.split(heading, 2).last.split(/\n(?=##?#?\s)/, 2).first
+  end
+
+  def markdown_top_level_section(document, heading)
+    document.split(heading, 2).last.split(/\n(?=##\s)/, 2).first
   end
 end
