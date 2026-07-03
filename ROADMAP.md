@@ -190,6 +190,8 @@ The maintained docs should make the difference between current public API, revie
 - `README.md` is the public entrypoint and docs map.
 - `doc/setup.md` is the maintained setup walkthrough and source of truth for the read-only setup doctor boundary.
 - `doc/public_api.md` is the intended stable API inventory for the 0.1.x series, including package-root JavaScript exports, FormBuilder helpers, controller helpers, table metadata adapters, Stimulus values, and events.
+- `CHANGELOG.md` is the exhaustive release-history source for released and `Unreleased` user-visible changes.
+- `doc/release_notes_0_1_1.md` is the reviewer-facing and GitHub-release-facing draft summary for the current `Unreleased` section. Keep it aligned with `CHANGELOG.md` and do not add proposal-only or open-PR behavior there until the corresponding current entry has landed.
 - `doc/shared_metadata_navigation.md` is the short boundary map for shared token, Ransack, and table metadata patterns; it points readers back to the current API inventory and away from treating roadmap-only registry or adapter examples as implemented contract.
 - `doc/masked_input_boundary.md` is the current proposal boundary for masked inputs. It points host apps to native wrappers plus host-owned masking libraries today and keeps `rfk_masked_field` out of the current public API.
 - `doc/slug_helper_boundary.md` is the current proposal boundary for title-to-slug workflows. It points host apps to current native text wrappers today and keeps slug generation, uniqueness, transliteration, reserved words, validation, and persistence as host-app responsibilities.
@@ -198,7 +200,7 @@ The maintained docs should make the difference between current public API, revie
 - `doc/visual_references.md` and `doc/visual_reference_index.html` are maintained review entrypoints for landed static visual reference artifacts. They help reviewers inspect representative rendered states, but they do not define production runtime behavior or make proposal-only helper names current public API.
 - `Product Profile.md` and `AGENTS.md` summarize maintainer-facing source-of-truth order and responsibility boundaries.
 
-When a future feature lands, update the current public API docs and any affected review artifacts first, then keep this roadmap aligned with that landed behavior without rewriting proposal lanes as implemented contract.
+When a future feature lands, update the current public API docs and any affected review artifacts first, then sync `CHANGELOG.md` and the release note draft when the change is release-facing. Keep this roadmap aligned with that landed behavior without rewriting proposal lanes as implemented contract.
 
 ## Longer-term candidates
 
@@ -218,4 +220,3 @@ These are useful proposals, not current public API, and should not distract from
 - Treat app-specific search meaning as host app responsibility.
 - Keep integrations optional and dependency-light.
 - Make generated markup work naturally with Turbo-driven page updates.
-- Document where Rails Fields Kit stops and host app code begins.
