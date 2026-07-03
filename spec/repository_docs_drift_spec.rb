@@ -100,7 +100,7 @@ RSpec.describe "repository docs drift guards" do
   end
 
   it "keeps controller helper workflow chooser and option alignment boundaries visible" do
-    workflow_chooser = markdown_section(controller_helpers_doc, "## Remote workflow chooser")
+    workflow_chooser = markdown_top_level_section(controller_helpers_doc, "## Remote workflow chooser")
 
     expect(workflow_chooser).to include(
       "Remote search",
@@ -199,5 +199,9 @@ RSpec.describe "repository docs drift guards" do
 
   def markdown_section(document, heading)
     document.split(heading, 2).last.split(/\n(?=##?#?\s)/, 2).first
+  end
+
+  def markdown_top_level_section(document, heading)
+    document.split(heading, 2).last.split(/\n(?=##\s)/, 2).first
   end
 end
