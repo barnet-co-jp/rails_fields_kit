@@ -92,8 +92,8 @@ RSpec.describe "focused configuration and visual docs inventory guard" do
 
     expect(native_accessibility_contract_visual_reference).to include(
       "Native Accessibility Contract Reference",
-      "Focused visual review lane for the current `nativeFieldAccessibilityContract(element)`",
-      "wrapper, label, hint, error, and `aria-describedby` pieces",
+      "Focused visual review lane for the current <code>nativeFieldAccessibilityContract(element)</code>",
+      "reader. It maps rendered wrapper, label, hint, error, and <code>aria-describedby</code> pieces",
       "Confirm <code>labelElement</code> resolves an explicit <code>label[for]</code> first, then the nearest wrapper label fallback.",
       "Do not change native helper markup, JavaScript helper behavior, or the reader return shape from this artifact"
     )
