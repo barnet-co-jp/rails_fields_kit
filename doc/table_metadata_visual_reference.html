@@ -591,6 +591,51 @@
 
         <article class="card">
           <div class="card-header">
+            <span class="tag native">Checkbox Metadata</span>
+            <h2>Checkbox filter and editor states</h2>
+            <p>Represents checkbox table metadata after the table integration chooses the landed `rfk_check_box` helper mapping.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="strip">
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Active only filter</span>
+                  <span class="metadata-chip">TableFilterInput.check_box</span>
+                </div>
+                <div class="control native">
+                  <span class="selected">[x] Active records only</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Published editor</span>
+                  <span class="metadata-chip">TableCellInput.check_box</span>
+                </div>
+                <div class="control native">
+                  <span class="placeholder">[ ] Published</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Submitted values</span>
+                  <span class="metadata-chip">checked / unchecked</span>
+                </div>
+                <div class="control native">
+                  <span class="helper">checked_value: "1" / unchecked_value: "0"</span>
+                </div>
+              </div>
+            </div>
+            <div class="toolbar">
+              <span class="pill">Maps to rfk_check_box</span>
+              <span class="pill">Rails checkbox contract remains visible</span>
+            </div>
+            <div class="stack-note">Use this lane to review checkbox metadata readability only. Hidden field handling follows Rails' native checkbox contract; boolean query semantics, tri-state filters, bulk edit persistence, and table execution policy stay with the host app or table integration.</div>
+          </div>
+          <p class="card-footer">This keeps `TableFilterInput.check_box` and `TableCellInput.check_box` visible as supported metadata without implying that Rails Fields Kit owns boolean query behavior.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
             <span class="tag editor">Editors</span>
             <h2>Editable cell controls</h2>
             <p>Represents `rfk_table_cell_editors(columns)` when the table metadata describes the editor family and Rails Fields Kit only renders those controls.</p>
