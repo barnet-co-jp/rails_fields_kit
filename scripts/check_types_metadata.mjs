@@ -7,11 +7,15 @@ const packageJsonPath = path.join(repoRoot, "package.json")
 const indexTypesPath = "./app/javascript/rails_fields_kit/index.d.ts"
 const controllerTypesPath = "./app/javascript/rails_fields_kit/tom_select_controller.d.ts"
 const textOverrideTypesPath = "./app/javascript/rails_fields_kit/tom_select_text_override_contract.d.ts"
+const pluginContractTypesPath = "./app/javascript/rails_fields_kit/tom_select_plugin_contract.d.ts"
+const errorSurfaceTypesPath = "./app/javascript/rails_fields_kit/read_rendered_error_surface.d.ts"
 const nativeAccessibilityTypesPath = "./app/javascript/rails_fields_kit/native_field_accessibility_contract.d.ts"
 const nativeConstraintTypesPath = "./app/javascript/rails_fields_kit/native_field_constraint_contract.d.ts"
 const indexTypes = path.join(repoRoot, indexTypesPath)
 const controllerTypes = path.join(repoRoot, controllerTypesPath)
 const textOverrideTypes = path.join(repoRoot, textOverrideTypesPath)
+const pluginContractTypes = path.join(repoRoot, pluginContractTypesPath)
+const errorSurfaceTypes = path.join(repoRoot, errorSurfaceTypesPath)
 const nativeAccessibilityTypes = path.join(repoRoot, nativeAccessibilityTypesPath)
 const nativeConstraintTypes = path.join(repoRoot, nativeConstraintTypesPath)
 
@@ -30,6 +34,24 @@ assert.deepEqual(
     default: "./app/javascript/rails_fields_kit/tom_select_text_override_contract.js"
   },
   "direct Tom Select text override export should declare thin subpath types without changing runtime paths"
+)
+assert.deepEqual(
+  packageJson.exports["./tom_select_plugin_contract"],
+  {
+    types: pluginContractTypesPath,
+    import: "./app/javascript/rails_fields_kit/tom_select_plugin_contract.js",
+    default: "./app/javascript/rails_fields_kit/tom_select_plugin_contract.js"
+  },
+  "direct Tom Select plugin contract export should declare thin subpath types without changing runtime paths"
+)
+assert.deepEqual(
+  packageJson.exports["./read_rendered_error_surface"],
+  {
+    types: errorSurfaceTypesPath,
+    import: "./app/javascript/rails_fields_kit/read_rendered_error_surface.js",
+    default: "./app/javascript/rails_fields_kit/read_rendered_error_surface.js"
+  },
+  "direct rendered error surface export should declare thin subpath types without changing runtime paths"
 )
 assert.deepEqual(
   packageJson.exports["./native_field_accessibility_contract"],
@@ -53,12 +75,16 @@ assert.deepEqual(
 await access(indexTypes)
 await access(controllerTypes)
 await access(textOverrideTypes)
+await access(pluginContractTypes)
+await access(errorSurfaceTypes)
 await access(nativeAccessibilityTypes)
 await access(nativeConstraintTypes)
 
 const indexDeclaration = await readFile(indexTypes, "utf8")
 const controllerDeclaration = await readFile(controllerTypes, "utf8")
 const textOverrideDeclaration = await readFile(textOverrideTypes, "utf8")
+const pluginContractDeclaration = await readFile(pluginContractTypes, "utf8")
+const errorSurfaceDeclaration = await readFile(errorSurfaceTypes, "utf8")
 const nativeAccessibilityDeclaration = await readFile(nativeAccessibilityTypes, "utf8")
 const nativeConstraintDeclaration = await readFile(nativeConstraintTypes, "utf8")
 
@@ -120,6 +146,9 @@ for (const signal of expectedIndexSignals) {
 assert.ok(controllerDeclaration.includes("export default TomSelectController"), "direct controller declaration should expose the default controller export")
 assert.ok(textOverrideDeclaration.includes("tomSelectTextOverrideContract as default"), "direct text override declaration should mirror the default helper re-export")
 assert.ok(textOverrideDeclaration.includes("export type { TomSelectTextOverrideContract } from \"./index.js\""), "direct text override declaration should re-export its package-root type")
+assert.ok(pluginContractDeclaration.includes("tomSelectPluginContract as default"), "direct plugin contract declaration should mirror the default helper re-export")
+assert.ok(pluginContractDeclaration.includes("export type { TomSelectPluginContract } from \"./index.js\""), "direct plugin contract declaration should re-export its package-root type")
+assert.ok(errorSurfaceDeclaration.includes("readRenderedErrorSurface as default"), "direct rendered error surface declaration should mirror the default helper re-export")
 assert.ok(nativeAccessibilityDeclaration.includes("nativeFieldAccessibilityContract as default"), "direct native accessibility declaration should mirror the default helper re-export")
 assert.ok(nativeAccessibilityDeclaration.includes("export type { NativeFieldAccessibilityContract } from \"./index.js\""), "direct native accessibility declaration should re-export its package-root type")
 assert.ok(nativeConstraintDeclaration.includes("nativeFieldConstraintContract as default"), "direct native constraint declaration should mirror the default helper re-export")

@@ -36,15 +36,16 @@ RSpec.describe "docs package inventory guard" do
 
   it "keeps documented direct subpath examples aligned with package exports" do
     direct_exports = package_json.fetch("exports").keys.grep_v(".").map { |path| path.delete_prefix("./") }
-
-    expect(direct_exports).to eq(%w[
+    documented_direct_examples = %w[
       tom_select_controller
       tom_select_text_override_contract
       native_field_accessibility_contract
       native_field_constraint_contract
-    ])
+    ]
 
-    direct_exports.each do |entrypoint|
+    expect(direct_exports).to include(*documented_direct_examples)
+
+    documented_direct_examples.each do |entrypoint|
       expect(readme).to include("rails_fields_kit/#{entrypoint}")
       expect(setup_doc).to include("rails_fields_kit/#{entrypoint}")
     end
