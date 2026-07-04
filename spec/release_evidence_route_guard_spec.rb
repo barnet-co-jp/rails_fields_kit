@@ -31,7 +31,7 @@ RSpec.describe "release evidence route guard" do
     expect(package_root_helper_release_evidence).to include(
       "Use `doc/public_api.md#javascript-exports` as the source of truth for the current package-root helper list",
       "For each release or narrow PR, choose only the package-root helper lanes that are in scope for that change",
-      "request execution, visible feedback, locale policy, mutation, validation, and retry behavior remain outside the helper evidence lane",
+      "request execution, visible copy, locale policy, mutation, validation, and retry behavior remain outside the helper evidence lane",
       "## Selected preload config reader",
       "## Tom Select interaction config reader",
       "## Option payload mapping reader",
