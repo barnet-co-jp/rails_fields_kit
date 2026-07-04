@@ -21,8 +21,8 @@ RSpec.describe "controller helper docs guard" do
     expect(remote_field_helper_reference).to include(
       "selected_url:",
       "selected:",
-      "selected preload endpoint",
-      "rfk_find_with preserve_order: true"
+      "selected-option preload URL",
+      "selected preload workflow"
     )
   end
 
@@ -45,9 +45,9 @@ RSpec.describe "controller helper docs guard" do
       "separate from `assign:`"
     )
     expect(remote_field_helper_reference).to include(
-      "Fixed `query_params:` and `selected_query_params:` values are URL query params",
-      "`create_params:` uses a different lane",
-      "create-on-the-fly JSON request body"
+      "For remote search and selected-option preload, fixed params are URL query params",
+      "`create_params:` is separate",
+      "create-on-the-fly JSON body"
     )
   end
 
