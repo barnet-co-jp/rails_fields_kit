@@ -4,6 +4,12 @@ Use this guide when you want to replace existing server-rendered Rails select fi
 
 The first lane covers a single-value `collection_select` to `rfk_select` migration. The multi-value lane later in this guide covers ordinary multiple select or checkbox-style collections moving to `rfk_multi_select`, with a short boundary note for `rfk_tags`.
 
+## Release and sample evidence route
+
+When a release or PR depends on this migration route, use the `Verify collection_select migration path` lane in [`sample_app_checklist.md`](sample_app_checklist.md) and record the result in the `collection_select` migration checks lane in [`sample_app_results.md`](sample_app_results.md), or in a scoped PR comment for a narrow docs/spec change.
+
+Keep the evidence representative: confirm the same model attribute and submitted params, edit-form redisplay or validation rerender, `include_blank:`, and any scoped `disabled:`, grouped option, or `option_html:` behavior that the release surface depends on. Do not turn this lane into a full helper inventory, remote search check, selected preload check, create-on-the-fly check, or Tom Select configuration review.
+
 ## Start from the existing Rails select
 
 A typical admin form often starts here:
