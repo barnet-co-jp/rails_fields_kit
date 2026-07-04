@@ -67,13 +67,31 @@ The review passes when the captured surface keeps these distinctions readable:
 - `[MANUAL] Stimulus registration` is host-app boot-policy follow-up, not a failed automatic check.
 - Tom Select package visibility is dependency evidence only; package manager and version policy stay with the host app.
 
+## Generated Setup Note Examples
+
+Use these short examples when a captured state needs to show the generated host-app setup note check after #2623.
+
+```text
+[OK] Generated setup note: Found doc/rails_fields_kit_setup.md.
+
+[MANUAL] Generated setup note: doc/rails_fields_kit_setup.md was not found.
+This can be OK when the app used --skip-setup-notes or keeps setup notes in a
+host-owned location; setup doctor does not create or grade setup notes.
+```
+
+The review passes when the captured surface keeps these distinctions readable:
+
+- `[OK] Generated setup note` is a visibility signal for the generated note path, not proof that the note content was reviewed.
+- `[MANUAL] Generated setup note` is a valid host-app route when setup notes were skipped or stored elsewhere.
+- Missing generated setup notes are not described as `[MISSING]`, auto-fix work, or host-app CI failure unless another issue changes setup doctor behavior.
+
 ## Evidence Note Template
 
 ```text
 Setup doctor narrow wrap evidence:
 - Surface: 80-column terminal / GitHub PR comment code block / 390px Markdown preview
 - Setup path: importmap / jsbundling / bundler-managed JavaScript / other
-- Reviewed states: First-run mixed status / Advisory Tom Select package / Stimulus registration advisory / CSS import advisory / Importmap target mismatch
+- Reviewed states: First-run mixed status / Advisory Tom Select package / Stimulus registration advisory / CSS import advisory / Generated setup note advisory / Importmap target mismatch
 - Result: readable / needs docs follow-up
 - Notes: expected/found pairs stayed adjacent; [MANUAL] read as host-app follow-up, not failure
 ```
