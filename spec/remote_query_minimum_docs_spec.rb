@@ -30,6 +30,24 @@ RSpec.describe "remote query minimum documentation" do
     )
   end
 
+  it "keeps open-on-focus preload examples tied to host-owned blank query policy" do
+    blank_query_policy = markdown_section(controller_helpers, "### Blank query policy")
+
+    expect(blank_query_policy).to include(
+      "Choose the blank-query behavior deliberately",
+      "Allow a scoped initial option list",
+      "Block empty or too-short server requests",
+      "open_on_focus: true",
+      "preload: true",
+      "keep both sides permissive and rely on the host app's trusted scope and limit",
+      "scope: -> { current_account.customers.active }",
+      "limit: 10",
+      "min_length: 2",
+      "minimum_query_length: 2",
+      "The host app remains responsible for authorization, tenant scoping, query parsing, search execution, and deciding whether blank queries should be allowed for each endpoint."
+    )
+  end
+
   def markdown_section(document, heading)
     document.split(heading, 2).last.split(/\n(?=##?#?\s)/, 2).first
   end
