@@ -74,10 +74,11 @@ RSpec.describe "table metadata focused docs inventory" do
       "authorization and table execution policy"
     )
     expect(radio_metadata).to include(
+      "TableFilterInput.radio_button",
       "TableCellInput.radio_button",
       "maps `radio_button` metadata to `rfk_radio_button`",
       "`tag_value:` is required",
-      "TableFilterInput.radio_button` is intentionally not a built-in factory type",
+      "filter factory is renderable control metadata only",
       "collection radio group helpers",
       "table query execution or persistence"
     )

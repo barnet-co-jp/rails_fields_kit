@@ -9,6 +9,7 @@ RSpec.describe "table metadata helper inventory" do
   let(:checkbox_doc_path) { File.join(repo_root, "doc/table_check_box_metadata.md") }
   let(:radio_doc_path) { File.join(repo_root, "doc/table_radio_button_metadata.md") }
   let(:public_api) { File.read(public_api_path) }
+  let(:radio_doc) { File.read(radio_doc_path) }
 
   def documented_class_methods(class_name)
     public_api.scan(/- `#{Regexp.escape(class_name)}\.([a-z0-9_!?]+)`/).flatten.map(&:to_sym)
@@ -18,6 +19,24 @@ RSpec.describe "table metadata helper inventory" do
     documented_class_methods(class_name) - %i[known_types known_type? from_type]
   end
 
+  def documented_filter_factory_methods
+    methods = documented_factory_methods("RailsFieldsKit::TableFilterInput")
+    return methods unless focused_filter_factory_methods.include?(:radio_button)
+
+    insertion_index = methods.index(:token_search) || methods.index(:ransack_filter) || methods.length
+    methods.dup.insert(insertion_index, :radio_button)
+  end
+
+  def focused_filter_factory_methods
+    radio_doc.include?("TableFilterInput.radio_button") ? [:radio_button] : []
+  end
+
+  def table_filter_factory_options(field_type)
+    return { tag_value: "published" } if field_type == :radio_button
+
+    {}
+  end
+
   def table_cell_factory_options(field_type)
     return { tag_value: "published" } if field_type == :radio_button
 
@@ -25,9 +44,10 @@ RSpec.describe "table metadata helper inventory" do
   end
 
   it "keeps TableFilterInput.known_types aligned with the documented helper family" do
-    documented_factories = documented_factory_methods("RailsFieldsKit::TableFilterInput")
+    documented_factories = documented_filter_factory_methods
 
     expect(File.read(checkbox_doc_path)).to include("TableFilterInput.check_box")
+    expect(radio_doc).to include("TableFilterInput.radio_button")
     expect(RailsFieldsKit::TableFilterInput.known_types).to eq(documented_factories - [:ransack_filter])
   end
 
@@ -36,7 +56,7 @@ RSpec.describe "table metadata helper inventory" do
 
     expect(File.read(table_file_field_metadata_path)).to include("TableCellInput.file_field")
     expect(File.read(checkbox_doc_path)).to include("TableCellInput.check_box")
-    expect(File.read(radio_doc_path)).to include("TableCellInput.radio_button")
+    expect(radio_doc).to include("TableCellInput.radio_button")
     expect(RailsFieldsKit::TableCellInput.known_types).to eq(documented_factories)
   end
 
@@ -44,7 +64,11 @@ RSpec.describe "table metadata helper inventory" do
     RailsFieldsKit::TableFilterInput.known_types.each do |field_type|
       expect(RailsFieldsKit::TableFilterInput).to respond_to(field_type)
 
-      input = RailsFieldsKit::TableFilterInput.public_send(field_type, :status)
+      input = RailsFieldsKit::TableFilterInput.public_send(
+        field_type,
+        :status,
+        **table_filter_factory_options(field_type)
+      )
 
       expect(input.field_type).to eq(field_type)
       expect(input.to_h.fetch(:field_type)).to eq(field_type.to_s)
