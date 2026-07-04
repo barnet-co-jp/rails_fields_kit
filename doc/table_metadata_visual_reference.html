@@ -627,11 +627,11 @@
             </div>
             <div class="toolbar">
               <span class="pill">Maps to rfk_radio_button</span>
-              <span class="pill">No table filter factory</span>
+              <span class="pill">Cell editor lane only</span>
             </div>
-            <div class="stack-note">Use this lane to review radio cell-editor metadata readability only. Same-name grouping, fieldset / legend UI, query semantics, and table persistence stay with the host app or table integration.</div>
+            <div class="stack-note">Use this lane to review radio cell-editor metadata readability only. Table filter radio metadata has its own surface; same-name grouping, fieldset / legend UI, query semantics, and table persistence stay with the host app or table integration.</div>
           </div>
-          <p class="card-footer">This keeps `TableCellInput.radio_button` visible as supported cell-editor metadata without implying `TableFilterInput.radio_button` or Rails Fields Kit-owned radio group behavior.</p>
+          <p class="card-footer">This keeps `TableCellInput.radio_button` visible as supported cell-editor metadata without implying Rails Fields Kit-owned same-name radio group behavior or query execution.</p>
         </article>
 
         <article class="card">
