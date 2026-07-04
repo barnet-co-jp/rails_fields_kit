@@ -44,7 +44,7 @@ Host applications remain responsible for:
 - configuration defaults documented in `doc/configuration.md`, including `default_allow_clear` for the semantic Tom Select clear-button default
 - package-root JavaScript exports including `TomSelectController` and rendered-field contract helpers documented in `doc/public_api.md`
 - Stimulus events dispatched by `rails-fields-kit--tom-select`
-- read-only setup verification through `rails rails_fields_kit:doctor` and `RailsFieldsKit::SetupDoctor`, including text evidence, Ruby-facing `checks`, structured JSON representation, generated setup note visibility, and representative Stimulus registration advisory signal, while leaving Tom Select package install, final Stimulus boot policy, CSS import, bundler aliases, setup note creation, CI pass/fail policy, and auto-fix behavior with the host app
+- read-only setup verification through `rails rails_fields_kit:doctor` and `RailsFieldsKit::SetupDoctor`, including text evidence, Ruby-facing `checks`, structured JSON representation, generated setup note visibility, and representative Stimulus registration advisory signal, while leaving Tom Select package install, final Stimulus boot policy, CSS import, and bundler aliases as host-app responsibilities; setup note creation, CI pass/fail policy, and auto-fix behavior also remain with the host app
 
 ## Current non-goals
 
