@@ -5,6 +5,8 @@ require "pathname"
 
 module RailsFieldsKit
   class SetupDoctor
+    SETUP_NOTE_PATH = "doc/rails_fields_kit_setup.md"
+
     IMPORTMAP_PINS = {
       "rails_fields_kit" => "rails_fields_kit/index.js",
       "rails_fields_kit/native_field_accessibility_contract" => "rails_fields_kit/native_field_accessibility_contract.js",
@@ -93,6 +95,7 @@ module RailsFieldsKit
     def checks
       [
         initializer_check,
+        generated_setup_note_check,
         importmap_check,
         tom_select_package_check,
         stimulus_registration_check,
@@ -159,6 +162,26 @@ module RailsFieldsKit
           label: "Initializer",
           status: :missing,
           message: "config/initializers/rails_fields_kit.rb was not found; run rails generate rails_fields_kit:install or confirm this app intentionally configures the gem elsewhere."
+        )
+      end
+    end
+
+    def generated_setup_note_check
+      path = root.join(SETUP_NOTE_PATH)
+
+      if path.file?
+        Check.new(
+          key: :generated_setup_note,
+          label: "Generated setup note",
+          status: :ok,
+          message: "Found #{SETUP_NOTE_PATH}. Keep app-specific setup notes there and use doc/setup.md as the maintained reference."
+        )
+      else
+        Check.new(
+          key: :generated_setup_note,
+          label: "Generated setup note",
+          status: :manual,
+          message: "#{SETUP_NOTE_PATH} was not found. This is OK when the app used --skip-setup-notes or keeps setup notes elsewhere; setup doctor does not create the note or inspect app-specific checklist quality."
         )
       end
     end
