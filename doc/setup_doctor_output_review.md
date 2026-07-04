@@ -9,6 +9,7 @@ Use `doc/setup_doctor_output_narrow_wrap_review.md` with this route when the evi
 - Review the readability of representative setup doctor output states.
 - Confirm that the status legend explains `[OK]`, `[MISSING]`, and `[MANUAL]` before the user reaches individual checks.
 - Confirm that `[OK]`, `[MISSING]`, and `[MANUAL]` lines are easy to scan as diagnostic evidence.
+- Confirm that generated setup note evidence distinguishes `[OK]` note presence from `[MANUAL]` host-app note ownership.
 - Confirm that importmap target mismatch output is readable after the target-drift diagnostic landed.
 - Confirm that unresolved import evidence records the failing documented path, checked alias or pin target, and remaining host-app follow-up without changing setup doctor behavior.
 - Confirm that package.json Tom Select dependency evidence reads as advisory visibility, not as host-app package policy.
@@ -25,12 +26,14 @@ Use this artifact as the review aid for setup doctor evidence, then record the r
 - Use `doc/sample_app_checklist.md` to decide whether setup doctor evidence belongs in the release baseline or the host-app setup lane.
 - Record release-wide results in `doc/sample_app_results.md` under `Setup doctor checks`, including the app setup path: importmap, jsbundling, bundler-managed JavaScript, or another route.
 - For a narrow docs or setup-doctor PR, a PR comment is enough when it names the command, setup path, representative `[OK]` / `[MISSING]` / `[MANUAL]` lines, branch or commit, viewport or wrapping width, and result.
+- For generated setup note advisory evidence, include whether the note path was present or absent, and keep `--skip-setup-notes` / host-owned notes as valid `[MANUAL]` routes rather than failures.
 - For unresolved import diagnostics, include the failing documented import path, whether the package-root `rails_fields_kit` path or direct `rails_fields_kit/tom_select_controller` path failed, the alias or importmap pin target checked, and any remaining host-app follow-up such as Stimulus boot, Tom Select install, or CSS import.
 - When the PR comment needs a reusable narrow evidence template, start from `doc/setup_doctor_output_narrow_wrap_review.md` and link the note back to this review route instead of copying the companion artifact wholesale.
-- Use the representative review states below to decide whether the PR evidence should cover the first-run legend, an advisory-only Tom Select package lane, a Stimulus registration advisory lane, a CSS import advisory lane, an importmap mismatch lane, an unresolved import diagnostics lane, or all of those states.
+- Use the representative review states below to decide whether the PR evidence should cover the first-run legend, a generated setup note advisory lane, an advisory-only Tom Select package lane, a Stimulus registration advisory lane, a CSS import advisory lane, an importmap mismatch lane, an unresolved import diagnostics lane, or all of those states.
 - Treat `[MANUAL]` lines as host-app responsibility checks. Do not count them as failed automatic checks unless the release issue explicitly changes setup doctor behavior.
 - Treat `[OK] CSS import` as evidence that setup doctor found a representative import signal; it does not mean Rails Fields Kit owns the app stylesheet pipeline, theme choice, or every possible asset path.
 - Treat `[OK] Stimulus registration` as evidence that setup doctor found a representative controller registration signal; it does not mean Rails Fields Kit owns the app boot file, `Application.start()` policy, or every possible controller registry.
+- Treat `[OK] Generated setup note` as path visibility evidence only; it does not mean setup doctor reviewed note content or setup quality.
 - Keep auto-fix behavior, exit-code policy, and host-app setup policy decisions out of release evidence notes unless a separate implementation issue changes them.
 
 ## Representative Narrow Review States
@@ -40,6 +43,7 @@ Use these states when a PR or release asks for narrow terminal, wrapped Markdown
 | State | Use it when | Narrow / wrapped evidence should show |
 | --- | --- | --- |
 | First-run mixed status | The PR changes the setup doctor overview, generated setup notes, or evidence wording | The status legend appears before checks, `[MISSING]` reads as the automatic action item, and `[MANUAL]` reads as host-app follow-up rather than failure. |
+| Generated setup note advisory | The PR touches generated setup note evidence, setup note review notes, or #2623 follow-up wording | `[OK] Generated setup note` reads as path visibility, while `[MANUAL] Generated setup note` reads as a valid skipped or host-owned note route rather than a failed automatic check. |
 | Advisory Tom Select package | The PR touches package dependency visibility, Stimulus registration guidance, or CSS import evidence | The Tom Select package line reads as advisory dependency visibility, and manual Stimulus / CSS checks do not look like failed automatic checks. |
 | Stimulus registration advisory | The PR touches Stimulus registration detection, setup visibility, or release evidence for controller registration | `[OK] Stimulus registration` reads as a representative source signal, while `[MANUAL] Stimulus registration` reads as host-app boot policy follow-up rather than a failed automatic check. |
 | CSS import advisory | The PR touches CSS import detection, setup visibility, or release evidence for Tom Select stylesheets | `[OK] CSS import` reads as a representative detected import signal, while `[MANUAL] CSS import` reads as host-app stylesheet or bundler-pipeline follow-up rather than a failed automatic check. |
@@ -53,6 +57,7 @@ Use this matrix when deciding which evidence note to write after a narrow or wra
 | Evidence note names | Pair with checklist section | Include in the note |
 | --- | --- | --- |
 | `First-run mixed status` | Status Interpretation | Legend position, `[MISSING]` action item, `[MANUAL]` host-app follow-up wording, and the width or preview surface used. |
+| `Generated setup note advisory` | Advisory Ownership | Whether the note state is `[OK]` or `[MANUAL]`, whether `doc/rails_fields_kit_setup.md` was present, and whether skipped or host-owned notes remain valid. |
 | `Advisory Tom Select package` | Advisory Ownership | Package evidence boundary, manual Stimulus / CSS follow-up wording, setup path, and whether the line came from package.json visibility only. |
 | `Stimulus registration advisory` | Advisory Ownership | Whether the captured state is `[OK]` or `[MANUAL]`, the representative entrypoint or absence of one, and the host-app boot-policy boundary. |
 | `CSS import advisory` | Advisory Ownership | Whether the captured state is `[OK]` or `[MANUAL]`, the representative stylesheet or entrypoint, and the host-app stylesheet / bundler boundary. |
@@ -74,6 +79,7 @@ Status legend: [OK] detected setup; [MISSING] needs action for the detected setu
 Next step: fix [MISSING] lines first, then review [MANUAL] lines for this app's JavaScript toolchain.
 
 [OK] Initializer: Found config/initializers/rails_fields_kit.rb.
+[OK] Generated setup note: Found doc/rails_fields_kit_setup.md.
 [OK] Importmap pins: Rails Fields Kit importmap pins are present in config/importmap.rb.
 [MANUAL] Tom Select package: Install Tom Select with the JavaScript package manager already used by this app.
 [OK] Stimulus registration: Found Rails Fields Kit Stimulus registration signal in app/javascript/controllers/index.js. This is an advisory controller visibility check only; Stimulus boot policy stays with the host app.
@@ -86,10 +92,39 @@ Review notes:
 - `[OK]` means the doctor could read the expected setup signal.
 - `[MISSING]` means the doctor could not find an expected setup signal for the detected route.
 - `[MANUAL]` means the doctor cannot safely verify the host app decision automatically; it is not a hard failure by itself.
+- `[OK] Generated setup note` means the generated note path is present. It does not inspect the note body, decide whether the checklist is complete, or grade app-specific setup quality.
+- `[MANUAL] Generated setup note` should remain a valid route when the app used `--skip-setup-notes` or keeps notes outside `doc/rails_fields_kit_setup.md`.
 - The `Next step` line should make first-run output actionable without adding an auto-fix policy.
 - Bundler-only apps can have manual JavaScript checks without implying an importmap failure.
 - `[OK] CSS import` only proves a representative stylesheet or JavaScript entrypoint contains a Tom Select CSS import signal. It does not make Rails Fields Kit responsible for stylesheet bundling, theme selection, or production CSS policy.
 - `[OK] Stimulus registration` only proves a representative JavaScript entrypoint contains a Rails Fields Kit registration signal. It does not make Rails Fields Kit responsible for the app's Stimulus boot file, controller registry shape, or `Application.start()` policy.
+
+## Generated Setup Note Advisory
+
+Use this state when setup doctor output or release evidence needs to show the difference between a detected generated setup note and a host-owned or intentionally skipped setup note route.
+
+Generated setup note present:
+
+```text
+rails rails_fields_kit:doctor
+
+[OK] Generated setup note: Found doc/rails_fields_kit_setup.md.
+```
+
+Generated setup note absent:
+
+```text
+rails rails_fields_kit:doctor
+
+[MANUAL] Generated setup note: doc/rails_fields_kit_setup.md was not found. If this app used --skip-setup-notes or keeps setup notes elsewhere, confirm the host-owned setup note route; setup doctor does not create, inspect, or grade generated setup notes.
+```
+
+Review notes:
+
+- `[OK] Generated setup note` is a detected advisory state for the generated note path.
+- `[MANUAL] Generated setup note` means setup doctor did not find `doc/rails_fields_kit_setup.md`, but absence can be intentional for skipped generated notes or host-owned documentation.
+- Both states keep generated note creation, note content quality, setup checklist ownership, and host-app CI policy outside setup doctor.
+- Do not treat `[MANUAL] Generated setup note` as `[MISSING]`, auto-fix work, or a hard failure unless a separate setup policy issue explicitly changes doctor behavior.
 
 ## Tom Select Package Advisory
 
@@ -239,6 +274,9 @@ Use this checklist when recording release or PR evidence. Work from the status m
 
 ### Advisory Ownership
 
+- [ ] Generated setup note evidence distinguishes detected note visibility from note content quality or setup checklist approval.
+- [ ] `[OK] Generated setup note` is not described as setup note body review, setup completeness approval, or host-app policy ownership.
+- [ ] `[MANUAL] Generated setup note` is not described as a failed automatic check when `--skip-setup-notes` or host-owned notes are valid for the app.
 - [ ] Tom Select package evidence is described as advisory dependency visibility, not package/version policy.
 - [ ] Stimulus registration evidence distinguishes detected advisory signals from manual host-app boot checks.
 - [ ] `[OK] Stimulus registration` is not described as Rails Fields Kit owning the app boot file, controller registry shape, or `Application.start()` policy.
