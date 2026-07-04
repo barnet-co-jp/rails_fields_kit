@@ -12,8 +12,7 @@ RSpec.describe "table metadata native helper inventory" do
   it "keeps table metadata native factories aligned with the FormBuilder native helper inventory" do
     native_field_types = native_helper_field_types_from(form_builder_source) + %i[check_box radio_button]
     filter_metadata_exceptions = {
-      file_field: "file uploads are cell-editor metadata only; filters would imply query/upload semantics",
-      radio_button: "radio buttons are cell-editor metadata only; filters would imply query semantics and group policy"
+      file_field: "file uploads are cell-editor metadata only; filters would imply query/upload semantics"
     }
     cell_metadata_exceptions = {}
     renderer_metadata_exceptions = {}
