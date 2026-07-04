@@ -28,6 +28,47 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
     end
   end
 
+  it "reports generated setup note presence without treating skipped notes as missing" do
+    Dir.mktmpdir do |root|
+      setup_note_check = check_for(described_class.new(root: root), :generated_setup_note)
+
+      expect(setup_note_check.status).to eq(:manual)
+      expect(setup_note_check.message).to include("doc/rails_fields_kit_setup.md was not found")
+      expect(setup_note_check.message).to include("--skip-setup-notes")
+      expect(setup_note_check.message).to include("does not create the note")
+
+      write_file(root, "doc/rails_fields_kit_setup.md", "# App setup notes\n")
+
+      setup_note_check = check_for(described_class.new(root: root), :generated_setup_note)
+      expect(setup_note_check.status).to eq(:ok)
+      expect(setup_note_check.message).to include("Found doc/rails_fields_kit_setup.md")
+    end
+  end
+
+  it "includes generated setup note state in text and JSON output" do
+    Dir.mktmpdir do |root|
+      write_file(root, "config/initializers/rails_fields_kit.rb")
+      doctor = described_class.new(root: root)
+      text_output = StringIO.new
+      json_output = StringIO.new
+
+      expect(doctor.run(io: text_output)).to eq(true)
+      expect(text_output.string).to include("[MANUAL] Generated setup note")
+      expect(text_output.string).to include("--skip-setup-notes")
+
+      expect(doctor.run(io: json_output, format: :json)).to eq(true)
+      payload = JSON.parse(json_output.string)
+      setup_note = payload.fetch("checks").find { |check| check.fetch("key") == "generated_setup_note" }
+
+      expect(payload.fetch("summary")).to include("manual" => 6)
+      expect(setup_note).to include(
+        "label" => "Generated setup note",
+        "status" => "manual",
+        "manual" => true
+      )
+    end
+  end
+
   it "keeps importmap as a manual item when config/importmap.rb is absent" do
     Dir.mktmpdir do |root|
       importmap_check = check_for(described_class.new(root: root), :importmap)
@@ -89,7 +130,7 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
 
       checks = doctor.checks
       expect(checks).to all(be_a(described_class::Check))
-      expect(checks.map(&:key)).to include(:initializer, :importmap, :tom_select_package, :css_import)
+      expect(checks.map(&:key)).to include(:initializer, :generated_setup_note, :importmap, :tom_select_package, :css_import)
       expect(checks.map(&:status)).to include(:missing, :manual)
       checks.each do |check|
         expect(check.key).to be_a(Symbol)
@@ -102,6 +143,7 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       expect(report_lines).to all(be_a(String))
       expect(report_lines).to include("Rails Fields Kit setup doctor")
       expect(report_lines).to include(a_string_matching(/\[MISSING\] Initializer:/))
+      expect(report_lines).to include(a_string_matching(/\[MANUAL\] Generated setup note:/))
       expect(report_lines).to include(a_string_matching(/\[MANUAL\] Importmap pins:/))
 
       expect(doctor.run(io: output)).to eq(true)
@@ -124,17 +166,23 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       expect(payload.fetch("summary")).to eq(
         "ok" => 1,
         "missing" => 0,
-        "manual" => 5
+        "manual" => 6
       )
 
       initializer = payload.fetch("checks").find { |check| check.fetch("key") == "initializer" }
       importmap = payload.fetch("checks").find { |check| check.fetch("key") == "importmap" }
+      setup_note = payload.fetch("checks").find { |check| check.fetch("key") == "generated_setup_note" }
 
       expect(initializer).to include(
         "label" => "Initializer",
         "status" => "ok",
         "manual" => false,
         "message" => "Found config/initializers/rails_fields_kit.rb."
+      )
+      expect(setup_note).to include(
+        "label" => "Generated setup note",
+        "status" => "manual",
+        "manual" => true
       )
       expect(importmap).to include(
         "label" => "Importmap pins",
@@ -396,6 +444,7 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       expect(importmap_check.message).to include("rails_fields_kit/tom_select_controller")
       expect(doctor.run(io: output)).to eq(true)
       expect(output.string).to include("[MISSING] Importmap pins")
+      expect(output.string).to include("[MANUAL] Generated setup note")
       expect(output.string).to include("[MANUAL] Tom Select package")
       expect(output.string).to include("[MANUAL] Stimulus registration")
       expect(output.string).to include("[MANUAL] CSS import")
