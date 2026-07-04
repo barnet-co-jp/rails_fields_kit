@@ -6,11 +6,14 @@ For direct table helper `group_html:` work, this guide is the release evidence r
 
 For TableRenderer registry work, this guide is the release evidence route. It helps reviewers choose one representative registration, introspection, and cleanup check without turning the public API docs into an exhaustive manual test checklist.
 
+For table radio button metadata work, this guide is the release evidence route. It helps reviewers choose one representative `TableCellInput.radio_button` check without turning release evidence into a radio filter, collection group, or query-semantics checklist.
+
 ## Source of truth
 
 - Use `doc/public_api.md` for current public TableRenderer method names.
 - Use `doc/table_adapters.md` for table metadata, call-spec, renderer registry, and host-app responsibility boundaries.
 - Use `doc/table_group_html.md` for the direct FormBuilder `group_html:` wrapper boundary.
+- Use `doc/table_radio_button_metadata.md` for the current `TableCellInput.radio_button` cell-editor-only boundary when radio button table metadata is in the sample evidence scope.
 - Use `doc/native_contact_fields.md` for native contact/search helper ownership boundaries when contact or browser-native search metadata is in the sample evidence scope.
 
 This guide does not define new runtime behavior. It only helps reviewers choose representative sample app checks.
@@ -23,6 +26,7 @@ This guide does not define new runtime behavior. It only helps reviewers choose 
 | TableRenderer registry introspection | One custom helper registration where `registered_field_types` includes the custom type, followed by cleanup with `reset_field_helpers!` or `unregister_field_helper` | Redesigning registry return shapes, changing helper names, adding metadata persistence |
 | Custom-only unregister cleanup | A custom-only mapping is removed with `unregister_field_helper`, then the type is no longer renderable | Removing built-in mappings or changing built-in factory `known_types` |
 | Built-in override fallback | A built-in field type is temporarily registered to a custom helper, then `unregister_field_helper` restores the built-in default helper | Treating the override as a permanent helper remapping or changing public fallback semantics |
+| Radio button table cell editor metadata | One `TableCellInput.radio_button` sample that records required `tag_value:`, checked and unchecked representative states, and the rendered call-spec path to `rfk_radio_button` | `TableFilterInput.radio_button`, same-name grouping policy, boolean or enum query semantics, `fieldset` / `legend` builders, collection radio groups, table persistence, authorization, production CSS |
 | Native contact/search table metadata | One or two `TableFilterInput` or `TableCellInput` examples using `email_field`, `url_field`, `phone_field`, or browser-native `search_field`, with rendered wrapper and metadata notes | Email deliverability, URL normalization, phone formatting, server-side validation, remote suggestions, token parsing, query execution |
 
 ## Direct table helper group-wrapper evidence route
@@ -36,6 +40,19 @@ Use this route when a release, PR, or review question mentions `rfk_table_filter
 5. Put the final `PASS`, `FAIL`, `SOURCE REVIEW ONLY`, `DEFERRED`, or `OUT OF SCOPE` note in the chosen evidence location.
 
 Keep this lane representative. Do not require both filter and cell-editor helpers, every table metadata type, or every possible wrapper attribute unless the release or PR actually changes those surfaces. If a screen needs `fieldset`, `legend`, group hint text, group error copy, or group-level `aria-describedby`, record that as host-app-owned surrounding markup rather than Rails Fields Kit `group_html:` evidence.
+
+## Radio button table cell-editor evidence route
+
+Use this route when a release, PR, or review question mentions `TableCellInput.radio_button`, `doc/table_radio_button_metadata.md`, or radio button table cell-editor metadata.
+
+1. Start from `doc/table_radio_button_metadata.md` for the current cell-editor-only boundary and required `tag_value:` contract.
+2. Exercise one representative table cell-editor metadata sample using `TableCellInput.radio_button(:status, tag_value: "published", ...)` or an equivalent app-specific method/value pair.
+3. Record the checked and unchecked representative states that the sample relies on, without turning the evidence into a collection radio group or same-name grouping review.
+4. Record that `TableRenderer.cell_editor_call` or `rfk_table_cell_editors` reaches the documented `rfk_radio_button(method, tag_value, **options)` rendering path.
+5. Record whether the result belongs in the release-wide `doc/sample_app_results.md` table metadata lane or in a scoped PR comment for a narrow docs/spec change.
+6. Put the final `PASS`, `FAIL`, `SOURCE REVIEW ONLY`, `DEFERRED`, or `OUT OF SCOPE` note in the chosen evidence location.
+
+Keep this lane representative and tied to the current public surface. Do not add `TableFilterInput.radio_button` evidence unless that surface has landed and the scoped PR or release explicitly includes it. Query construction, enum or boolean interpretation, table persistence, authorization, `fieldset` / `legend`, collection radio groups, and production CSS remain host-app or table-integration responsibilities.
 
 ## TableRenderer registry evidence route
 
@@ -56,6 +73,9 @@ When the lane is in scope, confirm only the relevant items below:
 - [ ] `group_html:` adds attributes to one outer table-helper group wrapper while each rendered field keeps its own field-level wrapper behavior.
 - [ ] Evidence notes distinguish group-level `group_html:` from field-level `wrapper_html:`.
 - [ ] Evidence notes keep semantic `fieldset`, `legend`, group hint/error copy, and group-level `aria-describedby` wiring with the host app unless a separate future surface lands.
+- [ ] Radio button table metadata evidence starts from `doc/table_radio_button_metadata.md` and stays in the `TableCellInput.radio_button` cell-editor-only lane.
+- [ ] The representative radio cell-editor sample records required `tag_value:` and checked / unchecked state evidence without implying a radio filter factory.
+- [ ] Radio button table metadata evidence keeps same-name grouping, boolean or enum query semantics, collection radio groups, `fieldset` / `legend`, table persistence, authorization, and production CSS outside Rails Fields Kit ownership.
 - [ ] A representative custom field helper registration is renderable through the documented call-spec path.
 - [ ] `RailsFieldsKit::TableRenderer.registered_field_types` exposes renderable custom types without exposing helper method names.
 - [ ] `RailsFieldsKit::TableFilterInput.known_types` and `RailsFieldsKit::TableCellInput.known_types` remain limited to the built-in factory family.
@@ -73,6 +93,7 @@ Copy the compact result into `doc/sample_app_results.md` for release candidates,
 | Evidence lane | Representative sample | Result | Notes |
 | --- | --- | --- | --- |
 | Table helper `group_html:` |  |  |  |
+| Radio button table cell editor |  |  |  |
 | TableRenderer custom registry |  |  |  |
 | TableRenderer unregister cleanup |  |  |  |
 | Built-in override fallback |  |  |  |
