@@ -380,7 +380,7 @@ columns = [
   },
   {
     key: :status,
-    editor: RailsFieldsKit::TableCellInput.enum_select(:status)
+    cell_editor: RailsFieldsKit::TableCellInput.enum_select(:status)
   }
 ]
 
@@ -632,7 +632,7 @@ A host app or table helper can pass the metadata objects into column-like defini
 ```ruby
 {
   key: :status,
-  editor: RailsFieldsKit::TableCellInput.enum_select(:status)
+  cell_editor: RailsFieldsKit::TableCellInput.enum_select(:status)
 }
 ```
 
