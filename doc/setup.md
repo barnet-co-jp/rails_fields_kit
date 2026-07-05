@@ -112,7 +112,9 @@ resolve: {
     { find: /^rails_fields_kit$/, replacement: gemJavaScriptPath("index.js") },
     { find: /^rails_fields_kit\/native_field_accessibility_contract$/, replacement: gemJavaScriptPath("native_field_accessibility_contract.js") },
     { find: /^rails_fields_kit\/native_field_constraint_contract$/, replacement: gemJavaScriptPath("native_field_constraint_contract.js") },
+    { find: /^rails_fields_kit\/read_rendered_error_surface$/, replacement: gemJavaScriptPath("read_rendered_error_surface.js") },
     { find: /^rails_fields_kit\/tom_select_controller$/, replacement: gemJavaScriptPath("tom_select_controller.js") },
+    { find: /^rails_fields_kit\/tom_select_plugin_contract$/, replacement: gemJavaScriptPath("tom_select_plugin_contract.js") },
     { find: /^rails_fields_kit\/tom_select_text_override_contract$/, replacement: gemJavaScriptPath("tom_select_text_override_contract.js") },
   ],
 }
@@ -134,7 +136,9 @@ pin "tom-select"
 pin "rails_fields_kit", to: "rails_fields_kit/index.js"
 pin "rails_fields_kit/native_field_accessibility_contract", to: "rails_fields_kit/native_field_accessibility_contract.js"
 pin "rails_fields_kit/native_field_constraint_contract", to: "rails_fields_kit/native_field_constraint_contract.js"
+pin "rails_fields_kit/read_rendered_error_surface", to: "rails_fields_kit/read_rendered_error_surface.js"
 pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
+pin "rails_fields_kit/tom_select_plugin_contract", to: "rails_fields_kit/tom_select_plugin_contract.js"
 pin "rails_fields_kit/tom_select_text_override_contract", to: "rails_fields_kit/tom_select_text_override_contract.js"
 ```
 
@@ -151,7 +155,7 @@ The package-root pin remains the normal route for controller registration and re
 
 `rails_fields_kit/index.js` re-exports the same controller as `rails_fields_kit/tom_select_controller`, so both documented import paths stay available after pinning. Rails Fields Kit still leaves the Tom Select pin source, package version, plugin pins, and any additional importmap conventions to the host app.
 
-The package root also exposes read-only rendered-field contract helpers, including `nativeFieldAccessibilityContract(element)` for native wrapper accessibility wiring and `nativeFieldConstraintContract(element)` for rendered native constraint attributes. Import those helpers from `rails_fields_kit` only when host-app scripts need to inspect already-rendered labels, hints, errors, wrapper elements, or native attributes such as `maxlength`, `minlength`, `pattern`, `autocomplete`, and `inputmode`; controller registration, browser validation behavior or messages, masking, formatting, normalization, focus management, and visible feedback remain separate host-app responsibilities. Use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the current source of truth for the helper list and return shape.
+The package root also exposes read-only rendered-field contract helpers, including `nativeFieldAccessibilityContract(element)` for native wrapper accessibility wiring, `nativeFieldConstraintContract(element)` for rendered native constraint attributes, `readRenderedErrorSurface(element)` for opt-in request-failure placeholders, and `tomSelectPluginContract(element)` for effective plugin state. Import those helpers from `rails_fields_kit` only when host-app scripts need to inspect already-rendered labels, hints, errors, wrapper elements, native attributes such as `maxlength`, `minlength`, `pattern`, `autocomplete`, and `inputmode`, request-failure placeholder wiring, or plugin lists; controller registration, browser validation behavior or messages, masking, formatting, normalization, focus management, visible feedback, plugin asset loading, and clear affordance styling remain separate host-app responsibilities. Use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the current source of truth for the helper list and return shape.
 
 The direct helper subpath examples in this setup guide are intentionally limited to the helper files that `package.json` exposes as direct entrypoints today. Do not extend the alias or importmap examples by copying every package-root helper name from the public API table; prefer package-root imports for the broader rendered-field contract helper family unless a host app deliberately pins one of the documented direct helper files.
 
@@ -161,7 +165,7 @@ When a build error, browser console error, or importmap resolution error says a 
 
 - If `import { TomSelectController } from "rails_fields_kit"` or a package-root contract helper import fails, check the bundler alias or importmap pin for `rails_fields_kit` and confirm it points at `rails_fields_kit/index.js`.
 - If `import TomSelectController from "rails_fields_kit/tom_select_controller"` fails, check the separate alias or pin for `rails_fields_kit/tom_select_controller` and confirm it points at `rails_fields_kit/tom_select_controller.js`.
-- If a direct helper subpath import such as `rails_fields_kit/native_field_accessibility_contract`, `rails_fields_kit/native_field_constraint_contract`, or `rails_fields_kit/tom_select_text_override_contract` fails, check the matching alias or importmap pin and confirm it points at the same documented subpath file.
+- If a direct helper subpath import such as `rails_fields_kit/native_field_accessibility_contract`, `rails_fields_kit/native_field_constraint_contract`, `rails_fields_kit/read_rendered_error_surface`, `rails_fields_kit/tom_select_plugin_contract`, or `rails_fields_kit/tom_select_text_override_contract` fails, check the matching alias or importmap pin and confirm it points at the same documented subpath file.
 - If both imports resolve but the field is not enhanced, check that the host app registered `rails-fields-kit--tom-select` on the Stimulus application it actually boots, and avoid starting a second Stimulus application just for Rails Fields Kit.
 - If the controller connects but Tom Select is missing or unstyled, check the host app's `tom-select` package or pin and CSS import separately. Changing the Rails Fields Kit import path does not install Tom Select, load Tom Select CSS, or choose plugin assets.
 
