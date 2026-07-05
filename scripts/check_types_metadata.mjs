@@ -21,6 +21,18 @@ const nativeConstraintTypes = path.join(repoRoot, nativeConstraintTypesPath)
 
 const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8"))
 
+const packageRootOnlyReaderNames = [
+  "readRenderedTomSelectInteractionConfig",
+  "readRenderedOptionPayloadMapping",
+  "readRenderedTableFilterMetadata"
+]
+
+const packageRootOnlyReaderSubpaths = [
+  "read_rendered_tom_select_interaction_config",
+  "read_rendered_option_payload_mapping",
+  "read_rendered_table_filter_metadata"
+]
+
 assert.equal(packageJson.types, indexTypesPath, "package root should point TypeScript users at the package-root declaration")
 assert.equal(packageJson.exports["."].types, indexTypesPath, "package root export should declare package-root types")
 assert.equal(packageJson.exports["."].import, "./app/javascript/rails_fields_kit/index.js", "package root import path should remain the runtime entrypoint")
@@ -71,6 +83,14 @@ assert.deepEqual(
   },
   "direct native constraint export should declare thin subpath types without changing runtime paths"
 )
+
+for (const subpath of packageRootOnlyReaderSubpaths) {
+  assert.equal(
+    Object.hasOwn(packageJson.exports, `./${subpath}`),
+    false,
+    `${subpath} should stay package-root only unless a future issue explicitly expands the direct helper subpath surface`
+  )
+}
 
 await access(indexTypes)
 await access(controllerTypes)
@@ -141,6 +161,13 @@ const expectedIndexSignals = [
 
 for (const signal of expectedIndexSignals) {
   assert.ok(indexDeclaration.includes(signal), `index.d.ts should include ${signal}`)
+}
+
+for (const readerName of packageRootOnlyReaderNames) {
+  assert.ok(
+    indexDeclaration.includes(`export function ${readerName}`),
+    `index.d.ts should keep ${readerName} visible from the package root`
+  )
 }
 
 assert.ok(controllerDeclaration.includes("export default TomSelectController"), "direct controller declaration should expose the default controller export")
