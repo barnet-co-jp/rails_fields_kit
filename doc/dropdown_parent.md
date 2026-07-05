@@ -51,6 +51,8 @@ The option also does not change endpoint behavior, selected preload, create-on-t
 
 Use `dropdown_parent_release_evidence.md` when a release or sample-app review needs to record selector pass-through and omitted-option behavior. That evidence guide is not a modal layout approval checklist.
 
+Use `dropdown_parent_review.html` when design reviewers need a static modal / drawer / body-mounted dropdown comparison. That review lane is a companion artifact for selector ownership and host-app overlay boundaries; it is not browser positioning approval, production CSS evidence, or a modal framework contract.
+
 Use `public_api.md#javascript-exports` when inspecting the package-root contract reader that reports rendered Tom Select interaction config, including `dropdownParent`. That reader is diagnostic and read-only; it does not initialize Tom Select or validate selector reachability.
 
 Use `field_helpers.md#remote-option-options` for the shared Tom Select-backed option list and neighboring request-shaping options.
