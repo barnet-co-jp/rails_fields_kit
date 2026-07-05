@@ -59,7 +59,7 @@ RSpec.describe "focused docs inventory and release guard" do
     expect(release_doc).to include(
       "`doc/final_release_checklist.md`",
       "reviewer-facing and GitHub-release-facing summary",
-      "sample app evidence log or a scoped PR comment"
+      "choosing whether narrow PR evidence belongs in the full sample app evidence log or a PR comment"
     )
 
     expect(final_release_checklist).to include(
@@ -67,7 +67,7 @@ RSpec.describe "focused docs inventory and release guard" do
       "GitHub Actions CI run passed for the release commit",
       "Compare the release note draft with `CHANGELOG.md` before publishing",
       "browser-capable visual evidence",
-      "sample app verification",
+      "Sample app verification",
       "package-root helper evidence guide",
       "Do not use `PASS` for GitHub Actions success, source review, static diff review, or a successful package build"
     )
