@@ -26,6 +26,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/setup_doctor_output_review.md`: focused setup doctor CLI diagnostic evidence review for `[OK]`, `[MISSING]`, `[MANUAL]`, generated setup note advisory states, and importmap target mismatch scanability
 - `doc/package_root_helper_release_evidence.md`: release and sample-app evidence guide for package-root rendered-field contract helpers; keep `doc/public_api.md#javascript-exports` as the helper list and return-shape source of truth
 - `doc/default_allow_clear.md`: focused app-wide `allow_clear` default guide; keep `clear_button` plugin installation, styling, empty-state copy, selection mutation, and lifecycle behavior with the host app
+- `doc/dropdown_parent.md`: focused `dropdown_parent:` selector pass-through guide; keep modal, drawer, portal, z-index, focus, and production CSS ownership with the host app
 - `doc/dropdown_parent_release_evidence.md`: focused release and sample-app evidence note for Tom Select-backed `dropdown_parent:` selector pass-through and no-config boundaries; keep modal, drawer, portal, z-index, and production CSS ownership with the host app
 - `doc/table_metadata_release_evidence.md`: release and sample-app evidence guide for table metadata rendering, group-level wrappers, and TableRenderer registry lanes
 - `doc/token_table_sample_app_evidence.md`: release and PR evidence companion for token search, token suggestions, Ransack suggestion metadata, and table metadata lanes; keep token parsing, query execution, authorization, and table persistence host-app owned
@@ -39,6 +40,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/tom_select_turbo_reconnect_visual_reference.html`: focused companion visual reference for Turbo reconnect appearance and duplicate-wrapper caution review
 - `doc/tom_select_no_event_boundary_review.html`: map-only companion visual reference for stale / aborted Tom Select request no-event boundary review
 - `doc/tom_select_disabled_option_visual_reference.html`: focused visual reference for collection-backed disabled option readability and option metadata boundaries
+- `doc/dropdown_parent_review.html`: static companion review lane for modal, drawer, and body-mounted `dropdown_parent:` selector ownership; it is not browser positioning approval or production CSS evidence
 - `doc/tom_select_plugin_clearable_review.html`: map-only companion visual reference for `allow_clear: true`, whole-field clear affordance, and host-owned plugin boundaries
 - `doc/tom_select_request_failure_visual_reference.html`: static visual reference for opt-in request-failure feedback, operation/status metadata, and `error_surface: true` lanes
 - `doc/tom_select_host_feedback_lifecycle_visual_reference.html`: companion visual reference for host-owned inline feedback and follow-up clearing cues after request-failure events
