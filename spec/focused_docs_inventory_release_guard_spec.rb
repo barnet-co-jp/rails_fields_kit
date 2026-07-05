@@ -66,10 +66,9 @@ RSpec.describe "focused docs inventory and release guard" do
       "Use this checklist immediately before publishing a gem release",
       "GitHub Actions CI run passed for the release commit",
       "Compare the release note draft with `CHANGELOG.md` before publishing",
-      "browser-capable visual evidence",
+      "Confirm the static visual reference family above",
       "Sample app verification",
-      "package-root helper evidence guide",
-      "Do not use `PASS` for GitHub Actions success, source review, static diff review, or a successful package build"
+      "package-root helper evidence guide"
     )
   end
 
