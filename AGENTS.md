@@ -21,9 +21,9 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `lib/rails_fields_kit/table_*`: table metadata and renderer support
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app setup note
 - `doc/support_boundary.md`: supported Ruby / Rails / Node boundaries and representative CI evidence
-- `doc/setup_doctor.md`: read-only SetupDoctor report surface for `checks`, `report_lines`, `run(io:)`, and host-app-owned setup policy boundaries
+- `doc/setup_doctor.md`: read-only SetupDoctor report surface for generated setup note visibility, `checks`, `report_lines`, `run(io:)`, and host-app-owned setup policy boundaries
 - `doc/setup_doctor_machine_readable.md`: structured JSON output guide for SetupDoctor `schema_version`, `summary`, and `checks` payloads; keep host-app CI pass/fail policy and auto-fix behavior out of this doc
-- `doc/setup_doctor_output_review.md`: focused setup doctor CLI diagnostic evidence review for `[OK]`, `[MISSING]`, `[MANUAL]`, and importmap target mismatch scanability
+- `doc/setup_doctor_output_review.md`: focused setup doctor CLI diagnostic evidence review for `[OK]`, `[MISSING]`, `[MANUAL]`, generated setup note advisory states, and importmap target mismatch scanability
 - `doc/package_root_helper_release_evidence.md`: release and sample-app evidence guide for package-root rendered-field contract helpers; keep `doc/public_api.md#javascript-exports` as the helper list and return-shape source of truth
 - `doc/default_allow_clear.md`: focused app-wide `allow_clear` default guide; keep `clear_button` plugin installation, styling, empty-state copy, selection mutation, and lifecycle behavior with the host app
 - `doc/dropdown_parent_release_evidence.md`: focused release and sample-app evidence note for Tom Select-backed `dropdown_parent:` selector pass-through and no-config boundaries; keep modal, drawer, portal, z-index, and production CSS ownership with the host app
@@ -60,7 +60,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/table_direct_helper_boundary.md`: direct `rfk_table_filters(columns, group_html: nil)` / `rfk_table_cell_editors(columns, group_html: nil)` boundary for safe-join output, the optional single outer group wrapper, and lower-level render/call-spec lanes
 - `doc/table_range_field_metadata.md`: focused `TableFilterInput.range_field` / `TableCellInput.range_field` metadata guide; keep range-pair queries, custom sliders, table persistence, Ransack execution, and production styling host-app owned
 - `doc/table_check_box_metadata.md`: focused `TableFilterInput.check_box` / `TableCellInput.check_box` metadata guide; keep boolean query semantics, tri-state filtering, bulk edit behavior, table persistence, and production styling host-app owned
-- `doc/table_radio_button_metadata.md`: focused `TableCellInput.radio_button` metadata guide; keep required `tag_value:`, cell-editor-only scope, radio filter semantics, same-name grouping, collection groups, and production styling outside Rails Fields Kit ownership
+- `doc/table_radio_button_metadata.md`: focused `TableFilterInput.radio_button` / `TableCellInput.radio_button` metadata guide; keep required `tag_value:`, radio filter query semantics, same-name grouping, collection groups, table persistence, and production styling outside Rails Fields Kit ownership
 - `doc/table_file_field_metadata.md`: focused `TableCellInput.file_field` metadata guide; keep upload execution, preview UI, storage policy, query execution, table persistence, and `TableFilterInput.file_field` out of Rails Fields Kit ownership
 - `doc/token_search_saved_search_visual_reference.html`: static visual reference for saved-search token suggestion states
 - `doc/tom_select_turbo_lifecycle.md`: maintained Turbo and Stimulus lifecycle boundary for Tom Select-backed helpers
