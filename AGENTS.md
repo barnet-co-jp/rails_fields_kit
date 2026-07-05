@@ -61,6 +61,7 @@ When `ROADMAP.md` and the code disagree, treat the roadmap as a proposal rather 
 - `doc/table_metadata_visual_reference.html`: static visual reference for representative table metadata filter and editor lanes
 - `doc/table_direct_helper_boundary.md`: direct `rfk_table_filters(columns, group_html: nil)` / `rfk_table_cell_editors(columns, group_html: nil)` boundary for safe-join output, the optional single outer group wrapper, and lower-level render/call-spec lanes
 - `doc/table_range_field_metadata.md`: focused `TableFilterInput.range_field` / `TableCellInput.range_field` metadata guide; keep range-pair queries, custom sliders, table persistence, Ransack execution, and production styling host-app owned
+- `doc/table_date_time_color_metadata.md`: focused `TableFilterInput.date_field` / `time_field` / `datetime_local_field` / `color_field` and matching `TableCellInput` metadata guide; keep picker behavior, timezone conversion, masking, query execution, table persistence, and production styling host-app owned
 - `doc/table_check_box_metadata.md`: focused `TableFilterInput.check_box` / `TableCellInput.check_box` metadata guide; keep boolean query semantics, tri-state filtering, bulk edit behavior, table persistence, and production styling host-app owned
 - `doc/table_radio_button_metadata.md`: focused `TableFilterInput.radio_button` / `TableCellInput.radio_button` metadata guide; keep required `tag_value:`, radio filter query semantics, same-name grouping, collection groups, table persistence, and production styling outside Rails Fields Kit ownership
 - `doc/table_file_field_metadata.md`: focused `TableCellInput.file_field` metadata guide; keep upload execution, preview UI, storage policy, query execution, table persistence, and `TableFilterInput.file_field` out of Rails Fields Kit ownership
@@ -110,6 +111,7 @@ Before release-oriented docs updates, review:
 - `doc/radio_button.md` and `doc/radio_button_release_evidence.md` when the `rfk_radio_button` wrapper or radio button sample-app evidence is part of the release surface
 - `doc/table_direct_helper_boundary.md` when table metadata direct helper layout or lower-level render/call-spec boundaries are part of the release surface
 - `doc/table_range_field_metadata.md` when range-specific table metadata is part of the release surface
+- `doc/table_date_time_color_metadata.md` when date/time/datetime-local/color table metadata is part of the release surface
 - `doc/table_check_box_metadata.md` when checkbox-specific table metadata is part of the release surface
 - `doc/table_file_field_metadata.md` when file-input table cell-editor metadata is part of the release surface
 - `doc/native_date_time_color_fields.md` when browser-native date/time/datetime-local/color wrapper helpers are part of the release surface
