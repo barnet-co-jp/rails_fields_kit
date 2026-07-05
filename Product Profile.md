@@ -44,7 +44,7 @@ Host applications remain responsible for:
 - configuration defaults documented in `doc/configuration.md`, including `default_allow_clear` for the semantic Tom Select clear-button default
 - package-root JavaScript exports including `TomSelectController` and rendered-field contract helpers documented in `doc/public_api.md`
 - Stimulus events dispatched by `rails-fields-kit--tom-select`
-- read-only setup verification through `rails rails_fields_kit:doctor` and `RailsFieldsKit::SetupDoctor`, including text evidence, Ruby-facing `checks`, structured JSON representation, and representative Stimulus registration advisory signal, while leaving Tom Select package install, final Stimulus boot policy, CSS import, bundler aliases as host-app responsibilities, and CI pass/fail policy or auto-fix behavior with the host app
+- read-only setup verification through `rails rails_fields_kit:doctor` and `RailsFieldsKit::SetupDoctor`, including text evidence, Ruby-facing `checks`, structured JSON representation, generated setup note visibility, and representative Stimulus registration advisory signal, while leaving Tom Select package install, final Stimulus boot policy, CSS import, and bundler aliases as host-app responsibilities; setup note creation, CI pass/fail policy, and auto-fix behavior also remain with the host app
 
 ## Current non-goals
 
@@ -72,9 +72,9 @@ This inventory is for maintainers who need to find the right source of truth qui
 ### Setup and generated host-app notes
 
 - `doc/setup.md`: maintained setup walkthrough, including the read-only setup doctor boundary
-- `doc/setup_doctor.md`: read-only SetupDoctor report surface for programmatic checks, text evidence, and command behavior boundaries
+- `doc/setup_doctor.md`: read-only SetupDoctor report surface for generated setup note visibility, programmatic checks, text evidence, and command behavior boundaries
 - `doc/setup_doctor_machine_readable.md`: structured JSON output guide for SetupDoctor `schema_version`, `summary`, and `checks` payloads, without turning advisory checks into host-app CI policy
-- `doc/setup_doctor_output_review.md`: focused CLI diagnostic evidence review for setup doctor output, Stimulus registration advisory states, target mismatch readability, and manual-check boundaries
+- `doc/setup_doctor_output_review.md`: focused CLI diagnostic evidence review for setup doctor output, generated setup note advisory states, Stimulus registration advisory states, target mismatch readability, and manual-check boundaries
 - `lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md`: generated host-app checklist that should stay pointed back to the maintained docs
 
 ### Public API and behavior sources of truth
@@ -94,7 +94,7 @@ This inventory is for maintainers who need to find the right source of truth qui
 - `doc/table_group_html.md`: direct table FormBuilder helper group-level wrapper attributes
 - `doc/table_range_field_metadata.md`: focused table metadata guide for `TableFilterInput.range_field` / `TableCellInput.range_field`; range-pair queries, custom sliders, table persistence, Ransack execution, and production styling stay out of scope
 - `doc/table_check_box_metadata.md`: focused table metadata guide for `TableFilterInput.check_box` / `TableCellInput.check_box`; boolean query semantics, tri-state filtering, bulk edit, table persistence, and production styling stay out of scope
-- `doc/table_radio_button_metadata.md`: focused table metadata guide for `TableCellInput.radio_button`; required `tag_value:`, radio filter semantics, collection groups, same-name grouping policy, table persistence, and production styling stay out of scope
+- `doc/table_radio_button_metadata.md`: focused table metadata guide for `TableFilterInput.radio_button` / `TableCellInput.radio_button`; required `tag_value:`, radio filter query semantics, collection groups, same-name grouping policy, table persistence, and production styling stay out of scope
 - `doc/table_file_field_metadata.md`: focused table metadata guide for `TableCellInput.file_field`; file upload execution, preview UI, storage policy, query execution, table persistence, and `TableFilterInput.file_field` stay out of scope
 
 ### Helper boundary docs
