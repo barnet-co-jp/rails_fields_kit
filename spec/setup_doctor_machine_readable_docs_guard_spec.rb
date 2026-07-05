@@ -33,7 +33,7 @@ RSpec.describe "setup doctor machine-readable docs guard" do
     )
     expect(machine_readable_doc).to include(
       "RailsFieldsKit::SetupDoctor.new.run(io: output, format: :json)",
-      "`schema_version`",
+      '"schema_version": 1',
       "`summary` counts and `checks` array are inspection data",
       "`manual` checks for review",
       "does not define a universal pass/fail policy"
