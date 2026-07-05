@@ -353,7 +353,7 @@ import nativeFieldConstraintContract from "rails_fields_kit/native_field_constra
 import tomSelectTextOverrideContract from "rails_fields_kit/tom_select_text_override_contract"
 ```
 
-Prefer package-root imports for normal rendered-field contract helper use. Direct helper subpaths are setup and troubleshooting routes for explicit host-app pins or bundler aliases; they do not add helper names, return shapes, or responsibility boundaries beyond the package-root table above. Keep the package-root table in this document as the helper inventory source of truth, and keep README, setup, and generated setup notes as routing guidance rather than mirrors of every helper export.
+Prefer package-root imports for normal rendered-field contract helper use. Direct helper subpaths are setup and troubleshooting routes for explicit host-app pins or bundler aliases; they do not add helper names, return shapes, or responsibility boundaries beyond the package-root table above. The package-root-only readers `readRenderedTomSelectInteractionConfig`, `readRenderedOptionPayloadMapping`, and `readRenderedTableFilterMetadata` intentionally stay on the `rails_fields_kit` package-root route in this 0.1.x surface; do not infer direct subpaths for them unless a future issue explicitly expands the direct helper subpath policy. Keep the package-root table in this document as the helper inventory source of truth, and keep README, setup, and generated setup notes as routing guidance rather than mirrors of every helper export.
 
 ### Contract reader boundary
 
