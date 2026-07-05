@@ -85,6 +85,7 @@ This inventory is for maintainers who need to find the right source of truth qui
 - `doc/default_allow_clear.md`: focused app-wide `allow_clear` default guide; keep `clear_button` plugin installation, styling, empty-state copy, and lifecycle behavior with the host app
 - `doc/styling_boundary.md`: reader-facing source of truth for wrapper classes, styling hooks, and host-app CSS ownership
 - `doc/tom_select_class_names.md`: focused field-level Tom Select internal `classNames` pass-through guide; keep wrapper customization, production CSS, theme presets, and initializer-level defaults out of this lane
+- `doc/dropdown_parent.md`: focused `dropdown_parent:` selector pass-through guide; modal, drawer, portal, z-index, focus, and production CSS ownership stay with the host app
 - `doc/events.md`: Stimulus event contract
 - `doc/tom_select_turbo_lifecycle.md`: Turbo and Stimulus connect/disconnect lifecycle boundary for Tom Select-backed helpers
 - `doc/select_migration.md`, `doc/grouped_select.md`, and `doc/enum_select.md`: focused collection-backed select docs for ordinary Rails select migration, optgroup choices, and enum-backed choices
@@ -133,6 +134,7 @@ This inventory is for maintainers who need to find the right source of truth qui
 - `doc/tom_select_error_surface_contract_visual_reference.html`: static visual reference for focused `error_surface: true` live-region contract review
 - `doc/tom_select_text_override_visual_reference.html`: static visual reference for configured Tom Select text override copy states
 - `doc/tom_select_disabled_option_visual_reference.html`: static visual reference for collection-backed disabled option readability and option metadata boundaries
+- `doc/dropdown_parent_review.html`: static companion review lane for modal, drawer, and body-mounted `dropdown_parent:` selector ownership; it is not browser positioning approval or production CSS evidence
 - `doc/native_accessibility_contract_visual_reference.html`: static visual reference for focused native helper accessibility contract reader lanes
 - `doc/configuration_wrapper_class_visual_reference.html`: static visual reference for initializer-driven wrapper class pass-through, narrow viewport review, and host-app CSS ownership boundaries
 - `doc/table_metadata_visual_reference.html`: static visual reference for representative table metadata filter and editor lanes
