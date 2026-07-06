@@ -101,7 +101,7 @@ RSpec.describe "focused docs inventory guard" do
       "Rails Fields Kit does not currently provide `rfk_masked_field`, `rfk_slug_field`, or `rfk_datalist_field`"
     )
     expect(roadmap).to include(
-      "[`doc/datalist_boundary.md`](datalist_boundary.md)",
+      "[`doc/datalist_boundary.md`](doc/datalist_boundary.md)",
       "current proposal boundary for HTML datalist support",
       "keeps `rfk_datalist_field` out of the current public API"
     )
