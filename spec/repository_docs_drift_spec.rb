@@ -176,6 +176,32 @@ RSpec.describe "repository docs drift guards" do
     )
   end
 
+  it "keeps package-root-only contract readers off inferred direct subpath routes" do
+    public_api_import_patterns = markdown_section(public_api_doc, "### Import patterns")
+
+    expect(public_api_import_patterns).to include(
+      "Direct helper subpath imports are supported only for helper files that `package.json` exports",
+      "Prefer package-root imports for normal rendered-field contract helper use",
+      "Direct helper subpaths are setup and troubleshooting routes for explicit host-app pins or bundler aliases"
+    )
+
+    expect(public_api_import_patterns).to include(
+      "The package-root-only readers `readRenderedTomSelectInteractionConfig`, `readRenderedOptionPayloadMapping`, and `readRenderedTableFilterMetadata` intentionally stay on the `rails_fields_kit` package-root route in this 0.1.x surface",
+      "do not infer direct subpaths for them unless a future issue explicitly expands the direct helper subpath policy"
+    )
+
+    root_only_readers = %w[
+      readRenderedTomSelectInteractionConfig
+      readRenderedOptionPayloadMapping
+      readRenderedTableFilterMetadata
+    ]
+
+    root_only_readers.each do |reader_name|
+      expect(public_api_import_patterns).to include(reader_name)
+      expect(package_metadata.fetch("exports").keys).not_to include("./#{reader_name.gsub(/([a-z])([A-Z])/, "\\1_\\2").downcase}")
+    end
+  end
+
   it "keeps representative focused docs discoverable from the public API index without promoting proposals" do
     expect(public_api_doc).to include(
       "[`native_date_time_color_fields.md`](native_date_time_color_fields.md)",
