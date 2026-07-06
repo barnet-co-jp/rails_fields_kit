@@ -24,6 +24,7 @@ Complete these checks in order. Stop after the first field renders, record what 
 Use these checks after the first field renders so setup notes stay focused on this host app instead of becoming a copy of the upstream docs.
 
 - [ ] Run `rails rails_fields_kit:doctor` after the first-pass wiring to review detectable setup state, importmap pin target diagnostics, representative Stimulus registration advisory state, and manual checklist items.
+- [ ] Use the doctor output as a read-only prompt. Missing importmap pins, unexpected Rails Fields Kit pin targets, target-omitted pins, and bundler aliases for documented Rails Fields Kit entrypoints remain host-app setup responsibilities. The doctor does not inspect or rewrite bundler config.
 - [ ] Read the setup doctor status legend before triage: fix `[MISSING]` lines first, then treat `[MANUAL]` lines as host-app JavaScript toolchain checks.
 - [ ] Treat `[OK] Stimulus registration` as a representative source signal only; final Stimulus boot policy and any `[MANUAL]` follow-up stay with this host app.
 - [ ] When recording setup doctor evidence, use the upstream setup doctor output review to distinguish setup behavior from CLI output readability and to avoid treating `[MANUAL]` lines as automatic failures.
@@ -36,6 +37,7 @@ Keep these as boundary checks for troubleshooting or app-specific setup choices.
 
 - [ ] For Turbo-enabled apps, let the registered Stimulus controller handle normal `rfk_*` field reconnects; do not add a separate host-app `turbo:load` reinitializer unless custom markup lives outside Stimulus-managed DOM.
 - [ ] If `rails_fields_kit` or `rails_fields_kit/tom_select_controller` cannot be resolved, use the upstream setup guide's unresolved imports troubleshooting section before changing aliases, importmap pins, Stimulus registration, Tom Select package setup, or CSS imports.
+- [ ] When the first pass needs richer select behavior, use the maintained docs for `selected_url:`, `option_description_field:`, `option_badge_field:`, `rfk_search_with`, `rfk_find_with`, and `rfk_create_with` instead of copying that setup here.
 - [ ] Review the upstream support boundary before assuming Ruby, Rails, Node, or repository JavaScript check coverage for this host app.
 
 ## Suggested docs order
@@ -48,7 +50,7 @@ Start with these while proving the first field:
 
 Use these after the first field works or when the host app hits that exact setup question:
 
-- Setup doctor output review: `doc/setup.md#setup-doctor-output-review`
+- Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>
 - Unresolved imports troubleshooting: `doc/setup.md#unresolved-imports`
 - Turbo and Stimulus reconnection note: `doc/setup.md#turbo-and-stimulus-reconnection`
 - Support boundary: `README.md#support-boundary`
