@@ -264,13 +264,23 @@
         text-align: center;
       }
 
-      .review-question {
+      .review-question,
+      .route-cue {
         padding: 10px 12px;
+        font-size: 0.92rem;
+        overflow-wrap: anywhere;
+      }
+
+      .review-question {
         border-left: 3px solid var(--accent);
         background: var(--accent-soft);
         color: #244d47;
-        font-size: 0.92rem;
-        overflow-wrap: anywhere;
+      }
+
+      .route-cue {
+        border-left: 3px solid var(--info);
+        background: var(--info-soft);
+        color: #21486f;
       }
 
       ul, ol {
@@ -329,7 +339,17 @@
         .quick-list a,
         .task-links a,
         .family-links a,
-        .reference-link { width: 100%; }
+        .reference-link {
+          width: 100%;
+          justify-content: flex-start;
+          text-align: left;
+        }
+
+        .task-card .task-links,
+        .family-card .family-links {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
 
         .task-card .task-links a,
         .family-card .family-links a { min-height: 36px; }
@@ -590,6 +610,7 @@
               <h3>Contract reader review</h3>
               <p>Use when a PR or release asks which rendered-state lane should support a package-root contract reader without copying the helper inventory into this index.</p>
             </header>
+            <p class="route-cue"><strong>Route cue:</strong> choose the nearest current visual lane here, then keep helper names and return-shape details in public_api.md.</p>
             <ul>
               <li>Open public API exports first; that table remains the source of truth for current landed helper names and return-shape boundaries.</li>
               <li>Open package helper release evidence when the review needs representative package-root export checks instead of a visual lane.</li>
