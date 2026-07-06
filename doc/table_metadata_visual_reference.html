@@ -636,6 +636,51 @@
 
         <article class="card">
           <div class="card-header">
+            <span class="tag native">Radio Metadata</span>
+            <h2>Radio button cell-editor states</h2>
+            <p>Represents `TableCellInput.radio_button` after the table integration chooses a single radio helper for an editable cell.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="strip">
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Published status</span>
+                  <span class="metadata-chip">TableCellInput.radio_button</span>
+                </div>
+                <div class="control native">
+                  <span class="selected">(o) Published</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Draft status</span>
+                  <span class="metadata-chip">tag_value: "draft"</span>
+                </div>
+                <div class="control native">
+                  <span class="placeholder">( ) Draft</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Editor hint</span>
+                  <span class="metadata-chip">cell editor only</span>
+                </div>
+                <div class="control native">
+                  <span class="helper">Label, hint, checked state, and custom tag value stay visible as helper metadata.</span>
+                </div>
+              </div>
+            </div>
+            <div class="toolbar">
+              <span class="pill">Maps to rfk_radio_button</span>
+              <span class="pill">Cell editor lane only</span>
+            </div>
+            <div class="stack-note">Use this lane to review radio cell-editor metadata readability only. Table filter radio metadata has its own surface; same-name grouping, fieldset / legend UI, query semantics, and table persistence stay with the host app or table integration.</div>
+          </div>
+          <p class="card-footer">This keeps `TableCellInput.radio_button` visible as supported cell-editor metadata without implying Rails Fields Kit-owned same-name radio group behavior or query execution.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
             <span class="tag editor">Editors</span>
             <h2>Editable cell controls</h2>
             <p>Represents `rfk_table_cell_editors(columns)` when the table metadata describes the editor family and Rails Fields Kit only renders those controls.</p>
