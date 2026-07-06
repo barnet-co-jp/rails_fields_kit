@@ -46,8 +46,8 @@ RSpec.describe "visual reference documentation inventory" do
 
     expect(lifecycle_guide).to include(
       "disconnect()",
-      "pending requests on disconnect",
-      "ignores stale responses"
+      "aborts in-flight remote requests",
+      "request abort and stale-response guards"
     )
   end
 
@@ -75,7 +75,7 @@ RSpec.describe "visual reference documentation inventory" do
       "character counters, masking, browser validation-message policy",
       "autocomplete policy",
       "nativeFieldConstraintContract(element)",
-      "does not read validation messages, masks, formatting"
+      "does not mutate attributes, run validation, own validation messages, apply masking or formatting"
     )
 
     expect(native_reference).to include(
