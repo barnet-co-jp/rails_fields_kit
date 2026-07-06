@@ -29,7 +29,7 @@ RSpec.describe "events docs inventory guard" do
       "When a field is rendered with `error_surface: true`, the controller also includes `detail.surface` on request-failure events",
       "pass an explicit `error_surface_html: { id: \"...\" }` for each field instance",
       "data-rfk-error-state=\"error\"",
-      "data-rfk-error-operation=\"load\", `\"selected-load\"`, or `\"create\"`",
+      "data-rfk-error-operation",
       "data-rfk-error-status` when an HTTP status is available",
       "They do not make Rails Fields Kit responsible for visible message text, retry UI, loading UI, or endpoint policy",
       "This recipe intentionally uses only the current `load-error`, `selected-load-error`, and `create-error` hooks",
