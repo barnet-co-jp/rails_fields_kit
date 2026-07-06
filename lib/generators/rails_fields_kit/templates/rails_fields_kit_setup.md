@@ -6,7 +6,11 @@ Use it as a lightweight adoption checklist for wiring Rails Fields Kit into this
 
 ## Start here
 
-Finish this first pass before adding remote endpoints, release evidence, or visual review tasks. The goal is to prove one server-rendered field in this host app and record any app-specific ownership notes.
+Finish this first pass before adding remote endpoints, release evidence, visual review tasks, or table metadata work. The goal is to prove one server-rendered field in this host app and record any app-specific ownership notes.
+
+### First field route
+
+Complete these checks in order. Stop after the first field renders, record what worked, and use the later sections only when the host app needs that follow-up.
 
 - [ ] Confirm `config/initializers/rails_fields_kit.rb` matches this app's needs.
 - [ ] Install Tom Select with the JavaScript toolchain already used by this app.
@@ -14,19 +18,31 @@ Finish this first pass before adding remote endpoints, release evidence, or visu
 - [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.
 - [ ] Follow the README first field quickstart or the setup guide `rfk_select` lane before adding remote endpoints.
 - [ ] Render one Rails Fields Kit field on a server-rendered form and record the field name below.
+
+### First-pass evidence
+
+Use these checks after the first field renders so setup notes stay focused on this host app instead of becoming a copy of the upstream docs.
+
 - [ ] Run `rails rails_fields_kit:doctor` after the first-pass wiring to review detectable setup state, importmap pin target diagnostics, representative Stimulus registration advisory state, and manual checklist items.
 - [ ] Read the setup doctor status legend before triage: fix `[MISSING]` lines first, then treat `[MANUAL]` lines as host-app JavaScript toolchain checks.
 - [ ] Treat `[OK] Stimulus registration` as a representative source signal only; final Stimulus boot policy and any `[MANUAL]` follow-up stay with this host app.
 - [ ] When recording setup doctor evidence, use the upstream setup doctor output review to distinguish setup behavior from CLI output readability and to avoid treating `[MANUAL]` lines as automatic failures.
 - [ ] If setup doctor reports `[MANUAL] Stimulus registration`, confirm the existing boot file or controller index; this is host-app follow-up, not an automatic failure.
+- [ ] Record the first Rails Fields Kit field and any app-specific ownership notes below.
+
+### Use only when the first pass needs it
+
+Keep these as boundary checks for troubleshooting or app-specific setup choices. They are not prerequisites for proving the first field.
+
 - [ ] For Turbo-enabled apps, let the registered Stimulus controller handle normal `rfk_*` field reconnects; do not add a separate host-app `turbo:load` reinitializer unless custom markup lives outside Stimulus-managed DOM.
 - [ ] If `rails_fields_kit` or `rails_fields_kit/tom_select_controller` cannot be resolved, use the upstream setup guide's unresolved imports troubleshooting section before changing aliases, importmap pins, Stimulus registration, Tom Select package setup, or CSS imports.
 - [ ] Review the upstream support boundary before assuming Ruby, Rails, Node, or repository JavaScript check coverage for this host app.
-- [ ] Record the first Rails Fields Kit field and any app-specific ownership notes below.
 
 ## Maintained docs to read first
 
 Use these upstream docs after the first pass when you need maintained examples, public API details, release checks, or troubleshooting. This generated note should link back to source-of-truth docs rather than mirror their details.
+
+Start with these while proving the first field:
 
 - README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>
 - Setup guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>
@@ -34,6 +50,9 @@ Use these upstream docs after the first pass when you need maintained examples, 
 - Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>
 - Support boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/support_boundary.md>
 - Turbo lifecycle boundary: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_turbo_lifecycle.md>
+
+Use these after the first field works and the host app needs the deeper surface:
+
 - Public API: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/public_api.md>
 - Shared metadata runnable guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/shared_metadata_runnable_guide.md> for copyable current-API examples derived from one host-app-owned metadata source
 - Configuration: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration.md>
@@ -79,6 +98,8 @@ Use these references before shipping remote preloads, table metadata surfaces, o
 - [ ] Use `doc/tom_select_visual_reference.html` when this app needs a quick visual comparison of representative Tom Select-backed states.
 
 ## Reference links
+
+These links are for later lookup. Use the first-pass route above before turning this note into a full docs inventory.
 
 - Practical `rfk_select` migration guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/select_migration.md>
 - Setup troubleshooting for unresolved imports: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md> (section `#troubleshoot-unresolved-imports`)
