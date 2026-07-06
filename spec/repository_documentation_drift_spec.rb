@@ -18,18 +18,14 @@ RSpec.describe "repository documentation drift guards" do
     source[start_index...(next_heading || source.length)]
   end
 
-  it "keeps generated setup notes upstream links pointed at existing onboarding docs" do
+  it "keeps generated setup notes upstream links pointed at first-pass onboarding docs" do
     template = read_repo_file("lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md")
     linked_paths = template.scan(%r{https://github\.com/matsuo-haruhito/rails_fields_kit/blob/main/([^>\s)]+)}).flatten
 
-    expect(linked_paths).to include(
+    expect(linked_paths).to contain_exactly(
       "README.md",
       "doc/setup.md",
-      "doc/public_api.md",
-      "doc/configuration.md",
-      "doc/field_helpers.md",
-      "doc/controller_helpers.md",
-      "doc/visual_references.md"
+      "doc/setup_doctor_output_review.md"
     )
 
     missing_paths = linked_paths.reject { |path| File.file?(File.join(root, path)) }
