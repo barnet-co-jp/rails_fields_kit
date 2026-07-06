@@ -20,7 +20,7 @@ RSpec.describe "visual reference browser evidence docs inventory" do
   it "keeps development and freshness guidance routed to the runbook" do
     expect(development).to include(
       "needs-browser-evidence",
-      "doc/visual_reference_browser_evidence.md",
+      ".github/pr_freshness_queue_note.md",
       "CI and source review cannot replace"
     )
     expect(freshness_note).to include(
