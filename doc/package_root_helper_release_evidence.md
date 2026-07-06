@@ -206,6 +206,14 @@ Representative import:
 import { tomSelectPluginContract } from "rails_fields_kit"
 ```
 
+The package-root import remains the normal release evidence route. When a narrow PR or release specifically includes the direct helper subpath from `doc/public_api.md#javascript-exports`, add a second import check in the same helper lane rather than creating a separate release gate:
+
+```js
+import tomSelectPluginContractFromSubpath from "rails_fields_kit/tom_select_plugin_contract"
+```
+
+That direct-subpath check should only confirm that the same representative field reaches the same read-only helper route. Record it in the helper row in `doc/sample_app_results.md` or in a scoped PR comment, and do not expand the evidence into plugin assets, clear/remove styling, selection mutation, Tom Select lifecycle, or browser visual approval.
+
 Check one rendered Tom Select-backed field that uses `allow_clear: true` and, when the release scope includes explicit plugin overrides, one comparable field that renders `plugins:` explicitly:
 
 - `tomSelectPluginContract(fieldElement)` returns a plain object for a Rails Fields Kit Tom Select field.
@@ -213,12 +221,13 @@ Check one rendered Tom Select-backed field that uses `allow_clear: true` and, wh
 - A field with `allow_clear: true` reports `clear_button` in the documented `plugins` array and sets the documented `hasClearButton` flag.
 - A field with explicit `plugins:` reports the rendered effective plugin list and derived `hasClearButton` / `hasRemoveButton` flags without treating the host app's plugin choices as Rails Fields Kit-owned behavior.
 - A comparable non-Tom Select or unrelated element returns `null`.
+- If the direct helper subpath is in scope, the direct import resolves and returns the same documented read-only result for the representative field.
 - The evidence stays read-only; plugin asset installation, clear/remove affordance styling, selection mutation, empty-state copy, Tom Select plugin objects, and Tom Select instance lifecycle remain outside this helper evidence lane.
 
 Suggested evidence note:
 
 ```text
-tomSelectPluginContract: PASS on <field selector>. plugins matched the rendered effective plugin list; allow_clear field exposed clear_button through plugins and hasClearButton; explicit plugin field exposed the expected derived hasClearButton / hasRemoveButton flags; unrelated element returned null. Plugin assets, styling, mutation, empty-state copy, and Tom Select plugin lifecycle remained host-app or Tom Select responsibilities.
+tomSelectPluginContract: PASS on <field selector>. Package-root import returned the documented plugins / hasClearButton / hasRemoveButton contract; direct subpath import returned the same read-only result when that route was in scope; unrelated element returned null. Plugin assets, styling, mutation, empty-state copy, and Tom Select plugin lifecycle remained host-app or Tom Select responsibilities.
 ```
 
 ## Tom Select selection contract reader
