@@ -171,6 +171,12 @@ RSpec.describe "focused docs inventory guard" do
       "[`doc/visual_reference_browser_evidence.md`](doc/visual_reference_browser_evidence.md)",
       "manual desktop/narrow browser-capable evidence beyond CI or source review"
     )
+    expect(visual_references).to include(
+      "Evidence shorthand: source review checks file content, links, headings, and scope text; browser visual approval checks the rendered artifact at the stated viewport",
+      "If the run is connector-only and no browser screenshot is available, say what was checked instead, such as source review, CI, or a static render, and name the remaining human or browser-capable check rather than treating CI green as visual approval",
+      "Not checked here: browser screenshot / real browser desktop / real browser narrow",
+      "Do not paste it as a release approval when the browser pass was not actually run"
+    )
     expect(sample_app_results_route_guide).to include(
       "Source-only or connector-only visual review",
       "source review / browser pass / CI / docs link review",
@@ -222,9 +228,23 @@ RSpec.describe "focused docs inventory guard" do
       "doc/setup_doctor_output_narrow_wrap_review.md"
     )
 
+    expect(readme).to include(
+      "[`doc/setup_doctor_output_review.md`](doc/setup_doctor_output_review.md)",
+      "CLI diagnostic evidence review"
+    )
+
+    expect(visual_references).to include(
+      "[`setup_doctor_output_review.md`](setup_doctor_output_review.md)",
+      "reviews `[OK]`, `[MISSING]`, `[MANUAL]`, and target-mismatch scanability without changing setup doctor runtime behavior or output wording",
+      "Treat it as a CLI diagnostic evidence lane, not a field UI visual reference or a source of runtime wording changes"
+    )
+
     expect(setup_doctor_output_review).to include(
       "Use `doc/setup_doctor_output_narrow_wrap_review.md` with this route",
       "80-column terminal, GitHub PR comment code block, or 390px Markdown preview",
+      "Confirm that the status legend explains `[OK]`, `[MISSING]`, and `[MANUAL]` before the user reaches individual checks",
+      "Treat `[MANUAL]` lines as host-app responsibility checks. Do not count them as failed automatic checks unless the release issue explicitly changes setup doctor behavior",
+      "The `Next step` line should make first-run output actionable without adding an auto-fix policy",
       "setup doctor runtime wording, exit-code behavior, auto-fix policy, and host-app setup policy here as non-goals"
     )
 
