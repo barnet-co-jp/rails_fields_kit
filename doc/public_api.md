@@ -174,7 +174,7 @@ Class responsibilities:
 
 Public metadata methods are grouped by class so reviewers can scan the contract without reading one long mixed list. Use [`table_adapters.md`](table_adapters.md) as the source of truth for examples, custom renderer registry setup, and the difference between built-in factory types and custom renderable mappings.
 
-Focused native metadata guides stay behind that table adapters route, but can be useful when reviewing one built-in field family at a time: use [`table_range_field_metadata.md`](table_range_field_metadata.md) for range metadata, [`table_check_box_metadata.md`](table_check_box_metadata.md) for checkbox metadata, [`table_radio_button_metadata.md`](table_radio_button_metadata.md) for radio button cell-editor metadata, and [`table_file_field_metadata.md`](table_file_field_metadata.md) for file cell-editor metadata. These guides do not add range-pair query semantics, boolean query policy, radio group generation, file upload execution, table persistence, or production styling to Rails Fields Kit responsibility.
+Focused native metadata guides stay behind that table adapters route, but can be useful when reviewing one built-in field family at a time: use [`table_range_field_metadata.md`](table_range_field_metadata.md) for range metadata, [`table_check_box_metadata.md`](table_check_box_metadata.md) for checkbox metadata, [`table_radio_button_metadata.md`](table_radio_button_metadata.md) for radio button cell-editor metadata, [`table_date_time_color_metadata.md`](table_date_time_color_metadata.md) for date, time, datetime-local, and color metadata, and [`table_file_field_metadata.md`](table_file_field_metadata.md) for file cell-editor metadata. These guides do not add range-pair query semantics, boolean query policy, radio group generation, file upload execution, table persistence, or production styling to Rails Fields Kit responsibility. The date/time/color metadata route also keeps browser-native picker policy, timezone or locale formatting, masking, and custom picker UI outside Rails Fields Kit ownership.
 
 ### TableFilterInput methods
 
@@ -350,6 +350,7 @@ Direct helper subpath imports are supported only for helper files that `package.
 ```js
 import nativeFieldAccessibilityContract from "rails_fields_kit/native_field_accessibility_contract"
 import nativeFieldConstraintContract from "rails_fields_kit/native_field_constraint_contract"
+import tomSelectPluginContract from "rails_fields_kit/tom_select_plugin_contract"
 import tomSelectTextOverrideContract from "rails_fields_kit/tom_select_text_override_contract"
 ```
 
