@@ -14,7 +14,7 @@ RSpec.describe "events docs inventory guard" do
     expect(specification.files).to include("doc/events.md")
 
     expect(public_api).to include(
-      "Tom Select-backed helpers also support opt-in `error_surface:`",
+      "Tom Select-backed `rfk_*` helpers also support opt-in `error_surface:`",
       "request-failure events described in [`events.md`](events.md) can include that placeholder as `detail.surface`",
       "visible error copy and retry UI remain host-app responsibility"
     )
