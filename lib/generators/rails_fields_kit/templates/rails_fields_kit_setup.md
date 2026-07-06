@@ -6,7 +6,9 @@ Use it as a lightweight adoption checklist for wiring Rails Fields Kit into this
 
 ## Start here
 
-Finish this first pass before adding remote endpoints, release evidence, or visual review tasks. The goal is to prove one server-rendered field in this host app and record any app-specific ownership notes.
+Use this as the first-pass checklist only. Stop after one server-rendered field works and the app-specific notes are filled in; the later sections are follow-up lanes for remote endpoints, helper migration, release evidence, and visual review.
+
+### First-pass field setup
 
 - [ ] Confirm `config/initializers/rails_fields_kit.rb` matches this app's needs.
 - [ ] Install Tom Select with the JavaScript toolchain already used by this app.
@@ -14,6 +16,12 @@ Finish this first pass before adding remote endpoints, release evidence, or visu
 - [ ] Load `tom-select/dist/css/tom-select.css` from the app's stylesheet or bundler entrypoint.
 - [ ] Follow the README first field quickstart or the setup guide `rfk_select` lane before adding remote endpoints.
 - [ ] Render one Rails Fields Kit field on a server-rendered form and record the field name below.
+- [ ] Record the first Rails Fields Kit field and any app-specific ownership notes below.
+
+### First-pass setup review
+
+Run these checks after the first field renders. Use them to triage setup visibility without turning this generated note into a full setup guide.
+
 - [ ] Run `rails rails_fields_kit:doctor` after the first-pass wiring to review detectable setup state, importmap pin target diagnostics, representative Stimulus registration advisory state, and manual checklist items.
 - [ ] Read the setup doctor status legend before triage: fix `[MISSING]` lines first, then treat `[MANUAL]` lines as host-app JavaScript toolchain checks.
 - [ ] Treat `[OK] Stimulus registration` as a representative source signal only; final Stimulus boot policy and any `[MANUAL]` follow-up stay with this host app.
@@ -22,11 +30,10 @@ Finish this first pass before adding remote endpoints, release evidence, or visu
 - [ ] For Turbo-enabled apps, let the registered Stimulus controller handle normal `rfk_*` field reconnects; do not add a separate host-app `turbo:load` reinitializer unless custom markup lives outside Stimulus-managed DOM.
 - [ ] If `rails_fields_kit` or `rails_fields_kit/tom_select_controller` cannot be resolved, use the upstream setup guide's unresolved imports troubleshooting section before changing aliases, importmap pins, Stimulus registration, Tom Select package setup, or CSS imports.
 - [ ] Review the upstream support boundary before assuming Ruby, Rails, Node, or repository JavaScript check coverage for this host app.
-- [ ] Record the first Rails Fields Kit field and any app-specific ownership notes below.
 
-## Maintained docs to read first
+## Maintained docs after first pass
 
-Use these upstream docs after the first pass when you need maintained examples, public API details, release checks, or troubleshooting. This generated note should link back to source-of-truth docs rather than mirror their details.
+Use these upstream docs after the first field works and you need maintained examples, public API details, release checks, or troubleshooting. Open the smallest source-of-truth doc for the job; this generated note should route back to maintained docs rather than mirror their details.
 
 - README: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/README.md>
 - Setup guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md>
@@ -78,7 +85,9 @@ Use these references before shipping remote preloads, table metadata surfaces, o
 - [ ] Use `doc/visual_references.md` as the source of truth before opening focused accessibility-contract, request-failure, native helper, or table/token visual lanes; this generated note should point back to that maintained map instead of listing every static artifact.
 - [ ] Use `doc/tom_select_visual_reference.html` when this app needs a quick visual comparison of representative Tom Select-backed states.
 
-## Reference links
+## Reference links for follow-up work
+
+Use these links only after the matching topic is in scope. Keep the first-pass setup above short; this list is a route map back to maintained upstream docs.
 
 - Practical `rfk_select` migration guide: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/select_migration.md>
 - Setup troubleshooting for unresolved imports: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md> (section `#troubleshoot-unresolved-imports`)
