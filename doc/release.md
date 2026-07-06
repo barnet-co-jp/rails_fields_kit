@@ -106,6 +106,7 @@ bundle exec rake build
    - `doc/saved_search_token_suggestion_evidence.md` when saved-search token suggestion evidence is part of the release or PR scope
    - `doc/ransack_suggestions.md`
    - `doc/table_adapters.md`
+   - `doc/rails_table_preferences_bridge_boundary.md` when Rails Table Preferences bridge ownership, dependency-light integration, or table metadata handoff is part of the release review surface
    - `doc/configuration.md`
    - `doc/events.md`
    - `doc/tom_select_turbo_lifecycle.md`
