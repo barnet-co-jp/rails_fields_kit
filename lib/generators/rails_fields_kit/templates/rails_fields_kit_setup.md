@@ -24,7 +24,7 @@ Complete these checks in order. Stop after the first field renders, record what 
 Use these checks after the first field renders so setup notes stay focused on this host app instead of becoming a copy of the upstream docs.
 
 - [ ] Run `rails rails_fields_kit:doctor` after the first-pass wiring to review detectable setup state, importmap pin target diagnostics, representative Stimulus registration advisory state, and manual checklist items.
-- [ ] Use the doctor output as a read-only prompt. missing importmap pins, unexpected Rails Fields Kit pin targets, target-omitted pins, and bundler aliases for documented Rails Fields Kit entrypoints remain host-app setup responsibilities. The doctor does not inspect or rewrite bundler config.
+- [ ] Use the doctor output as a read-only prompt; missing importmap pins, unexpected Rails Fields Kit pin targets, target-omitted pins, and bundler aliases for documented Rails Fields Kit entrypoints remain host-app setup responsibilities. The doctor does not inspect or rewrite bundler config.
 - [ ] Read the setup doctor status legend before triage: fix `[MISSING]` lines first, then treat `[MANUAL]` lines as host-app JavaScript toolchain checks.
 - [ ] Treat `[OK] Stimulus registration` as a representative source signal only; final Stimulus boot policy and any `[MANUAL]` follow-up stay with this host app.
 - [ ] When recording setup doctor evidence, use the upstream setup doctor output review to distinguish setup behavior from CLI output readability and to avoid treating `[MANUAL]` lines as automatic failures.
