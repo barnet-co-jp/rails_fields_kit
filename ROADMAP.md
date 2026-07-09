@@ -142,6 +142,7 @@ Current progress:
 
 - Rails Fields Kit exposes table-oriented metadata objects such as `RailsFieldsKit::TableFilterInput` and `RailsFieldsKit::TableCellInput`.
 - Table-oriented gems can read these through `to_table_filter`, `to_table_cell_editor`, `to_h`, and `to_hash` without taking a hard dependency on Rails Fields Kit.
+- The current Rails Table Preferences bridge first route is the docs/proposal boundary in [`doc/rails_table_preferences_bridge_boundary.md`](doc/rails_table_preferences_bridge_boundary.md), used with [`doc/table_adapters.md`](doc/table_adapters.md); it keeps this lane dependency-light and avoids adding a runtime adapter, table persistence, query execution, or authorization ownership to Rails Fields Kit.
 - `RailsFieldsKit::TableRenderer` maps table filter/editor metadata to FormBuilder call specs or dispatches them through a FormBuilder.
 - `RailsFieldsKit::TableRenderer` supports custom table field helper registration, normalized field/helper names, helper-hidden `registered_field_types` introspection, individual `unregister_field_helper` cleanup, reset behavior, ordered rendering, and mutation-safe call specs.
 - `RailsFieldsKit::TableMetadata` collects filter/editor metadata from column lists, enumerators, hash columns, hash-like columns, object columns, and table-like objects that respond to `columns`.
