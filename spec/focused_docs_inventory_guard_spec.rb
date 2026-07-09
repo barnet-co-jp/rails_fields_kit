@@ -24,6 +24,7 @@ RSpec.describe "focused docs inventory guard" do
   let(:token_table_sample_app_evidence) { read_doc("doc/token_table_sample_app_evidence.md") }
   let(:search_controller_release_evidence) { read_doc("doc/search_controller_release_evidence.md") }
   let(:radio_button_release_evidence) { read_doc("doc/radio_button_release_evidence.md") }
+  let(:rails_table_preferences_bridge_boundary) { read_doc("doc/rails_table_preferences_bridge_boundary.md") }
   let(:tom_select_no_event_boundary_review) { read_doc("doc/tom_select_no_event_boundary_review.html") }
   let(:tom_select_plugin_clearable_review) { read_doc("doc/tom_select_plugin_clearable_review.html") }
   let(:setup_doctor_output_review) { read_doc("doc/setup_doctor_output_review.md") }
@@ -219,6 +220,20 @@ RSpec.describe "focused docs inventory guard" do
       "Single select with whole-field clear",
       "Multi item removal is a different affordance",
       "Plugin assets, styling, event payloads, selection mutation, and Tom Select lifecycle behavior remain host-app or Tom Select responsibilities"
+    )
+  end
+
+  it "keeps Rails Table Preferences bridge boundary docs packaged without making it a release gate" do
+    expect(specification.files).to include("doc/rails_table_preferences_bridge_boundary.md")
+    expect(rails_table_preferences_bridge_boundary).to include(
+      "This proposal note keeps the Rails Table Preferences bridge as a metadata and rendering boundary first",
+      "It does not add a runtime adapter, hard dependency, or table execution behavior",
+      "Use this page with [`table_adapters.md`](table_adapters.md) when a host app wants Rails Table Preferences column metadata to render Rails Fields Kit controls",
+      "The first supported route is duck-typing and docs recipe, not a dedicated adapter module",
+      "Do not add a `rails_table_preferences` dependency to Rails Fields Kit for this first slice",
+      "table preference persistence",
+      "query execution or Ransack execution",
+      "docs-portal Gemfile bumps, pinned SHA changes, or downstream smoke tests"
     )
   end
 
