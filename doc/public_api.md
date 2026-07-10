@@ -262,6 +262,7 @@ Focused native metadata guides stay behind that table adapters route, but can be
 - `RailsFieldsKit::TableRenderer.registered_field_type?`
 - `RailsFieldsKit::TableRenderer.register_field_helper`
 - `RailsFieldsKit::TableRenderer.unregister_field_helper`
+- `RailsFieldsKit::TableRenderer.with_field_helpers`
 - `RailsFieldsKit::TableRenderer.reset_field_helpers!`
 - `RailsFieldsKit::TableRenderer.filter_call`
 - `RailsFieldsKit::TableRenderer.filter_calls`
@@ -278,7 +279,7 @@ The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_typ
 
 `TableFilterInput.ransack_filter` is the current public entrypoint when table-oriented code wants Ransack-compatible token-search metadata. `TableMetadata` can collect metadata from Hash columns, hash-like columns that respond to `to_hash`, object columns with public metadata readers, enumerable column lists, and table-like objects that respond to `columns`. Explicit `false` filter/editor metadata disables that slot instead of falling through to alias keys or readers. `TableRenderer` can turn collected metadata into FormBuilder call specs or dispatch it to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol, custom registry examples, and Rails Table Preferences integration notes.
 
-`TableRenderer.unregister_field_helper(field_type)` removes a custom-only renderer mapping from the current registry. If a built-in field type was temporarily overridden with `register_field_helper`, unregistering that built-in type restores the default helper instead of making the built-in type unknown. Use `reset_field_helpers!` when a test or integration needs to discard all custom mappings at once. The registry APIs do not change `TableFilterInput.known_types`, `TableCellInput.known_types`, table preference persistence, UI generation, or authorization policy.
+`TableRenderer.unregister_field_helper(field_type)` removes a custom-only renderer mapping from the current registry. If a built-in field type was temporarily overridden with `register_field_helper`, unregistering that built-in type restores the default helper instead of making the built-in type unknown. Use `with_field_helpers(custom_field: :custom_table_field) { ... }` when a test or integration needs scoped renderer overrides that restore the exact previous registry snapshot after the block, including custom-only mappings, built-in overrides, exception paths, and the block return value. Use `reset_field_helpers!` when a test or integration needs to discard all custom mappings at once. The registry APIs do not change `TableFilterInput.known_types`, `TableCellInput.known_types`, table preference persistence, UI generation, or authorization policy.
 
 ## JavaScript exports
 
