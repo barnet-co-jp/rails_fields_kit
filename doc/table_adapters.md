@@ -4,6 +4,8 @@ Rails Fields Kit can be used by table-oriented gems without forcing those gems t
 
 The adapter objects in this document expose small metadata protocols that other gems can read when Rails Fields Kit is present.
 
+For the Rails Table Preferences bridge first route, use [`rails_table_preferences_bridge_boundary.md`](rails_table_preferences_bridge_boundary.md) with this guide; that proposal note keeps the bridge dependency-light and does not add a runtime adapter, table persistence, query execution, or authorization ownership to Rails Fields Kit.
+
 For a product-neutral visual comparison of representative `rfk_table_filters(columns)` and `rfk_table_cell_editors(columns)` lanes, including the token-search editor lane, see [`table_metadata_visual_reference.html`](table_metadata_visual_reference.html).
 
 For the focused boundary between the direct FormBuilder helpers and lower-level render/call-spec lanes, see [`table_direct_helper_boundary.md`](table_direct_helper_boundary.md).
