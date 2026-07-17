@@ -40,8 +40,8 @@ assertSignals(
     "Detail: `{ values, options }`",
     "Detail: `{ input, option }`",
     "Detail: `{ operation, input, error, response, payload, status, surface }`",
-    "Detail: `{ value, values }`",
-    "Detail: `{ values }`"
+    "Detail: `{ value, values, option, options }`",
+    "Detail: `{ value, item, values, option, options }`"
   ],
   "Tom Select event detail docs"
 )
@@ -69,8 +69,10 @@ assertSignals(
   [
     "Aborted requests, disconnect-time aborts, and stale responses do not dispatch",
     "Rails Fields Kit does not dispatch a separate request-start event or render built-in loading, retry, or fallback UI.",
-    "For single-value fields, Tom Select's scalar cleared value is wrapped, so a clear event typically has `values: [\"\"]`.",
-    "For multiple-value fields, clear keeps Tom Select's empty array shape as `values: []`."
+    "The `option` field is the Tom Select option payload for the event value, or `null` when no option exists for that value, such as free text.",
+    "preserving additional fields returned by remote search, selected preload, create-on-the-fly, or collection-backed select setup",
+    "For single-value fields, Tom Select's scalar cleared value is wrapped, so a clear event typically has `values: [\"\"]` and `options: [null]`.",
+    "For multiple-value fields, clear keeps Tom Select's empty array shape as `values: []` and `options: []`."
   ],
   "request lifecycle and forwarded interaction boundary docs"
 )

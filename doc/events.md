@@ -79,11 +79,11 @@ Create success now has a dedicated hook before the normal Tom Select interaction
   - Fired after the create endpoint succeeds and before the created option is handed back to Tom Select.
   - Detail: `{ input, option }`
 - `rails-fields-kit--tom-select:item-add`
-  - Detail: `{ value, item, values }`
+  - Detail: `{ value, item, values, option, options }`
 - `rails-fields-kit--tom-select:change`
-  - Detail: `{ value, values }`
+  - Detail: `{ value, values, option, options }`
 
-Use `create` when the host app needs to distinguish inline creation from ordinary selection, for example for analytics, toast messages, hidden field wiring, or follow-up fetches. Keep using `item-add` / `change` when the app only cares that the current selection changed.
+Use `create` when the host app needs to distinguish inline creation from ordinary selection, for example for analytics, toast messages, hidden field wiring, or follow-up fetches. Keep using `item-add` / `change` when the app only cares that the current selection changed. The forwarded `option` and `options` fields expose the selected option payloads after Tom Select accepts the value, so host apps do not need to read `tomSelect.options[value]` directly.
 
 Create failure keeps its own dedicated event:
 
@@ -165,21 +165,25 @@ If the host app only wants field-adjacent visible copy, writing to `detail.surfa
 These events forward common Tom Select interactions:
 
 - `rails-fields-kit--tom-select:change`
-  - Detail: `{ value, values }`
+  - Detail: `{ value, values, option, options }`
 - `rails-fields-kit--tom-select:item-add`
-  - Detail: `{ value, item, values }`
+  - Detail: `{ value, item, values, option, options }`
 - `rails-fields-kit--tom-select:item-remove`
-  - Detail: `{ value, item, values }`
+  - Detail: `{ value, item, values, option, options }`
 - `rails-fields-kit--tom-select:clear`
-  - Detail: `{ values }`
+  - Detail: `{ values, options }`
 
-These are useful even when the field does not use remote search or create-on-the-fly. The `values` array mirrors Tom Select's current value after Rails Fields Kit normalizes it with the same helper used by the other interaction events. For single-value fields, Tom Select's scalar cleared value is wrapped, so a clear event typically has `values: [""]`. For multiple-value fields, clear keeps Tom Select's empty array shape as `values: []`.
+These are useful even when the field does not use remote search or create-on-the-fly. The `values` array mirrors Tom Select's current value after Rails Fields Kit normalizes it with the same helper used by the other interaction events. The `option` field is the Tom Select option payload for the event value, or `null` when no option exists for that value, such as free text. The `options` array mirrors `values` and contains each current selected option payload, preserving additional fields returned by remote search, selected preload, create-on-the-fly, or collection-backed select setup; values without an option are represented as `null` in the same position.
+
+For single-value fields, Tom Select's scalar cleared value is wrapped, so a clear event typically has `values: [""]` and `options: [null]`. For multiple-value fields, clear keeps Tom Select's empty array shape as `values: []` and `options: []`.
+
+Rails Fields Kit only exposes the selected candidate payloads on the event. Reflecting business metadata such as price, unit, account, category, or secondary display fields into other controls remains host-app responsibility.
 
 ## Choosing the right hook
 
 - Use `load` / `selected-load` when the app cares about fetched option payloads.
 - Use `create` when the app needs a dedicated success hook for inline creation.
-- Use `item-add` / `change` when the app cares that the selection actually changed after Tom Select accepted the value.
+- Use `item-add` / `change` when the app cares that the selection actually changed after Tom Select accepted the value and needs the selected `option` / `options` payload.
 - Use `load-error`, `selected-load-error`, or `create-error` when the app wants visible error UI, retry UI, or logging.
 - Use `detail.surface` with `error_surface: true` when the app wants a stable placeholder next to the field without replacing the controller.
 - Keep `no_results_text:` and `loading_text:` as dropdown-local status copy overrides, not request-failure UI or retry surfaces.
