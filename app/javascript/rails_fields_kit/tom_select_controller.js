@@ -214,7 +214,8 @@ export default class extends Controller {
   }
 
   optionLabel(data) {
-    const label = this.hasDisplayFieldValue && this.hasPresentValue(data[this.displayFieldValue]) ? data[this.displayFieldValue] : data[this.labelFieldValue]
+    const label = data[this.labelFieldValue]
+    if (this.hasDisplayFieldValue && this.hasPresentValue(data[this.displayFieldValue])) return this.displayValue(data[this.displayFieldValue])
     if (this.hasPresentValue(label)) return this.displayValue(label)
     if (this.labelFallbackValue === false) return ""
 
