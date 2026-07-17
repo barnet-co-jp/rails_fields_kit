@@ -13,6 +13,7 @@ Use this chooser in three passes: pick the Tom Select-backed lane when the field
 | A normal single select backed by a collection you already rendered in Rails | `rfk_select` | Keeps the same field name and ordinary Rails select flow. |
 | Remote search, selected preload, or create-on-the-fly while still submitting a selected ID or value | `rfk_combobox` | Uses remote JSON endpoints for options instead of relying on the initial collection. |
 | Suggestion UI for a text value that stays free text when submitted | `rfk_autocomplete` | Suggestions help typing, but the submitted value is still plain text. |
+| Free text plus an optional selected master ID | `rfk_lookup` | Submits the text attribute and a separate `id_field:` hidden value; selecting a candidate sets both. |
 | Structured search text such as `status:open keyword` with suggestion metadata | `rfk_token_search` | Rails Fields Kit owns the token input UI, while the host app still parses and executes the query. |
 | Request-failure feedback for any Tom Select-backed helper | Keep the chosen helper and opt into `error_surface:`. | Adds a stable hidden placeholder for host-owned visible feedback while leaving copy, retry UI, reveal timing, and production CSS with the host app. See [Shared request-failure feedback options](#shared-request-failure-feedback-options). |
 | Ordinary multiple selection from a known collection | `rfk_multi_select` | Keeps a select-style multiple value flow without implying tag creation. |
@@ -218,6 +219,25 @@ Use this representative lane when the host app still wants the user's text itsel
 - `rfk_token_search` is the helper to use when the text itself is structured query syntax that the host app will parse later.
 
 Like other remote helpers, `rfk_autocomplete` can still opt into `error_surface: true` for request-failure feedback. Its representative setup does not depend on selected preload or create-on-the-fly support.
+
+### `rfk_lookup`
+
+Use `rfk_lookup` when the visible business value remains editable text but selecting a remote candidate should also retain a master ID.
+
+```erb
+<%= f.rfk_lookup :item_name,
+  id_field: :product_id,
+  url: search_options_path("products"),
+  selected_url: search_options_path("products"),
+  value_field: "value",
+  label_field: "name",
+  display_field: "text",
+  clear_id_on_text_change: true %>
+```
+
+The helper submits both `item_name` and `product_id`. Manual editing clears the ID by default; pass `clear_id_on_text_change: false` only when the host application's validation policy permits retaining the association. Candidate metadata remains available through the normal Tom Select selection events.
+
+Tom Select-backed helpers also accept `option_metadata_fields:` for safe dropdown previews. Each declaration may contain `field`, `label`, `suffix`, `truncate`, and `format` or `style` (`badge`; `currency` also accepts `currency`, defaulting to `JPY`). Empty values are omitted and all labels, values, suffixes, and field names are escaped. JavaScript formatter functions are intentionally not accepted.
 
 ### `rfk_token_search`
 
