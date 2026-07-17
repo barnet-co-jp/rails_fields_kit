@@ -76,17 +76,25 @@ const eventDetailSignals = [
   "Detail: `{ input, option }`",
   "Detail: `{ operation, query, error, response, payload, status, surface }`",
   "Detail: `{ operation, values, error, response, payload, status, surface }`",
-  "Detail: `{ operation, input, error, response, payload, status, surface }`"
+  "Detail: `{ operation, input, error, response, payload, status, surface }`",
+  "Detail: `{ value, values, option, options }`",
+  "Detail: `{ value, item, values, option, options }`"
 ]
 
 eventDetailSignals.forEach((signal) => assert.match(eventsDoc, new RegExp(signal.replace(/[{}]/g, "\\$&"))))
 
 await withTomSelectControllerSandbox("rails-fields-kit-interaction-events-", async ({ TomSelectController }) => {
   const { controller, dispatched } = buildController(TomSelectController)
+  const alphaOption = { value: "alpha", text: "Alpha", price_cents: 1200 }
+  const betaOption = { value: "beta", text: "Beta", unit: "box" }
   const handlers = {}
   let selectedValue = ""
 
   controller.tomSelect = {
+    options: {
+      alpha: alphaOption,
+      beta: betaOption
+    },
     getValue: () => selectedValue,
     on: (eventName, handler) => {
       handlers[eventName] = handler
@@ -99,21 +107,43 @@ await withTomSelectControllerSandbox("rails-fields-kit-interaction-events-", asy
   handlers.clear()
   assert.deepEqual(dispatched.pop(), {
     eventName: "clear",
-    detail: { values: [""] }
+    detail: { values: [""], options: [null] }
   })
 
   selectedValue = []
   handlers.clear()
   assert.deepEqual(dispatched.pop(), {
     eventName: "clear",
-    detail: { values: [] }
+    detail: { values: [], options: [] }
+  })
+
+  selectedValue = "alpha"
+  handlers.change("alpha")
+  assert.deepEqual(dispatched.pop(), {
+    eventName: "change",
+    detail: { value: "alpha", values: ["alpha"], option: alphaOption, options: [alphaOption] }
   })
 
   selectedValue = ["alpha", "beta"]
   handlers.change("alpha")
   assert.deepEqual(dispatched.pop(), {
     eventName: "change",
-    detail: { value: "alpha", values: ["alpha", "beta"] }
+    detail: { value: "alpha", values: ["alpha", "beta"], option: alphaOption, options: [alphaOption, betaOption] }
+  })
+
+  selectedValue = ["alpha", "beta"]
+  const betaItem = { dataset: { value: "beta" } }
+  handlers.item_add("beta", betaItem)
+  assert.deepEqual(dispatched.pop(), {
+    eventName: "item-add",
+    detail: { value: "beta", item: betaItem, values: ["alpha", "beta"], option: betaOption, options: [alphaOption, betaOption] }
+  })
+
+  selectedValue = "custom"
+  handlers.change("custom")
+  assert.deepEqual(dispatched.pop(), {
+    eventName: "change",
+    detail: { value: "custom", values: ["custom"], option: null, options: [null] }
   })
 
   const remoteOptions = [{ value: "tokyo", text: "Tokyo" }]
