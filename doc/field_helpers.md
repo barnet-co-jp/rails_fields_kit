@@ -22,6 +22,8 @@ Use this chooser in three passes: pick the Tom Select-backed lane when the field
 
 ### Current native wrapper helpers
 
+A native password, checkbox, radio, file, or range control with focused ownership boundaries belongs in this same current native wrapper family, but the rows below keep those focused docs split so one helper is not read as the answer for every native control.
+
 | If you need... | Choose | Why |
 | --- | --- | --- |
 | A native browser input with shared wrapper, hint, error, affix, and accessibility behavior for text, textarea, or search | Start with `rfk_text_field`, `rfk_text_area`, or `rfk_search_field`. | Stays in the ordinary HTML input flow while reusing Rails Fields Kit wrapper conventions. Use [`doc/public_api.md`](public_api.md) for the current helper inventory and [`native_contact_fields.md`](native_contact_fields.md) for contact/search ownership boundaries. |
