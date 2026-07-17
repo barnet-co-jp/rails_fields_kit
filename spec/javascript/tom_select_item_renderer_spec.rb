@@ -94,4 +94,43 @@ RSpec.describe "Tom Select item renderer" do
       run_node_renderer_check(controller_path, script:)
     end
   end
+
+
+  it "renders escaped declarative metadata and synchronizes lookup fields" do
+    build_renderer_sandbox do |tmpdir|
+      controller_path = File.join(tmpdir, "app/javascript/rails_fields_kit/tom_select_controller.js")
+
+      script = <<~'JS'
+        import { pathToFileURL } from "node:url"
+
+        const { default: TomSelectController } = await import(pathToFileURL(process.argv[1]).href)
+        const controller = new TomSelectController()
+        controller.labelFieldValue = "name"
+        controller.valueFieldValue = "value"
+        controller.labelFallbackValue = true
+        controller.hasOptionDescriptionFieldValue = false
+        controller.hasOptionBadgeFieldValue = false
+        controller.hasOptionMetadataFieldsValue = true
+        controller.optionMetadataFieldsValue = [
+          { field: "price", label: "Price", suffix: " yen" },
+          { field: "category", style: "badge" }
+        ]
+        const escape = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;")
+        const option = controller.renderers().option({ value: "1", name: "Product", price: "<100>", category: "Food" }, escape)
+        if (!option.includes("rfk-option-metadata") || !option.includes("&lt;100&gt; yen") || option.includes("<100>")) throw new Error(option)
+        if (!option.includes("rfk-option-metadata--badge")) throw new Error(option)
+
+        const textField = { value: "" }
+        const idField = { value: "" }
+        controller.kindValue = "lookup"
+        controller.lookupTextField = () => textField
+        controller.lookupIdField = () => idField
+        controller.tomSelect = { options: { "1": { value: "1", name: "Product" } } }
+        controller.syncLookupSelection("1")
+        if (textField.value !== "Product" || idField.value !== "1") throw new Error(`${textField.value}:${idField.value}`)
+      JS
+
+      run_node_renderer_check(controller_path, script:)
+    end
+  end
 end

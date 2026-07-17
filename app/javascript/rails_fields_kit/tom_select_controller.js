@@ -20,6 +20,7 @@ export default class extends Controller {
     createParam: { type: String, default: "text" },
     valueField: { type: String, default: "value" },
     labelField: { type: String, default: "text" },
+    displayField: String,
     labelFallback: { type: Boolean, default: true },
     searchField: { type: String, default: "text" },
     minLength: { type: Number, default: 0 },
@@ -38,6 +39,10 @@ export default class extends Controller {
     createText: String,
     optionDescriptionField: String,
     optionBadgeField: String,
+    optionMetadataFields: Array,
+    lookupTextFieldId: String,
+    lookupIdFieldId: String,
+    clearLookupIdOnTextChange: { type: Boolean, default: true },
     plugins: Array,
     classNames: Object
   }
@@ -48,6 +53,7 @@ export default class extends Controller {
     this.requestTokens = {}
     this.tomSelect = new TomSelect(this.element, this.options())
     this.bindTomSelectEvents()
+    this.bindLookupEvents()
     this.clearErrorSurface()
     this.loadSelectedOptions()
   }
@@ -102,6 +108,7 @@ export default class extends Controller {
   bindTomSelectEvents() {
     this.tomSelect.on("change", (value) => {
       this.clearErrorSurface()
+      this.syncLookupSelection(value)
       this.dispatch("change", { detail: this.selectionDetail(value) })
     })
     this.tomSelect.on("item_add", (value, item) => {
@@ -116,6 +123,37 @@ export default class extends Controller {
       this.clearErrorSurface()
       this.dispatch("clear", { detail: { values: this.selectedValues(), options: this.selectedOptions() } })
     })
+  }
+
+  bindLookupEvents() {
+    if (this.kindValue !== "lookup") return
+
+    this.tomSelect.on("type", (text) => {
+      const textField = this.lookupTextField()
+      if (textField) textField.value = text
+      if (this.clearLookupIdOnTextChangeValue) {
+        const idField = this.lookupIdField()
+        if (idField) idField.value = ""
+      }
+    })
+  }
+
+  syncLookupSelection(value) {
+    if (this.kindValue !== "lookup") return
+
+    const option = this.optionForValue(value)
+    const textField = this.lookupTextField()
+    const idField = this.lookupIdField()
+    if (textField) textField.value = option ? this.optionLabel(option) : this.element.value
+    if (idField) idField.value = option ? this.displayValue(option[this.valueFieldValue]) : ""
+  }
+
+  lookupTextField() {
+    return this.hasLookupTextFieldIdValue ? document.getElementById(this.lookupTextFieldIdValue) : null
+  }
+
+  lookupIdField() {
+    return this.hasLookupIdFieldIdValue ? document.getElementById(this.lookupIdFieldIdValue) : null
   }
 
   renderers() {
@@ -139,9 +177,30 @@ export default class extends Controller {
     if (this.hasPresentValue(badge)) parts.push(`<span class="rfk-option-badge">${escape(this.displayValue(badge))}</span>`)
     parts.push("</div>")
     if (this.hasPresentValue(description)) parts.push(`<div class="rfk-option-description">${escape(this.displayValue(description))}</div>`)
+    this.metadataRows(data, escape).forEach((row) => parts.push(row))
     parts.push("</div>")
 
     return parts.join("")
+  }
+
+  metadataRows(data, escape) {
+    if (!this.hasOptionMetadataFieldsValue) return []
+
+    return this.optionMetadataFieldsValue.flatMap((definition) => {
+      if (!definition || !this.hasPresentValue(definition.field)) return []
+      const value = data[definition.field]
+      if (!this.hasPresentValue(value)) return []
+
+      let display = this.displayValue(value)
+      if (definition.format === "currency") {
+        const numericValue = Number(value)
+        if (Number.isFinite(numericValue)) display = new Intl.NumberFormat(undefined, { style: "currency", currency: definition.currency || "JPY", maximumFractionDigits: 0 }).format(numericValue)
+      }
+      if (definition.truncate && display.length > definition.truncate) display = `${display.slice(0, definition.truncate)}…`
+      const content = `${definition.label ? `${escape(definition.label)} ` : ""}${escape(display)}${definition.suffix ? escape(definition.suffix) : ""}`
+      const modifier = definition.style === "badge" || definition.format === "badge" ? " rfk-option-metadata--badge" : ""
+      return [`<div class="rfk-option-metadata${modifier}" data-rfk-metadata-field="${escape(definition.field)}">${content}</div>`]
+    })
   }
 
   itemTemplate(data, escape) {
@@ -156,6 +215,7 @@ export default class extends Controller {
 
   optionLabel(data) {
     const label = data[this.labelFieldValue]
+    if (this.hasDisplayFieldValue && this.hasPresentValue(data[this.displayFieldValue])) return this.displayValue(data[this.displayFieldValue])
     if (this.hasPresentValue(label)) return this.displayValue(label)
     if (this.labelFallbackValue === false) return ""
 

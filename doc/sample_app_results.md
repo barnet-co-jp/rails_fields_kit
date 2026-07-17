@@ -165,6 +165,7 @@ Notes:
 - [ ] `rfk_select`
 - [ ] `rfk_combobox`
 - [ ] `rfk_autocomplete`
+- [ ] `rfk_lookup` submits separate text and selected ID params
 - [ ] `rfk_tags`
 - [ ] `rfk_multi_select`
 - [ ] `rfk_grouped_select`

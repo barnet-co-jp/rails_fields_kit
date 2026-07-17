@@ -135,6 +135,7 @@ Create a form that exercises:
 - `rfk_select`
 - `rfk_combobox`
 - `rfk_autocomplete`
+- `rfk_lookup` with separate text and `id_field:` params
 - `rfk_tags`
 - `rfk_multi_select`
 - `rfk_grouped_select`

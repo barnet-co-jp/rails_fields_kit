@@ -6,7 +6,7 @@ RSpec.describe RailsFieldsKit::FormBuilder do
   include ActionView::Helpers::TagHelper
   include ActionView::Context
 
-  DummyModel = Struct.new(:status, :customer_id, :tag_ids, :keyword, :quantity, :amount, :rate, :email, :website_url, :phone) do
+  DummyModel = Struct.new(:status, :customer_id, :tag_ids, :keyword, :quantity, :amount, :rate, :email, :website_url, :phone, :product_id) do
     def self.model_name
       ActiveModel::Name.new(self, nil, "DummyModel")
     end
@@ -95,6 +95,26 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("value=\"draft\"")
     expect(html).to include("selected=\"selected\"")
     expect(html).to include(">Draft</option>")
+  end
+
+  it "renders lookup text and selected id as separate Rails params" do
+    model = DummyModel.new("draft", nil, [], "Custom item", 1, 1000, 10, "a@example.com", "https://example.com", "03-0000-0000", 42)
+    html = form_builder(model).rfk_lookup(:keyword, id_field: :product_id, url: "/products.json")
+
+    expect(html).to include('data-rails-fields-kit--tom-select-kind-value="lookup"')
+    expect(html).to include('id="dummy_model_keyword_lookup"')
+    expect(html).to include('name="dummy_model[keyword]"')
+    expect(html).to include('value="Custom item"')
+    expect(html).to include('name="dummy_model[product_id]"')
+    expect(html).to include('value="42"')
+    expect(html.scan('name="dummy_model[keyword]"').size).to eq(1)
+  end
+
+  it "renders declarative option metadata as escaped controller data" do
+    html = form_builder.rfk_combobox(:customer_id, option_metadata_fields: [{field: "price", label: "Price"}])
+
+    expect(html).to include("data-rails-fields-kit--tom-select-option-metadata-fields-value=")
+    expect(html).to include("&quot;field&quot;:&quot;price&quot;")
   end
 
   it "renders grouped selects" do

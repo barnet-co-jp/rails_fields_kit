@@ -92,6 +92,13 @@ module RailsFieldsKit
       rfk_tom_select_field(method, :autocomplete, **options)
     end
 
+    def rfk_lookup(method, id_field:, **options)
+      options[:free_text] = false unless options.key?(:free_text)
+      options[:lookup_id_field] = id_field
+      options[:selected] = object.public_send(id_field) unless options.key?(:selected) || !object.respond_to?(id_field)
+      rfk_tom_select_field(method, :lookup, **options)
+    end
+
     def rfk_token_search(method, **options)
       options[:as] = :text unless options.key?(:as)
       options[:free_text] = true unless options.key?(:free_text)
@@ -140,6 +147,8 @@ module RailsFieldsKit
       disabled = options.delete(:disabled)
       option_html = options.delete(:option_html) || {}
       selected = options.delete(:selected)
+      lookup_id_field = options.delete(:lookup_id_field)
+      clear_lookup_id_on_text_change = options.key?(:clear_id_on_text_change) ? options.delete(:clear_id_on_text_change) : true
       allow_clear = options.key?(:allow_clear) ? options.delete(:allow_clear) : config.default_allow_clear
       error_surface = options.delete(:error_surface)
       error_surface_html = options.delete(:error_surface_html) || {}
@@ -167,6 +176,7 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :create_param, rfk_option_or_default(options, :create_param, config.default_create_param))
       rfk_assign_data_value(data, :value_field, rfk_option_or_default(options, :value_field, config.default_value_field))
       rfk_assign_data_value(data, :label_field, rfk_option_or_default(options, :label_field, config.default_label_field))
+      rfk_assign_data_value(data, :display_field, options.delete(:display_field))
       rfk_assign_data_value(data, :label_fallback, options.delete(:label_fallback))
       rfk_assign_data_value(data, :search_field, rfk_option_or_default(options, :search_field, config.default_search_field))
       rfk_assign_data_value(data, :min_length, rfk_option_or_default(options, :min_length, config.default_min_length))
@@ -185,6 +195,7 @@ module RailsFieldsKit
       rfk_assign_data_value(data, :create_text, rfk_render_text_option(options, :create_text, config.default_create_text, "rails_fields_kit.tom_select.create_text", "Add"))
       rfk_assign_data_value(data, :option_description_field, rfk_option_or_default(options, :option_description_field, config.default_option_description_field))
       rfk_assign_data_value(data, :option_badge_field, rfk_option_or_default(options, :option_badge_field, config.default_option_badge_field))
+      rfk_assign_data_value(data, :option_metadata_fields, options.delete(:option_metadata_fields))
       rfk_assign_data_value(data, :plugins, plugins)
       rfk_assign_data_value(data, :error_surface_id, error_surface_id) if error_surface
       rfk_apply_error_surface_accessibility!(html_options, error_surface_id) if error_surface
@@ -192,7 +203,26 @@ module RailsFieldsKit
       html_options[:multiple] = options.delete(:multiple) if options.key?(:multiple)
       html_options[:placeholder] = options.delete(:placeholder) if options.key?(:placeholder)
 
-      field_html = if field_kind == :autocomplete || html_options[:multiple] == false && options[:as] == :text || field_kind == :token_search
+      field_html = if field_kind == :lookup
+        text_hidden_id = field_id(method)
+        id_hidden_id = field_id(lookup_id_field)
+        lookup_control_id = "#{text_hidden_id}_lookup"
+        text_value = object.public_send(method) if object.respond_to?(method)
+        id_value = object.public_send(lookup_id_field) if object.respond_to?(lookup_id_field)
+        wrapper_options[:label_html][:for] ||= lookup_control_id
+        rfk_assign_data_value(data, :lookup_text_field_id, text_hidden_id)
+        rfk_assign_data_value(data, :lookup_id_field_id, id_hidden_id)
+        rfk_assign_data_value(data, :clear_lookup_id_on_text_change, clear_lookup_id_on_text_change)
+        html_options[:id] = lookup_control_id
+        html_options[:name] = nil
+        html_options[:value] = id_value
+        control = text_field(method, options.merge(html_options).except(:as))
+        @template.safe_join([
+          control,
+          hidden_field(method, id: text_hidden_id, value: text_value),
+          hidden_field(lookup_id_field, id: id_hidden_id, value: id_value)
+        ])
+      elsif field_kind == :autocomplete || html_options[:multiple] == false && options[:as] == :text || field_kind == :token_search
         text_field(method, options.merge(html_options).except(:as))
       elsif grouped_collection
         grouped_choices = rfk_normalize_grouped_collection(
