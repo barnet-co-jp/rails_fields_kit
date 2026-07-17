@@ -102,19 +102,19 @@ export default class extends Controller {
   bindTomSelectEvents() {
     this.tomSelect.on("change", (value) => {
       this.clearErrorSurface()
-      this.dispatch("change", { detail: { value, values: this.selectedValues() } })
+      this.dispatch("change", { detail: this.selectionDetail(value) })
     })
     this.tomSelect.on("item_add", (value, item) => {
       this.clearErrorSurface()
-      this.dispatch("item-add", { detail: { value, item, values: this.selectedValues() } })
+      this.dispatch("item-add", { detail: this.selectionDetail(value, { item }) })
     })
     this.tomSelect.on("item_remove", (value, item) => {
       this.clearErrorSurface()
-      this.dispatch("item-remove", { detail: { value, item, values: this.selectedValues() } })
+      this.dispatch("item-remove", { detail: this.selectionDetail(value, { item }) })
     })
     this.tomSelect.on("clear", () => {
       this.clearErrorSurface()
-      this.dispatch("clear", { detail: { values: this.selectedValues() } })
+      this.dispatch("clear", { detail: { values: this.selectedValues(), options: this.selectedOptions() } })
     })
   }
 
@@ -317,6 +317,26 @@ export default class extends Controller {
   selectedValues() {
     const value = this.tomSelect.getValue()
     return Array.isArray(value) ? value : [value]
+  }
+
+  selectionDetail(value, extra = {}) {
+    return {
+      value,
+      ...extra,
+      values: this.selectedValues(),
+      option: this.optionForValue(value),
+      options: this.selectedOptions()
+    }
+  }
+
+  selectedOptions() {
+    return this.selectedValues().map((value) => this.optionForValue(value))
+  }
+
+  optionForValue(value) {
+    if (Array.isArray(value) || !this.hasPresentValue(value) || !this.tomSelect || !this.tomSelect.options) return null
+
+    return this.tomSelect.options[value] || null
   }
 
   applySelectedOptions(json, requestedValues = []) {
