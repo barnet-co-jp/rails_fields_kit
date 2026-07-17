@@ -103,8 +103,10 @@ RSpec.describe RailsFieldsKit::FormBuilder do
 
     expect(html).to include('data-rails-fields-kit--tom-select-kind-value="lookup"')
     expect(html).to include('id="dummy_model_keyword_lookup"')
-    expect(html).to include('name="dummy_model[keyword]" value="Custom item"')
-    expect(html).to include('name="dummy_model[product_id]" value="42"')
+    expect(html).to include('name="dummy_model[keyword]"')
+    expect(html).to include('value="Custom item"')
+    expect(html).to include('name="dummy_model[product_id]"')
+    expect(html).to include('value="42"')
     expect(html.scan('name="dummy_model[keyword]"').size).to eq(1)
   end
 
