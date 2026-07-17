@@ -350,6 +350,7 @@ Direct helper subpath imports are supported only for helper files that `package.
 ```js
 import nativeFieldAccessibilityContract from "rails_fields_kit/native_field_accessibility_contract"
 import nativeFieldConstraintContract from "rails_fields_kit/native_field_constraint_contract"
+import readRenderedErrorSurface from "rails_fields_kit/read_rendered_error_surface"
 import tomSelectPluginContract from "rails_fields_kit/tom_select_plugin_contract"
 import tomSelectTextOverrideContract from "rails_fields_kit/tom_select_text_override_contract"
 ```
