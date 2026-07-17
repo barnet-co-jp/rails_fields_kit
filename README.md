@@ -75,6 +75,7 @@ This keeps the submitted params the same shape as an ordinary Rails select while
 - Use `rfk_select` when you already have a server-rendered collection and want the submitted param shape to stay the same as an ordinary Rails select.
 - Use `rfk_combobox` when options come from remote search, selected preload, or create-on-the-fly endpoints and the submitted value should still be a selected ID or value.
 - Use `rfk_autocomplete` when the submitted value itself is free text and suggestions are only there to help typing.
+- Use `rfk_lookup` when free text and an optional selected master ID must be submitted separately.
 - Use `rfk_token_search` when the input should accept structured token text such as `status:open assignee:matsuo keyword`; Rails Fields Kit can suggest tokens, but the host app still parses and executes the query.
 - Use `rfk_multi_select` for ordinary multiple selected values, and `rfk_tags` when the UI should feel like tag entry or create-on-the-fly tag creation.
 - Use `rfk_grouped_select` for `<optgroup>` collections and `rfk_enum_select` for Rails enum attributes.
