@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Add `rfk_lookup` for free-text values paired with optional selected IDs, and escaped declarative `option_metadata_fields` previews for Tom Select-backed helpers.
+
 ### Release digest
 
 The next release is primarily about making the 0.1.x public surface easier to adopt without moving host-app responsibilities into the gem:
