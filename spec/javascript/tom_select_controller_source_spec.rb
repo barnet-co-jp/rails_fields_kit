@@ -84,10 +84,13 @@ RSpec.describe "Tom Select controller source" do
   end
 
   it "forwards interaction events with stable detail keys" do
-    expect(source).to include('this.dispatch("change", { detail: { value, values: this.selectedValues() } })')
-    expect(source).to include('this.dispatch("item-add", { detail: { value, item, values: this.selectedValues() } })')
-    expect(source).to include('this.dispatch("item-remove", { detail: { value, item, values: this.selectedValues() } })')
-    expect(source).to include('this.dispatch("clear", { detail: { values: this.selectedValues() } })')
+    expect(source).to include('this.dispatch("change", { detail: this.selectionDetail(value) })')
+    expect(source).to include('this.dispatch("item-add", { detail: this.selectionDetail(value, { item }) })')
+    expect(source).to include('this.dispatch("item-remove", { detail: this.selectionDetail(value, { item }) })')
+    expect(source).to include('this.dispatch("clear", { detail: { values: this.selectedValues(), options: this.selectedOptions() } })')
+    expect(source).to include("selectionDetail(value, extra = {}) {")
+    expect(source).to include("option: this.optionForValue(value)")
+    expect(source).to include("options: this.selectedOptions()")
   end
 
   it "dispatches a dedicated create success event with the input and option" do
