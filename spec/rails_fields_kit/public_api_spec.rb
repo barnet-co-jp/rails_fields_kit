@@ -15,6 +15,7 @@ RSpec.describe "public API" do
       :rfk_select,
       :rfk_combobox,
       :rfk_autocomplete,
+      :rfk_lookup,
       :rfk_tags,
       :rfk_multi_select,
       :rfk_grouped_select,
