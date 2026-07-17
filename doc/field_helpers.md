@@ -4,6 +4,10 @@ This document lists the FormBuilder helpers provided by Rails Fields Kit.
 
 ## Quick chooser
 
+Use this chooser in three passes: pick the Tom Select-backed lane when the field needs searchable/selectable choices, pick the native wrapper lane when an ordinary browser input is enough, and use the proposal-only boundary notes only when comparing future helper directions. `doc/public_api.md` remains the exact current helper inventory.
+
+### Current Tom Select-backed helpers
+
 | If you need... | Choose | Why |
 | --- | --- | --- |
 | A normal single select backed by a collection you already rendered in Rails | `rfk_select` | Keeps the same field name and ordinary Rails select flow. |
@@ -15,16 +19,26 @@ This document lists the FormBuilder helpers provided by Rails Fields Kit.
 | Tag-style multiple selection or create-on-the-fly tags | `rfk_tags` | Optimized for tag entry and optional remote tag creation. |
 | Grouped `<optgroup>` choices | `rfk_grouped_select` | Keeps grouped collection structure explicit. |
 | A Rails enum attribute | `rfk_enum_select` | Uses the enum-backed attribute directly. |
+
+### Current native wrapper helpers
+
+| If you need... | Choose | Why |
+| --- | --- | --- |
 | A native browser input with shared wrapper, hint, error, affix, and accessibility behavior for text, textarea, or search | Start with `rfk_text_field`, `rfk_text_area`, or `rfk_search_field`. | Stays in the ordinary HTML input flow while reusing Rails Fields Kit wrapper conventions. Use [`doc/public_api.md`](public_api.md) for the current helper inventory and [`native_contact_fields.md`](native_contact_fields.md) for contact/search ownership boundaries. |
 | A native password control with focused credential-adjacent ownership boundaries | Use `rfk_password_field`. | Keeps password visibility toggles, strength meters, credential policy, authentication workflow, and credential storage outside Rails Fields Kit. Use [`password_field.md`](password_field.md). |
 | A native boolean or single-choice control | Use `rfk_check_box` or `rfk_radio_button`. | Keeps Rails checkbox submission and Rails radio value / checked-state behavior in the focused native helper lane instead of implying collection groups. Use [`check_box.md`](check_box.md) or [`radio_button.md`](radio_button.md). |
 | A native file upload or range control | Use `rfk_file_field` or `rfk_range_field`. | Keeps upload handling, storage policy, range live preview behavior, and production styling with the host app. Use [`file_field.md`](file_field.md) or [`range_field.md`](range_field.md). |
 | Native numeric, money, percent, email, URL, or phone inputs | Use the matching native helper such as `rfk_number_field`, `rfk_money_field`, `rfk_percent_field`, `rfk_email_field`, `rfk_url_field`, or `rfk_phone_field`. | Keeps formatting, rounding, normalization, validation wording, and phone policy with the host app while Rails Fields Kit owns the shared wrapper lane. Use [`native_numeric_fields.md`](native_numeric_fields.md) and [`native_contact_fields.md`](native_contact_fields.md). |
 | Native date, time, datetime-local, or color controls | Use `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, or `rfk_color_field`. | Keeps browser-native picker behavior, timezone conversion, locale formatting, masking, and production CSS outside Rails Fields Kit. Use [`native_date_time_color_fields.md`](native_date_time_color_fields.md). |
-| Browser-native datalist suggestions, title-to-slug workflows, or masked inputs | No current Rails Fields Kit helper; use the existing native wrapper lane plus [`datalist_boundary.md`](datalist_boundary.md), [`slug_helper_boundary.md`](slug_helper_boundary.md), or [`masked_input_boundary.md`](masked_input_boundary.md). | For browser-native datalist suggestions, keep using `rfk_text_field list:` plus host-owned `<datalist>` markup; the proposal doc explains why this is separate from Tom Select-backed autocomplete or combobox workflows. Keep `rfk_datalist_field`, `rfk_slug_field`, and `rfk_masked_field` in proposal-only docs while host apps own candidate markup, slug generation, masking libraries, normalization, validation, and persistence policy. |
-| Inline textarea mentions such as `@user` or `#tag` | No current Rails Fields Kit helper; see [`mention_field_boundary.md`](mention_field_boundary.md). | Keeps textarea mention overlay, parsing, hidden metadata, authorization, persistence, and suggestion endpoint shape in the proposal / host-app responsibility lane instead of implying a current `rfk_mention_field` API. |
 
-The `A native password, checkbox, radio, file, or range control with focused ownership boundaries` helper family is intentionally split across the password, boolean/radio, and file/range rows above so `rfk_password_field` is not read as the helper for every native control.
+### Proposal-only boundaries
+
+These rows do not describe current public helpers. Use them only to keep future helper proposals separate from the current FormBuilder surface.
+
+| If you are comparing... | Current route | Boundary |
+| --- | --- | --- |
+| Browser-native datalist suggestions, title-to-slug workflows, or masked inputs | Use the existing native wrapper lane plus [`datalist_boundary.md`](datalist_boundary.md), [`slug_helper_boundary.md`](slug_helper_boundary.md), or [`masked_input_boundary.md`](masked_input_boundary.md). | For browser-native datalist suggestions, keep using `rfk_text_field list:` plus host-owned `<datalist>` markup; the proposal doc explains why this is separate from Tom Select-backed autocomplete or combobox workflows. Keep `rfk_datalist_field`, `rfk_slug_field`, and `rfk_masked_field` in proposal-only docs while host apps own candidate markup, slug generation, masking libraries, normalization, validation, and persistence policy. |
+| Inline textarea mentions such as `@user` or `#tag` | See [`mention_field_boundary.md`](mention_field_boundary.md). | Keeps textarea mention overlay, parsing, hidden metadata, authorization, persistence, and suggestion endpoint shape in the proposal / host-app responsibility lane instead of implying a current `rfk_mention_field` API. |
 
 If the choice is mostly about who owns search semantics, use this rule of thumb: `rfk_select`, `rfk_multi_select`, `rfk_grouped_select`, and `rfk_enum_select` stay collection-first; `rfk_combobox` and `rfk_autocomplete` call remote endpoints for suggestions; `rfk_token_search` goes one step further by letting the host app parse submitted token text or build `params[:q]` later. When a native browser search input is enough, `rfk_search_field` stays in the native wrapper lane and does not call remote endpoints or take over token parsing.
 
