@@ -80,6 +80,23 @@ module RailsFieldsKit
         end
       end
 
+      def with_field_helpers(field_helpers = nil, **field_helper_overrides)
+        raise ArgumentError, "field helper block is required" unless block_given?
+
+        overrides = normalize_field_helper_overrides(field_helpers, field_helper_overrides)
+        previous_field_helpers = registered_field_helpers.dup
+
+        begin
+          overrides.each_pair do |field_type, helper_name|
+            register_field_helper(field_type, helper_name)
+          end
+
+          yield
+        ensure
+          @field_helpers = previous_field_helpers
+        end
+      end
+
       def reset_field_helpers!
         @field_helpers = DEFAULT_FIELD_HELPERS.dup
       end
@@ -120,6 +137,20 @@ module RailsFieldsKit
 
       def registered_field_helpers
         @field_helpers ||= DEFAULT_FIELD_HELPERS.dup
+      end
+
+      def normalize_field_helper_overrides(field_helpers, field_helper_overrides)
+        overrides = {}
+
+        unless field_helpers.nil?
+          unless field_helpers.respond_to?(:to_hash)
+            raise ArgumentError, "field helper overrides must be a hash"
+          end
+
+          overrides.merge!(field_helpers.to_hash)
+        end
+
+        overrides.merge!(field_helper_overrides)
       end
 
       def normalize_metadata_list(metadata)
