@@ -17,6 +17,7 @@ Use this companion note when a release or PR needs manual evidence but the full 
 | Selected preload ordering evidence | Use the selected preload representative lane only when the PR or release depends on preserved selected-label ordering. | Yes for a narrow `rfk_find_with preserve_order: true` docs or evidence PR. | A new ordering SQL, authorization, or endpoint scoping contract. |
 | Selected preload request params evidence | Use the selected preload representative lane only when the PR or release depends on Rails array params, comma-separated ids, or a custom `ids_param:` key. | Yes for a narrow `rfk_find_with` request-shape docs or evidence PR. | Endpoint authorization, tenant scoping, ordering, missing-id policy, or selected preload response-shape redesign. |
 | Remote collection wrapper evidence | Use the remote lifecycle lane only when the PR or release depends on raw arrays, `{ options: [...] }`, or `{ results: [...] }` collection wrappers. | Yes for a narrow output-shape docs or evidence PR. | Create-on-the-fly `{ option: ... }`, pagination metadata, arbitrary response adapters, authorization, query execution, or Tom Select renderer approval. |
+| Option metadata preview evidence | Use the nearest Tom Select helper lane only when the PR or release depends on `option_metadata_fields:` safe dropdown preview evidence. | Yes for a narrow `rfk_lookup` or option metadata docs PR. Name the helper, representative declaration, result, and boundary. | Business formatting approval, endpoint payload validation, rich renderer ownership, production CSS, or visual approval. |
 | Remote search minimum query length evidence | Use the remote lifecycle lane only when the PR or release depends on endpoint-side blank-query policy. | Yes for a narrow `rfk_search_with minimum_query_length:` docs or evidence PR. Name the blank query, short query, `wrap:` shape, and result. | Field-level `min_length:` approval, authorization policy, tenant scoping, Ransack execution, Tom Select lifecycle approval, or visible feedback approval. |
 | Token search entry evidence | Use the token-search representative entry lane when the PR or release depends on `rfk_token_search` helper rendering or submitted token text. | Yes for a narrow token-search sample docs PR. | Token parser behavior, query execution, Ransack execution, suggestion payload approval, or table metadata approval. |
 | Token or Ransack suggestion metadata evidence | Use the token suggestion and Ransack suggestion metadata lane only when the PR or release depends on `TokenSuggestions.build`, `RansackSuggestions.build`, or `rfk_token_suggestions_with` payloads. | Yes for a narrow metadata/docs PR that names the checked builder or endpoint shape. | `rfk_token_search` helper rendering approval, submitted token parsing, query execution, Ransack execution, table persistence, or user-visible search result approval. |
@@ -111,6 +112,21 @@ A scoped evidence note should include:
 
 Do not use this lane for create-on-the-fly responses. `results` is a collection wrapper for remote search and selected preload evidence, not a pagination contract or generic adapter surface.
 
+### Option metadata preview
+
+Record this lane when the review needs evidence for `option_metadata_fields:` safe dropdown previews rather than endpoint behavior, business formatting, production CSS, or a rich renderer redesign.
+
+A scoped evidence note should include:
+
+- Representative helper and field, such as an `rfk_lookup` text / ID split field or another Tom Select-backed helper in scope.
+- The representative `option_metadata_fields:` declaration checked, including `field`, `label`, `suffix`, `truncate`, and `format` or `style` when relevant.
+- Observed preview result, such as label/suffix visibility, truncated long value, badge or currency display, empty value omission, and escaped labels / values / suffixes / field names.
+- Whether the evidence belongs in a narrow PR comment or the release-wide `sample_app_results.md` helper lane.
+- Result word: `PASS`, `FAIL`, `SOURCE REVIEW ONLY`, or `DEFERRED`.
+- Confirmation that JavaScript formatter functions remain unsupported, and that endpoint payload validation, authorization, remote search execution, business formatting policy, rich option renderer ownership, visual approval, and production CSS remain out of scope.
+
+Do not use this lane to approve endpoint response semantics or host-app business formatting. It records only the representative safe preview contract for already-supplied option payload fields.
+
 ### Remote search minimum query length
 
 Record this lane when a remote search endpoint uses `rfk_search_with(..., minimum_query_length: ...)` and the review needs evidence for endpoint-side blank or short query handling.
@@ -157,7 +173,7 @@ Do not use this lane to approve helper rendering or submitted token text. Those 
 ## Visual Reference Result Words
 
 | Result | Use it when | Evidence note should include |
-| --- | --- | --- |
+| --- | --- |
 | `PASS` | A real browser checked the named artifact, viewport, and lane. | Browser, viewport, lane/state, and responsibility boundary. |
 | `FAIL` | A real browser check found overlap, clipping, unreadable copy, or another visual issue. | The failing viewport/lane and next fix. |
 | `SOURCE REVIEW ONLY` | The changed HTML/CSS or Markdown was reviewed but not rendered in a browser. | File/diff reviewed and the remaining browser-capable check. |
@@ -240,6 +256,26 @@ Remote evidence note
 
 If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark sample-app execution as complete.
 
+### Option metadata evidence PR comment shape
+
+Use this shape when `option_metadata_fields:` evidence is narrow enough for a PR comment instead of the release evidence log.
+
+```markdown
+Option metadata evidence note
+
+- Lane: option metadata preview
+- Representative helper and field: `...`
+- Declaration checked: `option_metadata_fields: [...]`
+- Checked here: source review / sample app route / CI / docs link review
+- Result: PASS / FAIL / SOURCE REVIEW ONLY / DEFERRED
+- Evidence observed: label, suffix, truncate, badge or currency display, empty value omission, escaping, and no JavaScript formatter support as applicable
+- Separate lane checked: yes/no, and link or note if `rfk_lookup` text / ID behavior, remote search execution, or visual artifact review was intentionally split
+- Responsibility boundary: endpoint payload validation, authorization, business formatting policy, rich option renderer ownership, visual approval, and production CSS remain out of scope
+- Remaining follow-up: ...
+```
+
+If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark sample-app execution or visual approval as complete.
+
 ### Token evidence PR comment shape
 
 Use this shape when token-search or suggestion metadata evidence is narrow enough for a PR comment instead of the release evidence log.
@@ -258,31 +294,3 @@ Token evidence note
 ```
 
 If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark sample-app execution as complete.
-
-### Remote search minimum query length evidence PR comment shape
-
-Use this shape when `rfk_search_with minimum_query_length:` evidence is narrow enough for a PR comment instead of the release evidence log.
-
-```markdown
-Remote search endpoint evidence note
-
-- Lane: remote search minimum query length
-- Representative field and endpoint: `...`
-- Endpoint configuration: `minimum_query_length: ...`, `wrap: ...`, `query_param: ...`
-- Checked here: source review / sample app route / request spec / CI / docs link review
-- Result: PASS / FAIL / SOURCE REVIEW ONLY / DEFERRED
-- Evidence observed: blank query result, short-query result, preserved wrapper shape such as `{ "options": [] }`, and comparison with the normal allowed query result when checked
-- Separate lane checked: yes/no, and link or note if field-level `min_length:` or visible feedback was checked elsewhere
-- Responsibility boundary: authorization, tenant scoping, query parsing, Ransack execution, Tom Select lifecycle, visible feedback copy, and retry UI remain host-app responsibilities
-- Remaining follow-up: ...
-```
-
-If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark sample-app execution as complete.
-
-## Boundaries
-
-- Keep release-wide baseline evidence separate from feature-specific helper, visual, remote, token, table, or setup-doctor lanes.
-- Do not turn a feature-specific lane into a release-wide requirement without a separate release policy decision.
-- Do not record sample app evidence that was not actually run.
-- Do not redesign visual artifacts, helper behavior, setup doctor output, or release policy from this guide.
-- Use `sample_app_results.md` as the full evidence log when a release or release-critical PR needs the detailed checklist.
