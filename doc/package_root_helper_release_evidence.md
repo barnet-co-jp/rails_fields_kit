@@ -289,18 +289,27 @@ Representative import:
 import { readRenderedErrorSurface } from "rails_fields_kit"
 ```
 
+The package-root import remains the normal release evidence route. When a narrow PR or release specifically includes the direct helper subpath from `doc/public_api.md#javascript-exports`, add a second import check in this same helper lane rather than creating a separate release gate:
+
+```js
+import readRenderedErrorSurfaceFromSubpath from "rails_fields_kit/read_rendered_error_surface"
+```
+
+That direct-subpath check should only confirm that the same representative opt-in field reaches the same read-only helper route. Record it in the helper row in `doc/sample_app_results.md` or in a scoped PR comment, and do not expand the evidence into request execution, visible feedback copy, retry UI, event payload redesign, or host-app fallback rendering.
+
 Check a rendered Tom Select-backed field that opts into `error_surface:`:
 
 - `readRenderedErrorSurface(fieldElement)` returns the rendered placeholder element for a Rails Fields Kit field with an `errorSurfaceId` value.
 - The returned element id matches the documented `errorSurfaceId` surfaced through `tomSelectRequestContract(element)` for the same field.
 - A comparable Rails Fields Kit field without `error_surface:` returns `null`.
 - A field whose rendered placeholder is missing returns `null` rather than creating or mutating visible feedback.
+- If the direct helper subpath is in scope, the direct import resolves and returns the same documented read-only result for the representative field.
 - The evidence stays read-only; request execution, retry UI, visible copy, validation policy, authorization, mutation, and fallback rendering remain host-app responsibilities.
 
 Suggested evidence note:
 
 ```text
-readRenderedErrorSurface: PASS on <field selector>. The helper returned the rendered opt-in placeholder matching the field errorSurfaceId; no-surface and missing-placeholder cases returned null. Request execution, retry UI, visible copy, validation policy, authorization, mutation, and fallback rendering remained out of scope.
+readRenderedErrorSurface: PASS on <field selector>. Package-root import returned the rendered opt-in placeholder matching the field errorSurfaceId; direct subpath import returned the same read-only result when that route was in scope; no-surface and missing-placeholder cases returned null. Request execution, retry UI, visible copy, validation policy, authorization, mutation, and fallback rendering remained out of scope.
 ```
 
 ## Native accessibility contract reader
