@@ -9,7 +9,7 @@ Use this companion note when a release or PR needs manual evidence but the full 
 | Release candidate or release PR | Yes. Fill the release-wide baseline and any feature-specific lane that changed. | Optional summary only. | A feature-only spot check. |
 | Narrow static visual reference PR | Only when the artifact is release-critical or the release evidence log is being refreshed. | Usually yes. Name the artifact, viewport, lane, result, and blocker. | CI success as visual approval. |
 | Turbo reconnect visual reference route | Only when the release or release candidate depends on Turbo reconnect visual evidence. | Usually yes. Name the Turbo reconnect artifact, restored-wrapper lane, viewport, and whether the result is browser-run or deferred. | Turbo lifecycle, Stimulus boot policy, or Tom Select reconnect behavior approval. |
-| SetupDoctor output review | Use the Setup doctor checks lane only when a release candidate, release PR, or setup-focused change depends on CLI diagnostic evidence. | Yes for a narrow setup-doctor or setup-visibility PR. Name the command, setup path, representative status lines, wrapping surface, and result. | Host-app CI pass/fail policy, auto-fix approval, Tom Select install approval, Stimulus boot policy, CSS pipeline, bundler alias confirmation, or setup doctor JSON payload approval. |
+| SetupDoctor output review | Use the Setup doctor checks lane only when a release candidate, release PR, or setup-focused change depends on CLI diagnostic evidence. | Yes for a narrow setup-doctor or setup-visibility PR. Name the command, setup path, representative status lines, wrapping surface, and result. | Host-app CI pass/fail policy, auto-fix approval, Tom Select install approval, Stimulus boot policy, CSS pipeline approval, bundler alias confirmation, or setup doctor JSON payload approval. |
 | SetupDoctor JSON payload evidence | Use the Setup doctor checks lane only when a release candidate, release PR, or setup-focused change depends on machine-readable setup visibility. | Yes for a narrow setup-doctor JSON docs or evidence PR. Name the branch or commit, Ruby API call, observed `summary["missing"]`, manual advisory review, and result. | Human-readable CLI wrapping approval, full JSON schema copy, CLI `--json` contract, auto-fix behavior, SARIF/JUnit output, or universal host-app CI policy. |
 | Source-only or connector-only visual review | Use `SOURCE REVIEW ONLY` or `DEFERRED` if the evidence log is in scope. | Yes. State what source was checked and what browser pass remains. | Browser `PASS`. |
 | Package-root helper or setup visibility PR | Use the package-root helper or setup lane only if that surface changed. | Yes for narrow PR proof. | A release-wide helper inventory. |
@@ -294,3 +294,31 @@ Token evidence note
 ```
 
 If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark sample-app execution as complete.
+
+### Remote search minimum query length evidence PR comment shape
+
+Use this shape when `rfk_search_with minimum_query_length:` evidence is narrow enough for a PR comment instead of the release evidence log.
+
+```markdown
+Remote search endpoint evidence note
+
+- Lane: remote search minimum query length
+- Representative field and endpoint: `...`
+- Endpoint configuration: `minimum_query_length: ...`, `wrap: ...`, `query_param: ...`
+- Checked here: source review / sample app route / request spec / CI / docs link review
+- Result: PASS / FAIL / SOURCE REVIEW ONLY / DEFERRED
+- Evidence observed: blank query result, short-query result, preserved wrapper shape such as `{ "options": [] }`, and comparison with the normal allowed query result when checked
+- Separate lane checked: yes/no, and link or note if field-level `min_length:` or visible feedback was checked elsewhere
+- Responsibility boundary: authorization, tenant scoping, query parsing, Ransack execution, Tom Select lifecycle, visible feedback copy, and retry UI remain host-app responsibilities
+- Remaining follow-up: ...
+```
+
+If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark sample-app execution as complete.
+
+## Boundaries
+
+- Keep release-wide baseline evidence separate from feature-specific helper, visual, remote, token, table, or setup-doctor lanes.
+- Do not turn a feature-specific lane into a release-wide requirement without a separate release policy decision.
+- Do not record sample app evidence that was not actually run.
+- Do not redesign visual artifacts, helper behavior, setup doctor output, or release policy from this guide.
+- Use `sample_app_results.md` as the full evidence log when a release or release-critical PR needs the detailed checklist.
