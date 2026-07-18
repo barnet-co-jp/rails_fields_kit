@@ -9,7 +9,7 @@ Use this companion note when a release or PR needs manual evidence but the full 
 | Release candidate or release PR | Yes. Fill the release-wide baseline and any feature-specific lane that changed. | Optional summary only. | A feature-only spot check. |
 | Narrow static visual reference PR | Only when the artifact is release-critical or the release evidence log is being refreshed. | Usually yes. Name the artifact, viewport, lane, result, and blocker. | CI success as visual approval. |
 | Turbo reconnect visual reference route | Only when the release or release candidate depends on Turbo reconnect visual evidence. | Usually yes. Name the Turbo reconnect artifact, restored-wrapper lane, viewport, and whether the result is browser-run or deferred. | Turbo lifecycle, Stimulus boot policy, or Tom Select reconnect behavior approval. |
-| SetupDoctor output review | Use the Setup doctor checks lane only when a release candidate, release PR, or setup-focused change depends on CLI diagnostic evidence. | Yes for a narrow setup-doctor or setup-visibility PR. Name the command, setup path, representative status lines, wrapping surface, and result. | Host-app CI pass/fail policy, auto-fix approval, Tom Select install approval, Stimulus boot policy, CSS pipeline approval, bundler alias confirmation, or setup doctor JSON payload approval. |
+| SetupDoctor output review | Use the Setup doctor checks lane only when a release candidate, release PR, or setup-focused change depends on CLI diagnostic evidence. | Yes for a narrow setup-doctor or setup-visibility PR. Name the command, setup path, representative status lines, wrapping surface, and result. | Host-app CI pass/fail policy, auto-fix approval, Tom Select install approval, Stimulus boot policy, CSS pipeline, bundler alias confirmation, or setup doctor JSON payload approval. |
 | SetupDoctor JSON payload evidence | Use the Setup doctor checks lane only when a release candidate, release PR, or setup-focused change depends on machine-readable setup visibility. | Yes for a narrow setup-doctor JSON docs or evidence PR. Name the branch or commit, Ruby API call, observed `summary["missing"]`, manual advisory review, and result. | Human-readable CLI wrapping approval, full JSON schema copy, CLI `--json` contract, auto-fix behavior, SARIF/JUnit output, or universal host-app CI policy. |
 | Source-only or connector-only visual review | Use `SOURCE REVIEW ONLY` or `DEFERRED` if the evidence log is in scope. | Yes. State what source was checked and what browser pass remains. | Browser `PASS`. |
 | Package-root helper or setup visibility PR | Use the package-root helper or setup lane only if that surface changed. | Yes for narrow PR proof. | A release-wide helper inventory. |
@@ -173,7 +173,7 @@ Do not use this lane to approve helper rendering or submitted token text. Those 
 ## Visual Reference Result Words
 
 | Result | Use it when | Evidence note should include |
-| --- | --- |
+| --- | --- | --- |
 | `PASS` | A real browser checked the named artifact, viewport, and lane. | Browser, viewport, lane/state, and responsibility boundary. |
 | `FAIL` | A real browser check found overlap, clipping, unreadable copy, or another visual issue. | The failing viewport/lane and next fix. |
 | `SOURCE REVIEW ONLY` | The changed HTML/CSS or Markdown was reviewed but not rendered in a browser. | File/diff reviewed and the remaining browser-capable check. |
