@@ -2,7 +2,7 @@
 
 ## What this repository is
 
-Rails Fields Kit is a Ruby gem that gives Rails applications a focused set of form helpers for inputs that are awkward with native HTML alone. Its current center of gravity is Tom Select-backed searchable selects, editable comboboxes, tag inputs, token search inputs, native wrapper helpers, and table-oriented metadata helpers.
+Rails Fields Kit is a Ruby gem that gives Rails applications a focused set of form helpers for inputs that are awkward with native HTML alone. Its current center of gravity is Tom Select-backed searchable selects, editable comboboxes, lookup fields, tag inputs, token search inputs, declarative option metadata previews, native wrapper helpers, and table-oriented metadata helpers.
 
 ## Who it serves
 
@@ -13,7 +13,7 @@ Rails Fields Kit is a Ruby gem that gives Rails applications a focused set of fo
 ## What it should do well
 
 - wrap Tom Select in Rails-friendly helpers for naming, redisplay, validation, and accessibility
-- support remote search, selected preload, and create-on-the-fly workflows
+- support remote search, selected preload, create-on-the-fly workflows, and lookup text / selected ID synchronization
 - expose stable integration points for controller helpers, token suggestion builders, JavaScript rendered-contract helpers, table metadata, configuration defaults, and read-only setup verification
 - keep native wrappers such as `rfk_password_field`, `rfk_file_field`, `rfk_check_box`, `rfk_radio_button`, `rfk_date_field`, and `rfk_color_field` thin, Rails-friendly, and explicit about host-app-owned behavior
 - stay easy to adopt from ordinary Rails forms without taking over the whole frontend stack
@@ -37,7 +37,7 @@ Host applications remain responsible for:
 
 ## Current public surface
 
-- FormBuilder helpers such as `rfk_select`, `rfk_combobox`, `rfk_tags`, `rfk_token_search`, `rfk_password_field`, `rfk_file_field`, `rfk_check_box`, `rfk_radio_button`, `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, `rfk_color_field`, `rfk_table_filters`, and `rfk_table_cell_editors`
+- FormBuilder helpers such as `rfk_select`, `rfk_combobox`, `rfk_autocomplete`, `rfk_lookup`, `rfk_tags`, `rfk_token_search`, `rfk_password_field`, `rfk_file_field`, `rfk_check_box`, `rfk_radio_button`, `rfk_date_field`, `rfk_time_field`, `rfk_datetime_local_field`, `rfk_color_field`, `rfk_table_filters`, and `rfk_table_cell_editors`
 - controller helpers under `RailsFieldsKit::Searchable`
 - token suggestion builders including `RailsFieldsKit::TokenSuggestions.build` and `RailsFieldsKit::RansackSuggestions.build`
 - table metadata objects including `RailsFieldsKit::TableFilterInput`, `RailsFieldsKit::TableCellInput`, `RailsFieldsKit::TableMetadata`, and `RailsFieldsKit::TableRenderer`
@@ -80,7 +80,7 @@ This inventory is for maintainers who need to find the right source of truth qui
 ### Public API and behavior sources of truth
 
 - `doc/public_api.md`: intended stable API for 0.1.x
-- `doc/field_helpers.md` and `doc/controller_helpers.md`: public helper references
+- `doc/field_helpers.md` and `doc/controller_helpers.md`: public helper references, including the `rfk_lookup` text / ID split and declarative `option_metadata_fields:` preview boundary
 - `doc/configuration.md`: initializer defaults and override precedence
 - `doc/default_allow_clear.md`: focused app-wide `allow_clear` default guide; keep `clear_button` plugin installation, styling, empty-state copy, and lifecycle behavior with the host app
 - `doc/styling_boundary.md`: reader-facing source of truth for wrapper classes, styling hooks, and host-app CSS ownership
