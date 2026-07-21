@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rails Fields Kit rfk_select Migration Visual Reference</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page: #f7f8fa;
+        --surface: #ffffff;
+        --surface-muted: #f3f5f7;
+        --ink: #17212b;
+        --muted: #5d6975;
+        --line: #d6dbe1;
+        --line-strong: #9da8b3;
+        --accent: #176b5f;
+        --accent-soft: #e6f4f1;
+        --info: #285f9f;
+        --info-soft: #eaf2fb;
+        --warning: #8a5a12;
+        --warning-soft: #fff3d8;
+        --error: #9f2438;
+        --error-soft: #fdecef;
+        --shadow: 0 1px 2px rgba(23, 33, 43, 0.06);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0 52px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .eyebrow {
+        color: var(--accent);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      h1, h2, h3, p { margin: 0; }
+
+      h1 {
+        font-size: 1.8rem;
+        font-weight: 650;
+        line-height: 1.12;
+      }
+
+      h2 {
+        font-size: 1rem;
+        line-height: 1.24;
+      }
+
+      h3 {
+        font-size: 0.92rem;
+        line-height: 1.25;
+      }
+
+      .lede {
+        max-width: 800px;
+        color: var(--muted);
+        font-size: 0.96rem;
+      }
+
+      .hero-links,
+      .tag-row,
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      a { color: inherit; }
+
+      .hero-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        max-width: 100%;
+        padding: 0 11px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+        color: var(--ink);
+        font-size: 0.9rem;
+        line-height: 1.25;
+        text-align: center;
+        text-decoration: none;
+        overflow-wrap: anywhere;
+      }
+
+      .hero-links a:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .review-checklist,
+      .card,
+      .scope-note {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .review-checklist {
+        display: grid;
+        gap: 8px;
+        margin: 0 0 18px;
+        padding: 12px 14px;
+      }
+
+      .review-checklist ul {
+        display: grid;
+        gap: 5px;
+        margin: 0;
+        padding-left: 18px;
+        color: var(--muted);
+        font-size: 0.89rem;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(278px, 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        display: grid;
+        gap: 11px;
+        min-width: 0;
+        padding: 14px;
+      }
+
+      .card.wide {
+        grid-column: 1 / -1;
+        border-color: #adc6e4;
+      }
+
+      .card-header {
+        display: grid;
+        gap: 6px;
+      }
+
+      .card-header p,
+      .card-footer,
+      .scope-note,
+      .state-note {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .tag,
+      .metadata-chip,
+      .status-note {
+        display: inline-flex;
+        align-items: center;
+        max-width: 100%;
+        min-height: 24px;
+        padding: 3px 7px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface-muted);
+        color: var(--ink);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+      }
+
+      .tag.before,
+      .metadata-chip.native {
+        border-color: #b9c9d5;
+        background: #eef5f8;
+        color: #315f72;
+      }
+
+      .tag.after,
+      .metadata-chip.migration {
+        border-color: #9bcdbc;
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .tag.boundary,
+      .metadata-chip.warning {
+        border-color: #d6b663;
+        background: var(--warning-soft);
+        color: var(--warning);
+      }
+
+      .tag.error,
+      .metadata-chip.error {
+        border-color: #e1a8b3;
+        background: var(--error-soft);
+        color: var(--error);
+      }
+
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .pane,
+      .control,
+      .field {
+        display: grid;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .panel {
+        display: grid;
+        gap: 10px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        background: var(--surface-muted);
+      }
+
+      .field-label {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: baseline;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+      }
+
+      .hint,
+      .error-text,
+      .helper-text {
+        font-size: 0.84rem;
+        overflow-wrap: anywhere;
+      }
+
+      .hint,
+      .helper-text { color: var(--muted); }
+      .error-text { color: var(--error); }
+
+      .native-select,
+      .tom-select-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 42px;
+        padding: 8px 10px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+        color: var(--ink);
+        overflow: hidden;
+      }
+
+      .native-select {
+        justify-content: space-between;
+      }
+
+      .tom-select-control {
+        flex-wrap: wrap;
+      }
+
+      .select-value,
+      .placeholder,
+      .token {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .placeholder { color: #737f8a; }
+
+      .token {
+        display: inline-flex;
+        align-items: center;
+        max-width: 100%;
+        padding: 4px 8px;
+        border: 1px solid #b7d2c7;
+        background: var(--accent-soft);
+        color: #174c43;
+        font-weight: 600;
+      }
+
+      .clear-button,
+      .caret {
+        flex: none;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .clear-button {
+        min-width: 26px;
+        min-height: 26px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--line-strong);
+        background: #fff;
+      }
+
+      .dropdown {
+        display: grid;
+        gap: 1px;
+        border: 1px solid var(--line);
+        background: var(--line);
+      }
+
+      .option,
+      .message,
+      .submitted-map {
+        padding: 9px 10px;
+        background: var(--surface);
+      }
+
+      .option.is-active {
+        position: relative;
+        background: var(--info-soft);
+        outline: 2px solid var(--info);
+        outline-offset: -2px;
+      }
+
+      .option.is-active::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 4px;
+        background: var(--info);
+      }
+
+      .option strong,
+      .message strong,
+      .submitted-map strong {
+        display: block;
+        font-size: 0.91rem;
+      }
+
+      .option span,
+      .message span,
+      .submitted-map span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 0.84rem;
+        overflow-wrap: anywhere;
+      }
+
+      .submitted-map {
+        display: grid;
+        gap: 7px;
+        border-top: 1px solid var(--line);
+      }
+
+      .map-row {
+        display: grid;
+        grid-template-columns: minmax(92px, 0.42fr) minmax(0, 1fr);
+        gap: 8px;
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+
+      .map-row strong { color: var(--ink); }
+      .map-row span { margin-top: 0; }
+
+      .message.warning {
+        border-left: 4px solid var(--warning);
+        background: var(--warning-soft);
+        color: var(--warning);
+      }
+
+      .message.error {
+        border-left: 4px solid var(--error);
+        background: var(--error-soft);
+        color: var(--error);
+      }
+
+      .scope-note {
+        margin-top: 18px;
+        padding: 14px;
+      }
+
+      .scope-note strong { color: var(--ink); }
+
+      @media (max-width: 820px) {
+        .comparison-grid { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 640px) {
+        main {
+          width: min(100% - 20px, 1120px);
+          padding-top: 26px;
+          padding-bottom: 44px;
+        }
+
+        h1 { font-size: 1.55rem; }
+        .review-checklist, .card, .panel { padding: 12px; }
+
+        .map-row {
+          grid-template-columns: 1fr;
+          gap: 2px;
+        }
+
+        .hero-links a {
+          width: 100%;
+          justify-content: flex-start;
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="eyebrow">Rails Fields Kit</div>
+        <h1 id="page-title">rfk_select Migration Visual Reference</h1>
+        <p class="lede">
+          A focused static reference for reviewing the ordinary Rails collection_select to rfk_select migration route.
+          Use it to compare label, hint, blank option, selected value, clear affordance, and validation readability without changing helper behavior.
+        </p>
+        <nav class="hero-links" aria-label="Related documentation">
+          <a href="select_migration.md">Select migration guide</a>
+          <a href="tom_select_visual_reference.html">Tom Select core reference</a>
+          <a href="visual_references.md">Visual reference map</a>
+        </nav>
+      </section>
+
+      <section class="review-checklist" aria-labelledby="review-checklist-title">
+        <h2 id="review-checklist-title">Review focus</h2>
+        <ul>
+          <li>Compare the ordinary collection_select before state with the endpoint-free rfk_select after state.</li>
+          <li>Check label, hint, include_blank / placeholder, selected value, clear affordance, and validation copy at desktop and narrow widths.</li>
+          <li>Keep remote search, selected preload, create-on-the-fly, authorization, query execution, sample app evidence, and production CSS out of scope.</li>
+        </ul>
+      </section>
+
+      <section class="grid" aria-label="Representative migration states">
+        <article class="card wide">
+          <div class="card-header">
+            <span class="tag after">Before / after migration</span>
+            <h2>Collection-backed first field keeps the same form meaning</h2>
+            <p>The visual comparison focuses on the rendered review surface, not on submitted parameter or validation behavior changes.</p>
+          </div>
+          <div class="comparison-grid" aria-hidden="true">
+            <div class="pane">
+              <h3>Before: ordinary Rails collection_select</h3>
+              <div class="panel">
+                <div class="field">
+                  <div class="field-label">
+                    <span>Product</span>
+                    <span class="metadata-chip native">collection_select</span>
+                  </div>
+                  <p class="hint">Choose a product from the server-rendered collection.</p>
+                  <div class="native-select">
+                    <span class="select-value">Northwind Supplies</span>
+                    <span class="caret">v</span>
+                  </div>
+                  <p class="helper-text">Name: order[product_id]</p>
+                </div>
+              </div>
+              <p class="card-footer">This state represents the ordinary Rails helper before migration. It is intentionally plain and endpoint-free.</p>
+            </div>
+
+            <div class="pane">
+              <h3>After: rfk_select with Tom Select chrome</h3>
+              <div class="panel">
+                <div class="field">
+                  <div class="field-label">
+                    <span>Product</span>
+                    <span class="metadata-chip migration">rfk_select</span>
+                  </div>
+                  <p class="hint">Choose a product from the same server-rendered collection.</p>
+                  <div class="tom-select-control">
+                    <span class="token">Northwind Supplies</span>
+                    <span class="clear-button">x</span>
+                    <span class="caret">v</span>
+                  </div>
+                  <div class="dropdown">
+                    <div class="option is-active">
+                      <strong>Northwind Supplies</strong>
+                      <span>Selected value remains collection-backed and endpoint-free.</span>
+                    </div>
+                  </div>
+                  <p class="helper-text">Name: order[product_id]</p>
+                </div>
+              </div>
+              <p class="card-footer">The after state lets reviewers inspect wrapper density, clear affordance, and selected-value readability without implying remote search.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag before">Blank option</span>
+            <h2>include_blank stays a first-choice prompt</h2>
+            <p>Use this lane to review blank or placeholder copy after migration without changing validation semantics.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="field">
+              <div class="field-label">
+                <span>Customer segment</span>
+                <span class="metadata-chip migration">include_blank</span>
+              </div>
+              <p class="hint">Select the segment used for the first import pass.</p>
+              <div class="tom-select-control">
+                <span class="placeholder">Choose a segment</span>
+                <span class="caret">v</span>
+              </div>
+              <div class="dropdown">
+                <div class="option is-active"><strong>Choose a segment</strong><span>Blank option remains visible as prompt copy.</span></div>
+                <div class="option"><strong>Wholesale</strong><span>Collection-backed option.</span></div>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">This is a visual copy lane only; required validation and blank-value handling stay with the host app.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag after">Selected value</span>
+            <h2>Selected state wraps before it crowds labels or hints</h2>
+            <p>Long collection labels should remain readable in the selected token and dropdown option.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="field">
+              <div class="field-label">
+                <span>Preferred product for manual review</span>
+                <span class="metadata-chip migration">selected</span>
+              </div>
+              <p class="hint">Representative long label used to check narrow viewport wrapping.</p>
+              <div class="tom-select-control">
+                <span class="token">Northwind Regional Supplies With A Long Localized Label</span>
+                <span class="clear-button">x</span>
+                <span class="caret">v</span>
+              </div>
+              <div class="dropdown">
+                <div class="option is-active">
+                  <strong>Northwind Regional Supplies With A Long Localized Label</strong>
+                  <span>Label wraps inside the field surface before colliding with the clear affordance.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="card-footer">Use this state to inspect layout pressure only; it is not a selected preload or remote label restoration lane.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag error">Validation rerender</span>
+            <h2>Error copy remains tied to the migrated field</h2>
+            <p>Validation rerender should keep the label, hint, selected value, and error message readable together.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="field">
+              <div class="field-label">
+                <span>Product</span>
+                <span class="metadata-chip error">validation</span>
+              </div>
+              <p class="hint">Choose the product that should be attached to this order.</p>
+              <div class="tom-select-control">
+                <span class="placeholder">Choose a product</span>
+                <span class="caret">v</span>
+              </div>
+              <p class="error-text">Product must be selected before saving the order.</p>
+              <div class="message error"><strong>Review cue</strong><span>The visual artifact checks copy placement only. Model validation and rerender behavior stay in the host app.</span></div>
+            </div>
+          </div>
+          <p class="card-footer">This keeps validation readability visible without adding or changing validation rules.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag boundary">Migration boundary</span>
+            <h2>Do not mix migration review with remote workflows</h2>
+            <p>The migration lane is for collection-backed helpers and should not imply remote search or selected preload behavior.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="message warning">
+              <strong>Static-only boundary</strong>
+              <span>Remote combobox, selected preload restore/failure, create-on-the-fly, authorization, query execution, sample app evidence, screenshot approval CI, and production CSS remain separate review tracks.</span>
+            </div>
+            <div class="submitted-map">
+              <strong>Submitted field meaning</strong>
+              <div class="map-row"><strong>Before</strong><span>order[product_id] from collection_select</span></div>
+              <div class="map-row"><strong>After</strong><span>order[product_id] from rfk_select, same collection-backed field meaning</span></div>
+            </div>
+          </div>
+          <p class="card-footer">Use this boundary before discussing endpoint-backed comboboxes, selected preload, or richer option rendering.</p>
+        </article>
+      </section>
+
+      <section class="scope-note">
+        <strong>Scope note.</strong>
+        This page is a static documentation artifact for the collection_select to rfk_select migration route. It does not change FormBuilder behavior,
+        Tom Select configuration, runtime Ruby or JavaScript, field names, submitted params, validation policy, sample app execution, screenshot approval CI,
+        production styling, remote search, selected preload, create-on-the-fly behavior, authorization, query execution, or host-app persistence.
+      </section>
+    </main>
+  </body>
+</html>
