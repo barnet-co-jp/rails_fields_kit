@@ -606,6 +606,7 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `plugins:` passes explicit Tom Select plugin names for one field and overrides `config.default_plugins` for that field.
 - `allow_clear:` controls Rails Fields Kit's semantic `clear_button` auto-add for one field and can override `config.default_allow_clear`.
 - `tom_select_class_names:` passes Tom Select internal `classNames` for one field without changing Rails Fields Kit wrapper classes.
+- `dropdown_parent:` passes a selector string as Tom Select's `dropdownParent` for one field. Use [`dropdown_parent.md`](dropdown_parent.md) for modal, drawer, portal, or body-mounted selector pass-through and the host-app-owned overlay boundary.
 - `loading_text:`, `no_results_text:`, and `create_text:` override the bundled or initializer-provided Tom Select copy for one field only.
 - `error_surface:` adds a stable nearby placeholder for request-failure handlers.
 - `error_surface_html:` customizes that generated placeholder element.
