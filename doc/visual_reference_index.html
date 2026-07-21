@@ -418,6 +418,7 @@
           <a href="tom_select_visual_reference.html">Tom Select states</a>
           <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
           <a href="tom_select_disabled_option_visual_reference.html">Disabled options</a>
+          <a href="tom_select_lookup_metadata_visual_reference.html">Lookup metadata</a>
           <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
           <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a>
           <a href="tom_select_error_surface_contract_visual_reference.html">Error surface contract</a>
@@ -445,17 +446,18 @@
                 <span class="tag info">remote states</span>
               </div>
               <h3>Search-backed controls</h3>
-              <p>Start here for selects, comboboxes, autocomplete, tags, token search, request feedback, host-owned feedback lifecycle, and configured helper copy.</p>
+              <p>Start here for selects, comboboxes, autocomplete, lookup metadata, tags, token search, request feedback, host-owned feedback lifecycle, and configured helper copy.</p>
             </header>
             <ul>
               <li>Use the core states for layout and viewport checks.</li>
-              <li>Use disabled option and Turbo reconnect lanes only when collection metadata or reconnect appearance is the review topic.</li>
+              <li>Use disabled option, lookup metadata, and Turbo reconnect lanes only when collection metadata, hidden-ID lookup boundaries, or reconnect appearance is the review topic.</li>
               <li>Use focused lanes only when error feedback, host-owned clearing cues, or copy overrides are the review topic.</li>
             </ul>
             <nav class="family-links" aria-label="Tom Select helper family references">
               <a href="tom_select_visual_reference.html">Core states</a>
               <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
               <a href="tom_select_disabled_option_visual_reference.html">Disabled options</a>
+              <a href="tom_select_lookup_metadata_visual_reference.html">Lookup metadata</a>
               <a href="tom_select_request_failure_visual_reference.html">Request feedback</a>
               <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a>
               <a href="tom_select_error_surface_contract_visual_reference.html">Error surface contract</a>
@@ -706,6 +708,23 @@
               <li>Keep authorization, grouped choices, enum behavior, remote rich option rendering, and production CSS outside the visual artifact.</li>
             </ul>
             <a class="reference-link" href="tom_select_disabled_option_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">lookup metadata</span>
+                <span class="tag info">hidden ID</span>
+              </div>
+              <h3>Tom Select lookup metadata</h3>
+              <p>Focused `rfk_lookup` visible text, optional hidden master ID, safe option metadata, manual edit boundary, and narrow wrapping states.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect lookup metadata readability without treating endpoint validation, authorization, business formatting, or production CSS as Rails Fields Kit responsibilities?</p>
+            <ul>
+              <li>Compare selected candidate metadata, submitted field map, manual edit ID clearing, long labels, and boundary copy.</li>
+              <li>Keep remote search execution, selected preload behavior, rich renderer ownership, validation policy, and business formatting with the host app.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_lookup_metadata_visual_reference.html">Open reference</a>
           </article>
 
           <article class="reference-card">
