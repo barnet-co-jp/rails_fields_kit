@@ -19,7 +19,7 @@ module RailsFieldsKit
         options[:html] = html_options
       end
 
-      super(method, field_kind, collection: collection, **options)
+      super
     end
 
     def rfk_dependent_query_params_data(html_options)
