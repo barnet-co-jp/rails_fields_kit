@@ -16,6 +16,8 @@ RSpec.describe "focused docs inventory guard" do
   let(:table_range_field_metadata) { read_doc("doc/table_range_field_metadata.md") }
   let(:table_check_box_metadata) { read_doc("doc/table_check_box_metadata.md") }
   let(:datalist_boundary) { read_doc("doc/datalist_boundary.md") }
+  let(:masked_input_boundary) { read_doc("doc/masked_input_boundary.md") }
+  let(:masked_input_boundary_sample_evidence) { read_doc("doc/masked_input_boundary_sample_evidence.html") }
   let(:native_numeric_fields) { read_doc("doc/native_numeric_fields.md") }
   let(:native_contact_fields) { read_doc("doc/native_contact_fields.md") }
   let(:visual_reference_browser_evidence) { read_doc("doc/visual_reference_browser_evidence.md") }
@@ -119,6 +121,52 @@ RSpec.describe "focused docs inventory guard" do
       "Do not add `rfk_datalist_field` to `doc/public_api.md`"
     )
     expect(form_builder_helpers).not_to include("rfk_datalist_field")
+  end
+
+  it "keeps masked input boundary docs packaged without promoting a current helper" do
+    form_builder_helpers = markdown_section(public_api, "## FormBuilder helpers")
+
+    expect(specification.files).to include(
+      "doc/masked_input_boundary.md",
+      "doc/masked_input_boundary_sample_evidence.html"
+    )
+    expect(readme).to include(
+      "[`doc/masked_input_boundary.md`](doc/masked_input_boundary.md)",
+      "Rails Fields Kit does not currently provide `rfk_masked_field`, `rfk_slug_field`, or `rfk_datalist_field`"
+    )
+    expect(field_helpers).to include(
+      "[`masked_input_boundary.md`](masked_input_boundary.md)",
+      "Keep `rfk_datalist_field`, `rfk_slug_field`, and `rfk_masked_field`",
+      "masking libraries, normalization, validation, and persistence policy out of the current public helper inventory"
+    )
+    expect(visual_references).to include(
+      "[`masked_input_boundary.md`](masked_input_boundary.md)",
+      "Native helper browser-semantics review",
+      "Browser validation copy, masking, formatting, normalization, and autocomplete policy stay host-app responsibilities"
+    )
+    expect(masked_input_boundary).to include(
+      "Masked inputs are a future proposal, not current public API",
+      "[`masked_input_boundary_sample_evidence.html`](masked_input_boundary_sample_evidence.html)",
+      "Treat that artifact as visual evidence for host-owned masking hooks, not as a new helper or public API proposal",
+      "let the host app own the masking layer",
+      "Do not add helper names such as `rfk_masked_field` to the current public API"
+    )
+    expect(masked_input_boundary_sample_evidence).to include(
+      "Masked Input Boundary Sample Evidence",
+      "No runtime JavaScript",
+      "No rfk_masked_field API",
+      "data-controller=\"phone-mask\"",
+      "data-controller=\"currency-mask\"",
+      "Rails Fields Kit owns",
+      "Host app owns",
+      "Masking library choice, controller behavior, and browser event handling",
+      "Server-side validation, submitted value normalization, and persistence policy"
+    )
+    expect(public_api).to include(
+      "masking, browser validation-message policy",
+      "remain host-app responsibility"
+    )
+    expect(form_builder_helpers).not_to include("rfk_masked_field")
   end
 
   it "keeps native numeric and contact focused docs packaged without promoting host-app-owned behavior" do
