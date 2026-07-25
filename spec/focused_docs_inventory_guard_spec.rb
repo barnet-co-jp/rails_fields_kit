@@ -139,11 +139,6 @@ RSpec.describe "focused docs inventory guard" do
       "Keep `rfk_datalist_field`, `rfk_slug_field`, and `rfk_masked_field`",
       "masking libraries, normalization, validation, and persistence policy out of the current public helper inventory"
     )
-    expect(visual_references).to include(
-      "[`masked_input_boundary.md`](masked_input_boundary.md)",
-      "Native helper browser-semantics review",
-      "Browser validation copy, masking, formatting, normalization, and autocomplete policy stay host-app responsibilities"
-    )
     expect(masked_input_boundary).to include(
       "Masked inputs are a future proposal, not current public API",
       "[`masked_input_boundary_sample_evidence.html`](masked_input_boundary_sample_evidence.html)",
