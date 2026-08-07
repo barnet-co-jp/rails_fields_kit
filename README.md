@@ -179,7 +179,7 @@ For importmap, keep Tom Select on the host app's normal pinning flow and pin the
 rails generate rails_fields_kit:install --importmap
 ```
 
-The opt-in generator path adds the Rails Fields Kit pins below when they are not already present. If the app does not have `config/importmap.rb`, add the pins manually instead:
+The opt-in generator path adds the Rails Fields Kit pins below when they are not already present. It leaves an existing named pin unchanged when its target is unexpected or omitted, warns with the documented target, and asks you to update that target manually before running the setup doctor again. If the app does not have `config/importmap.rb`, add the pins manually instead:
 
 ```ruby
 # config/importmap.rb
