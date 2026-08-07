@@ -41,6 +41,26 @@ When table metadata evidence is in scope, confirm only the relevant items below:
 - [ ] If custom renderer registry behavior was in scope, the evidence stayed limited to the documented call-spec and registry helper lane.
 - [ ] Evidence notes made clear that query execution, preference persistence, authorization, pagination, visible save/error copy, and final table layout remain host-app or table integration responsibilities.
 
+## RansackSuggestions focused evidence decision
+
+For the focused `RailsFieldsKit::RansackSuggestions.build` review split from the combined sample-app queue, record the result in the narrow PR comment rather than filling the release-wide `doc/sample_app_results.md` log. This lane has no rendered field or table UI to approve: it verifies Ruby suggestion metadata that a host-app parser or search object may consume.
+
+Use these representative signals and keep them separate from `rfk_token_search` rendering and table metadata evidence:
+
+| Signal | Representative source | Expected evidence |
+| --- | --- | --- |
+| Predicate alias | `customer: { ransack_predicate: :customer_name_cont }` | The field option exposes `ransack_field: "customer"` and `ransack_predicate: "customer_name_cont"`. |
+| Value metadata | `created: { predicate: :created_at_gteq, values: [{ value: "today", range: "day" }] }` | The value option preserves `ransack_value: "today"` and custom `range: "day"` metadata. |
+| Custom output mapping | `value_field: "token"`, `label_field: "label"`, `description_field: "help"`, `badge_field: "kind"` | The configured output keys replace the defaults while the Ransack field and predicate metadata remain available. |
+
+Run the focused Ruby check when recording `PASS`:
+
+```bash
+bundle exec rspec spec/rails_fields_kit/ransack_suggestions_spec.rb
+```
+
+A scoped evidence comment must name the branch or commit, command, result, and the three representative signals above. If the Ruby check was not run, use `SOURCE REVIEW ONLY` or `DEFERRED`; do not infer `PASS` from docs review. Ransack gem setup, submitted-token parsing, `params[:q]` construction, allowed-predicate enforcement, relation construction, authorization, pagination, and result rendering remain host-app responsibilities. This focused lane does not approve the `rfk_token_search` UI or any table metadata rendering lane.
+
 ## Result template
 
 Copy the compact result into `doc/sample_app_results.md` for release candidates, or into a PR comment for a narrow docs/spec change.
