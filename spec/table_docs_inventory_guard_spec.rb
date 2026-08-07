@@ -9,6 +9,9 @@ RSpec.describe "table docs inventory guard" do
   let(:readme) { read_doc("README.md") }
   let(:public_api) { read_doc("doc/public_api.md") }
   let(:table_adapters) { read_doc("doc/table_adapters.md") }
+  let(:development_doc) { read_doc("doc/development.md") }
+  let(:table_renderer_source) { read_doc("lib/rails_fields_kit/table_renderer.rb") }
+  let(:table_group_source) { read_doc("lib/rails_fields_kit/form_builder_table_groups.rb") }
   let(:table_group_html) { read_doc("doc/table_group_html.md") }
   let(:table_direct_helper_boundary) { read_doc("doc/table_direct_helper_boundary.md") }
   let(:table_range_field_metadata) { read_doc("doc/table_range_field_metadata.md") }
@@ -54,6 +57,36 @@ RSpec.describe "table docs inventory guard" do
       "`wrapper_html:`, `item_html:`, or `empty:`",
       "introduced as separate public API decisions",
       "query execution, table preference persistence, authorization, and user-visible success or error copy"
+    )
+  end
+
+  it "keeps direct safe-buffer and batch array rendering contracts aligned" do
+    expect(table_group_source).to include(
+      "def rfk_table_filters(columns, group_html: nil)",
+      "def rfk_table_cell_editors(columns, group_html: nil)",
+      "@template.safe_join(RailsFieldsKit::TableMetadata.render_filters(self, columns))",
+      "@template.safe_join(RailsFieldsKit::TableMetadata.render_cell_editors(self, columns))"
+    )
+    expect(table_renderer_source).to include(
+      "def render_filters(form_builder, filters)",
+      "filter_calls(filters).map",
+      "def render_cell_editors(form_builder, editors)",
+      "cell_editor_calls(editors).map"
+    )
+    expect(public_api).to include(
+      "return safe-buffer helper output for ordinary Rails views",
+      "return ordered render result arrays"
+    )
+    expect(table_adapters).to include(
+      "These batch render helpers return ordered arrays of rendered pieces",
+      "safe-joins those pieces into ordinary FormBuilder output",
+      "still expects an ordered array that it will join or otherwise consume itself"
+    )
+    expect(development_doc).to include(
+      "The table render-result documentation drift guard keeps the two rendering lanes distinct",
+      "direct `rfk_table_filters` / `rfk_table_cell_editors` FormBuilder helpers safe-join rendered pieces",
+      "return ordered render result arrays",
+      "do not turn it into a renderer registry redesign"
     )
   end
 
