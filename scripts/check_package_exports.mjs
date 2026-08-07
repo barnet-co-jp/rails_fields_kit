@@ -18,6 +18,12 @@ const expectedNamedExports = ${JSON.stringify(expectedPackageRootNamedExports)}
 const expectedCallableHelperExports = ${JSON.stringify(expectedCallableHelperExports)}
 
 ${fakeDomProbeSource()}
+const actualNamedExports = Object.keys(packageRoot).filter((exportName) => exportName !== "default").sort()
+assert.deepEqual(
+  actualNamedExports,
+  [...expectedNamedExports].sort(),
+  "package root named exports should match doc/public_api.md#javascript-exports without undocumented additions or missing documented entries"
+)
 expectedNamedExports.forEach((exportName) => {
   assert.ok(exportName in packageRoot, \`package root should expose documented export ${"${exportName}"}\`)
 })
