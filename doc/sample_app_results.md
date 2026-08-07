@@ -436,9 +436,9 @@ Notes:
 
 Use this section when a release or narrow PR needs evidence for the `rfk_token_search` helper entry itself. Keep it separate from suggestion metadata and table metadata: this lane records that a representative token-search field rendered and submitted token text through the host app route, not that Rails Fields Kit parsed or executed the search.
 
-- Representative helper: `rfk_token_search`
-- Representative field or route:
-- Evidence location:
+- Representative helper: `rfk_token_search(:keyword, url: "/search_suggestions.json", placeholder: "status:open keyword", max_items: 20, load_throttle: 250)`
+- Representative field or route: rendered field name `dummy_model[keyword]`; submitted token text remains the value of that host form parameter
+- Evidence location: `spec/rails_fields_kit/form_builder_spec.rb` (`renders a token search text input`)
 
 - [ ] the representative `rfk_token_search` field rendered in the expected page or source-reviewed helper call
 - [ ] submitted token text or the observed query param shape was recorded for the host app route under review
@@ -447,6 +447,16 @@ Use this section when a release or narrow PR needs evidence for the `rfk_token_s
 - [ ] `SOURCE REVIEW ONLY` or `DEFERRED` was used when a browser/sample-app run was not actually performed
 
 Notes:
+
+### Focused result: `rfk_token_search` entry field split from #3
+
+| Representative lane | Source reviewed | Result | Evidence notes |
+| --- | --- | --- | --- |
+| Token-search entry field | `rfk_token_search(:keyword, url: "/search_suggestions.json", placeholder: "status:open keyword", max_items: 20, load_throttle: 250)` | `SOURCE REVIEW ONLY` | The helper contract renders a token-search text input named `dummy_model[keyword]`; the host form submits the token text through that parameter. The suggestion URL configures option loading and is not the form submission route. No browser or host sample app was run in this environment. |
+
+Run `bundle exec rspec spec/rails_fields_kit/form_builder_spec.rb` before promoting the helper contract to automated `PASS`, and record the exact branch / commit and workflow URL in the scoped PR comment. No inconsistency was found during source review.
+
+Suggestion payload structure belongs in the metadata lane below; Ransack suggestion metadata and table metadata remain separate evidence lanes. Token parsing, `params[:q]` construction, query execution, authorization, Ransack relation construction, saved-search resolution or persistence, table persistence, and user-visible results remain host-app responsibilities.
 
 ## Token suggestion and Ransack suggestion metadata checks
 
