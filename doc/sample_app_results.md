@@ -508,6 +508,17 @@ Use this section when table metadata is part of the release surface, or when `do
 
 Notes:
 
+### Focused result: table metadata rendering split from #3
+
+This focused review records only two representative metadata rendering lanes. It does not record token-search helper evidence, Ransack execution, or a full sample-app pass.
+
+| Representative lane | Source reviewed | Result | Evidence notes |
+| --- | --- | --- | --- |
+| Filter metadata | `TableFilterInput.date_field(:starts_on, min: "2026-01-01")` through `rfk_table_filters` / `rfk_date_field` | `SOURCE REVIEW ONLY` | Factory, renderer mapping, and direct helper path were reviewed. No browser or host sample app was run in this environment. |
+| Cell editor metadata | `TableCellInput.enum_select(:status)` through `rfk_table_cell_editors` / `rfk_enum_select` | `SOURCE REVIEW ONLY` | Metadata order, renderer mapping, and safe-buffer direct helper specs were reviewed. No browser or host sample app was run in this environment. |
+
+Run `bundle exec rspec spec/rails_fields_kit/table_metadata_spec.rb spec/rails_fields_kit/table_renderer_spec.rb spec/rails_fields_kit/form_builder_table_metadata_safe_buffer_spec.rb` before promoting either row to automated `PASS`, and record the exact branch / commit and workflow URL in the scoped PR comment. No inconsistency was found during source review. Table persistence, query execution, Ransack relation construction, authorization, sorting, pagination, visual approval, and final table layout remain host-app or table-integration responsibilities. The `rfk_token_search` entry-field lane remains separate.
+
 ## Turbo reconnect checks
 
 - Evidence location:
