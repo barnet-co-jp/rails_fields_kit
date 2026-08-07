@@ -15,6 +15,7 @@ RSpec.describe "table docs inventory guard" do
   let(:table_group_html) { read_doc("doc/table_group_html.md") }
   let(:table_direct_helper_boundary) { read_doc("doc/table_direct_helper_boundary.md") }
   let(:table_range_field_metadata) { read_doc("doc/table_range_field_metadata.md") }
+  let(:table_date_time_color_metadata) { read_doc("doc/table_date_time_color_metadata.md") }
   let(:table_file_field_metadata) { read_doc("doc/table_file_field_metadata.md") }
 
   it "keeps the table group_html focused doc packaged and routed without promoting semantic group ownership" do
@@ -115,6 +116,39 @@ RSpec.describe "table docs inventory guard" do
       "range-pair query semantics",
       "multi-thumb sliders",
       "custom slider UI",
+      "table preference persistence"
+    )
+  end
+
+  it "keeps date, time, datetime-local, and color table metadata docs packaged and routed with native picker ownership" do
+    expect(specification.files).to include("doc/table_date_time_color_metadata.md")
+
+    expect(public_api).to include(
+      "[`table_date_time_color_metadata.md`](table_date_time_color_metadata.md)",
+      "date, time, datetime-local, and color metadata",
+      "browser-native picker"
+    )
+    expect(table_adapters).to include(
+      "[`table_date_time_color_metadata.md`](table_date_time_color_metadata.md)",
+      "`TableFilterInput.date_field`",
+      "`TableFilterInput.time_field`",
+      "`TableFilterInput.datetime_local_field`",
+      "`TableFilterInput.color_field`",
+      "matching `TableCellInput` factories"
+    )
+    expect(table_date_time_color_metadata).to include(
+      "RailsFieldsKit::TableFilterInput.date_field",
+      "RailsFieldsKit::TableFilterInput.time_field",
+      "RailsFieldsKit::TableCellInput.datetime_local_field",
+      "RailsFieldsKit::TableCellInput.color_field",
+      "travel through metadata `options`",
+      "passed to the corresponding helper when rendered",
+      "browser-native picker behavior",
+      "timezone conversion",
+      "locale formatting",
+      "masking",
+      "browser validation-message policy",
+      "query execution",
       "table preference persistence"
     )
   end
