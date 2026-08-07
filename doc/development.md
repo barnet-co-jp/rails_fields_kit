@@ -56,6 +56,8 @@ The FormBuilder helper inventory docs spec keeps the compact helper list in `doc
 
 When checking the table FormBuilder helper surface, read `lib/rails_fields_kit/form_builder.rb` together with `lib/rails_fields_kit/form_builder_table_groups.rb`. The base file alone does not show the full `group_html:` surface for `rfk_table_filters` and `rfk_table_cell_editors`; `doc/table_group_html.md` is the source of truth for that split definition boundary.
 
+The table render-result documentation drift guard keeps the two rendering lanes distinct across implementation, `doc/public_api.md`, and `doc/table_adapters.md`: direct `rfk_table_filters` / `rfk_table_cell_editors` FormBuilder helpers safe-join rendered pieces into ordinary view output, while `TableMetadata.render_filters` / `render_cell_editors` and `TableRenderer.render_filters` / `render_cell_editors` return ordered render result arrays. Keep this as a representative contract guard; do not turn it into a renderer registry redesign, helper return-shape change, table persistence contract, or full docs wording mirror.
+
 The remote request option documentation drift spec keeps representative request-shaping option names visible across README, `doc/field_helpers.md`, and `doc/controller_helpers.md`. It checks public option signals such as `query_params:`, `selected_query_params:`, `create_params:`, `selected_param:`, `selected_multiple_param:`, and `create_param:` without turning README into a full mirror of the endpoint helper reference.
 
 It also checks representative controller helper keyword options such as `minimum_query_length:`, `scope:`, `order:`, and `wrap:` against `doc/controller_helpers.md` so endpoint helper docs drift is caught without generating docs or freezing full prose.
