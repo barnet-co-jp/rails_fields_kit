@@ -144,6 +144,43 @@ RSpec.describe RailsFieldsKit::Generators::InstallGenerator do
     expect(output).not_to include("run with --importmap")
   end
 
+  it "keeps existing importmap pins unchanged and warns about unexpected targets" do
+    importmap = <<~RUBY
+      pin "rails_fields_kit", to: "rails_fields_kit.js"
+      pin "rails_fields_kit/native_field_accessibility_contract", to: "rails_fields_kit/native_field_accessibility_contract.js"
+      pin "rails_fields_kit/native_field_constraint_contract", to: "rails_fields_kit/native_field_constraint_contract.js"
+      pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
+      pin "rails_fields_kit/tom_select_text_override_contract", to: "rails_fields_kit/tom_select_text_override_contract.js"
+    RUBY
+    write_file "config/importmap.rb", importmap
+
+    output = capture_generator_output ["--importmap"]
+
+    expect(read_file("config/importmap.rb")).to eq(importmap)
+    expect(output).to include("Rails Fields Kit importmap pins have unexpected targets")
+    expect(output).to include("rails_fields_kit (expected rails_fields_kit/index.js, found rails_fields_kit.js)")
+    expect(output).to include("Existing pins were not changed")
+    expect(output).to include("update those targets manually")
+    expect(output).not_to include("importmap pins already exist")
+  end
+
+  it "appends missing importmap pins without replacing an unexpected existing target" do
+    write_file "config/importmap.rb", <<~RUBY
+      pin "rails_fields_kit", to: "rails_fields_kit.js"
+    RUBY
+
+    output = capture_generator_output ["--importmap"]
+    importmap = read_file("config/importmap.rb")
+
+    expect(importmap).to include(
+      "pin \"rails_fields_kit\", to: \"rails_fields_kit.js\"",
+      "pin \"rails_fields_kit/tom_select_controller\", to: \"rails_fields_kit/tom_select_controller.js\""
+    )
+    expect(importmap.scan(/pin "rails_fields_kit"/).size).to eq(1)
+    expect(output).to include("Missing Rails Fields Kit importmap pins were added")
+    expect(output).to include("Existing pins with unexpected targets were not changed")
+  end
+
   it "does not create config/importmap.rb when opt-in is used without an existing importmap" do
     run_generator ["--importmap"]
 

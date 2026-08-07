@@ -43,18 +43,35 @@ module RailsFieldsKit
           return
         end
 
+        content = File.read(absolute_path)
         missing_pins = IMPORTMAP_PINS.reject do |name, _target|
-          importmap_pin_present?(absolute_path, name)
+          importmap_pin_present?(content, name)
+        end
+        target_mismatches = IMPORTMAP_PINS.filter_map do |name, expected_target|
+          next unless importmap_pin_present?(content, name)
+
+          actual_target = importmap_pin_target(content, name)
+          next if actual_target == expected_target
+
+          [name, expected_target, actual_target]
+        end
+
+        unless target_mismatches.empty?
+          say "Rails Fields Kit importmap pins have unexpected targets: #{format_importmap_target_mismatches(target_mismatches)}. Existing pins were not changed.", :yellow
         end
 
         if missing_pins.empty?
-          self.importmap_pin_status = :already_present
-          say "Rails Fields Kit importmap pins already exist.", :green
+          if target_mismatches.empty?
+            self.importmap_pin_status = :already_present
+            say "Rails Fields Kit importmap pins already exist.", :green
+          else
+            self.importmap_pin_status = :target_mismatch
+          end
           return
         end
 
         append_to_file importmap_path, "\n#{importmap_pin_lines(missing_pins)}\n"
-        self.importmap_pin_status = :added
+        self.importmap_pin_status = target_mismatches.empty? ? :added : :added_with_target_mismatch
       end
 
       def show_next_steps
@@ -84,8 +101,12 @@ module RailsFieldsKit
         case importmap_pin_status
         when :added
           "Rails Fields Kit importmap pins were added to config/importmap.rb."
+        when :added_with_target_mismatch
+          "Missing Rails Fields Kit importmap pins were added to config/importmap.rb. Existing pins with unexpected targets were not changed; update those targets manually."
         when :already_present
           "Rails Fields Kit importmap pins already exist in config/importmap.rb."
+        when :target_mismatch
+          "Rails Fields Kit importmap pins with unexpected targets were not changed; update those targets manually."
         when :missing_file
           "config/importmap.rb was not found; add the documented pins manually if this app uses importmap."
         else
@@ -93,8 +114,20 @@ module RailsFieldsKit
         end
       end
 
-      def importmap_pin_present?(path, name)
-        File.read(path).match?(/^\s*pin\s+["']#{Regexp.escape(name)}["']/)
+      def importmap_pin_present?(content, name)
+        content.match?(/^\s*pin\s+["']#{Regexp.escape(name)}["']/)
+      end
+
+      def importmap_pin_target(content, name)
+        match = content.match(/^\s*pin\s+["']#{Regexp.escape(name)}["'](?:\s*,\s*to:\s*["']([^"']+)["'])?/)
+        match && match[1]
+      end
+
+      def format_importmap_target_mismatches(target_mismatches)
+        target_mismatches.map do |name, expected_target, actual_target|
+          actual_target_label = actual_target || "no explicit target"
+          "#{name} (expected #{expected_target}, found #{actual_target_label})"
+        end.join(", ")
       end
 
       def importmap_pin_lines(pins)
