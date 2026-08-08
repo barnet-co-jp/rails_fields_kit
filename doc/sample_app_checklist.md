@@ -332,6 +332,7 @@ Create a minimal table definition that exercises:
 
 - `RailsFieldsKit::TableFilterInput.combobox` or `RailsFieldsKit::TableFilterInput.token_search`
 - `RailsFieldsKit::TableFilterInput.check_box` or `RailsFieldsKit::TableCellInput.check_box` when checkbox table metadata is in release or PR scope
+- `RailsFieldsKit::TableFilterInput.radio_button(:status, tag_value: "published", label: "Published")` when radio filter metadata is in release or PR scope
 - `RailsFieldsKit::TableCellInput.file_field` when file field table metadata is in release or PR scope
 - `RailsFieldsKit::TableCellInput.enum_select` or another current editor helper
 - `rfk_table_filters`
@@ -344,6 +345,9 @@ Verify:
 - native metadata such as `TableFilterInput.search_field`, `money_field`, `text_area`, or `check_box` also renders through the documented helper path when the integration uses common field helpers
 - checkbox table metadata, when in scope, keeps `checked_value:` / `unchecked_value:` as Rails checkbox helper contract evidence and stays separate from the native `rfk_check_box` wrapper lane
 - checkbox table metadata evidence does not imply boolean query semantics, tri-state filtering, bulk edit persistence, table preference persistence, or authorization policy ownership by Rails Fields Kit
+- radio button filter metadata, when in scope, keeps required `tag_value:` in the call-spec options and passes it as the positional radio value when `TableRenderer.render_filter` dispatches to `rfk_radio_button`
+- radio button filter metadata without `tag_value:` raises the documented `ArgumentError` before helper dispatch
+- radio button filter evidence stays separate from the `TableCellInput.radio_button` cell-editor lane and does not imply query semantics, params construction, same-name grouping, `fieldset` / `legend`, collection radio groups, table persistence, or production styling ownership by Rails Fields Kit
 - file field table metadata, when in scope, keeps `accept:`, `multiple:`, and `direct_upload:` as Rails file helper option pass-through evidence and stays in the cell-editor metadata lane
 - file field table metadata evidence does not imply `TableFilterInput.file_field`, multipart form policy, Active Storage direct upload JavaScript, preview UI, upload progress UI, table persistence, query execution, file validation policy, storage configuration, virus scanning, authorization, or production CSS ownership by Rails Fields Kit
 - any direct `TableRenderer.filter_call` or `TableRenderer.cell_editor_call` usage in your integration still matches the documented call-spec shape
