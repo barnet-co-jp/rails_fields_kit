@@ -24,6 +24,7 @@ assertSignals(
     "rails-fields-kit--tom-select:selected-load-error",
     "rails-fields-kit--tom-select:create",
     "rails-fields-kit--tom-select:create-error",
+    "rails-fields-kit--tom-select:dependency-change",
     "rails-fields-kit--tom-select:item-add",
     "rails-fields-kit--tom-select:item-remove",
     "rails-fields-kit--tom-select:change",
@@ -38,6 +39,7 @@ assertSignals(
   [
     "Detail: `{ query, options }`",
     "Detail: `{ values, options }`",
+    "Detail: `{ params, previousParams, changed }`",
     "Detail: `{ input, option }`",
     "Detail: `{ operation, input, error, response, payload, status, surface }`",
     "Detail: `{ value, values, option, options }`",
@@ -58,6 +60,7 @@ assertSignals(
     "\"selected-load\"",
     "\"create\"",
     "data-rfk-error-status",
+    "host-app follow-up signal",
     "They do not make Rails Fields Kit responsible for visible message text, retry UI, loading UI, or endpoint policy."
   ],
   "error-surface ownership docs"
