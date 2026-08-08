@@ -42,6 +42,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/public_api.md`.
 - [ ] Review `doc/select_migration.md`.
 - [ ] Review `doc/field_helpers.md`.
+- [ ] Review `doc/dependent_query_params.md` when `depends_on:` or `clear_on_dependency_change:` is release-scoped.
 - [ ] Review `doc/native_numeric_fields.md` when native numeric wrapper helpers are part of the release surface.
 - [ ] Review `doc/native_contact_fields.md` when native contact or native search wrapper helpers are part of the release surface.
 - [ ] Review `doc/visual_references.md` as the visual reference family index, and confirm it still matches the README Docs map.
@@ -143,6 +144,7 @@ Record visual reference and sample app evidence in a compact matrix before treat
 - [ ] Confirm one representative `rfk_enum_select` lane preserves the current enum label and value mapping through edit-form redisplay or validation rerender without drifting into a hand-maintained arbitrary collection lane.
 - [ ] Confirm one representative native helper lane keeps `wrapper: true` label / hint / prefix / suffix rendering stable through validation rerender, and that a comparable `accessibility: false` example clearly drops the shared automatic wiring.
 - [ ] Confirm one representative native helper customization lane preserves field-level `wrapper_html:` / `label_html:` / `hint_html:` / `error_html:` / `control_html:` / `prefix_html:` / `suffix_html:` attributes while `html:` remains scoped to the input element and label / hint / error `aria-describedby` wiring plus error wrapper state stay aligned with `doc/field_helpers.md`.
+- [ ] When dependent query params are release-scoped, confirm one feature-specific remote-search lane records fixed-plus-dependency merge, blank omission, default retention versus opt-in clearing, stale-response non-adoption, and reconnect listener cleanup in `doc/sample_app_results.md` or a scoped PR comment. Do not mark manual sample/browser evidence complete from CI or source review alone; record `NOT RUN` or an explicit `DEFERRED` handoff when applicable.
 - [ ] Confirm selected preload works in edit forms.
 - [ ] Confirm one representative selected preload lane covers saved-ID label restore, `rails-fields-kit--tom-select:selected-load`, `rails-fields-kit--tom-select:selected-load-error`, and any host-app fallback or `error_surface:` boundary together.
 - [ ] Confirm one representative multi-value selected preload lane restores visible labels for saved IDs and still uses the documented `selected_multiple_param:` or comma-separated `ids` contract when the endpoint relies on it.

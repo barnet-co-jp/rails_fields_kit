@@ -231,6 +231,21 @@ Verify:
 
 If the release surface includes `RailsFieldsKit::RansackSuggestions.build`, also confirm the sample endpoint can return the expected predicate metadata without handing query parsing to the gem.
 
+## Verify dependent query params representative remote-search lane
+
+Use this feature-specific lane only when `depends_on:` or `clear_on_dependency_change:` is in release or PR scope. Use representative Tom Select-backed fields and a fixed-response remote-search endpoint; do not treat this lane as release-wide baseline evidence.
+
+Record the branch or commit, representative field and dependency selectors, captured outgoing search params, selection behavior, reconnect path, result, and evidence location. Confirm:
+
+- unrelated fixed `query_params:` values remain present while a nonblank dependency value with the same key overrides the fixed value for that request
+- blank dependency values are omitted from outgoing remote-search params
+- omitting `clear_on_dependency_change:` retains the current selection, while a comparable field with `clear_on_dependency_change: true` clears it after an effective dependency change
+- an in-flight response from the previous dependency state is not adopted, and an open dropdown reloads from the current state
+- one Turbo replacement or same-form revisit does not duplicate dependency listeners; one effective change produces one reload and one `rails-fields-kit--tom-select:dependency-change` notification
+- endpoint authorization, query execution, business autofill, selected preload, pagination, production CSS, and visual approval remain outside this lane
+
+For source-only review, record `Sample app/browser execution: NOT RUN` and `Result: SOURCE REVIEW ONLY`. Use `DEFERRED` only when a named reviewer, release step, or follow-up issue owns the missing manual run.
+
 ## Verify selected preload representative lane
 
 Use one representative server-rendered edit-form field with `selected_url:` and whatever host-app fallback UI or `error_surface:` wiring the release expects to support.
