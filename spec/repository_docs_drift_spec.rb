@@ -30,15 +30,24 @@ RSpec.describe "repository docs drift guards" do
     workflow_node_versions = ci_workflow.match(/node-version:\s+\[([^\]]+)\]/)[1].scan(/"([^"]+)"/).flatten
     expected_node_versions = node_boundary.scan(/\d+/).uniq
     rails_matrix_rows = ci_workflow.scan(/rails: "([^"]+)"\n\s+ruby-version: "([^"]+)"\n\s+gemfile: ([^\n]+)/)
+    expected_rails_matrix_rows = [
+      ["7.0", "3.1", "gemfiles/rails_7_0.gemfile"],
+      ["8.0", "3.3", "gemfiles/rails_8_0.gemfile"]
+    ]
 
     expect(support_boundary).to include("- Ruby: `#{ruby_requirement}`")
     expect(support_boundary).to include("- Rails: `#{rails_requirements[0]}`, `#{rails_requirements[1]}`")
     expect(support_boundary).to include("The package metadata boundary is Node #{node_boundary}")
     expect(development_doc).to include("The package metadata boundary is Node #{node_boundary}")
     expect(workflow_node_versions).to eq(expected_node_versions)
+    expect(rails_matrix_rows).to eq(expected_rails_matrix_rows)
 
     rails_matrix_rows.each do |rails_version, ruby_version, gemfile|
       expect(support_boundary).to include("| #{rails_version} | #{ruby_version} | `#{gemfile}` |")
+      expect(development_doc).to include(
+        "Rails #{rails_version} on Ruby #{ruby_version}",
+        "BUNDLE_GEMFILE=#{gemfile} bundle exec rspec"
+      )
     end
 
     expect(development_doc).to include(
