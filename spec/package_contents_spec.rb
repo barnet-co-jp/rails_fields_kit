@@ -293,6 +293,7 @@ RSpec.describe "package contents" do
   it "keeps README configuration profile route aligned with the docs-only boundary" do
     docs_map = markdown_section(readme, "## Docs map")
     configuration_profiles_boundary = markdown_section(configuration_profiles, "## Boundary")
+    generated_setup_note = File.read(File.expand_path("../lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md", __dir__))
 
     expect(specification.files).to include("doc/configuration_profiles.md")
     expect(docs_map).to include(
@@ -300,6 +301,10 @@ RSpec.describe "package contents" do
       "field-level override precedence",
       "[`doc/configuration_profiles.md`](doc/configuration_profiles.md)",
       "docs-only copyable profile examples"
+    )
+    expect(generated_setup_note).to include(
+      "https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration_profiles.md",
+      "docs-only copyable examples, not named profiles, presets, or generator options"
     )
     expect(configuration_profiles).to include(
       "does not ship named initializer profiles",
