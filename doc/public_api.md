@@ -406,11 +406,15 @@ Rails Fields Kit also renders `data-rails-fields-kit--tom-select-kind-value` as 
 Remote endpoint extensions:
 
 - `query_params:` adds fixed query parameters to search requests.
+- `depends_on:` renders the dependency-selector map consumed as the `dependsOn` Stimulus value for remote-search requests.
+- `clear_on_dependency_change:` renders the boolean `clearOnDependencyChange` Stimulus value; its default is false.
 - `selected_query_params:` adds fixed query parameters to selected preload requests.
 - `create_params:` adds fixed JSON fields to create requests.
 - `error_surface:` adds a generated placeholder id so request-failure events can expose `detail.surface` for host-app feedback.
 
 `error_surface_html:` customizes the generated placeholder element, but it does not change the event names or move visible feedback responsibility into the gem.
+
+See [`dependent_query_params.md`](dependent_query_params.md) for merge and selection behavior; dependency values do not alter selected preload or define endpoint semantics, authorization, or business rules.
 
 ## Stimulus lifecycle contract
 
@@ -425,6 +429,7 @@ The compact event family includes:
 - remote search success / failure: `load`, `load-error`
 - selected preload success / failure: `selected-load`, `selected-load-error`
 - create-on-the-fly success / failure: `create`, `create-error`
+- dependency changes: `dependency-change`
 - forwarded interaction events: `change`, `item-add`, `item-remove`, `clear`
 
 Use [`events.md`](events.md) as the source of truth for exact event names, payload shapes, request cancellation behavior, `detail.surface`, and host-app visible feedback responsibilities.
