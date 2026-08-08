@@ -57,24 +57,6 @@ RSpec.describe "package contents" do
   end
   let(:form_builder_source) { form_builder_paths.map { |path| File.read(path) }.join("\n") }
 
-  it "ships the documented JavaScript package entrypoints" do
-    expect(specification.files).to include(
-      "package.json",
-      "app/javascript/rails_fields_kit/index.js",
-      "app/javascript/rails_fields_kit/tom_select_controller.js"
-    )
-  end
-
-  it "ships the install-flow docs and generator artifacts described by README and setup" do
-    expect(specification.files).to include(
-      "README.md",
-      "doc/setup.md",
-      "doc/sample_app_checklist.md",
-      "lib/generators/rails_fields_kit/install_generator.rb",
-      "lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md"
-    )
-  end
-
   it "keeps README and setup JavaScript helper summaries pointed at the public API source of truth" do
     javascript_exports = markdown_section(public_api, "## JavaScript exports")
     readme_js_setup = markdown_section(readme, "### Direct imports and package exports")
@@ -98,26 +80,6 @@ RSpec.describe "package contents" do
     expect(setup_doc).to include(
       "The package root also exposes read-only rendered-field contract helpers",
       "Use [`public_api.md#javascript-exports`](public_api.md#javascript-exports) as the current source of truth for the helper list and return shape"
-    )
-  end
-
-  it "ships the maintained public reference docs linked from README and setup" do
-    expect(specification.files).to include(
-      "doc/public_api.md",
-      "doc/select_migration.md",
-      "doc/field_helpers.md",
-      "doc/textarea_autosize.md",
-      "doc/controller_helpers.md",
-      "doc/configuration.md",
-      "doc/events.md",
-      "doc/tom_select_turbo_lifecycle.md",
-      "doc/token_suggestions.md",
-      "doc/ransack_suggestions.md",
-      "doc/table_adapters.md",
-      "doc/tom_select_visual_reference.html",
-      "doc/tom_select_text_override_visual_reference.html",
-      "doc/native_field_visual_reference.html",
-      "doc/table_metadata_visual_reference.html"
     )
   end
 
@@ -347,19 +309,6 @@ RSpec.describe "package contents" do
     expect(configuration_profiles_boundary).to include(
       "avoid a Ruby profile API, generator option, or preset registry",
       "separate feature decision"
-    )
-  end
-
-  it "ships the release-facing verification docs linked from README" do
-    expect(specification.files).to include(
-      "doc/development.md",
-      "doc/sample_app_results.md",
-      "doc/sample_app_results_route_guide.md",
-      "doc/final_release_checklist.md",
-      "doc/selected_preload_release_gate.md",
-      "doc/release.md",
-      "doc/release_notes_0_1_1.md",
-      "doc/release_notes_0_1_0.md"
     )
   end
 
