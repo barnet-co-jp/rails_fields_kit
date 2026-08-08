@@ -78,7 +78,7 @@ RSpec.describe "focused configuration and visual docs inventory guard" do
     expect(final_release_checklist).to include(
       "Review `doc/default_allow_clear.md`",
       "one representative `config.default_allow_clear = true` field",
-      expected_boundary
+      "plugin assets, styling, empty-state wording, selection mutation, or Tom Select lifecycle"
     )
   end
 
