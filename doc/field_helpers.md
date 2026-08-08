@@ -595,6 +595,8 @@ Use boolean `disabled: true` to disable the whole select. Use array/value `disab
 Tom Select-backed helpers that call remote endpoints accept these request-shaping options:
 
 - `query_params:` adds fixed query parameters to the remote search `GET` URL before the typed query is applied.
+- `depends_on:` maps remote-search query parameter names to input or select selectors and reads their current nonblank values for each search request.
+- `clear_on_dependency_change:` optionally clears the current client-side selection when a dependency changes; omission keeps the selection.
 - `selected_query_params:` adds fixed query parameters to the selected-option preload URL.
 - `create_params:` adds fixed JSON fields to create-on-the-fly POST requests.
 - `preload:` forwards Tom Select's preload option. For remote search fields, any blank or initial load it permits is still governed by the host app endpoint. It does not restore labels for already selected IDs; use `selected_url:` plus `selected:` or the saved model value for that selected preload workflow.
@@ -612,6 +614,8 @@ Tom Select-backed helpers that call remote endpoints accept these request-shapin
 - `error_surface_html:` customizes that generated placeholder element.
 
 For remote search and selected-option preload, fixed params are URL query params. Scalar values are set on the request URL, array values are appended as repeated query entries for the same key, and `null` / `undefined` values are skipped. `create_params:` is separate: Rails Fields Kit merges those fixed values into the create-on-the-fly JSON body, not the request URL.
+
+See [`dependent_query_params.md`](dependent_query_params.md) for merge order, the `rails-fields-kit--tom-select:dependency-change` hook, and the boundary that keeps dependency values out of selected preload. Endpoint semantics, authorization, and business rules remain host-app responsibilities.
 
 When neither the field nor the initializer sets those values, Rails Fields Kit falls back to bundled locale-aware copy at render time. The bundled baseline currently includes English and Japanese, and falls back to English when a locale-specific key is not present.
 

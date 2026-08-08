@@ -28,6 +28,8 @@ Use those attributes for host-owned CSS, analytics, or lightweight event handler
 | Selected preload | `rails-fields-kit--tom-select:selected-load` | `rails-fields-kit--tom-select:selected-load-error` | Use when edit forms need labels for already-selected IDs. |
 | Create-on-the-fly | `rails-fields-kit--tom-select:create`, `rails-fields-kit--tom-select:item-add`, and `rails-fields-kit--tom-select:change` | `rails-fields-kit--tom-select:create-error` | Use `create` when the app needs a dedicated hook before ordinary selection events. |
 
+For dependency-driven remote search and the `rails-fields-kit--tom-select:dependency-change` integration hook, see [`dependent_query_params.md`](dependent_query_params.md). Endpoint semantics, authorization, and business rules remain host-app responsibilities.
+
 Common error detail fields:
 
 - `operation`: request type (`load`, `selected-load`, `create`)
