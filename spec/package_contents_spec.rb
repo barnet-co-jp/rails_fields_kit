@@ -18,6 +18,10 @@ RSpec.describe "package contents" do
   let(:textarea_autosize) { File.read(textarea_autosize_path) }
   let(:field_helpers_path) { File.expand_path("../doc/field_helpers.md", __dir__) }
   let(:field_helpers) { File.read(field_helpers_path) }
+  let(:tom_select_class_names_path) { File.expand_path("../doc/tom_select_class_names.md", __dir__) }
+  let(:tom_select_class_names) { File.read(tom_select_class_names_path) }
+  let(:styling_boundary_path) { File.expand_path("../doc/styling_boundary.md", __dir__) }
+  let(:styling_boundary) { File.read(styling_boundary_path) }
   let(:controller_helpers_path) { File.expand_path("../doc/controller_helpers.md", __dir__) }
   let(:controller_helpers) { File.read(controller_helpers_path) }
   let(:token_suggestions_path) { File.expand_path("../doc/token_suggestions.md", __dir__) }
@@ -114,6 +118,29 @@ RSpec.describe "package contents" do
       "doc/tom_select_text_override_visual_reference.html",
       "doc/native_field_visual_reference.html",
       "doc/table_metadata_visual_reference.html"
+    )
+  end
+
+  it "keeps Tom Select class names focused docs packaged and routed from styling docs" do
+    expect(specification.files).to include("doc/tom_select_class_names.md")
+
+    expect(tom_select_class_names).to include(
+      "`tom_select_class_names:` is a field-level pass-through",
+      "`wrapper_html:`",
+      "production CSS or theme presets",
+      "Host apps remain responsible"
+    )
+
+    expect(styling_boundary).to include(
+      "[`tom_select_class_names:`](tom_select_class_names.md)",
+      "Passing field-level `tom_select_class_names:` through",
+      "Production CSS"
+    )
+
+    expect(field_helpers).to include(
+      "### Shared Tom Select class names option",
+      "[`tom_select_class_names.md`](tom_select_class_names.md)",
+      "This option is separate from Rails Fields Kit wrapper customization"
     )
   end
 
