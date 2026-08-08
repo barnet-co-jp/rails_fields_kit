@@ -149,6 +149,20 @@ RSpec.describe "docs package inventory guard" do
     )
   end
 
+  it "keeps dependent query params docs packaged and scoped to remote search" do
+    dependent_query_params = read_doc("doc/dependent_query_params.md")
+
+    expect(specification.files).to include("doc/dependent_query_params.md")
+    expect(dependent_query_params).to include(
+      "`depends_on:`",
+      "`clear_on_dependency_change: true`",
+      "Blank dependency values are omitted.",
+      "Endpoint meaning, authorization, account scoping, and valid combinations remain host-app responsibility.",
+      "Dependency values are request-scoped, not selected-preload scoped.",
+      "`selected_url:` continues to use only `selected_query_params:` plus the selected id or ids"
+    )
+  end
+
   it "keeps the select migration visual reference packaged, routed, and scoped" do
     migration_reference = read_doc("doc/tom_select_migration_visual_reference.html")
 
