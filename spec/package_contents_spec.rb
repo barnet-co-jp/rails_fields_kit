@@ -321,6 +321,22 @@ RSpec.describe "package contents" do
     )
   end
 
+  it "keeps generated setup notes routed to scoped package-root helper evidence" do
+    generated_setup_note = File.read(File.expand_path("../lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md", __dir__))
+
+    expect(specification.files).to include("doc/package_root_helper_release_evidence.md")
+    expect(generated_setup_note).to include(
+      "https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/package_root_helper_release_evidence.md",
+      "choose representative checks only when host scripts import package-root helpers",
+      "doc/public_api.md#javascript-exports",
+      "helper-list and return-shape source of truth"
+    )
+    expect(package_root_helper_release_evidence).to include(
+      "Use `doc/public_api.md#javascript-exports` as the source of truth for the current package-root helper list",
+      "choose only the package-root helper lanes that are in scope"
+    )
+  end
+
   it "keeps gemspec metadata URLs pointed at repository-local package docs" do
     repository_root_uri = "#{specification.homepage}/blob/main/"
 

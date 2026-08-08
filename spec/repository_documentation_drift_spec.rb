@@ -25,8 +25,11 @@ RSpec.describe "repository documentation drift guards" do
     expect(linked_paths).to contain_exactly(
       "README.md",
       "doc/configuration_profiles.md",
+      "doc/package_root_helper_release_evidence.md",
+      "doc/selected_preload_release_gate.md",
       "doc/setup.md",
-      "doc/setup_doctor_output_review.md"
+      "doc/setup_doctor_output_review.md",
+      "doc/tom_select_text_override_visual_reference.html"
     )
 
     missing_paths = linked_paths.reject { |path| File.file?(File.join(root, path)) }
