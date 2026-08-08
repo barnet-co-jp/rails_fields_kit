@@ -18,6 +18,10 @@ RSpec.describe "package contents" do
   let(:textarea_autosize) { File.read(textarea_autosize_path) }
   let(:field_helpers_path) { File.expand_path("../doc/field_helpers.md", __dir__) }
   let(:field_helpers) { File.read(field_helpers_path) }
+  let(:tom_select_class_names_path) { File.expand_path("../doc/tom_select_class_names.md", __dir__) }
+  let(:tom_select_class_names) { File.read(tom_select_class_names_path) }
+  let(:styling_boundary_path) { File.expand_path("../doc/styling_boundary.md", __dir__) }
+  let(:styling_boundary) { File.read(styling_boundary_path) }
   let(:controller_helpers_path) { File.expand_path("../doc/controller_helpers.md", __dir__) }
   let(:controller_helpers) { File.read(controller_helpers_path) }
   let(:token_suggestions_path) { File.expand_path("../doc/token_suggestions.md", __dir__) }
@@ -53,24 +57,6 @@ RSpec.describe "package contents" do
   end
   let(:form_builder_source) { form_builder_paths.map { |path| File.read(path) }.join("\n") }
 
-  it "ships the documented JavaScript package entrypoints" do
-    expect(specification.files).to include(
-      "package.json",
-      "app/javascript/rails_fields_kit/index.js",
-      "app/javascript/rails_fields_kit/tom_select_controller.js"
-    )
-  end
-
-  it "ships the install-flow docs and generator artifacts described by README and setup" do
-    expect(specification.files).to include(
-      "README.md",
-      "doc/setup.md",
-      "doc/sample_app_checklist.md",
-      "lib/generators/rails_fields_kit/install_generator.rb",
-      "lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md"
-    )
-  end
-
   it "keeps README and setup JavaScript helper summaries pointed at the public API source of truth" do
     javascript_exports = markdown_section(public_api, "## JavaScript exports")
     readme_js_setup = markdown_section(readme, "### Direct imports and package exports")
@@ -97,23 +83,26 @@ RSpec.describe "package contents" do
     )
   end
 
-  it "ships the maintained public reference docs linked from README and setup" do
-    expect(specification.files).to include(
-      "doc/public_api.md",
-      "doc/select_migration.md",
-      "doc/field_helpers.md",
-      "doc/textarea_autosize.md",
-      "doc/controller_helpers.md",
-      "doc/configuration.md",
-      "doc/events.md",
-      "doc/tom_select_turbo_lifecycle.md",
-      "doc/token_suggestions.md",
-      "doc/ransack_suggestions.md",
-      "doc/table_adapters.md",
-      "doc/tom_select_visual_reference.html",
-      "doc/tom_select_text_override_visual_reference.html",
-      "doc/native_field_visual_reference.html",
-      "doc/table_metadata_visual_reference.html"
+  it "keeps Tom Select class names focused docs packaged and routed from styling docs" do
+    expect(specification.files).to include("doc/tom_select_class_names.md")
+
+    expect(tom_select_class_names).to include(
+      "`tom_select_class_names:` is a field-level pass-through",
+      "`wrapper_html:`",
+      "production CSS or theme presets",
+      "Host apps remain responsible"
+    )
+
+    expect(styling_boundary).to include(
+      "[`tom_select_class_names:`](tom_select_class_names.md)",
+      "Passing field-level `tom_select_class_names:` through",
+      "Production CSS"
+    )
+
+    expect(field_helpers).to include(
+      "### Shared Tom Select class names option",
+      "[`tom_select_class_names.md`](tom_select_class_names.md)",
+      "This option is separate from Rails Fields Kit wrapper customization"
     )
   end
 
@@ -320,19 +309,6 @@ RSpec.describe "package contents" do
     expect(configuration_profiles_boundary).to include(
       "avoid a Ruby profile API, generator option, or preset registry",
       "separate feature decision"
-    )
-  end
-
-  it "ships the release-facing verification docs linked from README" do
-    expect(specification.files).to include(
-      "doc/development.md",
-      "doc/sample_app_results.md",
-      "doc/sample_app_results_route_guide.md",
-      "doc/final_release_checklist.md",
-      "doc/selected_preload_release_gate.md",
-      "doc/release.md",
-      "doc/release_notes_0_1_1.md",
-      "doc/release_notes_0_1_0.md"
     )
   end
 

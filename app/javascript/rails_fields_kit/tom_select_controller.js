@@ -8,6 +8,8 @@ export default class extends Controller {
     selectedUrl: String,
     createUrl: String,
     queryParams: Object,
+    dependsOn: Object,
+    clearOnDependencyChange: { type: Boolean, default: false },
     selectedQueryParams: Object,
     createParams: Object,
     create: Boolean,
@@ -51,15 +53,19 @@ export default class extends Controller {
     this.connected = true
     this.requestControllers = {}
     this.requestTokens = {}
+    this.dependencyListeners = []
+    this.dependencyParams = this.currentDependencyParams()
     this.tomSelect = new TomSelect(this.element, this.options())
     this.bindTomSelectEvents()
     this.bindLookupEvents()
+    this.bindDependencyEvents()
     this.clearErrorSurface()
     this.loadSelectedOptions()
   }
 
   disconnect() {
     this.connected = false
+    this.unbindDependencyEvents()
     this.abortAllRequests()
     if (this.tomSelect) {
       this.tomSelect.destroy()
@@ -136,6 +142,110 @@ export default class extends Controller {
         if (idField) idField.value = ""
       }
     })
+  }
+
+  bindDependencyEvents() {
+    this.unbindDependencyEvents()
+    this.dependencyParams = this.currentDependencyParams()
+    if (!this.hasDependsOnValue) return
+
+    Object.entries(this.dependsOnValue).forEach(([key, selector]) => {
+      if (!this.hasPresentValue(key) || !this.hasPresentValue(selector)) return
+
+      const element = document.querySelector(selector)
+      if (!element) return
+
+      const handler = () => this.handleDependencyChange()
+      ;["change", "input"].forEach((eventName) => {
+        element.addEventListener(eventName, handler)
+        this.dependencyListeners.push({ element, eventName, handler })
+      })
+    })
+  }
+
+  unbindDependencyEvents() {
+    if (!this.dependencyListeners) return
+
+    this.dependencyListeners.forEach(({ element, eventName, handler }) => {
+      element.removeEventListener(eventName, handler)
+    })
+    this.dependencyListeners = []
+  }
+
+  handleDependencyChange() {
+    const previousParams = this.dependencyParams || {}
+    const params = this.currentDependencyParams()
+    const changed = this.changedDependencyParams(previousParams, params)
+    if (Object.keys(changed).length === 0) return
+
+    this.dependencyParams = params
+    this.abortRequest("load")
+    this.clearRemoteOptions()
+
+    if (this.clearOnDependencyChangeValue && this.tomSelect && typeof this.tomSelect.clear === "function") {
+      this.tomSelect.clear(true)
+    }
+
+    this.reloadOpenDropdown()
+    this.dispatch("dependency-change", { detail: { params, previousParams, changed } })
+  }
+
+  currentDependencyParams() {
+    if (!this.hasDependsOnValue) return {}
+
+    return Object.entries(this.dependsOnValue).reduce((params, [key, selector]) => {
+      if (!this.hasPresentValue(key) || !this.hasPresentValue(selector)) return params
+
+      const element = document.querySelector(selector)
+      const value = this.dependencyElementValue(element)
+
+      if (Array.isArray(value)) {
+        const values = value.filter((item) => this.hasPresentValue(item))
+        if (values.length > 0) params[key] = values
+      } else if (this.hasPresentValue(value)) {
+        params[key] = value
+      }
+
+      return params
+    }, {})
+  }
+
+  dependencyElementValue(element) {
+    if (!element) return null
+
+    const tagName = element.tagName ? element.tagName.toLowerCase() : ""
+    if (tagName === "input" && element.type === "checkbox") return element.checked ? element.value : null
+    if (tagName === "select" && element.multiple) return Array.from(element.selectedOptions).map((option) => option.value)
+
+    return element.value
+  }
+
+  changedDependencyParams(previousParams, params) {
+    const keys = Array.from(new Set([...Object.keys(previousParams), ...Object.keys(params)]))
+
+    return keys.reduce((changed, key) => {
+      if (JSON.stringify(previousParams[key]) !== JSON.stringify(params[key])) {
+        changed[key] = { previous: previousParams[key], current: params[key] }
+      }
+
+      return changed
+    }, {})
+  }
+
+  remoteSearchParams() {
+    return { ...this.queryParamsValue, ...(this.dependencyParams || {}) }
+  }
+
+  clearRemoteOptions() {
+    if (!this.tomSelect || typeof this.tomSelect.clearOptions !== "function") return
+
+    this.tomSelect.clearOptions()
+  }
+
+  reloadOpenDropdown() {
+    if (!this.hasUrlValue || !this.tomSelect || !this.tomSelect.isOpen || typeof this.tomSelect.load !== "function") return
+
+    this.tomSelect.load(this.tomSelect.lastQuery || "")
   }
 
   syncLookupSelection(value) {
@@ -281,7 +391,7 @@ export default class extends Controller {
   loadOptions(query, callback) {
     this.clearErrorSurface()
     const url = new URL(this.urlValue, window.location.origin)
-    this.appendParams(url, this.queryParamsValue)
+    this.appendParams(url, this.remoteSearchParams())
     url.searchParams.set(this.queryParamValue, query)
 
     const { signal, token } = this.beginRequest("load")

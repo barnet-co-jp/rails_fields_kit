@@ -430,7 +430,7 @@
         <h1 id="page-title">rfk_select Migration Visual Reference</h1>
         <p class="lede">
           A focused static reference for reviewing the ordinary Rails collection_select to rfk_select migration route.
-          Use it to compare label, hint, blank option, selected value, clear affordance, and validation readability without changing helper behavior.
+          Use it to compare label, hint, blank option, selected value, clear affordance when <code>allow_clear: true</code> or app-wide <code>default_allow_clear</code> enables it, and validation readability without changing helper behavior.
         </p>
         <nav class="hero-links" aria-label="Related documentation">
           <a href="select_migration.md">Select migration guide</a>
@@ -443,7 +443,7 @@
         <h2 id="review-checklist-title">Review focus</h2>
         <ul>
           <li>Compare the ordinary collection_select before state with the endpoint-free rfk_select after state.</li>
-          <li>Check label, hint, include_blank / placeholder, selected value, clear affordance, and validation copy at desktop and narrow widths.</li>
+          <li>Check label, hint, include_blank / placeholder, selected value, clear affordance when <code>allow_clear: true</code> or app-wide <code>default_allow_clear</code> enables it, and validation copy at desktop and narrow widths.</li>
           <li>Keep remote search, selected preload, create-on-the-fly, authorization, query execution, sample app evidence, and production CSS out of scope.</li>
         </ul>
       </section>
@@ -455,7 +455,7 @@
             <h2>Collection-backed first field keeps the same form meaning</h2>
             <p>The visual comparison focuses on the rendered review surface, not on submitted parameter or validation behavior changes.</p>
           </div>
-          <div class="comparison-grid" aria-hidden="true">
+          <div class="comparison-grid">
             <div class="pane">
               <h3>Before: ordinary Rails collection_select</h3>
               <div class="panel">
@@ -498,7 +498,7 @@
                   <p class="helper-text">Name: order[product_id]</p>
                 </div>
               </div>
-              <p class="card-footer">The after state lets reviewers inspect wrapper density, clear affordance, and selected-value readability without implying remote search.</p>
+              <p class="card-footer">The after state lets reviewers inspect wrapper density, clear affordance when <code>allow_clear: true</code> or app-wide <code>default_allow_clear</code> enables it, and selected-value readability without implying remote search.</p>
             </div>
           </div>
         </article>
@@ -509,7 +509,7 @@
             <h2>include_blank stays a first-choice prompt</h2>
             <p>Use this lane to review blank or placeholder copy after migration without changing validation semantics.</p>
           </div>
-          <div class="panel" aria-hidden="true">
+          <div class="panel">
             <div class="field">
               <div class="field-label">
                 <span>Customer segment</span>
@@ -535,7 +535,7 @@
             <h2>Selected state wraps before it crowds labels or hints</h2>
             <p>Long collection labels should remain readable in the selected token and dropdown option.</p>
           </div>
-          <div class="panel" aria-hidden="true">
+          <div class="panel">
             <div class="field">
               <div class="field-label">
                 <span>Preferred product for manual review</span>
@@ -550,7 +550,7 @@
               <div class="dropdown">
                 <div class="option is-active">
                   <strong>Northwind Regional Supplies With A Long Localized Label</strong>
-                  <span>Label wraps inside the field surface before colliding with the clear affordance.</span>
+                  <span>Label wraps inside the field surface before colliding with the clear affordance when <code>allow_clear: true</code> or app-wide <code>default_allow_clear</code> enables it.</span>
                 </div>
               </div>
             </div>
@@ -564,7 +564,7 @@
             <h2>Error copy remains tied to the migrated field</h2>
             <p>Validation rerender should keep the label, hint, selected value, and error message readable together.</p>
           </div>
-          <div class="panel" aria-hidden="true">
+          <div class="panel">
             <div class="field">
               <div class="field-label">
                 <span>Product</span>
@@ -588,7 +588,7 @@
             <h2>Do not mix migration review with remote workflows</h2>
             <p>The migration lane is for collection-backed helpers and should not imply remote search or selected preload behavior.</p>
           </div>
-          <div class="panel" aria-hidden="true">
+          <div class="panel">
             <div class="message warning">
               <strong>Static-only boundary</strong>
               <span>Remote combobox, selected preload restore/failure, create-on-the-fly, authorization, query execution, sample app evidence, screenshot approval CI, and production CSS remain separate review tracks.</span>

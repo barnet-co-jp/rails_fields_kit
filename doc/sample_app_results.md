@@ -13,6 +13,7 @@ If the route map is too broad for a narrow PR, use `doc/sample_app_results_route
 | Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. | Feature-specific helper, visual, remote, token, or table lanes unless the release candidate explicitly includes them. |
 | JavaScript setup and package-root helper evidence | Setup doctor checks, JavaScript setup checks, package-root helper lanes checked, event checks, Turbo reconnect checks | The release touches setup visibility, package-root exports, read-only rendered-field helper evidence, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. | Native wrapper behavior, visual reference rendering, endpoint execution, or table metadata unless those lanes also changed. |
 | Tom Select plugin override boundary | Tom Select plugin override checks | The release or PR touches `config.default_plugins`, field-level `plugins:`, or the `remove_button` helper default for `rfk_tags` / `rfk_token_search`. | Tom Select package install, plugin-specific UI behavior, production CSS approval, `allow_clear` visual review, or package-root helper evidence unless those lanes also changed. |
+| Default allow clear policy | Default allow clear checks | The release or PR touches `config.default_allow_clear` or field-level `allow_clear:` precedence. | Raw `default_plugins` / `plugins:` replacement, visual approval, event payloads, selection mutation, or Tom Select lifecycle unless those lanes also changed. |
 | Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, password field native wrapper checks, native wrapper customization checks | Native helper wrapper, password helper boundary, class/styling boundary, hint/error, affix, accessibility wiring, or browser semantics evidence changed. | Tom Select remote lifecycle, package-root helper import checks, credential policy, or table persistence. |
 | README first field quickstart evidence | `rfk_select` representative collection-backed single-value lane checks, Visual reference render checks | The README first field or quickstart sample needs endpoint-free, server-rendered collection evidence without mixing in setup/import, remote search, selected preload, create-on-the-fly, or token metadata lanes. | Setup/import verification, remote search, selected preload, create-on-the-fly, token metadata, or release-wide readiness. |
 | Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. | Runtime helper behavior, production CSS approval, sample-app field behavior, or CI success as visual approval. |
@@ -74,9 +75,14 @@ rails generate rails_fields_kit:install
 
 Result:
 
-- [ ] `config/initializers/rails_fields_kit.rb` generated
-- [ ] `doc/rails_fields_kit_setup.md` generated
-- [ ] generated setup notes match current public API and setup walkthrough
+- Setup note route checked:
+  - [ ] default generated note
+  - [ ] `--skip-setup-notes`
+  - [ ] host-app-owned setup notes
+- [ ] `config/initializers/rails_fields_kit.rb` generated for the selected route
+- [ ] default route generated `doc/rails_fields_kit_setup.md` and the note matched the current public API and `doc/setup.md` walkthrough
+- [ ] `--skip-setup-notes` route intentionally omitted `doc/rails_fields_kit_setup.md` and directed the reviewer to maintained `doc/setup.md`
+- [ ] host-app-owned setup note location was recorded when that route was used
 
 Notes:
 
@@ -92,6 +98,9 @@ Result:
 
 - [ ] setup doctor ran after generator setup without changing files
 - [ ] initializer visibility was recorded
+- [ ] generated setup note evidence was recorded as `[OK]` when `doc/rails_fields_kit_setup.md` existed, or `[MANUAL]` when `--skip-setup-notes` / host-app-owned notes were the selected route
+- [ ] `[OK] Generated setup note` was treated as path visibility only, not approval of app-specific note content or setup quality
+- [ ] `[MANUAL] Generated setup note` was not treated as `[MISSING]`, a hard failure, an auto-fix request, or a request for setup doctor to create or inspect the note
 - [ ] importmap pin visibility was recorded when `config/importmap.rb` was present, or the non-importmap/manual status was recorded without treating bundler apps as failures
 - [ ] representative Stimulus registration evidence was recorded as either `[OK]` advisory source visibility or `[MANUAL]` host-app follow-up when registration evidence was in scope
 - [ ] `[OK] Stimulus registration` was not treated as proof of the host app's final Stimulus boot policy or every possible controller registry
@@ -142,6 +151,24 @@ In the `Result` column, use `PASS` when the scoped helper lane was checked succe
 | Helper | Source-of-truth reference | Representative field or selector | Result | Evidence notes |
 | --- | --- | --- | --- | --- |
 |  |  |  |  |  |
+
+## Default allow clear checks
+
+Use this section only when the release or PR changes the app-wide semantic clear default or its field-level precedence. Keep raw plugin replacement evidence in `Tom Select plugin override checks` and visual review in the visual evidence lane.
+
+- Representative helper / fields:
+- Branch or commit:
+- Evidence location:
+- Result: `PASS` / `FAIL` / `SOURCE REVIEW ONLY` / `DEFERRED`
+
+- [ ] `config.default_allow_clear = true` added `clear_button` when the representative field omitted `allow_clear:`
+- [ ] a comparable `allow_clear: false` field suppressed only Rails Fields Kit's semantic auto-add
+- [ ] an explicit `plugins: ["clear_button"]` remained explicit plugin configuration rather than being removed by `allow_clear: false`
+- [ ] the representative single-value clear returned to Rails-owned `include_blank:` or `prompt:` wording
+- [ ] `clear_button` was recorded as whole-field clear and `remove_button` as per-item removal
+- [ ] evidence notes kept plugin assets, styling, empty-state wording, selection mutation, and Tom Select lifecycle behavior with the host app or Tom Select
+
+Notes:
 
 ## Tom Select plugin override checks
 
@@ -436,9 +463,9 @@ Notes:
 
 Use this section when a release or narrow PR needs evidence for the `rfk_token_search` helper entry itself. Keep it separate from suggestion metadata and table metadata: this lane records that a representative token-search field rendered and submitted token text through the host app route, not that Rails Fields Kit parsed or executed the search.
 
-- Representative helper: `rfk_token_search`
-- Representative field or route:
-- Evidence location:
+- Representative helper: `rfk_token_search(:keyword, url: "/search_suggestions.json", placeholder: "status:open keyword", max_items: 20, load_throttle: 250)`
+- Representative field or route: rendered field name `dummy_model[keyword]`; submitted token text remains the value of that host form parameter
+- Evidence location: `spec/rails_fields_kit/form_builder_spec.rb` (`renders a token search text input`)
 
 - [ ] the representative `rfk_token_search` field rendered in the expected page or source-reviewed helper call
 - [ ] submitted token text or the observed query param shape was recorded for the host app route under review
@@ -447,6 +474,16 @@ Use this section when a release or narrow PR needs evidence for the `rfk_token_s
 - [ ] `SOURCE REVIEW ONLY` or `DEFERRED` was used when a browser/sample-app run was not actually performed
 
 Notes:
+
+### Focused result: `rfk_token_search` entry field split from #3
+
+| Representative lane | Source reviewed | Result | Evidence notes |
+| --- | --- | --- | --- |
+| Token-search entry field | `rfk_token_search(:keyword, url: "/search_suggestions.json", placeholder: "status:open keyword", max_items: 20, load_throttle: 250)` | `SOURCE REVIEW ONLY` | The helper contract renders a token-search text input named `dummy_model[keyword]`; the host form submits the token text through that parameter. The suggestion URL configures option loading and is not the form submission route. No browser or host sample app was run in this environment. |
+
+Run `bundle exec rspec spec/rails_fields_kit/form_builder_spec.rb` before promoting the helper contract to automated `PASS`, and record the exact branch / commit and workflow URL in the scoped PR comment. No inconsistency was found during source review.
+
+Suggestion payload structure belongs in the metadata lane below; Ransack suggestion metadata and table metadata remain separate evidence lanes. Token parsing, `params[:q]` construction, query execution, authorization, Ransack relation construction, saved-search resolution or persistence, table persistence, and user-visible results remain host-app responsibilities.
 
 ## Token suggestion and Ransack suggestion metadata checks
 
@@ -490,6 +527,7 @@ Use this section when table metadata is part of the release surface, or when `do
   - [ ] Ransack token filter metadata
   - [ ] native field metadata
   - [ ] range field metadata
+  - [ ] radio button filter metadata
   - [ ] cell editors
   - [ ] custom helper mapping
 - Evidence location:
@@ -501,12 +539,34 @@ Use this section when table metadata is part of the release surface, or when `do
 - [ ] native field metadata such as `search_field`, `money_field`, or `text_area` rendered through the documented helper path
 - [ ] range field metadata used `TableFilterInput.range_field` or `TableCellInput.range_field` and kept `min`, `max`, and `step` as ordinary native input options
 - [ ] range field table metadata evidence stayed separate from native `rfk_range_field` wrapper evidence unless that wrapper lane was also in scope
+- [ ] radio button filter metadata kept required `tag_value:` in the call spec and passed it as the positional radio value when `TableRenderer.render_filter` dispatched to `rfk_radio_button`
+- [ ] missing radio filter `tag_value:` produced the documented `ArgumentError` before helper dispatch
+- [ ] radio button filter metadata stayed separate from the `TableCellInput.radio_button` cell-editor lane and remained renderable control metadata rather than query or grouping behavior
 - [ ] direct `TableRenderer` call-spec usage still matches the documented helper / method / options shape when used
 - [ ] a representative `TableRenderer.register_field_helper` mapping rendered through the documented call-spec path
 - [ ] `TableRenderer.reset_field_helpers!` restored the default mapping after the representative custom helper check
 - [ ] table metadata remained rendering assistance only; representative query execution or persistence stayed in the host app / table integration
 
 Notes:
+
+### Focused result: table metadata rendering split from #3
+
+This focused review records only two representative metadata rendering lanes. It does not record token-search helper evidence, Ransack execution, or a full sample-app pass.
+
+| Representative lane | Source reviewed | Result | Evidence notes |
+| --- | --- | --- | --- |
+| Filter metadata | `TableFilterInput.date_field(:starts_on, min: "2026-01-01")` through `rfk_table_filters` / `rfk_date_field` | `SOURCE REVIEW ONLY` | Factory, renderer mapping, and direct helper path were reviewed. No browser or host sample app was run in this environment. |
+| Cell editor metadata | `TableCellInput.enum_select(:status)` through `rfk_table_cell_editors` / `rfk_enum_select` | `SOURCE REVIEW ONLY` | Metadata order, renderer mapping, and safe-buffer direct helper specs were reviewed. No browser or host sample app was run in this environment. |
+
+Run `bundle exec rspec spec/rails_fields_kit/table_metadata_spec.rb spec/rails_fields_kit/table_renderer_spec.rb spec/rails_fields_kit/form_builder_table_metadata_safe_buffer_spec.rb` before promoting either row to automated `PASS`, and record the exact branch / commit and workflow URL in the scoped PR comment. No inconsistency was found during source review. Table persistence, query execution, Ransack relation construction, authorization, sorting, pagination, visual approval, and final table layout remain host-app or table-integration responsibilities. The `rfk_token_search` entry-field lane remains separate.
+
+### Focused result: radio button filter metadata
+
+| Representative lane | Source reviewed | Result | Evidence notes |
+| --- | --- | --- | --- |
+| Radio button filter metadata | `TableFilterInput.radio_button(:status, tag_value: "published", label: "Published")` through `TableRenderer.filter_call` / `render_filter` / `rfk_radio_button` | `SOURCE REVIEW ONLY` | Factory, call-spec mapping, required `tag_value:`, positional renderer dispatch, and focused specs were source-reviewed. No browser or host sample app was run in this environment. `TableCellInput.radio_button` remains the separate #2383 cell-editor evidence lane. |
+
+Run `bundle exec rspec spec/rails_fields_kit/table_radio_button_metadata_spec.rb spec/rails_fields_kit/table_renderer_radio_button_filter_spec.rb` before promoting this result to automated `PASS`, and record the exact branch / commit and workflow URL in the scoped PR comment. No inconsistency was found during source review. Query execution, params construction, same-name grouping, `fieldset` / `legend`, collection radio groups, table persistence, production styling, and visual approval remain host-app, table-integration, or separate evidence responsibilities.
 
 ## Turbo reconnect checks
 

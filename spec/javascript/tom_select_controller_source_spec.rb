@@ -44,8 +44,9 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include("Array.isArray(json) || (json && Array.isArray(json.options)) || (json && Array.isArray(json.results))")
   end
 
-  it "appends fixed query params before adding the remote search query" do
-    expect(source).to include('this.appendParams(url, this.queryParamsValue)')
+  it "merges fixed and dependency query params before adding the remote search query" do
+    expect(source).to include('this.appendParams(url, this.remoteSearchParams())')
+    expect(source).to include('return { ...this.queryParamsValue, ...(this.dependencyParams || {}) }')
     expect(source).to include('url.searchParams.set(this.queryParamValue, query)')
   end
 
@@ -55,6 +56,20 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include("value.forEach((item) => url.searchParams.append(key, item))")
     expect(source).to include("} else if (value !== null && value !== undefined) {")
     expect(source).to include("url.searchParams.set(key, value)")
+  end
+
+  it "binds dependency fields without duplicate reconnect listeners" do
+    expect(source).to include("bindDependencyEvents() {")
+    expect(source).to include("this.unbindDependencyEvents()")
+    expect(source).to include('element.addEventListener(eventName, handler)')
+    expect(source).to include('element.removeEventListener(eventName, handler)')
+  end
+
+  it "dispatches dependency changes after aborting stale remote loads" do
+    expect(source).to include('this.abortRequest("load")')
+    expect(source).to include("this.clearRemoteOptions()")
+    expect(source).to include("this.reloadOpenDropdown()")
+    expect(source).to include('this.dispatch("dependency-change", { detail: { params, previousParams, changed } })')
   end
 
   it "dispatches selected preload success with requested values and resolved options" do

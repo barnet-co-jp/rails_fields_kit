@@ -67,16 +67,21 @@ yarn add tom-select
 
 ## Install Rails Fields Kit
 
+Choose and record one setup-note route:
+
 ```bash
+# Default generated note
 rails generate rails_fields_kit:install
+
+# Maintained guide or host-app-owned notes
+rails generate rails_fields_kit:install --skip-setup-notes
 ```
 
-Confirm these files are created:
+For every route, confirm `config/initializers/rails_fields_kit.rb` is created.
 
-- `config/initializers/rails_fields_kit.rb`
-- `doc/rails_fields_kit_setup.md`
+For the default route, confirm `doc/rails_fields_kit_setup.md` is created and still matches the maintained walkthrough in `doc/setup.md` and the documented JavaScript registration flow.
 
-Confirm the generated setup notes still match the maintained walkthrough in `doc/setup.md` and the documented JavaScript registration flow.
+For `--skip-setup-notes`, confirm the generated note is intentionally absent and the generator directs the reviewer to maintained `doc/setup.md`. If the host app keeps setup notes elsewhere, record that location. Neither route is a generator failure.
 
 ## Verify setup doctor JSON evidence
 
@@ -92,8 +97,11 @@ Verify:
 
 - the evidence names the branch or commit checked and the Ruby API call used
 - `summary["missing"]` was recorded as the representative required setup signal
+- generated setup note evidence matched the selected generator route: `[OK]` when `doc/rails_fields_kit_setup.md` existed, or `[MANUAL]` for `--skip-setup-notes` / host-app-owned notes
+- `[OK] Generated setup note` was treated as path visibility only, not approval of note content or setup quality
+- `[MANUAL] Generated setup note` remained host-app follow-up rather than `[MISSING]`, a hard failure, auto-fix behavior, or a request for setup doctor to create or inspect the note
 - manual advisory checks were reviewed as host-app follow-up items rather than automatic Rails Fields Kit failures
-- evidence notes link back to `setup_doctor_machine_readable.md` instead of copying the full payload schema
+- evidence notes link back to `setup_doctor_machine_readable.md` for the payload contract and to `setup_doctor_output_review.md` only for representative output readability, instead of copying either artifact as new runtime wording
 - CLI `--json`, auto-fix behavior, formal schema publication, SARIF / JUnit output, and universal host-app CI pass/fail policy stayed out of scope
 
 ## Register JavaScript
@@ -157,6 +165,20 @@ Verify:
 - hint / error ids still feed the shared accessibility wiring when `accessibility:` remains enabled
 - `accessibility: false` remains an explicit opt-out from automatic aria wiring only, not from the wrapper customization lane
 - repo-wide class defaults from the initializer still provide the shared baseline; field-level `*_html` options only layer additional attributes for that field
+
+## Verify `default_allow_clear` representative lane
+
+Use this lane only when the release or PR changes the app-wide clear policy. Configure `config.default_allow_clear = true`, then use one representative collection-backed `rfk_select` that omits `allow_clear:` and one comparable field that passes `allow_clear: false`.
+
+Verify:
+
+- the field that omits `allow_clear:` renders `clear_button` and can return to the Rails-owned `include_blank:` or `prompt:` state
+- the comparable `allow_clear: false` field suppresses only Rails Fields Kit's semantic auto-add
+- an explicit `plugins: ["clear_button"]` remains explicit host-app plugin configuration and is not removed by `allow_clear: false`
+- `clear_button` remains a whole-field clear affordance, while `remove_button` remains per-item removal for multi-item helpers
+- plugin assets, styling, empty-state wording, selection mutation, and Tom Select lifecycle behavior remain host-app or Tom Select responsibilities
+
+Record release-candidate evidence in `doc/sample_app_results.md`. For a narrow PR, record the representative fields, branch or commit, result, and responsibility boundary in the PR comment.
 
 ## Verify `collection_select` migration path
 
@@ -332,6 +354,7 @@ Create a minimal table definition that exercises:
 
 - `RailsFieldsKit::TableFilterInput.combobox` or `RailsFieldsKit::TableFilterInput.token_search`
 - `RailsFieldsKit::TableFilterInput.check_box` or `RailsFieldsKit::TableCellInput.check_box` when checkbox table metadata is in release or PR scope
+- `RailsFieldsKit::TableFilterInput.radio_button(:status, tag_value: "published", label: "Published")` when radio filter metadata is in release or PR scope
 - `RailsFieldsKit::TableCellInput.file_field` when file field table metadata is in release or PR scope
 - `RailsFieldsKit::TableCellInput.enum_select` or another current editor helper
 - `rfk_table_filters`
@@ -344,6 +367,9 @@ Verify:
 - native metadata such as `TableFilterInput.search_field`, `money_field`, `text_area`, or `check_box` also renders through the documented helper path when the integration uses common field helpers
 - checkbox table metadata, when in scope, keeps `checked_value:` / `unchecked_value:` as Rails checkbox helper contract evidence and stays separate from the native `rfk_check_box` wrapper lane
 - checkbox table metadata evidence does not imply boolean query semantics, tri-state filtering, bulk edit persistence, table preference persistence, or authorization policy ownership by Rails Fields Kit
+- radio button filter metadata, when in scope, keeps required `tag_value:` in the call-spec options and passes it as the positional radio value when `TableRenderer.render_filter` dispatches to `rfk_radio_button`
+- radio button filter metadata without `tag_value:` raises the documented `ArgumentError` before helper dispatch
+- radio button filter evidence stays separate from the `TableCellInput.radio_button` cell-editor lane and does not imply query semantics, params construction, same-name grouping, `fieldset` / `legend`, collection radio groups, table persistence, or production styling ownership by Rails Fields Kit
 - file field table metadata, when in scope, keeps `accept:`, `multiple:`, and `direct_upload:` as Rails file helper option pass-through evidence and stays in the cell-editor metadata lane
 - file field table metadata evidence does not imply `TableFilterInput.file_field`, multipart form policy, Active Storage direct upload JavaScript, preview UI, upload progress UI, table persistence, query execution, file validation policy, storage configuration, virus scanning, authorization, or production CSS ownership by Rails Fields Kit
 - any direct `TableRenderer.filter_call` or `TableRenderer.cell_editor_call` usage in your integration still matches the documented call-spec shape

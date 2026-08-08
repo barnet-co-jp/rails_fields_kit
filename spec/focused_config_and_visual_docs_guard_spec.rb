@@ -14,6 +14,9 @@ RSpec.describe "focused configuration and visual docs inventory guard" do
   let(:controller_helpers) { read_doc("doc/controller_helpers.md") }
   let(:visual_references) { read_doc("doc/visual_references.md") }
   let(:release_guide) { read_doc("doc/release.md") }
+  let(:final_release_checklist) { read_doc("doc/final_release_checklist.md") }
+  let(:sample_app_checklist) { read_doc("doc/sample_app_checklist.md") }
+  let(:sample_app_results) { read_doc("doc/sample_app_results.md") }
   let(:default_allow_clear) { read_doc("doc/default_allow_clear.md") }
   let(:tom_select_source_fallback_review) { read_doc("doc/tom_select_source_fallback_review.html") }
   let(:tom_select_error_surface_contract_visual_reference) { read_doc("doc/tom_select_error_surface_contract_visual_reference.html") }
@@ -50,6 +53,32 @@ RSpec.describe "focused configuration and visual docs inventory guard" do
       "`allow_clear: false` only suppresses Rails Fields Kit's semantic auto-add",
       "`default_plugins` remains a raw Tom Select plugin pass-through",
       "does not add production CSS, theme presets, Tom Select plugin assets, clear-button wording, empty-state copy, or JavaScript lifecycle behavior"
+    )
+
+    expected_boundary = "plugin assets, styling, empty-state wording, selection mutation, and Tom Select lifecycle"
+
+    expect(sample_app_checklist).to include(
+      "## Verify `default_allow_clear` representative lane",
+      "`config.default_allow_clear = true`",
+      "one comparable field that passes `allow_clear: false`",
+      "`clear_button` remains a whole-field clear affordance",
+      expected_boundary
+    )
+    expect(sample_app_results).to include(
+      "## Default allow clear checks",
+      "`config.default_allow_clear = true` added `clear_button`",
+      "a comparable `allow_clear: false` field",
+      "`remove_button` as per-item removal",
+      expected_boundary
+    )
+    expect(release_guide).to include(
+      "`doc/default_allow_clear.md`",
+      "focused default-allow-clear lane"
+    )
+    expect(final_release_checklist).to include(
+      "Review `doc/default_allow_clear.md`",
+      "one representative `config.default_allow_clear = true` field",
+      "plugin assets, styling, empty-state wording, selection mutation, or Tom Select lifecycle"
     )
   end
 

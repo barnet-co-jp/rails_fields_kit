@@ -42,7 +42,12 @@ RSpec.describe "table metadata focused docs inventory" do
     expect(table_adapters).to include(
       "[`table_range_field_metadata.md`](table_range_field_metadata.md)",
       "[`table_check_box_metadata.md`](table_check_box_metadata.md)",
+      "[`table_radio_button_metadata.md`](table_radio_button_metadata.md)",
       "[`table_file_field_metadata.md`](table_file_field_metadata.md)",
+      "`TableFilterInput.radio_button`",
+      "`TableCellInput.radio_button`",
+      "required `tag_value:`",
+      "same-name grouping",
       "range-pair query semantics",
       "tri-state filtering",
       "upload execution",
@@ -52,7 +57,7 @@ RSpec.describe "table metadata focused docs inventory" do
     expect(public_api).to include(
       "use [`table_range_field_metadata.md`](table_range_field_metadata.md) for range metadata",
       "[`table_check_box_metadata.md`](table_check_box_metadata.md) for checkbox metadata",
-      "[`table_radio_button_metadata.md`](table_radio_button_metadata.md) for radio button cell-editor metadata",
+      "[`table_radio_button_metadata.md`](table_radio_button_metadata.md) for radio button filter and cell-editor metadata",
       "[`table_file_field_metadata.md`](table_file_field_metadata.md) for file cell-editor metadata",
       "These guides do not add range-pair query semantics, boolean query policy, radio group generation, file upload execution, table persistence, or production styling"
     )

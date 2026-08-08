@@ -591,6 +591,96 @@
 
         <article class="card">
           <div class="card-header">
+            <span class="tag native">Date / Time Metadata</span>
+            <h2>Native date, time, datetime, and color controls</h2>
+            <p>Represents date/time/color table metadata when the table integration chooses browser-native controls and ordinary option pass-through.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="strip">
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Start date filter</span>
+                  <span class="metadata-chip">TableFilterInput.date_field</span>
+                </div>
+                <div class="control native">
+                  <span class="helper">min: 2026-07-21 / required</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Publish time editor</span>
+                  <span class="metadata-chip">TableCellInput.datetime_local_field</span>
+                </div>
+                <div class="control native">
+                  <span class="selected">2026-07-21 09:30, step 60</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Accent color editor</span>
+                  <span class="metadata-chip">TableCellInput.color_field</span>
+                </div>
+                <div class="control native">
+                  <span class="selected">#246b60 selected by browser color control</span>
+                </div>
+              </div>
+            </div>
+            <div class="toolbar">
+              <span class="pill">min / max / step pass through</span>
+              <span class="pill">Browser-native picker remains host/browser owned</span>
+            </div>
+            <div class="stack-note">Use this lane to review wrapper labels, hints, metadata chips, and ordinary native options only. Timezone conversion, locale formatting, masking, custom picker UI, browser validation-message policy, query execution, and table persistence stay with the host app or table integration.</div>
+          </div>
+          <p class="card-footer">This keeps date, time, datetime-local, and color table metadata visible without implying Rails Fields Kit owns scheduling policy, color palette behavior, or native picker UX.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <span class="tag native">File Metadata</span>
+            <h2>File input cell editor boundary</h2>
+            <p>Represents `TableCellInput.file_field` as a cell-editor-only table metadata lane, not a filter or upload workflow.</p>
+          </div>
+          <div class="panel" aria-hidden="true">
+            <div class="strip">
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Attachment editor</span>
+                  <span class="metadata-chip">TableCellInput.file_field</span>
+                </div>
+                <div class="control native">
+                  <span class="placeholder">Choose invoice PDF or PNG receipt</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Accepted files</span>
+                  <span class="metadata-chip">accept / multiple / direct_upload</span>
+                </div>
+                <div class="control native">
+                  <span class="helper">accept: image/png, application/pdf / multiple: true</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="label-line">
+                  <span>Filter boundary</span>
+                  <span class="metadata-chip">cell editor only</span>
+                </div>
+                <div class="control native">
+                  <span class="helper">No TableFilterInput.file_field factory is implied by this review lane.</span>
+                </div>
+              </div>
+            </div>
+            <div class="toolbar">
+              <span class="pill editor">Maps to rfk_file_field</span>
+              <span class="pill editor">Upload execution stays outside RFK</span>
+            </div>
+            <div class="stack-note">Use this lane to review file metadata readability only. Multipart form setup, Active Storage direct upload JavaScript, preview UI, upload progress, file validation policy, storage configuration, virus scanning, authorization, table persistence, and query execution stay with the host app.</div>
+          </div>
+          <p class="card-footer">This gives reviewers a concrete file-field cell editor state while keeping file upload behavior and filter/query semantics outside Rails Fields Kit.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
             <span class="tag native">Checkbox Metadata</span>
             <h2>Checkbox filter and editor states</h2>
             <p>Represents checkbox table metadata after the table integration chooses the landed `rfk_check_box` helper mapping.</p>

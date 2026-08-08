@@ -9,6 +9,7 @@
         color-scheme: light;
         --page: #f7f8fa;
         --surface: #ffffff;
+        --surface-muted: #f2f5f7;
         --ink: #17212b;
         --muted: #5d6975;
         --line: #d6dbe1;
@@ -21,43 +22,338 @@
         --warning-soft: #fff3d8;
         --shadow: 0 1px 2px rgba(23, 33, 43, 0.06);
       }
+
       * { box-sizing: border-box; }
-      body { margin: 0; background: var(--page); color: var(--ink); font-family: "IBM Plex Sans", "Segoe UI", sans-serif; line-height: 1.5; }
-      main { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 44px 0 60px; }
-      .hero { display: grid; gap: 14px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
-      .eyebrow { color: var(--accent); font-size: 0.76rem; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 44px 0 60px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 14px;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .eyebrow {
+        color: var(--accent);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
       h1, h2, h3, p { margin: 0; }
-      h1 { max-width: 800px; font-size: 2.2rem; font-weight: 650; line-height: 1.08; }
-      h2 { font-size: 1.35rem; line-height: 1.2; }
-      h3 { font-size: 1.02rem; line-height: 1.25; }
-      .lede { max-width: 780px; color: var(--muted); font-size: 1rem; }
-      a { color: inherit; }
-      .hero-links, .quick-list, .task-links, .family-links { display: flex; flex-wrap: wrap; gap: 8px; }
-      .hero-links a, .quick-list a, .task-links a, .family-links a, .reference-link { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; max-width: 100%; padding: 8px 11px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); line-height: 1.25; text-align: center; text-decoration: none; overflow-wrap: anywhere; }
-      .hero-links a, .quick-list a { flex: 1 1 176px; }
-      .hero-links a:hover, .quick-list a:hover, .task-links a:hover, .family-links a:hover, .reference-link:hover { border-color: var(--accent); color: var(--accent); }
-      .summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 24px; }
-      .role-strip, .family-grid, .task-grid, .reference-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
-      .summary-item, .role-item, .family-card, .task-card, .reference-card, .workflow { min-width: 0; display: grid; gap: 12px; align-content: start; padding: 16px; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
-      .summary-item strong { font-size: 1.35rem; line-height: 1; overflow-wrap: anywhere; }
-      .role-item strong { font-size: 0.98rem; line-height: 1.25; overflow-wrap: anywhere; }
-      .summary-item span, .role-item span:last-child, .section-heading p, .family-card p, .family-card li, .task-card p, .task-card li, .reference-card p, .reference-card li, .workflow li, .scope-note { color: var(--muted); font-size: 0.92rem; overflow-wrap: anywhere; }
-      .section-heading { display: grid; gap: 6px; margin: 28px 0 14px; }
+
+      h1 {
+        max-width: 800px;
+        font-size: 2.2rem;
+        font-weight: 650;
+        line-height: 1.08;
+      }
+
+      h2 {
+        font-size: 1.35rem;
+        line-height: 1.2;
+      }
+
+      h3 {
+        font-size: 1.02rem;
+        line-height: 1.25;
+      }
+
+      .lede {
+        max-width: 780px;
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .hero-links,
+      .quick-list,
+      .task-links,
+      .family-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .hero-links a,
+      .quick-list a,
+      .task-links a,
+      .family-links a,
+      .reference-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        max-width: 100%;
+        padding: 8px 11px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface);
+        color: var(--ink);
+        line-height: 1.25;
+        text-align: center;
+        text-decoration: none;
+        overflow-wrap: anywhere;
+      }
+
+      .hero-links a,
+      .quick-list a {
+        flex: 1 1 176px;
+      }
+
+      .hero-links a:hover,
+      .quick-list a:hover,
+      .task-links a:hover,
+      .family-links a:hover,
+      .reference-link:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .role-strip {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .summary-item,
+      .role-item,
+      .family-card,
+      .task-card,
+      .reference-card,
+      .workflow {
+        min-width: 0;
+        display: grid;
+        gap: 12px;
+        align-content: start;
+        padding: 16px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .role-item {
+        gap: 8px;
+      }
+
+      .summary-item strong {
+        font-size: 1.35rem;
+        line-height: 1;
+        overflow-wrap: anywhere;
+      }
+
+      .role-item strong {
+        font-size: 0.98rem;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+      }
+
+      .summary-item span,
+      .role-item span:last-child,
+      .section-heading p,
+      .family-card p,
+      .family-card li,
+      .task-card p,
+      .task-card li,
+      .reference-card p,
+      .reference-card li,
+      .workflow li,
+      .scope-note {
+        color: var(--muted);
+        font-size: 0.92rem;
+        overflow-wrap: anywhere;
+      }
+
+      .section-heading {
+        display: grid;
+        gap: 6px;
+        margin: 28px 0 14px;
+      }
+
       .section-heading p { max-width: 760px; }
-      .tag-row { display: flex; flex-wrap: wrap; gap: 7px; }
-      .tag { display: inline-flex; align-items: center; max-width: 100%; min-height: 24px; padding: 3px 7px; border: 1px solid var(--line-strong); background: #f2f5f7; color: var(--ink); font-size: 0.72rem; font-weight: 700; letter-spacing: 0; line-height: 1.2; overflow-wrap: anywhere; }
-      .tag.primary { border-color: #9bcdbc; background: var(--accent-soft); color: var(--accent); }
-      .tag.info { border-color: #adc6e4; background: var(--info-soft); color: var(--info); }
-      .tag.warning { border-color: #d6b663; background: var(--warning-soft); color: var(--warning); }
-      .review-question, .route-cue { padding: 10px 12px; font-size: 0.92rem; overflow-wrap: anywhere; }
-      .review-question { border-left: 3px solid var(--accent); background: var(--accent-soft); color: #244d47; }
-      .route-cue { border-left: 3px solid var(--info); background: var(--info-soft); color: #21486f; }
-      ul, ol { margin: 0; padding-left: 20px; }
-      .reference-link { justify-self: start; text-align: left; }
-      .workflow ol { display: grid; gap: 8px; }
-      .scope-note { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--line); }
-      @media (max-width: 760px) { main { width: min(100% - 24px, 1120px); padding: 28px 0 44px; } h1 { font-size: 1.78rem; } h2 { font-size: 1.18rem; } .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } .family-grid, .task-grid, .reference-grid { grid-template-columns: 1fr; } }
-      @media (max-width: 480px) { main { width: min(100% - 20px, 1120px); } .summary { grid-template-columns: 1fr; } .summary-item, .role-item, .family-card, .task-card, .reference-card, .workflow { padding: 14px; } .hero-links a, .quick-list a, .task-links a, .family-links a, .reference-link { width: 100%; justify-content: flex-start; text-align: left; } }
+
+      .family-grid,
+      .task-grid,
+      .reference-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 14px;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        max-width: 100%;
+        min-height: 24px;
+        padding: 3px 7px;
+        border: 1px solid var(--line-strong);
+        background: var(--surface-muted);
+        color: var(--ink);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+        text-transform: none;
+      }
+
+      .tag.primary {
+        border-color: #9bcdbc;
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .tag.info {
+        border-color: #adc6e4;
+        background: var(--info-soft);
+        color: var(--info);
+      }
+
+      .tag.warning {
+        border-color: #d6b663;
+        background: var(--warning-soft);
+        color: var(--warning);
+      }
+
+      .task-card header,
+      .family-card header,
+      .reference-card header {
+        display: grid;
+        gap: 8px;
+      }
+
+      .task-card .task-links,
+      .family-card .family-links {
+        gap: 8px;
+      }
+
+      .task-card .task-links a,
+      .family-card .family-links a {
+        flex: 1 1 168px;
+        text-align: center;
+      }
+
+      .review-question,
+      .route-cue {
+        padding: 10px 12px;
+        font-size: 0.92rem;
+        overflow-wrap: anywhere;
+      }
+
+      .review-question {
+        border-left: 3px solid var(--accent);
+        background: var(--accent-soft);
+        color: #244d47;
+      }
+
+      .route-cue {
+        border-left: 3px solid var(--info);
+        background: var(--info-soft);
+        color: #21486f;
+      }
+
+      ul, ol {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .reference-link {
+        justify-self: start;
+        text-align: left;
+      }
+
+      .workflow ol {
+        display: grid;
+        gap: 8px;
+      }
+
+      .scope-note {
+        margin-top: 28px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+
+      @media (max-width: 760px) {
+        main {
+          width: min(100% - 24px, 1120px);
+          padding: 28px 0 44px;
+        }
+
+        h1 { font-size: 1.78rem; }
+        h2 { font-size: 1.18rem; }
+
+        .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+        .family-grid,
+        .task-grid,
+        .reference-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-links a,
+        .quick-list a,
+        .task-links a,
+        .family-links a,
+        .reference-link {
+          flex: 1 1 176px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        main { width: min(100% - 20px, 1120px); }
+        .summary { grid-template-columns: 1fr; }
+        .summary-item, .role-item, .family-card, .task-card, .reference-card, .workflow { padding: 14px; }
+
+        .hero-links a,
+        .quick-list a,
+        .task-links a,
+        .family-links a,
+        .reference-link {
+          width: 100%;
+          justify-content: flex-start;
+          text-align: left;
+        }
+
+        .task-card .task-links,
+        .family-card .family-links {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+
+        .task-card .task-links a,
+        .family-card .family-links a { min-height: 36px; }
+      }
     </style>
   </head>
   <body>
@@ -66,20 +362,582 @@
         <div class="eyebrow">Rails Fields Kit static docs artifact</div>
         <h1 id="page-title">Visual Reference Index</h1>
         <p class="lede">Start here when you need to choose a static HTML reference for release QA or design review. Each reference is documentation-only and keeps production helper markup, runtime behavior, search execution, authorization, and persistence out of scope.</p>
-        <nav class="hero-links" aria-label="Related documentation"><a href="visual_references.md">Reference map</a><a href="public_api.md#javascript-exports">Public API exports</a><a href="package_root_helper_release_evidence.md">Package helper evidence</a><a href="setup_doctor_output_review.md">Setup Doctor output</a><a href="final_release_checklist.md">Release checklist</a><a href="sample_app_results.md">Manual evidence log</a></nav>
+        <nav class="hero-links" aria-label="Related documentation">
+          <a href="visual_references.md">Reference map</a>
+          <a href="public_api.md#javascript-exports">Public API exports</a>
+          <a href="package_root_helper_release_evidence.md">Package helper evidence</a>
+          <a href="setup_doctor_output_review.md">Setup Doctor output</a>
+          <a href="final_release_checklist.md">Release checklist</a>
+          <a href="sample_app_results.md">Manual evidence log</a>
+        </nav>
       </section>
+
       <section class="summary" aria-label="Visual reference family summary">
-        <div class="summary-item"><strong>Map</strong><span>Use visual_references.md as the maintained artifact list.</span></div>
-        <div class="summary-item"><strong>Families</strong><span>Choose by helper family before opening a focused lane.</span></div>
-        <div class="summary-item"><strong>Narrow</strong><span>Links, tags, and task cards wrap without hiding the review route.</span></div>
-        <div class="summary-item"><strong>Main</strong><span>List only references that have landed on main.</span></div>
+        <div class="summary-item">
+          <strong>Map</strong>
+          <span>Use visual_references.md as the maintained artifact list.</span>
+        </div>
+        <div class="summary-item">
+          <strong>Families</strong>
+          <span>Choose by helper family before opening a focused lane.</span>
+        </div>
+        <div class="summary-item">
+          <strong>Narrow</strong>
+          <span>Links, tags, and task cards wrap without hiding the review route.</span>
+        </div>
+        <div class="summary-item">
+          <strong>Main</strong>
+          <span>List only references that have landed on main.</span>
+        </div>
       </section>
-      <section class="role-strip" aria-label="Reference role boundaries"><article class="role-item"><span class="tag primary">field UI</span><strong>Rendered helper lanes</strong><span>Use visual HTML artifacts for field chrome, copy, states, and narrow-width readability.</span></article><article class="role-item"><span class="tag info">diagnostics</span><strong>Evidence and setup lanes</strong><span>Use Setup Doctor and sample evidence docs for CLI diagnostics or release recording, not field layout approval.</span></article><article class="role-item"><span class="tag warning">contract</span><strong>Public API source</strong><span>Use public_api.md for landed exports; this index routes reviewers to the nearest current lane.</span></article></section>
-      <section aria-labelledby="quick-links-title"><div class="section-heading"><h2 id="quick-links-title">Pick by artifact</h2><p>Use the shortest matching lane first. If the review question is not listed here, check the Markdown reference map before treating an unmerged proposal as current public API.</p></div><div class="quick-list" aria-label="Direct visual reference links"><a href="tom_select_visual_reference.html">Tom Select states</a><a href="tom_select_migration_visual_reference.html">Select migration</a><a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a><a href="tom_select_disabled_option_visual_reference.html">Disabled options</a><a href="tom_select_request_failure_visual_reference.html">Request failures</a><a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a><a href="tom_select_error_surface_contract_visual_reference.html">Error surface contract</a><a href="tom_select_text_override_visual_reference.html">Text override copy</a><a href="native_field_visual_reference.html">Native helper narrow stress</a><a href="native_accessibility_contract_visual_reference.html">Native accessibility contract</a><a href="configuration_wrapper_class_visual_reference.html">Wrapper class narrow lane</a><a href="setup_doctor_output_review.md">Setup Doctor diagnostics</a><a href="table_metadata_visual_reference.html">Table metadata</a><a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a></div></section>
-      <section aria-labelledby="family-picker-title"><div class="section-heading"><h2 id="family-picker-title">Pick by helper family</h2><p>Use stable family groups when the reference set grows. They keep the first choice tied to the helper surface instead of a fragile artifact count.</p></div><div class="family-grid"><article class="family-card"><div class="tag-row"><span class="tag primary">Tom Select</span><span class="tag info">remote states</span></div><h3>Search-backed controls</h3><p>Start here for selects, migration states, comboboxes, autocomplete, tags, token search, request feedback, host-owned feedback lifecycle, and configured helper copy.</p><nav class="family-links" aria-label="Tom Select helper family references"><a href="tom_select_visual_reference.html">Core states</a><a href="tom_select_migration_visual_reference.html">Select migration</a><a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a><a href="tom_select_disabled_option_visual_reference.html">Disabled options</a><a href="tom_select_request_failure_visual_reference.html">Request feedback</a><a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a><a href="tom_select_error_surface_contract_visual_reference.html">Error surface contract</a><a href="tom_select_text_override_visual_reference.html">Copy overrides</a></nav></article><article class="family-card"><div class="tag-row"><span class="tag primary">native helpers</span><span class="tag warning">forms</span></div><h3>Native field wrappers</h3><p>Use this family for text-like inputs, labels, hints, affixes, validation copy, non-editable states, accessibility wiring, and class pass-through checks.</p><nav class="family-links" aria-label="Native helper family references"><a href="native_field_visual_reference.html">Native helper states</a><a href="native_accessibility_contract_visual_reference.html">Accessibility contract</a><a href="configuration_wrapper_class_visual_reference.html">Configured class narrow lane</a></nav></article><article class="family-card"><div class="tag-row"><span class="tag primary">metadata</span><span class="tag info">token search</span></div><h3>Table and token bridges</h3><p>Use these lanes when generated field metadata or saved-search suggestions stay inside their ownership boundary.</p><nav class="family-links" aria-label="Table and token bridge references"><a href="table_metadata_visual_reference.html">Table metadata</a><a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a></nav></article></div></section>
-      <section aria-labelledby="task-picker-title"><div class="section-heading"><h2 id="task-picker-title">Pick by reviewer task</h2><p>Start from the task that matches the PR or release question, then open the primary artifact first. Secondary links are there only when the review needs a neighboring lane.</p></div><div class="task-grid"><article class="task-card"><div class="tag-row"><span class="tag primary">release gate</span><span class="tag info">broad scan</span></div><h3>Release verification</h3><p>Use when a release or PR needs visual evidence that landed references still read well at desktop and narrow widths.</p><nav class="task-links" aria-label="Release verification references"><a href="tom_select_visual_reference.html">Primary: Tom Select states</a><a href="native_field_visual_reference.html">Native helper states</a><a href="package_root_helper_release_evidence.md">Package helper evidence</a><a href="setup_doctor_output_review.md">Setup Doctor output</a></nav></article><article class="task-card"><div class="tag-row"><span class="tag primary">design review</span><span class="tag warning">copy</span></div><h3>Design and copy review</h3><p>Use when the change is about labels, hints, helper chrome, copy overrides, class pass-through, or narrow wrapping.</p><nav class="task-links" aria-label="Design and copy review references"><a href="native_field_visual_reference.html">Primary: native stress</a><a href="configuration_wrapper_class_visual_reference.html">Wrapper class narrow lane</a><a href="tom_select_text_override_visual_reference.html">Text override copy</a></nav></article><article class="task-card"><div class="tag-row"><span class="tag primary">focused companion</span><span class="tag info">map evidence</span></div><h3>Companion artifact discovery</h3><p>Use when a focused companion exists, including select migration, but the one-screen index should stay limited to current primary routes.</p><nav class="task-links" aria-label="Companion artifact discovery references"><a href="visual_references.md#reference-map">Primary: reference map</a><a href="tom_select_migration_visual_reference.html">Select migration lane</a><a href="visual_references.md#how-to-use-this-family">Task guide</a></nav></article><article class="task-card"><div class="tag-row"><span class="tag primary">request failure</span><span class="tag info">feedback</span></div><h3>Request-failure feedback</h3><p>Use when a PR touches error_surface, load failure copy, selected-load failure, operation metadata, or host-owned feedback clearing cues.</p><nav class="task-links" aria-label="Request-failure feedback references"><a href="tom_select_request_failure_visual_reference.html">Primary: request failures</a><a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a><a href="tom_select_text_override_visual_reference.html">Text override copy</a></nav></article><article class="task-card"><div class="tag-row"><span class="tag primary">contract reader</span><span class="tag info">public API</span></div><h3>Contract reader review</h3><p class="route-cue"><strong>Route cue:</strong> choose the nearest current visual lane here, then keep helper names and return-shape details in public_api.md.</p><nav class="task-links" aria-label="Contract reader review references"><a href="public_api.md#javascript-exports">Primary: public API exports</a><a href="package_root_helper_release_evidence.md">Package helper evidence</a><a href="tom_select_visual_reference.html">Tom Select rendered lane</a><a href="native_accessibility_contract_visual_reference.html">Native wrapper lane</a><a href="tom_select_request_failure_visual_reference.html">Request feedback lane</a><a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lane</a></nav></article><article class="task-card"><div class="tag-row"><span class="tag primary">table metadata</span><span class="tag info">token search</span></div><h3>Table and token boundaries</h3><p>Use when metadata-driven filters, editors, or token suggestions stay inside their ownership boundary.</p><nav class="task-links" aria-label="Table and token boundary references"><a href="table_metadata_visual_reference.html">Primary: table metadata</a><a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a></nav></article></div></section>
-      <section aria-labelledby="reference-cards-title"><div class="section-heading"><h2 id="reference-cards-title">Review Lanes</h2><p>Each lane names the artifact, the primary thing to inspect, and the boundary that should stay outside Rails Fields Kit.</p></div><div class="reference-grid"><article class="reference-card"><div class="tag-row"><span class="tag primary">core helpers</span><span class="tag info">viewport scan</span></div><h3>Tom Select-backed states</h3><p>Searchable select, grouped select, combobox, autocomplete, tags, token search, preload, create, error, keyboard focus, active option, and selected item focus states.</p><p class="review-question"><strong>Question:</strong> do the core Tom Select-backed states remain readable across normal and narrow viewports?</p><a class="reference-link" href="tom_select_visual_reference.html">Open reference</a></article><article class="reference-card"><div class="tag-row"><span class="tag primary">migration</span><span class="tag info">focused companion</span></div><h3>Select migration</h3><p>Ordinary Rails collection_select before state beside endpoint-free rfk_select after state, including blank option, selected value, clear affordance, and validation rerender cues.</p><p class="review-question"><strong>Question:</strong> can reviewers compare before and after migration without treating remote search, selected preload, create-on-the-fly, authorization, query execution, sample app evidence, or production CSS as part of the lane?</p><a class="reference-link" href="tom_select_migration_visual_reference.html">Open reference</a></article><article class="reference-card"><div class="tag-row"><span class="tag primary">Turbo reconnect</span><span class="tag info">static lane</span></div><h3>Tom Select Turbo reconnect</h3><p>Focused static Turbo reconnect states for restored wrapper appearance and duplicate-wrapper caution.</p><a class="reference-link" href="tom_select_turbo_reconnect_visual_reference.html">Open reference</a></article><article class="reference-card"><div class="tag-row"><span class="tag primary">disabled option</span><span class="tag info">collection metadata</span></div><h3>Tom Select disabled options</h3><p>Focused collection-backed disabled option readability and option_html metadata pass-through boundaries.</p><a class="reference-link" href="tom_select_disabled_option_visual_reference.html">Open reference</a></article><article class="reference-card"><div class="tag-row"><span class="tag primary">request failure</span><span class="tag info">error surface</span></div><h3>Tom Select request failures</h3><p>Focused error_surface request-failure states, duplicate object/method id boundary, and operation/status metadata for Tom Select-backed helpers.</p><a class="reference-link" href="tom_select_request_failure_visual_reference.html">Open reference</a></article><article class="reference-card"><div class="tag-row"><span class="tag primary">host feedback</span><span class="tag info">clearing cues</span></div><h3>Tom Select host feedback lifecycle</h3><p>Host-owned inline feedback, detail.surface placement, and follow-up clearing cues after request-failure events.</p><a class="reference-link" href="tom_select_host_feedback_lifecycle_visual_reference.html">Open reference</a></article><article class="reference-card"><div class="tag-row"><span class="tag primary">request contract</span><span class="tag info">live region</span></div><h3>Tom Select error surface contract</h3><p>Focused error_surface live-region contract states and wrapper customization boundaries.</p><a class="reference-link" href="tom_select_error_surface_contract_visual_reference.html">Open reference</a></article><article class="reference-card"><div class="tag-row"><span class="tag warning">copy</span><span class="tag info">configuration</span></div><h3>Tom Select text overrides</h3><p>Configured no-results, loading, and create copy states for Tom Select-backed helpers.</p><a class="reference-link" href="tom_select_text_override_visual_reference.html">Open reference</a></article><article class="reference-card"><div class="tag-row"><span class="tag primary">native helpers</span><span class="tag warning">narrow stress</span></div><h3>Native helper states</h3><p>Wrapper, label, hint, prefix, suffix, required marker, readonly, disabled, validation, accessibility wiring, and narrow-width stress examples.</p><a class="reference-link" href="native_field_visual_reference.html">Open reference</a></article><article class="reference-card"><div class="tag-row"><span class="tag primary">native contract</span><span class="tag info">accessibility</span></div><h3>Native accessibility contract</h3><p>Focused native helper accessibility contract reader lanes for wrapper, label, hint, error, and aria-describedby wiring.</p><a class="reference-link" href="native_accessibility_contract_visual_reference.html">Open reference</a></article><article class="reference-card"><div class="tag-row"><span class="tag primary">native helpers</span><span class="tag info">configuration</span></div><h3>Configuration wrapper classes</h3><p>Initializer-driven wrapper, label, hint, error, control, prefix, and suffix class examples.</p><a class="reference-link" href="configuration_wrapper_class_visual_reference.html">Open reference</a></article><article class="reference-card"><div class="tag-row"><span class="tag primary">table metadata</span><span class="tag info">adapter boundary</span></div><h3>Table metadata filters and editors</h3><p>Representative filter and cell editor lanes built from table metadata helper contracts.</p><a class="reference-link" href="table_metadata_visual_reference.html">Open reference</a></article><article class="reference-card"><div class="tag-row"><span class="tag primary">token search</span><span class="tag warning">saved search</span></div><h3>Saved-search token suggestions</h3><p>Saved-search suggestions shown beside field and value completions for token search inputs.</p><a class="reference-link" href="token_search_saved_search_visual_reference.html">Open reference</a></article></div></section>
-      <section aria-labelledby="workflow-title"><div class="section-heading"><h2 id="workflow-title">Suggested Review Flow</h2><p>Keep the artifact review small and evidence-driven so it does not drift into implementation or proposal review.</p></div><div class="workflow"><ol><li>Choose the reviewer task, helper family, lane, or release gate that matches the current PR or design question.</li><li>For focused companion or map-only evidence lanes, open visual_references.md before adding another card to this one-screen index.</li><li>For package-root contract readers, confirm the current public export and boundary in public_api.md before opening a visual lane.</li><li>Open the individual static HTML reference and compare desktop and narrow viewport readability.</li><li>Record release or PR evidence in sample_app_results.md when the artifact changes or gates a release.</li></ol></div></section>
+
+      <section class="role-strip" aria-label="Reference role boundaries">
+        <article class="role-item">
+          <span class="tag primary">field UI</span>
+          <strong>Rendered helper lanes</strong>
+          <span>Use visual HTML artifacts for field chrome, copy, states, and narrow-width readability.</span>
+        </article>
+        <article class="role-item">
+          <span class="tag info">diagnostics</span>
+          <strong>Evidence and setup lanes</strong>
+          <span>Use Setup Doctor and sample evidence docs for CLI diagnostics or release recording, not field layout approval.</span>
+        </article>
+        <article class="role-item">
+          <span class="tag warning">contract</span>
+          <strong>Public API source</strong>
+          <span>Use public_api.md for landed exports; this index only routes reviewers to the nearest current lane.</span>
+        </article>
+      </section>
+
+      <section aria-labelledby="quick-links-title">
+        <div class="section-heading">
+          <h2 id="quick-links-title">Pick by artifact</h2>
+          <p>Use the shortest matching lane first. If the review question is not listed here, check the Markdown reference map before treating an unmerged proposal as current public API.</p>
+        </div>
+        <div class="quick-list" aria-label="Direct visual reference links">
+          <a href="tom_select_visual_reference.html">Tom Select states</a>
+          <a href="tom_select_migration_visual_reference.html">Select migration</a>
+          <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
+          <a href="tom_select_disabled_option_visual_reference.html">Disabled options</a>
+          <a href="tom_select_lookup_metadata_visual_reference.html">Lookup metadata</a>
+          <a href="tom_select_request_failure_visual_reference.html">Request failures</a>
+          <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a>
+          <a href="tom_select_error_surface_contract_visual_reference.html">Error surface contract</a>
+          <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
+          <a href="native_field_visual_reference.html">Native helper narrow stress</a>
+          <a href="native_accessibility_contract_visual_reference.html">Native accessibility contract</a>
+          <a href="configuration_wrapper_class_visual_reference.html">Wrapper class narrow lane</a>
+          <a href="setup_doctor_output_review.md">Setup Doctor diagnostics</a>
+          <a href="table_metadata_visual_reference.html">Table metadata</a>
+          <a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a>
+        </div>
+      </section>
+
+      <section aria-labelledby="family-picker-title">
+        <div class="section-heading">
+          <h2 id="family-picker-title">Pick by helper family</h2>
+          <p>Use these stable family groups when the reference set grows. They keep the first choice tied to the helper surface instead of a fragile artifact count.</p>
+        </div>
+
+        <div class="family-grid">
+          <article class="family-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">Tom Select</span>
+                <span class="tag info">remote states</span>
+              </div>
+              <h3>Search-backed controls</h3>
+              <p>Start here for selects, comboboxes, autocomplete, lookup metadata, tags, token search, request feedback, host-owned feedback lifecycle, and configured helper copy.</p>
+            </header>
+            <ul>
+              <li>Use the core states for layout and viewport checks.</li>
+              <li>Use disabled option, lookup metadata, and Turbo reconnect lanes only when collection metadata, hidden-ID lookup boundaries, or reconnect appearance is the review topic.</li>
+              <li>Use focused lanes only when error feedback, host-owned clearing cues, or copy overrides are the review topic.</li>
+            </ul>
+            <nav class="family-links" aria-label="Tom Select helper family references">
+              <a href="tom_select_visual_reference.html">Core states</a>
+              <a href="tom_select_turbo_reconnect_visual_reference.html">Turbo reconnect</a>
+              <a href="tom_select_disabled_option_visual_reference.html">Disabled options</a>
+              <a href="tom_select_lookup_metadata_visual_reference.html">Lookup metadata</a>
+              <a href="tom_select_request_failure_visual_reference.html">Request feedback</a>
+              <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a>
+              <a href="tom_select_error_surface_contract_visual_reference.html">Error surface contract</a>
+              <a href="tom_select_text_override_visual_reference.html">Copy overrides</a>
+            </nav>
+          </article>
+
+          <article class="family-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">native helpers</span>
+                <span class="tag warning">forms</span>
+              </div>
+              <h3>Native field wrappers</h3>
+              <p>Use this family for text-like inputs, labels, hints, affixes, validation copy, non-editable states, and class pass-through checks.</p>
+            </header>
+            <ul>
+              <li>Confirm wrapper density and copy wrapping without treating the artifact as production CSS.</li>
+              <li>Use configured class review to check long labels, affixes, hint, and error copy at narrow width.</li>
+              <li>Keep native browser semantics separate from Tom Select-backed search behavior.</li>
+            </ul>
+            <nav class="family-links" aria-label="Native helper family references">
+              <a href="native_field_visual_reference.html">Native helper states</a>
+              <a href="native_accessibility_contract_visual_reference.html">Accessibility contract</a>
+              <a href="configuration_wrapper_class_visual_reference.html">Configured class narrow lane</a>
+            </nav>
+          </article>
+
+          <article class="family-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">metadata</span>
+                <span class="tag info">token search</span>
+              </div>
+              <h3>Table and token bridges</h3>
+              <p>Use these lanes when the question is whether generated field metadata or saved-search suggestions stay inside their ownership boundary.</p>
+            </header>
+            <ul>
+              <li>Use table metadata for filter and editor helper contracts.</li>
+              <li>Use saved-search tokens for suggestion shape, badges, wrapping, and source-of-truth boundaries.</li>
+            </ul>
+            <nav class="family-links" aria-label="Table and token bridge references">
+              <a href="table_metadata_visual_reference.html">Table metadata</a>
+              <a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a>
+            </nav>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="task-picker-title">
+        <div class="section-heading">
+          <h2 id="task-picker-title">Pick by reviewer task</h2>
+          <p>Start from the task that matches the PR or release question, then open the primary artifact first. Secondary links are there only when the review needs a neighboring lane; companion discovery routes to the maintained Markdown map instead of turning this index into a full artifact inventory.</p>
+        </div>
+
+        <div class="task-grid">
+          <article class="task-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">release gate</span>
+                <span class="tag info">broad scan</span>
+              </div>
+              <h3>Release verification</h3>
+              <p>Use when a release or PR needs visual evidence that landed references still read well at desktop and narrow widths.</p>
+            </header>
+            <ul>
+              <li>Start with the core Tom Select artifact for the broadest helper coverage.</li>
+              <li>Use native helper states when the release touches native wrapper, label, hint, validation, or affix surfaces.</li>
+              <li>Use package helper evidence when the release question is package-root helper export coverage rather than visual artifact appearance.</li>
+              <li>Use Setup Doctor output when the release question is CLI diagnostic readability rather than field UI rendering.</li>
+              <li>Record changed artifact evidence in sample_app_results.md or the release PR comment.</li>
+            </ul>
+            <nav class="task-links" aria-label="Release verification references">
+              <a href="tom_select_visual_reference.html">Primary: Tom Select states</a>
+              <a href="native_field_visual_reference.html">Native helper states</a>
+              <a href="package_root_helper_release_evidence.md">Package helper evidence</a>
+              <a href="setup_doctor_output_review.md">Setup Doctor output</a>
+            </nav>
+          </article>
+
+          <article class="task-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">design review</span>
+                <span class="tag warning">copy</span>
+              </div>
+              <h3>Design and copy review</h3>
+              <p>Use when the change is about labels, hints, helper chrome, copy overrides, class pass-through, or narrow wrapping.</p>
+            </header>
+            <ul>
+              <li>Start with native narrow stress for field copy, affixes, validation, and long labels.</li>
+              <li>Use wrapper classes for host-app class pass-through, then text overrides only for configured Tom Select copy.</li>
+              <li>Check configured wrapper classes at narrow width when host-app class names, affixes, hints, or error copy are under review.</li>
+              <li>Keep native search fields separate from Tom Select-backed search or token suggestions.</li>
+            </ul>
+            <nav class="task-links" aria-label="Design and copy review references">
+              <a href="native_field_visual_reference.html">Primary: native stress</a>
+              <a href="configuration_wrapper_class_visual_reference.html">Wrapper class narrow lane</a>
+              <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
+            </nav>
+          </article>
+
+          <article class="task-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">focused companion</span>
+                <span class="tag info">map-only evidence</span>
+              </div>
+              <h3>Companion artifact discovery</h3>
+              <p>Use when a focused companion or map-only evidence lane exists, but the one-screen index should stay limited to current primary routes.</p>
+            </header>
+            <ul>
+              <li>Open the Markdown reference map as the maintained source of truth before adding a new card to this page.</li>
+              <li>Use companion lanes only when the review question matches their scoped boundary.</li>
+              <li>Keep proposal-only helpers, unmerged artifacts, and full inventory mirrors out of this index.</li>
+            </ul>
+            <nav class="task-links" aria-label="Companion artifact discovery references">
+              <a href="visual_references.md#reference-map">Primary: reference map</a>
+              <a href="visual_references.md#how-to-use-this-family">Task guide</a>
+              <a href="visual_references.md#recording-browser-evidence">Evidence notes</a>
+            </nav>
+          </article>
+
+          <article class="task-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">request failure</span>
+                <span class="tag info">feedback</span>
+              </div>
+              <h3>Request-failure feedback</h3>
+              <p>Use when a PR touches `error_surface: true`, load failure copy, selected-load failure, operation metadata, or host-owned feedback clearing cues.</p>
+            </header>
+            <ul>
+              <li>Start with request failures for the focused error-surface lane.</li>
+              <li>Open host feedback lifecycle when the review includes visible host feedback or follow-up clearing states.</li>
+              <li>Open text overrides only when configured no-results, loading, or create copy is part of the review.</li>
+              <li>Keep retry actions, reveal timing, and request lifecycle behavior with the host app.</li>
+            </ul>
+            <nav class="task-links" aria-label="Request-failure feedback references">
+              <a href="tom_select_request_failure_visual_reference.html">Primary: request failures</a>
+              <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lifecycle</a>
+              <a href="tom_select_text_override_visual_reference.html">Text override copy</a>
+            </nav>
+          </article>
+
+          <article class="task-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">contract reader</span>
+                <span class="tag info">public API</span>
+              </div>
+              <h3>Contract reader review</h3>
+              <p>Use when a PR or release asks which rendered-state lane should support a package-root contract reader without copying the helper inventory into this index.</p>
+            </header>
+            <p class="route-cue"><strong>Route cue:</strong> choose the nearest current visual lane here, then keep helper names and return-shape details in public_api.md.</p>
+            <ul>
+              <li>Open public API exports first; that table remains the source of truth for current landed helper names and return-shape boundaries.</li>
+              <li>Open package helper release evidence when the review needs representative package-root export checks instead of a visual lane.</li>
+              <li>Route Tom Select rendered contracts through the core states or text override lane when the review is about rendered copy or configuration surfaces.</li>
+              <li>Route native wrapper contracts through native helper states or accessibility contract lanes; route error-surface and request reader questions through request-failure feedback.</li>
+              <li>Keep current helper names and return shapes out of this card so public_api.md stays the source of truth.</li>
+            </ul>
+            <nav class="task-links" aria-label="Contract reader review references">
+              <a href="public_api.md#javascript-exports">Primary: public API exports</a>
+              <a href="package_root_helper_release_evidence.md">Package helper evidence</a>
+              <a href="tom_select_visual_reference.html">Tom Select rendered lane</a>
+              <a href="native_accessibility_contract_visual_reference.html">Native wrapper lane</a>
+              <a href="tom_select_request_failure_visual_reference.html">Request feedback lane</a>
+              <a href="tom_select_host_feedback_lifecycle_visual_reference.html">Host feedback lane</a>
+            </nav>
+          </article>
+
+          <article class="task-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">table metadata</span>
+                <span class="tag info">token search</span>
+              </div>
+              <h3>Table and token boundaries</h3>
+              <p>Use when the review question is whether metadata-driven filters, editors, or token suggestions stay inside their ownership boundary.</p>
+            </header>
+            <ul>
+              <li>Start with table metadata for generated filter/editor lanes.</li>
+              <li>Use saved-search tokens when suggestion shape, badges, delimiter visibility, or multi-token wrapping is the review topic.</li>
+              <li>Keep table persistence, query execution, token parsing, and authorization outside Rails Fields Kit.</li>
+            </ul>
+            <nav class="task-links" aria-label="Table and token boundary references">
+              <a href="table_metadata_visual_reference.html">Primary: table metadata</a>
+              <a href="token_search_saved_search_visual_reference.html">Saved-search tokens</a>
+            </nav>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="reference-cards-title">
+        <div class="section-heading">
+          <h2 id="reference-cards-title">Review lanes</h2>
+          <p>Each lane names the artifact, the primary thing to inspect, and the boundary that should stay outside Rails Fields Kit.</p>
+        </div>
+
+        <div class="reference-grid">
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">core helpers</span>
+                <span class="tag info">viewport scan</span>
+              </div>
+              <h3>Tom Select-backed states</h3>
+              <p>Searchable select, combobox, autocomplete, tags, token search, preload, create, and error states.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> do the core Tom Select-backed states remain readable across normal and narrow viewports?</p>
+            <ul>
+              <li>Compare normal, loading, empty, create, disabled, and error states.</li>
+              <li>Keep host-app search, authorization, pagination, and result execution out of scope.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">select migration</span>
+                <span class="tag info">static lane</span>
+              </div>
+              <h3>Collection select migration</h3>
+              <p>Focused before/after states for an ordinary Rails <code>collection_select</code> migrating to an endpoint-free <code>rfk_select</code>.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> do labels, hints, blank copy, selected values, optional clear affordances, and validation copy remain readable at desktop and narrow widths?</p>
+            <ul>
+              <li>Compare collection-backed before/after states while preserving the submitted field meaning.</li>
+              <li>Keep remote search, selected preload, create-on-the-fly, authorization, query execution, sample app evidence, and production CSS out of scope.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_migration_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">Turbo reconnect</span>
+                <span class="tag info">static lane</span>
+              </div>
+              <h3>Tom Select Turbo reconnect</h3>
+              <p>Focused static Turbo reconnect states for restored wrapper appearance and duplicate-wrapper caution.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers discuss Turbo restoration appearance without treating reconnect cleanup or request cancellation as a visual artifact contract?</p>
+            <ul>
+              <li>Compare one-wrapper restored field appearance, ordinary settled state, and duplicate-wrapper caution.</li>
+              <li>Keep runtime reconnect cleanup, stale response guards, and lifecycle smoke coverage in the lifecycle docs and JavaScript checks.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_turbo_reconnect_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">disabled option</span>
+                <span class="tag info">collection metadata</span>
+              </div>
+              <h3>Tom Select disabled options</h3>
+              <p>Focused collection-backed disabled option readability and `option_html` metadata pass-through boundaries.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect disabled option visibility and metadata cues without treating authorization or visibility policy as Rails Fields Kit responsibilities?</p>
+            <ul>
+              <li>Compare disabled option readability and option metadata cues in the collection-backed lane.</li>
+              <li>Keep authorization, grouped choices, enum behavior, remote rich option rendering, and production CSS outside the visual artifact.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_disabled_option_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">lookup metadata</span>
+                <span class="tag info">hidden ID</span>
+              </div>
+              <h3>Tom Select lookup metadata</h3>
+              <p>Focused `rfk_lookup` visible text, optional hidden master ID, safe option metadata, manual edit boundary, and narrow wrapping states.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect lookup metadata readability without treating endpoint validation, authorization, business formatting, or production CSS as Rails Fields Kit responsibilities?</p>
+            <ul>
+              <li>Compare selected candidate metadata, submitted field map, manual edit ID clearing, long labels, and boundary copy.</li>
+              <li>Keep remote search execution, selected preload behavior, rich renderer ownership, validation policy, and business formatting with the host app.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_lookup_metadata_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">request failure</span>
+                <span class="tag info">error surface</span>
+              </div>
+              <h3>Tom Select request failures</h3>
+              <p>Focused `error_surface: true` states for hidden, revealed, restore-failure, create-failure, and custom-wrapper feedback.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect request-failure feedback without treating retry UI or request lifecycle behavior as built in?</p>
+            <ul>
+              <li>Compare hidden slot, load error, selected-load error, create error, and custom wrapper states.</li>
+              <li>Keep default visible messages, retry actions, reveal timing, and request behavior with the host app.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_request_failure_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">host feedback</span>
+                <span class="tag info">clearing cues</span>
+              </div>
+              <h3>Tom Select host feedback lifecycle</h3>
+              <p>Host-owned inline feedback, `detail.surface` placement, and follow-up clearing cues after request-failure events.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect visible host feedback and clearing states without treating default copy, retry UI, or request lifecycle behavior as Rails Fields Kit responsibilities?</p>
+            <ul>
+              <li>Compare current failure feedback, follow-up clearing state, and boundary notes after request-failure events.</li>
+              <li>Keep visible copy, retry UI, persistence, and request lifecycle behavior with the host app.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_host_feedback_lifecycle_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">request contract</span>
+                <span class="tag info">live region</span>
+              </div>
+              <h3>Tom Select error surface contract</h3>
+              <p>Focused `error_surface: true` live-region contract states and wrapper customization boundaries.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect the hidden-by-default live region, host-app-visible feedback, and custom wrapper lane without treating retry UI or visible copy as built in?</p>
+            <ul>
+              <li>Compare hidden contract, host-app visible feedback, and customized wrapper attributes.</li>
+              <li>Keep retry UI, visible default copy, and request lifecycle behavior with the host app.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_error_surface_contract_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag warning">copy</span>
+                <span class="tag info">configuration</span>
+              </div>
+              <h3>Tom Select text overrides</h3>
+              <p>Configured no-results, loading, and create copy states for Tom Select-backed helpers.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect text override copy without confusing it with locale ownership or request behavior?</p>
+            <ul>
+              <li>Check fallback and configured copy separately.</li>
+              <li>Keep app-specific localization and request lifecycle behavior outside this static artifact.</li>
+            </ul>
+            <a class="reference-link" href="tom_select_text_override_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">native helpers</span>
+                <span class="tag info">accessibility</span>
+                <span class="tag warning">narrow stress</span>
+              </div>
+              <h3>Native helper states</h3>
+              <p>Wrapper, label, hint, prefix, suffix, readonly, disabled, validation, customization, accessibility wiring, and narrow-width stress examples.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> do native helper states remain legible under long label, hint, error, and affix stress while staying separate from Tom Select-backed behavior?</p>
+            <ul>
+              <li>Inspect field chrome, text wrapping, required marker, prefix/suffix, and visible state differences.</li>
+              <li>Do not use this lane to change FormBuilder behavior, generated markup, or Tom Select-backed search behavior.</li>
+            </ul>
+            <a class="reference-link" href="native_field_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">native contract</span>
+                <span class="tag info">accessibility</span>
+              </div>
+              <h3>Native accessibility contract</h3>
+              <p>Focused native helper accessibility contract reader lanes for wrapper, label, hint, error, and aria-describedby wiring.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect the current rendered accessibility contract without treating future return-shape proposals or focus management as current behavior?</p>
+            <ul>
+              <li>Compare wrapper, label, hint, error, and described-by wiring lanes.</li>
+              <li>Keep id generation, validation messages, focus movement, and future helper returns outside this artifact.</li>
+            </ul>
+            <a class="reference-link" href="native_accessibility_contract_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">native helpers</span>
+                <span class="tag info">configuration</span>
+                <span class="tag warning">narrow lane</span>
+              </div>
+              <h3>Configuration wrapper classes</h3>
+              <p>Initializer-driven wrapper, label, hint, error, control, prefix, and suffix class examples.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers see configured classes as host-app pass-through instead of bundled CSS framework support, even under narrow label / affix / hint stress?</p>
+            <ul>
+              <li>Compare default `rfk-*` classes with host-app classes, validation class examples, and the narrow viewport review lane.</li>
+              <li>Keep framework CSS, spacing, colors, validation copy, and layout integration with the host app.</li>
+            </ul>
+            <a class="reference-link" href="configuration_wrapper_class_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag info">diagnostics</span>
+                <span class="tag warning">release evidence</span>
+              </div>
+              <h3>Setup Doctor diagnostic output</h3>
+              <p>CLI diagnostic evidence lane for `[OK]`, `[MISSING]`, `[MANUAL]`, target mismatch, and wrapped output scanability.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers inspect setup doctor evidence without treating it as field UI rendering, runtime wording, or host-app CI policy?</p>
+            <ul>
+              <li>Check status legend, advisory lines, mismatch output, unresolved import notes, and narrow or wrapped evidence prompts.</li>
+              <li>Keep setup doctor behavior, output wording, machine-readable schema, auto-fix policy, and host-app CI decisions outside this index lane.</li>
+            </ul>
+            <a class="reference-link" href="setup_doctor_output_review.md">Open diagnostic evidence</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">table metadata</span>
+                <span class="tag info">adapter boundary</span>
+              </div>
+              <h3>Table metadata filters and editors</h3>
+              <p>Representative filter and cell editor lanes built from table metadata helper contracts.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers scan metadata-driven filter and editor examples without treating table persistence or query execution as Rails Fields Kit responsibilities?</p>
+            <ul>
+              <li>Compare native field metadata, token search, and custom helper examples.</li>
+              <li>Keep table preference storage and query semantics with the host app or table gem.</li>
+            </ul>
+            <a class="reference-link" href="table_metadata_visual_reference.html">Open reference</a>
+          </article>
+
+          <article class="reference-card">
+            <header>
+              <div class="tag-row">
+                <span class="tag primary">token search</span>
+                <span class="tag warning">saved search</span>
+              </div>
+              <h3>Saved-search token suggestions</h3>
+              <p>Saved-search suggestions shown beside field and value completions for token search inputs.</p>
+            </header>
+            <p class="review-question"><strong>Question:</strong> can reviewers distinguish saved search suggestions without treating token parsing, search execution, or authorization as Rails Fields Kit responsibilities?</p>
+            <ul>
+              <li>Check kind labels, badges, wrapping, and edge accent readability.</li>
+              <li>Use token_suggestions.md as the behavior source of truth.</li>
+            </ul>
+            <a class="reference-link" href="token_search_saved_search_visual_reference.html">Open reference</a>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="workflow-title">
+        <div class="section-heading">
+          <h2 id="workflow-title">Suggested review flow</h2>
+          <p>Keep the artifact review small and evidence-driven so it does not drift into implementation or proposal review.</p>
+        </div>
+        <div class="workflow">
+          <ol>
+            <li>Choose the reviewer task, helper family, lane, or release gate that matches the current PR or design question.</li>
+            <li>For focused companion or map-only evidence lanes, open visual_references.md before adding another card to this one-screen index.</li>
+            <li>For package-root contract readers, confirm the current public export and boundary in public_api.md before opening a visual lane.</li>
+            <li>Use package_root_helper_release_evidence.md when the review is about representative package-root helper evidence, not field appearance.</li>
+            <li>Use setup_doctor_output_review.md when the review is about CLI diagnostic evidence, not field UI visual references.</li>
+            <li>Open the individual static HTML reference and compare desktop and narrow viewport readability.</li>
+            <li>Record release or PR evidence in sample_app_results.md when the artifact changes or gates a release.</li>
+            <li>Update visual_references.md and this index when a new visual reference lands on main.</li>
+          </ol>
+        </div>
+      </section>
+
       <p class="scope-note"><strong>Scope note.</strong> This page is a static index for documentation artifacts. It does not define public helper behavior, JavaScript exports, request lifecycle events, setup diagnostics, or runtime rendering contracts. Use visual_references.md as the maintained source-of-truth map for focused companion and map-only evidence lanes, and use public_api.md#javascript-exports before treating a contract reader as current public API.</p>
     </main>
   </body>
