@@ -34,6 +34,57 @@ RSpec.describe "docs package inventory guard" do
   let(:release_doc) { read_doc("doc/release.md") }
   let(:product_profile) { read_doc("Product Profile.md") }
 
+  it "ships the documented JavaScript package entrypoints" do
+    expect(specification.files).to include(
+      "package.json",
+      "app/javascript/rails_fields_kit/index.js",
+      "app/javascript/rails_fields_kit/tom_select_controller.js"
+    )
+  end
+
+  it "ships the install-flow docs and generator artifacts described by README and setup" do
+    expect(specification.files).to include(
+      "README.md",
+      "doc/setup.md",
+      "doc/sample_app_checklist.md",
+      "lib/generators/rails_fields_kit/install_generator.rb",
+      "lib/generators/rails_fields_kit/templates/rails_fields_kit_setup.md"
+    )
+  end
+
+  it "ships the maintained public reference docs linked from README and setup" do
+    expect(specification.files).to include(
+      "doc/public_api.md",
+      "doc/select_migration.md",
+      "doc/field_helpers.md",
+      "doc/textarea_autosize.md",
+      "doc/controller_helpers.md",
+      "doc/configuration.md",
+      "doc/events.md",
+      "doc/tom_select_turbo_lifecycle.md",
+      "doc/token_suggestions.md",
+      "doc/ransack_suggestions.md",
+      "doc/table_adapters.md",
+      "doc/tom_select_visual_reference.html",
+      "doc/tom_select_text_override_visual_reference.html",
+      "doc/native_field_visual_reference.html",
+      "doc/table_metadata_visual_reference.html"
+    )
+  end
+
+  it "ships the release-facing verification docs linked from README" do
+    expect(specification.files).to include(
+      "doc/development.md",
+      "doc/sample_app_results.md",
+      "doc/sample_app_results_route_guide.md",
+      "doc/final_release_checklist.md",
+      "doc/selected_preload_release_gate.md",
+      "doc/release.md",
+      "doc/release_notes_0_1_1.md",
+      "doc/release_notes_0_1_0.md"
+    )
+  end
+
   it "keeps documented direct subpath examples aligned with package exports" do
     direct_exports = package_json.fetch("exports").keys.grep_v(".").map { |path| path.delete_prefix("./") }
     documented_direct_examples = %w[
