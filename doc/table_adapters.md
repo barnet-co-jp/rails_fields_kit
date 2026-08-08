@@ -14,6 +14,8 @@ For range-specific table metadata examples, use [`table_range_field_metadata.md`
 
 For checkbox table metadata, use [`table_check_box_metadata.md`](table_check_box_metadata.md). It keeps `TableFilterInput.check_box` and `TableCellInput.check_box` in the metadata and renderer lane without adding boolean query semantics, tri-state filtering, bulk edit, table persistence, or production styling.
 
+For radio button table metadata, use [`table_radio_button_metadata.md`](table_radio_button_metadata.md). It keeps `TableFilterInput.radio_button` and `TableCellInput.radio_button` as single-control metadata with required `tag_value:`, without adding query semantics, params construction, same-name grouping, `fieldset` / `legend`, collection radio groups, table persistence, or production styling.
+
 For date, time, datetime-local, and color table metadata examples, use [`table_date_time_color_metadata.md`](table_date_time_color_metadata.md). It keeps `TableFilterInput.date_field`, `TableFilterInput.time_field`, `TableFilterInput.datetime_local_field`, `TableFilterInput.color_field`, and the matching `TableCellInput` factories in the native metadata lane without adding custom pickers, timezone conversion, masking, query persistence, or table-specific validation policy.
 
 For file input cell-editor metadata, use [`table_file_field_metadata.md`](table_file_field_metadata.md). It keeps `TableCellInput.file_field` cell-editor-only and does not add `TableFilterInput.file_field`, upload execution, query semantics, table persistence, or production styling.
