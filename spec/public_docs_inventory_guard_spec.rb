@@ -69,9 +69,8 @@ RSpec.describe "public docs inventory guards" do
     filter_methods = documented_class_methods("TableFilterInput")
     cell_methods = documented_class_methods("TableCellInput")
     table_metadata_intro = markdown_section(public_api, "## Table metadata adapters")
-    focused_filter_methods = with_focused_table_filter_methods(filter_methods)
 
-    expect(focused_filter_methods).to eq(
+    expect(filter_methods).to eq(
       %w[known_types known_type? from_type] +
         RailsFieldsKit::TableFilterInput.known_types.map(&:to_s) +
         %w[ransack_filter]
@@ -81,8 +80,9 @@ RSpec.describe "public docs inventory guards" do
         RailsFieldsKit::TableCellInput.known_types.map(&:to_s)
     )
 
-    expect(focused_filter_methods).to include("ransack_filter")
+    expect(filter_methods).to include("radio_button", "ransack_filter")
     expect(cell_methods).not_to include("ransack_filter")
+    expect(radio_metadata).to include("TableFilterInput.radio_button")
     expect(table_metadata_intro).to include(
       "Ransack-compatible token-search metadata",
       "without the Ransack-specific filter entrypoint"
@@ -101,17 +101,6 @@ RSpec.describe "public docs inventory guards" do
     markdown_section(public_api, "### #{class_name} methods")
       .scan(/`RailsFieldsKit::#{Regexp.escape(class_name)}\.([^`]+)`/)
       .flatten
-  end
-
-  def focused_table_filter_methods
-    radio_metadata.include?("TableFilterInput.radio_button") ? ["radio_button"] : []
-  end
-
-  def with_focused_table_filter_methods(methods)
-    return methods unless focused_table_filter_methods.include?("radio_button")
-
-    insertion_index = methods.index("token_search") || methods.index("ransack_filter") || methods.length
-    methods.dup.insert(insertion_index, "radio_button")
   end
 
   def markdown_section(document, heading)
