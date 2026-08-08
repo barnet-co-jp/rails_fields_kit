@@ -88,6 +88,8 @@ bundle exec rake build
    - `doc/check_box_release_evidence.md` when checkbox sample-app or release evidence is part of the release surface
    - `doc/radio_button.md` when the `rfk_radio_button` wrapper or radio button boundary is part of the release surface
    - `doc/radio_button_release_evidence.md` when radio button sample-app or release evidence is part of the release surface
+   - `doc/textarea_autosize.md` when the `rfk_text_area` autosize ownership boundary is part of the release surface
+   - `doc/textarea_autosize_release_evidence.md` when textarea autosize sample-app or release evidence is part of the release surface
    - `doc/native_numeric_fields.md` when native numeric wrapper helpers are part of the release surface
    - `doc/native_contact_fields.md` when native contact or native search wrapper helpers are part of the release surface
    - `doc/visual_references.md`
