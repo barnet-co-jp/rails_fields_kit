@@ -166,6 +166,20 @@ Verify:
 - `accessibility: false` remains an explicit opt-out from automatic aria wiring only, not from the wrapper customization lane
 - repo-wide class defaults from the initializer still provide the shared baseline; field-level `*_html` options only layer additional attributes for that field
 
+## Verify `default_allow_clear` representative lane
+
+Use this lane only when the release or PR changes the app-wide clear policy. Configure `config.default_allow_clear = true`, then use one representative collection-backed `rfk_select` that omits `allow_clear:` and one comparable field that passes `allow_clear: false`.
+
+Verify:
+
+- the field that omits `allow_clear:` renders `clear_button` and can return to the Rails-owned `include_blank:` or `prompt:` state
+- the comparable `allow_clear: false` field suppresses only Rails Fields Kit's semantic auto-add
+- an explicit `plugins: ["clear_button"]` remains explicit host-app plugin configuration and is not removed by `allow_clear: false`
+- `clear_button` remains a whole-field clear affordance, while `remove_button` remains per-item removal for multi-item helpers
+- plugin assets, styling, empty-state wording, selection mutation, and Tom Select lifecycle behavior remain host-app or Tom Select responsibilities
+
+Record release-candidate evidence in `doc/sample_app_results.md`. For a narrow PR, record the representative fields, branch or commit, result, and responsibility boundary in the PR comment.
+
 ## Verify `collection_select` migration path
 
 Create at least one server-rendered form that starts from the documented `collection_select` example in [`select_migration.md`](select_migration.md), then swap it to `rfk_select` and confirm:

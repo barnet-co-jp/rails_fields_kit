@@ -13,6 +13,7 @@ If the route map is too broad for a narrow PR, use `doc/sample_app_results_route
 | Release-wide confidence | Target release, local gem checks, branch head CI confirmation, generator checks | Every release candidate or release PR needs baseline package, CI, and generator evidence. | Feature-specific helper, visual, remote, token, or table lanes unless the release candidate explicitly includes them. |
 | JavaScript setup and package-root helper evidence | Setup doctor checks, JavaScript setup checks, package-root helper lanes checked, event checks, Turbo reconnect checks | The release touches setup visibility, package-root exports, read-only rendered-field helper evidence, Stimulus registration, importmap/jsbundling setup, events, or reconnect behavior. | Native wrapper behavior, visual reference rendering, endpoint execution, or table metadata unless those lanes also changed. |
 | Tom Select plugin override boundary | Tom Select plugin override checks | The release or PR touches `config.default_plugins`, field-level `plugins:`, or the `remove_button` helper default for `rfk_tags` / `rfk_token_search`. | Tom Select package install, plugin-specific UI behavior, production CSS approval, `allow_clear` visual review, or package-root helper evidence unless those lanes also changed. |
+| Default allow clear policy | Default allow clear checks | The release or PR touches `config.default_allow_clear` or field-level `allow_clear:` precedence. | Raw `default_plugins` / `plugins:` replacement, visual approval, event payloads, selection mutation, or Tom Select lifecycle unless those lanes also changed. |
 | Native wrapper and accessibility | Form helper checks, native helper representative wrapper and accessibility lane checks, password field native wrapper checks, native wrapper customization checks | Native helper wrapper, password helper boundary, class/styling boundary, hint/error, affix, accessibility wiring, or browser semantics evidence changed. | Tom Select remote lifecycle, package-root helper import checks, credential policy, or table persistence. |
 | README first field quickstart evidence | `rfk_select` representative collection-backed single-value lane checks, Visual reference render checks | The README first field or quickstart sample needs endpoint-free, server-rendered collection evidence without mixing in setup/import, remote search, selected preload, create-on-the-fly, or token metadata lanes. | Setup/import verification, remote search, selected preload, create-on-the-fly, token metadata, or release-wide readiness. |
 | Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. | Runtime helper behavior, production CSS approval, sample-app field behavior, or CI success as visual approval. |
@@ -150,6 +151,24 @@ In the `Result` column, use `PASS` when the scoped helper lane was checked succe
 | Helper | Source-of-truth reference | Representative field or selector | Result | Evidence notes |
 | --- | --- | --- | --- | --- |
 |  |  |  |  |  |
+
+## Default allow clear checks
+
+Use this section only when the release or PR changes the app-wide semantic clear default or its field-level precedence. Keep raw plugin replacement evidence in `Tom Select plugin override checks` and visual review in the visual evidence lane.
+
+- Representative helper / fields:
+- Branch or commit:
+- Evidence location:
+- Result: `PASS` / `FAIL` / `SOURCE REVIEW ONLY` / `DEFERRED`
+
+- [ ] `config.default_allow_clear = true` added `clear_button` when the representative field omitted `allow_clear:`
+- [ ] a comparable `allow_clear: false` field suppressed only Rails Fields Kit's semantic auto-add
+- [ ] an explicit `plugins: ["clear_button"]` remained explicit plugin configuration rather than being removed by `allow_clear: false`
+- [ ] the representative single-value clear returned to Rails-owned `include_blank:` or `prompt:` wording
+- [ ] `clear_button` was recorded as whole-field clear and `remove_button` as per-item removal
+- [ ] evidence notes kept plugin assets, styling, empty-state wording, selection mutation, and Tom Select lifecycle behavior with the host app or Tom Select
+
+Notes:
 
 ## Tom Select plugin override checks
 
