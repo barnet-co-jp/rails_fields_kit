@@ -34,6 +34,10 @@ RSpec.describe "package contents" do
   let(:shared_metadata_runnable_guide) { File.read(shared_metadata_runnable_guide_path) }
   let(:configuration_profiles_path) { File.expand_path("../doc/configuration_profiles.md", __dir__) }
   let(:configuration_profiles) { File.read(configuration_profiles_path) }
+  let(:release_doc_path) { File.expand_path("../doc/release.md", __dir__) }
+  let(:release_doc) { File.read(release_doc_path) }
+  let(:selected_preload_release_gate_path) { File.expand_path("../doc/selected_preload_release_gate.md", __dir__) }
+  let(:selected_preload_release_gate) { File.read(selected_preload_release_gate_path) }
   let(:sample_app_checklist_path) { File.expand_path("../doc/sample_app_checklist.md", __dir__) }
   let(:sample_app_checklist) { File.read(sample_app_checklist_path) }
   let(:sample_app_results_path) { File.expand_path("../doc/sample_app_results.md", __dir__) }
@@ -333,6 +337,35 @@ RSpec.describe "package contents" do
       expect(local_path).to eq(expected_path)
       expect(specification.files).to include(expected_path)
       expect(File.file?(File.expand_path("../#{local_path}", __dir__))).to be(true)
+    end
+  end
+
+  it "keeps the selected preload contract packaged and routed from its release gate" do
+    expect(specification.files).to include("doc/selected_preload_contract.md")
+    expect(selected_preload_release_gate).to include(
+      "[`selected_preload_contract.md`](selected_preload_contract.md)",
+      "Keep this page focused on release evidence",
+      "keep payload examples and invalid-shape details in the contract doc"
+    )
+  end
+
+  it "keeps representative release review entrypoints packaged and listed" do
+    release_review = release_doc
+      .split("8. Review documentation.", 2)
+      .fetch(1)
+      .split("\n9. Confirm version.", 2)
+      .first
+    stable_entrypoints = %w[
+      doc/support_boundary.md
+      doc/visual_references.md
+      doc/visual_reference_index.html
+      doc/final_release_checklist.md
+      doc/release_notes_0_1_1.md
+    ]
+
+    expect(specification.files).to include(*stable_entrypoints)
+    stable_entrypoints.each do |path|
+      expect(release_review).to include("`#{path}`")
     end
   end
 
