@@ -67,16 +67,21 @@ yarn add tom-select
 
 ## Install Rails Fields Kit
 
+Choose and record one setup-note route:
+
 ```bash
+# Default generated note
 rails generate rails_fields_kit:install
+
+# Maintained guide or host-app-owned notes
+rails generate rails_fields_kit:install --skip-setup-notes
 ```
 
-Confirm these files are created:
+For every route, confirm `config/initializers/rails_fields_kit.rb` is created.
 
-- `config/initializers/rails_fields_kit.rb`
-- `doc/rails_fields_kit_setup.md`
+For the default route, confirm `doc/rails_fields_kit_setup.md` is created and still matches the maintained walkthrough in `doc/setup.md` and the documented JavaScript registration flow.
 
-Confirm the generated setup notes still match the maintained walkthrough in `doc/setup.md` and the documented JavaScript registration flow.
+For `--skip-setup-notes`, confirm the generated note is intentionally absent and the generator directs the reviewer to maintained `doc/setup.md`. If the host app keeps setup notes elsewhere, record that location. Neither route is a generator failure.
 
 ## Verify setup doctor JSON evidence
 
@@ -92,8 +97,11 @@ Verify:
 
 - the evidence names the branch or commit checked and the Ruby API call used
 - `summary["missing"]` was recorded as the representative required setup signal
+- generated setup note evidence matched the selected generator route: `[OK]` when `doc/rails_fields_kit_setup.md` existed, or `[MANUAL]` for `--skip-setup-notes` / host-app-owned notes
+- `[OK] Generated setup note` was treated as path visibility only, not approval of note content or setup quality
+- `[MANUAL] Generated setup note` remained host-app follow-up rather than `[MISSING]`, a hard failure, auto-fix behavior, or a request for setup doctor to create or inspect the note
 - manual advisory checks were reviewed as host-app follow-up items rather than automatic Rails Fields Kit failures
-- evidence notes link back to `setup_doctor_machine_readable.md` instead of copying the full payload schema
+- evidence notes link back to `setup_doctor_machine_readable.md` for the payload contract and to `setup_doctor_output_review.md` only for representative output readability, instead of copying either artifact as new runtime wording
 - CLI `--json`, auto-fix behavior, formal schema publication, SARIF / JUnit output, and universal host-app CI pass/fail policy stayed out of scope
 
 ## Register JavaScript

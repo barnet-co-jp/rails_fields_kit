@@ -74,9 +74,14 @@ rails generate rails_fields_kit:install
 
 Result:
 
-- [ ] `config/initializers/rails_fields_kit.rb` generated
-- [ ] `doc/rails_fields_kit_setup.md` generated
-- [ ] generated setup notes match current public API and setup walkthrough
+- Setup note route checked:
+  - [ ] default generated note
+  - [ ] `--skip-setup-notes`
+  - [ ] host-app-owned setup notes
+- [ ] `config/initializers/rails_fields_kit.rb` generated for the selected route
+- [ ] default route generated `doc/rails_fields_kit_setup.md` and the note matched the current public API and `doc/setup.md` walkthrough
+- [ ] `--skip-setup-notes` route intentionally omitted `doc/rails_fields_kit_setup.md` and directed the reviewer to maintained `doc/setup.md`
+- [ ] host-app-owned setup note location was recorded when that route was used
 
 Notes:
 
@@ -92,6 +97,9 @@ Result:
 
 - [ ] setup doctor ran after generator setup without changing files
 - [ ] initializer visibility was recorded
+- [ ] generated setup note evidence was recorded as `[OK]` when `doc/rails_fields_kit_setup.md` existed, or `[MANUAL]` when `--skip-setup-notes` / host-app-owned notes were the selected route
+- [ ] `[OK] Generated setup note` was treated as path visibility only, not approval of app-specific note content or setup quality
+- [ ] `[MANUAL] Generated setup note` was not treated as `[MISSING]`, a hard failure, an auto-fix request, or a request for setup doctor to create or inspect the note
 - [ ] importmap pin visibility was recorded when `config/importmap.rb` was present, or the non-importmap/manual status was recorded without treating bundler apps as failures
 - [ ] representative Stimulus registration evidence was recorded as either `[OK]` advisory source visibility or `[MANUAL]` host-app follow-up when registration evidence was in scope
 - [ ] `[OK] Stimulus registration` was not treated as proof of the host app's final Stimulus boot policy or every possible controller registry
