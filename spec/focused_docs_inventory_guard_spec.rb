@@ -125,6 +125,7 @@ RSpec.describe "focused docs inventory guard" do
 
   it "keeps masked input boundary docs packaged without promoting a current helper" do
     form_builder_helpers = markdown_section(public_api, "## FormBuilder helpers")
+    visual_reference_index = read_doc("doc/visual_reference_index.html")
 
     expect(specification.files).to include(
       "doc/masked_input_boundary.md",
@@ -143,9 +144,12 @@ RSpec.describe "focused docs inventory guard" do
       "Masked inputs are a future proposal, not current public API",
       "[`masked_input_boundary_sample_evidence.html`](masked_input_boundary_sample_evidence.html)",
       "Treat that artifact as visual evidence for host-owned masking hooks, not as a new helper or public API proposal",
+      "focused boundary sample evidence, not a member of the maintained visual reference family or one-screen visual index",
       "let the host app own the masking layer",
       "Do not add helper names such as `rfk_masked_field` to the current public API"
     )
+    expect(visual_references).not_to include("masked_input_boundary_sample_evidence.html")
+    expect(visual_reference_index).not_to include("masked_input_boundary_sample_evidence.html")
     expect(masked_input_boundary_sample_evidence).to include(
       "Masked Input Boundary Sample Evidence",
       "No runtime JavaScript",

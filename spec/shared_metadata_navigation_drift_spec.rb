@@ -31,12 +31,22 @@ RSpec.describe "shared metadata navigation docs" do
   end
 
   it "keeps current public API, host-app-owned source, and future proposal boundaries visible" do
+    roadmap = File.read(File.join(repo_root, "ROADMAP.md"))
+
     expect(navigation).to include(
       "Current public API: `TokenSuggestions.build`, `RansackSuggestions.build`, `TableFilterInput.ransack_filter`",
       "Host-app pattern: keeping one app-owned metadata source",
       "Rails Fields Kit receives ordinary arguments; it does not own the source registry",
       "Future proposal: helper-level adapter DSLs or a Rails Fields Kit-owned field/operator registry",
       "There is no Rails Fields Kit-owned field/operator registry, helper-level Ransack adapter DSL, or query execution path in the current 0.1.x public API"
+    )
+
+    expect(roadmap).to include(
+      "[`doc/shared_metadata_navigation.md`](doc/shared_metadata_navigation.md)",
+      "separate current public API, host-app metadata patterns, and future registry or adapter proposals",
+      "The smallest useful slice is a docs/proposal pattern for a host app owned metadata source",
+      "This is not a current public registry API",
+      "A future Ruby registry object should be split into its own feature issue"
     )
   end
 

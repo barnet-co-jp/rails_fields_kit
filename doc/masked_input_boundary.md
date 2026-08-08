@@ -4,7 +4,7 @@ Masked inputs are a future proposal, not current public API.
 
 Rails Fields Kit currently keeps native wrapper helpers in the ordinary HTML input lane. Use helpers such as `rfk_text_field`, `rfk_phone_field`, `rfk_money_field`, `rfk_percent_field`, and related native wrappers when the host app wants shared labels, hints, errors, affixes, and accessibility wiring around a browser-native input.
 
-For a static review surface that shows this boundary without adding runtime behavior, see [`masked_input_boundary_sample_evidence.html`](masked_input_boundary_sample_evidence.html). Treat that artifact as visual evidence for host-owned masking hooks, not as a new helper or public API proposal.
+For a static review surface that shows this boundary without adding runtime behavior, see [`masked_input_boundary_sample_evidence.html`](masked_input_boundary_sample_evidence.html). Treat that artifact as visual evidence for host-owned masking hooks, not as a new helper or public API proposal. It is focused boundary sample evidence, not a member of the maintained visual reference family or one-screen visual index.
 
 ## Current path
 

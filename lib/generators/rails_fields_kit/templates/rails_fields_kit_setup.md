@@ -51,6 +51,7 @@ Start with these while proving the first field:
 Use these after the first field works or when the host app hits that exact setup question:
 
 - Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>
+- Configuration profile examples: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration_profiles.md> — docs-only copyable examples, not named profiles, presets, or generator options.
 - Unresolved imports troubleshooting: `doc/setup.md#unresolved-imports`
 - Turbo and Stimulus reconnection note: `doc/setup.md#turbo-and-stimulus-reconnection`
 - Support boundary: `README.md#support-boundary`

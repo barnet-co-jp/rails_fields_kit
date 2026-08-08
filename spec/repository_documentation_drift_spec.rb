@@ -24,6 +24,7 @@ RSpec.describe "repository documentation drift guards" do
 
     expect(linked_paths).to contain_exactly(
       "README.md",
+      "doc/configuration_profiles.md",
       "doc/setup.md",
       "doc/setup_doctor_output_review.md"
     )
