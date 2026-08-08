@@ -3,9 +3,12 @@
 require "spec_helper"
 
 RSpec.describe "sample app evidence boundary docs" do
+  let(:sample_app_checklist) { read_repo_file("doc/sample_app_checklist.md") }
   let(:sample_app_results) { read_repo_file("doc/sample_app_results.md") }
   let(:native_numeric_docs) { read_repo_file("doc/native_numeric_fields.md") }
   let(:native_contact_docs) { read_repo_file("doc/native_contact_fields.md") }
+  let(:native_date_time_color_docs) { read_repo_file("doc/native_date_time_color_fields.md") }
+  let(:file_field_docs) { read_repo_file("doc/file_field.md") }
   let(:support_boundary) { read_repo_file("doc/support_boundary.md") }
   let(:setup_docs) { read_repo_file("doc/setup.md") }
   let(:readme) { read_repo_file("README.md") }
@@ -34,6 +37,41 @@ RSpec.describe "sample app evidence boundary docs" do
       "phone-number formatting",
       "search execution",
       "Rails Fields Kit does not normalize contact values, validate deliverability, parse phone numbers, run searches, or attach remote suggestion endpoints to `rfk_search_field`"
+    )
+  end
+
+  it "keeps release-scoped native date/time/color and file evidence representative" do
+    expect(sample_app_checklist).to include(
+      "Choose release-scoped native helper family evidence",
+      "Pick the smallest representative field and do not reproduce the public helper inventory",
+      "[`native_date_time_color_fields.md`](native_date_time_color_fields.md)",
+      "[`file_field.md`](file_field.md)",
+      "Source review alone must stay `SOURCE REVIEW ONLY` or `DEFERRED`, never `PASS`"
+    )
+
+    expect(sample_app_results).to include(
+      "Release-scoped native family evidence",
+      "Representative helper / field:",
+      "Attributes or Rails options actually checked:",
+      "doc/native_date_time_color_fields.md",
+      "doc/file_field.md",
+      "Do not mark this blank record `PASS` from source review or CI success"
+    )
+
+    expect(native_date_time_color_docs).to include(
+      "Ordinary Rails options such as `min:`, `max:`, `step:`",
+      "browser-native picker behavior and browser support differences",
+      "locale-specific formatting or parsing policy",
+      "timezone conversion and storage semantics"
+    )
+
+    expect(file_field_docs).to include(
+      "Ordinary Rails `file_field` options such as `accept:`, `multiple:`, `direct_upload:`",
+      "multipart form setup",
+      "Active Storage direct upload behavior",
+      "file preview UI",
+      "upload progress UI",
+      "storage configuration"
     )
   end
 

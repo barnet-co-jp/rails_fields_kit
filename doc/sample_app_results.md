@@ -236,6 +236,22 @@ Notes:
 
 ## Native helper representative wrapper and accessibility lane checks
 
+### Release-scoped native family evidence
+
+Use this blank record only when date/time/color or file helpers are in the release or narrow PR scope. Choose the smallest representative field; do not add one row per helper or reproduce the public helper inventory.
+
+- Boundary source:
+- Representative helper / field:
+- Attributes or Rails options actually checked:
+- Execution status / result:
+- Evidence location:
+
+For date, time, datetime-local, or color evidence, use `doc/native_date_time_color_fields.md` as the boundary source and record only the wrapper/accessibility wiring and ordinary `min:`, `max:`, or `step:` attributes actually checked. Browser picker behavior, timezone or locale formatting, masking, validation-message policy, custom picker integrations, and production CSS remain browser or host-app responsibilities.
+
+For file evidence, use `doc/file_field.md` as the boundary source and record only one `rfk_file_field` plus checked `accept:` or `multiple:` pass-through; include `direct_upload:` only when Rails option pass-through is explicitly in scope. Multipart setup, Active Storage direct-upload JavaScript, previews, upload progress, validation and storage policy, and production CSS remain host-app responsibilities.
+
+If the named sample or browser check did not run, record `SOURCE REVIEW ONLY` or `DEFERRED` with the missing lane and handoff context. Do not mark this blank record `PASS` from source review or CI success. Keep any static visual review in the Visual reference render checks matrix.
+
 - [ ] one representative native helper field covered the end-to-end `wrapper: true` lane
 - [ ] the field rendered the documented label, hint, prefix, and suffix while staying in the native helper family rather than a Tom Select lane
 - [ ] `nativeFieldAccessibilityContract(element)` read the representative field's rendered `describedByIds`, `hintElement`, `errorElement`, and `wrapperElement` contract from package-root import code
