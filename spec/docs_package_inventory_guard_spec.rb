@@ -149,6 +149,38 @@ RSpec.describe "docs package inventory guard" do
     )
   end
 
+  it "keeps the select migration visual reference packaged, routed, and scoped" do
+    migration_reference = read_doc("doc/tom_select_migration_visual_reference.html")
+
+    expect(specification.files).to include("doc/tom_select_migration_visual_reference.html")
+    expect(visual_references).to include(
+      "[`tom_select_migration_visual_reference.html`](tom_select_migration_visual_reference.html)",
+      "collection_select",
+      "rfk_select",
+      "`allow_clear: true`",
+      "`default_allow_clear`"
+    )
+    expect(visual_reference_index).to include(
+      "tom_select_migration_visual_reference.html",
+      "tom_select_lookup_metadata_visual_reference.html",
+      "Setup Doctor diagnostic output",
+      "visual_references.md#recording-browser-evidence"
+    )
+    expect(migration_reference).to include(
+      "collection_select",
+      "rfk_select",
+      "include_blank",
+      "allow_clear: true",
+      "default_allow_clear",
+      "same collection-backed field meaning",
+      "Remote combobox",
+      "selected preload",
+      "authorization",
+      "query execution",
+      "production CSS"
+    )
+  end
+
   it "keeps configuration wrapper class visual reference packaged and scoped as class pass-through evidence" do
     expect(specification.files).to include("doc/configuration_wrapper_class_visual_reference.html")
     expect(styling_boundary).to include(
