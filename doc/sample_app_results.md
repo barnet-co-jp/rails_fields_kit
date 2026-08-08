@@ -500,6 +500,7 @@ Use this section when table metadata is part of the release surface, or when `do
   - [ ] Ransack token filter metadata
   - [ ] native field metadata
   - [ ] range field metadata
+  - [ ] radio button filter metadata
   - [ ] cell editors
   - [ ] custom helper mapping
 - Evidence location:
@@ -511,6 +512,9 @@ Use this section when table metadata is part of the release surface, or when `do
 - [ ] native field metadata such as `search_field`, `money_field`, or `text_area` rendered through the documented helper path
 - [ ] range field metadata used `TableFilterInput.range_field` or `TableCellInput.range_field` and kept `min`, `max`, and `step` as ordinary native input options
 - [ ] range field table metadata evidence stayed separate from native `rfk_range_field` wrapper evidence unless that wrapper lane was also in scope
+- [ ] radio button filter metadata kept required `tag_value:` in the call spec and passed it as the positional radio value when `TableRenderer.render_filter` dispatched to `rfk_radio_button`
+- [ ] missing radio filter `tag_value:` produced the documented `ArgumentError` before helper dispatch
+- [ ] radio button filter metadata stayed separate from the `TableCellInput.radio_button` cell-editor lane and remained renderable control metadata rather than query or grouping behavior
 - [ ] direct `TableRenderer` call-spec usage still matches the documented helper / method / options shape when used
 - [ ] a representative `TableRenderer.register_field_helper` mapping rendered through the documented call-spec path
 - [ ] `TableRenderer.reset_field_helpers!` restored the default mapping after the representative custom helper check
@@ -528,6 +532,14 @@ This focused review records only two representative metadata rendering lanes. It
 | Cell editor metadata | `TableCellInput.enum_select(:status)` through `rfk_table_cell_editors` / `rfk_enum_select` | `SOURCE REVIEW ONLY` | Metadata order, renderer mapping, and safe-buffer direct helper specs were reviewed. No browser or host sample app was run in this environment. |
 
 Run `bundle exec rspec spec/rails_fields_kit/table_metadata_spec.rb spec/rails_fields_kit/table_renderer_spec.rb spec/rails_fields_kit/form_builder_table_metadata_safe_buffer_spec.rb` before promoting either row to automated `PASS`, and record the exact branch / commit and workflow URL in the scoped PR comment. No inconsistency was found during source review. Table persistence, query execution, Ransack relation construction, authorization, sorting, pagination, visual approval, and final table layout remain host-app or table-integration responsibilities. The `rfk_token_search` entry-field lane remains separate.
+
+### Focused result: radio button filter metadata
+
+| Representative lane | Source reviewed | Result | Evidence notes |
+| --- | --- | --- | --- |
+| Radio button filter metadata | `TableFilterInput.radio_button(:status, tag_value: "published", label: "Published")` through `TableRenderer.filter_call` / `render_filter` / `rfk_radio_button` | `SOURCE REVIEW ONLY` | Factory, call-spec mapping, required `tag_value:`, positional renderer dispatch, and focused specs were source-reviewed. No browser or host sample app was run in this environment. `TableCellInput.radio_button` remains the separate #2383 cell-editor evidence lane. |
+
+Run `bundle exec rspec spec/rails_fields_kit/table_radio_button_metadata_spec.rb spec/rails_fields_kit/table_renderer_radio_button_filter_spec.rb` before promoting this result to automated `PASS`, and record the exact branch / commit and workflow URL in the scoped PR comment. No inconsistency was found during source review. Query execution, params construction, same-name grouping, `fieldset` / `legend`, collection radio groups, table persistence, production styling, and visual approval remain host-app, table-integration, or separate evidence responsibilities.
 
 ## Turbo reconnect checks
 
