@@ -63,6 +63,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/ransack_suggestions.md`.
 - [ ] Review `doc/table_adapters.md`.
 - [ ] Review `doc/table_group_html.md` when table metadata helpers use group-level wrappers; keep `doc/table_adapters.md` as the source of truth for table metadata behavior.
+- [ ] Review `doc/table_metadata_release_evidence.md` as the representative sample-app or PR-comment selector when table metadata rendering, group-level wrappers, or TableRenderer registry checks are release-scoped; keep `doc/table_adapters.md` as the table behavior source of truth and `doc/table_group_html.md` as the group-wrapper source of truth.
 - [ ] Review `doc/configuration.md`.
 - [ ] Review `doc/default_allow_clear.md` when `default_allow_clear` or field-level `allow_clear:` precedence is release-scoped.
 - [ ] Review `doc/events.md`.
