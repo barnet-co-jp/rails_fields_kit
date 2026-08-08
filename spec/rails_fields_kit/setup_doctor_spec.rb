@@ -84,7 +84,9 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
         pin "rails_fields_kit", to: "rails_fields_kit/index.js"
         pin "rails_fields_kit/native_field_accessibility_contract", to: "rails_fields_kit/native_field_accessibility_contract.js"
         pin "rails_fields_kit/native_field_constraint_contract", to: "rails_fields_kit/native_field_constraint_contract.js"
+        pin "rails_fields_kit/read_rendered_error_surface", to: "rails_fields_kit/read_rendered_error_surface.js"
         pin "rails_fields_kit/tom_select_controller", to: "rails_fields_kit/tom_select_controller.js"
+        pin "rails_fields_kit/tom_select_plugin_contract", to: "rails_fields_kit/tom_select_plugin_contract.js"
         pin "rails_fields_kit/tom_select_text_override_contract", to: "rails_fields_kit/tom_select_text_override_contract.js"
       RUBY
 
@@ -369,7 +371,9 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
               { find: /^rails_fields_kit$/, replacement: "/bundle/rails_fields_kit/index.js" },
               { find: /^rails_fields_kit\/native_field_accessibility_contract$/, replacement: "/bundle/rails_fields_kit/native_field_accessibility_contract.js" },
               { find: /^rails_fields_kit\/native_field_constraint_contract$/, replacement: "/bundle/rails_fields_kit/native_field_constraint_contract.js" },
+              { find: /^rails_fields_kit\/read_rendered_error_surface$/, replacement: "/bundle/rails_fields_kit/read_rendered_error_surface.js" },
               { find: /^rails_fields_kit\/tom_select_controller$/, replacement: "/bundle/rails_fields_kit/tom_select_controller.js" },
+              { find: /^rails_fields_kit\/tom_select_plugin_contract$/, replacement: "/bundle/rails_fields_kit/tom_select_plugin_contract.js" },
               { find: /^rails_fields_kit\/tom_select_text_override_contract$/, replacement: "/bundle/rails_fields_kit/tom_select_text_override_contract.js" },
             ],
           },
@@ -402,6 +406,8 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       expect(bundler_check.status).to eq(:manual)
       expect(bundler_check.message).to include("did not show alias signals for rails_fields_kit/native_field_accessibility_contract")
       expect(bundler_check.message).to include("rails_fields_kit/native_field_constraint_contract")
+      expect(bundler_check.message).to include("rails_fields_kit/read_rendered_error_surface")
+      expect(bundler_check.message).to include("rails_fields_kit/tom_select_plugin_contract")
       expect(bundler_check.message).to include("rails_fields_kit/tom_select_text_override_contract")
       expect(bundler_check.message).not_to include("rails_fields_kit/tom_select_controller.")
       expect(bundler_check.message).to include("does not inspect every resolver shape or rewrite bundler config")
@@ -426,6 +432,8 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       expect(bundler_check.message).to include("did not show alias signals for rails_fields_kit")
       expect(bundler_check.message).to include("rails_fields_kit/native_field_accessibility_contract")
       expect(bundler_check.message).to include("rails_fields_kit/native_field_constraint_contract")
+      expect(bundler_check.message).to include("rails_fields_kit/read_rendered_error_surface")
+      expect(bundler_check.message).to include("rails_fields_kit/tom_select_plugin_contract")
       expect(bundler_check.message).to include("does not inspect every resolver shape or rewrite bundler config")
     end
   end
@@ -441,7 +449,9 @@ RSpec.describe RailsFieldsKit::SetupDoctor do
       output = StringIO.new
 
       expect(importmap_check.status).to eq(:missing)
+      expect(importmap_check.message).to include("rails_fields_kit/read_rendered_error_surface")
       expect(importmap_check.message).to include("rails_fields_kit/tom_select_controller")
+      expect(importmap_check.message).to include("rails_fields_kit/tom_select_plugin_contract")
       expect(doctor.run(io: output)).to eq(true)
       expect(output.string).to include("[MISSING] Importmap pins")
       expect(output.string).to include("[MANUAL] Generated setup note")
