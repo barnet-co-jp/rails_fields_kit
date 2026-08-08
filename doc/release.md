@@ -110,6 +110,7 @@ bundle exec rake build
    - `doc/table_adapters.md`
    - `doc/rails_table_preferences_bridge_boundary.md` when Rails Table Preferences bridge ownership, dependency-light integration, or table metadata handoff is part of the release review surface
    - `doc/configuration.md`
+   - `doc/default_allow_clear.md` when the app-wide clear-button default or field-level `allow_clear:` precedence is part of the release surface
    - `doc/events.md`
    - `doc/tom_select_turbo_lifecycle.md`
    - `doc/development.md`
@@ -148,6 +149,8 @@ bundle exec rake build
 10. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
 
    Use [`sample_app_results_route_guide.md`](sample_app_results_route_guide.md) when the change under review is a narrow PR, source-only visual review, or package-root helper evidence slice and you need to choose between the full sample app evidence log and a compact PR comment. The guide is only a recording-lane selector; it does not add a release gate or turn CI success into browser visual approval.
+
+   When `default_allow_clear` is release-scoped, run the focused default-allow-clear lane in [`sample_app_checklist.md`](sample_app_checklist.md) and record the result in [`sample_app_results.md`](sample_app_results.md) or the scoped PR comment. Keep plugin assets, styling, empty-state wording, selection mutation, and Tom Select lifecycle behavior outside Rails Fields Kit evidence.
 
    Confirm the host app's Tom Select package version, pin source, plugin CSS, and plugin-specific asset loading through that app's normal JavaScript dependency review. Rails Fields Kit documents and packages its own import paths, but it does not fix, detect, or auto-correct Tom Select versions or plugin asset policy as part of the gem release gate.
 

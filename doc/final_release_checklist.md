@@ -63,6 +63,7 @@ Use this checklist immediately before publishing a gem release.
 - [ ] Review `doc/table_adapters.md`.
 - [ ] Review `doc/table_group_html.md` when table metadata helpers use group-level wrappers; keep `doc/table_adapters.md` as the source of truth for table metadata behavior.
 - [ ] Review `doc/configuration.md`.
+- [ ] Review `doc/default_allow_clear.md` when `default_allow_clear` or field-level `allow_clear:` precedence is release-scoped.
 - [ ] Review `doc/events.md`.
 - [ ] Review `doc/tom_select_turbo_lifecycle.md`.
 - [ ] Review `doc/development.md`.
@@ -134,6 +135,7 @@ Record visual reference and sample app evidence in a compact matrix before treat
 - [ ] Confirm responsive visual-reference checks stay limited to layout overflow, text wrapping, and state visibility rather than changing runtime helper markup or host-app query behavior.
 - [ ] Confirm one representative `rfk_select` lane keeps a server-rendered collection-backed selected value stable through edit-form redisplay or validation rerender, while `include_blank:`, representative `disabled:`, and representative `option_html:` stay aligned with current docs and do not depend on remote search or create-on-the-fly hooks.
 - [ ] Confirm one representative clearable `rfk_select` lane can return from a selected value to the documented blank or placeholder state with `allow_clear: true` while staying in the collection-backed single-value contract.
+- [ ] Confirm one representative `config.default_allow_clear = true` field and one comparable `allow_clear: false` field were recorded in the focused sample-app lane without treating plugin assets, styling, empty-state wording, selection mutation, or Tom Select lifecycle as Rails Fields Kit behavior.
 - [ ] Confirm one representative `rfk_autocomplete` lane keeps remote suggestions in the typing-assist role while the submitted value stays free text, without depending on `selected_url:` or create-on-the-fly hooks.
 - [ ] Confirm one representative `rfk_multi_select` lane keeps a known collection-backed multiple-value flow, with the submitted value staying an ordinary array of selected IDs or values rather than a tag-entry or free-text creation lane.
 - [ ] Confirm one representative `rfk_tags` lane keeps existing tags visible while accepting a new tag or exercising create-on-the-fly evidence, and stays distinct from the ordinary collection-backed `rfk_multi_select` lane.
