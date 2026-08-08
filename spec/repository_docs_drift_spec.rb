@@ -131,6 +131,9 @@ RSpec.describe "repository docs drift guards" do
     request_failure_recipe = markdown_top_level_section(events_doc, "## Copyable request-failure recipes")
     choosing_the_right_hook = markdown_top_level_section(events_doc, "## Choosing the right hook")
     visual_feedback_lanes = markdown_section(visual_references_doc, "### Request-failure and host-feedback lanes")
+    field_helpers_doc = read_repo_file("doc/field_helpers.md")
+    shared_feedback_options = markdown_section(field_helpers_doc, "### Shared request-failure feedback options")
+    styling_boundary = read_repo_file("doc/styling_boundary.md")
 
     expect(events_doc).to include(
       "When a field is rendered with `error_surface: true`, the controller also includes `detail.surface` on request-failure events",
@@ -151,6 +154,23 @@ RSpec.describe "repository docs drift guards" do
       "Use `load-error`, `selected-load-error`, or `create-error` when the app wants visible error UI, retry UI, or logging",
       "Use `detail.surface` with `error_surface: true` when the app wants a stable placeholder next to the field without replacing the controller",
       "Keep visible feedback in the host app. Rails Fields Kit only dispatches the events."
+    )
+
+    expect(field_helpers_doc).to include(
+      "### Shared request-failure feedback options",
+      "Request-failure feedback for any Tom Select-backed helper",
+      "Keep the chosen helper and opt into `error_surface:`.",
+      "[Shared request-failure feedback options](#shared-request-failure-feedback-options)"
+    )
+    expect(shared_feedback_options).to include(
+      "exposes the element as `event.detail.surface` on request-failure events documented in [`events.md`](events.md)",
+      "[`tom_select_request_failure_visual_reference.html`](tom_select_request_failure_visual_reference.html)",
+      "[`tom_select_host_feedback_lifecycle_visual_reference.html`](tom_select_host_feedback_lifecycle_visual_reference.html)",
+      "they do not add built-in retry UI, default copy, request lifecycle timing, or production CSS to Rails Fields Kit"
+    )
+    expect(styling_boundary).to include(
+      "Request-failure placeholders use `rfk-tom-select-error-surface`",
+      "visible copy, reveal timing, retry UI, and styling remain host-app responsibilities"
     )
 
     expect(visual_feedback_lanes).to include(
