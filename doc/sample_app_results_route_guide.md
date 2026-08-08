@@ -17,6 +17,7 @@ Use this companion note when a release or PR needs manual evidence but the full 
 | Selected preload ordering evidence | Use the selected preload representative lane only when the PR or release depends on preserved selected-label ordering. | Yes for a narrow `rfk_find_with preserve_order: true` docs or evidence PR. | A new ordering SQL, authorization, or endpoint scoping contract. |
 | Selected preload request params evidence | Use the selected preload representative lane only when the PR or release depends on Rails array params, comma-separated ids, or a custom `ids_param:` key. | Yes for a narrow `rfk_find_with` request-shape docs or evidence PR. | Endpoint authorization, tenant scoping, ordering, missing-id policy, or selected preload response-shape redesign. |
 | Remote collection wrapper evidence | Use the remote lifecycle lane only when the PR or release depends on raw arrays, `{ options: [...] }`, or `{ results: [...] }` collection wrappers. | Yes for a narrow output-shape docs or evidence PR. | Create-on-the-fly `{ option: ... }`, pagination metadata, arbitrary response adapters, authorization, query execution, or Tom Select renderer approval. |
+| Dependent query params remote-search evidence | Use the feature-specific dependent query params lane only when the release or PR depends on it. | Yes for a narrow runtime, docs, or evidence PR. Name the commit, representative field and dependency selectors, automated evidence reviewed, manual execution state, and result. | Release-wide baseline evidence, endpoint authorization, query execution, business autofill, selected preload, pagination, production CSS, or visual approval. |
 | Option metadata preview evidence | Use the nearest Tom Select helper lane only when the PR or release depends on `option_metadata_fields:` safe dropdown preview evidence. | Yes for a narrow `rfk_lookup` or option metadata docs PR. Name the helper, representative declaration, result, and boundary. | Business formatting approval, endpoint payload validation, rich renderer ownership, production CSS, or visual approval. |
 | Remote search minimum query length evidence | Use the remote lifecycle lane only when the PR or release depends on endpoint-side blank-query policy. | Yes for a narrow `rfk_search_with minimum_query_length:` docs or evidence PR. Name the blank query, short query, `wrap:` shape, and result. | Field-level `min_length:` approval, authorization policy, tenant scoping, Ransack execution, Tom Select lifecycle approval, or visible feedback approval. |
 | Token search entry evidence | Use the token-search representative entry lane when the PR or release depends on `rfk_token_search` helper rendering or submitted token text. | Yes for a narrow token-search sample docs PR. | Token parser behavior, query execution, Ransack execution, suggestion payload approval, or table metadata approval. |
@@ -111,6 +112,22 @@ A scoped evidence note should include:
 - Confirmation that create-on-the-fly `{ "option": ... }`, pagination metadata, arbitrary response adapters, authorization, query execution, and Tom Select renderer behavior remain out of scope.
 
 Do not use this lane for create-on-the-fly responses. `results` is a collection wrapper for remote search and selected preload evidence, not a pagination contract or generic adapter surface.
+
+### Dependent query params remote-search lane
+
+Record this feature-specific lane when review needs representative evidence for client-side `depends_on:` request shaping and dependency-change lifecycle behavior. It is not release-wide baseline evidence.
+
+A scoped evidence note should include:
+
+- Branch or commit checked, representative Tom Select-backed field, and dependency selectors.
+- Fixed params, nonblank dependency params, and blank dependency state used for request-shape review.
+- Default selection retention and the comparable `clear_on_dependency_change: true` result.
+- Whether stale-response non-adoption and reconnect listener cleanup came from automated evidence, a real sample/browser run, or remain unrun.
+- Sample app/browser execution: `PASS`, `FAIL`, `NOT RUN`, or `DEFERRED` with owner and context.
+- Overall result: `PASS`, `FAIL`, `SOURCE REVIEW ONLY`, or `DEFERRED`.
+- Confirmation that endpoint authorization, query execution, business autofill, selected preload, pagination, production CSS, and visual approval remain out of scope.
+
+Do not infer sample-app or browser `PASS` from CI or source review. Use `DEFERRED` only for an explicit handoff to a named owner, release step, or follow-up issue.
 
 ### Option metadata preview
 
@@ -255,6 +272,27 @@ Remote evidence note
 ```
 
 If the note only reviewed source or docs, use `SOURCE REVIEW ONLY` and do not mark sample-app execution as complete.
+
+### Dependent query params evidence PR comment shape
+
+Use this shape when dependent query params evidence is narrow enough for a PR comment instead of the release evidence log.
+
+```markdown
+Dependent query params evidence note
+
+- Lane: feature-specific dependent query params remote-search evidence
+- Branch or commit: `...`
+- Representative field and dependency selectors: `...`
+- Checked here: source review / focused RSpec / JavaScript smoke / CI / sample app / browser
+- Automated evidence: workflow URL or source-reviewed test paths; do not claim green when unverified
+- Sample app/browser execution: PASS / FAIL / NOT RUN / DEFERRED
+- Result: PASS / FAIL / SOURCE REVIEW ONLY / DEFERRED
+- Evidence observed: fixed-plus-dependency merge, blank omission, selection retention/clearing, stale-response non-adoption, and reconnect listener count as applicable
+- Responsibility boundary: endpoint authorization, query execution, business autofill, selected preload, pagination, production CSS, and visual approval remain out of scope
+- Remaining follow-up / owner / issue: ...
+```
+
+For source and test-wiring review only, use `Sample app/browser execution: NOT RUN` and `Result: SOURCE REVIEW ONLY`. Use `DEFERRED` only for an explicit handoff and name its owner or issue.
 
 ### Option metadata evidence PR comment shape
 

@@ -18,6 +18,7 @@ If the route map is too broad for a narrow PR, use `doc/sample_app_results_route
 | README first field quickstart evidence | `rfk_select` representative collection-backed single-value lane checks, Visual reference render checks | The README first field or quickstart sample needs endpoint-free, server-rendered collection evidence without mixing in setup/import, remote search, selected preload, create-on-the-fly, or token metadata lanes. | Setup/import verification, remote search, selected preload, create-on-the-fly, token metadata, or release-wide readiness. |
 | Visual reference review | Visual reference render checks | Static HTML visual references or the one-screen visual reference index changed. | Runtime helper behavior, production CSS approval, sample-app field behavior, or CI success as visual approval. |
 | Remote lifecycle feedback | Selected preload representative lane checks, create-on-the-fly representative failure lane checks, visible feedback checks | Selected preload, remote search, create-on-the-fly, request-failure, or visible fallback behavior changed. | Setup/import checks, static visual reference approval, endpoint authorization policy, or retry UI ownership unless those surfaces changed. |
+| Dependent query params remote-search evidence | Dependent query params representative remote-search lane checks | The release or PR depends on `depends_on:` merge, blank omission, optional selection clearing, stale-response non-adoption, or reconnect listener cleanup. | Release-wide baseline evidence, endpoint authorization, query execution, business autofill, selected preload, pagination, production CSS, or visual approval. |
 | Token and table metadata | `rfk_token_search` representative token-entry lane checks, token suggestion and Ransack suggestion metadata checks, table metadata checks | `rfk_token_search` helper rendering, submitted token text, token suggestions, saved-search metadata, Ransack metadata, table filters, range field table metadata, or cell editor metadata changed. | Query execution, parser semantics, table preference persistence, visual reference rendering, native wrapper evidence, or suggestion/table metadata approval unless those lanes also changed. |
 
 When adding a new evidence lane, place it near the closest feature-specific section and update this route map only when reviewers need a new starting point. Do not turn a feature-specific lane into a release-wide requirement without a separate release policy decision.
@@ -365,6 +366,27 @@ Notes:
 - [ ] Ransack-compatible suggestion metadata works as expected if it is part of the release surface
 
 Notes:
+
+## Dependent query params representative remote-search lane checks
+
+Use this only as feature-specific evidence when `depends_on:` or `clear_on_dependency_change:` is in scope. Do not promote it to the release-wide baseline.
+
+- Branch / commit:
+- Representative field and dependency selectors:
+- Evidence location:
+- Automated evidence reviewed: focused RSpec / JavaScript smoke / workflow URL / not verified
+- Sample app/browser execution: PASS / FAIL / NOT RUN / DEFERRED
+- Result: PASS / FAIL / SOURCE REVIEW ONLY / DEFERRED
+
+- [ ] fixed `query_params:` and current nonblank dependency params were present in the captured remote-search request, with the dependency value winning on a duplicate key
+- [ ] blank dependency values were omitted
+- [ ] the default field retained its selection and the `clear_on_dependency_change: true` field cleared its selection after an effective dependency change
+- [ ] a response from the previous dependency state was not adopted
+- [ ] one Turbo reconnect did not duplicate dependency listeners, reloads, or `dependency-change` notifications
+- [ ] endpoint authorization, query execution, business autofill, selected preload, pagination, production CSS, and visual approval remained out of scope
+
+Notes:
+- Remaining manual evidence / owner / follow-up:
 
 ## Selected preload representative lane checks
 

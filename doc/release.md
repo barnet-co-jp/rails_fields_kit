@@ -84,6 +84,7 @@ bundle exec rake build
    - `doc/public_api.md`
    - `doc/select_migration.md`
    - `doc/field_helpers.md`
+   - `doc/dependent_query_params.md` when `depends_on:` request shaping or dependency-change behavior is part of the release surface
    - `doc/check_box.md` when the `rfk_check_box` wrapper or checkbox boundary is part of the release surface
    - `doc/check_box_release_evidence.md` when checkbox sample-app or release evidence is part of the release surface
    - `doc/radio_button.md` when the `rfk_radio_button` wrapper or radio button boundary is part of the release surface
@@ -149,6 +150,8 @@ bundle exec rake build
 10. Install the built gem into a sample Rails 7+ application, verify [`sample_app_checklist.md`](sample_app_checklist.md), and record the result in [`sample_app_results.md`](sample_app_results.md).
 
    Use [`sample_app_results_route_guide.md`](sample_app_results_route_guide.md) when the change under review is a narrow PR, source-only visual review, or package-root helper evidence slice and you need to choose between the full sample app evidence log and a compact PR comment. The guide is only a recording-lane selector; it does not add a release gate or turn CI success into browser visual approval.
+
+   When dependent query params are release-scoped, use [`dependent_query_params.md`](dependent_query_params.md) as the behavior source of truth and run only the feature-specific dependent query params lane in [`sample_app_checklist.md`](sample_app_checklist.md). Record it in [`sample_app_results.md`](sample_app_results.md) or a scoped PR comment selected through [`sample_app_results_route_guide.md`](sample_app_results_route_guide.md). Do not turn this lane into release-wide baseline evidence, and keep endpoint authorization, query execution, business autofill, selected preload, pagination, production CSS, and visual approval out of scope.
 
    When `default_allow_clear` is release-scoped, run the focused default-allow-clear lane in [`sample_app_checklist.md`](sample_app_checklist.md) and record the result in [`sample_app_results.md`](sample_app_results.md) or the scoped PR comment. Keep plugin assets, styling, empty-state wording, selection mutation, and Tom Select lifecycle behavior outside Rails Fields Kit evidence.
 
