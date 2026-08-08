@@ -31,23 +31,7 @@ Endpoint meaning, authorization, account scoping, and valid combinations remain 
 
 ## Dependency changes
 
-When a dependency field changes, Rails Fields Kit aborts any in-flight remote search, clears cached remote options, and dispatches:
-
-```text
-rails-fields-kit--tom-select:dependency-change
-```
-
-Event detail includes:
-
-```js
-{
-  params,
-  previousParams,
-  changed
-}
-```
-
-`params` is the current dependency-param object, `previousParams` is the prior dependency-param object, and `changed` maps changed keys to `{ previous, current }` values.
+When the effective dependency params change, Rails Fields Kit aborts any in-flight remote search, clears cached remote options, and dispatches the [`rails-fields-kit--tom-select:dependency-change`](events.md#dependency-changes) integration hook. Use [`events.md`](events.md#dependency-changes) as the source of truth for the exact event name, detail payload, and dispatch timing.
 
 If the dropdown is open, the controller reloads the current Tom Select query after clearing cached options so the open list does not reuse stale results. Turbo reconnect and disconnect remove dependency listeners before rebinding, so replacing a form does not duplicate listeners.
 

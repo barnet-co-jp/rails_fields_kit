@@ -25,10 +25,11 @@ Use those attributes for host-owned CSS, analytics, or lightweight event handler
 | Workflow | Success surface | Failure surface | Notes |
 | --- | --- | --- | --- |
 | Remote search | `rails-fields-kit--tom-select:load` | `rails-fields-kit--tom-select:load-error` | Use when the app needs the fetched option payloads. |
+| Dependency-param change | `rails-fields-kit--tom-select:dependency-change` | — | Host-app follow-up signal after effective dependency params change. |
 | Selected preload | `rails-fields-kit--tom-select:selected-load` | `rails-fields-kit--tom-select:selected-load-error` | Use when edit forms need labels for already-selected IDs. |
 | Create-on-the-fly | `rails-fields-kit--tom-select:create`, `rails-fields-kit--tom-select:item-add`, and `rails-fields-kit--tom-select:change` | `rails-fields-kit--tom-select:create-error` | Use `create` when the app needs a dedicated hook before ordinary selection events. |
 
-For dependency-driven remote search and the `rails-fields-kit--tom-select:dependency-change` integration hook, see [`dependent_query_params.md`](dependent_query_params.md). Endpoint semantics, authorization, and business rules remain host-app responsibilities.
+For dependency-driven remote-search setup, merge order, selection clearing, and reconnect behavior, see [`dependent_query_params.md`](dependent_query_params.md). Endpoint semantics, authorization, business rules, and visible feedback remain host-app responsibilities.
 
 Common error detail fields:
 
@@ -57,6 +58,18 @@ Use the failure events for server errors, non-2xx responses, and payload-shape e
   - Detail: `{ operation, query, error, response, payload, status, surface }`
 
 Use these hooks when the host app wants to react to the fetched option set itself, for example by logging searches, updating nearby helper text, or showing a retry state. A true empty search result should return `[]`, `{ options: [] }`, or `{ results: [] }`; other 2xx JSON shapes are treated as payload errors so endpoint drift does not look like a successful empty search.
+
+## Dependency changes
+
+- `rails-fields-kit--tom-select:dependency-change`
+  - Fired after the effective dependency params change, after any in-flight remote search is aborted, cached remote options are cleared, optional selection clearing has run, and an open dropdown has been asked to reload its current query.
+  - Detail: `{ params, previousParams, changed }`
+
+`params` is the current dependency-param object, `previousParams` is the prior dependency-param object, and `changed` maps each changed key to `{ previous, current }`. No event is dispatched when an `input` or `change` notification leaves the effective dependency params unchanged.
+
+Use this as a host-app follow-up signal when app-owned state or UI needs to react to changed dependency params. It does not make Rails Fields Kit responsible for business logic, endpoint behavior, authorization, or visible feedback.
+
+For dependency setup, request-param merge order, selection clearing, and reconnect behavior, see [`dependent_query_params.md`](dependent_query_params.md).
 
 ## Selected preload
 
