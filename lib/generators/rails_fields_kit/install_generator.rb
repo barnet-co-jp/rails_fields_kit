@@ -78,7 +78,8 @@ module RailsFieldsKit
         say "Rails Fields Kit initializer created.", :green
         say "Next steps:", :yellow
         say "  1. Install Tom Select with your app's JavaScript toolchain: yarn add tom-select"
-        say "  2. Register RailsFieldsKit::TomSelectController in your Stimulus application."
+        say "  2. Import { TomSelectController } from \"rails_fields_kit\" and register it " \
+          "as \"rails-fields-kit--tom-select\" in your Stimulus application."
         say "  3. Load tom-select/dist/css/tom-select.css from your app stylesheet or bundler."
         say "  4. #{importmap_next_step}"
         say "  5. Run rails rails_fields_kit:doctor to review detectable setup state and manual checklist items."

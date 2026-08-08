@@ -52,6 +52,9 @@ Use these after the first field works or when the host app hits that exact setup
 
 - Setup doctor output review: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup_doctor_output_review.md>
 - Configuration profile examples: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/configuration_profiles.md> — docs-only copyable examples, not named profiles, presets, or generator options.
+- Text override visual reference: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/tom_select_text_override_visual_reference.html>
+- Selected preload release gate: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/selected_preload_release_gate.md> — use only when selected preload behavior is in release or PR scope.
+- Package-root helper release evidence: <https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/package_root_helper_release_evidence.md> — choose representative checks only when host scripts import package-root helpers; keep `doc/public_api.md#javascript-exports` as the helper-list and return-shape source of truth.
 - Unresolved imports troubleshooting: `doc/setup.md#unresolved-imports`
 - Turbo and Stimulus reconnection note: `doc/setup.md#turbo-and-stimulus-reconnection`
 - Support boundary: `README.md#support-boundary`

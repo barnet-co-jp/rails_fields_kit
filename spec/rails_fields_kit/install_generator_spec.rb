@@ -36,7 +36,27 @@ RSpec.describe RailsFieldsKit::Generators::InstallGenerator do
     expect(setup_notes).to include("rfk_find_with")
     expect(setup_notes).to include("rfk_create_with")
     expect(setup_notes).to include("instead of copying that setup here")
+    expect(setup_notes).to include(
+      "doc/tom_select_text_override_visual_reference.html",
+      "doc/selected_preload_release_gate.md",
+      "doc/package_root_helper_release_evidence.md"
+    )
     expect(setup_notes).not_to include("value_method:")
     expect(setup_notes).not_to include("label_method:")
+  end
+
+  it "keeps terminal next steps aligned with the package-root controller registration" do
+    generator = described_class.new
+    messages = []
+    allow(generator).to receive(:say) { |message, *_args| messages << message }
+
+    generator.show_next_steps
+
+    next_steps = messages.join("\n")
+    expect(next_steps).to include(
+      "Import { TomSelectController } from \"rails_fields_kit\"",
+      "register it as \"rails-fields-kit--tom-select\""
+    )
+    expect(next_steps).not_to include("RailsFieldsKit::TomSelectController")
   end
 end
