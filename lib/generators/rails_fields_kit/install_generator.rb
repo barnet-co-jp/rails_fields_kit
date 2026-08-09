@@ -92,7 +92,7 @@ module RailsFieldsKit
 
       def setup_notes_next_step
         if options[:skip_setup_notes]
-          "Setup examples remain in the maintained guide: https://github.com/matsuo-haruhito/rails_fields_kit/blob/main/doc/setup.md"
+          "Setup examples remain in the maintained guide: https://github.com/barnet-co-jp/rails_fields_kit/blob/main/doc/setup.md"
         else
           "See doc/rails_fields_kit_setup.md for examples."
         end

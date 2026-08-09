@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Rails form helpers for Tom Select fields, token search, native wrappers, and table metadata."
   spec.description = "Rails Fields Kit provides Rails-friendly form helpers centered on Tom Select-backed selects and comboboxes, with token search inputs, native wrapper helpers, and table-oriented metadata helpers for host-app owned workflows."
-  spec.homepage = "https://github.com/matsuo-haruhito/rails_fields_kit"
+  spec.homepage = "https://github.com/barnet-co-jp/rails_fields_kit"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1"
 
