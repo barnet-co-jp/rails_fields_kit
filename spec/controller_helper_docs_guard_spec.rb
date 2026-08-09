@@ -12,11 +12,17 @@ RSpec.describe "controller helper docs guard" do
     remote_field_helper_reference = markdown_section(field_helpers, "## Remote option options")
 
     expect(selected_preload_reference).to include(
+      "Without an explicit `order:`",
+      "follow the normalized incoming selected IDs by default",
+      "Supplying `order:` makes the relation order the response-order source of truth",
       "preserve_order: true",
-      "incoming selected IDs",
+      "A custom `value_field:` only changes the output key",
+      "Tom Select registers and restores selected items in the endpoint response order",
+      "`detail.options` in that response order",
+      "`detail.values` in the original requested order",
       "skips missing IDs",
-      "does not change authorization, scoping, query execution, or Tom Select runtime behavior",
-      "Use one of those policies per endpoint when possible"
+      "does not change authorization, scoping, or query execution",
+      "Use one of those final payload policies per endpoint when possible"
     )
     expect(remote_field_helper_reference).to include(
       "selected_url:",
