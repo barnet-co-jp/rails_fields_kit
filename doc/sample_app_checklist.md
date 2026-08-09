@@ -151,6 +151,15 @@ Create a form that exercises:
 - `rfk_token_search`
 - native helpers such as `rfk_text_field` and `rfk_money_field`
 
+## Choose release-scoped native helper family evidence
+
+Use this lane only when a native helper family is in the release or narrow PR scope. Pick the smallest representative field and do not reproduce the public helper inventory.
+
+- For date, time, datetime-local, or color evidence, use [`native_date_time_color_fields.md`](native_date_time_color_fields.md) as the boundary source. Record the chosen helper, wrapper, label, hint, error, accessibility wiring, and only the ordinary `min:`, `max:`, or `step:` attributes actually checked. Browser picker behavior, timezone or locale formatting, masking, validation-message policy, custom picker integrations, and production CSS remain browser or host-app responsibilities.
+- For file evidence, use [`file_field.md`](file_field.md) as the boundary source. Record one `rfk_file_field` and only the checked `accept:` or `multiple:` options; treat `direct_upload:` only as Rails option pass-through when it is explicitly in scope. Multipart setup, Active Storage direct-upload JavaScript, previews, upload progress, validation and storage policy, and production CSS remain host-app responsibilities.
+
+For a narrow PR, record the representative field, execution status, responsibility boundary, and evidence location in the PR comment. For a release candidate, use the release-scoped native family fields in `doc/sample_app_results.md`. Source review alone must stay `SOURCE REVIEW ONLY` or `DEFERRED`, never `PASS`. Keep static visual review in the visual reference matrix rather than treating this runtime evidence selector as approval for #1022 or #1636 artifacts.
+
 ## Verify native wrapper customization
 
 Use one representative native helper with `wrapper: true` and field-level wrapper customization options.
