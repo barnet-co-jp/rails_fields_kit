@@ -274,7 +274,9 @@ If the named sample or browser check did not run, record `SOURCE REVIEW ONLY` or
 
 - [ ] one representative native helper field covered the end-to-end `wrapper: true` lane
 - [ ] the field rendered the documented label, hint, prefix, and suffix while staying in the native helper family rather than a Tom Select lane
-- [ ] `nativeFieldAccessibilityContract(element)` read the representative field's rendered `describedByIds`, `hintElement`, `errorElement`, and `wrapperElement` contract from package-root import code
+- [ ] `nativeFieldAccessibilityContract(element)` read the representative field's rendered `describedByIds`, `labelElement`, `hintElement`, `errorElement`, and `wrapperElement` contract from package-root import code
+- [ ] `labelElement` resolved the representative field's explicit `label[for]` / input `id` association
+- [ ] when wrapper fallback evidence was release-scoped, a comparable field without an explicit association resolved the nearest `.rfk-field` label without DOM mutation
 - [ ] an edit form or validation rerender kept the same value and preserved the shared wrapper / accessibility wiring for that representative field
 - [ ] a comparable `accessibility: false` example clearly removed the automatic accessibility wiring that the release docs treat as opt-out behavior
 

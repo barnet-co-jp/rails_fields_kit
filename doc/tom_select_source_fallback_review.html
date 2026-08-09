@@ -56,8 +56,8 @@
       .message { background: var(--warning-soft); color: var(--warning); }
       .option strong, .message strong { display: block; font-size: 0.91rem; }
       .option span, .message span { display: block; margin-top: 3px; color: var(--muted); font-size: 0.84rem; }
-      table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
-      th, td { padding: 7px 8px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+      table { width: 100%; max-width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 0.84rem; }
+      th, td { padding: 7px 8px; border: 1px solid var(--line); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
       th { background: var(--muted-surface); color: #4f5f6d; }
       code { padding: 1px 4px; border: 1px solid #dbe2e8; background: #f6f8fa; font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.86em; }
       @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }

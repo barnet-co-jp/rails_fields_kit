@@ -359,6 +359,17 @@
         overflow-wrap: anywhere;
       }
 
+      .control-row input.input {
+        width: 100%;
+        border: 0;
+        font: inherit;
+      }
+
+      .control-row input[type="color"].input {
+        min-height: 42px;
+        padding: 5px 10px;
+      }
+
       .textarea {
         min-height: 88px;
       }
@@ -456,6 +467,12 @@
       .two-up {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .native-picker-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
         gap: 8px;
       }
 
@@ -583,6 +600,7 @@
         </p>
         <div class="hero-links">
           <a href="field_helpers.md">Read helper details</a>
+          <a href="native_date_time_color_fields.md">Date, time, and color boundary</a>
           <a href="public_api.md">Check public API</a>
         </div>
       </section>
@@ -867,6 +885,71 @@
               <div class="metadata-row">
                 <span class="metadata-key">Viewport check</span>
                 <span class="metadata-value">Long URL and query examples wrap through the existing two-up and 460px control-row rules.</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card native-picker-card">
+          <div class="tag metadata">Native date, time, and color</div>
+          <h2>Browser-native pickers keep the shared wrapper</h2>
+          <p>
+            Date, time, datetime-local, and color helpers preserve browser-native controls while reusing
+            the same label, hint, error, required marker, and accessibility wiring as other native fields.
+          </p>
+          <div class="example metadata-surface">
+            <div class="native-picker-grid">
+              <div class="field-block">
+                <div class="label-row">
+                  <span>Project start date</span>
+                  <span class="required">Required</span>
+                </div>
+                <div class="control-row">
+                  <input class="input" type="date" value="2026-08-21" aria-label="Project start date">
+                </div>
+                <div class="hint">Representative <code>rfk_date_field</code> with ordinary native <code>min:</code> pass-through.</div>
+              </div>
+              <div class="field-block">
+                <div class="label-row">
+                  <span>Daily review time</span>
+                </div>
+                <div class="control-row">
+                  <input class="input" type="time" value="09:30" aria-label="Daily review time">
+                </div>
+                <div class="hint">Representative <code>rfk_time_field</code>; the browser owns the picker UI.</div>
+              </div>
+              <div class="field-block">
+                <div class="label-row">
+                  <span>Publication window</span>
+                </div>
+                <div class="control-row">
+                  <input class="input" type="datetime-local" value="2026-08-21T09:30" aria-label="Publication window">
+                </div>
+                <div class="hint">Representative <code>rfk_datetime_local_field</code>; timezone conversion remains host-app owned.</div>
+              </div>
+              <div class="field-block">
+                <div class="label-row">
+                  <span>Workspace accent</span>
+                </div>
+                <div class="control-row">
+                  <input class="input" type="color" value="#176b5f" aria-label="Workspace accent">
+                  <span class="affix trailing">#176b5f</span>
+                </div>
+                <div class="hint">Representative <code>rfk_color_field</code>; custom palettes and production styling stay outside this lane.</div>
+              </div>
+            </div>
+            <div class="metadata-list">
+              <div class="metadata-row">
+                <span class="metadata-key">Shared contract</span>
+                <span class="metadata-value">Wrapper, label, hint, error, affix, and accessibility wiring remain Rails Fields Kit responsibilities.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">Host-app boundary</span>
+                <span class="metadata-value">Custom pickers, masking, polyfills, timezone and locale policy, validation copy, storage semantics, and production CSS remain outside this artifact.</span>
+              </div>
+              <div class="metadata-row">
+                <span class="metadata-key">Viewport check</span>
+                <span class="metadata-value">At narrow widths, native controls, long labels, hints, and the color value wrap inside the same one-column card layout.</span>
               </div>
             </div>
           </div>
@@ -1169,6 +1252,7 @@
           <span>Native helper lane only: no remote search, selected preload, or create-on-the-fly semantics.</span>
           <span>Native browser semantics distinguish `rfk_search_field`, `rfk_email_field`, and `rfk_url_field` from Tom Select-backed helpers.</span>
           <span>Multiline `rfk_text_area` keeps long content, long hints, and validation copy readable in one native wrapper lane.</span>
+          <span>Native date, time, datetime-local, and color controls keep browser-native picker semantics inside the shared wrapper at desktop and narrow widths.</span>
           <span>Input metadata and constraint attributes stay visible without adding masks, formatting, or validation policy.</span>
           <span>`rfk_file_field` stays a native wrapper lane: upload workflow, previews, progress, storage, and scanning remain host-app responsibilities.</span>
           <span>Narrow viewport stress keeps long label, hint, error, required marker, and money affixes readable.</span>
