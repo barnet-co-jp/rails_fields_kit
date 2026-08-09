@@ -250,6 +250,26 @@ For date, time, datetime-local, or color evidence, use `doc/native_date_time_col
 
 For file evidence, use `doc/file_field.md` as the boundary source and record only one `rfk_file_field` plus checked `accept:` or `multiple:` pass-through; include `direct_upload:` only when Rails option pass-through is explicitly in scope. Multipart setup, Active Storage direct-upload JavaScript, previews, upload progress, validation and storage policy, and production CSS remain host-app responsibilities.
 
+### Native disabled and readonly representative evidence
+
+Use two comparable native helper fields when non-editable state is release-critical. Keep `disabled:` and `readonly:` as separate records; neither state implies an authorization decision or a Rails Fields Kit-owned business rule.
+
+- Disabled representative helper / field:
+- Disabled current value and wrapper pieces checked:
+- Disabled execution status / result:
+- Disabled evidence location:
+- Readonly representative helper / field:
+- Readonly current value and wrapper pieces checked:
+- Readonly execution status / result:
+- Readonly evidence location:
+
+- [ ] the disabled field displayed its current value and preserved the scoped label, hint, prefix, suffix, and accessibility wiring
+- [ ] the readonly field displayed its current value and preserved the same scoped wrapper contract without being recorded as the disabled lane
+- [ ] edit-form or validation redisplay behavior was recorded separately for both fields when it was in scope
+- [ ] evidence notes kept authorization and business rules with the host application
+
+If these named sample checks did not run, record `SOURCE REVIEW ONLY` or `DEFERRED` for each field. Do not mark either record `PASS` from source review, static HTML, or CI success.
+
 If the named sample or browser check did not run, record `SOURCE REVIEW ONLY` or `DEFERRED` with the missing lane and handoff context. Do not mark this blank record `PASS` from source review or CI success. Keep any static visual review in the Visual reference render checks matrix.
 
 - [ ] one representative native helper field covered the end-to-end `wrapper: true` lane
