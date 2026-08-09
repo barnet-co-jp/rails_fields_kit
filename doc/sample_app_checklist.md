@@ -172,6 +172,8 @@ Verify:
 - `control_html:`, `prefix_html:`, and `suffix_html:` can add representative attributes on an affix field without changing the input value or submitted param shape
 - `html:` still targets the input element itself, separate from generated wrapper pieces
 - generated hint / error ids and any custom input `id:` boundary match [`field_helpers.md#generated-described-by-ids`](field_helpers.md#generated-described-by-ids) for the representative field without turning the checklist into a full generated-id inventory
+- `nativeFieldAccessibilityContract(element).labelElement` resolves the representative field's explicit `label[for]` / input `id` association
+- when wrapper fallback evidence is in scope, a comparable field without an explicit association resolves the nearest `.rfk-field` label without DOM mutation
 - hint / error ids still feed the shared accessibility wiring when `accessibility:` remains enabled
 - `accessibility: false` remains an explicit opt-out from automatic aria wiring only, not from the wrapper customization lane
 - repo-wide class defaults from the initializer still provide the shared baseline; field-level `*_html` options only layer additional attributes for that field
