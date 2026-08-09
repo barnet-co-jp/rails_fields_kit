@@ -103,8 +103,10 @@ Use `create` when the host app needs to distinguish inline creation from ordinar
 Create failure keeps its own dedicated event:
 
 - `rails-fields-kit--tom-select:create-error`
-  - Fired after create-on-the-fly fails or returns a non-2xx response.
+  - Fired after create-on-the-fly fails, returns a non-2xx response, or returns 2xx JSON without a usable option object containing the configured value field.
   - Detail: `{ operation, input, error, response, payload, status, surface }`
+
+The create endpoint must return either an option object or `{ option: { ... } }` with a present configured value field. Values such as `0` and `false` remain valid; `null`, an empty string, a missing value field, a non-object payload, or an empty wrapped option are payload-shape failures. A missing label can still use the documented display-only value fallback, so it does not by itself make the option invalid.
 
 Use `create-error` when the host app wants to show validation feedback, retry affordances, or analytics for failed inline creation.
 

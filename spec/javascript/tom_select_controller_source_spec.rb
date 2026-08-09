@@ -108,8 +108,10 @@ RSpec.describe "Tom Select controller source" do
     expect(source).to include("options: this.selectedOptions()")
   end
 
-  it "dispatches a dedicated create success event with the input and option" do
-    expect(source).to include('if (option) this.dispatch("create", { detail: { input, option } })')
+  it "dispatches create success only after response normalization accepts the option" do
+    expect(source).to include("const option = this.normalizeCreatedOption(json)")
+    expect(source).to include('new Error("Rails Fields Kit create response must include a usable option object")')
+    expect(source).to include('this.dispatch("create", { detail: { input, option } })')
   end
 
   it "merges fixed create params into the create request body" do
