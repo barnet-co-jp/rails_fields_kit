@@ -192,6 +192,23 @@ await withTomSelectControllerSandbox("rails-fields-kit-interaction-events-", asy
     detail: { options: selectedOptions, values: ["7"] }
   })
 
+  addedOptions.length = 0
+  addedItems.length = 0
+  const responseOrderedOptions = [
+    { value: "1", text: "One" },
+    { value: "2", text: "Two" }
+  ]
+  controller.applySelectedOptions(responseOrderedOptions, ["2", "1"])
+  assert.deepEqual(addedOptions, responseOrderedOptions)
+  assert.deepEqual(addedItems, [
+    { value: "1", silent: true },
+    { value: "2", silent: true }
+  ])
+  assert.deepEqual(dispatched.pop(), {
+    eventName: "selected-load",
+    detail: { options: responseOrderedOptions, values: ["2", "1"] }
+  })
+
   const createdOption = { value: "kyoto", text: "Kyoto" }
   controller.createUrlValue = "/cities"
   controller.createParamsValue = { source: "inline" }
