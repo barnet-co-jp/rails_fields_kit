@@ -301,7 +301,7 @@ These helpers return rendered contract or wiring details for host-app inspection
 <% end %>
 ```
 
-`selected:` preloads the current option for edit forms before remote search runs. It accepts a record, a `{ value:, text: }` hash, a `{ id:, name: }` hash, an ID value, or an array of any of those for multiple fields.
+`selected:` preloads the current option for edit forms before remote search runs. It accepts a record, a `{ value:, text: }` hash, a `{ id:, name: }` hash, an ID value, or an array of any of those for multiple fields. Explicit `0` and `false` values are valid selected values rather than blanks; for hashes, Rails Fields Kit also preserves `0` or `false` labels and only falls through to the alternate `id` / `name` key when the preferred key is `nil`.
 
 When `selected_url:` is provided, Rails Fields Kit can load missing selected option labels from the server after Tom Select connects. This is useful when the form only has stored IDs and not the display labels. For one value it sends `selected_param`, default `id`; for multiple values it sends `selected_multiple_param`, default `ids`.
 
