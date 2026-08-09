@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.0
+
+First stable release. All open issues resolved, documentation streamlined for end-user clarity.
+
+### Highlights
+
+- Tom Select-backed helpers: `rfk_select`, `rfk_combobox`, `rfk_autocomplete`, `rfk_token_search`, `rfk_multi_select`, `rfk_tags`, `rfk_grouped_select`, `rfk_enum_select`
+- Native wrapper helpers: `rfk_text_field`, `rfk_text_area`, `rfk_password_field`, `rfk_money_field`, `rfk_phone_field`, `rfk_range_field`, and more
+- Controller helpers: `rfk_search_with`, `rfk_find_with`, `rfk_create_with`, `rfk_token_suggestions_with`
+- Table metadata adapters: `TableFilterInput`, `TableCellInput`, `TableMetadata`, `TableRenderer`
+- Package-root JavaScript exports with read-only contract helpers
+- Install generator with setup doctor
+- Turbo reconnect support
+
+### Changed from 0.1.0
+
+- Removed 89 internal documentation files (release evidence, visual references, boundary records) from the gem package
+- Simplified README (492 → 180 lines) with quickstart-first structure
+- Simplified generated setup notes (120 → 35 lines)
+- Removed ROADMAP.md and Product Profile.md
+- Removed 111 documentation guard specs; retained runtime and behavior specs
+
 ## Unreleased
 
 - Add `rfk_lookup` for free-text values paired with optional selected IDs, and escaped declarative `option_metadata_fields` previews for Tom Select-backed helpers.
