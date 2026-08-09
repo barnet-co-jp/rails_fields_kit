@@ -142,6 +142,49 @@ await withTomSelectControllerSandbox("rails-fields-kit-create-headers-", async (
     )
   })
 
+  await withCsrfMeta(undefined, async () => {
+    const invalidPayloads = [
+      {},
+      null,
+      { option: {} },
+      { option: null },
+      "not-an-option"
+    ]
+
+    for (const payload of invalidPayloads) {
+      await withFetchStub(
+        async () => ({
+          ok: true,
+          status: 200,
+          json: async () => payload
+        }),
+        async () => {
+          const { controller: createController, events } = buildCreateController(TomSelectController)
+          const createdOption = await new Promise((resolve) => createController.createOption("Invalid success", resolve))
+
+          assert.equal(createdOption, false)
+          assert.deepEqual(events.map((event) => event.eventName), ["create-error"])
+          assert.equal(events[0].payload.detail.operation, "create")
+          assert.equal(events[0].payload.detail.input, "Invalid success")
+          assert.equal(events[0].payload.detail.status, 200)
+          assert.deepEqual(events[0].payload.detail.payload, payload)
+          assert.match(events[0].payload.detail.error.message, /usable option object/)
+        }
+      )
+    }
+  })
+
+  const customValueController = buildCreateController(TomSelectController).controller
+  customValueController.valueFieldValue = "slug"
+  assert.deepEqual(
+    await customValueController.handleCreateResponse({ ok: true, status: 200, json: async () => ({ slug: 0 }) }),
+    { slug: 0 }
+  )
+  assert.deepEqual(
+    await customValueController.handleCreateResponse({ ok: true, status: 200, json: async () => ({ slug: false }) }),
+    { slug: false }
+  )
+
   const wrappedOption = { value: "tokyo", text: "Tokyo" }
   assert.deepEqual(
     controller.normalizeCreatedOption({ option: wrappedOption }),

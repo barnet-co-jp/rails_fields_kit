@@ -542,12 +542,11 @@ export default class extends Controller {
       body: JSON.stringify({ ...this.createParamsValue, [this.createParamValue]: input })
     }, signal))
       .then((response) => this.handleCreateResponse(response))
-      .then((json) => {
+      .then((option) => {
         if (!this.requestIsCurrent("create", token)) return
 
-        const option = this.normalizeCreatedOption(json)
         this.clearErrorSurface()
-        if (option) this.dispatch("create", { detail: { input, option } })
+        this.dispatch("create", { detail: { input, option } })
         callback(option)
       })
       .catch((error) => {
@@ -573,9 +572,17 @@ export default class extends Controller {
 
   handleCreateResponse(response) {
     return response.json().catch(() => ({})).then((json) => {
-      if (response.ok) return json
+      if (!response.ok) {
+        const error = new Error("Rails Fields Kit create request failed")
+        error.response = response
+        error.payload = json
+        throw error
+      }
 
-      const error = new Error("Rails Fields Kit create request failed")
+      const option = this.normalizeCreatedOption(json)
+      if (option) return option
+
+      const error = new Error("Rails Fields Kit create response must include a usable option object")
       error.response = response
       error.payload = json
       throw error
