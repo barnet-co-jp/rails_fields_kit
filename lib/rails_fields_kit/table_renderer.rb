@@ -6,6 +6,7 @@ module RailsFieldsKit
       "select" => :rfk_select,
       "combobox" => :rfk_combobox,
       "autocomplete" => :rfk_autocomplete,
+      "lookup" => :rfk_lookup,
       "tags" => :rfk_tags,
       "multi_select" => :rfk_multi_select,
       "grouped_select" => :rfk_grouped_select,

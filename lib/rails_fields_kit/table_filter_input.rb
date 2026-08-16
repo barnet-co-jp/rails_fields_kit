@@ -29,7 +29,7 @@ module RailsFieldsKit
       radio_button
     ].freeze
 
-    KNOWN_FIELD_TYPES = (COMMON_FIELD_TYPES + %i[token_search]).freeze
+    KNOWN_FIELD_TYPES = (COMMON_FIELD_TYPES + %i[token_search lookup]).freeze
 
     attr_reader :field_type
 
@@ -69,6 +69,11 @@ module RailsFieldsKit
         }.merge(options)
         filter_options[:url] = url if url
         from_type(:token_search, field_name, **filter_options)
+      end
+
+      def lookup(field_name, id_field:, **options)
+        filter_options = options.merge(id_field: id_field)
+        from_type(:lookup, field_name, **filter_options)
       end
     end
 
