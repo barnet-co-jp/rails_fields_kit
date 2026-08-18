@@ -32,10 +32,11 @@ export async function withTomSelectControllerSandbox(prefix, assertion) {
   try {
     await installTomSelectControllerStubs(sandboxRoot)
 
-    const controllerSource = path.join(repoRoot, "app", "javascript", "rails_fields_kit", "tom_select_controller.js")
-    const controllerPath = path.join(sandboxRoot, "tom_select_controller.js")
-    await cp(controllerSource, controllerPath)
+    const controllerDirectory = path.join(repoRoot, "app", "javascript", "rails_fields_kit")
+    await cp(path.join(controllerDirectory, "tom_select_controller.js"), path.join(sandboxRoot, "tom_select_controller.js"))
+    await cp(path.join(controllerDirectory, "tom_select_controller_base.js"), path.join(sandboxRoot, "tom_select_controller_base.js"))
 
+    const controllerPath = path.join(sandboxRoot, "tom_select_controller.js")
     const { default: TomSelectController } = await import(pathToFileURL(controllerPath).href)
     await assertion({ TomSelectController, sandboxRoot })
   } finally {

@@ -51,6 +51,16 @@ Do not depend on private `rfk_*` implementation methods, generated Tom Select in
 
 If a required behavior cannot be expressed through the documented public API, add or request a public Rails Fields Kit extension point before introducing a host-side monkey patch. For example, enum label I18n key construction is configurable through `config.enum_i18n_key` rather than overriding the private enum-label helper.
 
+Before replacing or subclassing the Rails Fields Kit Tom Select controller, check these existing public routes:
+
+- `dropdown_parent:` passes Tom Select's `dropdownParent` selector for overflow/portal placement. Framework-specific overlay positioning, z-index, and nested-scroll policy remain host-app concerns.
+- `depends_on:` and `clear_on_dependency_change:` provide dependent remote-search params, cache clearing, optional selection clearing, and open-dropdown reload behavior.
+- `html: { data: { action: "..." } }` can subscribe app-owned Stimulus controllers to Rails Fields Kit events without replacing the built-in controller.
+- `selected-load-error` and `error_surface: true` provide selected-preload failure hooks and an accessible field-adjacent feedback surface.
+- `add_precedence:`, `create_on_blur:`, and `clear_after_select:` explicitly pass Tom Select behavior settings through when a field needs them. They remain opt-in; `free_text: true` does not implicitly change these settings.
+
+See [`free_text_behavior.md`](free_text_behavior.md) for the free-text behavior options and the related existing integration routes.
+
 ## Keep app-local guidance thin
 
 Host-app AI/agent skills and implementation notes should link or point to this gem-owned documentation instead of copying option semantics into multiple local documents. App-local documentation should contain only host-specific decisions such as endpoint names, authorization rules, query behavior, and project conventions.
