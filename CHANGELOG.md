@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Added `config.enum_i18n_key`, a callable extension point for `rfk_enum_select` label lookup keys. The default remains `"#{method}.#{value}"`; host applications can use another `human_attribute_name` key convention such as `"#{method}/#{value}"` without overriding private FormBuilder methods.
 - Formalized `rfk_lookup` and `RailsFieldsKit::TableFilterInput.lookup` as public 1.x API for free-text values paired with optional selected IDs.
+- Added explicit `add_precedence:`, `create_on_blur:`, and `clear_after_select:` Tom Select behavior pass-throughs without changing the default behavior of `free_text: true`.
 - Added host-application integration guidance that treats the installed gem version as the API source of truth.
 
 ### Release digest
@@ -16,6 +17,7 @@ The release improves host-application integration while keeping query execution,
 
 - `rfk_lookup` provides a supported UI lane for editable text paired with an optional selected master ID. Host applications remain responsible for query semantics such as selected ID exact match versus free-text LIKE search.
 - `enum_i18n_key` removes the need for host applications to prepend or redefine Rails Fields Kit private enum-label helpers only to change the `human_attribute_name` lookup key convention.
+- Free-text fields can opt into Tom Select `addPrecedence`, `createOnBlur`, and `clearAfterSelect` behavior through field-level Rails helper options instead of subclassing the Rails Fields Kit controller.
 - Generated setup notes and host integration docs direct consumers to the installed gem documentation and matching release tag instead of repository `main`.
 
 ### Added
@@ -24,6 +26,7 @@ The release improves host-application integration while keeping query execution,
 
 - `config.enum_i18n_key` is a public callable configuration point used by `rfk_enum_select` to build the attribute key passed to `human_attribute_name`. The default remains `"#{method}.#{value}"` for backward compatibility.
 - `rfk_lookup` for free-text values paired with an optional selected ID. Selecting a candidate synchronizes the text and ID fields; editing text clears the selected ID by default.
+- `add_precedence:`, `create_on_blur:`, and `clear_after_select:` explicitly pass Tom Select behavior settings through for fields that need them. They are opt-in and do not change `free_text: true` defaults.
 - `rfk_enum_select` has a focused explicit `enum:` hash guide for Rails enum-shaped sources. Hash keys remain the submitted values, labels stay on the model I18n / humanized-key path, and arbitrary label/value DSLs, remote enum option lookup, and PORO enum adapters remain outside the current public surface.
 - `rfk_range_field` provides a thin native range input wrapper with the same label, hint, error, affix, pass-through option, and accessibility wiring boundaries as the other native helpers. Browser slider behavior, live value previews, custom slider styling, multi-thumb controls, validation policy, and production CSS remain host-app responsibilities.
 - `rfk_password_field` provides a thin native password input wrapper with the same label, hint, error, affix, pass-through option, and accessibility wiring boundaries as the other native helpers. Password visibility toggles, strength meters, credential policy, authentication workflow, and credential storage remain host-app responsibilities.
@@ -75,7 +78,7 @@ The release improves host-application integration while keeping query execution,
   - `query_params:` for fixed search query parameters.
   - `selected_query_params:` for fixed selected preload query parameters.
   - `create_params:` for fixed create-on-the-fly JSON fields.
-- Tom Select option pass-throughs for `max_items:`, `load_throttle:`, and `delimiter:`.
+- Tom Select option pass-throughs include `max_items:`, `load_throttle:`, `delimiter:`, `add_precedence:`, `create_on_blur:`, and `clear_after_select:`. The free-text behavior options remain explicit rather than being enabled automatically by `free_text: true`.
 - Opt-in `error_surface:` and `error_surface_html:` support for Tom Select-backed helpers so request-failure events can expose a stable nearby placeholder as `detail.surface` without moving visible error copy or retry UI into the gem.
 
 ### Fixed

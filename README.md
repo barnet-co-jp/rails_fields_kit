@@ -57,6 +57,8 @@ That's it. The submitted params stay the same shape as an ordinary Rails select.
 
 For filters where a selected candidate must use exact ID matching while manual input must remain text for LIKE matching, use `rfk_lookup` so the text and selected ID remain separate. Do not repurpose `value_field:` as a display-label field to encode both meanings in one submitted value.
 
+For free-text fields that need Tom Select's create-option precedence, create-on-blur, or post-selection query clearing behavior, use the explicit `add_precedence:`, `create_on_blur:`, and `clear_after_select:` pass-throughs. See [`doc/free_text_behavior.md`](doc/free_text_behavior.md).
+
 See [`doc/field_helpers.md`](doc/field_helpers.md) for the full reference and [`doc/host_app_integration.md`](doc/host_app_integration.md) for host-app and AI/agent integration rules.
 
 ## Remote endpoints
@@ -165,6 +167,7 @@ For a host application, prefer the documentation packaged with its installed gem
 | Host-app integration contract | [`doc/host_app_integration.md`](doc/host_app_integration.md) |
 | Setup walkthrough | [`doc/setup.md`](doc/setup.md) |
 | Field helper reference | [`doc/field_helpers.md`](doc/field_helpers.md) |
+| Free-text Tom Select behavior | [`doc/free_text_behavior.md`](doc/free_text_behavior.md) |
 | Controller helper reference | [`doc/controller_helpers.md`](doc/controller_helpers.md) |
 | Configuration | [`doc/configuration.md`](doc/configuration.md) |
 | Public API & JS exports | [`doc/public_api.md`](doc/public_api.md) |
