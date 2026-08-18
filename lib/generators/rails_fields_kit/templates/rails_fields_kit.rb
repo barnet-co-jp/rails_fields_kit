@@ -41,6 +41,11 @@ RailsFieldsKit.configure do |config|
   config.default_option_description_field = nil
   config.default_option_badge_field = nil
 
+  # Build the model human_attribute_name key used by rfk_enum_select labels.
+  # Change this callable when the host app uses another enum translation path,
+  # for example: ->(method, value) { "#{method}/#{value}" }
+  config.enum_i18n_key = ->(method, value) { "#{method}.#{value}" }
+
   # Default Tom Select plugins applied by helpers.
   config.default_plugins = []
 

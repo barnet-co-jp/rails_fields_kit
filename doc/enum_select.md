@@ -19,9 +19,9 @@ This keeps the explicit source aligned with Rails enum params, where the symboli
 
 ## Labels
 
-Labels still come from the model class via `human_attribute_name("#{method}.#{key}")`, with the humanized key as fallback.
+Labels come from the model class through `human_attribute_name`, with the humanized enum key as fallback. By default Rails Fields Kit builds the lookup key as `"#{method}.#{key}"`.
 
-Use model I18n translations when the explicit hash should display localized or product-specific labels:
+Use model I18n translations when the enum should display localized or product-specific labels:
 
 ```yaml
 en:
@@ -32,6 +32,18 @@ en:
           draft: Draft
           published: Published
 ```
+
+If a host application already uses another `human_attribute_name` key convention, configure the key builder instead of overriding Rails Fields Kit's private FormBuilder methods:
+
+```ruby
+RailsFieldsKit.configure do |config|
+  config.enum_i18n_key = ->(method, value) { "#{method}/#{value}" }
+end
+```
+
+`enum_i18n_key` must respond to `#call` and receives the enum attribute method and enum key. The default callable returns `"#{method}.#{value}"`, preserving the existing behavior.
+
+The host application still owns the translation entries and wording. Rails Fields Kit only owns how the configurable key is passed to `human_attribute_name`.
 
 ## Option Metadata
 
@@ -61,4 +73,4 @@ Use explicit `enum:` for a small hash-like enum source that follows the Rails en
 
 Choose `rfk_select` instead when you need arbitrary label/value pairs, object collections, custom collection shaping, or options that are not Rails enum-style keys.
 
-Remote enum lookup, Ransack filters, enum i18n policy, enum validation, authorization, query execution, production CSS, dynamic option visibility, and table metadata adapter behavior stay outside `rfk_enum_select`; use the dedicated helpers and docs for those paths.
+Remote enum lookup, enum validation, authorization, query execution, production CSS, dynamic option visibility, and table metadata adapter behavior stay outside `rfk_enum_select`; use the dedicated helpers and docs for those paths.

@@ -8,6 +8,7 @@ RSpec.describe "public API" do
     expect(RailsFieldsKit).to respond_to(:configuration)
     expect(RailsFieldsKit).to respond_to(:configure)
     expect(RailsFieldsKit).to respond_to(:reset_configuration!)
+    expect(RailsFieldsKit.configuration.enum_i18n_key).to respond_to(:call)
   end
 
   it "exposes FormBuilder helpers" do
@@ -56,6 +57,7 @@ RSpec.describe "public API" do
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:combobox)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:select)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:autocomplete)
+    expect(RailsFieldsKit::TableFilterInput).to respond_to(:lookup)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:tags)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:multi_select)
     expect(RailsFieldsKit::TableFilterInput).to respond_to(:grouped_select)

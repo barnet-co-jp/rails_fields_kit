@@ -14,11 +14,12 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1"
 
+  release_ref = "v#{spec.version}"
   spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/barnet-co-jp"
   spec.metadata["rubygems_mfa_required"] = "true"
-  spec.metadata["source_code_uri"] = spec.homepage
-  spec.metadata["changelog_uri"] = "#{spec.homepage}/blob/main/CHANGELOG.md"
-  spec.metadata["documentation_uri"] = "#{spec.homepage}/blob/main/doc/setup.md"
+  spec.metadata["source_code_uri"] = "#{spec.homepage}/tree/#{release_ref}"
+  spec.metadata["changelog_uri"] = "#{spec.homepage}/blob/#{release_ref}/CHANGELOG.md"
+  spec.metadata["documentation_uri"] = "#{spec.homepage}/blob/#{release_ref}/doc/setup.md"
 
   spec.files = Dir.chdir(__dir__) do
     Dir[

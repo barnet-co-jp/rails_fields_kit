@@ -18,7 +18,9 @@ RSpec.describe "RailsFieldsKit::FormBuilder rfk_enum_select explicit enum bounda
     def self.human_attribute_name(attribute, options = {})
       translations = {
         "status.draft" => "Draft label",
-        "status.published" => "Published label"
+        "status.published" => "Published label",
+        "status/draft" => "Draft slash label",
+        "status/published" => "Published slash label"
       }
       translations.fetch(attribute.to_s, options[:default] || attribute.to_s.humanize)
     end
@@ -67,6 +69,23 @@ RSpec.describe "RailsFieldsKit::FormBuilder rfk_enum_select explicit enum bounda
     expect(html).to include(">Draft label</option>")
     expect(html).to include("value=\"published\"")
     expect(html).to include(">Published label</option>")
+  end
+
+  it "allows the enum i18n key path to be configured without overriding FormBuilder internals" do
+    RailsFieldsKit.configure do |config|
+      config.enum_i18n_key = ->(method, value) { "#{method}/#{value}" }
+    end
+
+    html = form_builder(ModelBackedEnum.new("draft"), :model_backed_enum).rfk_enum_select(:status)
+
+    expect(html).to include(">Draft slash label</option>")
+    expect(html).to include(">Published slash label</option>")
+  end
+
+  it "rejects a non-callable enum i18n key configuration" do
+    expect do
+      RailsFieldsKit.configure { |config| config.enum_i18n_key = "status/value" }
+    end.to raise_error(ArgumentError, "enum_i18n_key must respond to #call")
   end
 
   it "uses explicit enum values without requiring a pluralized enum method" do

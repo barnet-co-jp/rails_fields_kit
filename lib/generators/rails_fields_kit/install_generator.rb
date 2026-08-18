@@ -92,9 +92,9 @@ module RailsFieldsKit
 
       def setup_notes_next_step
         if options[:skip_setup_notes]
-          "Setup examples remain in the maintained guide: https://github.com/barnet-co-jp/rails_fields_kit/blob/main/doc/setup.md"
+          "Use `bundle show rails_fields_kit` and read doc/setup.md from that installed gem so the guide matches this app's resolved version."
         else
-          "See doc/rails_fields_kit_setup.md for examples."
+          "See doc/rails_fields_kit_setup.md for version-matched documentation guidance and examples."
         end
       end
 

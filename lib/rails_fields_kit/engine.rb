@@ -3,6 +3,7 @@
 require "active_support/core_ext/module/delegation"
 require "rails/engine"
 require "rails_fields_kit/form_builder"
+require "rails_fields_kit/form_builder_enum_i18n"
 require "rails_fields_kit/form_builder_dependent_query_params"
 require "rails_fields_kit/form_builder_check_box"
 require "rails_fields_kit/form_builder_file_field"
