@@ -60,6 +60,13 @@ RSpec.describe "package metadata" do
       File.write(File.join(tmpdir, "package.json"), "{\n  \"type\": \"module\"\n}\n")
       FileUtils.cp(package_json_path, File.join(node_package_dir, "package.json"))
       copy_package_entrypoints(package_dir, node_package_entrypoint_dir)
+      # Copy internal module dependencies not listed in package exports
+      base_js = "tom_select_controller_base.js"
+      base_source = File.join(repo_root, "app/javascript/rails_fields_kit", base_js)
+      if File.exist?(base_source)
+        FileUtils.cp(base_source, File.join(package_dir, base_js))
+        FileUtils.cp(base_source, File.join(node_package_entrypoint_dir, base_js))
+      end
       File.write(
         File.join(stimulus_dir, "package.json"),
         "{\n  \"name\": \"@hotwired/stimulus\",\n  \"type\": \"module\",\n  \"exports\": \"./index.js\"\n}\n"

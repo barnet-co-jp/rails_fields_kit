@@ -3,7 +3,10 @@
 require "spec_helper"
 
 RSpec.describe "Tom Select controller source" do
-  let(:source) { File.read(File.expand_path("../../app/javascript/rails_fields_kit/tom_select_controller.js", __dir__)) }
+  let(:source) do
+    File.read(File.expand_path("../../app/javascript/rails_fields_kit/tom_select_controller.js", __dir__)) +
+      File.read(File.expand_path("../../app/javascript/rails_fields_kit/tom_select_controller_base.js", __dir__))
+  end
 
   it "announces no-results state through a polite status region" do
     expect(source).to include('no_results: () => `<div class="no-results" role="status" aria-live="polite" aria-atomic="true">${this.escape(this.renderText(this.noResultsTextValue, "No results found"))}</div>`')

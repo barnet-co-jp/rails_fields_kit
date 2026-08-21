@@ -19,7 +19,7 @@ This keeps the explicit source aligned with Rails enum params, where the symboli
 
 ## Labels
 
-Labels come from the model class through `human_attribute_name`, with the humanized enum key as fallback. By default Rails Fields Kit builds the lookup key as `"#{method}.#{key}"`.
+Labels still come from the model class through `human_attribute_name`, with the humanized enum key as fallback. By default Rails Fields Kit builds the lookup key as `"#{method}.#{key}"`.
 
 Use model I18n translations when the enum should display localized or product-specific labels:
 

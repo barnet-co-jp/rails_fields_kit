@@ -24,6 +24,10 @@ RSpec.describe "rendered table filter metadata reader" do
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
         File.join(package_dir, "tom_select_controller.js")
       )
+      FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller_base.js"),
+        File.join(package_dir, "tom_select_controller_base.js")
+      )
       File.write(
         File.join(stimulus_dir, "package.json"),
         "{\n  \"name\": \"@hotwired/stimulus\",\n  \"type\": \"module\",\n  \"exports\": \"./index.js\"\n}\n"
