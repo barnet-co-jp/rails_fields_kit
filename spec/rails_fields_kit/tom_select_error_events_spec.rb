@@ -4,7 +4,8 @@ require "spec_helper"
 
 RSpec.describe "Tom Select error events" do
   let(:controller_source) do
-    File.read(File.expand_path("../../app/javascript/rails_fields_kit/tom_select_controller.js", __dir__))
+    File.read(File.expand_path("../../app/javascript/rails_fields_kit/tom_select_controller.js", __dir__)) +
+      File.read(File.expand_path("../../app/javascript/rails_fields_kit/tom_select_controller_base.js", __dir__))
   end
 
   let(:events_doc) do

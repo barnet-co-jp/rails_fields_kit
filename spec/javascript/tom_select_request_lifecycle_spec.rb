@@ -20,6 +20,10 @@ RSpec.describe "Tom Select request lifecycle" do
         File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller.js"),
         File.join(tmpdir, "tom_select_controller.js")
       )
+      FileUtils.cp(
+        File.join(repo_root, "app/javascript/rails_fields_kit/tom_select_controller_base.js"),
+        File.join(tmpdir, "tom_select_controller_base.js")
+      )
 
       File.write(
         File.join(stimulus_dir, "package.json"),

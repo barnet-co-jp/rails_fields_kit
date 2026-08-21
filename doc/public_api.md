@@ -1,6 +1,6 @@
 # Rails Fields Kit Public API
 
-This document summarizes the public API intended to be stable for the 0.1.x series.
+This document summarizes the public API intended to be stable for the 1.x series.
 
 ## Quick navigation
 
@@ -46,6 +46,7 @@ require "rails_fields_kit"
 RailsFieldsKit.configure do |config|
   config.default_query_param = "q"
   config.default_allow_clear = false
+  config.enum_i18n_key = ->(method, value) { "#{method}.#{value}" }
 end
 ```
 
@@ -55,7 +56,7 @@ Public configuration methods:
 - `RailsFieldsKit.configure`
 - `RailsFieldsKit.reset_configuration!`
 
-Configuration attributes are documented in [`configuration.md`](configuration.md). Tom Select interaction attributes include `default_allow_clear`, an app-wide semantic clear-button default that applies only when a helper omits field-level `allow_clear:`; use [`default_allow_clear.md`](default_allow_clear.md) for focused examples and non-goals.
+Configuration attributes are documented in [`configuration.md`](configuration.md). `enum_i18n_key` is the public callable extension point for changing the attribute key passed to `human_attribute_name` by `rfk_enum_select`; its default preserves the existing `"#{method}.#{value}"` lookup. Tom Select interaction attributes include `default_allow_clear`, an app-wide semantic clear-button default that applies only when a helper omits field-level `allow_clear:`; use [`default_allow_clear.md`](default_allow_clear.md) for focused examples and non-goals.
 
 ## FormBuilder helpers
 
@@ -118,9 +119,9 @@ See [`select_migration.md`](select_migration.md) for a practical server-rendered
 See [`enum_select.md`](enum_select.md) for the `rfk_enum_select` explicit `enum:` hash boundary, including keys-as-submitted-values behavior and the non-goal boundary around arbitrary label/value DSLs or remote enum option lookup.
 See [`collection_group_helpers.md`](collection_group_helpers.md) for the current non-API boundary around collection checkbox / radio groups, semantic `fieldset` / `legend`, group-level hint / error wiring, and host-app ownership of collection semantics.
 
-Current Ransack-oriented public surface stays metadata-first. `rfk_token_search` is a general token-search UI helper, while `rfk_table_filters(columns)` renders metadata that was already prepared elsewhere. Helper-level DSL examples such as `rfk_token_search ..., adapter: :ransack` or `rfk_table_filters @table_preferences, adapter: :ransack` are not current public APIs in the 0.1.x contract.
+Current Ransack-oriented public surface stays metadata-first. `rfk_token_search` is a general token-search UI helper, while `rfk_table_filters(columns)` renders metadata that was already prepared elsewhere. Helper-level DSL examples such as `rfk_token_search ..., adapter: :ransack` or `rfk_table_filters @table_preferences, adapter: :ransack` are not current public APIs in the 1.x contract.
 
-Collection checkbox / radio group helpers are also not current public APIs. Host apps should keep using ordinary Rails collection helpers or host-app markup for group semantics until a future helper is merged and listed here. Future proposal names, open PR helper names, and single-control wrapper helpers must not be read as current collection group API.
+Collection checkbox / radio group helpers are also not current public APIs. Host apps should keep using ordinary Rails collection helpers or host-app markup for group semantics until a future helper is merged and listed here. Future proposal names, open-PR helper names, and single-control wrapper helpers must not be read as current collection group API.
 
 Tom Select-backed `rfk_*` helpers also support opt-in `error_surface:` and `error_surface_html:` options for fields that should expose a stable nearby placeholder on request failures. When enabled, request-failure events described in [`events.md`](events.md) can include that placeholder as `detail.surface`, while visible error copy and retry UI remain host-app responsibility.
 
@@ -168,7 +169,7 @@ Class responsibilities:
 
 | Class | Public role | Notes |
 | --- | --- | --- |
-| `RailsFieldsKit::TableFilterInput` | Describes a filter UI that can later be rendered with Rails Fields Kit helpers. | Includes factory methods for built-in field types and `ransack_filter` for Ransack-compatible token-search metadata. |
+| `RailsFieldsKit::TableFilterInput` | Describes a filter UI that can later be rendered with Rails Fields Kit helpers. | Includes factory methods for built-in field types, `lookup` for free text plus an optional selected ID, and `ransack_filter` for Ransack-compatible token-search metadata. |
 | `RailsFieldsKit::TableCellInput` | Describes an editable cell UI that can later be rendered with Rails Fields Kit helpers. | Mirrors the built-in field type family used by filter metadata, without the Ransack-specific filter entrypoint. |
 | `RailsFieldsKit::TableMetadata` | Collects filter and cell editor metadata from columns or table-like objects. | Can return metadata hashes, FormBuilder call specs, or ordered render result arrays. |
 | `RailsFieldsKit::TableRenderer` | Maps metadata into FormBuilder helper calls or render results. | Owns the field type registry and custom helper mapping for table integrations. |
@@ -185,6 +186,7 @@ Focused native metadata guides stay behind that table adapters route, but can be
 - `RailsFieldsKit::TableFilterInput.select`
 - `RailsFieldsKit::TableFilterInput.combobox`
 - `RailsFieldsKit::TableFilterInput.autocomplete`
+- `RailsFieldsKit::TableFilterInput.lookup`
 - `RailsFieldsKit::TableFilterInput.tags`
 - `RailsFieldsKit::TableFilterInput.multi_select`
 - `RailsFieldsKit::TableFilterInput.grouped_select`
@@ -279,6 +281,8 @@ Use `TableRenderer.registered_field_types` when an integration needs a mutation-
 
 The returned metadata hashes use `type: "rails_fields_kit"`, a string `field_type`, an optional `method`, and an `options` hash. `to_h` and `to_hash` return the same metadata hash as `to_table_filter` or `to_table_cell_editor`.
 
+`TableFilterInput.lookup(field_name, id_field:, **options)` is the public table-metadata entrypoint for the `rfk_lookup` lane. It keeps the editable text field and selected ID field explicit in metadata; query semantics remain owned by the host application or table integration. A common search policy is selected ID present → exact ID match, otherwise text present → escaped LIKE search.
+
 `TableFilterInput.ransack_filter` is the current public entrypoint when table-oriented code wants Ransack-compatible token-search metadata. `TableMetadata` can collect metadata from Hash columns, hash-like columns that respond to `to_hash`, object columns with public metadata readers, enumerable column lists, and table-like objects that respond to `columns`. Explicit `false` filter/editor metadata disables that slot instead of falling through to alias keys or readers. `TableRenderer` can turn collected metadata into FormBuilder call specs or dispatch it to a form builder. See [`table_adapters.md`](table_adapters.md) for the protocol, custom registry examples, and Rails Table Preferences integration notes.
 
 `TableRenderer.unregister_field_helper(field_type)` removes a custom-only renderer mapping from the current registry. If a built-in field type was temporarily overridden with `register_field_helper`, unregistering that built-in type restores the default helper instead of making the built-in type unknown. Use `with_field_helpers(custom_field: :custom_table_field) { ... }` when a test or integration needs scoped renderer overrides that restore the exact previous registry snapshot after the block, including custom-only mappings, built-in overrides, exception paths, and the block return value. Use `reset_field_helpers!` when a test or integration needs to discard all custom mappings at once. The registry APIs do not change `TableFilterInput.known_types`, `TableCellInput.known_types`, table preference persistence, UI generation, or authorization policy.
@@ -358,7 +362,7 @@ import tomSelectPluginContract from "rails_fields_kit/tom_select_plugin_contract
 import tomSelectTextOverrideContract from "rails_fields_kit/tom_select_text_override_contract"
 ```
 
-Prefer package-root imports for normal rendered-field contract helper use. Direct helper subpaths are setup and troubleshooting routes for explicit host-app pins or bundler aliases; they do not add helper names, return shapes, or responsibility boundaries beyond the package-root table above. The package-root-only readers `readRenderedTomSelectInteractionConfig`, `readRenderedOptionPayloadMapping`, and `readRenderedTableFilterMetadata` intentionally stay on the `rails_fields_kit` package-root route in this 0.1.x surface; do not infer direct subpaths for them unless a future issue explicitly expands the direct helper subpath policy. Keep the package-root table in this document as the helper inventory source of truth, and keep README, setup, and generated setup notes as routing guidance rather than mirrors of every helper export.
+Prefer package-root imports for normal rendered-field contract helper use. Direct helper subpaths are setup and troubleshooting routes for explicit host-app pins or bundler aliases; they do not add helper names, return shapes, or responsibility boundaries beyond the package-root table above. The package-root-only readers `readRenderedTomSelectInteractionConfig`, `readRenderedOptionPayloadMapping`, and `readRenderedTableFilterMetadata` intentionally stay on the `rails_fields_kit` package-root route in this 1.x surface; do not infer direct subpaths for them unless a future issue explicitly expands the direct helper subpath policy. Keep the package-root table in this document as the helper inventory source of truth, and keep README, setup, and generated setup notes as routing guidance rather than mirrors of every helper export.
 
 ### Contract reader boundary
 
@@ -447,4 +451,4 @@ These are not intended as stable public APIs:
 
 ## Compatibility policy
 
-For the 0.1.x series, small API adjustments may still happen, but documented public APIs should not be removed without a changelog entry.
+For the 1.x series, documented public APIs should remain compatible within the major version unless a changelog entry explicitly calls out a breaking change.

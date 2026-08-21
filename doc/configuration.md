@@ -7,6 +7,7 @@ Use [`configuration_profiles.md`](configuration_profiles.md) when you want copya
 ```ruby
 RailsFieldsKit.configure do |config|
   config.controller_name = "rails-fields-kit--tom-select"
+  config.enum_i18n_key = ->(method, value) { "#{method}.#{value}" }
 end
 ```
 
@@ -16,7 +17,7 @@ Use these grouped tables to find the initializer key, field-level override, and 
 
 Read the quick reference in this order:
 
-1. Pick the group that matches the thing you are changing: request params, JSON mapping, Tom Select behavior, rendered text, or wrapper classes.
+1. Pick the group that matches the thing you are changing: request params, JSON mapping, enum label lookup, Tom Select behavior, rendered text, or wrapper classes.
 2. Use `Field-level override` when only one helper render should differ from the app-wide initializer default.
 3. Check `Default or fallback` before adding an initializer. Some defaults render a concrete value, some `nil` Tom Select settings omit the data value, and render text uses bundled locale-aware copy when unset.
 
@@ -45,6 +46,14 @@ Default behavior uses three different patterns:
 | `default_search_field` | `"text"` | `search_field:` | Tom Select search config | Use a comma-separated string for multiple fields. |
 | `default_option_description_field` | `nil` | `option_description_field:` | Option rendering metadata | `nil` means no secondary description field is rendered. |
 | `default_option_badge_field` | `nil` | `option_badge_field:` | Option rendering metadata | `nil` means no badge field is rendered. |
+
+### Enum label I18n
+
+| Initializer key | Default or fallback | Field-level override | Applies to | Notes |
+| --- | --- | --- | --- | --- |
+| `enum_i18n_key` | `->(method, value) { "#{method}.#{value}" }` | none | `rfk_enum_select` | Callable that returns the attribute key passed to `human_attribute_name`. |
+
+`enum_i18n_key` changes only how `rfk_enum_select` builds the attribute key used for model label lookup. The default preserves the existing `status.draft` style. Host applications that use another convention can provide a callable, for example `->(method, value) { "#{method}/#{value}" }`, without overriding private FormBuilder methods.
 
 ### Tom Select interaction defaults
 
@@ -159,6 +168,30 @@ Default: `nil`
 JSON key used for the optional badge in option rendering.
 
 Default: `nil`
+
+## Enum label I18n
+
+### `enum_i18n_key`
+
+Callable used by `rfk_enum_select` to build the attribute key passed to the model class's `human_attribute_name`.
+
+Default:
+
+```ruby
+->(method, value) { "#{method}.#{value}" }
+```
+
+For an application that stores enum translations under slash-style attribute keys:
+
+```ruby
+RailsFieldsKit.configure do |config|
+  config.enum_i18n_key = ->(method, value) { "#{method}/#{value}" }
+end
+```
+
+The callable receives the enum attribute method and enum key. It must respond to `#call`. Rails Fields Kit still delegates the actual translation lookup and wording to the model's `human_attribute_name`; this setting only changes the generated attribute key. There is no field-level override in 1.0.1.
+
+See [`enum_select.md`](enum_select.md) for the enum source and label boundary.
 
 ## Tom Select defaults
 
@@ -290,6 +323,8 @@ end
 ```
 
 That helper renders `lookup`, `uuid`, `display_name`, `display_name,email`, `10`, and `150` for its Tom Select data values and does not add `clear_button` because `allow_clear: false` overrides the app-wide clear default. Other helpers that omit those options still use the initializer defaults. The same pattern applies to request parameter defaults (`query_param:`, `selected_param:`, `selected_multiple_param:`, `create_param:`), JSON field defaults (`value_field:`, `label_field:`, `search_field:`, `option_description_field:`, `option_badge_field:`), and Tom Select defaults (`plugins:`, `allow_clear:`, `min_length:`, `max_options:`, `load_throttle:`, `preload:`, `open_on_focus:`, `close_after_select:`, `hide_selected:`, `persist:`).
+
+`enum_i18n_key` is intentionally app-wide in 1.0.1 and has no field-level override. Configure it only when the application uses a different `human_attribute_name` key convention for enum labels.
 
 Wrapper and affix class overrides follow a different lane: `wrapper_html:`, `label_html:`, `hint_html:`, `error_html:`, `control_html:`, `prefix_html:`, and `suffix_html:` customize Rails Fields Kit-rendered wrapper pieces only. Use `tom_select_class_names:` when one Tom Select-backed field needs internal Tom Select class hooks for that rendered field.
 
@@ -426,6 +461,10 @@ RailsFieldsKit.configure do |config|
   config.default_max_options = 50
   config.default_load_throttle = 300
   config.default_allow_clear = true
+
+  # Customize enum label lookup keys when the host app uses another
+  # human_attribute_name convention. Default: "#{method}.#{value}".
+  # config.enum_i18n_key = ->(method, value) { "#{method}/#{value}" }
 
   # Use only plugin names already available in your Tom Select setup.
   # Field-level plugins: overrides this default for one helper.

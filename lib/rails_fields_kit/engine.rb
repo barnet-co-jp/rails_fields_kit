@@ -3,6 +3,7 @@
 require "active_support/core_ext/module/delegation"
 require "rails/engine"
 require "rails_fields_kit/form_builder"
+require "rails_fields_kit/form_builder_enum_i18n"
 require "rails_fields_kit/form_builder_dependent_query_params"
 require "rails_fields_kit/form_builder_check_box"
 require "rails_fields_kit/form_builder_file_field"
@@ -11,6 +12,7 @@ require "rails_fields_kit/form_builder_native_date_time_fields"
 require "rails_fields_kit/form_builder_radio_button"
 require "rails_fields_kit/form_builder_table_groups"
 require "rails_fields_kit/form_builder_tom_select_class_names"
+require "rails_fields_kit/form_builder_tom_select_behavior_options"
 require "rails_fields_kit/option_html_context"
 
 module RailsFieldsKit

@@ -44,8 +44,9 @@ That's it. The submitted params stay the same shape as an ordinary Rails select.
 | Need | Helper |
 | --- | --- |
 | Server-rendered select | `rfk_select` |
-| Remote search / selected preload / create-on-the-fly | `rfk_combobox` |
+| Remote search / selected preload / create-on-the-fly that submits a selected ID/value | `rfk_combobox` |
 | Free-text autocomplete | `rfk_autocomplete` |
+| Free text plus an optional selected master ID | `rfk_lookup` |
 | Structured token search (`status:open keyword`) | `rfk_token_search` |
 | Multiple selection | `rfk_multi_select` |
 | Tag-style entry | `rfk_tags` |
@@ -54,7 +55,11 @@ That's it. The submitted params stay the same shape as an ordinary Rails select.
 | Table filters / cell editors from metadata | `rfk_table_filters` / `rfk_table_cell_editors` |
 | Native input with shared wrapper/hint/error/accessibility | `rfk_text_field`, `rfk_text_area`, `rfk_password_field`, `rfk_money_field`, etc. |
 
-See [`doc/field_helpers.md`](doc/field_helpers.md) for the full reference.
+For filters where a selected candidate must use exact ID matching while manual input must remain text for LIKE matching, use `rfk_lookup` so the text and selected ID remain separate. Do not repurpose `value_field:` as a display-label field to encode both meanings in one submitted value.
+
+For free-text fields that need Tom Select's create-option precedence, create-on-blur, or post-selection query clearing behavior, use the explicit `add_precedence:`, `create_on_blur:`, and `clear_after_select:` pass-throughs. See [`doc/free_text_behavior.md`](doc/free_text_behavior.md).
+
+See [`doc/field_helpers.md`](doc/field_helpers.md) for the full reference and [`doc/host_app_integration.md`](doc/host_app_integration.md) for host-app and AI/agent integration rules.
 
 ## Remote endpoints
 
@@ -103,7 +108,7 @@ RailsFieldsKit.configure do |config|
 end
 ```
 
-See [`doc/configuration.md`](doc/configuration.md) for all defaults.
+See [`doc/configuration.md`](doc/configuration.md) for all defaults and [`doc/enum_select.md`](doc/enum_select.md) for the configurable enum I18n key path.
 
 ## JavaScript setup
 
@@ -155,10 +160,14 @@ See [`doc/events.md`](doc/events.md) for payloads and details.
 
 ## Documentation
 
+For a host application, prefer the documentation packaged with its installed gem. Run `bundle show rails_fields_kit` and read the files from that directory so the docs match the resolved version. If browsing the private GitHub repository instead, use the exact release tag or commit rather than assuming `main` matches the host app.
+
 | Topic | Link |
 | --- | --- |
+| Host-app integration contract | [`doc/host_app_integration.md`](doc/host_app_integration.md) |
 | Setup walkthrough | [`doc/setup.md`](doc/setup.md) |
 | Field helper reference | [`doc/field_helpers.md`](doc/field_helpers.md) |
+| Free-text Tom Select behavior | [`doc/free_text_behavior.md`](doc/free_text_behavior.md) |
 | Controller helper reference | [`doc/controller_helpers.md`](doc/controller_helpers.md) |
 | Configuration | [`doc/configuration.md`](doc/configuration.md) |
 | Public API & JS exports | [`doc/public_api.md`](doc/public_api.md) |

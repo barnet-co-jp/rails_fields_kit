@@ -38,6 +38,8 @@ module RailsFieldsKit
       :prefix_class,
       :suffix_class
 
+    attr_reader :enum_i18n_key
+
     def initialize
       @controller_name = "rails-fields-kit--tom-select"
       @default_query_param = "q"
@@ -62,6 +64,7 @@ module RailsFieldsKit
       @default_create_text = DEFAULT_CREATE_TEXT
       @default_option_description_field = nil
       @default_option_badge_field = nil
+      @enum_i18n_key = ->(method, value) { "#{method}.#{value}" }
       @wrapper_class = "rfk-field"
       @label_class = "rfk-label"
       @hint_class = "rfk-hint"
@@ -70,6 +73,12 @@ module RailsFieldsKit
       @control_class = "rfk-control"
       @prefix_class = "rfk-prefix"
       @suffix_class = "rfk-suffix"
+    end
+
+    def enum_i18n_key=(callable)
+      raise ArgumentError, "enum_i18n_key must respond to #call" unless callable.respond_to?(:call)
+
+      @enum_i18n_key = callable
     end
   end
 end

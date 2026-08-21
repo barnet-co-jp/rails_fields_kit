@@ -38,6 +38,10 @@ try {
     path.join(repoRoot, "app", "javascript", "rails_fields_kit", "tom_select_controller.js"),
     path.join(packageRoot, "app", "javascript", "rails_fields_kit", "tom_select_controller.js")
   )
+  await cp(
+    path.join(repoRoot, "app", "javascript", "rails_fields_kit", "tom_select_controller_base.js"),
+    path.join(packageRoot, "app", "javascript", "rails_fields_kit", "tom_select_controller_base.js")
+  )
 
   await writeStubPackage(
     "@hotwired/stimulus",
