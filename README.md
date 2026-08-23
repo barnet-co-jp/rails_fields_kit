@@ -41,6 +41,8 @@ That's it. The submitted params stay the same shape as an ordinary Rails select.
 
 ## Choosing a helper
 
+Before reading the individual helper APIs, read the [`Quick Guide`](doc/quick_guide.md). It starts from the final data/search semantics, explains why `rfk_lookup` is often the first candidate for business inputs with an optional master link, and provides a decision tree for choosing between lookup, combobox, autocomplete, select, and native fields.
+
 | Need | Helper |
 | --- | --- |
 | Server-rendered select | `rfk_select` |
@@ -164,6 +166,7 @@ For a host application, prefer the documentation packaged with its installed gem
 
 | Topic | Link |
 | --- | --- |
+| Quick Guide / helper decision tree | [`doc/quick_guide.md`](doc/quick_guide.md) |
 | Host-app integration contract | [`doc/host_app_integration.md`](doc/host_app_integration.md) |
 | Setup walkthrough | [`doc/setup.md`](doc/setup.md) |
 | Field helper reference | [`doc/field_helpers.md`](doc/field_helpers.md) |
