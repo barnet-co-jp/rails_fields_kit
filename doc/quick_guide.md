@@ -44,7 +44,7 @@ flowchart TD
     D -- No --> MULTI["rfk_multi_select<br/>Known rendered collection"]
 
     C -- No --> E{"Need suggestions or selectable candidates?"}
-    E -- No --> NATIVE["Use the matching native helper<br/>text / number / date / checkbox / file / etc."]
+    E -- No --> NATIVE["Use the matching native helper<br/>See the native decision flow below"]
 
     E -- Yes --> F{"Is the visible text itself meaningful submitted data?"}
     F -- Yes --> G{"Also retain an optional master ID?"}
@@ -124,30 +124,40 @@ Multiple-value fields deserve an explicit branch instead of being treated as a v
 
 `rfk_tags` does not imply that the host application must allow creation. Leave create-on-the-fly disabled when the field should only select existing remote records.
 
-## Simple / native fields
+## Native helper decision flow
 
-Do not introduce Tom Select semantics when an ordinary browser input already matches the requirement. Use the native wrapper helpers so the field still gets the shared Rails Fields Kit wrapper, hint, error, affix, and accessibility behavior.
+When the main flow reaches a native field, choose the smallest helper that matches the browser input semantics.
 
-| Requirement | Preferred helper |
-| --- | --- |
-| Plain text | `rfk_text_field` |
-| Long text | `rfk_text_area` |
-| Ordinary keyword/search input without remote suggestions | `rfk_search_field` |
-| Numeric value | `rfk_number_field` |
-| Money | `rfk_money_field` |
-| Percentage | `rfk_percent_field` |
-| Range slider | `rfk_range_field` |
-| Email | `rfk_email_field` |
-| URL | `rfk_url_field` |
-| Phone | `rfk_phone_field` |
-| Password | `rfk_password_field` |
-| Boolean | `rfk_check_box` |
-| One explicit radio choice | `rfk_radio_button` |
-| File upload | `rfk_file_field` |
-| Date | `rfk_date_field` |
-| Time | `rfk_time_field` |
-| Datetime-local | `rfk_datetime_local_field` |
-| Color | `rfk_color_field` |
+```mermaid
+flowchart TD
+    A["Native field"] --> B{"Boolean?"}
+    B -- Yes --> CHECK["rfk_check_box"]
+    B -- No --> C{"One explicit radio value?"}
+    C -- Yes --> RADIO["rfk_radio_button"]
+    C -- No --> D{"File upload?"}
+    D -- Yes --> FILE["rfk_file_field"]
+    D -- No --> E{"Date / time value?"}
+    E -- Date --> DATE["rfk_date_field"]
+    E -- Time --> TIME["rfk_time_field"]
+    E -- Datetime-local --> DATETIME["rfk_datetime_local_field"]
+    E -- No --> F{"Numeric value?"}
+    F -- Money --> MONEY["rfk_money_field"]
+    F -- Percent --> PERCENT["rfk_percent_field"]
+    F -- Range --> RANGE["rfk_range_field"]
+    F -- Number --> NUMBER["rfk_number_field"]
+    F -- No --> G{"Specialized text semantics?"}
+    G -- Email --> EMAIL["rfk_email_field"]
+    G -- URL --> URL["rfk_url_field"]
+    G -- Phone --> PHONE["rfk_phone_field"]
+    G -- Password --> PASSWORD["rfk_password_field"]
+    G -- Search --> SEARCH["rfk_search_field"]
+    G -- Color --> COLOR["rfk_color_field"]
+    G -- No --> H{"Multi-line text?"}
+    H -- Yes --> TEXTAREA["rfk_text_area"]
+    H -- No --> TEXT["rfk_text_field"]
+```
+
+These native helpers stay in ordinary Rails / browser input semantics. They add Rails Fields Kit's shared wrapper, hint, error, affix, and accessibility behavior without introducing remote candidate selection.
 
 The existence of a more capable Tom Select-backed helper is not a reason to use it. Use the simplest helper that already matches the **finished** semantics.
 
