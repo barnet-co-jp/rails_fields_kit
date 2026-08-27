@@ -9,6 +9,8 @@ RSpec.describe "Tom Select initial state rendering" do
   include ActionView::Helpers::TagHelper
   include ActionView::Context
 
+  SelectedRecord = Struct.new(:id, :name)
+
   def protect_against_forgery?
     false
   end
@@ -85,6 +87,29 @@ RSpec.describe "Tom Select initial state rendering" do
 
     expect(html).to include('data-rfk-selected-label-pending="true"')
     expect(html).to include('<option data-rfk-selected-label-pending="true" selected="selected" value="42">42</option>')
+  end
+
+  it "preserves option_html value label and item context while marking pending selections" do
+    record = SelectedRecord.new(1, "Known customer")
+    observed = []
+
+    html = scoped_form_builder.rfk_combobox(
+      :customer_id,
+      collection: [record],
+      collection_value_method: :id,
+      collection_label_method: :name,
+      selected: 42,
+      selected_url: "/customers/selected.json",
+      option_html: lambda do |value, label, item|
+        observed << [value, label, item]
+        { data: { source: item&.name || "pending" } }
+      end
+    )
+
+    expect(observed).to include([1, "Known customer", record])
+    expect(html).to include('data-source="Known customer"')
+    expect(html).to include('data-source="pending"')
+    expect(html).to include('data-rfk-selected-label-pending="true"')
   end
 
   it "renders a native blank option for placeholder text before Tom Select connects" do
