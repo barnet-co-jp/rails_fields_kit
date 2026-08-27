@@ -24,7 +24,22 @@ For a multiple-value field that should clear the typed query after an item is ac
   clear_after_select: true %>
 ```
 
-Rails Fields Kit only forwards these values to Tom Select. Host applications remain responsible for deciding whether create-on-blur, create-option precedence, or post-selection query clearing is appropriate for a specific field.
+Rails Fields Kit only forwards these values to Tom Select for general Tom Select-backed fields. Host applications remain responsible for deciding whether create-on-blur, create-option precedence, or post-selection query clearing is appropriate for a specific field.
+
+## Editable free-text lookup behavior
+
+`rfk_lookup` has one additional interaction rule when both `free_text: true` and `create_on_blur: true` are enabled.
+
+A value created from the user's typed text is temporarily represented by Tom Select as a selected item after blur so the text is preserved. When the same lookup receives focus again, Rails Fields Kit recognizes that user-created item, removes only that temporary selection, restores its text to the editable textbox, clears the paired lookup ID, and reuses the restored text as the remote-search query.
+
+This means a partial lookup entry can be resumed naturally:
+
+1. Type `やき`.
+2. Click outside the field. The text remains preserved.
+3. Focus the field again. `やき` becomes editable text again and lookup suggestions are filtered with that query.
+4. Backspace edits one character at a time instead of deleting the whole temporary item.
+
+Normal options returned by the lookup endpoint are not restored into the textbox on focus; they remain selected. Other field kinds such as `rfk_tags` also keep their existing behavior.
 
 ## Related existing APIs
 
