@@ -139,8 +139,8 @@ module RailsFieldsKit
       existing_option_html = options[:option_html]
       pending = pending_values.map(&:to_s)
 
-      options[:option_html] = lambda do |value|
-        html = rfk_initial_state_option_html(existing_option_html, value)
+      options[:option_html] = lambda do |value, label = nil, item = nil|
+        html = rfk_option_html_for(value, existing_option_html, label: label, item: item)
         next html unless pending.include?(value.to_s)
 
         html = html.dup
@@ -149,17 +149,6 @@ module RailsFieldsKit
         data[:rfk_selected_label_pending] = true
         html[:data] = data
         html
-      end
-    end
-
-    def rfk_initial_state_option_html(option_html, value)
-      case option_html
-      when Proc
-        option_html.call(value) || {}
-      when Hash
-        option_html[value] || option_html[value.to_s] || {}
-      else
-        {}
       end
     end
 
