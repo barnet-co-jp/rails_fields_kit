@@ -25,13 +25,12 @@ module RailsFieldsKit
       options = options.dup
       collection = rfk_prepare_initial_state_collection(field_kind, collection, options)
       rfk_apply_native_select_placeholder!(field_kind, options)
+      render_field = -> { super(method, field_kind, collection: collection, **options) }
 
       if field_kind == :lookup && options.key?(:selected)
-        rfk_with_lookup_selected_object(method, options) do
-          super(method, field_kind, collection: collection, **options)
-        end
+        rfk_with_lookup_selected_object(method, options, &render_field)
       else
-        super(method, field_kind, collection: collection, **options)
+        render_field.call
       end
     end
 
