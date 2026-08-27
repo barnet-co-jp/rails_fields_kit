@@ -1,0 +1,96 @@
+# frozen_string_literal: true
+
+require "spec_helper"
+
+RSpec.describe "Tom Select initial state rendering" do
+  include ActionView::Helpers::FormHelper
+  include ActionView::Helpers::FormOptionsHelper
+  include ActionView::Helpers::TagHelper
+  include ActionView::Context
+
+  def protect_against_forgery?
+    false
+  end
+
+  def scoped_form_builder(object_name = :filters)
+    ActionView::Helpers::FormBuilder.new(object_name, nil, self, {})
+  end
+
+  around do |example|
+    RailsFieldsKit.reset_configuration!
+    example.run
+    RailsFieldsKit.reset_configuration!
+  end
+
+  it "restores explicit lookup text and id without a model object" do
+    html = scoped_form_builder.rfk_lookup(
+      :keyword,
+      id_field: :product_id,
+      url: "/products.json",
+      selected: { value: 42, text: "Widget 42" }
+    )
+
+    expect(html).to include('data-rails-fields-kit--tom-select-kind-value="lookup"')
+    expect(html).to include('id="filters_keyword_lookup"')
+    expect(html).to match(/type="hidden"[^>]*name="filters\[keyword\]"[^>]*value="Widget 42"|type="hidden"[^>]*value="Widget 42"[^>]*name="filters\[keyword\]"/)
+    expect(html).to match(/type="hidden"[^>]*name="filters\[product_id\]"[^>]*value="42"|type="hidden"[^>]*value="42"[^>]*name="filters\[product_id\]"/)
+  end
+
+  it "keeps id-only lookup state available for selected preload" do
+    html = scoped_form_builder.rfk_lookup(
+      :keyword,
+      id_field: :product_id,
+      selected: 42,
+      selected_url: "/products/selected.json"
+    )
+
+    expect(html).to include('data-rails-fields-kit--tom-select-selected-url-value="/products/selected.json"')
+    expect(html).to match(/type="hidden"[^>]*name="filters\[product_id\]"[^>]*value="42"|type="hidden"[^>]*value="42"[^>]*name="filters\[product_id\]"/)
+    expect(html).to match(/type="hidden"[^>]*name="filters\[keyword\]"[^>]*value=""|type="hidden"[^>]*value=""[^>]*name="filters\[keyword\]"/)
+  end
+
+  it "ignores an invalid scalar selected value for a static collection" do
+    html = scoped_form_builder.rfk_select(
+      :status,
+      collection: [["Draft", "draft"]],
+      selected: "missing"
+    )
+
+    expect(html).to include('<option value="draft">Draft</option>')
+    expect(html).not_to include('value="missing"')
+  end
+
+  it "keeps an explicit value and label pair outside a static collection" do
+    html = scoped_form_builder.rfk_select(
+      :status,
+      collection: [["Draft", "draft"]],
+      selected: { value: "missing", text: "Known missing record" }
+    )
+
+    expect(html).to include('<option selected="selected" value="missing">Known missing record</option>')
+  end
+
+  it "marks an id-only selected option as pending when selected_url can hydrate it" do
+    html = scoped_form_builder.rfk_combobox(
+      :customer_id,
+      collection: [["Known customer", "1"]],
+      selected: "42",
+      selected_url: "/customers/selected.json"
+    )
+
+    expect(html).to include('data-rfk-selected-label-pending="true"')
+    expect(html).to include('<option data-rfk-selected-label-pending="true" selected="selected" value="42">42</option>')
+  end
+
+  it "renders a native blank option for placeholder text before Tom Select connects" do
+    html = scoped_form_builder.rfk_select(
+      :status,
+      collection: [["Draft", "draft"]],
+      placeholder: "Choose status"
+    )
+
+    expect(html).to include('<option value="">Choose status</option>')
+    expect(html).to include('data-rails-fields-kit--tom-select-placeholder-value="Choose status"')
+    expect(html).to include('placeholder="Choose status"')
+  end
+end
