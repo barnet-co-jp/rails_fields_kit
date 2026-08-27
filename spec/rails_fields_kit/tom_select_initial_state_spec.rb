@@ -20,7 +20,7 @@ RSpec.describe "Tom Select initial state rendering" do
   end
 
   def parsed_hidden_field(html, name)
-    Nokogiri::HTML.fragment(html).at_xpath(%(.//input[@type="hidden" and @name="#{name}"]))
+    Nokogiri::HTML.fragment(html).css('input[type="hidden"]').find { |node| node["name"] == name }
   end
 
   around do |example|
