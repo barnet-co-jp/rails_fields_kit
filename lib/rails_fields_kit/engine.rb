@@ -13,6 +13,7 @@ require "rails_fields_kit/form_builder_radio_button"
 require "rails_fields_kit/form_builder_table_groups"
 require "rails_fields_kit/form_builder_tom_select_class_names"
 require "rails_fields_kit/form_builder_tom_select_behavior_options"
+require "rails_fields_kit/form_builder_tom_select_initial_state"
 require "rails_fields_kit/option_html_context"
 
 module RailsFieldsKit
