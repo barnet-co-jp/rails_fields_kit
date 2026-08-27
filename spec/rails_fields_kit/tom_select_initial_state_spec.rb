@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "nokogiri"
 require "spec_helper"
 
 RSpec.describe "Tom Select initial state rendering" do
@@ -14,6 +15,10 @@ RSpec.describe "Tom Select initial state rendering" do
 
   def scoped_form_builder(object_name = :filters)
     ActionView::Helpers::FormBuilder.new(object_name, nil, self, {})
+  end
+
+  def hidden_field(html, name)
+    Nokogiri::HTML.fragment(html).at_xpath(%(.//input[@type="hidden" and @name="#{name}"]))
   end
 
   around do |example|
@@ -32,8 +37,8 @@ RSpec.describe "Tom Select initial state rendering" do
 
     expect(html).to include('data-rails-fields-kit--tom-select-kind-value="lookup"')
     expect(html).to include('id="filters_keyword_lookup"')
-    expect(html).to match(/type="hidden"[^>]*name="filters\[keyword\]"[^>]*value="Widget 42"|type="hidden"[^>]*value="Widget 42"[^>]*name="filters\[keyword\]"/)
-    expect(html).to match(/type="hidden"[^>]*name="filters\[product_id\]"[^>]*value="42"|type="hidden"[^>]*value="42"[^>]*name="filters\[product_id\]"/)
+    expect(hidden_field(html, "filters[keyword]")["value"]).to eq("Widget 42")
+    expect(hidden_field(html, "filters[product_id]")["value"]).to eq("42")
   end
 
   it "keeps id-only lookup state available for selected preload" do
@@ -45,8 +50,8 @@ RSpec.describe "Tom Select initial state rendering" do
     )
 
     expect(html).to include('data-rails-fields-kit--tom-select-selected-url-value="/products/selected.json"')
-    expect(html).to match(/type="hidden"[^>]*name="filters\[product_id\]"[^>]*value="42"|type="hidden"[^>]*value="42"[^>]*name="filters\[product_id\]"/)
-    expect(html).to match(/type="hidden"[^>]*name="filters\[keyword\]"[^>]*value=""|type="hidden"[^>]*value=""[^>]*name="filters\[keyword\]"/)
+    expect(hidden_field(html, "filters[product_id]")["value"]).to eq("42")
+    expect(hidden_field(html, "filters[keyword]")["value"].to_s).to eq("")
   end
 
   it "ignores an invalid scalar selected value for a static collection" do
