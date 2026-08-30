@@ -25,6 +25,24 @@ Request-failure placeholders use `rfk-tom-select-error-surface` when a Tom Selec
 
 Tom Select internal generated parts use a separate lane. Use field-level [`tom_select_class_names:`](tom_select_class_names.md) when one Tom Select-backed helper needs to pass Tom Select's `classNames` option for generated control, dropdown, option, item, or loading states. Use [`tom_select_class_names_visual_boundary.html`](tom_select_class_names_visual_boundary.html) for a static review lane that compares that internal classNames pass-through with Rails Fields Kit wrapper hooks. That option is not an initializer-level Rails Fields Kit theme, and it does not make Rails Fields Kit own production CSS, theme presets, dark mode, density, or Tom Select internal DOM compatibility.
 
+## Tom Select initialization flash (FOUC)
+
+Tom Select-backed helpers intentionally render an ordinary native `<input>` or `<select>` first and let the registered Stimulus controller enhance that element on `connect()`. On a slow initial render or Turbo navigation, the native control can therefore be visible for a short interval before Tom Select applies its generated UI.
+
+Rails Fields Kit does not bundle a production theme or force a global hiding policy, because hiding every native control until JavaScript succeeds changes the progressive-enhancement and failure behavior of the host application. Applications that prefer to suppress that initialization flash can opt in through their own stylesheet using Tom Select's standard `ts-hidden` transition:
+
+```css
+[data-controller~="rails-fields-kit--tom-select"]:not(.ts-hidden) {
+  visibility: hidden;
+}
+```
+
+Before Tom Select initializes, the server-rendered RFK control matches this selector and is hidden. Once Tom Select initializes the original element, Tom Select adds `ts-hidden` to that original control and renders its generated control separately, so this rule no longer targets the enhanced UI.
+
+This is deliberately an opt-in host-app rule. If the Stimulus controller or Tom Select initialization fails, the original control never receives `ts-hidden` and therefore remains hidden. Applications that require the native field to remain available as a JavaScript-failure fallback should accept the brief native flash instead of applying this rule globally, or scope the rule only to screens where JavaScript initialization is treated as required and monitored.
+
+Do not suppress the lookup flash by replacing the lookup host control's initial value with its display label. For `rfk_lookup`, the Tom Select host control preserves the selected value/ID while the separate lookup text field preserves the display text; selected preload and initial-state hydration rely on that separation. FOUC suppression is a presentation concern and should not change the value/label contract.
+
 ## Responsibility boundary
 
 Rails Fields Kit owns these pieces:
@@ -40,6 +58,7 @@ Host apps own these pieces:
 - Deciding whether the default `rfk-*` hooks are enough or whether initializer defaults should be replaced with application-specific classes.
 - Deciding which Tom Select internal `classNames` values are appropriate for the host app's Tom Select version and stylesheet.
 - Styling Tom Select plugin affordances, request-failure visible feedback, password-specific UX, textarea autosize behavior, browser validation copy, and table layout.
+- Deciding whether to opt into native-control FOUC suppression and accepting the JavaScript-failure trade-off of that choice.
 
 ## Native and Tom Select differences
 
