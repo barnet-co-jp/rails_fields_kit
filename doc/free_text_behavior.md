@@ -26,6 +26,14 @@ For a multiple-value field that should clear the typed query after an item is ac
 
 Rails Fields Kit only forwards these values to Tom Select for general Tom Select-backed fields. Host applications remain responsible for deciding whether create-on-blur, create-option precedence, or post-selection query clearing is appropriate for a specific field.
 
+## Lookup selection normalization
+
+`rfk_lookup` treats an accepted lookup candidate as a completed master selection, independently of the generic `clear_after_select:` pass-through.
+
+When Tom Select accepts a lookup item, Rails Fields Kit synchronizes the paired lookup text and ID from the accepted option and clears the transient textbox query. A partial query such as `サ` therefore cannot remain in the editable textbox after the user selects `サポート商事（TCUST0001）`; the selected Tom Select item renders the option label while the paired hidden fields hold that label and ID.
+
+This normalization is lookup-specific. `clear_after_select:` still controls Tom Select's general `clearAfterSelect` behavior for other field kinds and should not be required merely to prevent a stale lookup search query from surviving a successful lookup selection.
+
 ## Editable free-text lookup behavior
 
 `rfk_lookup` has one additional interaction rule when both `free_text: true` and `create_on_blur: true` are enabled.

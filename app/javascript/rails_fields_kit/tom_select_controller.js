@@ -26,6 +26,10 @@ export default class extends BaseTomSelectController {
   dispatch(eventName, options = {}) {
     if (this.restoringFreeTextLookup && ["change", "item-remove", "clear"].includes(eventName)) return
 
+    if (eventName === "item-add") {
+      this.normalizeAcceptedLookupItem(options.detail && options.detail.value)
+    }
+
     return super.dispatch(eventName, options)
   }
 
@@ -135,6 +139,17 @@ export default class extends BaseTomSelectController {
     }
 
     this.tomSelect.addItem(value, true)
+  }
+
+  normalizeAcceptedLookupItem(value) {
+    if (this.kindValue !== "lookup" || !this.tomSelect) return
+    if (!this.optionForValue(value)) return
+
+    this.syncLookupSelection(value)
+
+    if (typeof this.tomSelect.setTextboxValue === "function") {
+      this.tomSelect.setTextboxValue("")
+    }
   }
 
   bindEditableFreeTextLookupFocus() {
