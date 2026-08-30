@@ -11,6 +11,7 @@ export default class extends BaseTomSelectController {
   connect() {
     super.connect()
     this.bindEditableFreeTextLookupFocus()
+    this.bindAcceptedLookupItem()
   }
 
   options() {
@@ -135,6 +136,23 @@ export default class extends BaseTomSelectController {
     }
 
     this.tomSelect.addItem(value, true)
+  }
+
+  bindAcceptedLookupItem() {
+    if (this.kindValue !== "lookup" || !this.tomSelect) return
+
+    this.tomSelect.on("item_add", (value) => this.normalizeAcceptedLookupItem(value))
+  }
+
+  normalizeAcceptedLookupItem(value) {
+    if (this.kindValue !== "lookup" || !this.tomSelect) return
+    if (!this.optionForValue(value)) return
+
+    this.syncLookupSelection(value)
+
+    if (typeof this.tomSelect.setTextboxValue === "function") {
+      this.tomSelect.setTextboxValue("")
+    }
   }
 
   bindEditableFreeTextLookupFocus() {
