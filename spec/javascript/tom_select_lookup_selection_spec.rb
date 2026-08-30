@@ -29,7 +29,13 @@ RSpec.describe "Tom Select lookup selection normalization" do
         File.join(stimulus_dir, "package.json"),
         "{\n  \"name\": \"@hotwired/stimulus\",\n  \"type\": \"module\",\n  \"exports\": \"./index.js\"\n}\n"
       )
-      File.write(File.join(stimulus_dir, "index.js"), "export class Controller { dispatch() {} }\n")
+      File.write(File.join(stimulus_dir, "index.js"), <<~JS)
+        export class Controller {
+          dispatch(name, options = {}) {
+            if (globalThis.__rfkDispatchObserver) globalThis.__rfkDispatchObserver(name, options)
+          }
+        }
+      JS
       File.write(
         File.join(tom_select_dir, "package.json"),
         "{\n  \"name\": \"tom-select\",\n  \"type\": \"module\",\n  \"exports\": \"./index.js\"\n}\n"
@@ -54,7 +60,7 @@ RSpec.describe "Tom Select lookup selection normalization" do
     MESSAGE
   end
 
-  it "replaces a typed lookup query with the accepted option and clears the stale textbox buffer" do
+  it "normalizes the accepted lookup before forwarding item-add" do
     build_controller_sandbox do |controller_path|
       script = <<~'JS'
         import { pathToFileURL } from "node:url"
@@ -65,10 +71,10 @@ RSpec.describe "Tom Select lookup selection normalization" do
 
         const Controller = (await import(pathToFileURL(process.argv[1]).href)).default
         const controller = new Controller()
-        const handlers = {}
         const textField = { value: "サ" }
         const idField = { value: "" }
         const textboxValues = []
+        const observed = []
         const option = { value: "42", text: "サポート商事（TCUST0001）" }
 
         controller.kindValue = "lookup"
@@ -80,27 +86,31 @@ RSpec.describe "Tom Select lookup selection normalization" do
         controller.lookupIdField = () => idField
         controller.tomSelect = {
           options: { "42": option },
-          on(name, callback) {
-            handlers[name] = callback
-          },
           setTextboxValue(value) {
             textboxValues.push(value)
           }
         }
 
-        controller.bindAcceptedLookupItem()
-        handlers.item_add("42", {})
+        globalThis.__rfkDispatchObserver = (name) => {
+          observed.push({ name, text: textField.value, id: idField.value, textbox: textboxValues.at(-1) })
+        }
+
+        controller.dispatch("item-add", { detail: { value: "42", option } })
 
         assert(textField.value === "サポート商事（TCUST0001）", `expected selected label, got ${textField.value}`)
         assert(idField.value === "42", `expected selected id, got ${idField.value}`)
         assert(textboxValues.length === 1 && textboxValues[0] === "", `expected stale query to be cleared: ${JSON.stringify(textboxValues)}`)
+        assert(observed.length === 1 && observed[0].name === "item-add", `expected item-add dispatch: ${JSON.stringify(observed)}`)
+        assert(observed[0].text === "サポート商事（TCUST0001）", "external item-add observers should see the normalized label")
+        assert(observed[0].id === "42", "external item-add observers should see the normalized id")
+        assert(observed[0].textbox === "", "external item-add observers should see the cleared textbox buffer")
       JS
 
       run_node_check(controller_path, script:)
     end
   end
 
-  it "does not alter non-lookup Tom Select fields" do
+  it "does not alter non-lookup item-add dispatches" do
     build_controller_sandbox do |controller_path|
       script = <<~'JS'
         import { pathToFileURL } from "node:url"
@@ -111,18 +121,23 @@ RSpec.describe "Tom Select lookup selection normalization" do
 
         const Controller = (await import(pathToFileURL(process.argv[1]).href)).default
         const controller = new Controller()
-        let bindCount = 0
+        const observed = []
+        let textboxChanges = 0
 
         controller.kindValue = "tags"
         controller.tomSelect = {
-          on() {
-            bindCount += 1
+          options: { alpha: { value: "alpha", text: "alpha" } },
+          setTextboxValue() {
+            textboxChanges += 1
           }
         }
 
-        controller.bindAcceptedLookupItem()
+        globalThis.__rfkDispatchObserver = (name) => observed.push(name)
 
-        assert(bindCount === 0, "non-lookup fields must not receive lookup selection normalization")
+        controller.dispatch("item-add", { detail: { value: "alpha" } })
+
+        assert(textboxChanges === 0, "non-lookup fields must keep their textbox behavior")
+        assert(observed.length === 1 && observed[0] === "item-add", "non-lookup item-add must still be forwarded")
       JS
 
       run_node_check(controller_path, script:)
