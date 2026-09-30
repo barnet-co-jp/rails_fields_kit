@@ -466,6 +466,14 @@ RSpec.describe RailsFieldsKit::FormBuilder do
     expect(html).to include("data-rails-fields-kit--tom-select-plugins-value=\"[&quot;remove_button&quot;]\"")
   end
 
+  it "renders client_filtering only when a remote field passes it" do
+    server_filtered = form_builder.rfk_combobox(:customer_id, url: "/customers.json", client_filtering: false)
+    default_filtered = form_builder.rfk_combobox(:customer_id, url: "/customers.json")
+
+    expect(server_filtered).to include("data-rails-fields-kit--tom-select-client-filtering-value=\"false\"")
+    expect(default_filtered).not_to include("client-filtering-value")
+  end
+
   it "preloads a selected option from a hash" do
     html = form_builder.rfk_combobox(
       :customer_id,
