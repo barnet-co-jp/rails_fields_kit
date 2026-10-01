@@ -403,6 +403,10 @@ export default class extends Controller {
     url.searchParams.set(this.queryParamValue, query)
 
     const { signal, token } = this.beginRequest("load")
+    // 採点で絞らない場合は前の検索語の候補も表示され続けるため、
+    // 新しい remote 検索を始める時点で未選択の候補を破棄する。
+    // 選択済みの item は Tom Select の clearOptions() が残す。
+    if (this.serverFiltered()) this.clearRemoteOptions()
 
     fetch(url.toString(), this.requestOptions({
       headers: { Accept: "application/json" }
@@ -414,9 +418,6 @@ export default class extends Controller {
         const options = this.normalizeOptions(json)
         this.clearErrorSurface()
         this.dispatch("load", { detail: { query, options } })
-        // 採点で絞らないと前の検索語の候補も表示されるため、今回の応答で置き換えて endpoint の並び順にする。
-        // 選択済みの item は Tom Select の clearOptions() が残す。
-        if (this.serverFiltered()) this.clearRemoteOptions()
         callback(options)
       })
       .catch((error) => {

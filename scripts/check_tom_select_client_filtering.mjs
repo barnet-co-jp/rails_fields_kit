@@ -38,11 +38,15 @@ async function waitForControllerPromises() {
   await new Promise((resolve) => setTimeout(resolve, 0))
 }
 
-async function withRemoteEnvironment(body, assertion) {
+function errorResponse(body = {}) {
+  return { ok: false, status: 500, json: async () => body }
+}
+
+async function withRemoteEnvironment(fetchImpl, assertion) {
   const previousWindow = globalThis.window
   const previousFetch = globalThis.fetch
   globalThis.window = { location: { origin: "https://example.test" } }
-  globalThis.fetch = async () => jsonResponse(body)
+  globalThis.fetch = fetchImpl
 
   try {
     await assertion()
@@ -97,13 +101,36 @@ await withTomSelectControllerSandbox("rails-fields-kit-client-filtering-", async
     const calls = []
     prepareLoad(controller, calls)
 
-    await withRemoteEnvironment([{ value: "8", text: "LOCAL-0008 — 検証用ボルト" }], async () => {
+    await withRemoteEnvironment(async () => jsonResponse([{ value: "8", text: "LOCAL-0008 — 検証用ボルト" }]), async () => {
       controller.loadOptions("ぼると", () => calls.push("callback"))
       await waitForControllerPromises()
     })
 
     assert.deepEqual(calls, expected)
   }
+
+  const failedReloadController = controllerWithBaseValues(TomSelectController, { clientFilteringValue: false })
+  const failedReloadCalls = []
+  let requestCount = 0
+  prepareLoad(failedReloadController, failedReloadCalls)
+
+  await withRemoteEnvironment(async () => {
+    requestCount += 1
+    if (requestCount === 1) return jsonResponse([{ value: "8", text: "LOCAL-0008 — 検証用ボルト" }])
+
+    return errorResponse({ error: "server error" })
+  }, async () => {
+    failedReloadController.loadOptions("ぼると", () => failedReloadCalls.push("callback:first"))
+    await waitForControllerPromises()
+    failedReloadController.loadOptions("なっと", () => failedReloadCalls.push("callback:second"))
+    await waitForControllerPromises()
+  })
+
+  assert.deepEqual(
+    failedReloadCalls,
+    ["clearOptions", "dispatch:load", "callback:first", "clearOptions", "dispatch:load-error", "callback:second"],
+    "a failed current request should not leave the previous remote results visible"
+  )
 })
 
 console.log("rails_fields_kit Tom Select client filtering smoke passed")
