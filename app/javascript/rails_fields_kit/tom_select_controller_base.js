@@ -25,6 +25,7 @@ export default class extends Controller {
     displayField: String,
     labelFallback: { type: Boolean, default: true },
     searchField: { type: String, default: "text" },
+    clientFiltering: { type: Boolean, default: true },
     minLength: { type: Number, default: 0 },
     maxOptions: Number,
     maxItems: Number,
@@ -102,6 +103,9 @@ export default class extends Controller {
     if (this.hasUrlValue) {
       options.shouldLoad = (query) => query.length >= this.minLengthValue
       options.load = (query, callback) => this.loadOptions(query, callback)
+      // endpoint 側で一致判定（かな・全角半角の正規化など）を済ませている。
+      // ラベルに入力文字列を含まない候補も Tom Select が落とさないよう、読み込んだ候補をすべて残す。
+      if (this.serverFiltered()) options.score = () => () => 1
     }
 
     if (this.hasCreateUrlValue) {
@@ -336,6 +340,10 @@ export default class extends Controller {
     return this.searchFieldValue.split(",").map((field) => field.trim()).filter(Boolean)
   }
 
+  serverFiltered() {
+    return this.hasUrlValue && this.clientFilteringValue === false
+  }
+
   beginRequest(operation) {
     if (!this.requestControllers) this.requestControllers = {}
     if (!this.requestTokens) this.requestTokens = {}
@@ -395,6 +403,10 @@ export default class extends Controller {
     url.searchParams.set(this.queryParamValue, query)
 
     const { signal, token } = this.beginRequest("load")
+    // 採点で絞らない場合は前の検索語の候補も表示され続けるため、
+    // 新しい remote 検索を始める時点で未選択の候補を破棄する。
+    // 選択済みの item は Tom Select の clearOptions() が残す。
+    if (this.serverFiltered()) this.clearRemoteOptions()
 
     fetch(url.toString(), this.requestOptions({
       headers: { Accept: "application/json" }

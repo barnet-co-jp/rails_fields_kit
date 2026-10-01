@@ -106,6 +106,10 @@ const checks = [
     args: ["scripts/check_tom_select_behavior_options.mjs"]
   },
   {
+    name: "Tom Select client filtering smoke",
+    args: ["scripts/check_tom_select_client_filtering.mjs"]
+  },
+  {
     name: "native affix contract smoke",
     args: ["scripts/check_native_affix_contract_smoke.mjs"]
   },
