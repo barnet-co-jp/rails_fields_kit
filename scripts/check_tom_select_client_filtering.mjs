@@ -93,7 +93,7 @@ await withTomSelectControllerSandbox("rails-fields-kit-client-filtering-", async
 
   const loads = [
     { overrides: {}, expected: ["dispatch:load", "callback"] },
-    { overrides: { clientFilteringValue: false }, expected: ["dispatch:load", "clearOptions", "callback"] }
+    { overrides: { clientFilteringValue: false }, expected: ["clearOptions", "dispatch:load", "callback"] }
   ]
 
   for (const { overrides, expected } of loads) {
